@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,8 @@ public class LegalSequencingChecker {
 
 		for (final IConstraintCheckerFactory factory : context.getConstraintCheckerRegistry().getConstraintCheckerFactories(context.getConstraintCheckers())) {
 			final IConstraintChecker checker = factory.instantiate();
-			if (checker instanceof IPairwiseConstraintChecker) {
-				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
+			if (checker instanceof IPairwiseConstraintChecker pChecker) {
+				pairwiseCheckers.add(pChecker);
 			}
 		}
 
@@ -87,7 +88,7 @@ public class LegalSequencingChecker {
 	 */
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		// Check with hard constraints like resource allocation and ordered elements
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: allowSequence", this.getClass().getName()));
@@ -112,7 +113,7 @@ public class LegalSequencingChecker {
 
 	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		final List<String> result = new ArrayList<>();
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));

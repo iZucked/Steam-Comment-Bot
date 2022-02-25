@@ -29,7 +29,7 @@ public final class NamedExecutorService {
 		final ThreadGroup threadGroup = parentThread.getThreadGroup();
 		final String prefix = name + "-pool-";
 
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
+		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactory() {
 			private final AtomicInteger threadNumber = new AtomicInteger(1);
 
 			@Override

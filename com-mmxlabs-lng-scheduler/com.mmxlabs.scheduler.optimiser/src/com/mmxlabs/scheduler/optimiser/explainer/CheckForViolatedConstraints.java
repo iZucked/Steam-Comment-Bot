@@ -25,7 +25,7 @@ public class CheckForViolatedConstraints {
 	private List<IConstraintChecker> constraintCheckers;
 
 	public @NonNull ISequences run(@NonNull final ISequences rawSequences) {
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: run", this.getClass().getName()));

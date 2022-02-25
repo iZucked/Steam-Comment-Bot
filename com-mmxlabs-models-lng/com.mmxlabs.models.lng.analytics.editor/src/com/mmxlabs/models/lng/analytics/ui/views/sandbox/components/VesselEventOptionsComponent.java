@@ -25,8 +25,6 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -98,7 +96,8 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 		GridViewerHelper.configureLookAndFeel(optionsViewer);
 		optionsViewer.getGrid().setHeaderVisible(false);
 		CellFormatterLabelProvider labelProvider = new VesselEventLabelProvider(sandboxUIHelper, new VesselEventOptionDescriptionFormatter(), validationErrors, "Events");
-		createColumn(optionsViewer, labelProvider, "Events", new VesselEventOptionDescriptionFormatter(), false);
+		// Temporary pending nebula grid bug fix
+		createColumn_TempForNebulaBugFix(optionsViewer, labelProvider, "Events", false);
 
 		optionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS));
 		hookOpenEditor(optionsViewer);

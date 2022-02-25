@@ -88,7 +88,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 	protected @NonNull UserSettings createUserSettings() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
 		userSettings.setCleanSlateOptimisation(false);
@@ -106,7 +105,6 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 50_000);
-		ScenarioUtils.setActionPlanStageParameters(optimisationPlan, 5_000_000, 1_500_000, 5_000);
 		ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 
 		return optimisationPlan;

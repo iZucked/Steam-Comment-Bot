@@ -38,6 +38,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -90,6 +91,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbench;
@@ -990,8 +992,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+
+			// TODO: Add action directly once there is an icon rather than use the
+			// ActionToolbarEditor created just for this class.
 			final Action editConstraintsAction = new EditConstraintsAction("Constraints");
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, editConstraintsAction);
+			ActionToolbarEditor ci = new ActionToolbarEditor("grouped-constraints-editor", editConstraintsAction);
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, ci);
 		}
 
 		if (actionBars != null) {

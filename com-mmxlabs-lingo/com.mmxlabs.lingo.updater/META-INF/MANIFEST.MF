@@ -37,7 +37,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  wrapped.com.squareup.okio.okio,
  com.mmxlabs.hub,
  org.eclipse.jface,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.eclipse.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.lingo.updater

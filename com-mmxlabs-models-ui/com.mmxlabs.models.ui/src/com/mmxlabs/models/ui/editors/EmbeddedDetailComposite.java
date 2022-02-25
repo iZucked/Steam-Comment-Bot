@@ -187,7 +187,7 @@ public class EmbeddedDetailComposite {
 				doCreateFormContent(input);
 			});
 		}
-		if (mainCompositeScrolled.getContent() != null) {
+		if (mainCompositeScrolled.getContent() != null && !mainCompositeScrolled.getContent().isDisposed()) {
 			mainCompositeScrolled.setMinSize(mainCompositeScrolled.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
 

@@ -149,17 +149,22 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 	}
 
 	private void checkNoCargosOnMediumShip(@NonNull final LNGDataTransformer dataTransformer, ISequences sequences) {
+		boolean oneWithMore = false;
 		for (IResource res : sequences.getResources()) {
 			ISequence seq = sequences.getSequences().get(res);
 			IResource mediumShipRes = SequenceHelper.getResource(dataTransformer, defaultVesselAvailability);
 			if (res == mediumShipRes) {
 				// Only start and end elements.
-				assertEquals(2, seq.size());
+				Assertions.assertEquals(2, seq.size());
 			} else {
-				// Should have everything else in it.
-				assertTrue(seq.size() > 2);
+				if (seq.size() > 2) {
+					// Should have everything else in it.
+					Assertions.assertFalse(oneWithMore);
+					oneWithMore = true;
+				}
 			}
 		}
+		Assertions.assertTrue(oneWithMore);
 	}
 
 	private void validatePortShipSizeConstraintViolated(final List<IConstraintChecker> failedConstraintCheckers) {

@@ -122,8 +122,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 	
 	private boolean checkEObject(final EObject object) {
-		if (object instanceof VesselAvailability) {
-			final VesselAvailability va = (VesselAvailability) object;
+		if (object instanceof VesselAvailability va) {
 			if (va.getContainedCharterContract() != null) {
 				return true;
 			}

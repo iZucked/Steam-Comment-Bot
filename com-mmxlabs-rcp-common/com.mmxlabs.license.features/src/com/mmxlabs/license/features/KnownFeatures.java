@@ -28,7 +28,6 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_MODULE_PARALLELISATION = "features:module-parallelisation";
 
-	public static final String FEATURE_OPTIMISATION_ACTIONSET = "features:optimisation-actionset";
 	public static final String FEATURE_OPTIMISATION_HILLCLIMB = "features:optimisation-hillclimb";
 	public static final String FEATURE_OPTIMISATION_PERIOD = "features:optimisation-period";
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
@@ -130,6 +129,7 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 
+	public static final String FEATURE_MMX_REFERENCE_VESSELS = "features:mmx-reference-vessels";
 
 	/**
 	 * Scenario repair features

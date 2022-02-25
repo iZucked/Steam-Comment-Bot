@@ -164,7 +164,6 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.build();
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -218,7 +217,6 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.build();
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -270,7 +268,6 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.build();
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);

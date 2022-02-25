@@ -101,7 +101,7 @@ public class FolderItemProvider extends ContainerItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Folder"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Folder.png"));
 	}
 
 	/**

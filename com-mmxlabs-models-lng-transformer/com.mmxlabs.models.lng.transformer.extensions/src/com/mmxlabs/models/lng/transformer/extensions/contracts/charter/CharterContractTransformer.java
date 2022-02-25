@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -41,7 +42,6 @@ import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ICharterContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
@@ -50,7 +50,6 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IRepositioningFeeTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
@@ -103,16 +102,6 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 
 	@Inject
 	private ModelEntityMap modelEntityMap;
-
-	/**
-	 */
-	@Override
-	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
-	}
-
-	@Override
-	public void finishTransforming() {
-	}
 
 	@Override
 	public ICharterContract createCharterContract(final GenericCharterContract eCharterContract) {
@@ -186,12 +175,8 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 			Set<IPort> returnPorts = null;
 
 			switch (ballastBonusTo) {
-			case NEAREST_HUB:
-				returnPorts = transformPorts(hubs);
-				break;
-			case LOAD_PORT:
-				returnPorts = null;
-				break;
+			case NEAREST_HUB -> returnPorts = transformPorts(hubs);
+			case LOAD_PORT -> returnPorts = null;
 			}
 
 			final IBallastBonusTerm tt = new MonthlyBallastBonusContractTerm(oStartYMInclusive, oEndYMExclusive, oPctCharterRate, //
@@ -261,7 +246,10 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				
 			} else if (term instanceof final OriginPortRepositioningFeeTerm t) {
 				final String priceExpression = t.getLumpSumPriceExpression();
-				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				if (lumpSumCurve == null) {
+					lumpSumCurve = new ConstantValueLongCurve(0L);
+				}
 				final String fuelPriceExpression = t.getFuelPriceExpression();
 				final ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
 				final String charterPriceExpression = t.getHirePriceExpression();

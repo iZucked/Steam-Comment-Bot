@@ -13,81 +13,45 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.extensions.IComponentHelperExtension;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 /**
- * Handles the extension point com.mmxlabs.models.ui.componenthelpers. When constructing a UI element for an EClass, the default editor will ask this registry to get an {@link IComponentHelper}
- * matching the EClass. Extensions are matched according to the following rules:
+ * Handles the extension point com.mmxlabs.models.ui.componenthelpers. When
+ * constructing a UI element for an EClass, the default editor will ask this
+ * registry to get an {@link IComponentHelper} matching the EClass. Extensions
+ * are matched according to the following rules:
  * 
  * <ol>
- * <li>An extension matches an EClass if (a) the modelClass attribute matches the EClass' interface canonical name exactly, or (b) matches a supertype's interface canonical name exactly and
- * inheritable=true</li>
- * <li>If more than one extension matches, the one with the most specific modelClass wins</li>
+ * <li>An extension matches an EClass if (a) the modelClass attribute matches
+ * the EClass' interface canonical name exactly, or (b) matches a supertype's
+ * interface canonical name exactly and inheritable=true</li>
+ * <li>If more than one extension matches, the one with the most specific
+ * modelClass wins</li>
  * </ol>
  * 
  * @author hinton
  * 
  */
 public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComponentHelper>> implements IComponentHelperRegistry {
+
 	@Inject
-	Iterable<IComponentHelperExtension> extensions;
-	private Comparator<IComponentHelper> comparator = new Comparator<IComponentHelper>() {
-		@Override
-		public int compare(IComponentHelper arg0, IComponentHelper arg1) {
+	private Iterable<IComponentHelperExtension> extensions;
 
-			if (arg0 == null) {
-				return -1;
-			}
-			if (arg1 == null) {
-				return 1;
-			}
+	private Comparator<IComponentHelper> comparator = (arg0, arg1) -> {
 
-			return ((Integer) arg0.getDisplayPriority()).compareTo(arg1.getDisplayPriority());
+		if (arg0 == null) {
+			return -1;
 		}
+		if (arg1 == null) {
+			return 1;
+		}
+
+		return ((Integer) arg0.getDisplayPriority()).compareTo(arg1.getDisplayPriority());
 	};
-
-	/**
-	 * If an EClass has no component helper registered that will match it, but its supertypes do have registered component helpers, we will still want to invoke those on the supertypes. This method
-	 * returns a component helper to do that job.
-	 * 
-	 * @param eClass
-	 * @return
-	 */
-	private IComponentHelper reflector(final EClass eClass) {
-		final ArrayList<IComponentHelper> superHelpers = new ArrayList<IComponentHelper>();
-
-		for (final EClass eSuper : eClass.getESuperTypes()) {
-			final List<IComponentHelper> h = getComponentHelpers(eSuper);
-			superHelpers.addAll(h);
-		}
-
-		// This check should ensure that pointless reflectors are not created.
-		if (superHelpers.isEmpty())
-			return null;
-
-		return new BaseComponentHelper() {
-			@Override
-			public void addEditorsToComposite(IInlineEditorContainer detailComposite, EClass displayedClass) {
-				for (final IComponentHelper h : superHelpers)
-					h.addEditorsToComposite(detailComposite, displayedClass);
-			}
-
-			@Override
-			public void addEditorsToComposite(IInlineEditorContainer detailComposite) {
-				addEditorsToComposite(detailComposite, eClass);
-			}
-		};
-	}
-
-	public ComponentHelperRegistry() {
-
-	}
 
 	@Override
 	public synchronized List<IComponentHelper> getComponentHelpers(final EClass modelClass) {
@@ -96,15 +60,13 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 
 	@Override
 	protected List<IComponentHelper> match(final EClass key) {
-		
-//		SOMEWHERE HERE RETURN THE DEFAULT
-		
+
 		final List<IComponentHelper> helpers = new ArrayList<>();
 		IComponentHelperExtension bestExtension = null;
 		int bestExtensionMatch = Integer.MAX_VALUE;
 		for (final IComponentHelperExtension extension : extensions) {
 			final int closeness = getMinimumGenerations(key, extension.getEClassName());
-			if ( closeness == 0) {
+			if (closeness == 0) {
 				if (closeness < bestExtensionMatch) {
 					bestExtensionMatch = closeness;
 					bestExtension = extension;
@@ -112,7 +74,12 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 					if (factoryExistsForID(extension.getID())) {
 						helpers.addAll(getFactoryForID(extension.getID()));
 					} else {
-						helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(extension.instantiate())));
+						if (extension.getHelperClass().equals(DefaultComponentHelper.class.getCanonicalName())) {
+							// Note: key may need to be replaced with the extension eclass?
+							helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(new DefaultComponentHelper(key))));
+						} else {
+							helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(extension.instantiate())));
+						}
 					}
 				}
 			}
@@ -120,18 +87,19 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 		}
 
 		if (bestExtension == null) {
-//			if (key.getESuperTypes().isEmpty())
-//				return helpers;
-			final IComponentHelper reflector = new DefaultComponentHelper(key);// reflector(key);
-			if (reflector != null)
-				helpers.add(reflector);
+			helpers.add(new DefaultComponentHelper(key));
 			return helpers;
 		}
 
 		if (factoryExistsForID(bestExtension.getID())) {
 			helpers.addAll(getFactoryForID(bestExtension.getID()));
 		} else {
-			helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
+			if (bestExtension.getHelperClass().equals(DefaultComponentHelper.class.getCanonicalName())) {
+				// Note: key may need to be replaced with the extension eclass?
+				helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(new DefaultComponentHelper(key))));
+			} else {
+				helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
+			}
 		}
 
 		if (helpers.size() > 1) {

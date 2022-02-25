@@ -5,7 +5,6 @@
 package com.mmxlabs.optimiser.lso.multiobjective.modules;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
@@ -25,31 +24,45 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.SequentialParallelSimpleMultiObjectiveOptimiser;
+import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser;
 
 public class MultiObjectiveOptimiserModule extends AbstractModule {
-	public static final String MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES = "MULTIOBJECTIVE_OBJECTIVE_NAMES";
+
+	public static final String MULTIOBJECTIVE_OBJECTIVE_FITNESS_COMPONENTS = "MULTIOBJECTIVE_FITNESS_COMPONENTS";
+	public static final String MULTIOBJECTIVE_OBJECTIVE_NAMES = "MULTIOBJECTIVE_OBJECTIVE_NAMES";
 	public static final String MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES = "MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES";
 
-	@Override
-	protected void configure() {
-	}
+//	@Provides
+//	@Singleton
+//	SimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+//			@NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+//			@Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
+//			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
+//			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed) {
+//		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
+//		assert (objectives.size() == objectiveNames.size());
+//		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives);
+//
+//		setLSO(injector, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
+//		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
+//		return lso;
+//	}
 
+	
 	@Provides
 	@Singleton
-	SequentialParallelSimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context,
-			@NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
-			@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-			@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
-			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
-			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed) {
-		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
+	SimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
+			@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames,
+			@NonNull final List<IConstraintChecker> constraintCheckers, @NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed) {
+
+		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).toList();
 		assert (objectives.size() == objectiveNames.size());
 
-		final SequentialParallelSimpleMultiObjectiveOptimiser lso = new SequentialParallelSimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
+		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
 	}
@@ -57,7 +70,7 @@ public class MultiObjectiveOptimiserModule extends AbstractModule {
 	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
 			@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
 			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
-			@NonNull final LocalSearchOptimiser lso, final long seed) {
+			@NonNull final SimpleMultiObjectiveOptimiser lso) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
 
@@ -70,8 +83,14 @@ public class MultiObjectiveOptimiserModule extends AbstractModule {
 		lso.setEvaluationProcesses(evaluationProcesses);
 
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
+	}
 
-		lso.setRandom(new Random(seed));
+	@Provides
+	@Named(MULTIOBJECTIVE_OBJECTIVE_FITNESS_COMPONENTS)
+	private List<IFitnessComponent> buildSimpleMultiObjectiveLSOMover(@NonNull final Injector injector, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
+			@Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames) {
+		List<IFitnessComponent> multiObjectiveFitnessComponents = getMultiObjectiveFitnessComponents(fitnessEvaluator, objectiveNames);
+		return multiObjectiveFitnessComponents;
 	}
 
 	public static List<IFitnessComponent> getMultiObjectiveFitnessComponents(final IMultiObjectiveFitnessEvaluator fitnessEvaluator, final List<String> objectiveNames) {

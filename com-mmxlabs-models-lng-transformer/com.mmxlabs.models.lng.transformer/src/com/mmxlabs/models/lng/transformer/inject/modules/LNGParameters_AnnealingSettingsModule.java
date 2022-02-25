@@ -15,10 +15,10 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.optimiser.lso.IThresholder;
-import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.ParallelLSOConstants;
+import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.optimiser.lso.parallellso.ParallelLSOConstants;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
@@ -33,18 +33,11 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 		this.settings = settings;
 	}
 
-	@Override
-	protected void configure() {
-
-	}
-
 	@Provides
 	@Singleton
 	private IThresholder provideThresholder(@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
 		// For now we are just going to generate a self-calibrating thresholder
-
-		final IThresholder thresholder = new GeometricThresholder(new Random(seed), settings.getEpochLength(), settings.getInitialTemperature(), settings.getCooling());
-		return thresholder;
+		return new GeometricThresholder(new Random(seed), settings.getEpochLength(), settings.getInitialTemperature(), settings.getCooling());
 	}
 
 	@Provides
@@ -78,15 +71,9 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(RestartingLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)
+	@Named(DefaultLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)
 	private int getRestartIterationsThreshold() {
 		return settings.getRestartIterationsThreshold();
-	}
-
-	@Provides
-	@Named(LocalSearchOptimiserModule.NEW_SIMILARITY_OPTIMISER)
-	private boolean isUsingNewSimilarityModule() {
-		return false;
 	}
 
 	@Provides

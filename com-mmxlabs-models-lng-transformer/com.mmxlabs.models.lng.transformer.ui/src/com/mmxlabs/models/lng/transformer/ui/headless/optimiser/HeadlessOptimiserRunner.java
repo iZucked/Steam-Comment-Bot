@@ -29,7 +29,6 @@ import com.google.inject.Module;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
@@ -37,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
@@ -54,7 +54,6 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scheduler.optimiser.actionplan.ActionSetLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class HeadlessOptimiserRunner {
@@ -129,9 +128,6 @@ public class HeadlessOptimiserRunner {
 		// Create logging module
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
-		final boolean doesActionSet = optimisationPlan.getStages().stream().anyMatch(ActionPlanOptimisationStage.class::isInstance);
-		final ActionSetLogger actionSetLogger = doesActionSet ? new ActionSetLogger() : null;
-
 		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
 
 			@Override
@@ -170,7 +166,7 @@ public class HeadlessOptimiserRunner {
 				if (moduleType == ModuleType.Module_Optimisation) {
 					final LinkedList<@NonNull Module> modules = new LinkedList<>();
 					if (exportLogs) {
-						modules.add(createLoggingModule(options.loggingParameters, phaseToLoggerMap, actionSetLogger, runnerHook));
+						modules.add(createLoggingModule(options.loggingParameters, phaseToLoggerMap, runnerHook));
 					}
 					if (ocOptions.injections != null) {
 						modules.add(new LNGOptimisationOverrideModule(ocOptions.injections));
@@ -241,7 +237,7 @@ public class HeadlessOptimiserRunner {
 				saveScenario(options.outputScenarioFileName, sdp);
 			}
 			if (exportLogs) {
-				exportData(phaseToLoggerMap, actionSetLogger, options.outputLoggingFolder, false);
+				exportData(phaseToLoggerMap, options.outputLoggingFolder, false);
 			}
 
 			return true;
@@ -302,7 +298,7 @@ public class HeadlessOptimiserRunner {
 				if (moduleType == ModuleType.Module_Optimisation) {
 					final LinkedList<@NonNull Module> modules = new LinkedList<>();
 					if (exportLogs) {
-						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, null, runnerHook));
+						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, runnerHook));
 					}
 
 					return modules;
@@ -366,8 +362,9 @@ public class HeadlessOptimiserRunner {
 			options.setUserSettings(EcoreUtil.copy(userSettings));
 			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget);
 
-			final SequencesContainer initialSequencesContainer = new SequencesContainer(runner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
-			link.run(initialSequencesContainer, result, new NullProgressMonitor());
+			LNGDataTransformer dataTransformer = runner.getScenarioToOptimiserBridge().getDataTransformer();
+			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
+			link.run(dataTransformer, initialSequencesContainer, result, new NullProgressMonitor());
 
 //			if (outputScenarioFileName != null) {
 //				// TODO: make this work when there is no parent file specified
@@ -380,7 +377,7 @@ public class HeadlessOptimiserRunner {
 //				saveScenario(outputScenarioFileName, sdp);
 //			}
 			if (exportLogs) {
-				exportData(phaseToLoggerMap, null, outputLoggingFolder, false);
+				exportData(phaseToLoggerMap, outputLoggingFolder, false);
 			}
 
 			return options;
@@ -442,7 +439,7 @@ public class HeadlessOptimiserRunner {
 				if (moduleType == ModuleType.Module_Optimisation) {
 					final LinkedList<@NonNull Module> modules = new LinkedList<>();
 					if (exportLogs) {
-						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, null, runnerHook));
+						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, runnerHook));
 					}
 
 					return modules;
@@ -516,7 +513,7 @@ public class HeadlessOptimiserRunner {
 				saveScenario(outputScenarioFileName, sdp);
 			}
 			if (exportLogs) {
-				exportData(phaseToLoggerMap, null, outputLoggingFolder, false);
+				exportData(phaseToLoggerMap, outputLoggingFolder, false);
 			}
 
 			return true;
@@ -525,16 +522,7 @@ public class HeadlessOptimiserRunner {
 		}
 	}
 
-	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final boolean verbose) {
-		// // first export logging data
-		if (actionSetLogger != null) {
-			System.out.println(verbose);
-			if (!verbose)
-				actionSetLogger.shortExport(Paths.get(path).toString(), "actionSets");
-			else
-				actionSetLogger.export(Paths.get(path).toString(), "action");
-		}
-
+	private void exportData(final Map<String, LSOLogger> loggerMap, final String path, final boolean verbose) {
 		final PrintWriter writer = WriterFactory.getWriter(Paths.get(path, "machineData.txt").toString());
 		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 		writer.close();
@@ -546,10 +534,9 @@ public class HeadlessOptimiserRunner {
 	 * framework.
 	 */
 	@NonNull
-	private Module createLoggingModule(LoggingParameters loggingParameters, final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook) {
+	private Module createLoggingModule(LoggingParameters loggingParameters, final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook) {
 
-		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook, loggingParameters);
-		return loggingModule;
+		return new LoggingModule(phaseToLoggerMap, runnerHook, loggingParameters);
 	}
 
 	protected void saveScenario(final String outputFile, final @NonNull IScenarioDataProvider sdp) throws IOException {

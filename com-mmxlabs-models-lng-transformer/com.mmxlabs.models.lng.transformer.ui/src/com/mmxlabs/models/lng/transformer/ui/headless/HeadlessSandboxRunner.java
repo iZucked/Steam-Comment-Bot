@@ -29,20 +29,37 @@ public class HeadlessSandboxRunner {
 
 	public AbstractSolutionSet run(final HeadlessSandboxOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
+		return run(options, scenarioModelRecord, sdp, completedHook, monitor, false);
+	}
+
+	public AbstractSolutionSet run(final HeadlessSandboxOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor, boolean directExecute) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
 		final UserSettings userSettings = options.userSettings;
 
 		OptionAnalysisModel model = null;
 		for (final OptionAnalysisModel oam : lngScenarioModel.getAnalyticsModel().getOptionModels()) {
-
-			if (Objects.equals(options.sandboxUUID, oam.getUuid())) {
-				model = oam;
-				break;
+			// Prefer UUID
+			if (options.sandboxUUID != null) {
+				if (Objects.equals(options.sandboxUUID, oam.getUuid())) {
+					model = oam;
+					break;
+				}
+			} else if (options.sandboxName != null) {
+				if (Objects.equals(options.sandboxName, oam.getName())) {
+					model = oam;
+					break;
+				}
 			}
 		}
 		if (model == null) {
-			throw new IllegalArgumentException("Missing sandbox " + options.sandboxUUID);
+			if (options.sandboxUUID != null) {
+				throw new IllegalArgumentException("Missing sandbox " + options.sandboxUUID);
+			} else if (options.sandboxName != null) {
+				throw new IllegalArgumentException("Missing sandbox " + options.sandboxName);
+			}
+			throw new IllegalArgumentException("Missing sandbox");
 		}
 
 		final AnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
@@ -55,7 +72,12 @@ public class HeadlessSandboxRunner {
 			cmd.append(SetCommand.create(editingDomain, pModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, sandboxResult));
 
 			if (!cmd.isEmpty()) {
-				editingDomain.getCommandStack().execute(cmd);
+				// Execute directly as e.g. running in ITS and not on display thread
+				if (directExecute) {
+					cmd.execute();
+				} else {
+					editingDomain.getCommandStack().execute(cmd);
+				}
 			}
 		};
 		final int mode = model.getMode();
@@ -68,7 +90,7 @@ public class HeadlessSandboxRunner {
 		case SandboxModeConstants.MODE_DERIVE -> evaluator.runSandboxOptions(sdp, null, model, userSettings, action, false, subMonitor);
 
 		}
-		
+
 		return model.getResults();
 
 	}

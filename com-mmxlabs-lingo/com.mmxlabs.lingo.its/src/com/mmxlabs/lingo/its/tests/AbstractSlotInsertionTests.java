@@ -55,7 +55,6 @@ public class AbstractSlotInsertionTests {
 			userSettings.setPeriodEnd(periodEnd);
 		}
 
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);

@@ -37,21 +37,21 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
  */
 public final class AddModelAction {
 	public interface IAddContext {
-		public ICommandHandler getCommandHandler();
+		ICommandHandler getCommandHandler();
 
-		public EObject getContainer();
+		EObject getContainer();
 
-		public EReference getContainment();
+		EReference getContainment();
 
-		public MMXRootObject getRootObject();
+		MMXRootObject getRootObject();
 
-		public IScenarioEditingLocation getEditorPart();
+		IScenarioEditingLocation getEditorPart();
 
 		@Nullable
 		Collection<@NonNull EObject> getCurrentSelection();
 	}
 
-	public final static Action create(final EClass eClass, final IAddContext context) {
+	public static final Action create(final EClass eClass, final IAddContext context) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
 
 		if (factories.isEmpty())
@@ -62,9 +62,7 @@ public final class AddModelAction {
 			return new MenuAddAction(factories, context);
 	}
 
-	/**
-	 */
-	public final static Action create(final List<Pair<EClass, IAddContext>> items, final Action[] additionalActions) {
+	public static final Action create(final List<Pair<EClass, IAddContext>> items, final Action[] additionalActions) {
 
 		final List<Pair<IModelFactory, IAddContext>> factoryPairs = new LinkedList<>();
 		for (final Pair<EClass, IAddContext> p : items) {
@@ -76,13 +74,13 @@ public final class AddModelAction {
 		return new MultiAddContextAction(factoryPairs, additionalActions);
 	}
 
-	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
+	public static final Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
 		return create(eClass, context, additionalActions, null);
 	}
-	
+
 	/**
 	 */
-	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
+	public static final Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
 
 		if (factories.isEmpty())
@@ -98,7 +96,7 @@ class MenuAddAction extends AbstractMenuLockableAction {
 	private final IAddContext context;
 	private final Action[] additionalActions;
 	private Viewer viewer = null;
-	
+
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context) {
 		this(factories, context, new Action[0]);
 	}
@@ -106,11 +104,11 @@ class MenuAddAction extends AbstractMenuLockableAction {
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions) {
 		this(factories, context, additionalActions, null);
 	}
-	
+
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
 		super("Create new element");
-		
- 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
+
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		this.context = context;
 		this.factories = factories;
 		this.additionalActions = additionalActions;
@@ -138,7 +136,7 @@ class MultiAddContextAction extends AbstractMenuLockableAction {
 
 	public MultiAddContextAction(final List<Pair<IModelFactory, IAddContext>> factories, final Action[] additionalActions) {
 		super("Create new element");
- 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		this.factories = factories;
 		this.additionalActions = additionalActions;
 	}

@@ -45,6 +45,12 @@ public abstract class DynamicTestCaseRunner {
 	public List<DynamicNode> runOptimisationTests() {
 		return OptimisationTestRunner.runOptimisationTests(getBaseDirectory());
 	}
+	
+	@TestFactory
+	@Tag(TestCategories.OPTIMISATION_TEST)
+	public List<DynamicNode> runSandboxTests() {
+		return OptimisationTestRunner.runSandboxTests(getBaseDirectory());
+	}
 
 	@Disabled
 	@TestFactory

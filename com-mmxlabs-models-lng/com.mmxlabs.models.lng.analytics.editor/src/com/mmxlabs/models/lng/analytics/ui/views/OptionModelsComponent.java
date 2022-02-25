@@ -77,7 +77,7 @@ public class OptionModelsComponent extends AbstractSandboxComponent<OptionModell
 		optionsTreeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
 		CellFormatterLabelProvider labelProvider = new OptionsTreeViewerLabelProvider(sandboxUIHelper,  new OptionTreeViewerFormatter(optionModellerView), validationErrors, "Option Models", optionModellerView);
-		createColumn(optionsTreeViewer, labelProvider, "Option Models", new OptionTreeViewerFormatter(optionModellerView), true);
+		createColumn(optionsTreeViewer, labelProvider, "Option Models", true);
 
 		mgr = new MenuManager();
 

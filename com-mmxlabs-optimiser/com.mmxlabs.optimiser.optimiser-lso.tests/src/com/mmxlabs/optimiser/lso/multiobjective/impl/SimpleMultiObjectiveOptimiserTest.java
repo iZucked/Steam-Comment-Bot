@@ -263,7 +263,7 @@ public class SimpleMultiObjectiveOptimiserTest {
 			}
 		});
 
-		SimpleMultiObjectiveOptimiser smoo = new SimpleMultiObjectiveOptimiser(null, new Random(0));
+		SimpleMultiObjectiveOptimiser smoo = new SimpleMultiObjectiveOptimiser(null);
 		injector.injectMembers(smoo);
 		return smoo;
 	}

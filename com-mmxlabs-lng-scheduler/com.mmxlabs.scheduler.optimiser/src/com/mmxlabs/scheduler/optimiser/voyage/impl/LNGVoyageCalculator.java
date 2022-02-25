@@ -751,8 +751,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// add up route cost and find the last voyage details element
 		for (int i = 0; i < sequence.length; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
-			if (element instanceof VoyageDetails) {
-				final VoyageDetails details = (VoyageDetails) element;
+			if (element instanceof VoyageDetails details) {
 				// add route cost
 				routeCostAccumulator += details.getOptions().getRouteCost();
 
@@ -760,8 +759,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				voyageTime += details.getIdleTime();
 
 				lastVoyageDetailsElement = details;
-			} else if (element instanceof PortDetails) {
-				final PortDetails details = (PortDetails) element;
+			} else if (element instanceof PortDetails details) {
 				if (details.getOptions().getPortSlot().getPortType() == PortType.Maintenance) {
 					if (details.getOptions().getPortSlot() instanceof MaintenanceVesselEventPortSlot) {
 						isDuringMaintenanceEvaluator = true;
@@ -1584,7 +1582,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				calculatePortFuelRequirements(options, details);
 
 				if (idx == 0) {
-					if (options.getPortSlot()instanceof IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
+					if (options.getPortSlot() instanceof IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
 						// This enables "running dry"
 						nboAvailableInM3 = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
 					}

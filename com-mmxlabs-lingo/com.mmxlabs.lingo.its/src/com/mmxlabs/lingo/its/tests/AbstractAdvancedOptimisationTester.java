@@ -25,8 +25,6 @@ import com.google.common.base.Joiner;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -36,7 +34,6 @@ import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
@@ -75,32 +72,17 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	}
 
 	@SuppressWarnings("unused")
-	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
-			throws Exception {
-		runAdvancedOptimisationTestCase(limitedIterations, mode, withActionSets, withGeneratedCharterOuts, LNGScenarioRunnerCreator.createITSService());
+	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withGeneratedCharterOuts) throws Exception {
+		runAdvancedOptimisationTestCase(limitedIterations, mode, withGeneratedCharterOuts, LNGScenarioRunnerCreator.createITSService());
 	}
 
 	@SuppressWarnings("unused")
-	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts,
+	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withGeneratedCharterOuts,
 			final IOptimiserInjectorService optimiserInjectorService, String... extraHints) throws Exception {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		if (withGeneratedCharterOuts) {
 			Assumptions.assumeTrue(runGCO);
-		}
-
-		if (withActionSets) {
-			// Preconditions check - ensure period, otherwise ignore test case
-			Assumptions.assumeTrue(periodStart != null);
-			Assumptions.assumeTrue(periodEnd != null);
-
-			// Should match OptimisationHelper (Repeated null checks for null analysis code)
-			if (periodStart != null && periodEnd != null) {
-				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) <= 6);
-			}
-			if (periodStart != null && periodEnd != null) {
-				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) < 3 || mode != SimilarityMode.LOW);
-			}
 		}
 
 		// Only run full iterations if the flag is set
@@ -118,9 +100,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			components.add("full-iters");
 		}
 		components.add(String.format("similarity-%s", mode.toString()));
-		if (withActionSets) {
-			components.add("actionset");
-		}
 		if (withGeneratedCharterOuts) {
 			components.add("gco");
 		}
@@ -152,7 +131,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 				userSettings.setPeriodEnd(periodEnd);
 			}
 
-			userSettings.setBuildActionSets(withActionSets);
 			userSettings.setGenerateCharterOuts(withGeneratedCharterOuts);
 			userSettings.setShippingOnly(false);
 			userSettings.setSimilarityMode(mode);
@@ -169,7 +147,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 
 			}
 			final UserSettings planUserSettings = optimisationPlan.getUserSettings();
-			Assertions.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
 			Assertions.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
 			Assertions.assertFalse(planUserSettings.isShippingOnly());
 			Assertions.assertEquals(periodStart, planUserSettings.getPeriodStartDate());
@@ -277,7 +254,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			@Nullable
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module>singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {
@@ -285,21 +262,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(voyageEvaluatorCache);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(timeWindowCache);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(pnlTrimmerCache);
-						}
-					});
-				}
-				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
-
-						@Override
-						protected void configure() {
-							// Nothing needed here
-						}
-
-						@Provides
-						@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
-						private boolean isOptimiserReevaluating() {
-							return false;
 						}
 					});
 				}

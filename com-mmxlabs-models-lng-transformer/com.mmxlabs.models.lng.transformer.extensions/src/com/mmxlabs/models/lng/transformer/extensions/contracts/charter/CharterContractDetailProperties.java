@@ -23,8 +23,7 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 	@Nullable
 	@Override
 	public DetailProperty createProperties(@NonNull EObject eObject) {
-		if (eObject instanceof CharterContractFeeDetails) {
-			final CharterContractFeeDetails details = (CharterContractFeeDetails) eObject;
+		if (eObject instanceof CharterContractFeeDetails details) {
 			return createTree(details);
 		}
 
@@ -37,12 +36,10 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 			details.setName("Ballast Bonus Fee Details");
 			addDetailProperty("Fee", "", "$", "", charterContractFeeDetails.getFee(), new StringFormatLabelProvider("%,d"), details);
 			if (charterContractFeeDetails.getMatchingContractDetails() != null) {
-				if (charterContractFeeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
-					LumpSumBallastBonusTermDetails rule = (LumpSumBallastBonusTermDetails) charterContractFeeDetails.getMatchingContractDetails();
+				if (charterContractFeeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails rule) {
 					addDetailProperty("Type", "", "", "", "Lump sum", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Matching port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
-				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails) {
-					NotionalJourneyBallastBonusTermDetails rule = (NotionalJourneyBallastBonusTermDetails) charterContractFeeDetails.getMatchingContractDetails();
+				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails rule) {
 					addDetailProperty("Type", "", "", "", "Notional journey", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Lump sum", "", "$", "", rule.getLumpSum(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Matching port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
@@ -56,9 +53,8 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 					addDetailProperty("Hire cost", "", "$", "", rule.getHireCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Route taken", "", "", "", rule.getRouteTaken(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Route cost", "", "$", "", rule.getCanalCost(), new StringFormatLabelProvider("%,d"), details);
-				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails) {
+				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails rule) {
 					details.setName("Repositioning Fee Details");
-					OriginPortRepositioningFeeTermDetails rule = (OriginPortRepositioningFeeTermDetails) charterContractFeeDetails.getMatchingContractDetails();
 					addDetailProperty("Type", "", "", "", "Notional journey", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Lump sum", "", "$", "", rule.getLumpSum(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Load port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
@@ -72,9 +68,8 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 					addDetailProperty("Hire cost", "", "$", "", rule.getHireCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Route taken", "", "", "", rule.getRouteTaken(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Route cost", "", "$", "", rule.getCanalCost(), new StringFormatLabelProvider("%,d"), details);
-				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
+				} else if (charterContractFeeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails rule) {
 					details.setName("Repositioning Fee Details");
-					LumpSumRepositioningFeeTermDetails rule = (LumpSumRepositioningFeeTermDetails) charterContractFeeDetails.getMatchingContractDetails();
 					addDetailProperty("Type", "", "", "", "Lump sum", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Load port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
 				}

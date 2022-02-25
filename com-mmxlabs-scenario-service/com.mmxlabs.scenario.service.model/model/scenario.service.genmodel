@@ -4,7 +4,7 @@
     modelDirectory="/com.mmxlabs.scenario.service.model/src" editorDirectory="" modelPluginID="com.mmxlabs.scenario.service.model"
     modelName="Scenario" reflectiveDelegation="true" codeFormatting="true" testsDirectory=""
     importerID="org.eclipse.emf.importer.ecore" featureDelegation="Reflective" complianceLevel="16.0"
-    copyrightFields="false" runtimeVersion="2.28" language="" usedGenPackages="../../com.mmxlabs.scenario.service.manifest/model/scenariomanifest.genmodel#//manifest">
+    copyrightFields="false" runtimeVersion="2.27" language="" usedGenPackages="../../com.mmxlabs.scenario.service.manifest/model/scenariomanifest.genmodel#//manifest">
   <foreignModel>scenario.service.ecore</foreignModel>
   <genPackages prefix="ScenarioService" basePackage="com.mmxlabs.scenario.service"
       disposableProviderFactory="true" literalsInterface="false" ecorePackage="scenario.service.ecore#/">

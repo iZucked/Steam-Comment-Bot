@@ -24,13 +24,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -126,16 +124,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	}
 
 	@Override
-	protected AbstractSimpleTabularReportContentProvider<VolumeData> createContentProvider() {
+	protected SimpleTabularReportContentProvider createContentProvider() {
 
-		return new AbstractSimpleTabularReportContentProvider<VolumeData>() {
-
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				// Nothing to handle here
-			}
-		};
-
+		return new SimpleTabularReportContentProvider();
 	}
 
 	@Override

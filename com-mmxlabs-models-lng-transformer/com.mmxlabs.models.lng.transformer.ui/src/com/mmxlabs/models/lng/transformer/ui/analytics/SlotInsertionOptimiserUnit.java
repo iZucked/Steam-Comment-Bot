@@ -133,10 +133,9 @@ public class SlotInsertionOptimiserUnit {
 
 			@Provides
 			@ThreadLocalScope
-			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
-					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
+			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				EvaluationHelper helper = new EvaluationHelper();
 				injector.injectMembers(helper);
 
 				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);

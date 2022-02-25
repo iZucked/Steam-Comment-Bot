@@ -63,7 +63,9 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	@Override
 	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
-		return slot.getPortType() == PortType.End && (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
+		return( slot.getPortType() == PortType.End || slot.getPortType() == PortType.Round_Trip_Cargo_End)
+				
+				&& (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
 	}
 
 	public Set<IPort> getReturnPorts() {

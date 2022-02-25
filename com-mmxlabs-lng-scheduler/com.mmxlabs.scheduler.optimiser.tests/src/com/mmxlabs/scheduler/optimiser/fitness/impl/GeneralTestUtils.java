@@ -35,6 +35,7 @@ import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.SingleThreadLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
@@ -111,7 +112,7 @@ public final class GeneralTestUtils {
 				data, phaseOptimisationData);
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
-		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		final SingleThreadLocalSearchOptimiser lso = new SingleThreadLocalSearchOptimiser();
 		lso.setLookupManager(new LookupManager());
 
 		lso.setNumberOfIterations(numberOfIterations);

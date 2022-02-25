@@ -131,7 +131,7 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, PhaseOptimisationData pData, @NonNull final Random random, final int numberOfIterations,
+	public static SingleThreadLocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, PhaseOptimisationData pData, @NonNull final Random random, final int numberOfIterations,
 			final int stepSize, final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
@@ -151,7 +151,7 @@ public final class GeneralTestUtils {
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, data);
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
-		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		final SingleThreadLocalSearchOptimiser lso = new SingleThreadLocalSearchOptimiser();
 
 		lso.setNumberOfIterations(numberOfIterations);
 		lso.setSequenceManipulator(new NullSequencesManipulator());

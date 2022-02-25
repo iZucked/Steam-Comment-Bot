@@ -91,8 +91,8 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CargoSwitch<Adapter> modelSwitch =
-		new CargoSwitch<Adapter>() {
+	protected CargoSwitch<@Nullable Adapter> modelSwitch =
+		new CargoSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseCargoModel(CargoModel object) {
 				return createCargoModelAdapter();

@@ -12,8 +12,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -35,6 +34,10 @@ import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 
 public class LNGScenarioChainBuilder {
 
+	private LNGScenarioChainBuilder() {
+
+	}
+
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 
 	/**
@@ -45,9 +48,8 @@ public class LNGScenarioChainBuilder {
 	 * @param dataTransformer
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
-	 * @param jobExecutorFactory           Optional (for now)
-	 *                                  {@link ExecutorFactory} for
-	 *                                  parallelisation
+	 * @param jobExecutorFactory        Optional (for now) {@link ExecutorFactory}
+	 *                                  for parallelisation
 	 * @param initialHints
 	 * @return
 	 */
@@ -68,7 +70,7 @@ public class LNGScenarioChainBuilder {
 			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && !optimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
 				LNGCheckForViolatedConstraintsUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
-			
+
 			BiConsumer<LNGScenarioToOptimiserBridge, String> exportCallback = (bridge, name) -> SolutionSetExporterUnit.exportMultipleSolutions(builder, 1, bridge, () -> {
 				final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 				options.setName(name);
@@ -80,16 +82,7 @@ public class LNGScenarioChainBuilder {
 
 				final UserSettings userSettings = optimisationPlan.getUserSettings();
 				for (final OptimisationStage stage : optimisationPlan.getStages()) {
-					BiConsumer<LNGScenarioToOptimiserBridge, String> callback;
-					if (stage instanceof ParallelOptimisationStage<?>) {
-						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
-						final OptimisationStage template = parallelOptimisationStage.getTemplate();
-						assert template != null;
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, jobExecutorFactory, template, parallelOptimisationStage.getJobCount(), userSettings);
-
-					} else {
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, jobExecutorFactory, stage, 1, userSettings);
-					}
+					BiConsumer<LNGScenarioToOptimiserBridge, String> callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, jobExecutorFactory, stage, userSettings);
 					if (callback != null) {
 						exportCallback = callback;
 					}

@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class CellFormatterLabelProvider extends CellLabelProvider {
@@ -32,14 +33,17 @@ public class CellFormatterLabelProvider extends CellLabelProvider {
 	@Override
 	public void update(final ViewerCell cell) {
 		Object element = cell.getElement();
-		if (element instanceof EObject && path != null) {
-			element = path.get((EObject) element);
+		if (path != null && element instanceof EObject eObj) {
+			element = path.get(eObj);
 		}
 		cell.setText(renderer.render(element));
 		cell.setImage(getImage(cell, element));
 	}
 
 	protected @Nullable Image getImage(final @NonNull ViewerCell cell, final @Nullable Object element) {
+		if (renderer instanceof IImageProvider ip) {
+			return ip.getImage(element);
+		}
 		return null;
 	}
 }

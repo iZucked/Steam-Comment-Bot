@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.importer;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,8 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -22,6 +25,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.fleet.util.ILingoReferenceVesselImportCommandProvider;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -48,6 +52,9 @@ public class FleetModelImporter implements ISubmodelImporter {
 	@Inject
 	private IImporterRegistry importerRegistry;
 
+	@Inject
+	private ILingoReferenceVesselImportCommandProvider referenceVesselImportCommand;
+
 	private IClassImporter vesselImporter;
 	private IClassImporter baseFuelImporter;
 	private IClassImporter groupImporter;
@@ -63,6 +70,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 			importerRegistry = activator.getImporterRegistry();
 			registryInit();
 		}
+		this.referenceVesselImportCommand = Activator.getDefault().getWorkbench().getService(ILingoReferenceVesselImportCommandProvider.class);
 	}
 
 	@Inject
@@ -90,6 +98,14 @@ public class FleetModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MMX_REFERENCE_VESSELS)) {
+			try {
+				referenceVesselImportCommand.run(fleetModel, context);
+			} catch (IOException e) {
+				context.addProblem(context.createProblem("Unable to import LiNGO DB reference vessels.", true, true, true));
+			}
+		}
 
 		if (inputs.containsKey(VESSELS_KEY))
 			fleetModel.getVessels().addAll((Collection<? extends Vessel>) vesselImporter.importObjects(FleetPackage.eINSTANCE.getVessel(), inputs.get(VESSELS_KEY), context));

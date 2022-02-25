@@ -18,6 +18,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.datetime;visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.rcp.common,
- com.mmxlabs.scenario.service.model
+ com.mmxlabs.scenario.service.model,
+ com.mmxlabs.models.util
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.fleet

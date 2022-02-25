@@ -162,14 +162,15 @@ public class MTMSanboxUnit {
 				bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
 
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+				
+				bind(MTMSandboxEvaluator.class).in(ThreadLocalScope.class);
 			}
 
 			@Provides
 			@ThreadLocalScope
-			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
-					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
+			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				EvaluationHelper helper = new EvaluationHelper();
 				injector.injectMembers(helper);
 
 				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
@@ -177,15 +178,6 @@ public class MTMSanboxUnit {
 
 				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 				return helper;
-			}
-
-			@Provides
-			@ThreadLocalScope
-			private MTMSandboxEvaluator providePerThreadOptimiser(@NonNull final Injector injector) {
-
-				MTMSandboxEvaluator optimiser = new MTMSandboxEvaluator();
-				injector.injectMembers(optimiser);
-				return optimiser;
 			}
 		});
 

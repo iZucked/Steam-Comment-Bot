@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -29,7 +28,7 @@ import com.mmxlabs.common.CumulativeMap;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -57,12 +56,8 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	}
 
 	@Override
-	protected AbstractSimpleTabularReportContentProvider<IncomeStatementData> createContentProvider() {
-		return new AbstractSimpleTabularReportContentProvider<IncomeStatementData>() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
+	protected SimpleTabularReportContentProvider createContentProvider() {
+		return new SimpleTabularReportContentProvider() {
 
 			@Override
 			public Object getParent(final Object element) {

@@ -85,7 +85,7 @@ public class LightWeightSchedulerOptimiser {
 	private ISequences initialSequences;
 
 	@Inject
-	@Named(OptimiserConstants.DEFAULT_VESSEL)
+	@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
 	private IVesselAvailability pnlVesselAvailability;
 
 	/**

@@ -76,8 +76,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ParametersSwitch<Adapter> modelSwitch =
-		new ParametersSwitch<Adapter>() {
+	protected ParametersSwitch<@Nullable Adapter> modelSwitch =
+		new ParametersSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseUserSettings(UserSettings object) {
 				return createUserSettingsAdapter();
@@ -119,16 +119,12 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createConstraintsAndFitnessSettingsStageAdapter();
 			}
 			@Override
-			public Adapter caseParallisableOptimisationStage(ParallisableOptimisationStage object) {
-				return createParallisableOptimisationStageAdapter();
-			}
-			@Override
-			public <T extends ParallisableOptimisationStage> Adapter caseParallelOptimisationStage(ParallelOptimisationStage<T> object) {
-				return createParallelOptimisationStageAdapter();
-			}
-			@Override
 			public Adapter caseCleanStateOptimisationStage(CleanStateOptimisationStage object) {
 				return createCleanStateOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseStrategicLocalSearchOptimisationStage(StrategicLocalSearchOptimisationStage object) {
+				return createStrategicLocalSearchOptimisationStageAdapter();
 			}
 			@Override
 			public Adapter caseLocalSearchOptimisationStage(LocalSearchOptimisationStage object) {
@@ -167,24 +163,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createMultipleSolutionSimilarityOptimisationStageAdapter();
 			}
 			@Override
-			public Adapter caseParallelMultipleSolutionSimilarityOptimisationStage(ParallelMultipleSolutionSimilarityOptimisationStage object) {
-				return createParallelMultipleSolutionSimilarityOptimisationStageAdapter();
-			}
-			@Override
-			public Adapter caseParallelHillClimbOptimisationStage(ParallelHillClimbOptimisationStage object) {
-				return createParallelHillClimbOptimisationStageAdapter();
-			}
-			@Override
-			public Adapter caseParallelLocalSearchOptimisationStage(ParallelLocalSearchOptimisationStage object) {
-				return createParallelLocalSearchOptimisationStageAdapter();
-			}
-			@Override
 			public Adapter caseMultiobjectiveSimilarityOptimisationStage(MultiobjectiveSimilarityOptimisationStage object) {
 				return createMultiobjectiveSimilarityOptimisationStageAdapter();
-			}
-			@Override
-			public Adapter caseParallelMultiobjectiveSimilarityOptimisationStage(ParallelMultiobjectiveSimilarityOptimisationStage object) {
-				return createParallelMultiobjectiveSimilarityOptimisationStageAdapter();
 			}
 			@Override
 			public Adapter caseCleanStateOptimisationSettings(CleanStateOptimisationSettings object) {
@@ -331,34 +311,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage <em>Parallisable Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallisableOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage <em>Parallel Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallelOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage <em>Clean State Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -369,6 +321,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCleanStateOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage <em>Strategic Local Search Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage
+	 * @generated
+	 */
+	public Adapter createStrategicLocalSearchOptimisationStageAdapter() {
 		return null;
 	}
 
@@ -527,48 +493,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage <em>Parallel Multiple Solution Similarity Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallelMultipleSolutionSimilarityOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage <em>Parallel Hill Climb Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallelHillClimbOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage <em>Parallel Local Search Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallelLocalSearchOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage <em>Multiobjective Similarity Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -579,20 +503,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMultiobjectiveSimilarityOptimisationStageAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage <em>Parallel Multiobjective Similarity Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage
-	 * @generated
-	 */
-	public Adapter createParallelMultiobjectiveSimilarityOptimisationStageAdapter() {
 		return null;
 	}
 

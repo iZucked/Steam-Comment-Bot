@@ -25,7 +25,7 @@ package com.mmxlabs.models.lng.parameters;
  * @model
  * @generated
  */
-public interface CleanStateOptimisationStage extends ParallisableOptimisationStage, ConstraintsAndFitnessSettingsStage {
+public interface CleanStateOptimisationStage extends ConstraintsAndFitnessSettingsStage {
 	/**
 	 * Returns the value of the '<em><b>Seed</b></em>' attribute.
 	 * <!-- begin-user-doc -->

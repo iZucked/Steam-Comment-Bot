@@ -30,7 +30,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class HillClimbOptimisationStageItemProvider extends ParallisableOptimisationStageItemProvider {
+public class HillClimbOptimisationStageItemProvider extends ConstraintsAndFitnessSettingsStageItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -91,7 +91,6 @@ public class HillClimbOptimisationStageItemProvider extends ParallisableOptimisa
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ParametersPackage.Literals.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS);
 		}
 		return childrenFeatures;
@@ -151,7 +150,6 @@ public class HillClimbOptimisationStageItemProvider extends ParallisableOptimisa
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE__SEED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -169,11 +167,6 @@ public class HillClimbOptimisationStageItemProvider extends ParallisableOptimisa
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS,
-				 ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -77,7 +77,7 @@ public class ChainRunner implements IChainRunner {
 				// if (!firstLink) {
 				// link.init();
 				// }
-				r = link.run(initialSequencesContainer, r, new SubProgressMonitor(monitor, link.getProgressTicks()));
+				r = link.run(dataTransformer, initialSequencesContainer, r, new SubProgressMonitor(monitor, link.getProgressTicks()));
 				// firstLink = false;
 				if (monitor.isCanceled()) {
 					throw new OperationCanceledException();

@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
+import com.mmxlabs.optimiser.lso.moves.impl.Move4over2;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
 @SuppressWarnings("null")

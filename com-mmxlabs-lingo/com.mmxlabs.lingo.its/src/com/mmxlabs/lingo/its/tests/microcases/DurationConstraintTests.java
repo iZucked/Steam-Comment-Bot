@@ -109,11 +109,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 			}
 		});
 
-		canalBookings.setStrictBoundaryOffsetDays(30);
-		canalBookings.setRelaxedBoundaryOffsetDays(90);
-		canalBookings.setFlexibleBookingAmountNorthbound(0);
-		canalBookings.setFlexibleBookingAmountSouthbound(0);
-
 		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		scenarioModel.setPromptPeriodStart(LocalDate.of(2017, 6, 1));
 		scenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 9, 1));
@@ -1045,12 +1040,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModel.getCanalBookings().getCanalBookingSlots().clear();
 
-		cargoModel.getCanalBookings().setStrictBoundaryOffsetDays(10);
-		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
-
-		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
-			
-		//cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -1144,11 +1133,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModel.getCanalBookings().getCanalBookingSlots().clear();
 
-		cargoModel.getCanalBookings().setStrictBoundaryOffsetDays(0);
-		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(1);
-
-		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
-		//cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -1187,7 +1171,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);

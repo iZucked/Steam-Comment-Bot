@@ -48,7 +48,7 @@
       <view
             category="org.eclipse.ui"
             class="com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator"
-            icon="icons/filenav_nav.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png"
             id="com.mmxlabs.scenario.service.ui.navigator"
             name="Scenarios"
             restorable="true">
@@ -724,7 +724,7 @@
          <action
                class="com.mmxlabs.scenario.service.ui.editor.actions.PinStateEditorActionDelegate"
                definitionId="com.mmxlabs.scenario.service.ui.pin"
-               icon="icons/pin_scenario.png"
+               icon="icons/pin_scenario_UNUSED.png"
                id="com.mmxlabs.scenario.service.ui.togglePin"
                label="Toggle pin for this scenario"
                style="toggle"

@@ -38,6 +38,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimise
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserRunner;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 
 /**
  * Headless Optimisation Runner
@@ -137,14 +140,16 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 		boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 		try {
+			KeyFileV2 keyfile = KeyFileLoader.getCloudOptimisationKeyFileV2();
+			CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 				AbstractSolutionSet result = runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
-				
-//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
-//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
-//				
-				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
-			});
+
+				//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+				//
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
+			}, scenarioCipherProvider);
 		} catch (Exception e) {
 			throw new IOException("Error running optimisation", e);
 		}

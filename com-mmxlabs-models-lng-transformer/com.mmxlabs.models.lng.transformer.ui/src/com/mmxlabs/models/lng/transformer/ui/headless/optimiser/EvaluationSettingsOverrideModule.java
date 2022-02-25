@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -22,9 +21,6 @@ public class EvaluationSettingsOverrideModule extends JsonConfiguredModule {
 		
 		// bind the "latenessComponentParameters" import using a custom method
 		importers.put("excessIdleTimeComponentParameters", (name, value) -> bind(IExcessIdleTimeComponentParameters.class).toInstance(parseExcessIdleTimeComponentParameters(value)));
-		
-		// bind the "latenessComponentParameters" import using a default binding (but a custom name)		
-		importers.put("optimiserReevaluate", (name, value) -> this.bindFromJsonNode(value, LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE));
 	}
 
 	/**

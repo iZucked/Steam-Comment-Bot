@@ -10,45 +10,44 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 
+@NonNullByDefault
 public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInMarketProviderEditor {
 
-	private @NonNull final Set<@NonNull ISpotCharterInMarket> spotCharterInMarkets = new HashSet<>();
-	private @NonNull final Map<@NonNull ISpotCharterInMarket, @NonNull Integer> spotCharterInMarketCount = new HashMap<>();
-	private @NonNull final Map<@NonNull Pair<@NonNull ISpotCharterInMarket, @NonNull Integer>, @NonNull IVesselAvailability> spotCharterInMarketMap = new HashMap<>();
+	private final Set<ISpotCharterInMarket> spotCharterInMarkets = new HashSet<>();
+	private final Map<ISpotCharterInMarket, Integer> spotCharterInMarketCount = new HashMap<>();
+	private final Map<Pair<ISpotCharterInMarket, Integer>, IVesselAvailability> spotCharterInMarketMap = new HashMap<>();
 
 	@Override
-	public @NonNull Collection<@NonNull ISpotCharterInMarket> getSpotCharterInMarkets() {
+	public Collection<ISpotCharterInMarket> getSpotCharterInMarkets() {
 		return spotCharterInMarkets;
 	}
 
 	@Override
-	public int getSpotCharterInMarketCount(@NonNull final ISpotCharterInMarket market) {
+	public int getSpotCharterInMarketCount(final ISpotCharterInMarket market) {
 		return spotCharterInMarketCount.getOrDefault(market, 0);
 	}
 
 	@Override
-	public @NonNull IVesselAvailability getSpotMarketAvailability(@NonNull final ISpotCharterInMarket market, final int spotIndex) {
-		return spotCharterInMarketMap.get(new Pair<>(market, spotIndex));
+	public IVesselAvailability getSpotMarketAvailability(final ISpotCharterInMarket market, final int spotIndex) {
+		return spotCharterInMarketMap.get(Pair.of(market, spotIndex));
 	}
 
 	@Override
-	public void addSpotMarketAvailability(@NonNull final IVesselAvailability vesselAvailability, @NonNull final ISpotCharterInMarket market, final int spotIndex) {
-		spotCharterInMarketMap.put(new Pair<>(market, spotIndex), vesselAvailability);
+	public void addSpotMarketAvailability(final IVesselAvailability vesselAvailability, final ISpotCharterInMarket market, final int spotIndex) {
+		spotCharterInMarketMap.put(Pair.of(market, spotIndex), vesselAvailability);
 		spotCharterInMarkets.add(market);
 
 		// If not a nominal option, update the highest option count.
 		// Note: This does not validation we have an option for each index.
 		if (spotIndex != -1) {
-			spotCharterInMarketCount.merge(market, spotIndex + 1, (existing, other) -> {
-				return Math.max(existing, other);
-			});
+			spotCharterInMarketCount.merge(market, spotIndex + 1, Math::max);
 		}
 	}
 }

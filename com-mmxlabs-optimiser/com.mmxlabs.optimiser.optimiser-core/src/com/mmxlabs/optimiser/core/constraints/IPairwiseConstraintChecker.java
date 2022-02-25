@@ -31,7 +31,7 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	boolean checkPairwiseConstraint(ISequenceElement first,  ISequenceElement second,  IResource resource, @Nullable List<@Nullable String> messages);
+	boolean checkPairwiseConstraint(ISequenceElement first,  ISequenceElement second,  IResource resource, @Nullable List<String> messages);
 
 	/**
 	 * Return a string explaining why these two items cannot follow one another

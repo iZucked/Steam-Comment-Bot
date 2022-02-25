@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getMode <em>Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isNominalOnly <em>Nominal Only</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}</li>
@@ -338,34 +337,6 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setWithSpotCargoMarkets(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Build Action Sets</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Build Action Sets</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Build Action Sets</em>' attribute.
-	 * @see #setBuildActionSets(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_BuildActionSets()
-	 * @model default="false"
-	 *        annotation="http://www.minimaxlabs.com/license/features/required module='actionplan'"
-	 * @generated
-	 */
-	boolean isBuildActionSets();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Build Action Sets</em>' attribute.
-	 * @see #isBuildActionSets()
-	 * @generated
-	 */
-	void setBuildActionSets(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.

@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
+import com.mmxlabs.optimiser.lso.moves.impl.Move4over1;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class Move4over1Test {

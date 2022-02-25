@@ -24,7 +24,6 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -37,7 +36,6 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -53,23 +51,13 @@ public class ADPScenarioModuleHelper {
 		return new AbstractModule() {
 
 			@Provides
-			@Named(OptimiserConstants.DEFAULT_VESSEL)
+			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
 			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, final IVesselProvider vesselProvider, final IOptimisationData optimisationData) {
 
-				final CharterInMarket defaultMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
-				final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
-
-				for (final IResource o_resource : optimisationData.getResources()) {
-					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-					if (o_vesselAvailability.getSpotCharterInMarket() != market) {
-						continue;
-					}
-					if (o_vesselAvailability.getSpotIndex() == -1) {
-						return o_vesselAvailability;
-					}
-
+				final IVesselAvailability va = (IVesselAvailability) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+				if (va != null) {
+					return va;
 				}
-
 				throw new IllegalStateException();
 			}
 

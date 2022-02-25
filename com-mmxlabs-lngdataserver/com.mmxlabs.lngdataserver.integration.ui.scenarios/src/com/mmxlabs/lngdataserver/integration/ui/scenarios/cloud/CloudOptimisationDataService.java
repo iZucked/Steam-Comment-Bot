@@ -5,10 +5,19 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
@@ -84,11 +93,12 @@ public class CloudOptimisationDataService implements IProgressProvider {
 	public String uploadData(final File dataFile, //
 			final String checksum, //
 			final String scenarioName, //
-			final IProgressListener progressListener) throws Exception {
+			final IProgressListener progressListener, //
+			final File encryptedSymmetricKey) throws Exception {
 		String response = null;
 		try {
 			updater.pause();
-			response = client.upload(dataFile, checksum, scenarioName, progressListener);
+			response = client.upload(dataFile, checksum, scenarioName, progressListener, encryptedSymmetricKey);
 		} catch (final Exception e) {
 			LOGGER.error(e.getMessage());
 		} finally {
@@ -185,6 +195,19 @@ public class CloudOptimisationDataService implements IProgressProvider {
 	public void setLocalRuntime(final String jobId, final long runtime) {
 		updater.setLocalRuntime(jobId, runtime);
 	}
+
+	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+		return client.getOptimisationServerPublicKey(pubkey);
+	}
+
+	public void encryptSymmetricKey(RSAPublicKey pubkey, SecretKey symkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {
+		var cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, pubkey);
+		try (FileOutputStream fos = new FileOutputStream(encryptedKeyFile)) {
+			fos.write(cipher.doFinal(symkey.getEncoded()));
+		}
+	}
+
 
 	@Override
 	public @Nullable Pair<Double, RunType> getProgress(final ScenarioInstance scenarioInstance, final ScenarioFragment fragment) {
