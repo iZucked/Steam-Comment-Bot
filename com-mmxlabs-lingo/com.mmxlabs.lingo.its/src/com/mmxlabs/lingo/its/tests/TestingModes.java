@@ -18,9 +18,6 @@ public final class TestingModes {
 	 */
 	public static final TestMode OptimisationTestMode = TestMode.Run;
 
-	// Cases with no generated output, Generate will be the same as skip
-	public static final TestMode EvaluationCases = TestMode.Run;
-
 	public static final TestMode UATCasestMode = TestMode.Run;
 
 }
