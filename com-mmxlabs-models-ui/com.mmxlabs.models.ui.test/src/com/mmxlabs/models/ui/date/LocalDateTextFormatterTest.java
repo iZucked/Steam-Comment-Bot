@@ -40,7 +40,7 @@ public class LocalDateTextFormatterTest extends AbstractSWTBotTest {
 	private void runTest(final String inputText, final int year, final int month, final int day) throws InterruptedException {
 		try {
 			final FormattedText[] text = new FormattedText[1];
-			Assertions.assertSame(display, bot.getDisplay());
+//			Assertions.assertSame(display, bot.getDisplay());
 			bot.getDisplay().syncExec(new Runnable() {
 
 				@Override
