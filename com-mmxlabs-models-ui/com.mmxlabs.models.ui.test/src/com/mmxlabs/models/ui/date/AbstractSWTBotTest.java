@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractSWTBotTest {
 
@@ -25,19 +25,19 @@ public class AbstractSWTBotTest {
 	protected static Thread uiThread;
 	protected static Display display;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setKeyboard() {
 		// For typeText, set US keyboard layout as GB does not seem to be supported
 		System.setProperty(SWTBotPreferenceConstants.KEY_KEYBOARD_LAYOUT, "EN_US");
 	}
-	@BeforeClass
+	@BeforeAll
 	public static void setLocale() {
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
 		DateTimeFormatsProvider.INSTANCE.setDefaultDayMonthFormats();
 	}
 
-	@Before
+	@BeforeEach
 	public void createDisplay() throws InterruptedException, BrokenBarrierException {
 
 		uiThread = new Thread(new Runnable() {
@@ -86,7 +86,7 @@ public class AbstractSWTBotTest {
 		swtBarrier.await();
 	}
 
-	@After
+	@AfterEach
 	public void disposeDisplay() throws InterruptedException {
 		// Ensure display is disposed
 		if (display != null && !display.isDisposed()) {
