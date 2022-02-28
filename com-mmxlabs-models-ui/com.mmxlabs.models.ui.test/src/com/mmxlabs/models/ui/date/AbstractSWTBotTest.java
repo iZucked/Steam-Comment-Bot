@@ -30,11 +30,28 @@ public class AbstractSWTBotTest {
 		// For typeText, set US keyboard layout as GB does not seem to be supported
 		System.setProperty(SWTBotPreferenceConstants.KEY_KEYBOARD_LAYOUT, "EN_US");
 	}
+
 	@BeforeAll
 	public static void setLocale() {
-		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
+		// Enforce UK Locale Needed for running tests on build server. Keeps date format
+		// consistent.
 		Locale.setDefault(Locale.UK);
 		DateTimeFormatsProvider.INSTANCE.setDefaultDayMonthFormats();
+	}
+
+	@BeforeEach
+	public void createSWTBot() throws InterruptedException, BrokenBarrierException {
+
+		// Create or reuse existing display
+		Display display = Display.getDefault();
+		shell = new Shell(display);
+
+		shell.setText("Testing: " + getClass().getName());
+		shell.setLayout(new FillLayout());
+
+		bot = new SWTBot(shell);
+		shell.open();
+
 	}
 
 //	@BeforeEach
