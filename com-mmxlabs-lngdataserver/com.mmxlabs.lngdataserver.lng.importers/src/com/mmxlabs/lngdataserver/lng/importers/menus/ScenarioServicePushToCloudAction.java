@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;

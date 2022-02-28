@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions.CannotDeserialiseException;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
@@ -143,7 +144,9 @@ public class OptimisationJSONDeserialiser {
 	static OptimisationPlan decodeOptimisationPlan(ObjectMapper mapper, JsonNode planNode) throws JsonProcessingException {
 
 		@SuppressWarnings("null")
-		UserSettings us = mapper.treeToValue(planNode.get("userSettings"), UserSettingsImpl.class);
+		UserSettings us = mapper //
+				.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class) //
+				.treeToValue(planNode.get("userSettings"), UserSettingsImpl.class);
 
 		OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 

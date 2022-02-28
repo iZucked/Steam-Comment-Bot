@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.lng.importers.menus;
+package com.mmxlabs.models.lng.parameters.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
