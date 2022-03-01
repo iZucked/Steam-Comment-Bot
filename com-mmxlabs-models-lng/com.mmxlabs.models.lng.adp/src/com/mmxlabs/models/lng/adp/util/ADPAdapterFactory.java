@@ -75,8 +75,8 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ADPSwitch<Adapter> modelSwitch =
-		new ADPSwitch<Adapter>() {
+	protected ADPSwitch<@Nullable Adapter> modelSwitch =
+		new ADPSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseADPModel(ADPModel object) {
 				return createADPModelAdapter();
@@ -228,6 +228,26 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseMullCargoWrapper(MullCargoWrapper object) {
 				return createMullCargoWrapperAdapter();
+			}
+			@Override
+			public Adapter caseSpacingProfile(SpacingProfile object) {
+				return createSpacingProfileAdapter();
+			}
+			@Override
+			public Adapter caseFobSpacingAllocation(FobSpacingAllocation object) {
+				return createFobSpacingAllocationAdapter();
+			}
+			@Override
+			public Adapter caseDesSpacingAllocation(DesSpacingAllocation object) {
+				return createDesSpacingAllocationAdapter();
+			}
+			@Override
+			public Adapter caseDesSpacingRow(DesSpacingRow object) {
+				return createDesSpacingRowAdapter();
+			}
+			@Override
+			public Adapter caseSpacingAllocation(SpacingAllocation object) {
+				return createSpacingAllocationAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -786,6 +806,76 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMullCargoWrapperAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SpacingProfile <em>Spacing Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SpacingProfile
+	 * @generated
+	 */
+	public Adapter createSpacingProfileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation <em>Fob Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation
+	 * @generated
+	 */
+	public Adapter createFobSpacingAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation <em>Des Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation
+	 * @generated
+	 */
+	public Adapter createDesSpacingAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.DesSpacingRow <em>Des Spacing Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingRow
+	 * @generated
+	 */
+	public Adapter createDesSpacingRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SpacingAllocation <em>Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SpacingAllocation
+	 * @generated
+	 */
+	public Adapter createSpacingAllocationAdapter() {
 		return null;
 	}
 

@@ -32,7 +32,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see com.mmxlabs.models.lng.adp.ADPPackage
  * @generated
  */
-public class ADPSwitch<T1> extends Switch<T1> {
+public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -341,6 +341,38 @@ public class ADPSwitch<T1> extends Switch<T1> {
 			case ADPPackage.MULL_CARGO_WRAPPER: {
 				MullCargoWrapper mullCargoWrapper = (MullCargoWrapper)theEObject;
 				T1 result = caseMullCargoWrapper(mullCargoWrapper);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.SPACING_PROFILE: {
+				SpacingProfile spacingProfile = (SpacingProfile)theEObject;
+				T1 result = caseSpacingProfile(spacingProfile);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.FOB_SPACING_ALLOCATION: {
+				FobSpacingAllocation fobSpacingAllocation = (FobSpacingAllocation)theEObject;
+				T1 result = caseFobSpacingAllocation(fobSpacingAllocation);
+				if (result == null) result = caseSpacingAllocation(fobSpacingAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.DES_SPACING_ALLOCATION: {
+				DesSpacingAllocation desSpacingAllocation = (DesSpacingAllocation)theEObject;
+				T1 result = caseDesSpacingAllocation(desSpacingAllocation);
+				if (result == null) result = caseSpacingAllocation(desSpacingAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.DES_SPACING_ROW: {
+				DesSpacingRow desSpacingRow = (DesSpacingRow)theEObject;
+				T1 result = caseDesSpacingRow(desSpacingRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.SPACING_ALLOCATION: {
+				SpacingAllocation spacingAllocation = (SpacingAllocation)theEObject;
+				T1 result = caseSpacingAllocation(spacingAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -915,6 +947,81 @@ public class ADPSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseMullCargoWrapper(MullCargoWrapper object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spacing Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spacing Profile</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSpacingProfile(SpacingProfile object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fob Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fob Spacing Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFobSpacingAllocation(FobSpacingAllocation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Des Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Des Spacing Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDesSpacingAllocation(DesSpacingAllocation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Des Spacing Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Des Spacing Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDesSpacingRow(DesSpacingRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spacing Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSpacingAllocation(SpacingAllocation object) {
 		return null;
 	}
 

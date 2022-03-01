@@ -55,6 +55,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  org.slf4j.api;bundle-version="1.7.10",
  org.eclipse.emf.ecore,
+ com.mmxlabs.models.lng.adp.rateability.spacing;bundle-version="0.0.0",
  com.mmxlabs.models.lng.schedule.editor
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule

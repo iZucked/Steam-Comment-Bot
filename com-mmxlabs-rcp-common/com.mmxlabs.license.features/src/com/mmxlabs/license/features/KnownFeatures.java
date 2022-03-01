@@ -125,6 +125,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
 
+	public static final String FEATURE_ADP_SPACING_RATEABILITY = "features:adp-spacing-rateability";
+
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 
 	public static final String FEATURE_MMX_REFERENCE_VESSELS = "features:mmx-reference-vessels";
