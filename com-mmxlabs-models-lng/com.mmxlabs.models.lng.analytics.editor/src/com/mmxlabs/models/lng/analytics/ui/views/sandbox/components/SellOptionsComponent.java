@@ -21,7 +21,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -49,29 +49,21 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 
 	@Override
 	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
-		ExpandableComposite expandable = wrapInExpandable(parent, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
-
+		ExpandableComposite expandable = wrapInExpandable(parent, "Sells", this::createSellOptionsViewer, expandableComposite -> {
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final SellsDropTargetListener listener = new SellsDropTargetListener(scenarioEditingLocation, sellOptionsViewer);
-				inputWants.add(model -> listener.setModel(model));
-				// Control control = getControl();
+				inputWants.add(listener::setModel);
 				final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
-				// expandableComposite.addDropSupport(DND.DROP_MOVE, types, listener);
 			}
 
 			final Label addSellButton = new Label(expandableComposite, SWT.NONE);
 			addSellButton.setImage(sandboxUIHelper.image_grey_add);
 			expandableComposite.setTextClient(addSellButton);
 			addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
-			addSellButton.addMouseTrackListener(new MouseTrackListener() {
-
-				@Override
-				public void mouseHover(final MouseEvent e) {
-
-				}
+			addSellButton.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
@@ -104,23 +96,23 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new SellOptionDescriptionFormatter(), validationErrors, "Sell");
 		// Temporary pending nebula grid bug fix
-		createColumn_TempForNebulaBugFix(sellOptionsViewer, labelProvider, "Sell",false);
+		createColumn_TempForNebulaBugFix(sellOptionsViewer, labelProvider, "Sell", false);
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
 		{
 			mgr = new MenuManager();
 			final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, scenarioEditingLocation, mgr);
-			inputWants.add(model -> listener.setModel(model));
+			inputWants.add(listener::setModel);
 			sellOptionsViewer.getGrid().addMenuDetectListener(listener);
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final SellsDropTargetListener listener = new SellsDropTargetListener(scenarioEditingLocation, sellOptionsViewer);
-			inputWants.add(model -> listener.setModel(model));
+			inputWants.add(listener::setModel);
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
-		inputWants.add(model -> sellOptionsViewer.setInput(model));
+		inputWants.add(sellOptionsViewer::setInput);
 
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(sellOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
