@@ -37,13 +37,14 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class VesselAvailabilityCharterContractIExtraModelImporter implements IExtraModelImporter {
 
-	static final Map<String, String> inputs = new LinkedHashMap<String, String>();
+	static final Map<String, String> inputs = new LinkedHashMap<>();
 	static final Map<@NonNull String, @NonNull EClass> keys = new LinkedHashMap<>();
 
 	/** Use a special case importer: don't go via the registry. */
 	private final IClassImporter extraImporter = new VesselAvailabilityCharterContractDefaultClassImporter();
 
 	static {
+		inputs.put(CharterContractConstants.CHARTER_CONTRACT_KEY, CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME);
 		inputs.put(CharterContractConstants.BALLAST_BONUS_KEY, CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME);
 		inputs.put(CharterContractConstants.REPOSITIONING_FEE_KEY, CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME);
 		
@@ -59,8 +60,7 @@ public class VesselAvailabilityCharterContractIExtraModelImporter implements IEx
 
 	@Override
 	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			if (cargoModel != null) {
 				for (Map.Entry<@NonNull String, @NonNull EClass> entry : keys.entrySet()) {
@@ -75,9 +75,7 @@ public class VesselAvailabilityCharterContractIExtraModelImporter implements IEx
 
 	@Override
 	public void exportModel(final Map<String, Collection<Map<String, String>>> output, IMMXExportContext context) {
-		MMXRootObject rootObject = context.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (context.getRootObject() instanceof LNGScenarioModel lngScenarioModel) {
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			if (cargoModel != null) {
 				List<IBallastBonus> bbExportContainers = new ArrayList<>();
@@ -96,18 +94,18 @@ public class VesselAvailabilityCharterContractIExtraModelImporter implements IEx
 							IBallastBonus bb = gcc.getBallastBonusTerms();
 							if (bb != null) {
 								bbExportContainers.add(bb);
-								if (bb instanceof SimpleBallastBonusContainer) {
-									bbExports.addAll(((SimpleBallastBonusContainer) bb).getTerms());
-								} else if (bb instanceof MonthlyBallastBonusContainer) {
-									bbExports.addAll(((MonthlyBallastBonusContainer) bb).getTerms());
-									mbbExports.addAll(((MonthlyBallastBonusContainer) bb).getHubs());
+								if (bb instanceof SimpleBallastBonusContainer container) {
+									bbExports.addAll(container.getTerms());
+								} else if (bb instanceof MonthlyBallastBonusContainer container) {
+									bbExports.addAll(container.getTerms());
+									mbbExports.addAll(container.getHubs());
 								}
 							}
 							IRepositioningFee rf = gcc.getRepositioningFeeTerms();
 							if (rf != null) {
 								rfExportContainers.add(rf);
-								if (rf instanceof SimpleRepositioningFeeContainer) {
-									rfExports.addAll(((SimpleRepositioningFeeContainer) rf).getTerms());
+								if (rf instanceof SimpleRepositioningFeeContainer container) {
+									rfExports.addAll(container.getTerms());
 								}
 							}
 						}

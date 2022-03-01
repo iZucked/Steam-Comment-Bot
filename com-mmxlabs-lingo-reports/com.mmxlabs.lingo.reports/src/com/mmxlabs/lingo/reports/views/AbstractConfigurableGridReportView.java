@@ -786,23 +786,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		clearInputEquivalents();
 		super.dispose();
 	}
-
-	/**
-	 */
-	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
-
-		// if (SortData.class.isAssignableFrom(adapter)) {
-		// return sortData;
-		// }
-		// if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
-		// final PropertySheetPage propertySheetPage = new PropertySheetPage();
-		//
-		// propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
-		// return propertySheetPage;
-		// }
-		return super.getAdapter(adapter);
-	}
+ 
 
 	/**
 	 * 

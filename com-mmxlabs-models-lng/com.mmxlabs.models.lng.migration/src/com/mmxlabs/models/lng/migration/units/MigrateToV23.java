@@ -67,7 +67,7 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 					final List<EObjectWrapper> eventsInGroup = new LinkedList<>();
 
 					final Object sequenceType = sequence.getAttrib("sequenceType");
-					if (sequenceType == literal_SequenceType_VESSEL | sequenceType == literal_SequenceType_SPOT_VESSEl) {
+					if (sequenceType == literal_SequenceType_VESSEL || sequenceType == literal_SequenceType_SPOT_VESSEl) {
 						final List<EObjectWrapper> events = sequence.getRefAsList("events");
 						EObjectWrapper grouping = null;
 						for (final EObjectWrapper event : events) {

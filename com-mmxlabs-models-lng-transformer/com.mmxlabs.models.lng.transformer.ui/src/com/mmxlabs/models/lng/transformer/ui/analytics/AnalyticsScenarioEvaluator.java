@@ -605,7 +605,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			}
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
-			final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
+			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
 					extraDataProvider, (mem, data, injector) -> {
 						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
@@ -614,12 +614,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
+					return runner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
 				}
 
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
+					return runner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
 			};
 		});
@@ -635,7 +635,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
-			final SandboxOptimiserRunner insertionRunner = new SandboxOptimiserRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
+			final SandboxOptimiserRunner runner = new SandboxOptimiserRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
 			});
@@ -643,12 +643,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
+					return runner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
 				}
 
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runOptimiser(monitor);
+					return runner.runOptimiser(monitor);
 				}
 			};
 		});

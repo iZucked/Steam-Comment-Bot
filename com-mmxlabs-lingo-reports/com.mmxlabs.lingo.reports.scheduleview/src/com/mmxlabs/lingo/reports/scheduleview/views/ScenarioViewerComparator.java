@@ -45,7 +45,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		public final String getDisplayName() {
 			return displayName;
 		}
-	};
+	}
 
 	private enum Type {
 		INVENTORY, DES, FOB, FLEET, CHARTER
@@ -174,8 +174,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 									} else {
 										e1Obj = null;
 									}
-								} else if (e1 instanceof EObject) {
-									e1Obj = (EObject) e1;
+								} else if (e1 instanceof EObject eo) {
+									e1Obj = eo;
 								} else {
 									e1Obj = null;
 								}
@@ -188,14 +188,14 @@ public class ScenarioViewerComparator extends ViewerComparator {
 									} else {
 										e2Obj = null;
 									}
-								} else if (e2 instanceof EObject) {
-									e2Obj = (EObject) e2;
+								} else if (e2 instanceof EObject eo) {
+									e2Obj = eo;
 								} else {
 									e2Obj = null;
 								}
 
-								final boolean s1Pinned = e1Obj != null ? selectedDataProvider.isPinnedObject(e1Obj) : false;
-								final boolean s2Pinned = e2Obj != null ? selectedDataProvider.isPinnedObject(e2Obj) : false;
+								final boolean s1Pinned = e1Obj != null && selectedDataProvider.isPinnedObject(e1Obj);
+								final boolean s2Pinned = e2Obj != null && selectedDataProvider.isPinnedObject(e2Obj);
 
 								if (s1Pinned != s2Pinned) {
 									if (s1Pinned) {
@@ -250,8 +250,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 										} else {
 											e1Obj = null;
 										}
-									} else if (e1 instanceof EObject) {
-										e1Obj = (EObject) e1;
+									} else if (e1 instanceof EObject eo) {
+										e1Obj = eo;
 									} else {
 										e1Obj = null;
 									}
@@ -264,14 +264,14 @@ public class ScenarioViewerComparator extends ViewerComparator {
 										} else {
 											e2Obj = null;
 										}
-									} else if (e2 instanceof EObject) {
-										e2Obj = (EObject) e2;
+									} else if (e2 instanceof EObject eo) {
+										e2Obj = eo;
 									} else {
 										e2Obj = null;
 									}
 
-									final boolean s1Pinned = e1Obj != null ? selectedDataProvider.isPinnedObject(e1Obj) : false;
-									final boolean s2Pinned = e2Obj != null ? selectedDataProvider.isPinnedObject(e2Obj) : false;
+									final boolean s1Pinned = e1Obj != null && selectedDataProvider.isPinnedObject(e1Obj);
+									final boolean s2Pinned = e2Obj != null && selectedDataProvider.isPinnedObject(e2Obj);
 
 									if (s1Pinned != s2Pinned) {
 										if (s1Pinned) {

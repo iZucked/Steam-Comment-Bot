@@ -4,17 +4,23 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -23,9 +29,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -56,6 +65,8 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 
 	private SandboxUIHelper sandboxHelper;
 
+	private OptionModellerView optionModellerView;
+
 	protected PartialCaseCompoment(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
@@ -63,6 +74,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 
 	@Override
 	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
+		this.optionModellerView = optionModellerView;
 		sandboxHelper = new SandboxUIHelper(parent);
 		{
 			expandable = wrapInExpandable(parent, "Options", this::createPartialCaseViewer, expandableCompo -> {
@@ -121,7 +133,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 					final Object element = cell.getElement();
 
 					final Set<Object> targetElements = getTargetElementsForWiringProvider(element);
-					IStatus s = sandboxHelper.getWorstStatus(targetElements, validationErrors);
+					final IStatus s = sandboxHelper.getWorstStatus(targetElements, validationErrors);
 					sandboxHelper.updateGridItem(cell, s);
 					cell.setImage(sandboxHelper.getValidationImageForStatus(s));
 
@@ -132,7 +144,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 						}
 					}
 
-					if (cell.getElement() instanceof PartialCaseRow row) {
+					if (cell.getElement() instanceof final PartialCaseRow row) {
 						String lbl = "";
 						if (!row.getBuyOptions().isEmpty()) {
 							lbl = new BuyOptionDescriptionFormatter().render(row.getBuyOptions());
@@ -195,6 +207,38 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		hookDragSource(partialCaseViewer);
+		
+		
+		{
+			final Action deleteAction = new Action("Delete") {
+				@Override
+				public void run() {
+					if (partialCaseViewer.getSelection() instanceof final IStructuredSelection selection) {
+
+						final Collection<EObject> c = new LinkedList<>();
+						selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
+						if (!c.isEmpty()) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
+						}
+					}
+				}
+			};
+			partialCaseViewer.getControl().addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(final FocusEvent e) {
+					optionModellerView.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), null);
+				}
+
+				@Override
+				public void focusGained(final FocusEvent e) {
+					optionModellerView.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+				}
+			});
+
+		}
+		
+		
 		return partialCaseViewer.getGrid();
 	}
 
@@ -204,7 +248,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		GridViewerHelper.recalculateRowHeights(partialCaseViewer.getGrid());
 	}
 
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		expandable.setVisible(visible);
 		((GridData) expandable.getLayoutData()).exclude = !visible;
 

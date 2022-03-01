@@ -31,6 +31,13 @@ public class CloudOptimiserPreferencePage extends FieldEditorPreferencePage impl
 		StringFieldEditor version = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_DEV_VERSION, "Version", getFieldEditorParent());
 		addField(version);
 
+		StringFieldEditor username = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_USERNAME, "Username", getFieldEditorParent());
+		addField(username);
+
+		StringFieldEditor password = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_PASSWORD, "Password", getFieldEditorParent());
+		password.getTextControl(getFieldEditorParent()).setEchoChar('*');
+		addField(password);
+
 	}
 
 	@Override

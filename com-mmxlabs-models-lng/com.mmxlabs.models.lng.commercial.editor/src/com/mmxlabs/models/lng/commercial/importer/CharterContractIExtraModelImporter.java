@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
@@ -29,7 +30,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
@@ -37,19 +37,22 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
- * Look at com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter
+ * Look at
+ * com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter
+ * 
  * @author FM
  *
  */
 public class CharterContractIExtraModelImporter implements IExtraModelImporter {
 
-	static final Map<String, String> inputs = new LinkedHashMap<String, String>();
+	static final Map<String, String> inputs = new LinkedHashMap<>();
 	static final Map<@NonNull String, @NonNull EClass> keys = new LinkedHashMap<>();
 
 	/** Use a special case importer: don't go via the registry. */
 	private final IClassImporter extraImporter = new CharterContractDefaultClassImporter();
 
 	static {
+		inputs.put(CharterContractConstants.CHARTER_CONTRACT_KEY, CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME);
 		inputs.put(CharterContractConstants.BALLAST_BONUS_KEY, CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME);
 		inputs.put(CharterContractConstants.REPOSITIONING_FEE_KEY, CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME);
 
@@ -65,11 +68,18 @@ public class CharterContractIExtraModelImporter implements IExtraModelImporter {
 
 	@Override
 	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
-		if (rootObject instanceof LNGScenarioModel) {
+		if (rootObject instanceof LNGScenarioModel scenarioModel) {
 			for (Map.Entry<@NonNull String, @NonNull EClass> entry : keys.entrySet()) {
 				final CSVReader reader = inputs.get(entry.getKey());
 				if (reader != null) {
-					extraImporter.importObjects(entry.getValue(), reader, context);
+					Collection<EObject> importObjects = extraImporter.importObjects(entry.getValue(), reader, context);
+					if (CharterContractConstants.CHARTER_CONTRACT_KEY .equals(entry.getKey())) {
+						importObjects.stream() //
+						.map(GenericCharterContract.class::cast) 
+						
+.
+						forEach(scenarioModel.getReferenceModel().getCommercialModel().getCharterContracts()::add);
+					}
 				}
 			}
 		}

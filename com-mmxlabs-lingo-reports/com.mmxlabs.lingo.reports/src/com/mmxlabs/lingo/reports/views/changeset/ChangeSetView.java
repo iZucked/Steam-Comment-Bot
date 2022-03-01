@@ -665,8 +665,7 @@ public class ChangeSetView extends ViewPart {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+				if (selection instanceof IStructuredSelection iStructuredSelection) {
 
 					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
 					// rows
@@ -676,11 +675,9 @@ public class ChangeSetView extends ViewPart {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							final Object o = itr.next();
-							if (o instanceof ChangeSetTableRow) {
-								final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) o;
+							if (o instanceof ChangeSetTableRow changeSetRow) {
 								selectRow(selectedElements, changeSetRow);
-							} else if (o instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup group = (ChangeSetTableGroup) o;
+							} else if (o instanceof ChangeSetTableGroup group) {
 								final List<ChangeSetTableRow> rows = group.getRows();
 								for (final ChangeSetTableRow changeSetRow : rows) {
 									selectRow(selectedElements, changeSetRow);
@@ -698,11 +695,10 @@ public class ChangeSetView extends ViewPart {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							Object o = itr.next();
-							if (o instanceof ChangeSetTableRow) {
-								o = ((ChangeSetTableRow) o).eContainer();
+							if (o instanceof ChangeSetTableRow row) {
+								o = row.eContainer();
 							}
-							if (o instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
+							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
 
 								// Set the flag so we don't end up in compare mode.
 								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
@@ -1049,13 +1045,7 @@ public class ChangeSetView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
-//	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final @Nullable String targetSlotId) {
-//		setNewDataData(target, action, true, targetSlotId);
-//	}
-
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
-
-		// columnHelper.cleanUpVesselColumns();
 
 		if (target == null) {
 			setEmptyData();
@@ -1118,7 +1108,7 @@ public class ChangeSetView extends ViewPart {
 		newViewState.root = newRoot;
 		newViewState.tableRootAlternative = newTableRoot;
 		newViewState.tableRootDefault = newTableRoot;
-
+		
 		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 	}
 
@@ -1166,16 +1156,6 @@ public class ChangeSetView extends ViewPart {
 
 	private ITreeContentProvider createContentProvider() {
 		return new ITreeContentProvider() {
-
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
-
-			@Override
-			public void dispose() {
-
-			}
 
 			@Override
 			public boolean hasChildren(final Object element) {
@@ -1618,12 +1598,10 @@ public class ChangeSetView extends ViewPart {
 		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getEventType() == Notification.REMOVE) {
 				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
-					setEmptyData();
-					getSite().getPage().hideView(ChangeSetView.this);
+					resetView();
 				}
 			}
-		};
-
+		}
 	};
 
 	private Action copyAction;
@@ -1782,13 +1760,7 @@ public class ChangeSetView extends ViewPart {
 		final ViewState viewState = currentViewState;
 		if (viewState != null && viewState.lastSolution != null //
 				&& ((viewState.lastSolution == solution) || (viewState.lastSolution.getSolution() == solution.getSolution()))) {
-			setViewMode(ViewMode.COMPARE, false);
-
-			setEmptyData();
-			// // Close view if dynamic
-			// if (viewMode != ViewMode.COMPARE) {
-			// getSite().getPage().hideView(ChangeSetView.this);
-			// }
+			resetView();
 		}
 	}
 
@@ -1828,13 +1800,15 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 			if (linked) {
-				setEmptyData();
-				// Close view if dynamic
-				if (viewMode != ViewMode.COMPARE) {
-					getSite().getPage().hideView(ChangeSetView.this);
-				}
+				resetView();
 			}
 		}
+	}
+	
+	private void resetView() {
+		setViewMode(ViewMode.COMPARE, false);
+		setPartName("Changes");
+		setEmptyData();
 	}
 
 	public ViewState getCurrentViewState() {
@@ -1998,14 +1972,13 @@ public class ChangeSetView extends ViewPart {
 			selectedElements.add(eventGrouping);
 			selectedElements.addAll(eventGrouping.getEvents());
 		}
-		if (eventGrouping instanceof Event) {
-			final Event event = (Event) eventGrouping;
+		if (eventGrouping instanceof Event event) {
 			selectedElements.add(event.getSequence());
 		}
-		if (eventGrouping instanceof CargoAllocation) {
-			final Sequence sequence = ((CargoAllocation) eventGrouping).getSequence();
+		if (eventGrouping instanceof CargoAllocation ca) {
+			final Sequence sequence = ca.getSequence();
 			if (sequence != null) {
-				selectedElements.add(((CargoAllocation) eventGrouping).getSequence());
+				selectedElements.add(ca.getSequence());
 			}
 		}
 		// //

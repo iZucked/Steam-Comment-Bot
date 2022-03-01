@@ -4,26 +4,36 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -39,6 +49,8 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.ui.views.ResultsSetDeletionHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
@@ -58,20 +70,21 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 	private GridTreeViewer shippingOptionsViewer;
 	private MenuManager mgr;
+	private Object optionModellerView;
 
-	public ShippingOptionsComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider) {
+	public ShippingOptionsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull final Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}
 
 	@Override
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
-		ExpandableComposite expandableShipping = wrapInExpandable(parent, "Shipping", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
+	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final Object optionModellerView) {
+		this.optionModellerView = optionModellerView;
+		final ExpandableComposite expandableShipping = wrapInExpandable(parent, "Shipping", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
 
 			{
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(scenarioEditingLocation, shippingOptionsViewer);
 				inputWants.add(model -> listener.setModel(model));
-				// Control control = getControl();
 				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_LINK);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
@@ -95,16 +108,15 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 				}
 			});
 
-			addShipping.addMouseListener(new MouseListener() {
+			addShipping.addMouseListener(new MouseAdapter() {
 
 				LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
 
 				void buildMenu() {
 					boolean portfolioMode = false;
 					{
-						AbstractAnalysisModel abstractAnalysisModel = modelProvider.get();
-						if (abstractAnalysisModel instanceof OptionAnalysisModel) {
-							OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) abstractAnalysisModel;
+						final AbstractAnalysisModel abstractAnalysisModel = modelProvider.get();
+						if (abstractAnalysisModel instanceof final OptionAnalysisModel optionAnalysisModel) {
 							portfolioMode = optionAnalysisModel.getBaseCase().isKeepExistingScenario();
 						}
 
@@ -182,24 +194,14 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 				}
 
 				@Override
-				public void mouseDoubleClick(final MouseEvent e) {
-
-				}
-
-				@Override
 				public void mouseDown(final MouseEvent e) {
 					if (modelProvider.get() != null) {
 						helper.clearActions();
 						buildMenu();
 						helper.open();
 					}
-
 				}
 
-				@Override
-				public void mouseUp(final MouseEvent e) {
-
-				}
 			});
 		}, false);
 
@@ -227,7 +229,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 			final Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(scenarioEditingLocation, shippingOptionsViewer);
 			shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, listener);
-			inputWants.add(model -> listener.setModel(model));
+			inputWants.add(listener::setModel);
 		}
 
 		mgr = new MenuManager();
@@ -239,6 +241,48 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 		inputWants.add(shippingOptionsViewer::setInput);
 		inputWants.add(listener::setModel);
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(shippingOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
+
+		if (optionModellerView instanceof final OptionModellerView view) {
+			final Action deleteAction = new Action("Delete") {
+				@Override
+				public void run() {
+
+					if (shippingOptionsViewer.getSelection() instanceof final IStructuredSelection selection) {
+
+						final Collection<EObject> c = new LinkedList<>();
+						selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
+
+						final CompoundCommand compoundCommand = new CompoundCommand("Delete sell option");
+						if (!c.isEmpty()) {
+							compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+						}
+						if (shippingOptionsViewer.getInput() instanceof final OptionAnalysisModel model) {
+							final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, model);
+							if (!linkedResults.isEmpty()) {
+								compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+							}
+						}
+						if (!compoundCommand.isEmpty()) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
+						}
+					}
+				}
+			};
+			shippingOptionsViewer.getControl().addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(final FocusEvent e) {
+					view.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), null);
+				}
+
+				@Override
+				public void focusGained(final FocusEvent e) {
+					view.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+
+				}
+			});
+		}
+
 		return shippingOptionsViewer;
 	}
 

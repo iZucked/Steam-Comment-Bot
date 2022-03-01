@@ -9,17 +9,17 @@ import java.util.Calendar;
 
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@RunWith(SWTBotJunit4ClassRunner.class)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class YearMonthTextFormatterTest extends AbstractSWTBotTest {
 
-	@Ignore("This test fails (as single digit month), but I think it is ok as setText is slightly different the the UI insert code")
+	@Disabled("This test fails (as single digit month), but I think it is ok as setText is slightly different the the UI insert code")
 	@Test
 	public void testManipulate() throws InterruptedException {
 
@@ -32,7 +32,7 @@ public class YearMonthTextFormatterTest extends AbstractSWTBotTest {
 		runTest("03/2015", 2015, Calendar.MARCH);
 	}
 
-	@Ignore("2 digit years currently not valid")
+	@Disabled("2 digit years currently not valid")
 	@Test
 	public void testManipulate_2DigitYear() throws InterruptedException {
 
@@ -60,13 +60,13 @@ public class YearMonthTextFormatterTest extends AbstractSWTBotTest {
 
 				final Object value = text[0].getValue();
 
-				Assert.assertNotNull(value);
+				Assertions.assertNotNull(value);
 				if (value instanceof YearMonth) {
 					final YearMonth mDate = (YearMonth) value;
-					Assert.assertEquals(1L + month, mDate.getMonthValue());
-					Assert.assertEquals(year, mDate.getYear());
+					Assertions.assertEquals(1L + month, mDate.getMonthValue());
+					Assertions.assertEquals(year, mDate.getYear());
 				} else {
-					Assert.fail("Unexpected result");
+					Assertions.fail("Unexpected result");
 				}
 			}
 		});

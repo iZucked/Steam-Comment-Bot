@@ -18,39 +18,14 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 
 public class OptimisationHelperTest {
 
-	@Test
-	public void testTransformUserSettings_Similarity_Medium() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
+	
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assertions.assertNotNull(optimisationPlan);
-		Assertions.assertNotNull(optimisationPlan.getUserSettings());
-		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assertions.assertFalse(optimisationPlan.getStages().isEmpty());
-		// hard to test this now...
-		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
-	}
 
 	@Test
-	public void testTransformUserSettings_Similarity_High() {
+	public void testTransformUserSettings_Similarity_All() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.HIGH);
-
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(optimisationPlan);
-		Assertions.assertNotNull(optimisationPlan.getUserSettings());
-		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assertions.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
-		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
-	}
-
-	@Test
-	public void testTransformUserSettings_Similarity_Low() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.LOW);
+		userSettings.setSimilarityMode(SimilarityMode.ALL);
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
