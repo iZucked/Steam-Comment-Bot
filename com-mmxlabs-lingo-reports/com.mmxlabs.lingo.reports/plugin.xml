@@ -896,6 +896,10 @@
             plugin.xml="paperdeals.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
+            feature="generated-papers"
+            plugin.xml="generatedpaperdeals.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
             feature="fitness-view"
             plugin.xml="fitness.plugin.xml">
       </PluginXMLEnablement>
