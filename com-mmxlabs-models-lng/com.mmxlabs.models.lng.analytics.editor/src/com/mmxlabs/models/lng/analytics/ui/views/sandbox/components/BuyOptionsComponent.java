@@ -4,32 +4,45 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.ui.views.ResultsSetDeletionHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.OptionMenuHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
@@ -42,6 +55,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 	private GridTreeViewer buyOptionsViewer;
 	private MenuManager mgr;
+	private Object optionModellerView;
 
 	public BuyOptionsComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<AbstractAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
@@ -49,6 +63,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 	@Override
 	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, Object optionModellerView) {
+		this.optionModellerView = optionModellerView;
 		ExpandableComposite expandable = wrapInExpandable(parent, "Buys", this::createBuyOptionsViewer, expandableComposite -> {
 
 			{
@@ -116,7 +131,49 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(buyOptionsViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
+		if (optionModellerView instanceof OptionModellerView view) {
+			Action deleteAction = new Action("Delete") {
+				@Override
+				public void run() {
+					final Collection<EObject> c = new LinkedList<>();
+
+					if (buyOptionsViewer.getSelection() instanceof IStructuredSelection selection) {
+
+						selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
+
+						final CompoundCommand compoundCommand = new CompoundCommand("Delete buy option");
+						if (!c.isEmpty()) {
+							compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+						}
+						if (buyOptionsViewer.getInput() instanceof OptionAnalysisModel model) {
+							final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, model);
+							if (!linkedResults.isEmpty()) {
+								compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+							}
+						}
+						if (!compoundCommand.isEmpty()) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
+						}
+					}
+				}
+			};
+			buyOptionsViewer.getControl().addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					view.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), null);
+				}
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					view.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+
+				}
+			});
+		}
+
 		return buyOptionsViewer.getControl();
+
 	}
 
 	@Override
