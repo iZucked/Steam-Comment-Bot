@@ -30,7 +30,7 @@ public abstract class AbstractOptimisationTester_CSV extends AbstractOptimisatio
 	private final String name;
 	private final String scenario;
 
-	public AbstractOptimisationTester_CSV(final String name, final String scenario) {
+	protected AbstractOptimisationTester_CSV(final String name, final String scenario) {
 		this.name = name;
 		this.scenario = scenario;
 	}
