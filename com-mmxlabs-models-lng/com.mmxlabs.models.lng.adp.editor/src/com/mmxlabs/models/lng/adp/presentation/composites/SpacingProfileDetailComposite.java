@@ -231,7 +231,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 			@Override
 			public void run() {
 				final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, oldValue, SpacingProfile::getFobSpacingAllocations, FobSpacingAllocation::getContract,
-						ADPPackage.Literals.FOB_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "Contract");
+						ADPPackage.Literals.FOB_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "FOB Contract");
 				updateStateWithSelection(selectedSalesContracts, oldValue, SpacingProfile::getFobSpacingAllocations, FobSpacingAllocation::getContract, "Contracts",
 						ADPPackage.Literals.SPACING_PROFILE__FOB_SPACING_ALLOCATIONS, ADPFactory.eINSTANCE::createFobSpacingAllocation, FobSpacingAllocation::setContract);
 			}
@@ -290,7 +290,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 			@Override
 			public void run() {
 				final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, oldValue, SpacingProfile::getDesSpacingAllocations, DesSpacingAllocation::getContract,
-						ADPPackage.Literals.DES_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "Contract");
+						ADPPackage.Literals.DES_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "DES Contract");
 				updateStateWithSelection(selectedSalesContracts, oldValue, SpacingProfile::getDesSpacingAllocations, DesSpacingAllocation::getContract, "Contracts",
 						ADPPackage.Literals.SPACING_PROFILE__DES_SPACING_ALLOCATIONS, ADPFactory.eINSTANCE::createDesSpacingAllocation, DesSpacingAllocation::setContract);
 			}

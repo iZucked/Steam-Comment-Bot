@@ -310,6 +310,33 @@ public class ModelDistanceProvider extends EContentAdapter {
 		return null;
 	}
 
+	public @Nullable CanalEntry getClosestCanalEntry(final RouteOption routeOption, final Port port) {
+		for (Route r : portModel.getRoutes()) {
+			if (r.getRouteOption() == routeOption) {
+				final EntryPoint northEntrance = r.getNorthEntrance();
+				final int distanceToNorthEntrance;
+				if (northEntrance != null && northEntrance.getPort() != null) {
+					distanceToNorthEntrance = getDistance(port, northEntrance.getPort(), RouteOption.DIRECT);
+				} else {
+					distanceToNorthEntrance = Integer.MAX_VALUE;
+				}
+				final EntryPoint southEntrance = r.getSouthEntrance();
+				final int distanceToSouthEntrance;
+				if (southEntrance != null && southEntrance.getPort() != null) {
+					distanceToSouthEntrance = getDistance(port, southEntrance.getPort(), RouteOption.DIRECT);
+				} else {
+					distanceToSouthEntrance = Integer.MAX_VALUE;
+				}
+				if (distanceToNorthEntrance != Integer.MAX_VALUE || distanceToSouthEntrance != Integer.MAX_VALUE) {
+					return distanceToNorthEntrance < distanceToSouthEntrance ? CanalEntry.NORTHSIDE : CanalEntry.SOUTHSIDE;
+				} else {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
+
 	public int getPortToPortContingencyIdleTimeInHours(final Port from, final Port to) {
 		if (from == null || from.getLocation() == null) {
 			return 0;

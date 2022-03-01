@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.adp.presentation.valueproviders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
@@ -13,6 +14,8 @@ import org.eclipse.emf.ecore.EcorePackage;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FobSpacingAllocation;
+import com.mmxlabs.models.lng.adp.SpacingAllocation;
+import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -22,11 +25,11 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
-public class FobSpacingAllocationValueProviderFactory implements IReferenceValueProviderFactory {
+public class SpacingAllocationValueProviderFactory implements IReferenceValueProviderFactory {
 
 	private final IReferenceValueProviderFactory delegate;
 	
-	public FobSpacingAllocationValueProviderFactory() {
+	public SpacingAllocationValueProviderFactory() {
 		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), CommercialPackage.eINSTANCE.getSalesContract());
 	}
 
@@ -35,8 +38,17 @@ public class FobSpacingAllocationValueProviderFactory implements IReferenceValue
 		if (delegate == null) {
 			return null;
 		}
-		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
+
 		if (reference == ADPPackage.eINSTANCE.getSpacingAllocation_Contract()) {
+			final Predicate<SalesContract> isAllowed;
+			if (owner == ADPPackage.Literals.FOB_SPACING_ALLOCATION) {
+				isAllowed = s -> s.getContractType() == ContractType.FOB;
+			} else if (owner == ADPPackage.Literals.DES_SPACING_ALLOCATION) {
+				isAllowed = s -> s.getContractType() == ContractType.DES;
+			} else {
+				throw new IllegalStateException("Unknown spacing type.");
+			}
+			final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
 			return new IReferenceValueProvider() {
 				
 				@Override
@@ -57,10 +69,10 @@ public class FobSpacingAllocationValueProviderFactory implements IReferenceValue
 				@Override
 				public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
-					if (target instanceof FobSpacingAllocation) {
+					if (target instanceof SpacingProfile) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>();
 						for (final Pair<String, EObject> p : delegateValue) {
-							if (((SalesContract) p.getSecond()).getContractType() == ContractType.FOB) {
+							if (isAllowed.test((SalesContract) p.getSecond())) {
 								filteredList.add(p);
 							}
 						}
@@ -74,11 +86,6 @@ public class FobSpacingAllocationValueProviderFactory implements IReferenceValue
 					delegateFactory.dispose();
 				}
 			};
-		}
-		
-		
-				if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
-			
 		}
 		return null;
 	}

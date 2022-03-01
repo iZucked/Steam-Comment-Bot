@@ -175,9 +175,15 @@
           referenceEClass="com.mmxlabs.models.lng.adp.MullCargoWrapper">
    </valueProvider>
    <valueProvider
-          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.FobSpacingAllocationValueProviderFactory"
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpacingAllocationValueProviderFactory"
           id="com.mmxlabs.models.lng.adp.presentation.valueproviders.FobSpacingAllocationValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.adp.FobSpacingAllocation"
+          referenceEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+   </valueProvider>
+   <valueProvider
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpacingAllocationValueProviderFactory"
+          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.DesSpacingAllocationValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.adp.DesSpacingAllocation"
           referenceEClass="com.mmxlabs.models.lng.commercial.SalesContract">
    </valueProvider>
 </extension>
