@@ -539,7 +539,7 @@ public class SlotInsertionOptimiserUnit {
 					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
 				}
 				// Reduce result to unique solutions
-				results = results.parallelStream().distinct().collect(Collectors.toList());
+				results = results.stream().distinct().toList();
 
 				final int maxSize = 300;
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions;
