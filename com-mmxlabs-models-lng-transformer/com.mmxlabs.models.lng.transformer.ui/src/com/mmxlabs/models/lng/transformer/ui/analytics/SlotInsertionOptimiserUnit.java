@@ -618,7 +618,7 @@ public class SlotInsertionOptimiserUnit {
 									return 0;
 								}
 							}).map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
-							.toList();
+							.collect(Collectors.toList());
 				}
 
 				if (solutions.size() < results.size()) {
