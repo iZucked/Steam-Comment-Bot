@@ -263,8 +263,8 @@ public class SlotInsertionOptimiser {
 
 		
 		final List<ISequenceElement> elements = portSlots.stream() //
-				.map(s -> portSlotProvider.getElement(s)) //
-				.collect(Collectors.toList());
+				.map(portSlotProvider::getElement) //
+				.toList();
 		final Pair<ISequences, Long> result = insert(state, seed, elements);
 		if (result != null) {
 		assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());

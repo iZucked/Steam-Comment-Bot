@@ -338,8 +338,7 @@ public class SlotInsertionOptimiserUnit {
 								}
 
 								final IPortSlot followerSlot = portSlotProvider.getPortSlot(follower);
-								if (followerSlot instanceof IDischargeOption) {
-									final IDischargeOption dischargeOption = (IDischargeOption) followerSlot;
+								if (followerSlot instanceof IDischargeOption dischargeOption) {
 									final boolean isDESSale = dischargeOption instanceof IDischargeSlot;
 									if (isFOBPurchase && !isDESSale) {
 										nonShippedPairs.add(new Pair<>(element, follower));
@@ -360,8 +359,7 @@ public class SlotInsertionOptimiserUnit {
 									}
 								}
 								final IPortSlot precederSlot = portSlotProvider.getPortSlot(preceder);
-								if (precederSlot instanceof ILoadOption) {
-									final ILoadOption loadOption = (ILoadOption) precederSlot;
+								if (precederSlot instanceof ILoadOption loadOption) {
 									final boolean isFOBPurchase = loadOption instanceof ILoadSlot;
 									if (isFOBPurchase && !isDESSale) {
 										nonShippedPairs.add(new Pair<>(preceder, element));
@@ -597,7 +595,7 @@ public class SlotInsertionOptimiserUnit {
 						while (itr.hasNext()) {
 							final List<Pair<ISequences, Long>> l = itr.next().getValue();
 							if (!l.isEmpty()) {
-								solutions.add(new NonNullPair<ISequences, Map<String, Object>>(l.remove(0).getFirst(), new HashMap<>()));
+								solutions.add(new NonNullPair<>(l.remove(0).getFirst(), new HashMap<>()));
 								if (solutions.size() == maxSize) {
 									break;
 								}
@@ -620,7 +618,7 @@ public class SlotInsertionOptimiserUnit {
 									return 0;
 								}
 							}).map(r -> new NonNullPair<ISequences, Map<String, Object>>(r.getFirst(), new HashMap<>())) //
-							.collect(Collectors.toList());
+							.toList();
 				}
 
 				if (solutions.size() < results.size()) {
@@ -642,7 +640,6 @@ public class SlotInsertionOptimiserUnit {
 			} finally {
 				monitor.done();
 				if (logger != null) {
-
 					logger.done();
 				}
 			}
@@ -650,8 +647,8 @@ public class SlotInsertionOptimiserUnit {
 	}
 
 	private static class Record {
-		int complexity;
-		List<ISequenceElement> linkedTo = new LinkedList<>();
+		private int complexity;
+		private List<ISequenceElement> linkedTo = new LinkedList<>();
 
 		@Override
 		public int hashCode() {
@@ -663,8 +660,7 @@ public class SlotInsertionOptimiserUnit {
 			if (obj == this) {
 				return true;
 			}
-			if (obj instanceof Record) {
-				final Record other = (Record) obj;
+			if (obj instanceof Record other) {
 				return complexity == other.complexity //
 						&& linkedTo.equals(other.linkedTo) //
 				;
