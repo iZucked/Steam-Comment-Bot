@@ -137,8 +137,8 @@ public class ElementKeyUtil {
 			}
 
 		}
-		if (element instanceof NamedObject) {
-			return element.getClass().getName() + "-" + ((NamedObject) element).getName();
+		if (element instanceof NamedObject namedObject) {
+			return element.getClass().getName() + "-" + namedObject.getName();
 		}
 		return element.toString();
 	}
@@ -168,15 +168,13 @@ public class ElementKeyUtil {
 
 	private static @NonNull String getSlotTypePrefix(final Slot<?> slot) {
 		String prefix;
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
+		if (slot instanceof LoadSlot loadSlot) {
 			if (loadSlot.isDESPurchase()) {
 				prefix = "des-purchase";
 			} else {
 				prefix = "fob-purchase";
 			}
-		} else if (slot instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+		} else if (slot instanceof DischargeSlot dischargeSlot) {
 			if (dischargeSlot.isFOBSale()) {
 				prefix = "fob-sale";
 			} else {

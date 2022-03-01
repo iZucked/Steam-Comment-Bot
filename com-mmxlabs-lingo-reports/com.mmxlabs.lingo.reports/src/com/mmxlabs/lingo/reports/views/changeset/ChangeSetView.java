@@ -1320,7 +1320,6 @@ public class ChangeSetView extends ViewPart {
 					// Set the flag so we don't end up in compare mode.
 					if (inChangingChangeSetSelection.compareAndSet(false, true)) {
 						try {
-							ISelection ss = null;
 							// This is a bit inefficient if we are just changing selected row(s) rather than
 							// change set.
 							scenarioComparisonService.setSelection(newSelection);
@@ -1431,8 +1430,7 @@ public class ChangeSetView extends ViewPart {
 					final UUIDObject object = solution.getSolution();
 					ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
 
-					if (object instanceof AbstractSolutionSet) {
-						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
 						ssHelper.processExtraData(abstractSolutionSet);
 
 						userSettings = abstractSolutionSet.getUserSettings();
@@ -1759,7 +1757,7 @@ public class ChangeSetView extends ViewPart {
 			return;
 		}
 
-		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
+		final Function<ScenarioResult, Boolean> checker = sr -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;
 		if (viewState != null) {
 			final ChangeSetRoot pRoot = viewState.root;

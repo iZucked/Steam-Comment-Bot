@@ -36,8 +36,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
@@ -112,33 +112,41 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private CustomReportDefinition currentBeforeChanges;
 
-	private Button userButton, teamButton;
+	private Button userButton;
+	private Button teamButton;
 
-	private TableViewer visibleViewer, nonVisibleViewer, customReportsViewer;
+	private TableViewer visibleViewer;
+	private TableViewer nonVisibleViewer;
+	private TableViewer customReportsViewer;
 
-	private Button upButton, downButton;
+	private Button upButton;
+	private Button downButton;
 
-	private Button toVisibleBtt, toNonVisibleBtt;
+	private Button toVisibleBtt;
+	private Button toNonVisibleBtt;
 
-	private Button newBtn, saveBtn, publishBtn, deleteBtn, copyBtn, renameBtn, discardBtn;
+	private Button newBtn;
+	private Button saveBtn;
+	private Button publishBtn;
+	private Button deleteBtn;
+	private Button copyBtn;
+	private Button renameBtn;
+	private Button discardBtn;
 
 	private Button refreshBtn;
 
-	private Label widthLabel;
-	private Text widthText;
-
 	private Point tableLabelSize;
 
-	final ScheduleBasedReportBuilder builder = new ScheduleBasedReportBuilder();
+	private final ScheduleBasedReportBuilder builder = new ScheduleBasedReportBuilder();
 
-	final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
+	private final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
 
-	final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
-	final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
+	private final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
+	private final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
-	boolean changesMade = false;
+	private boolean changesMade = false;
 
-	boolean modeChanged = false;
+	private boolean modeChanged = false;
 
 	private final Comparator<ColumnBlock> comparator = new Comparator<>() {
 		@Override
@@ -237,7 +245,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.internal.views.markers.ViewerSettingsAndStatusDialog# createDialogContentArea(org.eclipse.swt.widgets.Composite)
+	 * @see org.eclipse.ui.internal.views.markers.ViewerSettingsAndStatusDialog#
+	 * createDialogContentArea(org.eclipse.swt.widgets.Composite)
 	 */
 	protected Control createDialogContentArea(final Composite dialogArea) {
 		final Composite composite = new Composite(dialogArea, SWT.NONE);
@@ -377,7 +386,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		setButtonLayoutData(deleteBtn);
 		deleteBtn.setEnabled(false);
 
-		// This button doesn't do anything, just placed to create a button sized gap between buttons.
+		// This button doesn't do anything, just placed to create a button sized gap
+		// between buttons.
 		Button spacerBtn = new Button(bttArea, SWT.PUSH);
 		setButtonLayoutData(spacerBtn);
 		spacerBtn.setVisible(false);
@@ -390,13 +400,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		publishBtn = new Button(bttArea, SWT.PUSH);
 		publishBtn.setText("Publish");
-		publishBtn.addListener(SWT.Selection,  CustomReportsManagerDialog.this::handlePublishBtn);
+		publishBtn.addListener(SWT.Selection, CustomReportsManagerDialog.this::handlePublishBtn);
 		setButtonLayoutData(publishBtn);
 		publishBtn.setEnabled(false);
 
 		refreshBtn = new Button(bttArea, SWT.PUSH);
 		refreshBtn.setText("Refresh");
-		refreshBtn.addListener(SWT.Selection,  CustomReportsManagerDialog.this::handleRefreshBtn);
+		refreshBtn.addListener(SWT.Selection, CustomReportsManagerDialog.this::handleRefreshBtn);
 		setButtonLayoutData(refreshBtn);
 		refreshBtn.setEnabled(true);
 
@@ -441,7 +451,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			// Remove newly created, but unsaved report.
 			deleteReport(this.currentStoreType, this.current);
 		} else {
-			// Undo any changes to the visible / hidden columns by reloading the currently selected report definition.
+			// Undo any changes to the visible / hidden columns by reloading the currently
+			// selected report definition.
 			if (this.currentStoreType == StoreType.User) {
 				int index = this.userReportDefinitions.indexOf(this.current);
 				this.userReportDefinitions.set(index, this.currentBeforeChanges);
@@ -461,7 +472,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.saveBtn.setEnabled(false);
 		this.publishBtn.setEnabled(false);
 
-		// Changes undone, so not pending anymore - clear the discarded change only (as could be two changes
+		// Changes undone, so not pending anymore - clear the discarded change only (as
+		// could be two changes
 		// e.g. in the case where new report, copy without saving both.
 		this.uuidToChangedReports.remove(uuidDiscarded);
 
@@ -600,11 +612,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					}
 				}
 
-				// Check if report with that name already exists and if so prompt the user if they want to overwrite it or cancel.
+				// Check if report with that name already exists and if so prompt the user if
+				// they want to overwrite it or cancel.
 				CustomReportDefinition existingReport = this.checkForTeamReport(rd.getName());
 				if (existingReport == null) {
 
-					// If we are adding a user report to team, we need to clone it and create a new UUID as per PS, so
+					// If we are adding a user report to team, we need to clone it and create a new
+					// UUID as per PS, so
 					// that team version appears separately from user version.
 					CustomReportDefinition copy = new CustomReportDefinition();
 					copy.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
@@ -614,7 +628,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 					rd = copy;
 				} else {
-					// If it is already a team report, ask the user if they want to overwrite it with their new one.
+					// If it is already a team report, ask the user if they want to overwrite it
+					// with their new one.
 					int overwrite = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Overwrite existing team report?",
 							"There is an existing team report " + existingReport.getName() + ". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
 
@@ -641,7 +656,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				this.changesMade = true;
 				Change change = this.uuidToChangedReports.get(rd.getUuid());
 				if (change != null) {
-					// If team report or it has already been saved, then set disable discard button again.
+					// If team report or it has already been saved, then set disable discard button
+					// again.
 					if (this.teamButton.getSelection() || change.saved) {
 						this.discardBtn.setEnabled(false);
 					}
@@ -821,7 +837,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					logger.error(errorMsg, e);
 					displayErrorDialog(errorMsg);
 				}
-				// FIXME: As per SG, do not restart LiNGO, as upload may not have completed in time.
+				// FIXME: As per SG, do not restart LiNGO, as upload may not have completed in
+				// time.
 				// If we crack how to do dynamic update of views menus, this would resolve this.
 			}
 		}
@@ -910,11 +927,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		widthComposite.setLayout(gridLayout);
 		widthComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1));
 
-		widthLabel = new Label(widthComposite, SWT.NONE);
+		Label widthLabel = new Label(widthComposite, SWT.NONE);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		widthLabel.setLayoutData(gridData);
 
-		widthText = new Text(widthComposite, SWT.BORDER);
+		Text widthText = new Text(widthComposite, SWT.BORDER);
 		widthText.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(final VerifyEvent e) {
@@ -947,38 +964,30 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.userButton = new Button(composite, SWT.RADIO);
 		this.userButton.setText("User reports");
 		this.userButton.setSelection(true);
-		this.userButton.addSelectionListener(new SelectionListener() {
+		this.userButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				activateUserMode();
 				updateReports(true);
 			}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		});
 		tableLabelSize = userButton.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 
 		this.teamButton = new Button(composite, SWT.RADIO);
 		this.teamButton.setText("Team reports");
 		this.teamButton.setSelection(false);
-		this.teamButton.addSelectionListener(new SelectionListener() {
+		this.teamButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				activateTeamMode();
 				updateReports(false);
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		});
 
 		if (!CustomReportsRegistry.getInstance().hasTeamReportsCapability()) {
-			// Hide the team reports view if hub does not support or user does not have permissions.
+			// Hide the team reports view if hub does not support or user does not have
+			// permissions.
 			this.userButton.setVisible(false);
 			this.teamButton.setVisible(false);
 		}
@@ -1059,8 +1068,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Update the reports view
 	 * 
-	 * @param userReports
-	 *                        - true, if we want to display user's own reports, false, to display team reports
+	 * @param userReports - true, if we want to display user's own reports, false,
+	 *                    to display team reports
 	 */
 	protected void updateReports(boolean userReports) {
 		if (userReports) {
@@ -1074,8 +1083,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private void handleCustomReportSelection(ISelection selection) {
 		final List<CustomReportDefinition> selectedReports = ((IStructuredSelection) selection).toList();
 
-		// It is possible in some cases when moving from team to user reports to select more than 1 report, but we are
-		// only interested in the case when 1 report has been selected and the list box itself should in most cases
+		// It is possible in some cases when moving from team to user reports to select
+		// more than 1 report, but we are
+		// only interested in the case when 1 report has been selected and the list box
+		// itself should in most cases
 		// enforce this SINGLE selection property also.
 		if (selectedReports.size() == 1 && (selectedReports.get(0) != this.current || modeChanged)) {
 			// Check for unsaved changes to previously selected report.
@@ -1099,7 +1110,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				}
 			}
 
-			// Only enable publish/write access, if in user mode or if user has team reports publish permission.
+			// Only enable publish/write access, if in user mode or if user has team reports
+			// publish permission.
 			if (this.userButton.getSelection()) {
 				// User reports mode.
 				this.saveBtn.setEnabled(needsSaving);
@@ -1132,9 +1144,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	/**
-	 * Check if there are any unsaved/unpublished changes and ask the user what to do and do it. Side effects: either discards the changes or selected the previously selected report.
+	 * Check if there are any unsaved/unpublished changes and ask the user what to
+	 * do and do it. Side effects: either discards the changes or selected the
+	 * previously selected report.
 	 * 
-	 * @return true, if we went back, false, if we discarded the previously selected report's changes or there were no unsaved/unpublished changes.
+	 * @return true, if we went back, false, if we discarded the previously selected
+	 *         report's changes or there were no unsaved/unpublished changes.
 	 */
 	private boolean checkForUnsavedUnpublishedChanges() {
 		if (this.current != null) {
@@ -1278,17 +1293,19 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	/**
-	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnInfoProvider()}
+	 * Internal helper to @see
+	 * {@link ColumnConfigurationDialog#getColumnInfoProvider()}
 	 */
 	IColumnInfoProvider doGetColumnInfoProvider() {
 		return getColumnInfoProvider();
 	}
 
 	/**
-	 * To configure the columns we need further information. The supplied column objects are adapted for its properties via {@link IColumnInfoProvider}
+	 * To configure the columns we need further information. The supplied column
+	 * objects are adapted for its properties via {@link IColumnInfoProvider}
 	 */
 	protected IColumnInfoProvider getColumnInfoProvider() {
-		IColumnInfoProvider columnInfoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
+		return new ColumnConfigurationDialog.ColumnInfoAdapter() {
 			@Override
 			public int getColumnIndex(final Object columnObj) {
 				ColumnBlock cb = (ColumnBlock) columnObj;
@@ -1301,8 +1318,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				return current.getColumns().contains(cb.blockID);
 			}
 		};
-		return columnInfoProvider;
-	};
+	}
 
 	/**
 	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnUpdater()}
@@ -1312,7 +1328,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	/**
-	 * To configure properties/order of the columns is achieved via {@link IColumnUpdater}
+	 * To configure properties/order of the columns is achieved via
+	 * {@link IColumnUpdater}
 	 */
 	protected IColumnUpdater getColumnUpdater() {
 		return new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
@@ -1324,14 +1341,18 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-				// getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+				// getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock)
+				// columnObj2);
 			}
 
 			@Override
 			public Object[] resetColumnStates() {
 				/*
-				 * // Hide everything for (final String blockId : getBlockManager().getBlockIDOrder()) { getBlockManager().getBlockByID(blockId).setUserVisible(false); } // Apply the initial state
-				 * setInitialState(); // Return! return getBlockManager().getBlocksInVisibleOrder().toArray();
+				 * // Hide everything for (final String blockId :
+				 * getBlockManager().getBlockIDOrder()) {
+				 * getBlockManager().getBlockByID(blockId).setUserVisible(false); } // Apply the
+				 * initial state setInitialState(); // Return! return
+				 * getBlockManager().getBlocksInVisibleOrder().toArray();
 				 */
 				return new Object[0];
 			}
@@ -1388,9 +1409,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		nonVisibleViewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				if (e1 instanceof ColumnBlock && e2 instanceof ColumnBlock) {
-					final ColumnBlock b1 = (ColumnBlock) e1;
-					final ColumnBlock b2 = (ColumnBlock) e2;
+				if (e1 instanceof ColumnBlock b1 && e2 instanceof ColumnBlock b2) {
 					return b1.blockName.compareTo(b2.blockName);
 				}
 				return super.compare(viewer, e1, e2);
@@ -1423,7 +1442,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	/**
-	 * Handles a selection change in the viewer that lists out the visible columns. Takes care of various enablements.
+	 * Handles a selection change in the viewer that lists out the visible columns.
+	 * Takes care of various enablements.
 	 * 
 	 * @param selection
 	 */
@@ -1466,7 +1486,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	/**
-	 * Handles a selection change in the viewer that lists out the non-visible columns
+	 * Handles a selection change in the viewer that lists out the non-visible
+	 * columns
 	 * 
 	 * @param selection
 	 */
@@ -1481,8 +1502,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
-	 * @param e
-	 *              event from the button click
+	 * @param e event from the button click
 	 */
 	void handleDownButton(final Event e) {
 		if (this.current != null) {
@@ -1506,8 +1526,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
-	 * @param e
-	 *              event from the button click
+	 * @param e event from the button click
 	 */
 	void handleUpButton(final Event e) {
 		if (this.current != null) {
@@ -1538,8 +1557,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	/**
 	 * Moves selected columns from visible to non-visible state
 	 * 
-	 * @param e
-	 *              event from the button click
+	 * @param e event from the button click
 	 */
 	protected void handleToNonVisibleButton(final Event e) {
 
@@ -1715,11 +1733,6 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			@Override
 			public String getText(final Object element) {
 				return ((CustomReportDefinition) element).getName();
-			}
-
-			@Override
-			public Image getImage(final Object element) {
-				return super.getImage(element);
 			}
 
 			@Override
