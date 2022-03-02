@@ -345,10 +345,19 @@ class CloudOptimisationDataUpdater {
 						solutionFile.delete();
 					}
 
-					// cleanup(basePath, cRecord.getJobid());
+					cleanup(basePath, cRecord.getJobid());
 
 					// Move the temp file
 					cRecord.setComplete(true);
+
+					// force write to tasks.json
+					try {
+						final String json = CloudOptimisationDataServiceClient.getJSON(currentRecords);
+						Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
+					} catch (final Exception e) {
+						LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
+					}
+
 					readyCallback.accept(cRecord);
 				}
 			} catch (final Exception e) {
