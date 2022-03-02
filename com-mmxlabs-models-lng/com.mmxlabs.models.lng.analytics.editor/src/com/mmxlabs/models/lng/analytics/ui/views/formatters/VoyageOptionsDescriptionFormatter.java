@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -29,7 +26,6 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.analytics.editor";
 
-	private static final String IMG_SPACER = "<spacer>";
 	private static final String IMG_DATE = "/icons/voyageopts/date.png";
 	private static final String IMG_FUEL = "/icons/voyageopts/fuel.png";
 	private static final String IMG_CANAL_MIXED = "/icons/voyageopts/canal-plain.png";
