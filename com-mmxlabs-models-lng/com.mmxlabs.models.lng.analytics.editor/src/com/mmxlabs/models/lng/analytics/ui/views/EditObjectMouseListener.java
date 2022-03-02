@@ -53,15 +53,15 @@ public class EditObjectMouseListener extends MouseAdapter {
 			final Object element = cell.getElement();
 			EObject target = null;
 			if (element instanceof final BaseCaseRow row) {
-				if (cell.getColumnIndex() == 0) {
+				if (cell.getColumnIndex() == 1) {
 					target = row.getBuyOption();
-				} else if (cell.getColumnIndex() == 1) {
-					// Wiring
 				} else if (cell.getColumnIndex() == 2) {
-					target = row.getSellOption();
+					// Wiring
 				} else if (cell.getColumnIndex() == 3) {
-					target = row.getShipping();
+					target = row.getSellOption();
 				} else if (cell.getColumnIndex() == 4) {
+					target = row.getShipping();
+				} else if (cell.getColumnIndex() == 0) {
 					final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE, !row.isOptionise());
 					DetailCompositeDialogUtil.editInlock(scenarioEditingLocation, () -> {
 						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();

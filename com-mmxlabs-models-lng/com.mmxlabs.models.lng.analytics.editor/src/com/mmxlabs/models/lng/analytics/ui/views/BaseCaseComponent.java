@@ -105,6 +105,15 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
+		
+		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
+		optioniseCol.getColumn().setAlignment(SWT.CENTER);
+		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
+
+		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
+		optioniseCol.getColumn().setWidth(30);
+		optioniseCol.getColumn().setVisible(false);
+		
 		// Buy col
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(baseCaseViewer, SWT.CENTER | SWT.WRAP);
@@ -151,14 +160,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
-		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
-		optioniseCol.getColumn().setAlignment(SWT.CENTER);
-		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
-
-		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
-		optioniseCol.getColumn().setWidth(30);
-		optioniseCol.getColumn().setVisible(false);
-
+		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
 			// Mode specific columns
 			optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);
