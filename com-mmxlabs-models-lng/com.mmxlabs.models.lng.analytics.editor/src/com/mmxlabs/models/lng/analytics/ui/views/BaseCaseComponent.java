@@ -169,6 +169,8 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 			// Hide by default
 			optionsCol.getColumn().setVisible(false);
+			// 122 is precalculated width of the rendered image. 8px is padding
+			optionsCol.getColumn().setWidth(122 + 8);
 			// freezeCol.getColumn().setVisible(false);
 		}
 

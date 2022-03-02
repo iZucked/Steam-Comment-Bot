@@ -27,17 +27,20 @@ import com.mmxlabs.models.ui.tabular.IImageProvider;
 
 public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements IImageProvider {
 
-	private static final String LBL_BUY_SIDE = "Buy:";
-	private static final String LBL_SELL_SIDE = "Sell:";
-
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.analytics.editor";
 
+	private static final String IMG_SPACER = "<spacer>";
 	private static final String IMG_DATE = "/icons/voyageopts/date.png";
 	private static final String IMG_FUEL = "/icons/voyageopts/fuel.png";
 	private static final String IMG_CANAL_MIXED = "/icons/voyageopts/canal-plain.png";
 	private static final String IMG_CANAL_DIRECT = "/icons/voyageopts/canal-plain.png";
 	private static final String IMG_CANAL_SUEZ = "/icons/voyageopts/canal-suez.png";
 	private static final String IMG_CANAL_PANAMA = "/icons/voyageopts/canal-panama.png";
+
+	private static final int IDX_DATE = 0;
+	private static final int IDX_FUEL = 1;
+	private static final int IDX_CANAL = 2;
+	private static final int NUM_IMAGES = 3;
 
 	@Override
 	public String render(final Object object) {
@@ -55,52 +58,51 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		}
 		if (element instanceof final PartialCaseRowOptions rowOptions) {
 
-			final List<String> lhsImages = new LinkedList<>();
-			final List<String> rhsImages = new LinkedList<>();
+			final String[] lhsImages = new String[NUM_IMAGES];
+			final String[] rhsImages = new String[NUM_IMAGES];
 
 			if (!rowOptions.getLoadDates().isEmpty()) {
-				lhsImages.add(IMG_DATE);
+				lhsImages[IDX_DATE] = IMG_DATE;
 			}
 			if (!rowOptions.getLadenFuelChoices().isEmpty()) {
-				lhsImages.add(IMG_FUEL);
-
+				lhsImages[IDX_FUEL] = IMG_FUEL;
 			}
 			if (!rowOptions.getLadenRoutes().isEmpty()) {
 				if (rowOptions.getLadenRoutes().size() == 1) {
 					if (rowOptions.getLadenRoutes().get(0) == RouteOption.SUEZ) {
-						lhsImages.add(IMG_CANAL_SUEZ);
+						lhsImages[IDX_CANAL] = IMG_CANAL_SUEZ;
 					}
 					if (rowOptions.getLadenRoutes().get(0) == RouteOption.PANAMA) {
-						lhsImages.add(IMG_CANAL_PANAMA);
+						lhsImages[IDX_CANAL] = IMG_CANAL_PANAMA;
 					}
 					if (rowOptions.getLadenRoutes().get(0) == RouteOption.DIRECT) {
-						lhsImages.add(IMG_CANAL_DIRECT);
+						lhsImages[IDX_CANAL] = IMG_CANAL_DIRECT;
 					}
 				} else {
-					lhsImages.add(IMG_CANAL_MIXED);
+					lhsImages[IDX_CANAL] = IMG_CANAL_MIXED;
 				}
 
 			}
 
 			if (!rowOptions.getDischargeDates().isEmpty()) {
-				rhsImages.add(IMG_DATE);
+				rhsImages[IDX_DATE] = IMG_DATE;
 			}
 			if (!rowOptions.getBallastFuelChoices().isEmpty()) {
-				rhsImages.add(IMG_FUEL);
+				rhsImages[IDX_FUEL] = IMG_FUEL;
 			}
 			if (!rowOptions.getBallastRoutes().isEmpty()) {
 				if (rowOptions.getBallastRoutes().size() == 1) {
 					if (rowOptions.getBallastRoutes().get(0) == RouteOption.SUEZ) {
-						rhsImages.add(IMG_CANAL_SUEZ);
+						rhsImages[IDX_CANAL] = IMG_CANAL_SUEZ;
 					}
 					if (rowOptions.getBallastRoutes().get(0) == RouteOption.PANAMA) {
-						rhsImages.add(IMG_CANAL_PANAMA);
+						rhsImages[IDX_CANAL] = IMG_CANAL_PANAMA;
 					}
 					if (rowOptions.getBallastRoutes().get(0) == RouteOption.DIRECT) {
-						rhsImages.add(IMG_CANAL_DIRECT);
+						rhsImages[IDX_CANAL] = IMG_CANAL_DIRECT;
 					}
 				} else {
-					rhsImages.add(IMG_CANAL_MIXED);
+					rhsImages[IDX_CANAL] = IMG_CANAL_MIXED;
 				}
 			}
 
@@ -108,43 +110,43 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		}
 		if (element instanceof final BaseCaseRowOptions rowOptions) {
 
-			final List<String> lhsImages = new LinkedList<>();
-			final List<String> rhsImages = new LinkedList<>();
+			final String[] lhsImages = new String[NUM_IMAGES];
+			final String[] rhsImages = new String[NUM_IMAGES];
 
 			if (rowOptions.isSetLoadDate()) {
-				lhsImages.add(IMG_DATE);
+				lhsImages[IDX_DATE] = IMG_DATE;
 			}
 			if (rowOptions.isSetLadenFuelChoice()) {
-				lhsImages.add(IMG_FUEL);
+				lhsImages[IDX_FUEL] = IMG_FUEL;
 
 			}
 			if (rowOptions.isSetLadenRoute()) {
 				if (rowOptions.getLadenRoute() == RouteOption.SUEZ) {
-					lhsImages.add(IMG_CANAL_SUEZ);
+					lhsImages[IDX_CANAL] = IMG_CANAL_SUEZ;
 				}
 				if (rowOptions.getLadenRoute() == RouteOption.PANAMA) {
-					lhsImages.add(IMG_CANAL_PANAMA);
+					lhsImages[IDX_CANAL] = IMG_CANAL_PANAMA;
 				}
 				if (rowOptions.getLadenRoute() == RouteOption.DIRECT) {
-					lhsImages.add(IMG_CANAL_DIRECT);
+					lhsImages[IDX_CANAL] = IMG_CANAL_DIRECT;
 				}
 			}
 
 			if (rowOptions.isSetDischargeDate()) {
-				rhsImages.add(IMG_DATE);
+				rhsImages[IDX_DATE] = IMG_DATE;
 			}
 			if (rowOptions.isSetBallastFuelChoice()) {
-				rhsImages.add(IMG_FUEL);
+				rhsImages[IDX_FUEL] = IMG_FUEL;
 			}
 			if (rowOptions.isSetBallastRoute()) {
 				if (rowOptions.getBallastRoute() == RouteOption.SUEZ) {
-					rhsImages.add(IMG_CANAL_SUEZ);
+					rhsImages[IDX_CANAL] = IMG_CANAL_SUEZ;
 				}
 				if (rowOptions.getBallastRoute() == RouteOption.PANAMA) {
-					rhsImages.add(IMG_CANAL_PANAMA);
+					rhsImages[IDX_CANAL] = IMG_CANAL_PANAMA;
 				}
 				if (rowOptions.getBallastRoute() == RouteOption.DIRECT) {
-					rhsImages.add(IMG_CANAL_DIRECT);
+					rhsImages[IDX_CANAL] = IMG_CANAL_DIRECT;
 				}
 			}
 
@@ -154,12 +156,9 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		return null;
 	}
 
-	private @Nullable Image getImage(final List<String> lhsImages, final List<String> rhsImages) {
+	private @Nullable Image getImage(final String[] lhsImages, final String[] rhsImages) {
 
-		if (lhsImages.isEmpty() && rhsImages.isEmpty()) {
-			return null;
-		}
-
+		// Define a key for this set of images
 		final String imageName = "Buy" + String.join(",", lhsImages) + "Sell" + String.join(",", rhsImages);
 
 		final Image cache = Activator.getDefault().getImageRegistry().get(imageName);
@@ -167,41 +166,28 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 			return cache;
 		}
 
-		final Image imageGCImg = new Image(Display.getDefault(), 16, 16);
-		final GC tempGC = new GC(imageGCImg);
-		tempGC.setAdvanced(true);
-		tempGC.setAntialias(SWT.ON);
+		// Width of central dash
+		final int dashWidth = 10;
+		// padding either size of the dash
+		final int dashSpacer = 4;
 
+		final int paddingBetweenImages = 2;
+		final int imageWidth = 16;
+
+		// Calculate the size of the image
 		int width = 0;
-		boolean withSpacer = false;
-		if (!lhsImages.isEmpty() && !rhsImages.isEmpty()) {
-			width += 8;
-			withSpacer = true;
-		}
-		final int buyWidth = tempGC.textExtent(LBL_BUY_SIDE).x;
-		if (lhsImages.size() == 1) {
-			width += buyWidth;
-			width += 16;
-		} else if (lhsImages.size() > 1) {
-			width += buyWidth;
-			// Add image width
-			width += 16 * lhsImages.size();
-			// plus padding
-			width += 2 * (lhsImages.size() - 1);
-		}
-		final int sellWidth = tempGC.textExtent(LBL_SELL_SIDE).x;
-		if (rhsImages.size() == 1) {
-			width += sellWidth;
-			width += 16;
-		} else if (rhsImages.size() > 1) {
-			width += sellWidth;
-			// Add image width
-			width += 16 * rhsImages.size();
-			// plus padding
-			width += 2 * (rhsImages.size() - 1);
-		}
-		tempGC.dispose();
-		imageGCImg.dispose();
+		// Add in LHS images. 16px per image and 2px between images.
+		width += imageWidth * NUM_IMAGES;
+		width += paddingBetweenImages * (NUM_IMAGES - 1);
+
+		// Add width for spacer and padding
+		width += 2 * dashSpacer;
+		width += dashWidth;
+
+		// Add in RHS images. 16px per image and 2px between images.
+		width += imageWidth * NUM_IMAGES;
+		// plus padding
+		width += paddingBetweenImages * (NUM_IMAGES - 1);
 
 		final Image image = new Image(Display.getDefault(), width, 16);
 		final byte[] destArray = new byte[width * 16];
@@ -214,76 +200,71 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		// gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 
 		int xpos = 0;
-		boolean first = true;
-		for (final String p : lhsImages) {
-			if (first) {
-				first = false;
-				gc.drawString(LBL_BUY_SIDE, xpos, 0, true);
 
-				final byte[] d = image.getImageData().data;
-
-				for (int x = 0; x < buyWidth; x++) {
-					for (int y = 0; y < 16; y++) {
-						final int destPos = width * y + xpos + x;
-						final byte b = d[destPos * 4 + 3];
-						destArray[destPos] = b;
-					}
+		// Draw the LHS images
+		for (int idx = 0; idx < lhsImages.length; ++idx) {
+			if (idx > 0) {
+				// Padding
+				xpos += paddingBetweenImages;
+			}
+			final String p = lhsImages[idx];
+			if (p != null) {
+				final ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, p);
+				final Image img = desc.createImage();
+				gc.drawImage(img, xpos, 0);
+				for (int i = 0; i < 16; ++i) {
+					final byte[] srcArray = img.getImageData().alphaData;
+					final int destPos = width * i + xpos;
+					final int srcPos = img.getImageData().width * i;
+					System.arraycopy(srcArray, srcPos, destArray, destPos, 16);
 				}
-				xpos += buyWidth;
-			} else {
-				xpos += 2;
+				img.dispose();
 			}
-			final ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, p);
-			final Image img = desc.createImage();
-			gc.drawImage(img, xpos, 0);
-			for (int i = 0; i < 16; ++i) {
-				final byte[] srcArray = img.getImageData().alphaData;
-				final int destPos = width * i + xpos;
-				final int srcPos = img.getImageData().width * i;
-				System.arraycopy(srcArray, srcPos, destArray, destPos, 16);
-			}
-			img.dispose();
-
-			xpos += 16;
-		}
-		if (withSpacer) {
-			xpos += 8;
-		}
-
-		first = true;
-		for (final String p : rhsImages) {
-			if (first) {
-				first = false;
-				gc.drawString(LBL_SELL_SIDE, xpos, 0, true);
-
-				final byte[] d = image.getImageData().data;
-
-				for (int x = 0; x < sellWidth; x++) {
-					for (int y = 0; y < 16; y++) {
-						final int destPos = width * y + xpos + x;
-						final byte b = d[destPos * 4 + 3];
-						destArray[destPos] = b;
-					}
-				}
-
-				xpos += sellWidth;
-			} else {
-				xpos += 2;
-			}
-			final ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, p);
-			final Image img = desc.createImage();
-			gc.drawImage(img, xpos, 0);
-			for (int i = 0; i < 16; ++i) {
-				final byte[] srcArray = img.getImageData().alphaData;
-				final int destPos = width * i + xpos;
-				final int srcPos = img.getImageData().width * i;
-				System.arraycopy(srcArray, srcPos, destArray, destPos, 16);
-			}
-			img.dispose();
-
 			xpos += 16;
 		}
 
+		// Add spacer before dash
+		xpos += dashSpacer;
+
+		// Draw the dash
+		gc.setLineWidth(2);
+		gc.drawLine(xpos, 8, xpos + dashWidth, 8);
+
+		// Determine the dash alpha channel
+		final byte[] d = image.getImageData().data;
+		for (int x = 0; x < dashWidth; x++) {
+			for (int y = 7; y < 9; y++) {
+				final int destPos = width * y + xpos + x;
+				final byte b = d[destPos * 4 + 3];
+				destArray[destPos] = b;
+			}
+		}
+		xpos += dashWidth;
+		// Add spacer after dash
+		xpos += dashSpacer;
+
+		// Draw RHS images
+		for (int idx = 0; idx < lhsImages.length; ++idx) {
+			if (idx > 0) {
+				xpos += paddingBetweenImages;
+			}
+			final String p = rhsImages[idx];
+			if (p != null) {
+				final ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, p);
+				final Image img = desc.createImage();
+				gc.drawImage(img, xpos, 0);
+				for (int i = 0; i < 16; ++i) {
+					final byte[] srcArray = img.getImageData().alphaData;
+					final int destPos = width * i + xpos;
+					final int srcPos = img.getImageData().width * i;
+					System.arraycopy(srcArray, srcPos, destArray, destPos, 16);
+				}
+				img.dispose();
+			}
+			xpos += 16;
+		}
+		
+		// Create a new image merging in the alpha channel
 		final ImageData data = image.getImageData();
 		data.alphaData = destArray;
 

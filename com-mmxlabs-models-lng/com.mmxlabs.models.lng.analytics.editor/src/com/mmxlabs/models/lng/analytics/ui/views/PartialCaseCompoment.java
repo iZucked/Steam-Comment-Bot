@@ -191,7 +191,10 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
 		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
-			createColumn(partialCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS).getColumn().setWordWrap(true);
+			GridViewerColumn voyageOptsCol = createColumn(partialCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS);
+			voyageOptsCol.getColumn().setWordWrap(true);
+			// 122 is precalculated width of the rendered image. 8px is padding
+			voyageOptsCol.getColumn().setWidth(122 + 8);
 		}
 		partialCaseViewer.setContentProvider(new PartialCaseContentProvider());
 
@@ -207,8 +210,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		hookDragSource(partialCaseViewer);
-		
-		
+
 		{
 			final Action deleteAction = new Action("Delete") {
 				@Override
@@ -237,8 +239,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 			});
 
 		}
-		
-		
+
 		return partialCaseViewer.getGrid();
 	}
 
