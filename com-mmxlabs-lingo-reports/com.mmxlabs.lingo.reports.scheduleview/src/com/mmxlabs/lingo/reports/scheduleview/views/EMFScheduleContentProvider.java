@@ -353,8 +353,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public boolean isVisibleByDefault(final Object resource) {
-		if (!showNominalsByDefault && resource instanceof Sequence) {
-			final Sequence sequence = (Sequence) resource;
+		if (!showNominalsByDefault && resource instanceof Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
 		}
 		return true;
