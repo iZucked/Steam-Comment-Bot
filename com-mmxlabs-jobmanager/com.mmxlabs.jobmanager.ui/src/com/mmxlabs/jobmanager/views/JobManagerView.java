@@ -8,15 +8,12 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -35,14 +32,21 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.ui.Activator;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 /**
- * This sample class demonstrates how to plug-in a new workbench view. The view shows data obtained from the model. The sample creates a dummy model on the fly, but a real implementation would connect
- * to the model available either in this or another plug-in (e.g. the workspace). The view is connected to the model using a content provider.
+ * This sample class demonstrates how to plug-in a new workbench view. The view
+ * shows data obtained from the model. The sample creates a dummy model on the
+ * fly, but a real implementation would connect to the model available either in
+ * this or another plug-in (e.g. the workspace). The view is connected to the
+ * model using a content provider.
  * <p>
- * The view uses a label provider to define how model objects should be presented in the view. Each view can present the same model objects using different labels and icons, if needed. Alternatively,
- * a single label provider can be shared between views in order to ensure that objects of the same type are presented in the same way everywhere.
+ * The view uses a label provider to define how model objects should be
+ * presented in the view. Each view can present the same model objects using
+ * different labels and icons, if needed. Alternatively, a single label provider
+ * can be shared between views in order to ensure that objects of the same type
+ * are presented in the same way everywhere.
  * <p>
  */
 
@@ -80,14 +84,7 @@ public class JobManagerView extends ViewPart {
 		}
 
 		private void refresh() {
-			JobManagerView.this.refresh();
-			getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					updateActionEnablement(viewer.getSelection());
-				}
-			});
+			ViewerHelper.refreshThen(viewer, false, () -> updateActionEnablement(viewer.getSelection()));
 		}
 
 		@Override
@@ -149,16 +146,7 @@ public class JobManagerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-
-				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-
-				updateActionEnablement(selection);
-			}
-		});
+		viewer.addSelectionChangedListener(event -> updateActionEnablement(viewer.getSelection()));
 
 		jobManager.addEclipseJobManagerListener(jobManagerListener);
 
@@ -179,12 +167,8 @@ public class JobManagerView extends ViewPart {
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				JobManagerView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(JobManagerView.this::fillContextMenu);
+
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -327,17 +311,11 @@ public class JobManagerView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				viewer.refresh();
-			}
-		});
+		ViewerHelper.refresh(viewer, false);
 	}
 
 	private void updateActionEnablement(final ISelection selection) {
@@ -421,7 +399,8 @@ public class JobManagerView extends ViewPart {
 	}
 
 	/**
-	 * Helper method to return a typed {@link Iterator} from the {@link #viewer} selection.
+	 * Helper method to return a typed {@link Iterator} from the {@link #viewer}
+	 * selection.
 	 * 
 	 * @return
 	 */

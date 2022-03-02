@@ -13,5 +13,11 @@
             class="com.mmxlabs.lingo.app.updater.internal.PluginStartup">
       </startup>
    </extension>
-
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="lingo-updater"
+            plugin.xml="updater-plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 </plugin>

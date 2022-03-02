@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.jobmanager.ui;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -26,17 +24,6 @@ public class Activator extends AbstractUIPlugin {
 
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-	 */
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
@@ -47,11 +34,6 @@ public class Activator extends AbstractUIPlugin {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 
@@ -73,10 +55,10 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path
+	 * Returns an image descriptor for the image file at the given plug-in relative
+	 * path
 	 * 
-	 * @param path
-	 *            the path
+	 * @param path the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(final String path) {
@@ -85,29 +67,5 @@ public class Activator extends AbstractUIPlugin {
 
 	public IEclipseJobManager getEclipseJobManager() {
 		return jobManagerServiceTracker.getService();
-	}
-
-	public static void warning(final String message) {
-
-		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message);
-		getDefault().getLog().log(status);
-	}
-
-	public static void warning(final String message, final Throwable t) {
-
-		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message, t);
-		getDefault().getLog().log(status);
-	}
-
-	public static void error(final String message) {
-
-		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message);
-		getDefault().getLog().log(status);
-	}
-
-	public static void error(final String message, final Throwable t) {
-
-		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, t);
-		getDefault().getLog().log(status);
 	}
 }

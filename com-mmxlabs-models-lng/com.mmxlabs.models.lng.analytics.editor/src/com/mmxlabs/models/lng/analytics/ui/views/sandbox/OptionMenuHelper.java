@@ -287,8 +287,56 @@ public class OptionMenuHelper {
 
 					if (purchase) {
 						final SubLocalMenuHelper fob = new SubLocalMenuHelper("FOB Purchase");
+						if (spotMarketsModel.getFobPurchasesSpotMarket().getMarkets().size() > 1) {
+							fob.addAction(new RunnableAction("Add all", () -> {
+
+								final Set<SpotMarket> existingMarkets = new HashSet<>();
+								model.getBuys().stream() //
+										.filter(BuyMarket.class::isInstance) //
+										.map(BuyMarket.class::cast)//
+										.map(BuyMarket::getMarket)//
+										.forEach(existingMarkets::add);
+
+								final List<EObject> toAdd = new LinkedList<>();
+
+								for (final SpotMarket market : spotMarketsModel.getFobPurchasesSpotMarket().getMarkets()) {
+									if (!existingMarkets.contains(market)) {
+										toAdd.add(marketFactory.apply(market));
+									}
+								}
+
+								if (!toAdd.isEmpty()) {
+									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, toAdd),
+											model, containerFeature);
+								}
+							}));
+						}
 						menuMaker.accept(fob, spotMarketsModel.getFobPurchasesSpotMarket());
+
 						final SubLocalMenuHelper des = new SubLocalMenuHelper("DES Purchase");
+						if (spotMarketsModel.getDesPurchaseSpotMarket().getMarkets().size() > 1) {
+							des.addAction(new RunnableAction("Add all", () -> {
+
+								final Set<SpotMarket> existingMarkets = new HashSet<>();
+								model.getBuys().stream() //
+										.filter(BuyMarket.class::isInstance) //
+										.map(BuyMarket.class::cast)//
+										.map(BuyMarket::getMarket)//
+										.forEach(existingMarkets::add);
+
+								final List<EObject> toAdd = new LinkedList<>();
+								for (final SpotMarket market : spotMarketsModel.getDesPurchaseSpotMarket().getMarkets()) {
+									if (!existingMarkets.contains(market)) {
+										toAdd.add(marketFactory.apply(market));
+									}
+								}
+
+								if (!toAdd.isEmpty()) {
+									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, toAdd),
+											model, containerFeature);
+								}
+							}));
+						}
 						menuMaker.accept(des, spotMarketsModel.getDesPurchaseSpotMarket());
 
 						marketHelper.addSubMenu(fob);
@@ -325,8 +373,58 @@ public class OptionMenuHelper {
 
 					} else {
 						final SubLocalMenuHelper des = new SubLocalMenuHelper("DES Sale");
+						if (spotMarketsModel.getDesSalesSpotMarket().getMarkets().size() > 1) {
+							des.addAction(new RunnableAction("Add all", () -> {
+
+								final Set<SpotMarket> existingMarkets = new HashSet<>();
+
+								model.getSells().stream() //
+										.filter(SellMarket.class::isInstance) //
+										.map(SellMarket.class::cast)//
+										.map(SellMarket::getMarket)//
+										.forEach(existingMarkets::add);
+
+								final List<EObject> toAdd = new LinkedList<>();
+								for (final SpotMarket market : spotMarketsModel.getDesSalesSpotMarket().getMarkets()) {
+									if (!existingMarkets.contains(market)) {
+										toAdd.add(marketFactory.apply(market));
+									}
+								}
+
+								if (!toAdd.isEmpty()) {
+									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, toAdd),
+											model, containerFeature);
+								}
+							}));
+						}
 						menuMaker.accept(des, spotMarketsModel.getDesSalesSpotMarket());
+
 						final SubLocalMenuHelper fob = new SubLocalMenuHelper("FOB Sale");
+						if (spotMarketsModel.getFobSalesSpotMarket().getMarkets().size() > 1) {
+							fob.addAction(new RunnableAction("Add all", () -> {
+
+								final Set<SpotMarket> existingMarkets = new HashSet<>();
+
+								model.getSells().stream() //
+										.filter(SellMarket.class::isInstance) //
+										.map(SellMarket.class::cast)//
+										.map(SellMarket::getMarket)//
+										.forEach(existingMarkets::add);
+
+								final List<EObject> toAdd = new LinkedList<>();
+
+								for (final SpotMarket market : spotMarketsModel.getFobSalesSpotMarket().getMarkets()) {
+									if (!existingMarkets.contains(market)) {
+										toAdd.add(marketFactory.apply(market));
+									}
+								}
+
+								if (!toAdd.isEmpty()) {
+									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, toAdd),
+											model, containerFeature);
+								}
+							}));
+						}
 						menuMaker.accept(fob, spotMarketsModel.getFobSalesSpotMarket());
 
 						marketHelper.addSubMenu(des);

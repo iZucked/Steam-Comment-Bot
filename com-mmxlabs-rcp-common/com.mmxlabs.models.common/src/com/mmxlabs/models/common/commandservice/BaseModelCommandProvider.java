@@ -61,10 +61,11 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 	 */
 	@SuppressWarnings("unchecked")
 	private Collection<Object> collect(final CommandParameter parameter) {
-		if (parameter.getCollection() != null)
+		if (parameter.getCollection() != null) {
 			return (Collection<Object>) parameter.getCollection();
-		else if (parameter.getValue() != null)
+		} else if (parameter.getValue() != null) {
 			return Collections.singleton(parameter.getValue());
+		}
 		return Collections.emptySet();
 	}
 
@@ -101,8 +102,9 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 		for (final Object o : deleted) {
 			if (shouldHandleDeletion(o, overrides, editSet, rootObject)) {
 				final Command a = objectDeleted(editingDomain, rootObject, o, overrides, editSet);
-				if (a != null)
+				if (a != null) {
 					compound.append(a);
+				}
 			}
 		}
 

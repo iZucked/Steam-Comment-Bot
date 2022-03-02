@@ -13,13 +13,13 @@ public abstract class SimpleSeriesFunction implements ISeries {
 
 	protected List<ISeries> arguments;
 
-	public SimpleSeriesFunction(final List<ISeries> arguments) {
+	protected SimpleSeriesFunction(final List<ISeries> arguments) {
 		this.arguments = arguments;
 	}
 
 	@Override
 	public int[] getChangePoints() {
-		int accumulator[] = new int[0];
+		int[] accumulator = new int[0];
 		for (final ISeries argument : arguments) {
 			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
 		}

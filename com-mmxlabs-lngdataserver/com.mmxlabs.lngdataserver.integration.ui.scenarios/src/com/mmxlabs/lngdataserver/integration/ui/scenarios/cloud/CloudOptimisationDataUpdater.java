@@ -345,8 +345,19 @@ class CloudOptimisationDataUpdater {
 						solutionFile.delete();
 					}
 
+					cleanup(basePath, cRecord.getJobid());
+
 					// Move the temp file
 					cRecord.setComplete(true);
+
+					// force write to tasks.json
+					try {
+						final String json = CloudOptimisationDataServiceClient.getJSON(currentRecords);
+						Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
+					} catch (final Exception e) {
+						LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
+					}
+
 					readyCallback.accept(cRecord);
 				}
 			} catch (final Exception e) {
@@ -676,49 +687,31 @@ class CloudOptimisationDataUpdater {
 				LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
 			}
 
-			boolean amap = false;
-			try {
-				final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
-				if (anonymisationMap.exists()) {
-					amap = anonymisationMap.delete();
-				}
-			} catch (final Exception e) {
-				LOG.error("Error deleting anonymisation map!" + e.getMessage(), e);
-			}
-
-			boolean lngFile = false;
-			try {
-				final File lingoFile = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
-				if (lingoFile.exists()) {
-					lngFile = lingoFile.delete();
-				}
-			} catch (final Exception e) {
-				LOG.error("Error deleting scenario result!" + e.getMessage(), e);
-			}
-
-			boolean kFile = false;
-			try {
-				final File keyFile = new File(String.format("%s/%s.key", basePath, cRecord.getJobid()));
-				if (keyFile.exists()) {
-					kFile = keyFile.delete();
-				}
-			} catch (final Exception e) {
-				LOG.error("Error deleting scenario keyfile!" + e.getMessage(), e);
-			}
-
-			boolean kStore = false;
-			try {
-				final File keyStore = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
-				if (keyStore.exists()) {
-					kStore = keyStore.delete();
-				}
-			} catch (final Exception e) {
-				LOG.error("Error deleting scenario keystore!" + e.getMessage(), e);
-			}
-
-			return amap && lngFile && kFile && kStore;
+			return cleanup(basePath, cRecord.getJobid());
 		}
 		return false;
+	}
+
+	private boolean cleanup(File basePath, String jobid) {
+		boolean amap = deleteFile(basePath, jobid, "amap");
+		boolean lngFile = deleteFile(basePath, jobid, "lingo");
+		boolean kFile = deleteFile(basePath, jobid, "key");
+		boolean kStore = deleteFile(basePath, jobid, "key.p12");
+
+		return amap && lngFile && kFile && kStore;
+	}
+
+	private boolean deleteFile(File basePath, String jobid, String extension) {
+		boolean deleted = false;
+		try {
+			final File file = new File(String.format("%s/%s.%s", basePath, jobid, extension));
+			if (file.exists()) {
+				deleted = file.delete();
+			}
+		} catch (final Exception e) {
+			LOG.error("Error deleting file!" + e.getMessage(), e);
+		}
+		return deleted;
 	}
 
 	public void pause() {
