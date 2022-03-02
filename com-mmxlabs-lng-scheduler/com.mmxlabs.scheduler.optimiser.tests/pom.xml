@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-		<version>5.1.5-SNAPSHOT</version>
+		<version>5.3.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.scheduler.optimiser.tests</artifactId>

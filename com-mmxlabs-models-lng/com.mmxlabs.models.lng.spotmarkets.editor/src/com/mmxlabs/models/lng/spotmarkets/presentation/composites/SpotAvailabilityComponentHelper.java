@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
+/**
   * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
