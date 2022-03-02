@@ -12,12 +12,7 @@ import java.util.List;
 import com.mmxlabs.common.parser.series.ISeries;
 
 public class Max extends SimpleSeriesFunction {
-	private Comparator<? super Number> comparator = new Comparator<Number>() {
-		@Override
-		public int compare(Number o1, Number o2) {
-			return ((Double) o1.doubleValue()).compareTo(o2.doubleValue());
-		}
-	};
+	private Comparator<? super Number> comparator = (o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue());
 
 	public Max(List<ISeries> arguments) {
 		super(arguments);
