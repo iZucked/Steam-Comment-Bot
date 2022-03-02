@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>5.1.5-SNAPSHOT</version>
+		<version>5.3.0.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.scenario.service.model</artifactId>
