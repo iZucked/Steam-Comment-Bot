@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,66 +40,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
-	public class WrappedProgressMonitor implements IProgressMonitor {
-
-		private double dtotal = 0.0;
-		private int totalWork;
-		private IProgressMonitor delegate;
-
-		private WrappedProgressMonitor(IProgressMonitor delegate) {
-			this.delegate = delegate;
-
-		}
-
-		@Override
-		public void worked(int work) {
-			AbstractEclipseJobControl.this.setProgress(progress + (int) work);
-
-			double w = (double) work / (double) totalWork;
-			internalWorked(w);
-			delegate.worked(work);
-		}
-
-		@Override
-		public void subTask(String name) {
-			delegate.subTask(name);
-		}
-
-		@Override
-		public void setTaskName(String name) {
-			delegate.setTaskName(name);
-		}
-
-		@Override
-		public void setCanceled(boolean canceled) {
-			delegate.setCanceled(canceled);
-		}
-
-		@Override
-		public boolean isCanceled() {
-			return delegate.isCanceled();
-		}
-
-		@Override
-		public void internalWorked(double work) {
-			dtotal += work;
-			delegate.internalWorked(work);
-			AbstractEclipseJobControl.this.setProgress(progress + work);
-
-		}
-
-		@Override
-		public void done() {
-			delegate.done();
-		}
-
-		@Override
-		public void beginTask(String name, int totalWork) {
-			delegate.beginTask(name, totalWork);
-			this.totalWork = totalWork;
-		}
-	}
-
 	private class Runner extends Job {
 
 		public Runner(final String name) {
@@ -106,12 +47,15 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		}
 
 		@Override
-		public IStatus run(final IProgressMonitor monitor) {
+		public IStatus run(final IProgressMonitor parentMonitor) {
+
+			final BindingProgressMonitor monitor = new BindingProgressMonitor(AbstractEclipseJobControl.this, parentMonitor);
+
 			monitor.beginTask("", 100);
 			try {
 				setJobState(EJobState.RUNNING);
 
-				doRunJob(new WrappedProgressMonitor(monitor));
+				doRunJob(SubMonitor.convert(monitor, 100));
 				if (monitor.isCanceled()) {
 					setJobState(EJobState.CANCELLED);
 					return Status.CANCEL_STATUS;
@@ -136,7 +80,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} catch (final Exception | Error e) {
 
 				boolean visualStudioError = false;
-				if (e instanceof NoClassDefFoundError noClassDefFoundError) {
+				if (e instanceof final NoClassDefFoundError noClassDefFoundError) {
 					if (noClassDefFoundError.getMessage().contains("ortools")) {
 						visualStudioError = true;
 					}
