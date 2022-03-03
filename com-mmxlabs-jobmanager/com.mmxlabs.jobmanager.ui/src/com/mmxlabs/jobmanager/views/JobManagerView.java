@@ -60,7 +60,6 @@ public class JobManagerView extends ViewPart {
 	private TreeViewer viewer;
 	private Action packAction;
 	private Action startAction;
-	private Action pauseAction;
 	private Action stopAction;
 	private Action removeAction;
 
@@ -73,7 +72,6 @@ public class JobManagerView extends ViewPart {
 		public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 			JobManagerView.this.refresh();
 			switch (newState) {
-			case PAUSED:
 			case RUNNING:
 				refresh();
 				break;
@@ -182,14 +180,12 @@ public class JobManagerView extends ViewPart {
 
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(startAction);
-		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
 		manager.add(startAction);
-		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
 
@@ -200,7 +196,6 @@ public class JobManagerView extends ViewPart {
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packAction);
 		manager.add(startAction);
-		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
 	}
@@ -221,8 +216,6 @@ public class JobManagerView extends ViewPart {
 					if (control.getJobState() == EJobState.CREATED) {
 						control.prepare();
 						control.start();
-					} else if (control.getJobState() == EJobState.PAUSED) {
-						control.resume();
 					} else {
 						control.start();
 					}
@@ -234,23 +227,6 @@ public class JobManagerView extends ViewPart {
 		startAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/resume_co.gif"));
 		startAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif"));
 
-		pauseAction = new Action() {
-			@Override
-			public void run() {
-
-				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
-				while (itr.hasNext()) {
-					// TODO: Check states
-					final IJobDescriptor job = itr.next();
-					final IJobControl control = jobManager.getControlForJob(job);
-					control.pause();
-				}
-			}
-		};
-		pauseAction.setText("Suspend");
-		pauseAction.setToolTipText("Suspend Job");
-		pauseAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif"));
-		pauseAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif"));
 
 		stopAction = new Action() {
 			@Override
@@ -322,12 +298,10 @@ public class JobManagerView extends ViewPart {
 
 		if (selection.isEmpty()) {
 			startAction.setEnabled(false);
-			pauseAction.setEnabled(false);
 			stopAction.setEnabled(false);
 			removeAction.setEnabled(false);
 		} else {
 			boolean startEnabled = false;
-			boolean pauseEnabled = false;
 			boolean stopEnabled = false;
 
 			if (selection instanceof IStructuredSelection) {
@@ -352,24 +326,12 @@ public class JobManagerView extends ViewPart {
 					case INITIALISED:
 						startEnabled = true;
 						break;
-					case PAUSED:
-						startEnabled = true;
-						stopEnabled = true;
-						break;
-					case PAUSING:
-						stopEnabled = true;
-						break;
-					case RESUMING:
-						stopEnabled = true;
-						break;
 					case RUNNING:
-						pauseEnabled = true;
 						stopEnabled = true;
 						break;
 					case UNKNOWN:
 						break;
 					default:
-						pauseEnabled = false;
 						stopEnabled = false;
 						break;
 					}
@@ -377,7 +339,6 @@ public class JobManagerView extends ViewPart {
 			}
 
 			startAction.setEnabled(startEnabled);
-			pauseAction.setEnabled(pauseEnabled);
 			stopAction.setEnabled(stopEnabled);
 
 			removeAction.setEnabled(true);

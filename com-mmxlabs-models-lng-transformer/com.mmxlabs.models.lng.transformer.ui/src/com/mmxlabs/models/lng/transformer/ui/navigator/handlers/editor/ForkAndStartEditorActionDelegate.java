@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
 
@@ -139,13 +138,6 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			enabled = true;
 			break;
 		case INITIALISING:
-			break;
-		case PAUSED:
-			enabled = true;
-			break;
-		case PAUSING:
-			break;
-		case RESUMING:
 			break;
 		case RUNNING:
 			break;

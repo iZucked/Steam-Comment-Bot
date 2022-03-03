@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -114,7 +113,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 				doRunJob(new WrappedProgressMonitor(monitor));
 				if (monitor.isCanceled()) {
-					kill();
 					setJobState(EJobState.CANCELLED);
 					return Status.CANCEL_STATUS;
 				}
@@ -122,12 +120,10 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				setJobState(EJobState.COMPLETED);
 				return Status.OK_STATUS;
 			} catch (final OperationCanceledException e) {
-				kill();
 				setJobState(EJobState.CANCELLED);
 				return Status.CANCEL_STATUS;
 			} catch (final UserFeedbackException e) {
 				LOG.warn(e.getMessage());
-				kill();
 				setJobState(EJobState.CANCELLED);
 
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
@@ -140,14 +136,12 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} catch (final Exception | Error e) {
 
 				boolean visualStudioError = false;
-				if (e instanceof NoClassDefFoundError) {
-					NoClassDefFoundError noClassDefFoundError = (NoClassDefFoundError) e;
+				if (e instanceof NoClassDefFoundError noClassDefFoundError) {
 					if (noClassDefFoundError.getMessage().contains("ortools")) {
 						visualStudioError = true;
 					}
 				}
 
-				kill();
 				setJobState(EJobState.CANCELLED);
 
 				if (visualStudioError) {
@@ -159,12 +153,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} finally {
 				monitor.done();
 			}
-		}
-
-		@Override
-		protected void canceling() {
-			super.canceling();
-			resume();
 		}
 	}
 
@@ -233,8 +221,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	@Override
 	public synchronized void start() {
 		switch (getJobState()) {
-		case UNKNOWN:
-		case INITIALISING:
+		case UNKNOWN, INITIALISING:
 			this.addListener(new IJobControlListener() {
 				@Override
 				public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
@@ -262,31 +249,16 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	@Override
 	public void cancel() {
 		switch (getJobState()) {
-		case CANCELLING:
-		case CANCELLED:
+		case CANCELLING, CANCELLED:
 			return;
-		case PAUSED:
-			resume();
-			break;
 		case RUNNING:
 			runner.cancel();
 			setJobState(EJobState.CANCELLING);
 			break;
 		default:
 			setJobState(EJobState.CANCELLING);
-			kill();
 			setJobState(EJobState.CANCELLED);
 		}
-	}
-
-	@Override
-	public void pause() {
-		// DO NOTHING
-	}
-
-	@Override
-	public void resume() {
-		// DO NOTHING
 	}
 
 	@Override
@@ -336,13 +308,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	 * This method should prepare the job for execution
 	 */
 	protected abstract void reallyPrepare();
-
-	/**
-	 * This method will be called if the job gets killed; clean up any resources.
-	 */
-	protected void kill() {
-		// For sub-classes to override
-	}
 
 	public void setJobProperty(final QualifiedName name, final Object value) {
 		if (this.runner != null) {

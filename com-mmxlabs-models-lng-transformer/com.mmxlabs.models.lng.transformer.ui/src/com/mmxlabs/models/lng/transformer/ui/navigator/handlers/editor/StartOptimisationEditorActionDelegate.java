@@ -138,13 +138,6 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			break;
 		case INITIALISING:
 			break;
-		case PAUSED:
-			enabled = true;
-			break;
-		case PAUSING:
-			break;
-		case RESUMING:
-			break;
 		case RUNNING:
 			break;
 		case UNKNOWN:

@@ -262,14 +262,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
-	@Override
-	protected void kill() {
-	}
+ 
 
 	@Override
 	public void dispose() {
@@ -289,10 +282,4 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
-	}
-
 }

@@ -205,10 +205,4 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
-	}
-
 }

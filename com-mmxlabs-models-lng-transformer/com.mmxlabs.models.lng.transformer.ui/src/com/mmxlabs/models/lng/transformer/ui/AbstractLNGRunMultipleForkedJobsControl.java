@@ -160,11 +160,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			job.init();
 		}
 	}
-
-	@Override
-	protected void kill() {
-
-	}
+ 
 
 	@Override
 	public void dispose() {
@@ -189,11 +185,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	@Override
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
-	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
 	}
 
 	@Override

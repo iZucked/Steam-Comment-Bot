@@ -84,21 +84,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	}
 
 	@Override
-	public boolean isPauseable() {
-		return false;
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
 	public EJobState getJobState() {
 		return currentState;
 	}

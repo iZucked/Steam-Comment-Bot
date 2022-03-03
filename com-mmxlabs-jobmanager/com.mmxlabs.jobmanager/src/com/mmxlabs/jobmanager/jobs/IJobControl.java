@@ -45,21 +45,6 @@ public interface IJobControl {
 	void cancel();
 
 	/**
-	 * Returns true if this job can be paused and resumed.
-	 */
-	boolean isPauseable();
-
-	/**
-	 * Suspend the currently running process. Has no effect if {@link #isPauseable()} return false.
-	 */
-	void pause();
-
-	/**
-	 * Resume a previously paused process. Has no effect if {@link #isPauseable()} return false.
-	 */
-	void resume();
-
-	/**
 	 * Returns the current state of the job.
 	 * 
 	 * @return

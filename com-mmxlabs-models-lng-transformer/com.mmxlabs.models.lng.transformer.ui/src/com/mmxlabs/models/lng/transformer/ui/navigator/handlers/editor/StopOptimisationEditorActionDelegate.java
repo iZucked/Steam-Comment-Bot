@@ -67,15 +67,6 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 		case INITIALISING:
 			enabled = true;
 			break;
-		case PAUSED:
-			enabled = true;
-			break;
-		case PAUSING:
-			enabled = true;
-			break;
-		case RESUMING:
-			enabled = true;
-			break;
 		case RUNNING:
 			enabled = true;
 			break;

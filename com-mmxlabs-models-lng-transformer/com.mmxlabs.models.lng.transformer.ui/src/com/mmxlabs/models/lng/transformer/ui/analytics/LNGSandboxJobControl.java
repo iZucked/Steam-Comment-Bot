@@ -72,20 +72,12 @@ public class LNGSandboxJobControl extends AbstractEclipseJobControl {
 		}
 	}
 
-	@Override
-	protected void kill() {
-	}
 
 	@Override
 	public void dispose() {
-//		if (runner != null) {
-//			runner.dispose();
-//		}
-//
 		if (scenarioDataProvider != null) {
 			scenarioDataProvider.close();
 		}
-//
 		super.dispose();
 	}
 
@@ -98,10 +90,4 @@ public class LNGSandboxJobControl extends AbstractEclipseJobControl {
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
-
-	@Override
-	public boolean isPauseable() {
-		return false;
-	}
-
 }
