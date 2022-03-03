@@ -555,7 +555,8 @@ class CloudOptimisationDataUpdater {
 		final List<CloudOptimisationDataResultRecord> newList = new LinkedList<>();
 		for (final CloudOptimisationDataResultRecord r : currentRecords) {
 
-			if (r.isHasError()) {
+			// Do not request an update for complete jobs
+			if (r.isHasError() || r.isComplete()) {
 				newList.add(r);
 				continue;
 			}
