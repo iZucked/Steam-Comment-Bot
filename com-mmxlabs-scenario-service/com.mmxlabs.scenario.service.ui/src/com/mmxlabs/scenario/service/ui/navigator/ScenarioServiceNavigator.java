@@ -163,7 +163,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker = new ServiceTracker<>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 
-		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
+//		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
@@ -174,7 +174,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
-		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
+//		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		showColumnImage.dispose();
 		statusColumnImage.dispose();
