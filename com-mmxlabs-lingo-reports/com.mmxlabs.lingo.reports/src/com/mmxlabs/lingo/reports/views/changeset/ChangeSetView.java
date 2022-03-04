@@ -731,16 +731,14 @@ public class ChangeSetView extends ViewPart {
 
 				if (!showNegativePNLChanges) {
 
-					if (element instanceof ChangeSetTableGroup) {
-						final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+					if (element instanceof ChangeSetTableGroup changeSet) {
 						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 						if (totalPNLDelta <= 0) {
 							return false;
 						}
 					} else {
 
-						if (parentElement instanceof ChangeSetTableGroup) {
-							final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+						if (parentElement instanceof ChangeSetTableGroup changeSet) {
 							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 							if (totalPNLDelta <= 0) {
 								return false;
@@ -749,14 +747,12 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 				if (!showMinorChanges) {
-					if (element instanceof ChangeSetTableRow) {
-						final ChangeSetTableRow row = (ChangeSetTableRow) element;
+					if (element instanceof ChangeSetTableRow row) {
 						if (!row.isMajorChange()) {
 							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
 									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
-							if (parentElement instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+							if (parentElement instanceof ChangeSetTableGroup changeSet) {
 								totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 							}
 							if (Math.abs(delta) < 250_000L) {
@@ -781,8 +777,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public void open(final OpenEvent event) {
-				if (viewer.getSelection() instanceof IStructuredSelection) {
-					final IStructuredSelection structuredSelection = (IStructuredSelection) viewer.getSelection();
+				if (viewer.getSelection() instanceof IStructuredSelection structuredSelection) {
 					if (!structuredSelection.isEmpty()) {
 
 						// Attempt to detect the column we clicked on.
@@ -819,18 +814,14 @@ public class ChangeSetView extends ViewPart {
 		setViewMode(ViewMode.COMPARE, false);
 
 		{
-			// final MenuManager mgr = new MenuManager();
-			// LocalMenuHelper menuHelper = new LocalMenuHelper(viewer.getGrid());
-			final ContextMenuManager listener = new ContextMenuManager();
-			viewer.getGrid().addMenuDetectListener(listener);
+			viewer.getGrid().addMenuDetectListener(new ContextMenuManager());
 		}
 
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventHandlerCloseScenario = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
-			if (o instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+			if (o instanceof ScenarioInstance scenarioInstance) {
 				onClosingScenario(scenarioInstance);
 			}
 		};
@@ -838,8 +829,7 @@ public class ChangeSetView extends ViewPart {
 		eventHandlerCloseSolution = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
-			if (o instanceof AnalyticsSolution) {
-				final AnalyticsSolution sol = (AnalyticsSolution) o;
+			if (o instanceof AnalyticsSolution sol) {
 				onClosingAnalyticsSolution(sol);
 			}
 		};
@@ -1027,8 +1017,7 @@ public class ChangeSetView extends ViewPart {
 				// solution.
 				if (solution != null) {
 					final UUIDObject object = solution.getSolution();
-					if (object instanceof AbstractSolutionSet) {
-						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
 						final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(solution.getScenarioInstance());
 						EvaluateSolutionSetHelper.recomputeSolution(record, solution.getScenarioInstance(), abstractSolutionSet, //
 								false, // Generate from specification model only
@@ -1171,8 +1160,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof EObject) {
-					final EObject eObject = (EObject) element;
+				if (element instanceof EObject eObject) {
 					return eObject.eContainer();
 				}
 				return null;
@@ -1181,8 +1169,7 @@ public class ChangeSetView extends ViewPart {
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
-				if (inputElement instanceof ChangeSetTableRoot) {
-					final ChangeSetTableRoot changeSetRoot = (ChangeSetTableRoot) inputElement;
+				if (inputElement instanceof ChangeSetTableRoot changeSetRoot) {
 					return changeSetRoot.getGroups().toArray();
 				}
 
@@ -1191,8 +1178,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof ChangeSetTableGroup) {
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) parentElement;
+				if (parentElement instanceof ChangeSetTableGroup group) {
 					final List<ChangeSetTableRow> rows = group.getRows();
 					return rows.toArray();
 				}
@@ -1357,8 +1343,7 @@ public class ChangeSetView extends ViewPart {
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
 						directSelectedGroups.add((ChangeSetTableGroup) obj);
-					} else if (obj instanceof ChangeSetTableRow) {
-						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
+					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
 						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
 						directSelectedRows.add(changeSetRow);
 					}
