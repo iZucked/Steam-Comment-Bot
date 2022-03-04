@@ -218,11 +218,12 @@ public class SlotInsertionOptimiser {
 
 				metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, true, null, null);
 				if (metrics == null) {
+
 					valid = false;
 				}
 			}
 			if (!valid) {
-				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
+//				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
 
 				// Re-check sequences
 				{
