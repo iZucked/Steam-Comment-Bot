@@ -5,20 +5,15 @@
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Date;
-import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.JobExecutor;
-import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -51,36 +46,16 @@ public abstract class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	@Named(RESTART_ITERATIONS_THRESHOLD)
 	private int restartInterval;
 
-
-
-
-
 	protected void logJobState(LSOJobState state) {
 		if (loggingDataStore != null) {
 			switch (state.getStatus()) {
-			case NullMoveFail: {
-				loggingDataStore.logNullMove(state.getMove());
-				break;
-			}
-			case CannotValidateFail: {
-				loggingDataStore.logFailedToValidateMove(state.getMove());
-				break;
-			}
-			case ConstraintFail: {
-				loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
-				break;
-			}
-			case EvaluationProcessFail: {
-				break;
-			}
-			case EvaluatedConstraintFail: {
-				loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
-				break;
-			}
-			case Pass: {
-				loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
-				break;
-			}
+			case NullMoveFail -> loggingDataStore.logNullMove(state.getMove());
+			case CannotValidateFail -> loggingDataStore.logFailedToValidateMove(state.getMove());
+			case ConstraintFail -> loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
+			case EvaluationProcessFail -> {
+				/* Nothing to do */ }
+			case EvaluatedConstraintFail -> loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
+			case Pass -> loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
 			}
 		}
 
