@@ -19,6 +19,9 @@ import okhttp3.Response;
 
 public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
+	private static final String KEY_USERNAME = "username";
+	private static final String KEY_PASSWORD = "password";
+	
 	private static BasicAuthenticationManager instance = null;
 
 	private BasicAuthenticationManager() {
@@ -33,16 +36,16 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 	@Override
 	public void logout(final String upstreamURL, @Nullable final Shell shell) {
-		deleteFromSecurePreferences("username");
-		deleteFromSecurePreferences("password");
+		deleteFromSecurePreferences(KEY_USERNAME);
+		deleteFromSecurePreferences(KEY_PASSWORD);
 	}
 
 	@Override
 	public boolean isAuthenticated(final String upstreamURL) {
 		boolean authenticated = false;
 
-		final Optional<String> optionalUsername = retrieveFromSecurePreferences("username");
-		final Optional<String> optionalPassword = retrieveFromSecurePreferences("password");
+		final Optional<String> optionalUsername = retrieveFromSecurePreferences(KEY_USERNAME);
+		final Optional<String> optionalPassword = retrieveFromSecurePreferences(KEY_PASSWORD);
 
 		if (upstreamURL != null && !upstreamURL.isEmpty() && optionalUsername.isPresent() && optionalPassword.isPresent()
 				&& checkCredentials(upstreamURL, optionalUsername.get(), optionalPassword.get())) {
@@ -98,8 +101,8 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	public Optional<Request.Builder> buildRequestWithBasicAuth() {
-		final Optional<String> username = retrieveFromSecurePreferences("username");
-		final Optional<String> password = retrieveFromSecurePreferences("password");
+		final Optional<String> username = retrieveFromSecurePreferences(KEY_USERNAME);
+		final Optional<String> password = retrieveFromSecurePreferences(KEY_PASSWORD);
 		Optional<Request.Builder> builder;
 
 		if (username.isPresent() && password.isPresent()) {
@@ -123,7 +126,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 	}
 
 	public void withCredentials(String username, String password) {
-		storeInSecurePreferences("username", username);
-		storeInSecurePreferences("password", password);		
+		storeInSecurePreferences(KEY_USERNAME, username);
+		storeInSecurePreferences(KEY_PASSWORD, password);		
 	}
 }

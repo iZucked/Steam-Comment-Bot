@@ -44,7 +44,7 @@ public class AuthenticationManager {
 	private BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
 	private OAuthManager oauthManager = OAuthManager.getInstance();
 
-	private String authenticationScheme = "basic";
+	private String authenticationScheme = BASIC;
 	private String upstreamURL = null;
 
 	public AtomicBoolean forceBasicAuthentication = new AtomicBoolean(false);

@@ -24,7 +24,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,8 +34,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +65,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
 	/*
-	 * This listener fires whenever the Data Hub URL is modified but the changes have not yet been applied. Login will use the URL from the preferences which is saved only when the Apply button is
-	 * pressed
+	 * This listener fires whenever the Data Hub URL is modified but the changes
+	 * have not yet been applied. Login will use the URL from the preferences which
+	 * is saved only when the Apply button is pressed
 	 */
 	// display note and disable login button
 	private IPropertyChangeListener disableLogin = event -> disableLogin();
@@ -115,6 +115,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected Label noteLabel;
 
 	protected BooleanFieldEditor forceBasicAuth;
+	protected BooleanFieldEditor preferEdgeBrowser;
 
 	protected StringFieldEditor editor;
 
@@ -150,8 +151,10 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	/*
-	 * This listener fires when there are changes to the details in the UpstreamURLProvider: when the Datahub URL, the hostname check or the force local authentication checkbox have been changed and
-	 * the changes have been applied
+	 * This listener fires when there are changes to the details in the
+	 * UpstreamURLProvider: when the Datahub URL, the hostname check or the force
+	 * local authentication checkbox have been changed and the changes have been
+	 * applied
 	 */
 	private final IUpstreamDetailChangedListener enableLoginListener = () -> {
 
@@ -184,7 +187,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 						} else {
 							loginButton.setText("Login");
 						}
-						// forceBasicAuth has no dispose check, so assume it will be valid if the login button is valid.
+						// forceBasicAuth has no dispose check, so assume it will be valid if the login
+						// button is valid.
 						if (forceBasicAuth != null) {
 							forceBasicAuth.setEnabled(authenticationManager.isOAuthEnabled(), getFieldEditorParent());
 						}
@@ -310,6 +314,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "&Team folder", getFieldEditorParent()));
 		}
 
+		Label lbl2 = new Label(getFieldEditorParent(), SWT.NONE);
+		lbl2.setText("Check to prefer the Edge browser for web based login pages. Note: This requires the Edge WebView2 runtime to be installed.");
+		lbl2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		preferEdgeBrowser = new BooleanFieldEditor(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER, "&Prefer Edge Browser", getFieldEditorParent());
+		addField(preferEdgeBrowser);
+
 		final ExpandableComposite debugCompositeParent = new ExpandableComposite(getFieldEditorParent(), ExpandableComposite.TWISTIE);
 		debugCompositeParent.setExpanded(false);
 		debugCompositeParent.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
@@ -320,12 +330,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		debugCompositeParent.setClient(debugComposite);
 		debugComposite.setLayout(new GridLayout(2, false));
 
-		debugCompositeParent.addExpansionListener(new IExpansionListener() {
-
-			@Override
-			public void expansionStateChanging(final ExpansionEvent e) {
-				// Nothing to do
-			}
+		debugCompositeParent.addExpansionListener(new ExpansionAdapter() {
 
 			@Override
 			public void expansionStateChanged(final ExpansionEvent e) {
@@ -345,7 +350,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		final Button btn3 = new Button(debugComposite, SWT.PUSH);
 		btn3.setText("Check connection");
 		btn3.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
-		btn3.addSelectionListener(new SelectionListener() {
+		btn3.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
@@ -397,11 +402,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 				UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 				setLoginButtonEnabled();
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
 			}
 		});
 
