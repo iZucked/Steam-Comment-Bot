@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.common;
 
+import java.net.URL;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ResourceLocator;
@@ -12,8 +14,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.FrameworkUtil;
-
-import com.mmxlabs.rcp.common.handlers.PackGridHandler;
 
 /**
  * Snippet for client code:
@@ -47,6 +47,8 @@ public final class CommonImages {
 		Pin_8("icons/8x8/PinnedRow.png"), //
 		Pin("icons/16x16/pin.png"), //
 		Scenario("icons/16x16/scenario.png"), //
+		Hub("icons/16x16/hub.png", true), //
+		Local("icons/16x16/local.png", true), //
 		
 		
 		Play_16("icons/16x16/optimise.png", true), //
@@ -111,12 +113,10 @@ public final class CommonImages {
 
 		switch (mode) {
 		case Enabled:
-//				return AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", iconPath.path);
 			return ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", iconPath.path).orElse(null);
 		case Disabled:
 			if (iconPath.disabledPath != null) {
 				return ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", iconPath.disabledPath).orElse(null);
-//					return AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", iconPath.disabledPath);
 			} else {
 				return ImageDescriptor.createWithFlags(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", iconPath.path), SWT.IMAGE_DISABLE);
 			}
@@ -128,9 +128,29 @@ public final class CommonImages {
 	public static void setImageDescriptors(final IAction a, final IconPaths iconPath) {
 		setImageDescriptors(a, iconPath, false);
 	}
+	
+	public static URL getImageURL(final IconPaths iconPath, IconMode mode) {
+		switch (mode) {
+		case Enabled:
+			return FrameworkUtil.getBundle(CommonImages.class).getEntry("/" + iconPath.path);
+		case Disabled:
+			if (iconPath.disabledPath != null) {
+				return FrameworkUtil.getBundle(CommonImages.class).getEntry("/" + iconPath.disabledPath);
+			} else {
+				throw new IllegalArgumentException("Bad icon spec");
+			}
+		default:
+			throw new IllegalArgumentException("Bad icon spec");
+		}
+	}
+	
+
+	public static URL getImageURL(final IconPaths iconPath) {
+		return FrameworkUtil.getBundle(CommonImages.class).getEntry("/" + iconPath.path);
+	}
 
 	public static String getImageURI(final IconPaths iconPath) {
-		return FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/" + iconPath.path).toString();
+		return getImageURL(iconPath).toString();
 	}
 	
 	public static void setImageDescriptors(final IAction a, final IconPaths iconPath, final boolean includeHover) {
