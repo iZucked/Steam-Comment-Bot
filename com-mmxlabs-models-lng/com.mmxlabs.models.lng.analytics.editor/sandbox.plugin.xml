@@ -19,7 +19,7 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
-            icon="icons/sandbox.gif"
+            icon="icons/sandbox-08.png"
             id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
             name="Sandbox"
             restorable="true">
