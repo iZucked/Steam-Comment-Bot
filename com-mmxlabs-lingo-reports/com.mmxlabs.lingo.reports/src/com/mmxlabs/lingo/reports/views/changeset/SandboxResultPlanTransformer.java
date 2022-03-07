@@ -33,7 +33,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 public class SandboxResultPlanTransformer {
 	private static final Logger logger = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
 
-	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
+	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final ScheduleModel scheduleModel) {
 		if (modelRecord != null) {
 			return new ScenarioResultImpl(modelRecord, scheduleModel);
 		} else {
@@ -41,15 +41,20 @@ public class SandboxResultPlanTransformer {
 		}
 	}
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
+
+		// We can get here when trying to display an empty result from the sandbox
+		if (plan.eContainer() == null) {
+			return root;
+		}
 
 		final ScenarioResult base;
 		if (plan.isUseScenarioBase()) {
 			// Hacky - compare to evaluated state
-			AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer().eContainer();
-			LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
+			final AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer().eContainer();
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
 			if (scenarioModel.getScheduleModel().getSchedule() == null) {
 				throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 			}
@@ -65,14 +70,14 @@ public class SandboxResultPlanTransformer {
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			final UserSettings userSettings = plan.getUserSettings();
 
-			List<ChangeSet> changeSets = new LinkedList<>();
+			final List<ChangeSet> changeSets = new LinkedList<>();
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
 				final ScenarioResult current = make(scenarioInstance, modelRecord, option.getScheduleModel());
 
 				ScenarioResult altBase = null;
 				ScenarioResult altCurrent = null;
-				if (option instanceof DualModeSolutionOption slotInsertionOption) {
+				if (option instanceof final DualModeSolutionOption slotInsertionOption) {
 					if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
 						altBase = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroBaseCase().getScheduleModel());
 						altCurrent = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroTargetCase().getScheduleModel());
