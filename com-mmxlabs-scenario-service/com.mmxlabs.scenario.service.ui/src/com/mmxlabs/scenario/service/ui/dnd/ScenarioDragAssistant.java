@@ -62,9 +62,6 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioDragAssistant.class);
 
-	public ScenarioDragAssistant() {
-	}
-
 	@Override
 	public IStatus validateDrop(final Object target, final int operation, final TransferData transferType) {
 		if (!(operation == DND.DROP_MOVE || operation == DND.DROP_COPY)) {
@@ -74,9 +71,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		// Handle local "within eclipse" transfer
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(transferType) && (target instanceof Container || target == null)) {
 			final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
-			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection ss = (IStructuredSelection) selection;
-				final HashSet<EObject> containers = new HashSet<EObject>();
+			if (selection instanceof IStructuredSelection ss) {
+				final HashSet<EObject> containers = new HashSet<>();
 				EObject eTarget = (EObject) target;
 				if (target instanceof ScenarioService) {
 					return Status.CANCEL_STATUS;
@@ -117,8 +113,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				return Status.CANCEL_STATUS;
 			}
 
-			if (obj instanceof String[]) {
-				final String[] files = (String[]) obj;
+			if (obj instanceof String[] files) {
 
 				for (final String filePath : files) {
 					// Expect this type of extension
@@ -135,8 +130,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		} else if (FileTransfer.getInstance().isSupportedType(transferType) && (target instanceof ScenarioInstance || target == null)) {
 			final Object obj = FileTransfer.getInstance().nativeToJava(transferType);
 
-			if (obj instanceof String[]) {
-				final String[] files = (String[]) obj;
+			if (obj instanceof String[] files) {
 				if (files.length != 1) {
 					return Status.CANCEL_STATUS;
 
@@ -177,16 +171,15 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 			if (LocalSelectionTransfer.getTransfer().isSupportedType(currentTransfer)) {
 
 				final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
-				if (selection instanceof IStructuredSelection) {
+				if (selection instanceof IStructuredSelection ss) {
 
 					int detail = aDropTargetEvent.detail;
 
 					final List<Container> containers = new LinkedList<>();
-					final Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
+					final Iterator<?> iterator = ss.iterator();
 					while (iterator.hasNext()) {
 						final Object obj = iterator.next();
-						if (obj instanceof Container) {
-							final Container c = (Container) obj;
+						if (obj instanceof Container c) {
 							// Moving between scenario services? Force a copy
 							final IScenarioService a = SSDataManager.Instance.findScenarioService(c);
 							final IScenarioService b = SSDataManager.Instance.findScenarioService(container);
@@ -224,15 +217,13 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 												return;
 											}
 											monitor.setTaskName("Copying " + c.getName());
-											if (c instanceof Folder) {
+											if (c instanceof Folder folder) {
 												try {
-													copyFolder(container, (Folder) c, monitor.split(100));
+													copyFolder(container, folder, monitor.split(100));
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
-													RunnerHelper.asyncExec((display) -> {
-														MessageDialog.openError(display.getActiveShell(), "Error copying scenarios",
-																"There was an error copying scenarios. Please ensure they can all be opened.");
-													});
+													RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error copying scenarios",
+															"There was an error copying scenarios. Please ensure they can all be opened."));
 												}
 											} else {
 												try {
@@ -242,7 +233,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 													log.error(e.getMessage(), e);
 												}
 											}
-											//monitor.worked(1);
+											// monitor.worked(1);
 										}
 									} finally {
 										monitor.done();
@@ -261,9 +252,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 			} else if (FileTransfer.getInstance().isSupportedType(currentTransfer)) {
 				final Object obj = FileTransfer.getInstance().nativeToJava(currentTransfer);
 
-				if (obj instanceof String[]) {
+				if (obj instanceof String[] files) {
 
-					final String[] files = (String[]) obj;
 					return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
 						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
@@ -317,23 +307,19 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					});
 				}
 			}
-		} else if (aTarget instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) aTarget;
+		} else if (aTarget instanceof ScenarioInstance scenarioInstance) {
 			final TransferData currentTransfer = aDropAdapter.getCurrentTransfer();
 			if (LocalSelectionTransfer.getTransfer().isSupportedType(currentTransfer)) {
 
 				final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection ss = (IStructuredSelection) selection;
+				if (selection instanceof IStructuredSelection ss) {
 					final Object e = ss.getFirstElement();
-					if (e instanceof ScenarioFragment) {
-						final ScenarioFragment scenarioFragment = (ScenarioFragment) e;
+					if (e instanceof ScenarioFragment scenarioFragment) {
 						ServiceHelper.withAllServices(IScenarioFragmentCopyHandler.class, null, handler -> {
 							final boolean handled = handler.copy(scenarioFragment, scenarioInstance);
 							return !handled;
 						});
-					} else if (e instanceof IChangeSource) {
-						final IChangeSource iChangeSource = (IChangeSource) e;
+					} else if (e instanceof IChangeSource iChangeSource) {
 						ServiceHelper.withAllServices(IScenarioInstanceChangeHandler.class, null, handler -> {
 							final boolean handled = handler.applyChange(scenarioInstance, iChangeSource);
 							return !handled;
@@ -342,8 +328,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				}
 			} else if (FileTransfer.getInstance().isSupportedType(currentTransfer)) {
 				final Object obj = FileTransfer.getInstance().nativeToJava(currentTransfer);
-				if (obj instanceof String[]) {
-					final String[] files = (String[]) obj;
+				if (obj instanceof String[] files) {
 					return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
@@ -401,8 +386,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						return;
 					}
 					monitor.subTask("Copying " + c.getName());
-					if (c instanceof Folder) {
-						copyFolder(instance, (Folder) c, monitor.split(10));
+					if (c instanceof Folder folder) {
+						copyFolder(instance, folder, monitor.split(10));
 					} else {
 						copyScenario(instance, (ScenarioInstance) c, monitor.split(10));
 					}
@@ -428,8 +413,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					return;
 				}
 				monitor.subTask("Copying " + c.getName());
-				if (c instanceof Folder) {
-					copyFolder(f, (Folder) c, monitor.split(10));
+				if (c instanceof Folder subFolder) {
+					copyFolder(f, subFolder, monitor.split(10));
 				} else {
 					copyScenario(f, (ScenarioInstance) c, monitor.split(10));
 				}
