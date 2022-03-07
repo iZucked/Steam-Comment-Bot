@@ -58,7 +58,7 @@ public class OptimisationResultItemProvider extends AbstractSolutionSetItemProvi
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationResult"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationResult.png"));
 	}
 
 	/**

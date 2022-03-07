@@ -173,7 +173,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			}
 		}
 
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment.png"));
 	}
 
 	/**
