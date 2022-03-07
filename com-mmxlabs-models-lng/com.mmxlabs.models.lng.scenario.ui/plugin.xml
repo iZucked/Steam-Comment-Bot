@@ -138,15 +138,29 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:file?after=additions">
-            <command
-                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="Import scenario from CSV"
-                  style="push">
-            </command>
+            <menu
+                  id="file_import"
+                  label="Import scenario from">
+            </menu>
             <menu
                   id="file_export"
                   label="Export scenario to">
             </menu>
+         </menuContribution>
+         <!-- Import menu -->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file_import">
+  				<command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  label="CSV"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+                  label=".lingo"
+                  style="push">
+            </command>
          </menuContribution>
          <!-- Export menu -->
          <menuContribution
@@ -425,6 +439,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                name="Export Scenario as .lingo file">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+               name="Import Scenario as .lingo file">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCommodityCurveHandler"
