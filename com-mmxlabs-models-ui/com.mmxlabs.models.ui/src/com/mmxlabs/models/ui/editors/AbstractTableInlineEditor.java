@@ -36,7 +36,7 @@ public abstract class AbstractTableInlineEditor extends BasicAttributeInlineEdit
 	private Control control;
 	protected final Repacker repacker = new Repacker();
 
-	public AbstractTableInlineEditor(final EStructuralFeature feature) {
+	protected AbstractTableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 
