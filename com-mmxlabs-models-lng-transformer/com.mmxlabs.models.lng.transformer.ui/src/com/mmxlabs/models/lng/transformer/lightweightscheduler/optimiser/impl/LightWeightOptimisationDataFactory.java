@@ -242,7 +242,7 @@ public class LightWeightOptimisationDataFactory {
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
 		modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
-		Set<ISequenceElement> usedElements = new HashSet<>();
+		Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 
 		for (final List<IPortSlot> cargo : shippedCargoes) {
 			// Grab FOB/DES vessel

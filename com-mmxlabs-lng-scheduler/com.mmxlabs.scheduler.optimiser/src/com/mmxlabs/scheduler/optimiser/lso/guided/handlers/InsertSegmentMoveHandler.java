@@ -79,8 +79,8 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 				final Followers<ISequenceElement> preceders = followersAndPreceders.getValidPreceders(element);
 
 				filteredUnusedSequenceElements = unusedSequenceElements.stream()//
-						.filter(e -> helper.isLoadSlot(e))//
-						.filter(e -> preceders.contains(e))//
+						.filter(helper::isLoadSlot)//
+						.filter(preceders::contains)//
 						.filter(e -> !forbiddenElements.contains(e)) //
 						.collect(Collectors.toList());
 			} else if (helper.isFOBPurchase(element)) {

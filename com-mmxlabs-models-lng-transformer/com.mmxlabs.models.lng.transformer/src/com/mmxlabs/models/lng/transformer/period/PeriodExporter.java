@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -370,13 +371,13 @@ public class PeriodExporter {
 			final ISequences partialSequences = rawSequences;
 
 			// Elements we have put in
-			final Set<ISequenceElement> usedElements = new HashSet<>();
+			final Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 			// Elements we have pulled out. Once we have processed the data, removedElements
 			// - usedElements == partialSequences.getUnusedElements()
-			final Set<ISequenceElement> removedElements = new HashSet<>();
+			final Set<ISequenceElement> removedElements = new LinkedHashSet<>();
 
 			// Loop over period solution and modify the complete
-			final Set<IResource> seenCompleteResources = new HashSet<>();
+			final Set<IResource> seenCompleteResources = new LinkedHashSet<>();
 			for (final IResource r : partialSequences.getResources()) {
 				final ISequence seq = partialSequences.getSequence(r);
 
