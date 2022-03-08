@@ -39,6 +39,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * A component helper for CanalBookings instances
@@ -80,7 +83,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 			addSingleReferenceColumn(b, "Booking code", CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE);
 			addTextColumn(b, "Notes", CargoPackage.Literals.CANAL_BOOKING_SLOT__NOTES);
 
-			b.withAction("Add", (input, ch, sel) -> {
+			// Add action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
 				final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 				final CanalBookingSlot cbs = CargoFactory.eINSTANCE.createCanalBookingSlot();
 				final Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS, cbs);
@@ -88,7 +92,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			});
 
-			b.withAction("Delete", (input, ch, sel) -> {
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 				if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
 					final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 					final Command c = DeleteCommand.create(ch.getEditingDomain(), ss.toList());
@@ -119,13 +124,15 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			addColumn(b, "Vessels", CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
 
-			b.withAction("Add", (input, ch, sel) -> {
+			// Add action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
 				final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 				final VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 				final Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, vgcp);
 				ch.handleCommand(c, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
 			});
-			b.withAction("Delete", (input, ch, sel) -> {
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 
 				if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
 					final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
@@ -161,7 +168,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			addNumericColumn(b, "Southbound", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS);
 
-			b.withAction("Add", (input, ch, sel) -> {
+			// Add action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
 				final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 				final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
 				final Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS, psr);
@@ -169,7 +177,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			});
 
-			b.withAction("Delete", (input, ch, sel) -> {
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 
 				if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
 					final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();

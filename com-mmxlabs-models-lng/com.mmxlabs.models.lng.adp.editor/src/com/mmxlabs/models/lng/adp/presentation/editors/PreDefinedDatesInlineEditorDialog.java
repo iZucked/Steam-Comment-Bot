@@ -32,6 +32,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -51,6 +52,9 @@ import com.mmxlabs.models.ui.editors.DefaultCommandHandler;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class PreDefinedDatesInlineEditorDialog extends Dialog {
@@ -107,7 +111,11 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		buttonBar.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).equalWidth(true).create());
 		{
 			final Button btn = new Button(buttonBar, SWT.PUSH);
-			btn.setText("+");
+			{
+				Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
+				btn.setImage(img);
+				btn.addDisposeListener(e -> img.dispose());
+			}
 			btn.setLayoutData(GridDataFactory.fillDefaults().create());
 			btn.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -122,7 +130,11 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		}
 		{
 			final Button btn = new Button(buttonBar, SWT.PUSH);
-			btn.setText("-");
+			{
+				Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+				btn.setImage(img);
+				btn.addDisposeListener(e -> img.dispose());
+			}
 			btn.setLayoutData(GridDataFactory.fillDefaults().create());
 
 			btn.addSelectionListener(new SelectionAdapter() {
@@ -131,8 +143,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 				public void widgetSelected(final SelectionEvent e) {
 
 					final ISelection selection = tableViewer.getSelection();
-					if (selection instanceof IStructuredSelection) {
-						final IStructuredSelection ss = (IStructuredSelection) selection;
+					if (selection instanceof IStructuredSelection ss) {
 						final Iterator<?> itr = ss.iterator();
 						while (itr.hasNext()) {
 							((PreDefinedDistributionModel) container).getDates().remove(itr.next());

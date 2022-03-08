@@ -25,11 +25,13 @@ import com.mmxlabs.models.lng.analytics.LocalDateTimeHolder;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.ui.editors.FuelChoiceInlineEditorHelper;
 import com.mmxlabs.models.lng.analytics.ui.editors.RouteChoiceInlineEditorHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * A component helper for PartialCaseRowOptions instances
@@ -56,9 +58,9 @@ public class PartialCaseRowOptionsComponentHelper extends DefaultComponentHelper
 		addEditor(AnalyticsPackage.Literals.PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES, createDatesEditor(AnalyticsPackage.Literals.PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES, "Dates"));
 	}
 
-	protected Function<EClass, IInlineEditor> createDatesEditor(final EStructuralFeature feature, String label) {
+	protected Function<EClass, IInlineEditor> createDatesEditor(final EStructuralFeature feature, final String label) {
 		return topClass -> {
-			TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
+			final TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 			b.withShowHeaders(false);
 			b.withLabel(label);
 			b.withHeightHint(100);
@@ -85,19 +87,20 @@ public class PartialCaseRowOptionsComponentHelper extends DefaultComponentHelper
 					.withRMMaker((ch, rvp) -> new LocalDateTimeAttributeManipulator(AnalyticsPackage.Literals.LOCAL_DATE_TIME_HOLDER__DATE_TIME, ch)) //
 					.build();
 
-			b.withAction("Add", (input, ch, sel) -> {
-				PartialCaseRowOptions options = (PartialCaseRowOptions) input;
-				LocalDateTimeHolder holder = AnalyticsFactory.eINSTANCE.createLocalDateTimeHolder();
+			// Add Action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
+				final PartialCaseRowOptions options = (PartialCaseRowOptions) input;
+				final LocalDateTimeHolder holder = AnalyticsFactory.eINSTANCE.createLocalDateTimeHolder();
 				holder.setDateTime(LocalDate.now().atStartOfDay());
-				Command c = AddCommand.create(ch.getEditingDomain(), options, feature, holder);
+				final Command c = AddCommand.create(ch.getEditingDomain(), options, feature, holder);
 				ch.handleCommand(c, options, feature);
-
 			});
-			b.withAction("Delete", (input, ch, sel) -> {
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 
-				if (sel instanceof IStructuredSelection ss && !ss.isEmpty()) {
-					PartialCaseRowOptions options = (PartialCaseRowOptions) input;
-					Command c = RemoveCommand.create(ch.getEditingDomain(), options, feature, ss.toList());
+				if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
+					final PartialCaseRowOptions options = (PartialCaseRowOptions) input;
+					final Command c = RemoveCommand.create(ch.getEditingDomain(), options, feature, ss.toList());
 					ch.handleCommand(c, options, feature);
 				}
 			}, false, (btn, sel) -> btn.setEnabled(!sel.isEmpty()));
