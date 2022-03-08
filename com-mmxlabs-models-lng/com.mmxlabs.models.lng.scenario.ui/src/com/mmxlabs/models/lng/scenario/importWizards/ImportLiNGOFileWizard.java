@@ -16,12 +16,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PartInitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 
@@ -49,6 +53,7 @@ public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 
 					parentMonitor.beginTask("Import Scenario", 9);
 					final SubMonitor monitor = SubMonitor.convert(parentMonitor);
+					monitor.beginTask("Import Scenario", 9);
 					try {
 
 						final Container container = filesPage.getScenarioContainer();
@@ -61,15 +66,25 @@ public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 						final URL scenarioURL = file.toURI().toURL();
 						// SubMonitor - remember to be careful, only one #split monitor will work at a
 						// time.
+						final ScenarioInstance[] copyScenario = new ScenarioInstance[1];
 						ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioURL, (modelRecord, modelReference) -> {
 							try {
 								// This is the *second* progress monitor. This is expected to be called once the
 								// other #split monitor has completed.
-								ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, monitor.split(4));
+								copyScenario[0] = ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, monitor.split(4));
 							} catch (final Exception e) {
 								log.error(e.getMessage(), e);
 							}
 						}, monitor.split(5));
+
+						if (copyScenario[0] != null) {
+							RunnerHelper.asyncExec(() -> {
+								try {
+									OpenScenarioUtils.openScenarioInstance(copyScenario[0]);
+								} catch (PartInitException e) {
+								}
+							});
+						}
 					} catch (final Exception e) {
 						log.error(e.getMessage());
 					} finally {
