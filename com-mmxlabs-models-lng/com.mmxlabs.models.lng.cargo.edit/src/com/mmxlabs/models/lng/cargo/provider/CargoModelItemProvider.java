@@ -141,6 +141,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS);
@@ -207,6 +208,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
 			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
@@ -283,6 +285,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS,
 				 CargoFactory.eINSTANCE.createVesselTypeGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS,
+				 CargoFactory.eINSTANCE.createInventory()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -35,7 +35,7 @@ public final class CommonImages {
 		Pack("icons/16x16/pack.png"), //
 		Plus("icons/16x16/plus.png", true), //
 		Plusplus("icons/16x16/plusplus.png", true), //
-		Delete("icons/16x16/delete.png", true), //
+		Delete("icons/16x16/delete.png"), //
 		Filter("icons/16x16/filter.png"), //
 		Sort("icons/16x16/sort.png"), //
 		Copy("icons/16x16/copy.png", true), //

@@ -51,9 +51,6 @@ public class PricingCalendarsViewerPane extends ScenarioTableViewerPane {
 	}
 
 	public void setInput(final PricingCalendar data) {
-		if (data == null) {
-			return;
-		}
 		viewer.setInput(data);
 	}
 
