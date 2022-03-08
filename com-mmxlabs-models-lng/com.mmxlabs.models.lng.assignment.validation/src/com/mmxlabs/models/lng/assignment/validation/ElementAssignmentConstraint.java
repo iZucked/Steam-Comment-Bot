@@ -29,8 +29,11 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Validation constraint to check the type of vessel assigned. FOB/DES cargoes are either unassigned or a vessel not part of the "scenario" data - that is vessels in the FleetModel but do not have a
- * VesselAvailability. Fleet cargoes can be only scenario vessel assignments. Vessel Events can only use scenario vessels.
+ * Validation constraint to check the type of vessel assigned. FOB/DES cargoes
+ * are either unassigned or a vessel not part of the "scenario" data - that is
+ * vessels in the FleetModel but do not have a VesselAvailability. Fleet cargoes
+ * can be only scenario vessel assignments. Vessel Events can only use scenario
+ * vessels.
  * 
  */
 public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
@@ -38,75 +41,52 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) object;
+		if (object instanceof AssignableElement ae) {
+			final AssignableElement assignableElement = ae;
 
 			Cargo cargo = null;
-			if (assignableElement instanceof Cargo) {
-				cargo = (Cargo) assignableElement;
+			if (assignableElement instanceof Cargo c) {
+				cargo = c;
 			}
 
-			if (cargo != null) {
+			if (cargo != null && cargo.getCargoType() == CargoType.FLEET) {
+				final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
+				if (vesselAssignmentType == null) {
 
-				if (cargo.getCargoType() == CargoType.FLEET) {
-					final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-					if (vesselAssignmentType == null) {
+					if (LicenseFeatures.isPermitted("features:require-vessel-allocation")) {
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getLoadName() + " has no vessel assignment."), IStatus.ERROR);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 
-						if (LicenseFeatures.isPermitted("features:require-vessel-allocation")) {
+						failures.add(failure);
+
+					} else {
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getLoadName() + " has no vessel assignment. This may cause problems evaluating scenario."),
+								IStatus.WARNING);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+
+						failures.add(failure);
+					}
+				} else if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
+					if (assignableElement.getSpotIndex() == -1) {
+
+						if (!charterInMarket.isNominal()) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getLoadName() + " has no vessel assignment."), IStatus.ERROR);
-							failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-
-							failures.add(failure);
-
-						} else {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getLoadName() + " has no vessel assignment. This may cause problems evaluating scenario."),
-									IStatus.WARNING);
-							failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-
-							failures.add(failure);
-						}
-					} else if (vesselAssignmentType instanceof CharterInMarket) {
-						CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-						if (assignableElement.getSpotIndex() == -1) {
-
-							if (!charterInMarket.isNominal()) {
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-										(IConstraintStatus) ctx
-												.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment but the charter market does not permit nominal vessels."),
-										IStatus.ERROR);
-								failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-								failure.setTag(ValidationConstants.TAG_NOMINAL_VESSELS);
-								failures.add(failure);
-							} else {
-								final MMXRootObject rootObject = extraContext.getRootObject();
-								if (rootObject instanceof LNGScenarioModel) {
-									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-									final LocalDate promptPeriodEnd = lngScenarioModel.getPromptPeriodEnd();
-									if (promptPeriodEnd != null) {
-										final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
-										if (!sortedSlots.isEmpty()) {
-											final Slot<?> slot = sortedSlots.get(0);
-											if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
-												final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-														(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment in the prompt."), IStatus.WARNING);
-												failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-												failure.setTag(ValidationConstants.TAG_NOMINAL_VESSELS);
-												failures.add(failure);
-											}
-										}
-									}
-								}
-							}
-						} else if (!charterInMarket.isEnabled()) {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("Cargo %s is assigned to disabled market - %s.", cargo.getLoadName(), charterInMarket.getName())),
+									(IConstraintStatus) ctx
+											.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment but the charter market does not permit nominal vessels."),
 									IStatus.ERROR);
 							failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
-
+							failure.setTag(ValidationConstants.TAG_NOMINAL_VESSELS);
 							failures.add(failure);
 						}
+					} else if (!charterInMarket.isEnabled()) {
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(String.format("Cargo %s is assigned to disabled market - %s.", cargo.getLoadName(), charterInMarket.getName())),
+								IStatus.ERROR);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+
+						failures.add(failure);
 					}
 				}
 			}
