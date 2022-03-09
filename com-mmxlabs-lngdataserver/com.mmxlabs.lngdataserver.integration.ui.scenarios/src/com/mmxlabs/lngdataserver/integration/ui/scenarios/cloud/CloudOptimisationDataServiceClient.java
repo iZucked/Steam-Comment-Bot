@@ -190,28 +190,13 @@ public class CloudOptimisationDataServiceClient {
 			if (!response.isSuccessful()) {
 				response.body().close();
 				return GatewayResponseMaker.makeGatewayResponse(response);
+//				throw new IOException("Unexpected code: " + response);
 			}
-
-			// read from s3 presigned URL
-			String body = response.body().string();
-
-			Request s3request = new Request.Builder()//
-					.url(body) //
-					.build();
-
-			try (Response s3response = localHttpClient.newCall(s3request).execute()) {
-				if (!s3response.isSuccessful()) {
-					s3response.body().close();
-					return GatewayResponseMaker.makeGatewayResponse(s3response);
-				}
-
-				// write to file
-				try (BufferedSource bufferedSource = s3response.body().source()) {
-					final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
-					bufferedSink.writeAll(bufferedSource);
-					bufferedSink.close();
-					return GatewayResponseMaker.makeGatewayResponse(s3response);
-				}
+			try (BufferedSource bufferedSource = response.body().source()) {
+				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
+				bufferedSink.writeAll(bufferedSource);
+				bufferedSink.close();
+				return GatewayResponseMaker.makeGatewayResponse(response);
 			}
 		}
 	}
