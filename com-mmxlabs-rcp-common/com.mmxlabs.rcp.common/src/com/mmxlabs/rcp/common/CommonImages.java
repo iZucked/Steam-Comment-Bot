@@ -40,8 +40,8 @@ public final class CommonImages {
 		Sort("icons/16x16/sort.png"), //
 		Copy("icons/16x16/copy.png", true), //
 		Paste("icons/16x16/paste.png"), //
-		CollapseAll("icons/16x16/collapseall.png"), //
-		ExpandAll("icons/16x16/expandall.png"), //
+		CollapseAll("icons/16x16/collapse_all.png"), //
+		ExpandAll("icons/16x16/expand_all.png"), //
 		Cut("icons/16x16/cut.png"), //
 		Edit("icons/16x16/edit.png"), //
 		Pin_8("icons/8x8/pin.png"), //
