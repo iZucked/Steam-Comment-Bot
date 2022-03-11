@@ -185,7 +185,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox"
-               icon="icons/sandbox.gif"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -216,7 +216,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
-               icon="icons/sandbox.gif"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png"
                style="push">
             <visibleWhen
                   checkEnabled="false">

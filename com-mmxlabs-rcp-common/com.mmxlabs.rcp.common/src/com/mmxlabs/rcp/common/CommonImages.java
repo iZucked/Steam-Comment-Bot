@@ -46,6 +46,7 @@ public final class CommonImages {
 		Edit("icons/16x16/edit.png"), //
 		Pin_8("icons/8x8/PinnedRow.png"), //
 		Pin("icons/16x16/pin.png"), //
+		Sandbox("icons/16x16/sandbox.png"), //
 		Scenario("icons/16x16/scenario.png"), //
 		Hub("icons/16x16/hub.png", true), //
 		Local("icons/16x16/local.png", true), //
@@ -75,7 +76,7 @@ public final class CommonImages {
 		Fork("icons/24x24/fork.png", true), //
 		
 		Save("icons/24x24/save.png", true), //
-		Saveall("icons/24x24/saveall.png", true), 
+		Saveall("icons/24x24/save_all.png", true), //
 		ReEvaluate16("icons/16x16/reevaluate.png"), //
 		ReEvaluate24("icons/24x24/reevaluate.png"), //
 		;

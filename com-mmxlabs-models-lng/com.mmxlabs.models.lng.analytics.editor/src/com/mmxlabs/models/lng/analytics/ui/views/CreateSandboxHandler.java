@@ -39,6 +39,9 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -83,7 +86,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 						final Display display = PlatformUI.getWorkbench().getDisplay();
 
 						final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox.gif");
-						final Image img = d.createImage();
+						final Image img = CommonImages.getImageDescriptor(IconPaths.Sandbox, IconMode.Enabled).createImage();
 						final InputDialog dialog = new InputDialog(display.getActiveShell(), "Create sandbox", "Choose name for sandbox", "sandbox", null) {
 							@Override
 							protected void configureShell(final Shell shell) {
