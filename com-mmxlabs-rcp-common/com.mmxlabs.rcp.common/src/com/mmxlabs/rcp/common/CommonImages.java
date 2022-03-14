@@ -45,6 +45,7 @@ public final class CommonImages {
 		ExpandAll("icons/16x16/expand_all.png"), //
 		Cut("icons/16x16/cut.png"), //
 		Edit("icons/16x16/edit.png"), //
+		Highlighter("icons/16x16/highlighter.png"), //
 		Pin_8("icons/8x8/pin.png"), //
 		Pin("icons/16x16/pin.png"), //
 		Sandbox("icons/16x16/sandbox.png"), //
