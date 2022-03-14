@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.manager;
 
-import java.io.IOException;
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,7 +13,6 @@ import java.util.function.Consumer;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -61,18 +58,15 @@ public final class InstanceData {
 		this.closeCallback = closeCallback;
 		this.lock = new ScenarioLock(modelRecord);
 
-		commandStack.addCommandStackListener(new CommandStackListener() {
-			@Override
-			public void commandStackChanged(final EventObject event) {
-				// TODO: Determine Undo/Redo
-				final boolean newDirty = commandStack.isSaveNeeded() | externallyChanged;
-				final boolean fireEvent = newDirty != isDirty;
-				isDirty = newDirty;
-				if (fireEvent) {
-					fireDirtyEvent(isDirty);
-				}
-				modelRecord.runPostChangeHooks(PostChangeType.EDIT);
+		commandStack.addCommandStackListener(event -> {
+			// TODO: Determine Undo/Redo
+			final boolean newDirty = commandStack.isSaveNeeded() || externallyChanged;
+			final boolean fireEvent = newDirty != isDirty;
+			isDirty = newDirty;
+			if (fireEvent) {
+				fireDirtyEvent(isDirty);
 			}
+			modelRecord.runPostChangeHooks(PostChangeType.EDIT);
 		});
 	}
 
@@ -88,14 +82,14 @@ public final class InstanceData {
 	}
 
 	public boolean isDirty() {
-		return commandStack.isSaveNeeded() | isDirty | externallyChanged;
+		return commandStack.isSaveNeeded() || isDirty || externallyChanged;
 	}
 
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
 	}
 
-	public void save() throws IOException {
+	public void save() {
 		saveCallback.accept(modelRecord, this);
 		externallyChanged = false;
 		assert !commandStack.isSaveNeeded();
@@ -115,7 +109,7 @@ public final class InstanceData {
 	public void setDirty(final boolean newDirty) {
 		externallyChanged |= newDirty;
 		final boolean fireEvent = newDirty != isDirty;
-		isDirty = newDirty | externallyChanged;
+		isDirty = newDirty || externallyChanged;
 		if (fireEvent) {
 			fireDirtyEvent(isDirty);
 		}
@@ -168,7 +162,8 @@ public final class InstanceData {
 					// Re-do null check in the lock
 					resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
 					if (resourceToReadOnlyMap == null) {
-						// Concurrent hash map would be better, but it does not like null keys (even in #get())
+						// Concurrent hash map would be better, but it does not like null keys (even in
+						// #get())
 						resourceToReadOnlyMap = Collections.synchronizedMap(new HashMap<>());
 						adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
 					}
