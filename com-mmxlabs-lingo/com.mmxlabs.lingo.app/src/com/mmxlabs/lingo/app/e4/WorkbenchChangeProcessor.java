@@ -34,7 +34,8 @@ public class WorkbenchChangeProcessor {
 		// Note: Some images copied into many places are handled explicitly in the
 		// mapIcons functions
 		Map<String, String> iconMapping = new HashMap<>();
-		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_view.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_view.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png");

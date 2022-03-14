@@ -13,7 +13,7 @@
          point="org.eclipse.ui.views">
       <view
             name="Schedule Chart"
-            icon="icons/schedule_view.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_view.png"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView"
             id="com.mmxlabs.scheduleview.views.SchedulerView">
