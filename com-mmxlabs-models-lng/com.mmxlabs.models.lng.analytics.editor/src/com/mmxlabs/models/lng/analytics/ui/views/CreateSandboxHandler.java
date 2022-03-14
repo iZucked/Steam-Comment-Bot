@@ -85,7 +85,6 @@ public class CreateSandboxHandler extends AbstractHandler {
 						final EditingDomain domain = reference.getEditingDomain();
 						final Display display = PlatformUI.getWorkbench().getDisplay();
 
-						final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox.gif");
 						final Image img = CommonImages.getImageDescriptor(IconPaths.Sandbox, IconMode.Enabled).createImage();
 						final InputDialog dialog = new InputDialog(display.getActiveShell(), "Create sandbox", "Choose name for sandbox", "sandbox", null) {
 							@Override

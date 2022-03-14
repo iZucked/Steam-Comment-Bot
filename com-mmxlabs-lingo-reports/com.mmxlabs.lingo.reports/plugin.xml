@@ -909,7 +909,7 @@
       <ReplaceableView
             viewId="com.mmxlabs.lingo.reports.verticalreport"
             name="Vertical Schedule"
-            icon="icons/cview16/vertical_schedule.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
       </ReplaceableView>
@@ -1150,8 +1150,8 @@
 			label="Change Set Tools">
 			<action
 				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
-				icon="icons/FilterScheduleReport.png"
-				disabledIcon="icons/FilterScheduleReport_disabled.png"
+				icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/filter_schedule_report.png"
+				disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/filter_schedule_report_disabled.png"
 				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
          label="Filter Schedule Summary"
          style="toggle"
@@ -1159,8 +1159,8 @@
 			</action>
 			<action
 				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionAction"
-				icon="icons/FilterScheduleChart.png"
-				disabledIcon="icons/FilterScheduleChart_disabled.png"
+				icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/filter_schedule_chart.png"
+				disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/filter_schedule_chart_disabled.png"
 				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
          label="Filter Schedule Chart"
          style="toggle"
