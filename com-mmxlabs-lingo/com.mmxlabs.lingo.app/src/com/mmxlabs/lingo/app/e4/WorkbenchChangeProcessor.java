@@ -38,7 +38,8 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_view.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png");
-		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif", "platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png");

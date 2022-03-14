@@ -1066,7 +1066,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
          <command
                commandId="com.mmxlabs.lingo.reports.comparescenarios"
-               icon="icons/cview16/changes_view.gif"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png"
                id="com.mmxlabs.lingo.reports.comparescenarios.menu.navigator"
                label="Compare"
                style="push"
@@ -1125,14 +1125,14 @@
             allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/compare.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
             name="Changes">
       </view>
       <view
       		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/compare.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"
             name="Optimisations"
             restorable="true">
@@ -1141,7 +1141,7 @@
 <extension point="org.eclipse.ui.perspectives">
 		<perspective class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
 			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Compare"
-			icon="icons/compare.png">
+			icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png">
 		</perspective>
 	</extension>
 
