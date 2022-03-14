@@ -32,6 +32,7 @@ public final class CommonImages {
 
 	public enum IconPaths {
 // 16x16
+		BaseFlag("icons/16x16/base_flag.png"), //
 		Pack("icons/16x16/pack.png"), //
 		Plus("icons/16x16/plus.png", true), //
 		Plusplus("icons/16x16/plusplus.png", true), //
@@ -70,6 +71,7 @@ public final class CommonImages {
 		Play("icons/24x24/optimise.png", true), //
 		CloudPlay_24("icons/24x24/cloud_run.png", true), //
 		Cloud_24("icons/24x24/cloud.png"), //
+		Evaluate("icons/24x24/evaluate_schedule.png", true), //
 
 //		Resume("icons/24x24/terminate.png", true), //
 		Terminate("icons/24x24/terminate.png", true), //

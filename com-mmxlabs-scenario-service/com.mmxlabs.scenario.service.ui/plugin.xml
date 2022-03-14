@@ -516,7 +516,7 @@
          -->
          <command
                commandId="com.mmxlabs.scenario.service.ui.fork"
-               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork.png"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/fork.png"
                label="Fork"
                style="push">
             <visibleWhen

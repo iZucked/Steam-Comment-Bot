@@ -167,7 +167,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
-		statusColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/base-flag.png").createImage();
+		statusColumnImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	}
 
 	@Override
