@@ -52,6 +52,7 @@ public final class CommonImages {
 		Scenario("icons/16x16/scenario.png"), //
 		Hub("icons/16x16/hub.png", true), //
 		Local("icons/16x16/local.png", true), //
+		Label("icons/16x16/label.png"), //
 		
 		
 		Play_16("icons/16x16/optimise.png", true), //
