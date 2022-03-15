@@ -73,40 +73,10 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 	private interface IOp {
 		public Number evaluate(final Number a, final Number b);
 
-		public static final IOp ADD = new IOp() {
-			@Override
-			public Number evaluate(final Number a, final Number b) {
-				return a.doubleValue() + b.doubleValue();
-			}
-		};
-
-		public static final IOp SUB = new IOp() {
-			@Override
-			public Number evaluate(final Number a, final Number b) {
-				return a.doubleValue() - b.doubleValue();
-			}
-		};
-
-		public static final IOp DIV = new IOp() {
-			@Override
-			public Number evaluate(final Number a, final Number b) {
-				// Divide by zero check
-				return b.doubleValue() == 0.0 ? 0.0 : a.doubleValue() / b.doubleValue();
-			}
-		};
-
-		public static final IOp MUL = new IOp() {
-			@Override
-			public Number evaluate(final Number a, final Number b) {
-				return a.doubleValue() * b.doubleValue();
-			}
-		};
-
-		public static final IOp PERCENT = new IOp() {
-			@Override
-			public Number evaluate(final Number a, final Number b) {
-				return a.doubleValue() * b.doubleValue() / 100.0;
-			}
-		};
+		public static final IOp ADD = (a, b) -> a.doubleValue() + b.doubleValue();
+		public static final IOp SUB = (a, b) -> a.doubleValue() - b.doubleValue();
+		public static final IOp DIV = (a, b) -> b.doubleValue() == 0.0 ? 0.0 : a.doubleValue() / b.doubleValue();
+		public static final IOp MUL = (a, b) -> a.doubleValue() * b.doubleValue();
+		public static final IOp PERCENT = (a, b) -> a.doubleValue() * b.doubleValue() / 100.0;
 	}
 }
