@@ -17,7 +17,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -30,6 +29,11 @@ public class MarketIndexConstraint extends AbstractModelMultiConstraint {
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
 			if (target instanceof MarketIndex index) {
+				// Only need these curves when auto-hedging is enabled.
+				if (!index.isAutoHedgeEnabled()) {
+					return;
+				}
+
 				if (index.getFlatCurve() == null) {
 					final String message = String.format("Market index %s should have a flat curve!", index.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
