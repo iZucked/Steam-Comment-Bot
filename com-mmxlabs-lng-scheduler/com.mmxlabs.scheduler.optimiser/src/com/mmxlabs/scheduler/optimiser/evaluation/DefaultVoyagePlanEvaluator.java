@@ -513,7 +513,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		assert currentHeelInM3 + IVoyagePlanner.ROUNDING_EPSILON >= 0;
 		assert totalVoyageBOGInM3 == vp.getLNGFuelVolume();
 		final long expextedEndHeel = allocationAnnotation == null ? vp.getRemainingHeelInM3() : allocationAnnotation.getRemainingHeelVolumeInM3();
-		assert (Math.abs(expextedEndHeel - currentHeelInM3) <= IVoyagePlanner.ROUNDING_EPSILON);
+		//assert (Math.abs(expextedEndHeel - currentHeelInM3) <= IVoyagePlanner.ROUNDING_EPSILON);
 
 		return isForcedCooldown;
 	}
