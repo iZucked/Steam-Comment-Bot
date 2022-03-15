@@ -40,7 +40,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Base class for allocating load/discharge volumes; doesn't implement the solve() method, but does do various book-keeping tasks.
+ * Base class for allocating load/discharge volumes; doesn't implement the
+ * solve() method, but does do various book-keeping tasks.
  * 
  * @author hinton
  * 
@@ -62,10 +63,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Inject
 	private IFullCargoLotProviderEditor fullCargoLotProvider;
-
-	public BaseVolumeAllocator() {
-		super();
-	}
 
 	@Override
 	@Nullable
@@ -120,9 +117,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				if (slot instanceof StartPortSlot) {
 					continue;
 				}
-				if (slot instanceof ILoadOption) {
+				if (slot instanceof ILoadOption loadOption) {
 					slots.add(slot);
-					final ILoadOption loadOption = (ILoadOption) slot;
 					if (actualsDataProvider.hasActuals(slot)) {
 						// Do not mark has actuals as true here, wait for discharge
 						// hasActuals = true;
@@ -135,7 +131,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						maxVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
 					} else {
 						cargoCV = loadOption.getCargoCVValue();
-						// the mmbtu and m3 values have been set in the transformer, so no conversion needed here
+						// the mmbtu and m3 values have been set in the transformer, so no conversion
+						// needed here
 						minVolumesInMMBtu.add(loadOption.getMinLoadVolumeMMBTU());
 						maxVolumesInMMBtu.add(loadOption.getMaxLoadVolumeMMBTU());
 						minVolumesInM3.add(loadOption.getMinLoadVolume());
@@ -146,9 +143,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					if (!(loadOption instanceof ILoadSlot)) {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
 					}
-				} else if (slot instanceof IDischargeOption) {
+				} else if (slot instanceof IDischargeOption dischargeOption) {
 					slots.add(slot);
-					final IDischargeOption dischargeOption = (IDischargeOption) slot;
 					if (actualsDataProvider.hasActuals(slot)) {
 						hasActuals = true;
 						cargoCV = actualsDataProvider.getCVValue(slot);
@@ -167,9 +163,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					if (!(dischargeOption instanceof IDischargeSlot)) {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
 					}
-				} else if (slot instanceof IHeelOptionSupplierPortSlot) {
+				} else if (slot instanceof IHeelOptionSupplierPortSlot heelOptionsPortSlot) {
 					slots.add(slot);
-					final IHeelOptionSupplierPortSlot heelOptionsPortSlot = (IHeelOptionSupplierPortSlot) slot;
 					final IHeelOptionSupplier heelOptions = heelOptionsPortSlot.getHeelOptionsSupplier();
 					cargoCV = heelOptions.getHeelCVValue();
 
@@ -195,12 +190,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		IPortSlot returnSlot = null;
 		final IDetailsSequenceElement lastElement = sequence[sequence.length - 1];
-		if (lastElement instanceof PortDetails) {
-			final PortDetails portDetails = (PortDetails) lastElement;
+		if (lastElement instanceof PortDetails portDetails) {
 			final IPortSlot slot = portDetails.getOptions().getPortSlot();
 			returnSlot = slot;
-			if (slot instanceof IHeelOptionConsumerPortSlot) {
-				final IHeelOptionConsumerPortSlot heelOptionsSlotSlot = (IHeelOptionConsumerPortSlot) slot;
+			if (slot instanceof IHeelOptionConsumerPortSlot heelOptionsSlotSlot) {
 				final IHeelOptionConsumer heelOptions = heelOptionsSlotSlot.getHeelOptionsConsumer();
 
 				maxEndVolumeInM3 = heelOptions.getMaximumHeelAcceptedInM3();
@@ -217,14 +210,12 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				break;
 			}
 			// Check for break-evens - always assume FCL
-			if (ps instanceof ILoadOption) {
-				ILoadOption option = (ILoadOption) ps;
+			if (ps instanceof ILoadOption option) {
 				if (option.getLoadPriceCalculator() instanceof IBreakEvenPriceCalculator) {
 					allocationRecord.fullCargoLot = true;
 					break;
 				}
-			} else if (ps instanceof IDischargeOption) {
-				IDischargeOption option = (IDischargeOption) ps;
+			} else if (ps instanceof IDischargeOption option) {
 				if (option.getDischargePriceCalculator() instanceof IBreakEvenPriceCalculator) {
 					allocationRecord.fullCargoLot = true;
 					break;
