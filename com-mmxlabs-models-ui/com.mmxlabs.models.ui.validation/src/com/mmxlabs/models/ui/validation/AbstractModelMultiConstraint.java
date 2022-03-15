@@ -39,13 +39,13 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 	}
 
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected final String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 		doValidate(ctx, extraContext, statuses);
 		return FrameworkUtil.getBundle(getClass()).getSymbolicName();
 	}
 
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public final IStatus validate(final IValidationContext ctx) {
 
 		final List<IStatus> statuses = new LinkedList<>();
 

@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.actuals.util.ActualsAssignableDateProvider;
-import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -53,7 +52,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * This constraint ensures that an {@link CargoActuals} is preceded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
+ * This constraint ensures that an {@link CargoActuals} is preceded by another
+ * {@link CargoActuals}, or the vessel start. (or a vessel event with warning).
+ * This ensures proper heel tracking etc.
  * 
  * @author Simon Goodall
  * 
@@ -61,12 +62,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 		final MMXRootObject rootObject = extraContext.getRootObject();
-		if (target instanceof ActualsModel) {
-			final ActualsModel actualsModel = (ActualsModel) target;
+		if (target instanceof ActualsModel actualsModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
@@ -212,7 +212,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									statuses.add(failure);
 								}
 							}
-							// Reset this variable so no longer in scope for future iterations. We could also use a "firstElement" boolean.
+							// Reset this variable so no longer in scope for future iterations. We could
+							// also use a "firstElement" boolean.
 							va = null;
 						}
 
@@ -273,10 +274,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-
 		}
-		return Activator.PLUGIN_ID;
-
 	}
 
 	private String getDateString(final LocalDateTime date) {
@@ -284,14 +282,11 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private String getID(final EObject target) {
-		if (target instanceof Cargo) {
-			final Cargo slot = (Cargo) target;
-			return "cargo \"" + slot.getLoadName() + "\"";
-		} else if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+		if (target instanceof Cargo cargo) {
+			return "cargo \"" + cargo.getLoadName() + "\"";
+		} else if (target instanceof Slot<?> slot) {
 			return "slot \"" + slot.getName() + "\"";
-		} else if (target instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) target;
+		} else if (target instanceof VesselEvent vesselEvent) {
 			return "event \"" + vesselEvent.getName() + "\"";
 		}
 		return "(unknown)";

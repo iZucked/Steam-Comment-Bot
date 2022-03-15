@@ -17,13 +17,13 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Check that the end of any cargo's discharge window is not before the start of its load window.
+ * Check that the end of any cargo's discharge window is not before the start of
+ * its load window.
  * 
  * @author Tom Hinton
  * 
@@ -35,11 +35,10 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
+		if (object instanceof Cargo cargo) {
 
 			// String builder to store cargo type
 			final StringBuilder sb = new StringBuilder();
@@ -61,7 +60,8 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 					slotType = null;
 				}
 
-				// This should only permit a single load followed by zero or more discharge slots
+				// This should only permit a single load followed by zero or more discharge
+				// slots
 
 				if (slotType == Type.Load && prevSlotType != null) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -101,7 +101,5 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -17,6 +17,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.analytics,
  com.mmxlabs.models.lng.commercial.editor,
  com.mmxlabs.models.lng.pricing
-Bundle-Activator: com.mmxlabs.models.lng.analytics.validation.internal.Activator
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.analytics.validation

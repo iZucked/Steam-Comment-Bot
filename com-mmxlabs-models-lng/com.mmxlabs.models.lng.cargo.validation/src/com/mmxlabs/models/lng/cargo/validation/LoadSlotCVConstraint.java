@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -21,22 +20,19 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class LoadSlotCVConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) target;
-			DetailConstraintStatusDecorator rangeCheckDSD = checkCVRange(slot, ctx);
+		if (target instanceof final LoadSlot slot) {
+			final DetailConstraintStatusDecorator rangeCheckDSD = checkCVRange(slot, ctx);
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
-	private DetailConstraintStatusDecorator checkCVRange(LoadSlot slot, final IValidationContext ctx) {
-		double cv = slot.getSlotOrDelegateCV();
+	private DetailConstraintStatusDecorator checkCVRange(final LoadSlot slot, final IValidationContext ctx) {
+		final double cv = slot.getSlotOrDelegateCV();
 		if (cv < 1.0) {
 			final String message = String.format("Slot|%s CV is %.2f (should be greater than 1.0)", slot.getName(), cv);
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

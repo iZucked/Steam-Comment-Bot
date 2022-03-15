@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -23,14 +22,13 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
 public class SingleMissingPriceConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Cargo) {
-			final Cargo cargo = (Cargo) target;
+		if (target instanceof Cargo cargo) {
 			int missingPriceCount = 0;
-			for (final Slot slot : cargo.getSlots()) {
+			for (final Slot<?> slot : cargo.getSlots()) {
 
 				if (slot.isSetPriceExpression() && slot.getPriceExpression().equals(IBreakEvenEvaluator.MARKER)) {
 					if (++missingPriceCount > 1) {
@@ -41,6 +39,5 @@ public class SingleMissingPriceConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -26,13 +25,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		// Valid slot data checks
 		if (object instanceof Slot) {
-			if (object instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) object;
+			if (object instanceof LoadSlot loadSlot) {
 				if (loadSlot.isDESPurchase()) {
 					if (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY) {
 						if ((loadSlot.getPort() != null && !loadSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE))) {
@@ -92,6 +90,5 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

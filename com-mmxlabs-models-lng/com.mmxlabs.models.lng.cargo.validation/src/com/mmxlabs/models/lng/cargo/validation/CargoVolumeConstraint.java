@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -30,7 +29,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume
+ * A constraint which checks that the load and discharge quantities for a cargo
+ * are compatible, so min discharge volume < max load volume
  * 
  * @author Tom Hinton
  * 
@@ -40,11 +40,9 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 	private static final String COMPLEX_CARGO = "Complex cargo";
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof Cargo) {
-
-			final Cargo cargo = (Cargo) object;
+		if (object instanceof Cargo cargo) {
 
 			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus()//
 					.withTypedName("Cargo", cargo.getLoadName());
@@ -96,7 +94,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			}
 			if (loadUnits != dischargeUnits && (cv <= 0)) {
 				// no cv value, can't convert
-				return Activator.PLUGIN_ID;
+				return;
 			}
 			if (loadUnits != VolumeUnits.MMBTU) {
 				loadMinVolume = (int) (loadMinVolume * cv);
@@ -111,8 +109,6 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			checkMinAndMaxVolumesAgainstVesselCapacity(factoryBase, ctx, failures, cargo, loadSlot, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, cv, unitsWarning,
 					maxLoadValid);
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private String getUnitsWarningString(final VolumeUnits dischargeUnits, final VolumeUnits loadUnits) {

@@ -15,13 +15,13 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Check that there are not more than one spot slot and not less than one real slot
+ * Check that there are not more than one spot slot and not less than one real
+ * slot
  * 
  * @author FM
  * 
@@ -29,24 +29,23 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CargoSpotSlotsConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
-			
+		if (object instanceof Cargo cargo) {
+
 			List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			// Count how many spot and real slots we have
 			int spotSlotsCount = 0;
 			int realSlotsCount = 0;
 			for (final Slot<?> slot : sortedSlots) {
 				if (slot instanceof SpotSlot) {
-					spotSlotsCount ++;
+					spotSlotsCount++;
 				} else if (slot != null) {
-					realSlotsCount ++;
+					realSlotsCount++;
 				}
 			}
-			
+
 			// Usual situations are realSlotsCount >= 1 and spotSlotsCount <= 1
 			if (spotSlotsCount > 1) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -61,7 +60,5 @@ public class CargoSpotSlotsConstraint extends AbstractModelMultiConstraint {
 				failures.add(dsd);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

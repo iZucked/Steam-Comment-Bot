@@ -27,20 +27,18 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof LNGScenarioModel) {
+		if (target instanceof LNGScenarioModel lngScenarioModel) {
 
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) target;
 			final LocalDate schedulingEndDate = lngScenarioModel.getSchedulingEndDate();
 			final LocalDate earliestSlotDate = getEarliestSlotDate(lngScenarioModel);
 			final LocalDate promptPeriodStart = lngScenarioModel.getPromptPeriodStart();
 			if (promptPeriodStart == null) {
 				statuses.add(DetailConstraintStatusFactory.makeStatus() //
 						.withMessage("No prompt start date set") //
-						.withSeverity(IStatus.ERROR)
-						.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) //
+						.withSeverity(IStatus.ERROR).withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) //
 						.make(ctx));
 			}
 			if (promptPeriodStart != null && promptPeriodStart.isBefore(earliestSlotDate)) {
@@ -53,8 +51,7 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 			if (promptPeriodEnd == null) {
 				statuses.add(DetailConstraintStatusFactory.makeStatus() //
 						.withMessage("No prompt end date set") //
-						.withSeverity(IStatus.ERROR)
-						.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd()) //
+						.withSeverity(IStatus.ERROR).withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd()) //
 						.make(ctx));
 			}
 
@@ -62,8 +59,7 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 				if (!promptPeriodStart.isBefore(promptPeriodEnd)) {
 					statuses.add(DetailConstraintStatusFactory.makeStatus() //
 							.withMessage("Prompt start date must be before the prompt end date") //
-							.withSeverity(IStatus.ERROR)
-							.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) //
+							.withSeverity(IStatus.ERROR).withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) //
 							.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd()) //
 							.make(ctx));
 				}
@@ -71,20 +67,17 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 
 			if (lngScenarioModel.isSetSchedulingEndDate()) {
 				if (earliestSlotDate != LocalDate.MAX && schedulingEndDate != null && !schedulingEndDate.isAfter(earliestSlotDate)) {
-					final String message = String.format("Schedule horizon date (%s) must be after earliest slot date start (%s)", 
-							schedulingEndDate.format(DateTimeFormatter.ISO_DATE), earliestSlotDate.format(DateTimeFormatter.ISO_DATE));
+					final String message = String.format("Schedule horizon date (%s) must be after earliest slot date start (%s)", schedulingEndDate.format(DateTimeFormatter.ISO_DATE),
+							earliestSlotDate.format(DateTimeFormatter.ISO_DATE));
 					statuses.add(DetailConstraintStatusFactory.makeStatus() //
 							.withMessage(message) //
-							.withSeverity(IStatus.ERROR)
-							.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate()) //
+							.withSeverity(IStatus.ERROR).withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate()) //
 							.make(ctx));
 				}
 			}
-
 		}
-		return Activator.PLUGIN_ID;
 	}
-	
+
 	private LocalDate getEarliestSlotDate(final @NonNull LNGScenarioModel lngScenarioModel) {
 		LocalDate result = LocalDate.MAX;
 

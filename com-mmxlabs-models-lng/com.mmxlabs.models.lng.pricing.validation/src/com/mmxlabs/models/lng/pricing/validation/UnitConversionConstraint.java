@@ -16,7 +16,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -26,11 +25,10 @@ public class UnitConversionConstraint extends AbstractModelMultiConstraint {
 	private static final String REG_EXP_VALID_UNIT = "^[a-zA-Z0-9_]+$";
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof UnitConversion) {
-			final UnitConversion unitConversion = (UnitConversion) target;
+		if (target instanceof UnitConversion unitConversion) {
 			boolean doBadNameCheck = true;
 			if (unitConversion.getFrom() == null || unitConversion.getFrom().isEmpty()) {
 				final String failureMessage = String.format("Conversion factor is missing a from");
@@ -83,8 +81,7 @@ public class UnitConversionConstraint extends AbstractModelMultiConstraint {
 
 					final Set<Pair<String, String>> temp = new HashSet<>();
 					for (final EObject no : objects) {
-						if (no instanceof UnitConversion) {
-							final UnitConversion uc = (UnitConversion) no;
+						if (no instanceof UnitConversion uc) {
 							final Pair<String, String> key = makeKey(uc);
 							final Pair<String, String> reverseKey = Pair.of(key.getSecond(), key.getFirst());
 							if (!temp.add(key) || !temp.add(reverseKey)) {
@@ -106,8 +103,6 @@ public class UnitConversionConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private Pair<String, String> makeKey(final UnitConversion uc) {

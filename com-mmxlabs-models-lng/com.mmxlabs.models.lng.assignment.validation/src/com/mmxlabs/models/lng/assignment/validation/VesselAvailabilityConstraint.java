@@ -9,11 +9,9 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -28,29 +26,21 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Checks to test if slot and vessel event dates are consistent with the start / end dates of the assigned vessel.
+ * Checks to test if slot and vessel event dates are consistent with the start /
+ * end dates of the assigned vessel.
  * 
  */
 public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
-	void createErrorMessage(final String message, final IValidationContext ctx, List<IStatus> failures, EObject obj, final EStructuralFeature... features) {
-		final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
-		for (EStructuralFeature feature : features) {
-			failure.addEObjectAndFeature(obj, feature);
-		}
-		failures.add(failure);
-	}
-
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement assignment = (AssignableElement) object;
+		if (object instanceof AssignableElement assignment) {
 
 			final VesselAssignmentType vesselAssignmentType = assignment.getVesselAssignmentType();
 			if (!(vesselAssignmentType instanceof VesselAvailability)) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
@@ -60,12 +50,10 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			final ZonedDateTime availabilityEndBy = vesselAvailability.getEndByAsDateTime();
 
 			final EObject container = extraContext.getContainer(assignment);
-			if (container instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) container;
+			if (container instanceof CargoModel cargoModel) {
 
-				if (assignment instanceof Cargo) {
-					final Cargo cargo = (Cargo) assignment;
-					for (final Slot slot : cargo.getSlots()) {
+				if (assignment instanceof Cargo cargo) {
+					for (final Slot<?> slot : cargo.getSlots()) {
 						if (vesselAvailability.isSetStartAfter()) {
 							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEnd();
 							if (windowEndWithSlotOrPortTime != null && availabilityStartAfter != null && windowEndWithSlotOrPortTime.isBefore(availabilityStartAfter)) {
@@ -88,8 +76,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 
-				} else if (assignment instanceof VesselEvent) {
-					final VesselEvent vesselEvent = (VesselEvent) assignment;
+				} else if (assignment instanceof VesselEvent vesselEvent) {
 					if (vesselAvailability.isSetStartAfter()) {
 						final ZonedDateTime eventStartBy = vesselEvent.getStartByAsDateTime();
 						if (eventStartBy != null && availabilityStartAfter != null && eventStartBy.isBefore(availabilityStartAfter)) {
@@ -111,6 +98,5 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -21,6 +21,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class ContractParamsConstraintHelper {
 
+	private ContractParamsConstraintHelper() {
+
+	}
+
 	public static void pricingEventConstraint(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, Contract contract, PricingEvent restrictedEvent,
 			final String contractName) {
 		if (contract.getPricingEvent() != restrictedEvent) {

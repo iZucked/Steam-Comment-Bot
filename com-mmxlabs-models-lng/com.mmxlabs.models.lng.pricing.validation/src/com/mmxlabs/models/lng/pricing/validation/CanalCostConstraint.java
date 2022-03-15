@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -40,16 +39,14 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CanalCostConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Vessel) {
-			final Vessel vessel = (Vessel) target;
+		if (target instanceof Vessel vessel) {
 			final MMXRootObject rootObject = extraContext.getRootObject();
 
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 
 				final EObject original = extraContext.getOriginal(vessel);
 				final EObject replacement = extraContext.getReplacement(vessel);
@@ -153,6 +150,5 @@ public class CanalCostConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }
