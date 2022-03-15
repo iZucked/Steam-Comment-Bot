@@ -70,8 +70,8 @@ public final class Calculator {
 		return (m3 * (long) pricePerM3) / HighScaleFactor;
 	}
 
-	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
-		return (mmbtu * HighScaleFactor) / (long) factor;
+	public static long convertMMBTuToM3(final long mmbtu, final int cv) {
+		return (mmbtu * HighScaleFactor) / (long) cv;
 	}
 
 	public static long convertMMBTuToM3WithOverflowProtection(final long volumeInMMBTu, final int cv) {
@@ -86,12 +86,12 @@ public final class Calculator {
 		}
 	}
 
-	public static long convertM3ToMT(final long m3, final int cargoCV, final int factor) {
-		return factor == 0 ? 0L : (m3 * (long) cargoCV) / (long) factor;
+	public static long convertM3ToMT(final long m3, final int cargoCV, final int equivalenceFactor) {
+		return equivalenceFactor == 0 ? 0L : (m3 * (long) cargoCV) / (long) equivalenceFactor;
 	}
 
-	public static long convertMTToM3(final long mt, final int cargoCV, final int factor) {
-		return cargoCV == 0 ? 0 : (mt * (long) factor) / (long) cargoCV;
+	public static long convertMTToM3(final long mt, final int cargoCV, final int equivalenceFactor) {
+		return cargoCV == 0 ? 0 : (mt * (long) equivalenceFactor) / (long) cargoCV;
 	}
 
 	/**
