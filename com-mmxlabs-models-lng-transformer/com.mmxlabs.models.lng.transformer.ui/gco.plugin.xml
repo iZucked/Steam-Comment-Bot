@@ -16,8 +16,8 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleCharterOutEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.togglecharterout"
-                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/charter_out_disabled.png"
-                  icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/charter_out.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/charter_out_disabled.png"
+                  icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/charter_out.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.togglecharterout"
                   label="Toggle charter outs"
                   style="toggle"

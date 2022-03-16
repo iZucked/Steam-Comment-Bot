@@ -52,9 +52,9 @@ import com.mmxlabs.models.ui.editors.DefaultCommandHandler;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class PreDefinedDatesInlineEditorDialog extends Dialog {

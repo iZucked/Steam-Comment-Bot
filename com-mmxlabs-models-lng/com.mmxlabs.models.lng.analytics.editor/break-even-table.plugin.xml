@@ -20,7 +20,7 @@
       <view
       		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/16x16/sandbox.png"
             id="com.mmxlabs.models.lng.analytics.ui.views.breakeven.BreakEvenModellerView"
             name="Break-Even Sandbox"
             restorable="true">

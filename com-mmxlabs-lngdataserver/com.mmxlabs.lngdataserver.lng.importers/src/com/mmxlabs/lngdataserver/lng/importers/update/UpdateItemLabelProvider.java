@@ -8,9 +8,9 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * @author Simon Goodall

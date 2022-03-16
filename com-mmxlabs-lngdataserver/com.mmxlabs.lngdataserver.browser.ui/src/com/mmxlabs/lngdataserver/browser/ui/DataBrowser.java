@@ -66,12 +66,12 @@ import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExten
 import com.mmxlabs.lngdataserver.browser.util.DataExtension;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.manifest.Manifest;

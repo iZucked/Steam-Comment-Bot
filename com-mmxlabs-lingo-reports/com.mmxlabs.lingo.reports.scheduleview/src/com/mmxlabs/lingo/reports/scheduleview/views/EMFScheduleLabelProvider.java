@@ -76,9 +76,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**

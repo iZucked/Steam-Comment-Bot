@@ -19,9 +19,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {

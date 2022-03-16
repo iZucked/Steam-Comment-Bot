@@ -95,10 +95,10 @@ import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
@@ -496,7 +496,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 		};
 
-		CommonImages.setImageDescriptors(refreshButton, IconPaths.ReEvaluate16);
+		CommonImages.setImageDescriptors(refreshButton, IconPaths.ReEvaluate_16);
 
 		toolbar.appendToGroup(EDIT_GROUP, refreshButton);
 		toolbar.update(true);

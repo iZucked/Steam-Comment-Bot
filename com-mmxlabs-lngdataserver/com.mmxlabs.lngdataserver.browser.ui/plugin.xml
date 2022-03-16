@@ -26,7 +26,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/hub.png"
+            icon="icons:/icons/16x16/hub.png"
             id="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
             name="Hub">
       </perspective>

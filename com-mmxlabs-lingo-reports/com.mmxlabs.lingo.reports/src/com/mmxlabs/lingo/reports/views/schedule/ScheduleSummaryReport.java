@@ -16,8 +16,8 @@ import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportView {
 	

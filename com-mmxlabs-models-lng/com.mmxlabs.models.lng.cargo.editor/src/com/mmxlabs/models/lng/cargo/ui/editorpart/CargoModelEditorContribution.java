@@ -69,11 +69,11 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  */

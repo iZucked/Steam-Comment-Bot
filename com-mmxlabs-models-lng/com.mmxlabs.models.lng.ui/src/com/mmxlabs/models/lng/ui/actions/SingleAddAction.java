@@ -20,10 +20,10 @@ import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.LockableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class SingleAddAction extends LockableAction {
 	protected final IAddContext context;

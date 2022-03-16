@@ -37,9 +37,9 @@ import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.tabular.SimpleCellRenderer;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * A component helper for SuezCanalTariff instances

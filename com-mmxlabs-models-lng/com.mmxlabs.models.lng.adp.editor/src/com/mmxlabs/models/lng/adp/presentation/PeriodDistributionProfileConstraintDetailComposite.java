@@ -78,12 +78,12 @@ import com.mmxlabs.models.ui.tabular.GridViewerEditingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.manipulators.MultiAttributeInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
