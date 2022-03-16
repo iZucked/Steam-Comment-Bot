@@ -59,6 +59,8 @@ public final class SchedulerConstants {
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
 	public static final String Key_UsePNLBasedWindowTrimming = "scheduler-use-pnl-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
+	
+	public static final String Key_UseHeelRetention = "scheduler-use-heel-retention";
 	/**
 	 * A key to use the best Panama canal Idle days
 	 */

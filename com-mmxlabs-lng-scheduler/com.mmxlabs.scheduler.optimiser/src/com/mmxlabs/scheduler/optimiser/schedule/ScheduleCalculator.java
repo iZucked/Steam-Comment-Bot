@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -86,6 +88,10 @@ public class ScheduleCalculator {
 
 	@Inject
 	private LatenessChecker latenessChecker;
+	
+	@Inject
+	@Named(SchedulerConstants.Key_UseHeelRetention)
+	private boolean retainHeel;
 
 	@Nullable
 	public ProfitAndLossSequences schedule(final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -217,7 +223,9 @@ public class ScheduleCalculator {
 
 		}
 		
-		retainHeelPairwise(resource, vesselAvailability, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
+		if (retainHeel) {
+			retainHeelPairwise(resource, vesselAvailability, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
+		}
 
 		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, voyagePlans);
 	}
