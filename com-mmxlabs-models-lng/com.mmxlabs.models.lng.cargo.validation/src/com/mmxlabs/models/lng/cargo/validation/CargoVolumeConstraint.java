@@ -10,10 +10,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -174,28 +172,6 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 			factory.make(ctx, failures);
-		}
-		if (maxDischargeValid && loadMinVolume > dischargeMaxVolume) {
-			// Always consider non-shipped, or shipped if we have not enabled heel roll over
-			// TODO: Make this more customisable for client rules
-			if (cargo.getCargoType() != CargoType.FLEET //
-					|| !LicenseFeatures.isPermitted("features:heelrollover")) {
-
-				final DetailConstraintStatusFactory factory = factoryBase //
-						.copyName() //
-						.withTag(ValidationConstants.TAG_VOLUME_MISMATCH) //
-						.withFormattedMessage("Min load volume greater than max discharge %s", unitsWarning) //
-						.withSeverity(IStatus.WARNING);
-
-				for (final Slot<?> slot : cargo.getSlots()) {
-					if (slot instanceof LoadSlot) {
-						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					} else if (slot instanceof DischargeSlot) {
-						factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					}
-				}
-				factory.make(ctx, failures);
-			}
 		}
 	}
 
