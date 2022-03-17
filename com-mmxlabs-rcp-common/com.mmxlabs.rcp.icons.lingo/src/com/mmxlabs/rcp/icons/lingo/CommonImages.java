@@ -45,6 +45,11 @@ public final class CommonImages {
 		Plus(16, "icons/16x16/plus.png"), //
 		Plusplus(16, "icons/16x16/plusplus.png"), //
 		Delete(16, "icons/16x16/delete.png"), //
+		CanalPanama(16, "icons/16x16/canal_panama.png"), //
+		CanalPlain(16, "icons/16x16/canal_Plain.png"), //
+		CanalSuez(16, "icons/16x16/canal_suez.png"), //
+		Date(16, "icons/16x16/date.png"), //
+		Fuel(16, "icons/16x16/fuel.png"), //
 		Filter(16, "icons/16x16/filter.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
 		Copy(16, "icons/16x16/copy.png"), //
