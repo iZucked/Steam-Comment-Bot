@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -348,7 +348,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		customiseConstraints(constraints);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
@@ -427,7 +427,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
 		final ExecutorService executorService = Executors.newFixedThreadPool(LNGScenarioChainBuilder.getNumberOfAvailableCores());
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(lngScenarioModel, dataTransformer, "break-even-sandbox", userSettings, constraints, executorService,
 					dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
@@ -443,8 +443,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final String taskName = "Sandbox result";
 
 		final EObject object = scenarioDataProvider.getScenario();
-		if (userSettings == null && object instanceof LNGScenarioModel) {
-			final LNGScenarioModel root = (LNGScenarioModel) object;
+		if (userSettings == null && object instanceof LNGScenarioModel root) {
 
 			UserSettings previousSettings = null;
 			if (model.getResults() != null) {
@@ -462,7 +461,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
 		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -470,9 +468,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final UserSettings pUserSettings = userSettings;
 
 		if (runAsync) {
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
-			};
+			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> new LNGSandboxJobDescriptor(pTaskName, scenarioInstance,
+					createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
@@ -502,7 +499,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
 		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -510,9 +506,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final UserSettings pUserSettings = userSettings;
 
 		if (runAsync) {
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
-			};
+			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> new LNGSandboxJobDescriptor(pTaskName, scenarioInstance,
+					createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
@@ -607,7 +602,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			}
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
-			final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
+			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
 					extraDataProvider, (mem, data, injector) -> {
 						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
@@ -616,12 +611,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
+					return runner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
 				}
 
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
+					return runner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
 			};
 		});
@@ -637,7 +632,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
-			final SandboxOptimiserRunner insertionRunner = new SandboxOptimiserRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
+			final SandboxOptimiserRunner runner = new SandboxOptimiserRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
 				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
 			});
@@ -645,12 +640,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
+					return runner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
 				}
 
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runOptimiser(monitor);
+					return runner.runOptimiser(monitor);
 				}
 			};
 		});
@@ -689,27 +684,17 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
-				final List<Future<?>> jobs = new LinkedList<>();
+				final List<Future<SolutionOption>> jobs = new LinkedList<>();
 
 				if (results != null) {
 					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
-
-						jobs.add(jobExecutor.submit(() -> {
-
-							final ISequences seq = p.getFirst();
-							final SolutionOption resultSet = exporter.computeOption(seq);
-							synchronized (sandboxResult) {
-								sandboxResult.getOptions().add(resultSet);
-							}
-
-							return null;
-						}));
+						jobs.add(jobExecutor.submit(() -> exporter.computeOption(p.getFirst())));
 					}
 
 					jobs.forEach(f -> {
 						try {
-							f.get();
+							sandboxResult.getOptions().add(f.get());
 						} catch (final Exception e) {
 							// Ignore exceptions;
 						}
@@ -721,6 +706,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			sandboxResult.setName("SandboxResult");
 			sandboxResult.setHasDualModeSolutions(dualPNLMode);
 			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+			sandboxResult.setPortfolioBreakEvenMode(model.isUseTargetPNL());
 
 			// Request this now one all other parts have run to get correct data.
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
@@ -763,8 +749,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		if (opt != null) {
 			final ScheduleSpecification scheduleSpecification = opt.getScheduleSpecification();
 			addExtraData(solutionSet, scheduleSpecification);
-			if (opt instanceof DualModeSolutionOption) {
-				final DualModeSolutionOption dualModeSolutionOption = (DualModeSolutionOption) opt;
+			if (opt instanceof DualModeSolutionOption dualModeSolutionOption) {
 				if (dualModeSolutionOption.getMicroBaseCase() != null) {
 					addExtraData(solutionSet, dualModeSolutionOption.getMicroBaseCase().getScheduleSpecification());
 				}
@@ -833,9 +818,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final UserSettings pUserSettings = userSettings;
 
 		if (runAsync) {
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
-			};
+			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> new LNGSandboxJobDescriptor(pTaskName, scenarioInstance,
+					createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {

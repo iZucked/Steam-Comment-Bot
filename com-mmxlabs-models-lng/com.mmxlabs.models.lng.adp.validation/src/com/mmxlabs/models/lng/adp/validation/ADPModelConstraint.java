@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.validation;
@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -29,13 +28,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ADPModelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
-		EObject target = ctx.getTarget();
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+		final EObject target = ctx.getTarget();
 
-		if (target instanceof ADPModel) {
-			ADPModel adpModel = (ADPModel) target;
+		if (target instanceof final ADPModel adpModel) {
 
-			DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withName("ADP Model") //
 					.withTag(ValidationConstants.TAG_ADP);
 
@@ -82,8 +80,8 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			CargoModel cargoModel = ScenarioModelUtil.getCargoModel(extraContext.getScenarioDataProvider());
-			int slotCount = cargoModel.getLoadSlots().size() + cargoModel.getDischargeSlots().size();
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(extraContext.getScenarioDataProvider());
+			final int slotCount = cargoModel.getLoadSlots().size() + cargoModel.getDischargeSlots().size();
 			if (slotCount == 0) {
 				factory.copyName() //
 						.withObjectAndFeature(adpModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS) //
@@ -116,8 +114,6 @@ public class ADPModelConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

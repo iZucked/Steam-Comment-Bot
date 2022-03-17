@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.validation;
@@ -11,40 +11,19 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.license.features.NonLicenseFeatures;
-import com.mmxlabs.models.lng.cargo.CanalBookings;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.port.CanalEntry;
-import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
-import com.mmxlabs.models.lng.schedule.PortVisit;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.util.ValidationConstants;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 		if (!LicenseFeatures.isPermitted("features:panama-canal-bookings")) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
 //		if (target instanceof Journey && target.eContainer() instanceof Sequence) {
@@ -98,7 +77,5 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 //				}
 //			}
 //		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

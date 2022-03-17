@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingDate <em>Booking Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingCode <em>Booking Code</em>}</li>
@@ -104,16 +103,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @ordered
 	 */
 	protected LocalDate bookingDate = BOOKING_DATE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSlot()
-	 * @generated
-	 * @ordered
-	 */
-	protected Slot slot;
 
 	/**
 	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
@@ -249,46 +238,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @generated
 	 */
 	@Override
-	public Slot getSlot() {
-		if (slot != null && slot.eIsProxy()) {
-			InternalEObject oldSlot = (InternalEObject)slot;
-			slot = (Slot)eResolveProxy(oldSlot);
-			if (slot != oldSlot) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CANAL_BOOKING_SLOT__SLOT, oldSlot, slot));
-			}
-		}
-		return slot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Slot basicGetSlot() {
-		return slot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSlot(Slot newSlot) {
-		Slot oldSlot = slot;
-		slot = newSlot;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__SLOT, oldSlot, slot));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getNotes() {
 		return notes;
 	}
@@ -401,9 +350,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return getCanalEntrance();
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				return getBookingDate();
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				if (resolve) return getSlot();
-				return basicGetSlot();
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				return getNotes();
 			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:
@@ -433,9 +379,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				setBookingDate((LocalDate)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				setSlot((Slot)newValue);
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				setNotes((String)newValue);
@@ -467,9 +410,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				setBookingDate(BOOKING_DATE_EDEFAULT);
 				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				setSlot((Slot)null);
-				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
@@ -497,8 +437,6 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return canalEntrance != CANAL_ENTRANCE_EDEFAULT;
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				return BOOKING_DATE_EDEFAULT == null ? bookingDate != null : !BOOKING_DATE_EDEFAULT.equals(bookingDate);
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				return slot != null;
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:

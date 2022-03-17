@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -258,7 +259,6 @@ public class ScenarioServicePushToCloudAction {
 		if (userSettings != null) {
 			// Reset settings not supplied to the user
 			userSettings.setShippingOnly(false);
-			userSettings.setBuildActionSets(false);
 			userSettings.setCleanSlateOptimisation(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 		}

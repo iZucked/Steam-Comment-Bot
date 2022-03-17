@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,6 +43,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ResourceLocator;
@@ -94,6 +96,7 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.mull.AllocationDropType;
 import com.mmxlabs.models.lng.adp.mull.AllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.CargoBlueprint;
@@ -107,6 +110,10 @@ import com.mmxlabs.models.lng.adp.mull.Phase1AComparator;
 import com.mmxlabs.models.lng.adp.mull.Phase1AComparator2;
 import com.mmxlabs.models.lng.adp.mull.RollingLoadWindow;
 import com.mmxlabs.models.lng.adp.mull.SalesContractTracker;
+import com.mmxlabs.models.lng.adp.rateability.export.FeasibleSolverResult;
+import com.mmxlabs.models.lng.adp.rateability.export.Infeasible;
+import com.mmxlabs.models.lng.adp.rateability.export.SpacingRateabilitySolverResult;
+import com.mmxlabs.models.lng.adp.rateability.spacing.CPBasedSolver;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -212,6 +219,8 @@ public class ContractPage extends ADPComposite {
 					public String getText(final Object element) {
 						if (element instanceof MullProfile) {
 							return "MULL Generation";
+						} else if (element instanceof SpacingProfile) {
+							return "Spacing Rateability";
 						} else if (element instanceof PurchaseContract) {
 							final PurchaseContract profile = (PurchaseContract) element;
 							return String.format("%s (Purchase)", profile.getName());
@@ -226,12 +235,19 @@ public class ContractPage extends ADPComposite {
 				objectSelector.addSelectionChangedListener(event -> {
 					final ISelection selection = event.getSelection();
 					EObject target = null;
+					generateButton.setEnabled(false);
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+						cpSolveButton.setEnabled(false);
+					}
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 						target = (EObject) iStructuredSelection.getFirstElement();
 						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MullProfile);
+						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+							cpSolveButton.setEnabled(target instanceof SpacingProfile);
+						}
 					}
-					generateButton.setEnabled(target != null);
+					// generateButton.setEnabled(target != null);
 					updateDetailPaneInput(target);
 				});
 			}
@@ -274,6 +290,42 @@ public class ContractPage extends ADPComposite {
 						updateDetailPaneInput(input);
 					}
 				});
+			}
+			{
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+					cpSolveButton = new Button(toolbarComposite, SWT.PUSH);
+					cpSolveButton.setText("Run rateability solver");
+					cpSolveButton.setEnabled(true);
+					cpSolveButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							final CPBasedSolver cpBasedSolver = new CPBasedSolver();
+
+							final EObject input = detailComposite.getInput();
+							if (input instanceof final SpacingProfile spacingProfile) {
+								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(spacingProfile, editorData.scenarioModel, editorData.getEditingDomain(),
+										editorData.getScenarioDataProvider());
+								if (result instanceof final FeasibleSolverResult feasibleResult) {
+									final CompoundCommand modelPopulationCommand = (CompoundCommand) feasibleResult.getModelPopulationCommand();
+									if (!modelPopulationCommand.isEmpty()) {
+										editorData.getDefaultCommandHandler().handleCommand(modelPopulationCommand);
+									}
+								} else {
+									final String message;
+									if (result instanceof Infeasible) {
+										message = "Rateability model is infeasible";
+									} else {
+										message = "Rateability solver could not find a solution";
+									}
+									if (result != null) {
+										MessageDialog.openInformation(getShell(), "No solution found", message);
+									}
+								}
+							}
+
+						}
+					});
+				}
 			}
 		}
 
@@ -445,7 +497,7 @@ public class ContractPage extends ADPComposite {
 								mullSummaryViewer.expandToLevel(++mullSummaryExpandLevel);
 							}
 						};
-						
+
 						CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
 						CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
@@ -3226,6 +3278,16 @@ public class ContractPage extends ADPComposite {
 					cargoModel.eAdapters().remove(cargoModelAdapter);
 					adpModel.eAdapters().remove(mullSummaryAdapter);
 				};
+			} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+				SpacingProfile profile = adpModel.getSpacingProfile();
+				if (profile == null) {
+					profile = ADPFactory.eINSTANCE.createSpacingProfile();
+				}
+				objects.add(profile);
+				releaseAdaptersRunnable = () -> {
+					commercialModel.eAdapters().remove(commercialModelAdapter);
+					cargoModel.eAdapters().remove(cargoModelAdapter);
+				};
 			} else {
 				releaseAdaptersRunnable = () -> {
 					commercialModel.eAdapters().remove(commercialModelAdapter);
@@ -3304,6 +3366,11 @@ public class ContractPage extends ADPComposite {
 				editorData.adpModel.setMullProfile((MullProfile) object);
 			}
 
+			target = object;
+		} else if (object instanceof final SpacingProfile spacingProfile) {
+			if (editorData.adpModel.getSpacingProfile() == null) {
+				editorData.adpModel.setSpacingProfile(spacingProfile);
+			}
 			target = object;
 		}
 
@@ -3387,6 +3454,13 @@ public class ContractPage extends ADPComposite {
 					}
 					objects.add(profile);
 				}
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+					SpacingProfile profile = editorData.adpModel.getSpacingProfile();
+					if (profile == null) {
+						profile = ADPFactory.eINSTANCE.createSpacingProfile();
+					}
+					objects.add(profile);
+				}
 
 				objects.addAll(commercialModel.getPurchaseContracts());
 				objects.addAll(commercialModel.getSalesContracts());
@@ -3434,6 +3508,8 @@ public class ContractPage extends ADPComposite {
 	};
 
 	private Button generateButton;
+
+	private Button cpSolveButton;
 
 	private Group previewGroup;
 

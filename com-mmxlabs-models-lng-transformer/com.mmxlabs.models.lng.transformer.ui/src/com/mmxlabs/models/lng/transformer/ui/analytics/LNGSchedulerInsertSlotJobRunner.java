@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -130,7 +130,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// Reset settings not supplied to the user
 		this.userSettings.setShippingOnly(false);
-		this.userSettings.setBuildActionSets(false);
 		this.userSettings.setCleanSlateOptimisation(false);
 		this.userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -361,8 +360,9 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, dualModeInsertions,
 				portfolioBreakEvenTarget);
 
-		final SequencesContainer initialSequencesContainer = new SequencesContainer(scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
-		link.run(initialSequencesContainer, results, monitor);
+		LNGDataTransformer dt = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer();
+		final SequencesContainer initialSequencesContainer = new SequencesContainer(dt.getInitialResult().getBestSolution());
+		link.run(dt, initialSequencesContainer, results, monitor);
 
 		return slotInsertionOptions;
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
@@ -14,7 +14,7 @@ import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.lso.impl.Move2over2;
+import com.mmxlabs.optimiser.lso.moves.impl.Move2over2;
 
 /**
  * Generator for {@link Move2over2} moves. Currently always generates moves which respect the start and end elements of sequences.

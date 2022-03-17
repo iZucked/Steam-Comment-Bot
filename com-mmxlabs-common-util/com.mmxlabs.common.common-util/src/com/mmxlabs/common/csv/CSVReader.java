@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.common.csv;
@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * CSV reader; could easily delegate to spring batch or something.
@@ -37,7 +38,7 @@ public class CSVReader implements Closeable {
 	private final Set<String> unusedHeaders = new HashSet<>();
 
 	private final char separator;
-	private static final  String UTF8_BOM = new String("\uFEFF".getBytes(StandardCharsets.UTF_8));
+	private static final String UTF8_BOM = new String("\uFEFF".getBytes(StandardCharsets.UTF_8));
 	private static final String EMPTY_CHARACTER = new String("\u0000".getBytes(StandardCharsets.UTF_8));
 
 	private BufferedReader reader;
@@ -56,8 +57,8 @@ public class CSVReader implements Closeable {
 		if (headerLine == null) {
 			return;
 		}
-		//UTF-8 BOM can only be in at the start.
-		//Empty characters will be embedded to separate the normal characters
+		// UTF-8 BOM can only be in at the start.
+		// Empty characters will be embedded to separate the normal characters
 		headerLine[0] = headerLine[0].replace(UTF8_BOM, "").replace(EMPTY_CHARACTER, "");
 		for (int i = 0; i < headerLine.length; i++) {
 			final String lc = headerLine[i].toLowerCase();
@@ -71,7 +72,7 @@ public class CSVReader implements Closeable {
 		return originalHeaderLine.get(lowerCaseName);
 	}
 
-	public String[] readLine() throws IOException {
+	public String @Nullable [] readLine() throws IOException {
 		String line = reader.readLine();
 		lineNumber++;
 		if (line == null) {
@@ -143,7 +144,7 @@ public class CSVReader implements Closeable {
 	 * @return
 	 * @throws IOException
 	 */
-	public Map<String, String> readRowFields() throws IOException {
+	public @Nullable Map<String, String> readRowFields() throws IOException {
 		final Map<String, String> row = new LinkedHashMap<String, String>() {
 			private static final long serialVersionUID = -4630946181378550729L;
 
@@ -175,12 +176,12 @@ public class CSVReader implements Closeable {
 	/**
 	 * Reads the next row of the CSV file as an IFieldMap.
 	 * 
-	 * @param ignoreBlank
-	 *            Whether or not to ignore blank rows when selecting the next row
+	 * @param ignoreBlank Whether or not to ignore blank rows when selecting the
+	 *                    next row
 	 * @return An IFieldMap representing the contents of the row.
 	 * @throws IOException
 	 */
-	public IFieldMap readRow(final boolean ignoreBlankRows) throws IOException {
+	public @Nullable IFieldMap readRow(final boolean ignoreBlankRows) throws IOException {
 		Map<String, String> result;
 		while ((result = readRowFields()) != null) {
 			for (final String value : result.values()) {

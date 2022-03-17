@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors;
@@ -36,7 +36,7 @@ public abstract class AbstractTableInlineEditor extends BasicAttributeInlineEdit
 	private Control control;
 	protected final Repacker repacker = new Repacker();
 
-	public AbstractTableInlineEditor(final EStructuralFeature feature) {
+	protected AbstractTableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.dynamic;
@@ -44,6 +44,12 @@ public abstract class DynamicTestCaseRunner {
 	@Tag(TestCategories.OPTIMISATION_TEST)
 	public List<DynamicNode> runOptimisationTests() {
 		return OptimisationTestRunner.runOptimisationTests(getBaseDirectory());
+	}
+	
+	@TestFactory
+	@Tag(TestCategories.OPTIMISATION_TEST)
+	public List<DynamicNode> runSandboxTests() {
+		return OptimisationTestRunner.runSandboxTests(getBaseDirectory());
 	}
 
 	@Disabled

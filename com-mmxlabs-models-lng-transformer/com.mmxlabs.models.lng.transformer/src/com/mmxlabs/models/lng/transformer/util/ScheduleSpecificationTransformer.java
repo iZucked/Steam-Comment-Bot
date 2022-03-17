@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.util;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class ScheduleSpecificationTransformer {
 	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final ModelEntityMap mem, final IOptimisationData optimisationData, final Injector injector,
 			final boolean includeSpotSlots) {
 
-		final Set<ISequenceElement> usedElements = new HashSet<>();
+		final Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 
 		final List<IResource> orderedResources = new LinkedList<>();
 		final Map<IResource, IModifiableSequence> sequences = new HashMap<>();
@@ -98,16 +98,13 @@ public class ScheduleSpecificationTransformer {
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
 			IResource resource = null;
-			if (vesselAllocation instanceof VesselAvailability) {
-				final VesselAvailability e_vesselAvailability = (VesselAvailability) vesselAllocation;
+			if (vesselAllocation instanceof VesselAvailability e_vesselAvailability) {
 				final IVesselAvailability o_vesselAvailability = mem.getOptimiserObjectNullChecked(e_vesselAvailability, IVesselAvailability.class);
 				resource = vesselProvider.getResource(o_vesselAvailability);
-			} else if (vesselAllocation instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride e_charterInMarketOverride = (CharterInMarketOverride) vesselAllocation;
+			} else if (vesselAllocation instanceof CharterInMarketOverride e_charterInMarketOverride) {
 				final IVesselAvailability o_vesselAvailability = mem.getOptimiserObjectNullChecked(e_charterInMarketOverride, IVesselAvailability.class);
 				resource = vesselProvider.getResource(o_vesselAvailability);
-			} else if (vesselAllocation instanceof CharterInMarket) {
-				final CharterInMarket e_charterInMarket = (CharterInMarket) vesselAllocation;
+			} else if (vesselAllocation instanceof CharterInMarket e_charterInMarket) {
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
@@ -273,8 +270,7 @@ public class ScheduleSpecificationTransformer {
 		}
 
 		for (final ScheduleSpecificationEvent event : scheduleSpecification.getOpenEvents()) {
-			if (event instanceof SlotSpecification) {
-				final SlotSpecification slotSpecification = (SlotSpecification) event;
+			if (event instanceof SlotSpecification slotSpecification) {
 				final Slot e_slot = slotSpecification.getSlot();
 				final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);

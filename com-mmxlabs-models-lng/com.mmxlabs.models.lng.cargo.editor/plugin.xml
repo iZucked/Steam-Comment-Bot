@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -233,12 +233,6 @@
            id="VesselAvailabilityStartPortValueProviderFactory"
            ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
            referenceEClass="com.mmxlabs.models.lng.port.Port">
-     </valueProvider>
-     <valueProvider
-           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingSlotValueProviderFactory"
-           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingSlotValueProviderFactory_Slot"
-           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
-           referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
      </valueProvider>
      <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory"

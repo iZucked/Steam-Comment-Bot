@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -13,9 +13,8 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -26,11 +25,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ShippingExpressionConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof SimpleVesselCharterOption) {
-			final SimpleVesselCharterOption shippingOption = (SimpleVesselCharterOption) target;
+		if (target instanceof SimpleVesselCharterOption shippingOption) {
 			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, shippingOption, AnalyticsPackage.eINSTANCE.getSimpleVesselCharterOption_HireCost(), shippingOption.getHireCost(),
 					PriceIndexType.CHARTER);
 			if (!result.isOk()) {
@@ -40,8 +38,7 @@ public class ShippingExpressionConstraint extends AbstractModelMultiConstraint {
 				dsd.addEObjectAndFeature(shippingOption, AnalyticsPackage.Literals.SIMPLE_VESSEL_CHARTER_OPTION__HIRE_COST);
 				failures.add(dsd);
 			}
-			if (target instanceof OptionalSimpleVesselCharterOption) {
-				OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) target;
+			if (target instanceof OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption) {
 				if (optionalAvailabilityShippingOption.getStart() != null) {
 					LocalDate date = optionalAvailabilityShippingOption.getStart();
 					if (date.getYear() < 1900) {
@@ -80,6 +77,5 @@ public class ShippingExpressionConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

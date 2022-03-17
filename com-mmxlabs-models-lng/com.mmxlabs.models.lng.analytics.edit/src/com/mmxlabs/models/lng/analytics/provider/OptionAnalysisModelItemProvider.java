@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -139,11 +139,11 @@ public class OptionAnalysisModelItemProvider
 	 * This returns OptionAnalysisModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptionAnalysisModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/sandbox-08.png"));
 	}
 
 	/**

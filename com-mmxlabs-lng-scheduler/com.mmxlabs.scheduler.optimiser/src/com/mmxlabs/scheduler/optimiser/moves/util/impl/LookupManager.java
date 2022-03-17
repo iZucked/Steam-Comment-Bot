@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util.impl;
@@ -28,9 +28,14 @@ public class LookupManager implements ILookupManager {
 	private IAlternativeElementProvider alternativeElementProvider;
 
 	/**
-	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
-	 * null Resource index means the {@link ISequenceElement} is not part of the main set of sequences. A value of zero or more indicates the position within the {@link ISequences#getUnusedElements()}
-	 * list. A negative number means it is not for normal use. Currently -1 means the element is the unused pair of an alternative (@see {@link IAlternativeElementProvider}
+	 * A reverse lookup table from elements to positions. The {@link Pair} is a item
+	 * containing {@link Resource} index and position within the {@link ISequence}.
+	 * There are some special cases here. A null Resource index means the
+	 * {@link ISequenceElement} is not part of the main set of sequences. A value of
+	 * zero or more indicates the position within the
+	 * {@link ISequences#getUnusedElements()} list. A negative number means it is
+	 * not for normal use. Currently -1 means the element is the unused pair of an
+	 * alternative (@see {@link IAlternativeElementProvider}
 	 */
 	private final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
 
@@ -50,10 +55,11 @@ public class LookupManager implements ILookupManager {
 	}
 
 	@Override
-	public void updateLookup(final @NonNull ISequences rawSequences, @Nullable Collection<IResource> changedResources) {
+	public void updateLookup(final @NonNull ISequences rawSequences, @Nullable Collection<@NonNull IResource> changedResources) {
 
 		this.rawSequences = rawSequences;
-		// Currently this is always true. In future update IMove API/usage to include null for unused list
+		// Currently this is always true. In future update IMove API/usage to include
+		// null for unused list
 		boolean lookAtUnused = true;
 
 		final Collection<IResource> loopResources;
@@ -146,9 +152,12 @@ public class LookupManager implements ILookupManager {
 	}
 
 	/**
-	 * Returns a {@link Pair} mapping an {@link ISequenceElement} to a {@link IResource} / array index. If the {@link IResource} is null, this indicates the element is in the unused list. If the index
-	 * is -1, then this marks the element as the unused half of an alternative element pair (see {@link IAlternativeElementProvider}. Finally if a null Pair is return the element has not been found at
-	 * all.
+	 * Returns a {@link Pair} mapping an {@link ISequenceElement} to a
+	 * {@link IResource} / array index. If the {@link IResource} is null, this
+	 * indicates the element is in the unused list. If the index is -1, then this
+	 * marks the element as the unused half of an alternative element pair (see
+	 * {@link IAlternativeElementProvider}. Finally if a null Pair is return the
+	 * element has not been found at all.
 	 */
 	@Override
 	public Pair<IResource, Integer> lookup(@NonNull final ISequenceElement element) {

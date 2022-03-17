@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.breakeven;
@@ -42,19 +42,9 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptimisationStage stageSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private BreakEvenTransformerUnit t;
-
-			// @Override
-			// public IMultiStateResult run() {
-			// if (t == null) {
-			// throw new IllegalStateException("#init has not been called");
-			// }
-			// }
-
 			@Override
-			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new BreakEvenTransformerUnit(dt, userSettings, stageSettings, initialSequences.getSequences(), inputState, dt.getHints());
+			public IMultiStateResult run(final LNGDataTransformer dt, SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+				BreakEvenTransformerUnit t = new BreakEvenTransformerUnit(dt, userSettings, stageSettings, initialSequences.getSequences(), inputState, dt.getHints());
 				return t.run(monitor);
 			}
 
@@ -63,13 +53,6 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 				return progressTicks;
 			}
 
-			// @Override
-			// public IMultiStateResult getInputState() {
-			// if (t == null) {
-			// throw new IllegalStateException("#init has not been called");
-			// }
-			// return t.getInputState();
-			// }
 		};
 		chainBuilder.addLink(link);
 		return link;
@@ -106,7 +89,9 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()),
 				services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new
+		// LNGOptimisationModule(), services,
+		// IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 
@@ -140,7 +125,8 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 
 				// Should we return a new state? No change in sequences, but change in P&L
 
-				// final IMultiStateResult result = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 1000);
+				// final IMultiStateResult result = instance.optimise(inputRawSequences, new
+				// SubProgressMonitor(monitor, 95), 1000);
 				// if (result != null) {
 				// return result;
 				// }

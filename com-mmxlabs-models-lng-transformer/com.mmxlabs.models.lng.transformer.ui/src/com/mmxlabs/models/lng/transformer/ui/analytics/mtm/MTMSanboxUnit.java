@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.mtm;
@@ -162,6 +162,8 @@ public class MTMSanboxUnit {
 				bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
 
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+				
+				bind(MTMSandboxEvaluator.class).in(ThreadLocalScope.class);
 			}
 
 			@Provides
@@ -176,15 +178,6 @@ public class MTMSanboxUnit {
 
 				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 				return helper;
-			}
-
-			@Provides
-			@ThreadLocalScope
-			private MTMSandboxEvaluator providePerThreadOptimiser(@NonNull final Injector injector) {
-
-				MTMSandboxEvaluator optimiser = new MTMSandboxEvaluator();
-				injector.injectMembers(optimiser);
-				return optimiser;
 			}
 		});
 

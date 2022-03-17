@@ -1,19 +1,26 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -23,8 +30,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -57,6 +67,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 	private GridViewerColumn optioniseCol;
 //	private GridViewerColumn freezeCol;
 	private GridViewerColumn optionsCol;
+	private OptionModellerView optionModellerView;
 
 	protected BaseCaseComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -65,6 +76,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 	@Override
 	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
+		this.optionModellerView = optionModellerView;
 		final ExpandableComposite expandable = wrapInExpandable(parent, "Starting point", this::createBaseCaseViewer, expandableCompo -> {
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -93,6 +105,15 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
+		
+		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
+		optioniseCol.getColumn().setAlignment(SWT.CENTER);
+		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
+
+		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
+		optioniseCol.getColumn().setWidth(30);
+		optioniseCol.getColumn().setVisible(false);
+		
 		// Buy col
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(baseCaseViewer, SWT.CENTER | SWT.WRAP);
@@ -105,7 +126,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 			gvc.setLabelProvider(new CellLabelProvider() {
 
 				@Override
-				public void update(ViewerCell cell) {
+				public void update(final ViewerCell cell) {
 					final DataVisualizer dv = baseCaseViewer.getGrid().getDataVisualizer();
 					final GridItem item = (GridItem) cell.getItem();
 					// Reset any colouring
@@ -113,7 +134,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 					final int i = cell.getColumnIndex();
 					dv.setColumnSpan(item, i, 1);
 
-					if (cell.getElement() instanceof BaseCaseRow baseCaseRow) {
+					if (cell.getElement() instanceof final BaseCaseRow baseCaseRow) {
 						if (baseCaseRow.getVesselEventOption() != null) {
 							dv.setColumnSpan(item, i, 2);
 							cell.setText(new VesselEventOptionDescriptionFormatter().render(baseCaseRow.getVesselEventOption()));
@@ -139,14 +160,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
-		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
-		optioniseCol.getColumn().setAlignment(SWT.CENTER);
-		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
 		
-		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
-		optioniseCol.getColumn().setWidth(30);
-		optioniseCol.getColumn().setVisible(false);
-
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
 			// Mode specific columns
 			optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);
@@ -157,6 +171,8 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 			// Hide by default
 			optionsCol.getColumn().setVisible(false);
+			// 122 is precalculated width of the rendered image. 8px is padding
+			optionsCol.getColumn().setWidth(122 + 8);
 			// freezeCol.getColumn().setVisible(false);
 		}
 
@@ -175,10 +191,39 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(baseCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
+		{
+			final Action deleteAction = new Action("Delete") {
+				@Override
+				public void run() {
+					if (baseCaseViewer.getSelection() instanceof final IStructuredSelection selection) {
+
+						final Collection<EObject> c = new LinkedList<>();
+						selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
+						if (!c.isEmpty()) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
+						}
+					}
+				}
+			};
+			baseCaseViewer.getControl().addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(final FocusEvent e) {
+					optionModellerView.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), null);
+				}
+
+				@Override
+				public void focusGained(final FocusEvent e) {
+					optionModellerView.getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+				}
+			});
+
+		}
+
 		return baseCaseViewer.getGrid();
 	}
 
-	public void setMode(int mode) {
+	public void setMode(final int mode) {
 
 		optioniseCol.getColumn().setVisible(mode == SandboxModeConstants.MODE_OPTIONISE);
 

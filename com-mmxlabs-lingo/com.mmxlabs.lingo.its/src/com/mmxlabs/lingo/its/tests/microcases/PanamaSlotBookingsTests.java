@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -581,9 +580,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		lngScenarioModel.getCargoModel().getCanalBookings().setStrictBoundaryOffsetDays(0);
-		lngScenarioModel.getCargoModel().getCanalBookings().setRelaxedBoundaryOffsetDays(0);
-
 		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
@@ -854,15 +850,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-
-		canalBookings.setStrictBoundaryOffsetDays(0);
-		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setFlexibleBookingAmountNorthbound(1);
-		canalBookings.setFlexibleBookingAmountSouthbound(0);
-
-		// Need at least 5 days of idle time to allow it to go through.
-		//canalBookings.setSouthboundMaxIdleDays(5);
-
+ 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
@@ -947,17 +935,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
-
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
-		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-
-		canalBookings.setStrictBoundaryOffsetDays(0);
-		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setFlexibleBookingAmountNorthbound(1);
-		canalBookings.setFlexibleBookingAmountSouthbound(0);
-
-		// Need at least 5 days of idle time to allow it to go through.
-		//canalBookings.setSouthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1080,12 +1057,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModelBuilder.initCanalBookings();
-		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-
-		canalBookings.setStrictBoundaryOffsetDays(0);
-		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setFlexibleBookingAmountNorthbound(1);
-		canalBookings.setFlexibleBookingAmountSouthbound(1);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1223,11 +1194,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModelBuilder.initCanalBookings();
-		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-
-		canalBookings.setStrictBoundaryOffsetDays(0);
-		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		//canalBookings.setNorthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1314,11 +1280,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-
-		canalBookings.setStrictBoundaryOffsetDays(0);
-		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setFlexibleBookingAmountNorthbound(1);
-		canalBookings.setFlexibleBookingAmountSouthbound(1);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);

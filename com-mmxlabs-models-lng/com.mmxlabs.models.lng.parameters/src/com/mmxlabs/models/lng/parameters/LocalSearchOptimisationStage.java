@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -24,7 +24,7 @@ package com.mmxlabs.models.lng.parameters;
  * @model
  * @generated
  */
-public interface LocalSearchOptimisationStage extends ParallisableOptimisationStage, ConstraintsAndFitnessSettingsStage {
+public interface LocalSearchOptimisationStage extends ConstraintsAndFitnessSettingsStage {
 	/**
 	 * Returns the value of the '<em><b>Seed</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -181,7 +181,8 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given a list of target {@link EObject}s, generate a {@link MappingModel} which can be used to compare against other {@link MappingModel}s
+	 * Given a list of target {@link EObject}s, generate a {@link MappingModel}
+	 * which can be used to compare against other {@link MappingModel}s
 	 * 
 	 * @param targets
 	 * @return
@@ -429,8 +430,11 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Bind the before and after state based on identical keys. For spot market slots which are not identical, but have exactly one free equivalent, bind them. (For example DES Sale market in Feb 2017
-	 * may use in stance 1 in the before state and instance 2 in the after state. This should be considered the same). This method sets the LHS/RHS links
+	 * Bind the before and after state based on identical keys. For spot market
+	 * slots which are not identical, but have exactly one free equivalent, bind
+	 * them. (For example DES Sale market in Feb 2017 may use in stance 1 in the
+	 * before state and instance 2 in the after state. This should be considered the
+	 * same). This method sets the LHS/RHS links
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
@@ -1205,16 +1209,14 @@ public final class ChangeSetTransformerUtil {
 		if (toSchedule != null) {
 			for (final Sequence sequence : toSchedule.getSequences()) {
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer) {
-						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+					if (event instanceof ProfitAndLossContainer profitAndLossContainer) {
 						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
 					}
 
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
+					if (event instanceof SlotVisit slotVisit) {
 						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -1226,8 +1228,7 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 
-					if (event instanceof EventGrouping) {
-						final EventGrouping eventGrouping = (EventGrouping) event;
+					if (event instanceof EventGrouping eventGrouping) {
 						lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 					}
@@ -1261,15 +1262,13 @@ public final class ChangeSetTransformerUtil {
 		if (fromSchedule != null) {
 			for (final Sequence sequence : fromSchedule.getSequences()) {
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer) {
-						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+					if (event instanceof ProfitAndLossContainer profitAndLossContainer) {
 						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
 					}
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
+					if (event instanceof SlotVisit slotVisit) {
 						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -1281,8 +1280,7 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 
-					if (event instanceof EventGrouping) {
-						final EventGrouping eventGrouping = (EventGrouping) event;
+					if (event instanceof EventGrouping eventGrouping) {
 						lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 					}
@@ -1305,8 +1303,8 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 		deltaMetrics.setPnlDelta(pnl);
-		deltaMetrics.setLatenessDelta((int) lateness);
-		deltaMetrics.setCapacityDelta((int) violations);
+		deltaMetrics.setLatenessDelta(lateness);
+		deltaMetrics.setCapacityDelta(violations);
 		if (isAlternative) {
 			changeSet.setMetricsToAlternativeBase(deltaMetrics);
 		} else {
@@ -1504,8 +1502,7 @@ public final class ChangeSetTransformerUtil {
 
 	protected static @NonNull String getSlotTypePrefix(final Slot slot) {
 		String prefix;
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
+		if (slot instanceof LoadSlot loadSlot) {
 			if (loadSlot.isDESPurchase()) {
 				prefix = "des-purchase";
 			} else {

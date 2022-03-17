@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -21,14 +20,13 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class ContractQuantityRangeConstraint extends AbstractModelMultiConstraint {
 
-	private static int SENSIBLE_M3 = 300_000;
-	
+	private static final int SENSIBLE_M3 = 300_000;
+
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Contract) {
-			final Contract contract = (Contract) target;
+		if (target instanceof Contract contract) {
 			checkRange(contract, ctx, failures);
 			if (contract.getOperationalTolerance() < 0.0) {
 				final String failureMessage = String.format("Contract '%s' operational tolerance is less than zero", contract.getName());
@@ -45,8 +43,6 @@ public class ContractQuantityRangeConstraint extends AbstractModelMultiConstrain
 				failures.add(dsd);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void checkRange(final Contract contract, final IValidationContext ctx, final List<IStatus> failures) {

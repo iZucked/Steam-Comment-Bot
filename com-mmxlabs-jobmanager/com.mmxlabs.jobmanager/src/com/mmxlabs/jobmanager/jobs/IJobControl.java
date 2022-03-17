@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.jobmanager.jobs;
@@ -43,21 +43,6 @@ public interface IJobControl {
 	 * Abort and terminate the optimisation.
 	 */
 	void cancel();
-
-	/**
-	 * Returns true if this job can be paused and resumed.
-	 */
-	boolean isPauseable();
-
-	/**
-	 * Suspend the currently running process. Has no effect if {@link #isPauseable()} return false.
-	 */
-	void pause();
-
-	/**
-	 * Resume a previously paused process. Has no effect if {@link #isPauseable()} return false.
-	 */
-	void resume();
 
 	/**
 	 * Returns the current state of the job.

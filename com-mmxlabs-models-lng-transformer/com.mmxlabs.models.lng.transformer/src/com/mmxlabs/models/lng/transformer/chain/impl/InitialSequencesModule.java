@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -27,11 +27,6 @@ public class InitialSequencesModule extends AbstractModule {
 
 	public InitialSequencesModule(@NonNull final ISequences sequences) {
 		this.sequences = sequences;
-
-	}
-
-	@Override
-	protected void configure() {
 
 	}
 

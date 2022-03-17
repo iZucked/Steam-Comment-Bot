@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.commands;
@@ -40,7 +40,7 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 
 	@Override
 	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		if (added instanceof BaseFuel) {
+		if (added instanceof BaseFuel baseFuel) {
 			if (!(rootObject instanceof LNGScenarioModel)) {
 				return null;
 			}
@@ -48,12 +48,12 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 
 			final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
 			for (final BaseFuelCost existing : costModel.getBaseFuelCosts()) {
-				if (existing.getFuel() == added) {
+				if (existing.getFuel() == baseFuel) {
 					return null;
 				}
 			}
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
-			cost.setFuel((BaseFuel) added);
+			cost.setFuel(baseFuel);
 			return AddCommand.create(domain, costModel, PricingPackage.eINSTANCE.getCostModel_BaseFuelCosts(), cost);
 		}
 		return null;

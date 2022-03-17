@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.date;
@@ -9,14 +9,14 @@ import java.util.Calendar;
 
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
-@RunWith(SWTBotJunit4ClassRunner.class)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class LocalDateTextFormatterTest extends AbstractSWTBotTest {
 
 	@Test
@@ -40,7 +40,7 @@ public class LocalDateTextFormatterTest extends AbstractSWTBotTest {
 	private void runTest(final String inputText, final int year, final int month, final int day) throws InterruptedException {
 		try {
 			final FormattedText[] text = new FormattedText[1];
-			Assert.assertSame(display, bot.getDisplay());
+//			Assertions.assertSame(display, bot.getDisplay());
 			bot.getDisplay().syncExec(new Runnable() {
 
 				@Override
@@ -61,14 +61,14 @@ public class LocalDateTextFormatterTest extends AbstractSWTBotTest {
 
 					final Object value = text[0].getValue();
 
-					Assert.assertNotNull(value);
+					Assertions.assertNotNull(value);
 					if (value instanceof LocalDate) {
 						final LocalDate mDate = (LocalDate) value;
-						Assert.assertEquals(day, mDate.getDayOfMonth());
-						Assert.assertEquals(1L + month, mDate.getMonthValue());
-						Assert.assertEquals(year, mDate.getYear());
+						Assertions.assertEquals(day, mDate.getDayOfMonth());
+						Assertions.assertEquals(1L + month, mDate.getMonthValue());
+						Assertions.assertEquals(year, mDate.getYear());
 					} else {
-						Assert.fail("Unexpected result");
+						Assertions.fail("Unexpected result");
 					}
 				}
 			});

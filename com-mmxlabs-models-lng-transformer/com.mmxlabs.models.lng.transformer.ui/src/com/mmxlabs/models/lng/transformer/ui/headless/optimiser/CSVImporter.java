@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
@@ -249,29 +249,6 @@ public class CSVImporter {
 		referenceModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
 		referenceModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
 
-		// Post import map port names to MMX ID
-//		{
-//			Map<String, String> portNameToID = new HashMap<>();
-//			for (Port port : referenceModel.getPortModel().getPorts()) {
-//				Location l = port.getLocation();
-//				if (l.getName() == null) {
-//					l.setName(port.getName());
-//				}
-//				String mmxId = l.getMmxId();
-//				if (mmxId == null) {
-//					mmxId = port.getName();
-//					l.setMmxId(mmxId);
-//				}
-//				// Restores correct case
-//				portNameToID.put(mmxId.toLowerCase(), mmxId);
-//				
-//				portNameToID.put(port.getName().toLowerCase(), mmxId);
-//				portNameToID.put(l.getName().toLowerCase(), mmxId);
-//				for (String other : l.getOtherNames()) {
-//					portNameToID.put(other.toLowerCase(), mmxId);
-//				}
-//			}
-//		}
 		importExtraModels(scenarioModel, importerRegistry, context, dataMap);
 
 		context.setRootObject(scenarioModel);

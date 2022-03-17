@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -27,8 +27,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ActionPlanOptimisationStageItemProvider 
-	extends ConstraintsAndFitnessSettingsStageItemProvider {
+public class ActionPlanOptimisationStageItemProvider extends ConstraintsAndFitnessSettingsStageItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -147,7 +146,7 @@ public class ActionPlanOptimisationStageItemProvider
 			getString("_UI_ActionPlanOptimisationStage_type") :
 			getString("_UI_ActionPlanOptimisationStage_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

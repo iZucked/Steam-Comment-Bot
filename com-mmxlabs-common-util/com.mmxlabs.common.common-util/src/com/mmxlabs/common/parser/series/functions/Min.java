@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
@@ -12,12 +12,8 @@ import java.util.List;
 import com.mmxlabs.common.parser.series.ISeries;
 
 public class Min extends SimpleSeriesFunction {
-	private Comparator<? super Number> comparator = new Comparator<Number>() {
-		@Override
-		public int compare(Number o1, Number o2) {
-			return ((Double) o1.doubleValue()).compareTo(o2.doubleValue());
-		}
-	};
+
+	private Comparator<? super Number> comparator = (o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue());
 
 	public Min(List<ISeries> arguments) {
 		super(arguments);

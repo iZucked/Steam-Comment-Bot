@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
@@ -32,12 +32,12 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(CommercialPackage.eINSTANCE.getContract_Entity(), CommercialPackage.eINSTANCE.getContract_PriceInfo(),
 			CommercialPackage.eINSTANCE.getBaseLegalEntity_ShippingBook(), CommercialPackage.eINSTANCE.getBaseLegalEntity_TradingBook());
 
-	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
+	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<>();
 
 	private static synchronized Set<EReference> getReferencesToCheck(final EClass targetClass) {
 		Set<EReference> result = cacheByClass.get(targetClass);
 		if (result == null) {
-			result = new HashSet<EReference>(targetClass.getEAllReferences());
+			result = new HashSet<>(targetClass.getEAllReferences());
 			result.retainAll(checkedReferences);
 			cacheByClass.put(targetClass, result);
 		}
@@ -49,7 +49,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
-		final LinkedList<EReference> errors = new LinkedList<EReference>();
+		final LinkedList<EReference> errors = new LinkedList<>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
 			if ((target.eGet(ref) == null) && !(ref.isUnsettable() && (target.eIsSet(ref) == false))) {

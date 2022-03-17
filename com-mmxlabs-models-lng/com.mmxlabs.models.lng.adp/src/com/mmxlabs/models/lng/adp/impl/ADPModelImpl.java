@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -40,6 +41,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getFleetProfile <em>Fleet Profile</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getMullProfile <em>Mull Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.ADPModelImpl#getSpacingProfile <em>Spacing Profile</em>}</li>
  * </ul>
  *
  * @generated
@@ -124,6 +126,16 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @ordered
 	 */
 	protected MullProfile mullProfile;
+
+	/**
+	 * The cached value of the '{@link #getSpacingProfile() <em>Spacing Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpacingProfile()
+	 * @generated
+	 * @ordered
+	 */
+	protected SpacingProfile spacingProfile;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -358,6 +370,74 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 	 * @generated
 	 */
 	@Override
+	public SpacingProfile getSpacingProfile() {
+		if (spacingProfile != null && spacingProfile.eIsProxy()) {
+			InternalEObject oldSpacingProfile = (InternalEObject)spacingProfile;
+			spacingProfile = (SpacingProfile)eResolveProxy(oldSpacingProfile);
+			if (spacingProfile != oldSpacingProfile) {
+				InternalEObject newSpacingProfile = (InternalEObject)spacingProfile;
+				NotificationChain msgs = oldSpacingProfile.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPACING_PROFILE, null, null);
+				if (newSpacingProfile.eInternalContainer() == null) {
+					msgs = newSpacingProfile.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPACING_PROFILE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.ADP_MODEL__SPACING_PROFILE, oldSpacingProfile, spacingProfile));
+			}
+		}
+		return spacingProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpacingProfile basicGetSpacingProfile() {
+		return spacingProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSpacingProfile(SpacingProfile newSpacingProfile, NotificationChain msgs) {
+		SpacingProfile oldSpacingProfile = spacingProfile;
+		spacingProfile = newSpacingProfile;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__SPACING_PROFILE, oldSpacingProfile, newSpacingProfile);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSpacingProfile(SpacingProfile newSpacingProfile) {
+		if (newSpacingProfile != spacingProfile) {
+			NotificationChain msgs = null;
+			if (spacingProfile != null)
+				msgs = ((InternalEObject)spacingProfile).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPACING_PROFILE, null, msgs);
+			if (newSpacingProfile != null)
+				msgs = ((InternalEObject)newSpacingProfile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ADPPackage.ADP_MODEL__SPACING_PROFILE, null, msgs);
+			msgs = basicSetSpacingProfile(newSpacingProfile, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.ADP_MODEL__SPACING_PROFILE, newSpacingProfile, newSpacingProfile));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
@@ -368,6 +448,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return basicSetFleetProfile(null, msgs);
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				return basicSetMullProfile(null, msgs);
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+				return basicSetSpacingProfile(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -394,6 +476,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				if (resolve) return getMullProfile();
 				return basicGetMullProfile();
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+				if (resolve) return getSpacingProfile();
+				return basicGetSpacingProfile();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -427,6 +512,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				setMullProfile((MullProfile)newValue);
 				return;
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+				setSpacingProfile((SpacingProfile)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -457,6 +545,9 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				setMullProfile((MullProfile)null);
 				return;
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+				setSpacingProfile((SpacingProfile)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -481,6 +572,8 @@ public class ADPModelImpl extends UUIDObjectImpl implements ADPModel {
 				return fleetProfile != null;
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
 				return mullProfile != null;
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+				return spacingProfile != null;
 		}
 		return super.eIsSet(featureID);
 	}

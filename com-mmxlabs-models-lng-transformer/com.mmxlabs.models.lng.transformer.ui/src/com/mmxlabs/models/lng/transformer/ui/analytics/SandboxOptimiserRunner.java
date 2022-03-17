@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Named;
@@ -152,10 +151,6 @@ public class SandboxOptimiserRunner {
 					}
 				}
 
-				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					List<Module> modules = new LinkedList<>();
-					return modules;
-				}
 				return null;
 			}
 
@@ -172,8 +167,5 @@ public class SandboxOptimiserRunner {
 
 	public LNGScenarioRunner getLNGScenarioRunner() {
 		return scenarioRunner;
-	}
-
-	public void dispose() {
 	}
 }

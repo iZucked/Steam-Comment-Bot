@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -48,9 +48,6 @@ public class HolidayCalendarsViewerPane extends ScenarioTableViewerPane {
 	}
 
 	public void setInput(final HolidayCalendar data) {
-		if (data == null) {
-			return;
-		}
 		viewer.setInput(data);
 	}
 

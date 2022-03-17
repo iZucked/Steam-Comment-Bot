@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -86,6 +86,9 @@ public class ReportTesterHelper {
 
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
 	public static final String EXPOSURES_REPORT_SHORTNAME = "ExposuresReport";
+	
+	public static final String EXPOSURE_DETAILS_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureDetailReportView";
+	public static final String EXPOSURE_DETAILS_REPORT_SHORTNAME = "ExposureDetailsReport";
 
 	public static final String CARGO_ECONS_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	public static final String CARGO_ECONS_REPORT_SHORTNAME = "CargoEcons";
@@ -124,6 +127,9 @@ public class ReportTesterHelper {
 	public static List<ReportRecord> createSelectedElementReportTests() {
 		final List<ReportRecord> reports = new LinkedList<>();
 		reports.add(new ReportRecord(ReportTesterHelper.CARGO_ECONS_REPORT_ID, ReportTesterHelper.CARGO_ECONS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
+			reports.add(new ReportRecord(ReportTesterHelper.EXPOSURE_DETAILS_REPORT_ID, ReportTesterHelper.EXPOSURE_DETAILS_REPORT_SHORTNAME, ReportType.REPORT_HTML));
+		}
 
 		return reports;
 	}

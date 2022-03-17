@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -26,7 +26,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
-            icon="icons/hub.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/hub.png"
             id="com.mmxlabs.lngdataserver.browser.ui.DataServerPerspective"
             name="Hub">
       </perspective>

@@ -1,12 +1,12 @@
 #
-# Copyright (C) Minimax Labs Ltd., 2010 - 2021
+# Copyright (C) Minimax Labs Ltd., 2010 - 2022
 # All rights reserved.
 #
 
 import shutil, os
 #####################################
 path_to_ws = os.getcwd()
-version = 153
+version = 155
 #####################################
 
 root = "{0}/com.mmxlabs.models.lng.".format(path_to_ws)

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
@@ -19,6 +19,8 @@ import java.util.List;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +37,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 
+import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -89,11 +92,22 @@ public class CloudOptimisationDataServiceClient {
 			return null;
 		}
 
+		String credential = Credentials.basic(getUsername(), getPassword());
+
 		Request.Builder builder = new Request.Builder() //
-				.url(baseUrl + urlPath);
+				.url(baseUrl + urlPath) //
+				.header("Authorization", credential);
 
 		return builder;
 
+	}
+
+	private String getUsername() {
+		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_USERNAME);
+	}
+
+	private String getPassword() {
+		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_PASSWORD);
 	}
 
 	private String getGateway() {

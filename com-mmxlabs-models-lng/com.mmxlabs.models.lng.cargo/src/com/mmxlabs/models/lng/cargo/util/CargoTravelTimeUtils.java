@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -78,6 +79,15 @@ public class CargoTravelTimeUtils {
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
+	public static int getFobMinTimeInHours(final Slot<?> from, final Slot<?> to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel,
+			final double referenceSpeed, final Pair<Integer, Integer> panamaWaitingDays, final ModelDistanceProvider modelDistanceProvider) {
+		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, portModel);
+		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
+		final Vessel vessel = vesselAssignmentTypeData.getFirst();
+		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
+		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, panamaWaitingDays, modelDistanceProvider);
+	}
+
 	public static int getFobMinTimeInHours(final Port from, final Port to, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final double referenceSpeed,
 			final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
 		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, portModel);
@@ -85,6 +95,15 @@ public class CargoTravelTimeUtils {
 		final Vessel vessel = vesselAssignmentTypeData.getFirst();
 		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider, bufferTime);
+	}
+
+	public static int getFobMinTimeInHours(final Port from, final Port to, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final double referenceSpeed,
+			final Pair<Integer, Integer> panamaWaitingDays, final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
+		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, portModel);
+		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
+		final Vessel vessel = vesselAssignmentTypeData.getFirst();
+		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
+		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, panamaWaitingDays, modelDistanceProvider, bufferTime);
 	}
 
 	public static int getMinTimeFromAllowedRoutes(final Slot<?> from, final Slot<?> to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
@@ -102,6 +121,27 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
+	public static int getMinTimeFromAllowedRoutes(final Slot<?> from, final Slot<?> to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+			final Pair<Integer, Integer> panamaWaitingDays, final ModelDistanceProvider modelDistanceProvider) {
+		int minDuration = Integer.MAX_VALUE;
+		if (from != null && from.getPort() != null && to != null && to.getPort() != null) {
+			for (final Route route : allowedRoutes) {
+				assert route != null;
+				int totalTime = getTimeForRoute(vessel, referenceSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
+				if (totalTime != Integer.MAX_VALUE && route.getRouteOption() == RouteOption.PANAMA) {
+					final CanalEntry closestEntry = modelDistanceProvider.getClosestCanalEntry(RouteOption.PANAMA, from.getPort());
+					if (closestEntry != null) {
+						totalTime += closestEntry == CanalEntry.NORTHSIDE ? panamaWaitingDays.getSecond() * 24 : panamaWaitingDays.getFirst() * 24;
+					}
+				}
+				if (totalTime < minDuration) {
+					minDuration = totalTime;
+				}
+			}
+		}
+		return minDuration;
+	}
+
 	public static int getMinTimeFromAllowedRoutes(final Port from, final Port to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
 			final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
 		int minDuration = Integer.MAX_VALUE;
@@ -110,6 +150,29 @@ public class CargoTravelTimeUtils {
 			int totalTime = getTimeForRoute(vessel, referenceSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
 			if (totalTime != Integer.MAX_VALUE) {
 				totalTime += bufferTime;
+			}
+			if (totalTime < minDuration) {
+				minDuration = totalTime;
+			}
+		}
+
+		return minDuration;
+	}
+
+	public static int getMinTimeFromAllowedRoutes(final Port from, final Port to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+			final Pair<Integer, Integer> panamaWaitingDays, final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
+		int minDuration = Integer.MAX_VALUE;
+		for (final Route route : allowedRoutes) {
+			assert route != null;
+			int totalTime = getTimeForRoute(vessel, referenceSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
+			if (totalTime != Integer.MAX_VALUE) {
+				totalTime += bufferTime;
+				if (route.getRouteOption() == RouteOption.PANAMA) {
+					final CanalEntry closestEntry = modelDistanceProvider.getClosestCanalEntry(RouteOption.PANAMA, from);
+					if (closestEntry != null) {
+						totalTime += closestEntry == CanalEntry.NORTHSIDE ? panamaWaitingDays.getSecond() * 24 : panamaWaitingDays.getFirst() * 24;
+					}
+				}
 			}
 			if (totalTime < minDuration) {
 				minDuration = totalTime;

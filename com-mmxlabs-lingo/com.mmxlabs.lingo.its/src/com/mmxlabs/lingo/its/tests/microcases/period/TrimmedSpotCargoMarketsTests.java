@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.period;
@@ -67,7 +67,6 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setWithSpotCargoMarkets(true);
 
@@ -161,7 +160,6 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setWithSpotCargoMarkets(true);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -30,7 +30,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class CleanStateOptimisationStageItemProvider extends ParallisableOptimisationStageItemProvider {
+public class CleanStateOptimisationStageItemProvider extends ConstraintsAndFitnessSettingsStageItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -91,7 +91,6 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ParametersPackage.Literals.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS);
 		}
@@ -152,7 +151,6 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__SEED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -171,11 +169,6 @@ public class CleanStateOptimisationStageItemProvider extends ParallisableOptimis
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS,
-				 ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()));
 
 		newChildDescriptors.add
 			(createChildParameter

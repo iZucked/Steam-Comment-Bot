@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -34,7 +34,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage
  * @generated
  */
-public class ParametersSwitch<T1> extends Switch<T1> {
+public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -76,17 +76,17 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	@Override
-	protected T1 doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 			case ParametersPackage.USER_SETTINGS: {
 				UserSettings userSettings = (UserSettings)theEObject;
-				T1 result = caseUserSettings(userSettings);
+				T result = caseUserSettings(userSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.OBJECTIVE: {
 				Objective objective = (Objective)theEObject;
-				T1 result = caseObjective(objective);
+				T result = caseObjective(objective);
 				if (result == null) result = caseNamedObject(objective);
 				if (result == null) result = caseMMXObject(objective);
 				if (result == null) result = defaultCase(theEObject);
@@ -94,7 +94,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.CONSTRAINT: {
 				Constraint constraint = (Constraint)theEObject;
-				T1 result = caseConstraint(constraint);
+				T result = caseConstraint(constraint);
 				if (result == null) result = caseNamedObject(constraint);
 				if (result == null) result = caseMMXObject(constraint);
 				if (result == null) result = defaultCase(theEObject);
@@ -102,74 +102,67 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.ANNEALING_SETTINGS: {
 				AnnealingSettings annealingSettings = (AnnealingSettings)theEObject;
-				T1 result = caseAnnealingSettings(annealingSettings);
+				T result = caseAnnealingSettings(annealingSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.SIMILARITY_SETTINGS: {
 				SimilaritySettings similaritySettings = (SimilaritySettings)theEObject;
-				T1 result = caseSimilaritySettings(similaritySettings);
+				T result = caseSimilaritySettings(similaritySettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.SIMILARITY_INTERVAL: {
 				SimilarityInterval similarityInterval = (SimilarityInterval)theEObject;
-				T1 result = caseSimilarityInterval(similarityInterval);
+				T result = caseSimilarityInterval(similarityInterval);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.OPTIMISATION_PLAN: {
 				OptimisationPlan optimisationPlan = (OptimisationPlan)theEObject;
-				T1 result = caseOptimisationPlan(optimisationPlan);
+				T result = caseOptimisationPlan(optimisationPlan);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS: {
 				ConstraintAndFitnessSettings constraintAndFitnessSettings = (ConstraintAndFitnessSettings)theEObject;
-				T1 result = caseConstraintAndFitnessSettings(constraintAndFitnessSettings);
+				T result = caseConstraintAndFitnessSettings(constraintAndFitnessSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.OPTIMISATION_STAGE: {
 				OptimisationStage optimisationStage = (OptimisationStage)theEObject;
-				T1 result = caseOptimisationStage(optimisationStage);
+				T result = caseOptimisationStage(optimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE: {
 				ConstraintsAndFitnessSettingsStage constraintsAndFitnessSettingsStage = (ConstraintsAndFitnessSettingsStage)theEObject;
-				T1 result = caseConstraintsAndFitnessSettingsStage(constraintsAndFitnessSettingsStage);
+				T result = caseConstraintsAndFitnessSettingsStage(constraintsAndFitnessSettingsStage);
 				if (result == null) result = caseOptimisationStage(constraintsAndFitnessSettingsStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.PARALLISABLE_OPTIMISATION_STAGE: {
-				ParallisableOptimisationStage parallisableOptimisationStage = (ParallisableOptimisationStage)theEObject;
-				T1 result = caseParallisableOptimisationStage(parallisableOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallisableOptimisationStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.PARALLEL_OPTIMISATION_STAGE: {
-				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>)theEObject;
-				T1 result = caseParallelOptimisationStage(parallelOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallelOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE: {
 				CleanStateOptimisationStage cleanStateOptimisationStage = (CleanStateOptimisationStage)theEObject;
-				T1 result = caseCleanStateOptimisationStage(cleanStateOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(cleanStateOptimisationStage);
+				T result = caseCleanStateOptimisationStage(cleanStateOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(cleanStateOptimisationStage);
 				if (result == null) result = caseOptimisationStage(cleanStateOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ParametersPackage.STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE: {
+				StrategicLocalSearchOptimisationStage strategicLocalSearchOptimisationStage = (StrategicLocalSearchOptimisationStage)theEObject;
+				T result = caseStrategicLocalSearchOptimisationStage(strategicLocalSearchOptimisationStage);
+				if (result == null) result = caseLocalSearchOptimisationStage(strategicLocalSearchOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(strategicLocalSearchOptimisationStage);
+				if (result == null) result = caseOptimisationStage(strategicLocalSearchOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ParametersPackage.LOCAL_SEARCH_OPTIMISATION_STAGE: {
 				LocalSearchOptimisationStage localSearchOptimisationStage = (LocalSearchOptimisationStage)theEObject;
-				T1 result = caseLocalSearchOptimisationStage(localSearchOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(localSearchOptimisationStage);
+				T result = caseLocalSearchOptimisationStage(localSearchOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(localSearchOptimisationStage);
 				if (result == null) result = caseOptimisationStage(localSearchOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
@@ -177,8 +170,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: {
 				HillClimbOptimisationStage hillClimbOptimisationStage = (HillClimbOptimisationStage)theEObject;
-				T1 result = caseHillClimbOptimisationStage(hillClimbOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(hillClimbOptimisationStage);
+				T result = caseHillClimbOptimisationStage(hillClimbOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(hillClimbOptimisationStage);
 				if (result == null) result = caseOptimisationStage(hillClimbOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
@@ -186,7 +178,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: {
 				ActionPlanOptimisationStage actionPlanOptimisationStage = (ActionPlanOptimisationStage)theEObject;
-				T1 result = caseActionPlanOptimisationStage(actionPlanOptimisationStage);
+				T result = caseActionPlanOptimisationStage(actionPlanOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(actionPlanOptimisationStage);
 				if (result == null) result = caseOptimisationStage(actionPlanOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
@@ -194,21 +186,21 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: {
 				ResetInitialSequencesStage resetInitialSequencesStage = (ResetInitialSequencesStage)theEObject;
-				T1 result = caseResetInitialSequencesStage(resetInitialSequencesStage);
+				T result = caseResetInitialSequencesStage(resetInitialSequencesStage);
 				if (result == null) result = caseOptimisationStage(resetInitialSequencesStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.REDUCE_SEQUENCES_STAGE: {
 				ReduceSequencesStage reduceSequencesStage = (ReduceSequencesStage)theEObject;
-				T1 result = caseReduceSequencesStage(reduceSequencesStage);
+				T result = caseReduceSequencesStage(reduceSequencesStage);
 				if (result == null) result = caseOptimisationStage(reduceSequencesStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.INSERTION_OPTIMISATION_STAGE: {
 				InsertionOptimisationStage insertionOptimisationStage = (InsertionOptimisationStage)theEObject;
-				T1 result = caseInsertionOptimisationStage(insertionOptimisationStage);
+				T result = caseInsertionOptimisationStage(insertionOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(insertionOptimisationStage);
 				if (result == null) result = caseOptimisationStage(insertionOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
@@ -216,84 +208,39 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 			}
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: {
 				BreakEvenOptimisationStage breakEvenOptimisationStage = (BreakEvenOptimisationStage)theEObject;
-				T1 result = caseBreakEvenOptimisationStage(breakEvenOptimisationStage);
+				T result = caseBreakEvenOptimisationStage(breakEvenOptimisationStage);
 				if (result == null) result = caseOptimisationStage(breakEvenOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: {
 				SolutionBuilderSettings solutionBuilderSettings = (SolutionBuilderSettings)theEObject;
-				T1 result = caseSolutionBuilderSettings(solutionBuilderSettings);
+				T result = caseSolutionBuilderSettings(solutionBuilderSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: {
 				MultipleSolutionSimilarityOptimisationStage multipleSolutionSimilarityOptimisationStage = (MultipleSolutionSimilarityOptimisationStage)theEObject;
-				T1 result = caseMultipleSolutionSimilarityOptimisationStage(multipleSolutionSimilarityOptimisationStage);
+				T result = caseMultipleSolutionSimilarityOptimisationStage(multipleSolutionSimilarityOptimisationStage);
 				if (result == null) result = caseLocalSearchOptimisationStage(multipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(multipleSolutionSimilarityOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(multipleSolutionSimilarityOptimisationStage);
 				if (result == null) result = caseOptimisationStage(multipleSolutionSimilarityOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ParametersPackage.PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: {
-				ParallelMultipleSolutionSimilarityOptimisationStage parallelMultipleSolutionSimilarityOptimisationStage = (ParallelMultipleSolutionSimilarityOptimisationStage)theEObject;
-				T1 result = caseParallelMultipleSolutionSimilarityOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseLocalSearchOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallelMultipleSolutionSimilarityOptimisationStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE: {
-				ParallelHillClimbOptimisationStage parallelHillClimbOptimisationStage = (ParallelHillClimbOptimisationStage)theEObject;
-				T1 result = caseParallelHillClimbOptimisationStage(parallelHillClimbOptimisationStage);
-				if (result == null) result = caseHillClimbOptimisationStage(parallelHillClimbOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(parallelHillClimbOptimisationStage);
-				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelHillClimbOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallelHillClimbOptimisationStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE: {
-				ParallelLocalSearchOptimisationStage parallelLocalSearchOptimisationStage = (ParallelLocalSearchOptimisationStage)theEObject;
-				T1 result = caseParallelLocalSearchOptimisationStage(parallelLocalSearchOptimisationStage);
-				if (result == null) result = caseLocalSearchOptimisationStage(parallelLocalSearchOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(parallelLocalSearchOptimisationStage);
-				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelLocalSearchOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallelLocalSearchOptimisationStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ParametersPackage.MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: {
 				MultiobjectiveSimilarityOptimisationStage multiobjectiveSimilarityOptimisationStage = (MultiobjectiveSimilarityOptimisationStage)theEObject;
-				T1 result = caseMultiobjectiveSimilarityOptimisationStage(multiobjectiveSimilarityOptimisationStage);
+				T result = caseMultiobjectiveSimilarityOptimisationStage(multiobjectiveSimilarityOptimisationStage);
 				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(multiobjectiveSimilarityOptimisationStage);
 				if (result == null) result = caseLocalSearchOptimisationStage(multiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(multiobjectiveSimilarityOptimisationStage);
 				if (result == null) result = caseConstraintsAndFitnessSettingsStage(multiobjectiveSimilarityOptimisationStage);
 				if (result == null) result = caseOptimisationStage(multiobjectiveSimilarityOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ParametersPackage.PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: {
-				ParallelMultiobjectiveSimilarityOptimisationStage parallelMultiobjectiveSimilarityOptimisationStage = (ParallelMultiobjectiveSimilarityOptimisationStage)theEObject;
-				T1 result = caseParallelMultiobjectiveSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseMultiobjectiveSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseMultipleSolutionSimilarityOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseLocalSearchOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseParallisableOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseConstraintsAndFitnessSettingsStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = caseOptimisationStage(parallelMultiobjectiveSimilarityOptimisationStage);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_SETTINGS: {
 				CleanStateOptimisationSettings cleanStateOptimisationSettings = (CleanStateOptimisationSettings)theEObject;
-				T1 result = caseCleanStateOptimisationSettings(cleanStateOptimisationSettings);
+				T result = caseCleanStateOptimisationSettings(cleanStateOptimisationSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -312,7 +259,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseUserSettings(UserSettings object) {
+	public T caseUserSettings(UserSettings object) {
 		return null;
 	}
 
@@ -327,7 +274,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseObjective(Objective object) {
+	public T caseObjective(Objective object) {
 		return null;
 	}
 
@@ -342,7 +289,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseConstraint(Constraint object) {
+	public T caseConstraint(Constraint object) {
 		return null;
 	}
 
@@ -357,7 +304,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseAnnealingSettings(AnnealingSettings object) {
+	public T caseAnnealingSettings(AnnealingSettings object) {
 		return null;
 	}
 
@@ -372,7 +319,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseSimilaritySettings(SimilaritySettings object) {
+	public T caseSimilaritySettings(SimilaritySettings object) {
 		return null;
 	}
 
@@ -387,7 +334,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseSimilarityInterval(SimilarityInterval object) {
+	public T caseSimilarityInterval(SimilarityInterval object) {
 		return null;
 	}
 
@@ -402,7 +349,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseOptimisationStage(OptimisationStage object) {
+	public T caseOptimisationStage(OptimisationStage object) {
 		return null;
 	}
 
@@ -417,37 +364,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseConstraintsAndFitnessSettingsStage(ConstraintsAndFitnessSettingsStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallisable Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallisable Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParallisableOptimisationStage(ParallisableOptimisationStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallel Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallel Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public <T extends ParallisableOptimisationStage> T1 caseParallelOptimisationStage(ParallelOptimisationStage<T> object) {
+	public T caseConstraintsAndFitnessSettingsStage(ConstraintsAndFitnessSettingsStage object) {
 		return null;
 	}
 
@@ -462,7 +379,22 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseCleanStateOptimisationStage(CleanStateOptimisationStage object) {
+	public T caseCleanStateOptimisationStage(CleanStateOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Strategic Local Search Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Strategic Local Search Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStrategicLocalSearchOptimisationStage(StrategicLocalSearchOptimisationStage object) {
 		return null;
 	}
 
@@ -477,7 +409,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseLocalSearchOptimisationStage(LocalSearchOptimisationStage object) {
+	public T caseLocalSearchOptimisationStage(LocalSearchOptimisationStage object) {
 		return null;
 	}
 
@@ -492,7 +424,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseHillClimbOptimisationStage(HillClimbOptimisationStage object) {
+	public T caseHillClimbOptimisationStage(HillClimbOptimisationStage object) {
 		return null;
 	}
 
@@ -507,7 +439,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseActionPlanOptimisationStage(ActionPlanOptimisationStage object) {
+	public T caseActionPlanOptimisationStage(ActionPlanOptimisationStage object) {
 		return null;
 	}
 
@@ -522,7 +454,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseResetInitialSequencesStage(ResetInitialSequencesStage object) {
+	public T caseResetInitialSequencesStage(ResetInitialSequencesStage object) {
 		return null;
 	}
 
@@ -537,7 +469,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseReduceSequencesStage(ReduceSequencesStage object) {
+	public T caseReduceSequencesStage(ReduceSequencesStage object) {
 		return null;
 	}
 
@@ -552,7 +484,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseInsertionOptimisationStage(InsertionOptimisationStage object) {
+	public T caseInsertionOptimisationStage(InsertionOptimisationStage object) {
 		return null;
 	}
 
@@ -567,7 +499,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseBreakEvenOptimisationStage(BreakEvenOptimisationStage object) {
+	public T caseBreakEvenOptimisationStage(BreakEvenOptimisationStage object) {
 		return null;
 	}
 
@@ -582,7 +514,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseConstraintAndFitnessSettings(ConstraintAndFitnessSettings object) {
+	public T caseConstraintAndFitnessSettings(ConstraintAndFitnessSettings object) {
 		return null;
 	}
 
@@ -597,7 +529,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseOptimisationPlan(OptimisationPlan object) {
+	public T caseOptimisationPlan(OptimisationPlan object) {
 		return null;
 	}
 
@@ -612,7 +544,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseSolutionBuilderSettings(SolutionBuilderSettings object) {
+	public T caseSolutionBuilderSettings(SolutionBuilderSettings object) {
 		return null;
 	}
 
@@ -627,52 +559,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMultipleSolutionSimilarityOptimisationStage(MultipleSolutionSimilarityOptimisationStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParallelMultipleSolutionSimilarityOptimisationStage(ParallelMultipleSolutionSimilarityOptimisationStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallel Hill Climb Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallel Hill Climb Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParallelHillClimbOptimisationStage(ParallelHillClimbOptimisationStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallel Local Search Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallel Local Search Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParallelLocalSearchOptimisationStage(ParallelLocalSearchOptimisationStage object) {
+	public T caseMultipleSolutionSimilarityOptimisationStage(MultipleSolutionSimilarityOptimisationStage object) {
 		return null;
 	}
 
@@ -687,22 +574,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMultiobjectiveSimilarityOptimisationStage(MultiobjectiveSimilarityOptimisationStage object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParallelMultiobjectiveSimilarityOptimisationStage(ParallelMultiobjectiveSimilarityOptimisationStage object) {
+	public T caseMultiobjectiveSimilarityOptimisationStage(MultiobjectiveSimilarityOptimisationStage object) {
 		return null;
 	}
 
@@ -717,7 +589,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseCleanStateOptimisationSettings(CleanStateOptimisationSettings object) {
+	public T caseCleanStateOptimisationSettings(CleanStateOptimisationSettings object) {
 		return null;
 	}
 
@@ -732,7 +604,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMMXObject(MMXObject object) {
+	public T caseMMXObject(MMXObject object) {
 		return null;
 	}
 
@@ -747,7 +619,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseNamedObject(NamedObject object) {
+	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 
@@ -763,7 +635,7 @@ public class ParametersSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	@Override
-	public T1 defaultCase(EObject object) {
+	public T defaultCase(EObject object) {
 		return null;
 	}
 

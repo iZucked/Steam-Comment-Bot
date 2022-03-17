@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.hub;
@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.auth.AuthenticationManager;
+import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
@@ -42,10 +43,14 @@ import okhttp3.Response;
 /**
  * This class manages connections to the data hub.
  * <p>
- * The base URL is loaded from the preference store, and authentication info requested via the UI for the associated web domain. Call UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for
- * data hub requests.
+ * The base URL is loaded from the preference store, and authentication info
+ * requested via the UI for the associated web domain. Call
+ * UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for data hub
+ * requests.
  * <p>
- * N.B. {@link #getBaseUrlIfAvailable()} will not work until the UpstreamUrlProvider has finished initialising, which may not happen immediately at program start, or if the connection goes down later.
+ * N.B. {@link #getBaseUrlIfAvailable()} will not work until the
+ * UpstreamUrlProvider has finished initialising, which may not happen
+ * immediately at program start, or if the connection goes down later.
  *
  */
 public class UpstreamUrlProvider {
@@ -75,7 +80,8 @@ public class UpstreamUrlProvider {
 	private boolean connectionValid = false;
 	private DatahubInformation currentInformation = null;
 	/**
-	 * If there is no reported information from the upstream hub, fallback to "basic" auth mode.
+	 * If there is no reported information from the upstream hub, fallback to
+	 * "basic" auth mode.
 	 */
 	private static final DatahubInformation fallackInformation = new DatahubInformation("legacy", "basic");
 
@@ -106,6 +112,7 @@ public class UpstreamUrlProvider {
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
+		OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER)));
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
 	}
 
@@ -147,15 +154,21 @@ public class UpstreamUrlProvider {
 			authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
 			fireChangedListeners();
 			break;
+		case DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER:
+			OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(event.getNewValue()));
+			fireChangedListeners();
+			break;
 		default:
 			break;
 		}
 	};
 
 	/**
-	 * Returns the current URL for the upstream service, or an empty string if no service is currently available.
+	 * Returns the current URL for the upstream service, or an empty string if no
+	 * service is currently available.
 	 * <p>
-	 * <b>N.B. The caller of this method is responsible for guarding against possible failure by checking the return value.</b>
+	 * <b>N.B. The caller of this method is responsible for guarding against
+	 * possible failure by checking the return value.</b>
 	 * 
 	 * @return
 	 */
@@ -235,7 +248,8 @@ public class UpstreamUrlProvider {
 	}
 
 	/*
-	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This
+	 * pings the Datahub
 	 */
 	public synchronized void updateOnlineStatus() {
 
@@ -272,7 +286,8 @@ public class UpstreamUrlProvider {
 	}
 
 	/*
-	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This
+	 * pings the Datahub
 	 */
 	public synchronized OnlineState isUpstreamAvailable(@Nullable final Shell optionalShell) {
 
@@ -466,7 +481,7 @@ public class UpstreamUrlProvider {
 
 		return authenticationManager.buildRequest().url(baseUrlIfAvailable + urlPath);
 	}
-	
+
 	public @Nullable Builder makeRequestBuilder(@NonNull final String baseUrl, @NonNull final String urlPath) {
 		return authenticationManager.buildRequest().url(baseUrl + urlPath);
 	}

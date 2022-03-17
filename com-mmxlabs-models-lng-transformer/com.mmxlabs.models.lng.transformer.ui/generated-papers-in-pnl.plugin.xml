@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -17,7 +17,8 @@
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ToggleGeneratedPapersInPNLEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.togglegeneratedpapersinpnl"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.togglegeneratedpapersinpnl"
-                  icon="icons/dollar_ico_16.png"
+                  icon="icons/generated-paper.png"
+                  disabledIcon="icons/generated-paper_disabled.png"
                   label="GP PnL"
                   style="toggle"
                   toolbarPath="evaluategroup2"

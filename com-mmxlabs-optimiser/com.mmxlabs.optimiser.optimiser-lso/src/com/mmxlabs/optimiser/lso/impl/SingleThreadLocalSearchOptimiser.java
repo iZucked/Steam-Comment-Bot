@@ -1,0 +1,194 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
+package com.mmxlabs.optimiser.lso.impl;
+
+import java.util.Date;
+import java.util.Random;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+
+/**
+ * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class SingleThreadLocalSearchOptimiser extends LocalSearchOptimiser {
+
+	protected static final Logger LOG = LoggerFactory.getLogger(SingleThreadLocalSearchOptimiser.class);
+
+	protected Pair<Integer, Long> best = new Pair<>(0, Long.MAX_VALUE);
+
+	protected static final boolean DO_SEQUENCE_LOGGING = false;
+
+	public static final String RESTART_ITERATIONS_THRESHOLD = "restartIterationsThreshold";
+	private int maxRestarts;
+	private int currentRestart = 0;
+
+	@Inject
+	@Named(LocalSearchOptimiserModule.USE_RESTARTING_OPTIMISER)
+	private boolean restartEnabled;
+
+	@Inject
+	@Named(RESTART_ITERATIONS_THRESHOLD)
+	private int restartInterval;
+
+	@Inject
+	private Injector injector;
+
+	protected Random random;
+
+	public Random getRandom() {
+		return random;
+	}
+
+	public void setRandom(Random random) {
+		this.random = random;
+	}
+
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
+
+		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
+
+		for (int i = 0; i < iterationsThisStep; i++) {
+
+			if (isRestartIteration(getNumberOfMovesTried())) {
+				restart();
+			}
+
+			// create and submit jobs
+			final ILookupManager lookupManagerBatch = injector.getInstance(ILookupManager.class);
+			ISequences batchSequences = new ModifiableSequences(pinnedPotentialRawSequences);
+			lookupManagerBatch.createLookup(batchSequences);
+
+			LSOJob job = new LSOJob(injector, batchSequences, lookupManagerBatch, getMoveGenerator(), getRandom(), 0, failedInitialConstraintCheckers);
+			LSOJobState state = job.call();
+
+			getFitnessEvaluator().step();
+			++numberOfMovesTried;
+			logNextIteration();
+
+			logJobState(state);
+			// Test move and update state if accepted
+
+			acceptOrRejectMove(pinnedPotentialRawSequences, pinnedCurrentRawSequences, state);
+		}
+
+		setNumberOfIterationsCompleted(numberOfMovesTried);
+
+		updateProgressLogs();
+
+		return iterationsThisStep;
+	}
+
+	protected void logJobState(LSOJobState state) {
+		if (loggingDataStore != null) {
+			switch (state.getStatus()) {
+			case NullMoveFail: {
+				loggingDataStore.logNullMove(state.getMove());
+				break;
+			}
+			case CannotValidateFail: {
+				loggingDataStore.logFailedToValidateMove(state.getMove());
+				break;
+			}
+			case ConstraintFail: {
+				loggingDataStore.logFailedConstraints((IConstraintChecker) state.getFailedChecker(), state.getMove());
+				break;
+			}
+			case EvaluationProcessFail: {
+				break;
+			}
+			case EvaluatedConstraintFail: {
+				loggingDataStore.logFailedEvaluatedStateConstraints((IEvaluatedStateConstraintChecker) state.getFailedChecker(), state.getMove());
+				break;
+			}
+			case Pass: {
+				loggingDataStore.logAppliedMove(state.getMove().getClass().getName());
+				break;
+			}
+			}
+		}
+
+	}
+
+	protected boolean acceptOrRejectMove(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull IModifiableSequences pinnedCurrentRawSequences, LSOJobState state) {
+		boolean accepted = getFitnessEvaluator().evaluateSequencesFromFitnessOnly(state.getRawSequences(), state.getEvaluationState(), state.getFullSequences(), state.getFitness());
+
+		if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
+			loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, numberOfRejectedMoves, 0, 0, getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(),
+					new Date().getTime());
+		}
+
+		IMove move = state.getMove();
+		if (accepted) {
+			numberOfMovesAccepted++;
+
+			if (loggingDataStore != null) {
+				loggingDataStore.logSuccessfulMove(move, numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+			}
+
+			failedInitialConstraintCheckers = false;
+
+			updateSequences(state.getRawSequences(), pinnedPotentialRawSequences, move.getAffectedResources());
+			updateSequencesLookup(pinnedPotentialRawSequences, move.getAffectedResources());
+		} else {
+			numberOfRejectedMoves++;
+			if (loggingDataStore != null) {
+				loggingDataStore.logRejectedMove(state.getMove(), numberOfMovesTried, getFitnessEvaluator().getLastFitness());
+			}
+		}
+		return accepted;
+	}
+
+	protected boolean isRestartIteration(int numberOfMovesTried) {
+		if (restartEnabled) {
+			if (numberOfMovesTried > 0 && numberOfMovesTried % restartInterval == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void restart() {
+		currentRestart++;
+		currentRawSequences = new ModifiableSequences(initialRawSequences);
+		potentialRawSequences = new ModifiableSequences(potentialRawSequences);
+		System.out.println("Restarting:" + currentRestart);
+		getFitnessEvaluator().restart();
+	}
+
+	public int getMaxRestarts() {
+		return maxRestarts;
+	}
+
+	public void setMaxRestarts(int maxRestarts) {
+		this.maxRestarts = maxRestarts;
+	}
+
+	public int getRestartInterval() {
+		return restartInterval;
+	}
+
+	public void setRestartInterval(int restartInterval) {
+		this.restartInterval = restartInterval;
+	}
+}

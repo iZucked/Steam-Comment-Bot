@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -212,22 +212,17 @@ public class OptimisationPlanItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallisableOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallelOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
 				 ParametersFactory.eINSTANCE.createCleanStateOptimisationStage()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
 				 ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
+				 ParametersFactory.eINSTANCE.createStrategicLocalSearchOptimisationStage()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -267,27 +262,7 @@ public class OptimisationPlanItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallelMultipleSolutionSimilarityOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallelHillClimbOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallelLocalSearchOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
 				 ParametersFactory.eINSTANCE.createMultiobjectiveSimilarityOptimisationStage()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createParallelMultiobjectiveSimilarityOptimisationStage()));
 
 		newChildDescriptors.add
 			(createChildParameter

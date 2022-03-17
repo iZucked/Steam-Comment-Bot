@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.updater;
@@ -84,7 +84,7 @@ import okio.BufferedSource;
 
 /**
  * 
- * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt 
+ * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt
  * 
  *
  */
@@ -129,11 +129,9 @@ public class LiNGOUpdater {
 		}
 	}
 
-	public void updateWithDialog(final String path) throws Exception {
+	public void updateWithDialog(final @Nullable String path) throws Exception {
 		final ProgressMonitorDialog d = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-		d.run(true, false, monitor -> {
-			update(path, monitor);
-		});
+		d.run(true, false, monitor -> update(path, monitor));
 	}
 
 	public @Nullable Version getLiNGOVersion() {
@@ -174,7 +172,7 @@ public class LiNGOUpdater {
 		return file;
 	}
 
-	public void update(final String path, final IProgressMonitor monitor) {
+	public void update(final @Nullable String path, final IProgressMonitor monitor) {
 
 		SubMonitor m = SubMonitor.convert(monitor);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -34,14 +34,12 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
-public class AbstractSlotInsertionTests {
+public abstract class AbstractSlotInsertionTests {
 
 	protected void runTest(final URL scenarioURL, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
 			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) throws Exception {
 		final LiNGOTestDataProvider provider = new LiNGOTestDataProvider(scenarioURL);
-		provider.execute(originalScenario -> {
-			runScenario(originalScenario, periodStart, periodEnd, iterations, objectInsertionGetter, solutionChecker);
-		});
+		provider.execute(originalScenario -> runScenario(originalScenario, periodStart, periodEnd, iterations, objectInsertionGetter, solutionChecker));
 	}
 
 	protected void runScenario(final IScenarioDataProvider scenarioDataProvider, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
@@ -55,7 +53,6 @@ public class AbstractSlotInsertionTests {
 			userSettings.setPeriodEnd(periodEnd);
 		}
 
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
@@ -66,38 +63,33 @@ public class AbstractSlotInsertionTests {
 
 		final List<Slot<?>> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
-		for (final Object obj : objectsToInsert) {
-			if (obj instanceof Slot) {
-				final Slot<?> slot = (Slot<?>) obj;
+		for (final EObject obj : objectsToInsert) {
+			if (obj instanceof Slot<?> slot) {
 				targetSlots.add(slot);
-			} else if (obj instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) obj;
+			} else if (obj instanceof VesselEvent vesselEvent) {
 				targetEvents.add(vesselEvent);
 			}
 		}
 
 		final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(), userSettings, targetSlots,
 				targetEvents, null, null);
-		
+
 		runner.setIteration(iterations);
 		runner.prepare();
 
 		final IMultiStateResult results = runner.runInsertion(new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 
 		solutionChecker.accept(runner.getLNGScenarioRunner(), results);
-	 
+
 	}
 
 	protected SlotInsertionOptimiserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {
-		@NonNull
-		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-		@NonNull
-		final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+		final @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+		final @NonNull LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 
 		final InsertionOptimisationStage stage = ScenarioUtils.createDefaultInsertionSettings();
 
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getJobExecutorFactory(),
-				dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
-		return slotInserter;
+		return new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(),
+				dataTransformer.getInitialResult(), Collections.emptyList());
 	}
 }

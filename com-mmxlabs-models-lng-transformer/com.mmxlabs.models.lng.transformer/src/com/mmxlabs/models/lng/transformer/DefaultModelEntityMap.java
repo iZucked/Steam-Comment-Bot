@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +33,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
  */
 public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvider {
 
-	@NonNull
-	private final DateAndCurveHelper dateHelper;
+	private final @NonNull DateAndCurveHelper dateHelper;
 
-	@NonNull
-	private final Map<Object, Object> modelToOptimiser = new HashMap<>();
+	private final @NonNull Map<Object, Object> modelToOptimiser = new LinkedHashMap<>();
 
-	@NonNull
-	private final Map<Object, Object> optimiserToModel = new HashMap<>();
+	private final @NonNull Map<Object, Object> optimiserToModel = new LinkedHashMap<>();
 
-	private final Map<String, Object> nameToOptimiserObject = new HashMap<>();
+	private final @NonNull Map<String, Object> nameToOptimiserObject = new LinkedHashMap<>();
 
 	@Inject
 	public DefaultModelEntityMap(@NonNull final DateAndCurveHelper dateHelper) {

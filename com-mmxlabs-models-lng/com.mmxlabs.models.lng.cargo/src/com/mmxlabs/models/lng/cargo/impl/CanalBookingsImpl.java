@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -38,12 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getCanalBookingSlots <em>Canal Booking Slots</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getBookingExemptVessels <em>Booking Exempt Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getPanamaSeasonalityRecords <em>Panama Seasonality Records</em>}</li>
  * </ul>
@@ -60,46 +55,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected EList<CanalBookingSlot> canalBookingSlots;
-
-	/**
-	 * The default value of the '{@link #getStrictBoundaryOffsetDays() <em>Strict Boundary Offset Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStrictBoundaryOffsetDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getStrictBoundaryOffsetDays() <em>Strict Boundary Offset Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStrictBoundaryOffsetDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int strictBoundaryOffsetDays = STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getRelaxedBoundaryOffsetDays() <em>Relaxed Boundary Offset Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRelaxedBoundaryOffsetDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getRelaxedBoundaryOffsetDays() <em>Relaxed Boundary Offset Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRelaxedBoundaryOffsetDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int relaxedBoundaryOffsetDays = RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getArrivalMarginHours() <em>Arrival Margin Hours</em>}' attribute.
@@ -120,56 +75,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected int arrivalMarginHours = ARRIVAL_MARGIN_HOURS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getFlexibleBookingAmountNorthbound() <em>Flexible Booking Amount Northbound</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmountNorthbound()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getFlexibleBookingAmountNorthbound() <em>Flexible Booking Amount Northbound</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmountNorthbound()
-	 * @generated
-	 * @ordered
-	 */
-	protected int flexibleBookingAmountNorthbound = FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getFlexibleBookingAmountSouthbound() <em>Flexible Booking Amount Southbound</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmountSouthbound()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getFlexibleBookingAmountSouthbound() <em>Flexible Booking Amount Southbound</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmountSouthbound()
-	 * @generated
-	 * @ordered
-	 */
-	protected int flexibleBookingAmountSouthbound = FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getBookingExemptVessels() <em>Booking Exempt Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBookingExemptVessels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Vessel> bookingExemptVessels;
 
 	/**
 	 * The cached value of the '{@link #getVesselGroupCanalParameters() <em>Vessel Group Canal Parameters</em>}' containment reference list.
@@ -229,52 +134,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @generated
 	 */
 	@Override
-	public int getStrictBoundaryOffsetDays() {
-		return strictBoundaryOffsetDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStrictBoundaryOffsetDays(int newStrictBoundaryOffsetDays) {
-		int oldStrictBoundaryOffsetDays = strictBoundaryOffsetDays;
-		strictBoundaryOffsetDays = newStrictBoundaryOffsetDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS, oldStrictBoundaryOffsetDays, strictBoundaryOffsetDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getRelaxedBoundaryOffsetDays() {
-		return relaxedBoundaryOffsetDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRelaxedBoundaryOffsetDays(int newRelaxedBoundaryOffsetDays) {
-		int oldRelaxedBoundaryOffsetDays = relaxedBoundaryOffsetDays;
-		relaxedBoundaryOffsetDays = newRelaxedBoundaryOffsetDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS, oldRelaxedBoundaryOffsetDays, relaxedBoundaryOffsetDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getArrivalMarginHours() {
 		return arrivalMarginHours;
 	}
@@ -290,65 +149,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		arrivalMarginHours = newArrivalMarginHours;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS, oldArrivalMarginHours, arrivalMarginHours));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getFlexibleBookingAmountNorthbound() {
-		return flexibleBookingAmountNorthbound;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFlexibleBookingAmountNorthbound(int newFlexibleBookingAmountNorthbound) {
-		int oldFlexibleBookingAmountNorthbound = flexibleBookingAmountNorthbound;
-		flexibleBookingAmountNorthbound = newFlexibleBookingAmountNorthbound;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND, oldFlexibleBookingAmountNorthbound, flexibleBookingAmountNorthbound));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getFlexibleBookingAmountSouthbound() {
-		return flexibleBookingAmountSouthbound;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFlexibleBookingAmountSouthbound(int newFlexibleBookingAmountSouthbound) {
-		int oldFlexibleBookingAmountSouthbound = flexibleBookingAmountSouthbound;
-		flexibleBookingAmountSouthbound = newFlexibleBookingAmountSouthbound;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND, oldFlexibleBookingAmountSouthbound, flexibleBookingAmountSouthbound));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Vessel> getBookingExemptVessels() {
-		if (bookingExemptVessels == null) {
-			bookingExemptVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
-		}
-		return bookingExemptVessels;
 	}
 
 	/**
@@ -405,18 +205,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		switch (featureID) {
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				return getCanalBookingSlots();
-			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
-				return getStrictBoundaryOffsetDays();
-			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
-				return getRelaxedBoundaryOffsetDays();
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				return getArrivalMarginHours();
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
-				return getFlexibleBookingAmountNorthbound();
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
-				return getFlexibleBookingAmountSouthbound();
-			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
-				return getBookingExemptVessels();
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				return getVesselGroupCanalParameters();
 			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
@@ -438,24 +228,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				getCanalBookingSlots().clear();
 				getCanalBookingSlots().addAll((Collection<? extends CanalBookingSlot>)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
-				setStrictBoundaryOffsetDays((Integer)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
-				setRelaxedBoundaryOffsetDays((Integer)newValue);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				setArrivalMarginHours((Integer)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
-				setFlexibleBookingAmountNorthbound((Integer)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
-				setFlexibleBookingAmountSouthbound((Integer)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
-				getBookingExemptVessels().clear();
-				getBookingExemptVessels().addAll((Collection<? extends Vessel>)newValue);
 				return;
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				getVesselGroupCanalParameters().clear();
@@ -480,23 +254,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				getCanalBookingSlots().clear();
 				return;
-			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
-				setStrictBoundaryOffsetDays(STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
-				setRelaxedBoundaryOffsetDays(RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				setArrivalMarginHours(ARRIVAL_MARGIN_HOURS_EDEFAULT);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
-				setFlexibleBookingAmountNorthbound(FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
-				setFlexibleBookingAmountSouthbound(FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
-				getBookingExemptVessels().clear();
 				return;
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				getVesselGroupCanalParameters().clear();
@@ -518,18 +277,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		switch (featureID) {
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				return canalBookingSlots != null && !canalBookingSlots.isEmpty();
-			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
-				return strictBoundaryOffsetDays != STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
-				return relaxedBoundaryOffsetDays != RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				return arrivalMarginHours != ARRIVAL_MARGIN_HOURS_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
-				return flexibleBookingAmountNorthbound != FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
-				return flexibleBookingAmountSouthbound != FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
-				return bookingExemptVessels != null && !bookingExemptVessels.isEmpty();
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				return vesselGroupCanalParameters != null && !vesselGroupCanalParameters.isEmpty();
 			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
@@ -548,16 +297,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (strictBoundaryOffsetDays: ");
-		result.append(strictBoundaryOffsetDays);
-		result.append(", relaxedBoundaryOffsetDays: ");
-		result.append(relaxedBoundaryOffsetDays);
-		result.append(", arrivalMarginHours: ");
+		result.append(" (arrivalMarginHours: ");
 		result.append(arrivalMarginHours);
-		result.append(", flexibleBookingAmountNorthbound: ");
-		result.append(flexibleBookingAmountNorthbound);
-		result.append(", flexibleBookingAmountSouthbound: ");
-		result.append(flexibleBookingAmountSouthbound);
 		result.append(')');
 		return result.toString();
 	}

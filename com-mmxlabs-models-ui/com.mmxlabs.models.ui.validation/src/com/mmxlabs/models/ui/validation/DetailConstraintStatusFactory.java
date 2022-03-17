@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation;
@@ -92,8 +92,10 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
-	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @NonNull final String name) {
-		this.name = String.format("%s |'%s'", type, name);
+	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @Nullable final String name) {
+		final String checkedName = name == null || name.isBlank() ? "<unknown>" : name;
+		
+		this.name = String.format("%s |'%s'", type, checkedName);
 
 		return this;
 	}

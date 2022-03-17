@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.valueproviders;
@@ -18,14 +18,14 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
 /**
- * A reference value provider which is like simple reference value provider, but merges the values of several containment references.
+ * A reference value provider which is like simple reference value provider, but
+ * merges the values of several containment references.
  * 
  * @author hinton
  * 
  */
 public class MergedReferenceValueProvider extends SimpleReferenceValueProvider {
-	private final ArrayList<EReference> extraReferences;
-	private final EObject container;
+	private final List<EReference> extraReferences;
 
 	private final @NonNull MMXAdapterImpl adapter = new MMXAdapterImpl() {
 		@Override
@@ -52,9 +52,8 @@ public class MergedReferenceValueProvider extends SimpleReferenceValueProvider {
 
 	public MergedReferenceValueProvider(final EObject container, final EReference... containingReferences) {
 		super(container, containingReferences[0]);
-		this.container = container;
 		this.container.eAdapters().add(adapter);
-		extraReferences = new ArrayList<EReference>(containingReferences.length - 1);
+		extraReferences = new ArrayList<>(containingReferences.length - 1);
 		for (int i = 1; i < containingReferences.length; i++) {
 			extraReferences.add(containingReferences[i]);
 		}

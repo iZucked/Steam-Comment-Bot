@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.utils;
@@ -102,7 +102,9 @@ public class ExportCSVBundleUtil {
 				final Collection<Map<String, String>> rows = e.getValue();
 				if (rows != null && !rows.isEmpty()) {
 					final String friendlyName = importer.getRequiredInputs().get(key);
-
+					if (friendlyName == null) {
+						int ii = 0;
+					}
 					final URI uri = URI.createURI(baseURL + friendlyName + ".csv");
 					try (OutputStreamWriter writer = new OutputStreamWriter(uc.createOutputStream(uri))) {
 						writeCSV(rows, writer, delimiter);

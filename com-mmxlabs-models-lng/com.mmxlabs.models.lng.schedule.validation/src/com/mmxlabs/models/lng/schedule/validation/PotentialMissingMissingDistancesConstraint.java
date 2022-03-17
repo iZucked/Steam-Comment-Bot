@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.validation;
@@ -52,9 +52,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
- * Note: This is in the schedule plugin's as we do not have a top level whole scenario validation plug-in
+ * Note: This is in the schedule plugin's as we do not have a top level whole
+ * scenario validation plug-in
  * 
- * This validation constraint checks for potential problems caused by a wiring optimisation.
+ * This validation constraint checks for potential problems caused by a wiring
+ * optimisation.
  * 
  * @author Simon Goodall
  * 
@@ -62,7 +64,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class PotentialMissingMissingDistancesConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 
@@ -77,7 +79,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 			if (modelDistanceProvider == null) {
 				// No distanceprovider?
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			// Lambda function to check two sets of distances
@@ -113,7 +115,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 					.filter(s -> !s.isFOBSale() || s.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) //
 					.forEach(s -> dischargePorts.add(s.getPort()));
 
-			// TODO: Complex cargoes will also have load -> load and discharge -> discharge distance requirements
+			// TODO: Complex cargoes will also have load -> load and discharge -> discharge
+			// distance requirements
 
 			for (VesselEvent e : cargoModel.getVesselEvents()) {
 				if (e instanceof CharterOutEvent) {
@@ -134,7 +137,9 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			spotMarketsModel.getFobPurchasesSpotMarket().getMarkets().forEach(m -> loadPorts.add(((FOBPurchasesMarket) m).getNotionalPort()));
 			spotMarketsModel.getDesSalesSpotMarket().getMarkets().forEach(m -> dischargePorts.add(((DESSalesMarket) m).getNotionalPort()));
 
-			// Filter end ports by likely end ports as with ballast bonus work we may specify world-wide redelivery, but in practise we would not use all possible ports.
+			// Filter end ports by likely end ports as with ballast bonus work we may
+			// specify world-wide redelivery, but in practise we would not use all possible
+			// ports.
 			final Set<Port> likelyEndPorts = new HashSet<>();
 			likelyEndPorts.addAll(dischargePorts);
 			likelyEndPorts.addAll(eventEndPorts);
@@ -155,9 +160,9 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				if (vaEndPorts != null) {
 					vaLikelyEndPorts.retainAll(vaEndPorts);
 				}
-				if(va.getContainedCharterContract() != null){
+				if (va.getContainedCharterContract() != null) {
 					GenericCharterContract contract = va.getContainedCharterContract();
-					
+
 					final List<BallastBonusTerm> terms = new LinkedList<>();
 					final IBallastBonus ballastBonus = contract.getBallastBonusTerms();
 					if (ballastBonus instanceof SimpleBallastBonusContainer) {
@@ -165,7 +170,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 					} else if (ballastBonus instanceof MonthlyBallastBonusContainer) {
 						terms.addAll(((MonthlyBallastBonusContainer) ballastBonus).getTerms());
 					}
-					
+
 					for (final BallastBonusTerm line : terms) {
 						if (line instanceof NotionalJourneyBallastBonusTerm) {
 							NotionalJourneyBallastBonusTerm notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusTerm) line;
@@ -189,7 +194,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 					}
 				}
 
-				// Remove common ports from group as we will pick the common port and not travels
+				// Remove common ports from group as we will pick the common port and not
+				// travels
 				// Tmp has unique end ports.
 				Set<Port> tmp = new HashSet<>(vaLikelyEndPorts);
 				tmp.removeAll(vaEndPorts);
@@ -237,7 +243,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				statuses.add(failure);
 			}
 
-			// Check load -> discharge and back again - typically needed for notional voyages
+			// Check load -> discharge and back again - typically needed for notional
+			// voyages
 			for (Port from : loadPorts) {
 				for (Port to : dischargePorts) {
 					if (from != to) {
@@ -257,8 +264,6 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private String getPortName(final @Nullable Port port) {

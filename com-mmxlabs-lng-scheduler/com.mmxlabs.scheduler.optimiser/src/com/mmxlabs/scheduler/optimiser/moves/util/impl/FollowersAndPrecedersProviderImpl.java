@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util.impl;
@@ -102,8 +102,8 @@ public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders
 		// also need to fix the resource binding now
 		for (final ISequenceElement e1 : optimisationData.getSequenceElements()) {
 
-			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
-			final LinkedHashSet<ISequenceElement> preceders = new LinkedHashSet<ISequenceElement>();
+			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<>();
+			final LinkedHashSet<ISequenceElement> preceders = new LinkedHashSet<>();
 
 			for (final ISequenceElement e2 : optimisationData.getSequenceElements()) {
 				if (e1 == e2) {

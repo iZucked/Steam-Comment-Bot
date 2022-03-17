@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
@@ -13,13 +13,13 @@ public abstract class SimpleSeriesFunction implements ISeries {
 
 	protected List<ISeries> arguments;
 
-	public SimpleSeriesFunction(final List<ISeries> arguments) {
+	protected SimpleSeriesFunction(final List<ISeries> arguments) {
 		this.arguments = arguments;
 	}
 
 	@Override
 	public int[] getChangePoints() {
-		int accumulator[] = new int[0];
+		int[] accumulator = new int[0];
 		for (final ISeries argument : arguments) {
 			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
 		}

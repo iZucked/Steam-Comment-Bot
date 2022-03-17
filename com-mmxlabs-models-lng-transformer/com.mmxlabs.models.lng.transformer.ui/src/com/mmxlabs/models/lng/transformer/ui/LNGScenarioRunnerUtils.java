@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -25,9 +25,8 @@ public class LNGScenarioRunnerUtils {
 
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
-		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan(false);
+		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
 		assert optimisationPlan != null;
-
 		return createExtendedSettings(optimisationPlan);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.navigator;
@@ -95,9 +95,9 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
 		if (element instanceof ScenarioService scenarioService) {
-			if (!scenarioService.isLocal()) {
-				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
-			}
+//			if (!scenarioService.isLocal()) {
+//				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
+//			}
 		} else if (element instanceof ScenarioInstance scenarioInstance) {
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);

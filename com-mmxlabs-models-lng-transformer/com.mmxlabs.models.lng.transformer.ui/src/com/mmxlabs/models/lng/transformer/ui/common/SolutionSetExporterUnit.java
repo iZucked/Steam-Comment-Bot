@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.common;
@@ -78,7 +78,7 @@ public class SolutionSetExporterUnit {
 
 		final IChainLink link = new IChainLink() {
 			@Override
-			public @NonNull IMultiStateResult run(@NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
+			public @NonNull IMultiStateResult run(final LNGDataTransformer dt, @NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
 				SolutionSetExporterUnit.export(scenarioToOptimiserBridge, solutionSetFactory, dualPNLMode, portfolioBreakEvenTarget, initialSequences, inputState, monitor);
 
 				return inputState;

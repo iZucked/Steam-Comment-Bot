@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.internal;
@@ -25,7 +25,9 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 /**
- * A {@link Saveable} implementation to hook into the {@link ScenarioServiceContentProvider} internal {@link SaveablesProvider} implementation.
+ * A {@link Saveable} implementation to hook into the
+ * {@link ScenarioServiceContentProvider} internal {@link SaveablesProvider}
+ * implementation.
  * 
  * @author Simon Goodall
  * 
@@ -48,13 +50,11 @@ public class ScenarioInstanceSavable extends Saveable {
 
 	@Override
 	public String getToolTipText() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -65,15 +65,12 @@ public class ScenarioInstanceSavable extends Saveable {
 				@Override
 				public void run(final IProgressMonitor monitor) throws CoreException {
 					try {
-						// saving = true;
 						monitor.beginTask("Saving", 1);
-						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioinstanceSavable")) {
-							if (ref != null) {
-								try {
-								ref.save();
-								} finally {
-									ref.close();
+						final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						if (modelRecord != null) {
+							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioinstanceSavable")) {
+								if (ref != null) {
+									ref.save();
 								}
 							}
 						}
@@ -109,8 +106,7 @@ public class ScenarioInstanceSavable extends Saveable {
 
 	@Override
 	public boolean equals(final Object object) {
-		if (object instanceof ScenarioInstanceSavable) {
-			final ScenarioInstanceSavable scenarioInstanceSavable = (ScenarioInstanceSavable) object;
+		if (object instanceof final ScenarioInstanceSavable scenarioInstanceSavable) {
 			return scenarioInstance.equals(scenarioInstanceSavable.scenarioInstance);
 		}
 		return false;

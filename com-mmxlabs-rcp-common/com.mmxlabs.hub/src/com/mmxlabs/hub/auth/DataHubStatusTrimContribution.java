@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.hub.auth;
@@ -26,9 +26,9 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 
 public class DataHubStatusTrimContribution {
 	
-	private final Image connectedAndAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectedauth.png"));
+	private final Image connectedAndAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub.png"));
 	private final Image connectedNotAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
-	private final Image disconnected = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/disconnected.png"));
+	private final Image disconnected = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub_disabled.png"));
 	
 	protected IDataHubStateChangeListener listener;
 	

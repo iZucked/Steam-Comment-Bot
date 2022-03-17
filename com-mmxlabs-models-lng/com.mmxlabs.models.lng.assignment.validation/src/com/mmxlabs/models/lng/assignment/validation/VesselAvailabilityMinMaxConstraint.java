@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -24,12 +23,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Checks to test if slot and vessel event dates are consistent with the start / end dates of the assigned vessel.
+ * Checks to test if slot and vessel event dates are consistent with the start /
+ * end dates of the assigned vessel.
  * 
  */
 public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstraint {
 
-	final private void createErrorMessage(final String message, final IValidationContext ctx, final List<IStatus> failures, final EObject obj, final EStructuralFeature... features) {
+	private final void createErrorMessage(final String message, final IValidationContext ctx, final List<IStatus> failures, final EObject obj, final EStructuralFeature... features) {
 		final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
 		for (final EStructuralFeature feature : features) {
 			failure.addEObjectAndFeature(obj, feature);
@@ -37,20 +37,19 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 		failures.add(failure);
 	}
 
-	final private boolean isAfterOrEquals(final LocalDateTime a, final LocalDateTime b) {
+	private final boolean isAfterOrEquals(final LocalDateTime a, final LocalDateTime b) {
 		return (a.isAfter(b) || a.isEqual(b));
 	}
 
-	final private boolean isBeforeOrEquals(final LocalDateTime a, final LocalDateTime b) {
+	private final boolean isBeforeOrEquals(final LocalDateTime a, final LocalDateTime b) {
 		return (a.isBefore(b) || a.isEqual(b));
 	}
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) object;
+		if (object instanceof VesselAvailability vesselAvailability) {
 
 			// Only check those in the main scenario
 			if (vesselAvailability.eContainer() instanceof CargoModel) {
@@ -89,8 +88,7 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 								// The max date should be set after the EndAfter date
 								if (vesselAvailability.getEndAfter().isAfter(maxDate)) {
 									final String message = String.format("Vessel|%s: Charter max duration of %d days is too short to cover charter start/end dates (%.1f days).", vessel.getName(),
-											maxDuration,
-											(float) Hours.between(vesselAvailability.getStartBy(), vesselAvailability.getEndAfter()) / 24.0f);
+											maxDuration, (float) Hours.between(vesselAvailability.getStartBy(), vesselAvailability.getEndAfter()) / 24.0f);
 									createErrorMessage(message, ctx, failures, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration(), //
 											CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
 								}
@@ -127,6 +125,5 @@ public class VesselAvailabilityMinMaxConstraint extends AbstractModelMultiConstr
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

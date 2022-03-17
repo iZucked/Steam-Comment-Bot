@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.jobmanager.views;
@@ -81,9 +81,7 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		}
 
 		ImageDescriptor desc = null;
-		if (key instanceof EJobState) {
-			final EJobState state = (EJobState) key;
-
+		if (key instanceof EJobState state) {
 			switch (state) {
 			case CANCELLED:
 				return shell.getDisplay().getSystemImage(SWT.ICON_ERROR);
@@ -94,15 +92,6 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 				break;
 			case INITIALISED:
 				desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
-				break;
-			case PAUSED:
-				desc = Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif");
-				break;
-			case PAUSING:
-				desc = Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
-				break;
-			case RESUMING:
-				desc = Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif");
 				break;
 			case RUNNING:
 				desc = Activator.getImageDescriptor("/icons/elcl16/resume_co.gif");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -91,7 +91,7 @@ public class LocalSearchOptimiserTest {
 		Assertions.assertSame(moveGenerator, lso.getMoveGenerator());
 	}
 
-	private static class TestLocalSearchOptimiser extends LocalSearchOptimiser {
+	private static class TestLocalSearchOptimiser extends SingleThreadLocalSearchOptimiser {
 
 		@Override
 		@Nullable

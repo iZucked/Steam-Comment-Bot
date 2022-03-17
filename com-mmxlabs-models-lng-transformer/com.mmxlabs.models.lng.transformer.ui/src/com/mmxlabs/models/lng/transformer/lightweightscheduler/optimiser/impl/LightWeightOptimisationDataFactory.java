@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl;
@@ -242,7 +242,7 @@ public class LightWeightOptimisationDataFactory {
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
 		modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
-		Set<ISequenceElement> usedElements = new HashSet<>();
+		Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 
 		for (final List<IPortSlot> cargo : shippedCargoes) {
 			// Grab FOB/DES vessel

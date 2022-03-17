@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.util.encryption.impl;
@@ -40,8 +40,7 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 				return true;
 
 			}
-			if (obj instanceof ByteArrayKey) {
-				final ByteArrayKey other = (ByteArrayKey) obj;
+			if (obj instanceof final ByteArrayKey other) {
 				return Arrays.equals(bytes, other.bytes);
 			}
 
@@ -58,14 +57,14 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 	private IKeyFile defaultCipher;
 
 	public List<byte[]> listKeys() {
-		List<byte[]> l = new LinkedList<>();
-		for (IKeyFile k : keystore.values()) {
+		final List<byte[]> l = new LinkedList<>();
+		for (final IKeyFile k : keystore.values()) {
 			l.add(Arrays.copyOf(k.getKeyUUID(), k.getKeyUUID().length));
 		}
 		return l;
 	}
 
-	public IKeyFile getKeyFile(byte[] key) {
+	public IKeyFile getKeyFile(final byte[] key) {
 		return keystore.get(new ByteArrayKey(key));
 	}
 	
@@ -93,8 +92,7 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public void finish(final OutputStream out) throws Exception {
-		if (out instanceof WrappedOutputStream) {
-			final WrappedOutputStream wos = (WrappedOutputStream) out;
+		if (out instanceof final WrappedOutputStream wos) {
 			wos.finish();
 		}
 	}
@@ -113,8 +111,7 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public void finish(final InputStream in) throws Exception {
-		if (in instanceof WrappedInputStream) {
-			final WrappedInputStream wis = (WrappedInputStream) in;
+		if (in instanceof final WrappedInputStream wis) {
 			wis.finish();
 		}
 	}
@@ -122,12 +119,10 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 	private static class WrappedInputStream extends BufferedInputStream {
 
 		private final IKeyFile keyfile;
-		private final InputStream in;
 
 		public WrappedInputStream(final IKeyFile keyfile, final InputStream in) {
 			super(in);
 			this.keyfile = keyfile;
-			this.in = in;
 		}
 
 		public void finish() throws Exception {
@@ -138,12 +133,10 @@ public class DelegatingEMFCipher implements URIConverter.Cipher {
 	private static class WrappedOutputStream extends BufferedOutputStream {
 
 		private final IKeyFile keyfile;
-		private final OutputStream os;
 
 		public WrappedOutputStream(final IKeyFile keyfile, final OutputStream os) {
 			super(os);
 			this.keyfile = keyfile;
-			this.os = os;
 		}
 
 		public void finish() throws Exception {

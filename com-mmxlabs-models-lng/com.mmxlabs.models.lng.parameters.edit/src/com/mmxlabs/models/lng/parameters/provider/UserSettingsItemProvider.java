@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -68,7 +68,6 @@ public class UserSettingsItemProvider
 
 			addModePropertyDescriptor(object);
 			addNominalOnlyPropertyDescriptor(object);
-			addBuildActionSetsPropertyDescriptor(object);
 			addPeriodStartDatePropertyDescriptor(object);
 			addPeriodEndPropertyDescriptor(object);
 			addDualModePropertyDescriptor(object);
@@ -284,28 +283,6 @@ public class UserSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Build Action Sets feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBuildActionSetsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UserSettings_buildActionSets_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_buildActionSets_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__BUILD_ACTION_SETS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Floating Days Limit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -456,7 +433,6 @@ public class UserSettingsItemProvider
 		switch (notification.getFeatureID(UserSettings.class)) {
 			case ParametersPackage.USER_SETTINGS__MODE:
 			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 			case ParametersPackage.USER_SETTINGS__DUAL_MODE:

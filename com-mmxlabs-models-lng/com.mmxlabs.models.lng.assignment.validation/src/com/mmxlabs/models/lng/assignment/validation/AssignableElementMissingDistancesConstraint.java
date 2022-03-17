@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -42,7 +41,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
+ * A constraint to problem EMF level support for the TimeSortConstraintChecker
+ * to avoid getting scenarios which do not optimise when there is certain kinds
+ * of lateness.
  * 
  * @author Simon Goodall
  * 
@@ -50,21 +51,19 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class AssignableElementMissingDistancesConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 		final MMXRootObject rootObject = extraContext.getRootObject();
-		if (target instanceof CargoModel) {
-			final CargoModel cargoModel = (CargoModel) target;
+		if (target instanceof CargoModel cargoModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-			// final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			final ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 			if (collectAssignments == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			// Check sequencing for each grouping
@@ -96,9 +95,8 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 				// Find end port(s)
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
 
-					if (assignment instanceof Cargo) {
-						final Cargo cargo = (Cargo) assignment;
-						for (final Slot slot : cargo.getSortedSlots()) {
+					if (assignment instanceof Cargo cargo) {
+						for (final Slot<?> slot : cargo.getSortedSlots()) {
 							final Port currentPort = slot.getPort();
 							if (prevPort != null && currentPort != null) {
 								if (!modelDistanceProvider.hasAnyDistance(prevPort, currentPort)) {
@@ -111,8 +109,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						}
 
 						// Loop over all sorted slots
-					} else if (assignment instanceof CharterOutEvent) {
-						final CharterOutEvent charterOutEvent = (CharterOutEvent) assignment;
+					} else if (assignment instanceof CharterOutEvent charterOutEvent) {
 
 						final Port currentPort = charterOutEvent.getPort();
 						if (prevPort != null && currentPort != null) {
@@ -129,8 +126,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 							prevObject = charterOutEvent;
 							prevFeature = CargoPackage.Literals.CHARTER_OUT_EVENT__RELOCATE_TO;
 						}
-					} else if (assignment instanceof VesselEvent) {
-						final VesselEvent vesselEvent = (VesselEvent) assignment;
+					} else if (assignment instanceof VesselEvent vesselEvent) {
 						// single port
 						final Port currentPort = vesselEvent.getPort();
 						if (prevPort != null && currentPort != null) {
@@ -169,9 +165,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 					}
 				}
 			}
-
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 	private void reportError(final IValidationContext ctx, final EObject fromObject, final EStructuralFeature fromFeature, final Port fromPort, final EObject toObject,
@@ -205,14 +199,11 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 	}
 
 	private String getID(final EObject target, final EStructuralFeature feature) {
-		if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+		if (target instanceof Slot<?> slot) {
 			return "slot \"" + slot.getName() + "\"";
-		} else if (target instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) target;
+		} else if (target instanceof VesselEvent vesselEvent) {
 			return "event \"" + vesselEvent.getName() + "\"";
-		} else if (target instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) target;
+		} else if (target instanceof VesselAvailability vesselAvailability) {
 			final Vessel vessel = vesselAvailability.getVessel();
 			final String vesselName = vessel == null ? "Vessel <unnamed>" : "\"" + vessel.getName() + "\"";
 			String featureString = "";
@@ -221,7 +212,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			} else if (feature == VESSEL_AVAILABILITY__END_AT) {
 				featureString = " end ";
 			}
-			return (featureString == "" ? "Vessel " + vesselName : vesselName + featureString);
+			return ("".equals(featureString) ? "Vessel " + vesselName : vesselName + featureString);
 		}
 		return "(unknown)";
 	}

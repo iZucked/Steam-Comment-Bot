@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -894,6 +894,10 @@
       <PluginXMLEnablement
             feature="paperdeals"
             plugin.xml="paperdeals.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="generated-papers"
+            plugin.xml="generatedpaperdeals.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="fitness-view"

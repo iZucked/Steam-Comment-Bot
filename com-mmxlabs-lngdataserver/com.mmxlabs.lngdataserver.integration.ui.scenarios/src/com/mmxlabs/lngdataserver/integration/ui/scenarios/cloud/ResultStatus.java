@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
@@ -94,15 +94,17 @@ public class ResultStatus {
 		final ResultStatus rs = new ResultStatus();
 		rs.status = "unknown";
 
-		final JSONObject o = new JSONObject(str);
-		if (o.has("status")) {
-			rs.status = o.getString("status");
-		}
-		if (o.has("progress")) {
-			rs.progress = o.getDouble("progress");
-		}
-		if (o.has("reason")) {
-			rs.reason = o.getString("reason");
+		if (str != null) {
+			final JSONObject o = new JSONObject(str);
+			if (o.has("status")) {
+				rs.status = o.getString("status");
+			}
+			if (o.has("progress")) {
+				rs.progress = o.getDouble("progress");
+			}
+			if (o.has("reason")) {
+				rs.reason = o.getString("reason");
+			}
 		}
 		// AWS Eventually consistent means we can get out of order progress updates!
 		// We want to keep the highest progress value found

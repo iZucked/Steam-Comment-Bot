@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -35,15 +34,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 	public static final String viewName = "Options";
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PartialCaseRow) {
-			final PartialCaseRow partialCaseRow = (PartialCaseRow) target;
+		if (target instanceof PartialCaseRow partialCaseRow) {
 			PortModel portModel = null;
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
@@ -144,22 +141,20 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			if (hasCharterOutOpportunities) {
 				int roundTripCount = 0;
 				int totalCount = 0;
-				for (final ShippingOption shipOpt: partialCaseRow.getShipping()) {
+				for (final ShippingOption shipOpt : partialCaseRow.getShipping()) {
 					if (AnalyticsBuilder.isRoundTripOption(shipOpt)) {
 						roundTripCount++;
 					}
 					totalCount++;
 				}
 				if (roundTripCount > 0 && roundTripCount == totalCount) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - the row contains charter out opportunities which cannot be used with round-trip shipping options", viewName)));
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+							.createFailureStatus(String.format("%s - the row contains charter out opportunities which cannot be used with round-trip shipping options", viewName)));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private int getLateness(final PortModel portModel, final PartialCaseRow row, final ModelDistanceProvider modelDistanceProvider) {

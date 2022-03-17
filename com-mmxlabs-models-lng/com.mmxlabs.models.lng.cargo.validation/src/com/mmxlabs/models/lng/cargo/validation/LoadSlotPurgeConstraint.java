@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -22,11 +21,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class LoadSlotPurgeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) target;
+		if (target instanceof LoadSlot slot) {
 			if (slot.isSchedulePurge()) {
 				if (!slot.isRestrictedVesselsArePermissive()) {
 					final String message = String.format("Slot|%s with scheduled purge should have a single permitted vessel", slot.getName());
@@ -46,9 +44,6 @@ public class LoadSlotPurgeConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.multiobjective.impl;
@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.optimiser.lso.ParallelLSOConstants;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.multiobjective.impl.SimpleMultiObjectiveOptimiser.eQuartile;
@@ -254,6 +255,8 @@ public class SimpleMultiObjectiveOptimiserTest {
 				bind(Boolean.class).annotatedWith(Names.named(LocalSearchOptimiserModule.OPTIMISER_DEBUG_MODE)).toInstance(Boolean.FALSE);
 				// Make sure array length is equals to number of fitness objectives.
 				bind(long[].class).annotatedWith(Names.named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES)).toInstance(new long[2]);
+				bind(int.class).annotatedWith(Names.named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)).toInstance(100);
+				bind(long.class).annotatedWith(Names.named(LocalSearchOptimiserModule.RANDOM_SEED)).toInstance(0L);
 			}
 
 			@Provides
@@ -263,7 +266,7 @@ public class SimpleMultiObjectiveOptimiserTest {
 			}
 		});
 
-		SimpleMultiObjectiveOptimiser smoo = new SimpleMultiObjectiveOptimiser(null, new Random(0));
+		SimpleMultiObjectiveOptimiser smoo = new SimpleMultiObjectiveOptimiser(null);
 		injector.injectMembers(smoo);
 		return smoo;
 	}

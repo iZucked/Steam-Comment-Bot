@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -296,7 +296,7 @@
                class="com.mmxlabs.models.lng.transformer.ui.propertytesters.JobStatePropertyTester"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.propertyTester"
                namespace="com.mmxlabs.shiplingo.platform.models.optimisation.properties"
-               properties="jobState,canPause,canPlay,canTerminate,hasActiveJob"
+               properties="jobState,canPlay,canTerminate,hasActiveJob"
                type="com.mmxlabs.scenario.service.model.ScenarioInstance">
          </propertyTester>
       </extension>

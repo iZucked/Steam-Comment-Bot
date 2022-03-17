@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -119,6 +119,7 @@ public class ADPModelItemProvider
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
 			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE);
+			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SPACING_PROFILE);
 		}
 		return childrenFeatures;
 	}
@@ -182,6 +183,7 @@ public class ADPModelItemProvider
 			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
 			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
 			case ADPPackage.ADP_MODEL__MULL_PROFILE:
+			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -218,6 +220,11 @@ public class ADPModelItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE,
 				 ADPFactory.eINSTANCE.createMullProfile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.ADP_MODEL__SPACING_PROFILE,
+				 ADPFactory.eINSTANCE.createSpacingProfile()));
 	}
 
 }

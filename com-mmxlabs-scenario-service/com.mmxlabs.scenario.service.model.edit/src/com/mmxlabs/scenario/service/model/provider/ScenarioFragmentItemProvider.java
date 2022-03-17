@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.provider;
@@ -173,7 +173,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			}
 		}
 
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment.png"));
 	}
 
 	/**

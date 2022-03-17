@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -26,12 +26,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class SlotPricingConstraint extends AbstractModelMultiConstraint {
 	@Override
-	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
-			Contract contract = slot.getContract();
+		if (target instanceof final Slot<?> slot) {
+			final Contract contract = slot.getContract();
 			if (contract != null) {
 				if (slot instanceof LoadSlot && !(contract instanceof PurchaseContract)) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(

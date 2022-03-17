@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
@@ -33,7 +33,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
-import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -131,8 +130,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof Sequence) {
-			final Sequence sequence = (Sequence) element;
+		if (element instanceof Sequence sequence) {
 			final @Nullable ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 			if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(sequence)) {
 				return pinImage;
@@ -517,18 +515,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	}
 
-	private Vessel getVessel(Journey journey) {
-		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null) {
-			return journey.getSequence().getVesselAvailability().getVessel();
-		} else {
-			return null;
-		}
-	}
-
-	private boolean isPanamaExemptVessel(CanalBookings bookings, Journey journey) {
-		return bookings.getBookingExemptVessels().contains(getVessel(journey));
-	}
-
 	/**
 	 * Return a | separated string of sorted fuel names used in this event
 	 * 
@@ -691,22 +677,22 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private Integer getPnL(final Object object) {
 		ProfitAndLossContainer container = null;
 
-		if (object instanceof CargoAllocation) {
-			container = (CargoAllocation) object;
+		if (object instanceof CargoAllocation ca) {
+			container = ca;
 		}
 		if (object instanceof SlotVisit slotVisit) {
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 				container = slotVisit.getSlotAllocation().getCargoAllocation();
 			}
 		}
-		if (object instanceof VesselEventVisit) {
-			container = (VesselEventVisit) object;
+		if (object instanceof VesselEventVisit vev) {
+			container = vev;
 		}
-		if (object instanceof StartEvent) {
-			container = (StartEvent) object;
+		if (object instanceof StartEvent evt) {
+			container = evt;
 		}
-		if (object instanceof GeneratedCharterOut) {
-			container = (GeneratedCharterOut) object;
+		if (object instanceof GeneratedCharterOut evt) {
+			container = evt;
 		}
 
 		if (container != null) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp;
@@ -65,7 +65,6 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 
 	protected @NonNull UserSettings createUserSettings(boolean nominalADP) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setMode(OptimisationMode.ADP);
 		userSettings.setCleanSlateOptimisation(true);
@@ -84,7 +83,6 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 50_000);
-		ScenarioUtils.setActionPlanStageParameters(optimisationPlan, 5_000_000, 1_500_000, 5_000);
 		ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 
 		// and now delete lso and hill

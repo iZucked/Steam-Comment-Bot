@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -80,21 +80,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		if (getJobState() != EJobState.COMPLETED) {
 			setJobState(EJobState.CANCELLED);
 		}
-
-	}
-
-	@Override
-	public boolean isPauseable() {
-		return false;
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
 
 	}
 

@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -18,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class TestFixedPriceContract {
+
 	@Test
 	public void testComputeFixedPrice() {
 
@@ -28,6 +30,7 @@ public class TestFixedPriceContract {
 		final VoyagePlan voyagePlan = new VoyagePlan();
 
 		final FixedPriceContract contract = new FixedPriceContract(35353);
-		assert (contract.calculateFOBPricePerMMBTu(loadOption, dischargeOption, 0, allocationAnnotation, vesselAvailability, voyagePlan, null, null) == 35353);
+
+		Assertions.assertEquals(35353, contract.calculateFOBPricePerMMBTu(loadOption, dischargeOption, 0, allocationAnnotation, vesselAvailability, voyagePlan, null, null));
 	}
 }

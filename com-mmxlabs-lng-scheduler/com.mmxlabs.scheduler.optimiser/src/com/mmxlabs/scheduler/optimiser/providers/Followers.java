@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-final public class Followers<Q> implements Iterable<Q> {
+public final class Followers<Q> implements Iterable<Q> {
 	/**
 	 * @param followers
 	 */
@@ -20,8 +20,8 @@ final public class Followers<Q> implements Iterable<Q> {
 		containsSet.addAll(followers);
 	}
 
-	private final List<Q> backingList = new ArrayList<Q>();
-	private final Set<Q> containsSet = new HashSet<Q>();
+	private final List<Q> backingList = new ArrayList<>();
+	private final Set<Q> containsSet = new HashSet<>();
 
 	/**
 	 * @return

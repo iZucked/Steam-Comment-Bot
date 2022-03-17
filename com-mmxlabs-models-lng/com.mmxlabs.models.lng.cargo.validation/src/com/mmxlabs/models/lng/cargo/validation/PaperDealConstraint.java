@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -15,9 +15,8 @@ import org.eclipse.emf.validation.IValidationContext;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -27,11 +26,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class PaperDealConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PaperDeal) {
-			final PaperDeal paperDeal = (PaperDeal) target;
+		if (target instanceof PaperDeal paperDeal) {
 			final PaperPricingType ppt = paperDeal.getPricingType();
 			String name = paperDeal.getName();
 			if (name == null || name.trim().isEmpty()) {
@@ -43,9 +41,9 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 			final YearMonth startMonth = paperDeal.getPricingMonth();
 			if (startMonth == null) {
 				factory.copyName() //
-					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH) //
-					.withMessage("No pricing month specified") //
-					.make(ctx, statuses);
+						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH) //
+						.withMessage("No pricing month specified") //
+						.make(ctx, statuses);
 			} else {
 				if (startMonth.getYear() < 2010) {
 					factory.copyName() //
@@ -59,7 +57,7 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
-			
+
 			final LocalDate startDate = paperDeal.getStartDate();
 			if (startDate == null) {
 				factory.copyName() //
@@ -127,30 +125,27 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 			final int year = paperDeal.getYear();
 			if (year == 0 || year < 2010 || year > 2100) {
 				factory.copyName() //
-				.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__YEAR) //
-				.withMessage("Fiscal year date is not a valid year") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__YEAR) //
+						.withMessage("Fiscal year date is not a valid year") //
+						.make(ctx, statuses);
 			}
 			final BaseLegalEntity ble = paperDeal.getEntity();
 			if (ble == null) {
 				factory.copyName() //
-				.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__ENTITY) //
-				.withMessage("Paper deal requires entity") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__ENTITY) //
+						.withMessage("Paper deal requires entity") //
+						.make(ctx, statuses);
 			}
 			if (ppt.equals(PaperPricingType.INSTRUMENT)) {
 				if (paperDeal.getInstrument() == null) {
 					factory.copyName() //
-						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__INSTRUMENT) //
-						.withMessage("Paper deal requires an instrument") //
-						.make(ctx, statuses);
+							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__INSTRUMENT) //
+							.withMessage("Paper deal requires an instrument") //
+							.make(ctx, statuses);
 				}
 			}
 
 		}
-
-		return Activator.PLUGIN_ID;
-
 	}
 
 }

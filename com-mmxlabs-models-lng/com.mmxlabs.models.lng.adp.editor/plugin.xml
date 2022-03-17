@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -91,6 +91,12 @@
          inheritable="true">
    </displayCompositeFactory>
    <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.SpacingProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.SpacingProfileDetailCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SpacingProfileDetailCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
          eClass="com.mmxlabs.models.lng.adp.SubContractProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
          id="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
@@ -167,6 +173,18 @@
           factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.MullCargoWrapperValueProviderFactory"
           id="com.mmxlabs.models.lng.adp.presentation.valueproviders.MullCargoWrapperValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.adp.MullCargoWrapper">
+   </valueProvider>
+   <valueProvider
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpacingAllocationValueProviderFactory"
+          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.FobSpacingAllocationValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.adp.FobSpacingAllocation"
+          referenceEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+   </valueProvider>
+   <valueProvider
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpacingAllocationValueProviderFactory"
+          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.DesSpacingAllocationValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.adp.DesSpacingAllocation"
+          referenceEClass="com.mmxlabs.models.lng.commercial.SalesContract">
    </valueProvider>
 </extension>
 <extension

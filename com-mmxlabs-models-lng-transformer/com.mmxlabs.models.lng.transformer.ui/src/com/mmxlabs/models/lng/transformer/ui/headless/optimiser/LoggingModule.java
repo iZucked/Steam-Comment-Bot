@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
@@ -18,8 +18,6 @@ import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
-import com.mmxlabs.scheduler.optimiser.actionplan.ActionSetLogger;
-import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 
 /**
  * A {@link Module} providing the data from {@link ILoggingDataStore} to the {@link Injector} framework.
@@ -31,21 +29,13 @@ public class LoggingModule extends AbstractModule {
 
 	private final Map<String, LSOLogger> phaseToLoggerMap;
 	private final AbstractRunnerHook runnerHook;
-	private final ActionSetLogger actionSetLogger;
 	private final LSOLogger.LoggingParameters loggingParameters;
 
-	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook, final LoggingParameters loggingParameters) {
+	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap,  final AbstractRunnerHook runnerHook, final LoggingParameters loggingParameters) {
 		this.phaseToLoggerMap = phaseToLoggerMap;
 		this.runnerHook = runnerHook;
 		
 		this.loggingParameters = loggingParameters;
-		
-		this.actionSetLogger = actionSetLogger;
-	}
-
-	@Override
-	protected void configure() {
-
 	}
 
 	@Provides
@@ -103,11 +93,5 @@ public class LoggingModule extends AbstractModule {
 		final LoggingProvider logger = new LoggingProvider();
 		injector.injectMembers(logger);
 		return logger;
-	}
-
-	@Provides
-	@Named(BagOptimiser.ACTION_PLAN__LOGGER)
-	private ActionSetLogger providerActionSetLogger(@NonNull final Injector injector) {
-		return actionSetLogger;
 	}
 }

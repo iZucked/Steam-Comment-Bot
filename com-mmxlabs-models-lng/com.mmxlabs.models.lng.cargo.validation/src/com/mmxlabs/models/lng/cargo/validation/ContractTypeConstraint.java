@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -25,20 +24,17 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ContractTypeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		// Valid slot data checks
-		if (object instanceof Slot) {
-
-			final Slot slot = (Slot) object;
+		if (object instanceof Slot<?> slot) {
 			final Contract contract = slot.getContract();
 			if (contract == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 			String message = null;
-			if (object instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) object;
+			if (object instanceof LoadSlot loadSlot) {
 				if (loadSlot.isDESPurchase()) {
 					if (contract.getContractType() == ContractType.FOB) {
 						message = String.format("DES Purchase|%s contract is FOB Purchase only!", slot.getName());
@@ -48,8 +44,7 @@ public class ContractTypeConstraint extends AbstractModelMultiConstraint {
 						message = String.format("FOB Purchase|%s contract is DES Purchase only!", slot.getName());
 					}
 				}
-			} else if (object instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) object;
+			} else if (object instanceof DischargeSlot dischargeSlot) {
 				if (dischargeSlot.isFOBSale()) {
 					if (contract.getContractType() == ContractType.DES) {
 						message = String.format("FOB Sale|%s contract is DES Sale only!", slot.getName());
@@ -67,7 +62,6 @@ public class ContractTypeConstraint extends AbstractModelMultiConstraint {
 				failures.add(dsd);
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -15,8 +15,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Names;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
@@ -35,7 +38,9 @@ import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.SingleThreadLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.StepThresholder;
+import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move2over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move3over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
@@ -111,8 +116,24 @@ public final class GeneralTestUtils {
 				data, phaseOptimisationData);
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
-		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
-		lso.setLookupManager(new LookupManager());
+		final SingleThreadLocalSearchOptimiser lso = new SingleThreadLocalSearchOptimiser();
+
+		Injector c = parent.createChildInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(ILookupManager.class).to(LookupManager.class);
+				bind(ISequencesManipulator.class).to(NullSequencesManipulator.class);
+				bind(boolean.class).annotatedWith(Names.named(LocalSearchOptimiserModule.USE_RESTARTING_OPTIMISER)).toInstance(Boolean.FALSE);
+				bind(int.class).annotatedWith(Names.named(SingleThreadLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)).toInstance(-1);
+				bind(IFitnessCombiner.class).toInstance(fitnessEvaluator.getFitnessCombiner());
+			}
+
+		});
+
+		c.injectMembers(lso);
+
+//		lso.setLookupManager(new LookupManager());
 
 		lso.setNumberOfIterations(numberOfIterations);
 		lso.setSequenceManipulator(new NullSequencesManipulator());

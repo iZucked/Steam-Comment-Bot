@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.provider;
@@ -14,6 +14,9 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -202,16 +205,19 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	public Object getImage(Object object) {
 		if (object instanceof ScenarioService) {
 			ScenarioService scenarioService = (ScenarioService) object;
-			Object img = scenarioService.getImage();
-			if (img != null) {
-				return overlayImage(object, img);
+			if(scenarioService.isLocal()) {
+				return overlayImage(object, CommonImages.getImageURL(IconPaths.Local));
 			}
-
-			if (scenarioService.isOffline()) {
-				return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioServiceOffline"));
+			else {
+				if (scenarioService.isOffline()) {
+					return overlayImage(object, CommonImages.getImageURL(IconPaths.Hub, IconMode.Disabled));					
+				}
+				else {
+					return overlayImage(object, CommonImages.getImageURL(IconPaths.Hub, IconMode.Enabled));
+				}
 			}
 		}
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioService"));
+		return overlayImage(object, CommonImages.getImageURL(IconPaths.Local));
 	}
 
 	/**

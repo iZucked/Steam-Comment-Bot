@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
@@ -137,13 +137,6 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			enabled = true;
 			break;
 		case INITIALISING:
-			break;
-		case PAUSED:
-			enabled = true;
-			break;
-		case PAUSING:
-			break;
-		case RESUMING:
 			break;
 		case RUNNING:
 			break;

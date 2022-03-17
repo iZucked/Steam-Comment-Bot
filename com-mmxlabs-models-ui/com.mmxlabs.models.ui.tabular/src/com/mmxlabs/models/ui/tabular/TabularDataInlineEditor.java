@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.tabular;
@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -34,6 +35,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -51,7 +53,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 
 /**
- * An {@link IInlineEditor} for simple tabular data. This works as a builder class to define the table which will be invoked later when the editor control is created.
+ * An {@link IInlineEditor} for simple tabular data. This works as a builder
+ * class to define the table which will be invoked later when the editor control
+ * is created.
  * 
  * @author Simon Goodall
  * 
@@ -83,12 +87,14 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		private ICellRenderer renderer;
 
 		/**
-		 * A call back function used when creating the table as e.g. manipulators require the EditingDomain which is not available at builder time.
+		 * A call back function used when creating the table as e.g. manipulators
+		 * require the EditingDomain which is not available at builder time.
 		 */
 		private BiFunction<ICommandHandler, IReferenceValueProviderProvider, Object> rmMaker;
 
 		/**
-		 * A post creation callback fopr further column customisation outside the builder API.
+		 * A post creation callback fopr further column customisation outside the
+		 * builder API.
 		 */
 		private Consumer<GridViewerColumn> action;
 
@@ -103,12 +109,18 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		 * The label for the button
 		 */
 		private String name;
+
+		/**
+		 * The image for the button
+		 */
+		private ImageDescriptor imageDescriptor;
 		/**
 		 * The action to apply when the button is pressed
 		 */
 		private TriConsumer<Object, ICommandHandler, ISelection> action;
 		/**
-		 * Optional event handler when the table selection changes. E.g. to activate or deactivate the button
+		 * Optional event handler when the table selection changes. E.g. to activate or
+		 * deactivate the button
 		 */
 		private BiConsumer<Button, IStructuredSelection> selectionChanged;
 
@@ -152,8 +164,10 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		}
 
 		/**
-		 * Provide a callback function to create a combined renderer and manipulator instance when the table is created. A specific renderer or manipulator instance passed into the builder will take
-		 * precedence over the callback function.
+		 * Provide a callback function to create a combined renderer and manipulator
+		 * instance when the table is created. A specific renderer or manipulator
+		 * instance passed into the builder will take precedence over the callback
+		 * function.
 		 * 
 		 * @param <T>
 		 * @param rm
@@ -219,11 +233,36 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			return this;
 		}
 
+		public Builder withAction(final ImageDescriptor imageDescriptor, final TriConsumer<Object, ICommandHandler, ISelection> action) {
+
+			final ButtonDef d = new ButtonDef();
+			d.imageDescriptor = imageDescriptor;
+			d.action = action;
+			d.enabledState = true;
+			buttonDefs.add(d);
+
+			return this;
+		}
+
 		public Builder withAction(final String name, final TriConsumer<Object, ICommandHandler, ISelection> action, final boolean enabledState,
 				final BiConsumer<Button, IStructuredSelection> selectionChanged) {
 
 			final ButtonDef d = new ButtonDef();
 			d.name = name;
+			d.action = action;
+			d.selectionChanged = selectionChanged;
+			d.enabledState = enabledState;
+
+			buttonDefs.add(d);
+
+			return this;
+		}
+
+		public Builder withAction(final ImageDescriptor imageDescriptor, final TriConsumer<Object, ICommandHandler, ISelection> action, final boolean enabledState,
+				final BiConsumer<Button, IStructuredSelection> selectionChanged) {
+
+			final ButtonDef d = new ButtonDef();
+			d.imageDescriptor = imageDescriptor;
 			d.action = action;
 			d.selectionChanged = selectionChanged;
 			d.enabledState = enabledState;
@@ -344,7 +383,13 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			buttonParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(builder.buttonDefs.size()).equalWidth(false).create());
 			for (final ButtonDef d : builder.buttonDefs) {
 				final Button b = new Button(buttonParent, SWT.PUSH);
-				b.setText(d.name);
+				if (d.imageDescriptor != null) {
+					Image img = d.imageDescriptor.createImage();
+					b.setImage(img);
+					b.addDisposeListener(e -> img.dispose());
+				} else {
+					b.setText(d.name);
+				}
 				b.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
@@ -521,7 +566,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					return currentSeverity;
 				}
 			}
-			
+
 			if (objects.contains(input.eContainer())) {
 				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
 					// Is severity worse, then note it
@@ -530,7 +575,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					}
 
 					return currentSeverity;
-				}				
+				}
 			}
 		}
 
@@ -557,14 +602,14 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					sb.append(element.getBaseMessage());
 				}
 			}
-			
+
 			if (objects.contains(input.eContainer())) {
 				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
 					if (sb.length() > 0) {
 						sb.append("\n");
 					}
-					sb.append(element.getBaseMessage());			
-				}				
+					sb.append(element.getBaseMessage());
+				}
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.hub.preferences;
@@ -19,6 +19,7 @@ public class DataHubPreferenceConstants {
 	public static final String P_ACCESS_TOKEN = "AcessToken";
 
 	public static final String P_FORCE_BASIC_AUTH = "ForceBasicAuth";
+	public static final String P_PREFER_EDGE_BROWSER = "PreferEdgeBrowser";
 
 	public static final String P_ENABLE_BASE_CASE_SERVICE_KEY = "EnableBaseCaseService";
 	public static final String P_ENABLE_TEAM_SERVICE_KEY = "EnableTeamService";

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
@@ -35,6 +35,10 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class DataPublishUtil {
 
+	private DataPublishUtil() {
+
+	}
+
 	public static final void uploadReferenceData(Collection<DataOptions> options, final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
 		for (DataOptions option : options) {
 			switch (option) {
@@ -50,11 +54,8 @@ public class DataPublishUtil {
 				checkAndUploadBunkerFuelsData(modelRecord, scenarioModel);
 				checkAndUploadVesselData(modelRecord, scenarioModel);
 				checkAndUploadVesselGroupsData(modelRecord, scenarioModel);
-			case ADPData:
-			case CargoData:
-			case CommercialData:
-			case SpotCargoMarketsData:
-			case SpotCharterMarketsData:
+				break;
+			case ADPData, CargoData, CommercialData, SpotCargoMarketsData, SpotCharterMarketsData:
 			default:
 				break;
 			}
