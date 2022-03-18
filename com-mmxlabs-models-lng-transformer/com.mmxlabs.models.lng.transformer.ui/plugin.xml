@@ -259,8 +259,8 @@
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=optimisation">
                <command
                      commandId="com.mmxlabs.commands.optimisation.play"
-                     icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise.png"
-               		 disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise_disabled.png"
+                     icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/optimise.png"
+               		 disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/optimise_disabled.png"
                      id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
                      label="Optimise"
                      style="push"

@@ -143,7 +143,7 @@ public class OptionAnalysisModelItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/sandbox-08.png"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/sandbox.png"));
 	}
 
 	/**

@@ -37,7 +37,8 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png");
-		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png", "platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png");
 
 		mapIcons(application, iconMapping);
 		
