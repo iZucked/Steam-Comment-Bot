@@ -51,6 +51,7 @@ public final class CommonImages {
 		Date(16, "icons/16x16/date.png"), //
 		Fuel(16, "icons/16x16/fuel.png"), //
 		Filter(16, "icons/16x16/filter.png"), //
+		Folder(16, "icons/16x16/folder.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
 		Copy(16, "icons/16x16/copy.png"), //
 		Paste(16, "icons/16x16/paste.png"), //
