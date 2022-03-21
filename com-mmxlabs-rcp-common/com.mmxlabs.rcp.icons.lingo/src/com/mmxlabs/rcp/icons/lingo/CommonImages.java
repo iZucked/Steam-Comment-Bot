@@ -5,9 +5,14 @@
 package com.mmxlabs.rcp.icons.lingo;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
 
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -17,6 +22,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.rcp.icons.lingo.internal.Activator;
 
@@ -35,6 +42,8 @@ import com.mmxlabs.rcp.icons.lingo.internal.Activator;
  */
 public final class CommonImages {
 
+private static	Logger logger = LoggerFactory.getLogger(CommonImages.class); 
+	
 	private static final String PLUGIN_ID = "com.mmxlabs.rcp.icons.lingo";
 
 	public enum IconPaths {
@@ -109,8 +118,47 @@ public final class CommonImages {
 			this.disabledPath = disabledPath;
 
 			final ImageRegistry imageRegistry = Activator.getInstance().getImageRegistry();
-			imageRegistry.put(path, ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, path).orElseThrow());
-			imageRegistry.put(disabledPath, ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, disabledPath).orElseThrow());
+			imageRegistry.put(path, extracted(path).orElseThrow());
+			imageRegistry.put(disabledPath, extracted(disabledPath).orElseThrow());
+		}
+
+		private Optional<ImageDescriptor> extracted(final String filePath) {
+			
+			// Don't resolve the URL here, but create a URL using the
+			// "platform:/plugin" protocol, which also supports fragments.
+			// Caveat: The resulting URL may contain $nl$ etc., which is not
+			// directly supported by PlatformURLConnection and needs to go through
+			// FileLocator#find(URL), see bug 250432.
+			IPath uriPath = new Path("/plugin").append(PLUGIN_ID).append(filePath); //$NON-NLS-1$
+			logger.warn("Converting to " +  uriPath.toString());
+			URL url;
+			try {
+				URI uri = new URI("platform", null, uriPath.toString(), null); //$NON-NLS-1$
+				url = uri.toURL();
+			} catch (MalformedURLException | URISyntaxException e) {
+				return Optional.empty();
+			}
+			logger.warn("URL is  " +  url.toString());
+			// look for the resource
+			URL fullPathString = FileLocator.find(url);
+			if (fullPathString == null) {
+				// If not found, reinterpret imageFilePath as full URL.
+				// This is unspecified, but apparently widely-used, see bug 395126.
+				try {
+					url = new URL(filePath);
+				} catch (MalformedURLException e) {
+					return Optional.empty();
+				}
+			}
+			
+			logger.warn("Full path URL is  " +  fullPathString.toString());
+			Optional<URL> locate = Optional.ofNullable(url);
+			
+			if (locate.isPresent()) {
+				logger.warn("Locate URL is  " +  locate.get().toString());
+				return Optional.of(ImageDescriptor.createFromURL(locate.get()));
+			}
+			return Optional.empty();
 		}
 
 		private IconPaths(final int size, final String path) {
@@ -122,7 +170,7 @@ public final class CommonImages {
 
 			final ImageRegistry imageRegistry = Activator.getInstance().getImageRegistry();
 
-			final ImageDescriptor enabledDescriptor = ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, path).orElseThrow();
+			final ImageDescriptor enabledDescriptor = extracted(path).orElseThrow();
 			imageRegistry.put(path, enabledDescriptor);
 
 			final ImageDescriptor d = ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, disabledPath).orElse(null);
