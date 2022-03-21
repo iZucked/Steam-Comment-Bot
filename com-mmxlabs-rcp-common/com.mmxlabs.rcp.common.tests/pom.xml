@@ -26,6 +26,13 @@
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
 					<bundleStartLevel>
+
+<bundle>
+							<id>org.eclipse.core.runtime</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+
 						<bundle>
 							<id>com.mmxlabs.rcp.icons.lingo</id>
 							<level>1</level>
