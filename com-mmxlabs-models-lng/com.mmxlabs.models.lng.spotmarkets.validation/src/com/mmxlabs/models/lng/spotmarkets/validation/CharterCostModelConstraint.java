@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.Vali
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -25,10 +24,9 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof CharterInMarket) {
-			final CharterInMarket ccm = (CharterInMarket) object;
+		if (object instanceof CharterInMarket ccm) {
 			if (ccm.getVessel() == null) {
 				final String failureMessage = "A charter in market model needs to be associated with a vessel.";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
@@ -82,6 +80,5 @@ public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 				statuses.add(dsd);
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

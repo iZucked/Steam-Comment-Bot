@@ -12,7 +12,6 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
@@ -24,18 +23,14 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class SupplyFromSpotFlowConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof SupplyFromSpotFlow) {
-			final SupplyFromSpotFlow flow = (SupplyFromSpotFlow) target;
+		if (target instanceof SupplyFromSpotFlow flow) {
 
 			if (flow.getMarket() == null) {
 				createSimpleStatus(ctx, statuses, "Missing spot market allocation", flow, ADPPackage.Literals.SUPPLY_FROM_SPOT_FLOW__MARKET);
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

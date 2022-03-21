@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -30,7 +29,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class STSCargoConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		final int severity = extraContext.isValidatingClone() ? IStatus.WARNING : IStatus.ERROR;
@@ -93,11 +92,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CARGO);
 					failures.add(dsd);
 				}
-
 			}
-
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 	private void validateAttributes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, final int severity) {
@@ -199,6 +195,5 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			}
 
 		}
-
 	}
 }

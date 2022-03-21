@@ -23,20 +23,20 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A version of the {@link NameUniquenessConstraint} for Slots. We do not want duplicate ids, but we can allow duplicates for spot slots.
+ * A version of the {@link NameUniquenessConstraint} for Slots. We do not want
+ * duplicate ids, but we can allow duplicates for spot slots.
  * 
  */
 public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 
 	public static final String KEY_SLOT_NAME_UNIQUENESS = SlotNameUniquenessConstraint.class.getCanonicalName();
-	
+
 	private Collection<Type> getSlotTypes(final Slot slot) {
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
@@ -67,14 +67,12 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+		if (target instanceof final Slot<?> slot) {
 			final boolean isPurchase = slot instanceof LoadSlot;
 			final EObject container = extraContext.getContainer(target);
-			if (container instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) container;
+			if (container instanceof final CargoModel cargoModel) {
 
 				Map<Type, Set<String>> badNames = (Map<Type, Set<String>>) ctx.getCurrentConstraintData();
 				if (badNames == null) {
@@ -83,11 +81,11 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 				}
 
 				// STILL A PROBLEM
-				// 1). We only generate  slot type!
+				// 1). We only generate slot type!
 				// 2). Not easy to do all the tyes as0
 
 				final Collection<Type> slotTypes = getSlotTypes(slot);
-				for (Type slotType : slotTypes) {
+				for (final Type slotType : slotTypes) {
 					Set<String> bad = badNames.get(slotType);
 					if (bad == null) {
 						bad = new HashSet<String>();
@@ -102,7 +100,8 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 								/**
 								 * All slots should have unique name! Otherwise we can see some wiring glitches!
 								 * 
-								 * if (getSlotTypes(slot2).contains(Type.LOAD) || getSlotTypes(slot2).contains(Type.DISCHARGE)) {
+								 * if (getSlotTypes(slot2).contains(Type.LOAD) ||
+								 * getSlotTypes(slot2).contains(Type.DISCHARGE)) {
 								 * 
 								 */
 								final String n = slot2.getName();
@@ -126,8 +125,6 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
-
 	}
 
 }

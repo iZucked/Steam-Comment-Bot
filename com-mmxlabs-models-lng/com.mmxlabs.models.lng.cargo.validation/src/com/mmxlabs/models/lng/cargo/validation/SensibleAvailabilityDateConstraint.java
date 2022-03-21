@@ -15,7 +15,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -31,10 +30,9 @@ public class SensibleAvailabilityDateConstraint extends AbstractModelMultiConstr
 	 * Impose sensible date cutoffs for vessel availabilities and events
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) object;
+		if (object instanceof VesselAvailability vesselAvailability) {
 			for (EStructuralFeature feature : availabilityDateFields) {
 				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
 				if (date != null && date.isBefore(earliestDate)) {					
@@ -44,10 +42,7 @@ public class SensibleAvailabilityDateConstraint extends AbstractModelMultiConstr
 					failures.add(status);
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

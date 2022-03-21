@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -32,11 +31,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof OptionAnalysisModel) {
-			final OptionAnalysisModel model = (OptionAnalysisModel) target;
+		if (target instanceof OptionAnalysisModel model) {
 
 			if (!model.getBaseCase().isKeepExistingScenario() && model.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Optimise mode needs portfolio link enabled"));
@@ -82,14 +80,11 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	public void processModel(final OptionAnalysisModel model, final BiConsumer<BuyOption, LoadSlot> visitLoadSlot, final BiConsumer<SellOption, DischargeSlot> visitDischargeSlot) {
 		for (final BuyOption buy : model.getBuys()) {
-			if (buy instanceof BuyReference) {
-				final BuyReference buyReference = (BuyReference) buy;
+			if (buy instanceof BuyReference buyReference) {
 				final LoadSlot slot = buyReference.getSlot();
 				if (slot != null) {
 					visitLoadSlot.accept(buy, slot);
@@ -97,8 +92,7 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 			}
 		}
 		for (final SellOption sell : model.getSells()) {
-			if (sell instanceof SellReference) {
-				final SellReference sellReference = (SellReference) sell;
+			if (sell instanceof SellReference sellReference) {
 				final DischargeSlot slot = sellReference.getSlot();
 				if (slot != null) {
 					visitDischargeSlot.accept(sell, slot);

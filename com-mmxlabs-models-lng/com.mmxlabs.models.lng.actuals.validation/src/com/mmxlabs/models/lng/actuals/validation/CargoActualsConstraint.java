@@ -12,13 +12,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
-import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -42,10 +42,9 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof CargoActuals) {
-			final CargoActuals cargoActuals = (CargoActuals) object;
+		if (object instanceof CargoActuals cargoActuals) {
 
 			if (cargoActuals.getCargoReference() == null || cargoActuals.getCargoReference().isEmpty()) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Actuals needs cargo reference"));
@@ -377,7 +376,5 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -92,8 +92,10 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
-	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @NonNull final String name) {
-		this.name = String.format("%s |'%s'", type, name);
+	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @Nullable final String name) {
+		final String checkedName = name == null || name.isBlank() ? "<unknown>" : name;
+		
+		this.name = String.format("%s |'%s'", type, checkedName);
 
 		return this;
 	}

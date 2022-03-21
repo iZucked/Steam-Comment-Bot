@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -30,19 +29,19 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class SlotPortCapabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
 
 		final EObject object = ctx.getTarget();
-		if (object instanceof Slot) {
+		if (object instanceof Slot<?> slot) {
 			final EMFEventType eventType = ctx.getEventType();
 
 			// This is being triggered by a batch mode validation.
 			if (eventType == EMFEventType.NULL) {
 
-				final Slot slot = (Slot) object;
-
 				final Port port = slot.getPort();
-				// Null ports outside of CargoModel are ok (specifically we expect them to be SpotSlots for non-shipped markets which will be filled in when the Schedule is applied to the scenario.)
+				// Null ports outside of CargoModel are ok (specifically we expect them to be
+				// SpotSlots for non-shipped markets which will be filled in when the Schedule
+				// is applied to the scenario.)
 				if (port == null) {
 					if (slot.eContainer() instanceof CargoModel || extraContext.getContainer(slot) instanceof CargoModel) {
 						String message = String.format("[Slot|%s has no port", slot.getName());
@@ -94,7 +93,6 @@ public class SlotPortCapabilityConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 }

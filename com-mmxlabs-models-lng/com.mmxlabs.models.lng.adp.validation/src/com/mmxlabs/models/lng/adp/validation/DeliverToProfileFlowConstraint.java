@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -28,11 +27,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class DeliverToProfileFlowConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof DeliverToProfileFlow) {
-			final DeliverToProfileFlow flow = (DeliverToProfileFlow) target;
+		if (target instanceof DeliverToProfileFlow flow) {
 
 			if (flow.getProfile() == null) {
 				createSimpleStatus(ctx, statuses, "Missing profile", flow, ADPPackage.Literals.DELIVER_TO_PROFILE_FLOW__PROFILE);
@@ -82,7 +80,5 @@ public class DeliverToProfileFlowConstraint extends AbstractModelMultiConstraint
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

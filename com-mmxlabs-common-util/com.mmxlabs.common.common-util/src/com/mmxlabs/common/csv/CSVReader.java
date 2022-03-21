@@ -72,7 +72,7 @@ public class CSVReader implements Closeable {
 		return originalHeaderLine.get(lowerCaseName);
 	}
 
-	public @Nullable String[] readLine() throws IOException {
+	public String @Nullable [] readLine() throws IOException {
 		String line = reader.readLine();
 		lineNumber++;
 		if (line == null) {

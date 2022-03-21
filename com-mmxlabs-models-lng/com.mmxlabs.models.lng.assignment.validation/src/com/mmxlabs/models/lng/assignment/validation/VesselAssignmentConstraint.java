@@ -20,7 +20,6 @@ import org.eclipse.emf.query.statements.WHERE;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -40,34 +39,30 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement assignment = (AssignableElement) object;
+		if (object instanceof AssignableElement assignment) {
 
 			final VesselAssignmentType vesselAssignmentType = assignment.getVesselAssignmentType();
 			if (vesselAssignmentType == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final Vessel vessel;
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				vessel = charterInMarket.getVessel();
-			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride charterInMarketOverride) {
 				final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 				vessel = charterInMarket.getVessel();
-			} else if (vesselAssignmentType instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof VesselAvailability vesselAvailability) {
 				vessel = vesselAvailability.getVessel();
 			} else {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			if (vessel == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final Set<Port> restrictedPorts = new HashSet<>();
@@ -75,19 +70,21 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 				final EList<APortSet<Port>> inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				if (inaccessiblePorts.isEmpty()) {
 					// At least one vessel has no restrictions.
-					return Activator.PLUGIN_ID;
+					return;
 				} else {
 					final Set<Port> ports = SetUtils.getObjects(inaccessiblePorts);
 					restrictedPorts.addAll(ports);
 				}
 			}
 
-			// Multiple vessels have different restrictions, but between them they can visit any port.
+			// Multiple vessels have different restrictions, but between them they can visit
+			// any port.
 			if (restrictedPorts.isEmpty()) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
-			// Next stage, check the cargoes, slots and events to see if they contain a restricted port.
+			// Next stage, check the cargoes, slots and events to see if they contain a
+			// restricted port.
 			for (final Port port : restrictedPorts) {
 				final SELECT query = new SELECT(new FROM(assignment), new WHERE(new EObjectReferencerCondition(port)));
 				final IQueryResult result = query.execute();
@@ -115,6 +112,5 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

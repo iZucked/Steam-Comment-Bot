@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -31,13 +30,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Vessel) {
-			final Vessel vessel = (Vessel) target;
+		if (target instanceof Vessel vessel) {
 			{
 				final VesselStateAttributes laden = vessel.getLadenAttributes();
-				final Set<Double> seenSpeeds = new HashSet<Double>();
+				final Set<Double> seenSpeeds = new HashSet<>();
 				for (final FuelConsumption line : laden.getVesselOrDelegateFuelConsumption()) {
 					if (!seenSpeeds.add(line.getSpeed())) {
 						final String message = String.format("Vessel %s has duplicate speed entry of %2.2f in Laden attributes", vessel.getName(), line.getSpeed());
@@ -49,7 +47,7 @@ public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstrain
 			}
 			{
 				final VesselStateAttributes ballast = vessel.getBallastAttributes();
-				final Set<Double> seenSpeeds = new HashSet<Double>();
+				final Set<Double> seenSpeeds = new HashSet<>();
 				for (final FuelConsumption line : ballast.getVesselOrDelegateFuelConsumption()) {
 					if (!seenSpeeds.add(line.getSpeed())) {
 						final String message = String.format("Vessel %s has duplicate speed entry of %2.2f in ballast attributes", vessel.getName(), line.getSpeed());
@@ -60,7 +58,5 @@ public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstrain
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

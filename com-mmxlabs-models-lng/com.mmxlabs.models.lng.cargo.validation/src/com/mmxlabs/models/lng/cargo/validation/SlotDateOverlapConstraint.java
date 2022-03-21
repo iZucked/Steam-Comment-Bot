@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -50,7 +49,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		private final DateTimeFormatter df = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 
 		/**
-		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
+		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap
+		 * the given {@link Slot}.
 		 * 
 		 * @param slot
 		 * @return
@@ -80,9 +80,9 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 						ii.remove();
 						continue;
 					}
-					
+
 					// Non-divertible FOB purchase and DES sale slots don't need to be validated
-					if (slotType == SlotType.DES_Sale && overlapSlotType == SlotType.FOB_Sale || overlapSlotType == SlotType.DES_Sale && slotType == SlotType.FOB_Sale 
+					if (slotType == SlotType.DES_Sale && overlapSlotType == SlotType.FOB_Sale || overlapSlotType == SlotType.DES_Sale && slotType == SlotType.FOB_Sale
 							|| slotType == SlotType.FOB_Buy && overlapSlotType == SlotType.DES_Buy || slotType == SlotType.DES_Buy && overlapSlotType == SlotType.FOB_Buy) {
 						ii.remove();
 						continue;
@@ -95,7 +95,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 					final ZonedDateTime olEnd = overlapSlot.getSchedulingTimeWindow().getEndWithFlex();
 					final ZonedDateTime slotEnd = slot.getSchedulingTimeWindow().getEndWithFlex();
 
-					// if slot start + duration is before the end of the overlapSlot window, it can be OK so let them pass
+					// if slot start + duration is before the end of the overlapSlot window, it can
+					// be OK so let them pass
 					final ZonedDateTime slotFinish = slotStart.plusHours(slotDur);
 					if (slotFinish.isBefore(olEnd)) {
 						ii.remove();
@@ -108,7 +109,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 						continue;
 					}
 				}
-				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
+				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 :
+				// slots.size() > 0;
 				// if (overlaps) {
 				overlappingSlots.addAll(potentialOverlaps);
 				// overlappingSlots.remove(slot);
@@ -151,7 +153,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 				final String dateKey = dateToString(cal);
 				final Collection<Slot<?>> slots = getOverlappingSlots(slot, dateKey);
 				slots.add(slot);
-				// if(Calendar.get(Calendar.HOUR_OF_DAY, slot.getWindowStartWithSlotOrPortTime()) == 0)
+				// if(Calendar.get(Calendar.HOUR_OF_DAY,
+				// slot.getWindowStartWithSlotOrPortTime()) == 0)
 				windowPlusDurationSize -= 24;
 				cal = cal.plusMonths(1);
 			} while (windowPlusDurationSize > 0);
@@ -185,15 +188,15 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		if (LicenseFeatures.isPermitted("features:disable-slot-overlap-checks")) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
 		final EObject object = ctx.getTarget();
 		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
 		final EObject original = extraContext.getOriginal(object);
@@ -214,7 +217,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 				// }
 			}
 			if (slot instanceof SpotSlot) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final Object currentConstraintData = ctx.getCurrentConstraintData();
@@ -245,7 +248,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 
 			assert slotOverlaps.contains(slot) == false;
 			if (slotOverlaps.isEmpty()) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			boolean first = true;
@@ -267,8 +270,6 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			statuses.add(dsd);
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private PortSlotCounter buildConstraintData(final IValidationContext ctx, final IExtraValidationContext extraContext) {

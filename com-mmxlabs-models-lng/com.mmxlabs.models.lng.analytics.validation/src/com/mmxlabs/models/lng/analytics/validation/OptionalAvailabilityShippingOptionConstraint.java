@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -24,11 +23,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class OptionalAvailabilityShippingOptionConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof OptionalSimpleVesselCharterOption) {
-			final OptionalSimpleVesselCharterOption option = (OptionalSimpleVesselCharterOption) target;
+		if (target instanceof OptionalSimpleVesselCharterOption option) {
 			{
 				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, option, AnalyticsPackage.Literals.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION__REPOSITIONING_FEE,
 						option.getRepositioningFee(), PriceIndexType.CHARTER);
@@ -76,7 +74,5 @@ public class OptionalAvailabilityShippingOptionConstraint extends AbstractModelM
 				failures.add(dsd);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }
