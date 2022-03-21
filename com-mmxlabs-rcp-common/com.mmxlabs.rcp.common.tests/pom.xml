@@ -22,12 +22,12 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-
+<skip>true</skip>
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
 					<bundleStartLevel>
 
-<bundle>
+						<bundle>
 							<id>org.eclipse.core.runtime</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
@@ -38,7 +38,7 @@
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
-				<bundle>
+						<bundle>
 							<id>org.apache.felix.scr</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
