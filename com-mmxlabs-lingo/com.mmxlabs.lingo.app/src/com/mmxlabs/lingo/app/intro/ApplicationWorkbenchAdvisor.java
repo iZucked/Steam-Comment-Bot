@@ -239,12 +239,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 		declareWorkbenchImage(ideBundle, IDEInternalWorkbenchImages.IMG_DLGBAN_QUICKFIX_DLG, PATH_WIZBAN + "quick_fix.png", false); //$NON-NLS-1$
 
-//		declareWorkbenchImage(ideBundle, IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif", true); //$NON-NLS-1$
+		declareWorkbenchImage(ideBundle, IDE.SharedImages.IMG_OBJ_PROJECT, PATH_OBJECT + "prj_obj.gif", true); //$NON-NLS-1$
         {
             final ImageDescriptor desc = CommonImages.getImageDescriptor(IconPaths.Folder, IconMode.Enabled);
             assert desc != null;
             getWorkbenchConfigurer().declareImage(ISharedImages.IMG_OBJ_FOLDER, desc, true);
         }
+        {
+            final ImageDescriptor desc = CommonImages.getImageDescriptor(IconPaths.CollapseAll, IconMode.Enabled);
+            assert desc != null;
+            getWorkbenchConfigurer().declareImage(ISharedImages.IMG_ELCL_COLLAPSEALL, desc, true);
+        }       
 		declareWorkbenchImage(ideBundle, IDE.SharedImages.IMG_OBJ_PROJECT_CLOSED, PATH_OBJECT + "cprj_obj.gif", true); //$NON-NLS-1$
 		declareWorkbenchImage(ideBundle, IDE.SharedImages.IMG_OPEN_MARKER, PATH_ELOCALTOOL + "gotoobj_tsk.gif", true); //$NON-NLS-1$
 
