@@ -31,6 +31,16 @@
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
+				<bundle>
+							<id>org.apache.felix.scr</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.event</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
 					</bundleStartLevel>
 
 				</configuration>
