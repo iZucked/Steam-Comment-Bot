@@ -12,3 +12,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.icons.lingo
 Automatic-Module-Name: com.mmxlabs.rcp.icons.lingo
 Bundle-Activator: com.mmxlabs.rcp.icons.lingo.internal.Activator
+Bundle-ClassPath: .
