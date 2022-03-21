@@ -41,6 +41,7 @@ public final class CommonImages {
 
 		// 16x16
 		BaseFlag(16, "icons/16x16/base_flag.png"), //
+		BaseFlagGreen(16, "icons/16x16/base_flag_green.png"), //
 		Pack(16, "icons/16x16/pack.png"), //
 		Plus(16, "icons/16x16/plus.png"), //
 		Plusplus(16, "icons/16x16/plusplus.png"), //

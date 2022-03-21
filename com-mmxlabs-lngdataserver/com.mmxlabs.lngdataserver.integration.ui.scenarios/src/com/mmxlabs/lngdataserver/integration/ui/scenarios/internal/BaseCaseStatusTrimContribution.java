@@ -241,7 +241,7 @@ public class BaseCaseStatusTrimContribution {
 		return "You have the latest base case \nor you have dismissed the notification";
 	}
 	
-	private final Image baseFlagGreen = new Image(Display.getDefault(), BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+	private final Image baseFlagGreen = CommonImages.getImageDescriptor(IconPaths.BaseFlagGreen, IconMode.Enabled).createImage();
 	private final Image baseFlagEmpty = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	
 	private Image dataHubStatusImage(final boolean changed) {
