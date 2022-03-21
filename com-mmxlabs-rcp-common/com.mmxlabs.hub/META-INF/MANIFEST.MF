@@ -35,7 +35,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.di,
  wrapped.com.squareup.okhttp3.okhttp;bundle-version="3.14.2";visibility:=reexport,
  wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport,
- org.eclipse.core.resources;bundle-version="3.7.101"
+ org.eclipse.core.resources;bundle-version="3.7.101",
+ com.mmxlabs.rcp.icons.lingo
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered

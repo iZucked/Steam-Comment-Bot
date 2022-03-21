@@ -49,6 +49,7 @@ public final class CommonImages {
 		CanalPanama(16, "icons/16x16/canal_panama.png"), //
 		CanalPlain(16, "icons/16x16/canal_Plain.png"), //
 		CanalSuez(16, "icons/16x16/canal_suez.png"), //
+		ConnectedNotAuth(16, "icons/16x16/connected_not_auth.png"), //
 		Date(16, "icons/16x16/date.png"), //
 		Fuel(16, "icons/16x16/fuel.png"), //
 		Filter(16, "icons/16x16/filter.png"), //

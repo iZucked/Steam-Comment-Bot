@@ -23,12 +23,15 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class DataHubStatusTrimContribution {
 	
-	private final Image connectedAndAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub.png"));
-	private final Image connectedNotAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
-	private final Image disconnected = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub_disabled.png"));
+	private final Image connectedAndAuth = CommonImages.getImageDescriptor(IconPaths.Hub, IconMode.Enabled).createImage();
+	private final Image connectedNotAuth = CommonImages.getImageDescriptor(IconPaths.ConnectedNotAuth, IconMode.Enabled).createImage();
+	private final Image disconnected = CommonImages.getImageDescriptor(IconPaths.Hub, IconMode.Disabled).createImage();
 	
 	protected IDataHubStateChangeListener listener;
 	
