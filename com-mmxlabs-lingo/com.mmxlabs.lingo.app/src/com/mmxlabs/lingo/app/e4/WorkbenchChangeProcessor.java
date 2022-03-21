@@ -92,6 +92,19 @@ public class WorkbenchChangeProcessor {
 		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
 
 		CustomReportsRegistry.getInstance().removeDeletedViews(application, modelService);
+
+		// TODO: Handle this message;
+		// !MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon
+
+		// Remove views from the IDE plugin
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ResourceNavigator", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.BookmarkView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.AllMarkersView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.minimap.MinimapView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProblemView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.TaskList", application, modelService);
+
 	}
 
 	private void applyMapping(Object child, Map<String, String> iconMapping) {

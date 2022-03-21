@@ -13,11 +13,11 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,13 +42,13 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	private char decimalSeparator;
 	final private ScenarioInstance currentScenario;
 
-	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle) {
+	protected AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle) {
 		currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
 		guided = false;
 	}
 
-	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final String importFilename) {
+	protected AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final String importFilename) {
 		currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
 		this.importFilename = importFilename;
@@ -83,9 +83,9 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 		final List<ScenarioInstance> scenarios = getSelectedScenarios();
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+			final IRunnableWithProgress operation = new IRunnableWithProgress() {
 				@Override
-				protected void execute(final IProgressMonitor progressMonitor) {
+				public void run(final IProgressMonitor progressMonitor) {
 					doImport(scenarios, importFilename, csvSeparator, decimalSeparator, progressMonitor);
 				}
 			};

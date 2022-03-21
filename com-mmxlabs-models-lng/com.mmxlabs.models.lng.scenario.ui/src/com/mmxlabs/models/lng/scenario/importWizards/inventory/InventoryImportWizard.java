@@ -15,12 +15,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,9 +86,9 @@ public class InventoryImportWizard extends Wizard implements IImportWizard {
 			final char separator = getCsvSeparator();
 			final char decimalSeparator = getDecimalSeparator();
 
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+			final IRunnableWithProgress operation = new IRunnableWithProgress() {
 				@Override
-				protected void execute(final IProgressMonitor progressMonitor) {
+				public void run(final IProgressMonitor progressMonitor) {
 					doImport(scenarios, importFilename, separator, decimalSeparator, progressMonitor);
 				}
 			};

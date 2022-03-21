@@ -6,9 +6,7 @@ Bundle-Version: 5.4.3.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.ui.intro;bundle-version="3.4.100",
  org.eclipse.ui.forms;bundle-version="3.5.101",
- org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.7.101",
  org.eclipse.core.filesystem;bundle-version="1.3.100",
  com.mmxlabs.scenario.service.ui;bundle-version="[5.4.3,6.0.0)",
