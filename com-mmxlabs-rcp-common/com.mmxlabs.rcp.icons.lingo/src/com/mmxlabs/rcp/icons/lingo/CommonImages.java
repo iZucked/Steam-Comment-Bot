@@ -130,7 +130,7 @@ private static	Logger logger = LoggerFactory.getLogger(CommonImages.class);
 			// directly supported by PlatformURLConnection and needs to go through
 			// FileLocator#find(URL), see bug 250432.
 			IPath uriPath = new Path("/plugin").append(PLUGIN_ID).append(filePath); //$NON-NLS-1$
-			logger.warn("Converting to " +  uriPath.toString());
+			System.out.println("Converting to " +  uriPath.toString());
 			URL url;
 			try {
 				URI uri = new URI("platform", null, uriPath.toString(), null); //$NON-NLS-1$
@@ -138,7 +138,7 @@ private static	Logger logger = LoggerFactory.getLogger(CommonImages.class);
 			} catch (MalformedURLException | URISyntaxException e) {
 				return Optional.empty();
 			}
-			logger.warn("URL is  " +  url.toString());
+			System.out.println("URL is  " +  url.toString());
 			// look for the resource
 			URL fullPathString = FileLocator.find(url);
 			if (fullPathString == null) {
@@ -151,11 +151,11 @@ private static	Logger logger = LoggerFactory.getLogger(CommonImages.class);
 				}
 			}
 			
-			logger.warn("Full path URL is  " +  fullPathString.toString());
+			System.out.println("Full path URL is  " +  fullPathString.toString());
 			Optional<URL> locate = Optional.ofNullable(url);
 			
 			if (locate.isPresent()) {
-				logger.warn("Locate URL is  " +  locate.get().toString());
+				System.out.println("Locate URL is  " +  locate.get().toString());
 				return Optional.of(ImageDescriptor.createFromURL(locate.get()));
 			}
 			return Optional.empty();
