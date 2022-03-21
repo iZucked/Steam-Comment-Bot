@@ -7,6 +7,7 @@ package com.mmxlabs.rcp.icons.lingo;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -14,6 +15,8 @@ import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.application.IWorkbenchConfigurer;
 
 import com.mmxlabs.rcp.icons.lingo.internal.Activator;
 
@@ -95,10 +98,6 @@ public final class CommonImages {
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
 		;
-
-//		PackGridHand 44: element.setIconURI(FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/icons/pack.png").toString());  
-//		FilterField 71: setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.png")));
-// ContractPage 378:		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.png").ifPresent(packAction::setImageDescriptor);
 
 		private int size;
 		private final String path;
@@ -230,5 +229,35 @@ public final class CommonImages {
 
 	public static void setImage(final Item item, final IconPaths iconPath) {
 		item.setImage(iconPath.getImage(IconMode.Enabled));
+	}
+
+	/**
+	 * Map images to well-known shared images.
+	 * 
+	 * @param workbenchConfigurer
+	 */
+	public static void declareWorkbenchImages(IWorkbenchConfigurer workbenchConfigurer) {
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_OBJ_FOLDER, IconPaths.Folder.getImageDescriptor(IconMode.Enabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_DELETE, IconPaths.Delete.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_DELETE_DISABLED, IconPaths.Delete.getImageDescriptor(IconMode.Disabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_DELETE, IconPaths.Delete.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_DELETE_DISABLED, IconPaths.Delete.getImageDescriptor(IconMode.Disabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ELCL_COLLAPSEALL, IconPaths.CollapseAll.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ELCL_COLLAPSEALL_DISABLED, IconPaths.CollapseAll.getImageDescriptor(IconMode.Disabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_SAVEALL_EDIT, IconPaths.Saveall.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_SAVEALL_EDIT_DISABLED, IconPaths.Saveall.getImageDescriptor(IconMode.Disabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_SAVE_EDIT, IconPaths.Save.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_ETOOL_SAVE_EDIT_DISABLED, IconPaths.Save.getImageDescriptor(IconMode.Disabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_COPY, IconPaths.Copy.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_COPY_DISABLED, IconPaths.Copy.getImageDescriptor(IconMode.Disabled), true);
+
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_PASTE, IconPaths.Paste.getImageDescriptor(IconMode.Enabled), true);
+		workbenchConfigurer.declareImage(ISharedImages.IMG_TOOL_PASTE, IconPaths.Paste.getImageDescriptor(IconMode.Disabled), true);
 	}
 }
