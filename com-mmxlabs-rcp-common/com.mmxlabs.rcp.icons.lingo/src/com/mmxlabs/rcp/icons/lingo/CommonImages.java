@@ -59,7 +59,7 @@ private static	Logger logger = LoggerFactory.getLogger(CommonImages.class);
 		Plusplus(16, "icons/16x16/plusplus.png"), //
 		Delete(16, "icons/16x16/delete.png"), //
 		CanalPanama(16, "icons/16x16/canal_panama.png"), //
-		CanalPlain(16, "icons/16x16/canal_Plain.png"), //
+		CanalPlain(16, "icons/16x16/canal_plain.png"), //
 		CanalSuez(16, "icons/16x16/canal_suez.png"), //
 		ConnectedNotAuth(16, "icons/16x16/connected_not_auth.png"), //
 		Date(16, "icons/16x16/date.png"), //
