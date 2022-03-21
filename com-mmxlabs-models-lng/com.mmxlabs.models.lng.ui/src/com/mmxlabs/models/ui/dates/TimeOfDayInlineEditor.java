@@ -16,22 +16,21 @@ import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
  * @author hinton
  *
  */
-public class TimeOfDayInlineEditor extends ValueListInlineEditor {
-	final static List<Pair<String, Object>> values;
+public class TimeOfDayInlineEditor extends ValueListInlineEditor<Object> {
+	private static final List<Pair<String, Object>> DEFAULT_VALUES;
 	static {
-		values = new ArrayList<Pair<String, Object>>(24);
-		for (int i = 0; i<24; i++) {
-			values.add(new Pair<String, Object>(
-					String.format("%02d:00", i), i
-					));
+		DEFAULT_VALUES = new ArrayList<>(24);
+		for (int i = 0; i < 24; i++) {
+			DEFAULT_VALUES.add(Pair.of(String.format("%02d:00", i), i));
 		}
 	}
+
 	/**
 	 * @param feature
-	 * @param values
+	 * @param DEFAULT_VALUES
 	 */
 	public TimeOfDayInlineEditor(EStructuralFeature feature) {
-		super(feature, values);
+		super(feature, DEFAULT_VALUES);
 	}
 
 }

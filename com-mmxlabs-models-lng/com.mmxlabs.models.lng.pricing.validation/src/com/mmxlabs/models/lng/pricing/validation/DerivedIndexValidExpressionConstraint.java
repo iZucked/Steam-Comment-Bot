@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -24,11 +23,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class DerivedIndexValidExpressionConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof AbstractYearMonthCurve) {
-			final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) target;
+		if (target instanceof AbstractYearMonthCurve curve) {
 			if (curve.isSetExpression()) {
 				if (curve.getExpression() == null) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
@@ -51,7 +49,5 @@ public class DerivedIndexValidExpressionConstraint extends AbstractModelMultiCon
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

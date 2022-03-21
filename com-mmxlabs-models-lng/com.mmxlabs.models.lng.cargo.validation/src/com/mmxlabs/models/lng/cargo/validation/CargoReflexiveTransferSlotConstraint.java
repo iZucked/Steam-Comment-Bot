@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -24,11 +23,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class CargoReflexiveTransferSlotConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof DischargeSlot) {
-			final DischargeSlot slot = (DischargeSlot) target;
+		if (target instanceof DischargeSlot slot) {
 			final Cargo cargo = slot.getCargo();
 			final LoadSlot transfer = slot.getTransferTo();
 
@@ -36,10 +34,9 @@ public class CargoReflexiveTransferSlotConstraint extends AbstractModelMultiCons
 				final String message = String.format("[Cargo|'%s'] contains slots '%s' and '%s' which represent the same transfer.", cargo.getLoadName(), slot.getName(), transfer.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(cargo, CargoPackage.Literals.CARGO__SLOTS);
-				failures.add(dsd);				
+				failures.add(dsd);
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
-	
+
 }

@@ -24,10 +24,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 		if (target instanceof SlotVisit) {
 			EObject obj = null;
@@ -52,9 +52,6 @@ public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 
 				statuses.add(failure);
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

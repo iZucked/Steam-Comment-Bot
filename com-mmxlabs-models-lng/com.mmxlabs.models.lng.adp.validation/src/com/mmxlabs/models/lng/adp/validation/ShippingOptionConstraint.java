@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ShippingOption;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -25,11 +24,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ShippingOptionConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof ShippingOption) {
-			ShippingOption shippingOption = (ShippingOption) target;
+		if (target instanceof ShippingOption shippingOption) {
 
 //			if (shippingOption.getVessel() == null && shippingOption.getVesselAssignmentType() == null) {
 //				createSimpleStatus(ctx, statuses, "Missing default vessel allocation", shippingOption, ADPPackage.Literals.SHIPPING_OPTION__VESSEL,
@@ -41,7 +39,5 @@ public class ShippingOptionConstraint extends AbstractModelMultiConstraint {
 //			}
 
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

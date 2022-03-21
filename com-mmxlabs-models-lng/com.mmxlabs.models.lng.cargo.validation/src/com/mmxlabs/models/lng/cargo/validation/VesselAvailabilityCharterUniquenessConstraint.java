@@ -18,32 +18,29 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A version of the {@link NameUniquenessConstraint} for Slots. We do not want duplicate ids, but we can allow duplicates for spot slots.
+ * A version of the {@link NameUniquenessConstraint} for Slots. We do not want
+ * duplicate ids, but we can allow duplicates for spot slots.
  * 
  */
 public class VesselAvailabilityCharterUniquenessConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) target;
-
+		if (target instanceof VesselAvailability vesselAvailability) {
 			Vessel vessel = vesselAvailability.getVessel();
 			if (vessel == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final EObject container = extraContext.getContainer(target);
-			if (container instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) container;
+			if (container instanceof CargoModel cargoModel) {
 
 				Map<Vessel, Set<Integer>> existingOptions = (Map<Vessel, Set<Integer>>) ctx.getCurrentConstraintData();
 				if (existingOptions == null) {
@@ -66,8 +63,7 @@ public class VesselAvailabilityCharterUniquenessConstraint extends AbstractModel
 
 						final Set<Integer> temp = new HashSet<>();
 						for (final EObject no : objects) {
-							if (no instanceof VesselAvailability) {
-								final VesselAvailability va2 = (VesselAvailability) no;
+							if (no instanceof VesselAvailability va2) {
 								if (va2.getVessel() == vessel) {
 									final Integer n = va2.getCharterNumber();
 									if (temp.contains(n)) {
@@ -89,8 +85,6 @@ public class VesselAvailabilityCharterUniquenessConstraint extends AbstractModel
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
-
 	}
 
 }

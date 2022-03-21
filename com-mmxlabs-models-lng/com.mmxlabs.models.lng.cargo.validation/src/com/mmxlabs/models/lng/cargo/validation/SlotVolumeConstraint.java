@@ -15,7 +15,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -37,7 +36,7 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
 	 */
 	@Override
-	public String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	public void doValidate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) object;
@@ -71,7 +70,6 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 	private void checkSensibleValues(@NonNull IValidationContext ctx, @NonNull List<IStatus> failures, Slot slot, String name) {

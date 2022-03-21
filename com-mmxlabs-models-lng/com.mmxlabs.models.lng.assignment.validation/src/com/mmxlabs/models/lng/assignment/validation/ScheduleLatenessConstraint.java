@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -35,7 +34,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
+ * A constraint to problem EMF level support for the TimeSortConstraintChecker
+ * to avoid getting scenarios which do not optimise when there is certain kinds
+ * of lateness.
  * 
  * @author Simon Goodall
  * 
@@ -43,11 +44,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof LNGScenarioModel) {
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
+		if (target instanceof LNGScenarioModel scenarioModel) {
 			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
@@ -55,7 +55,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 			if (collectAssignments == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 			final List<Pair<AssignableElement, AssignableElement>> problems = new LinkedList<>();
 
@@ -74,7 +74,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 					if (left != null && right != null) {
 						if (left.isAfter(right)) {
 							// Uh oh, likely to be an error
-							problems.add(new Pair<AssignableElement, AssignableElement>(prevAssignment, assignment));
+							problems.add(new Pair<>(prevAssignment, assignment));
 						}
 					}
 
@@ -94,51 +94,43 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 				statuses.add(failure);
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 	private void addStartDateFeature(final DetailConstraintStatusDecorator failure, final AssignableElement uuidObject) {
-		if (uuidObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) uuidObject;
+		if (uuidObject instanceof Cargo cargo) {
 			final Slot<?> slot = cargo.getSortedSlots().get(0);
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-		} else if (uuidObject instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
+		} else if (uuidObject instanceof VesselEvent vesselEvent) {
 			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 		}
 	}
 
 	private void addEndDateFeature(final DetailConstraintStatusDecorator failure, final AssignableElement uuidObject) {
-		if (uuidObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) uuidObject;
+		if (uuidObject instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			final Slot<?> slot = sortedSlots.get(sortedSlots.size() - 1);
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-		} else if (uuidObject instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
+		} else if (uuidObject instanceof VesselEvent vesselEvent) {
 			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 		}
 	}
 
 	private ZonedDateTime getStartDate(final AssignableElement uuidObject, boolean isStartOfWindow) {
-		if (uuidObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) uuidObject;
+		if (uuidObject instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			final Slot<?> slot = sortedSlots.get(0);
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
 			return isStartOfWindow ? slot.getSchedulingTimeWindow().getStart() : slot.getSchedulingTimeWindow().getEndWithFlex();
-		} else if (uuidObject instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
+		} else if (uuidObject instanceof VesselEvent vesselEvent) {
 			return vesselEvent.getStartByAsDateTime();
 		}
 		return null;
 	}
 
 	private ZonedDateTime getEndDate(final AssignableElement uuidObject) {
-		if (uuidObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) uuidObject;
+		if (uuidObject instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			final Slot<?> slot = sortedSlots.get(sortedSlots.size() - 1);
 			if (slot instanceof SpotSlot) {
@@ -148,19 +140,16 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (windowStartWithSlotOrPortTime != null) {
 				return windowStartWithSlotOrPortTime.plusHours(slot.getSchedulingTimeWindow().getDuration());
 			}
-		} else if (uuidObject instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
+		} else if (uuidObject instanceof VesselEvent vesselEvent) {
 			return vesselEvent.getStartAfterAsDateTime();
 		}
 		return null;
 	}
 
 	private String getID(final AssignableElement uuidObject) {
-		if (uuidObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) uuidObject;
+		if (uuidObject instanceof Cargo cargo) {
 			return "Cargo " + cargo.getLoadName();
-		} else if (uuidObject instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
+		} else if (uuidObject instanceof VesselEvent vesselEvent) {
 			return "Event " + vesselEvent.getName();
 		}
 		return "(unknown)";

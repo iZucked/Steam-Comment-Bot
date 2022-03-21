@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -27,15 +26,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+		if (target instanceof Slot<?> slot) {
 			checkSlot(ctx, slot, statuses, extraContext.getRootObject());
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	/**
@@ -47,7 +43,7 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 	 * @param cargoName
 	 * @param statuses
 	 */
-	private void checkSlot(final IValidationContext ctx, final Slot slot, final List<IStatus> statuses, final MMXRootObject rootObject) {
+	private void checkSlot(final IValidationContext ctx, final Slot<?> slot, final List<IStatus> statuses, final MMXRootObject rootObject) {
 
 		if (slot.eContainer() == null || slot.eContainer() instanceof CargoModel) {
 			final boolean rSlotsEmpty = slot.getRestrictedSlots().isEmpty();

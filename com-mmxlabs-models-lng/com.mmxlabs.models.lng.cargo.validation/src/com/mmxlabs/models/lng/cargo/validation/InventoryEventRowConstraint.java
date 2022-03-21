@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -22,14 +21,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class InventoryEventRowConstraint extends AbstractModelMultiConstraint {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		
-		if (object instanceof InventoryEventRow) {
-			final InventoryEventRow ier = (InventoryEventRow) object;
-			
-			if (ier.eContainer() instanceof Inventory) {
-				final Inventory inventory = (Inventory) ier.eContainer();
+		if (object instanceof InventoryEventRow ier) {
+			if (ier.eContainer() instanceof Inventory inventory) {
 			
 				if (ier.getStartDate() == null) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) 
@@ -53,6 +49,5 @@ public class InventoryEventRowConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -39,28 +38,24 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statues) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statues) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) target;
+		if (target instanceof AssignableElement assignableElement) {
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 
 			List<APortSet<Port>> inaccessiblePorts = null;
 
-			if (vesselAssignmentType instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+			if (vesselAssignmentType instanceof VesselAvailability vesselAvailability) {
 				final Vessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
 					inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				}
-			} else if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				final Vessel vessel = charterInMarket.getVessel();
 				if (vessel != null) {
 					inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				}
-			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride charterInMarketOverride) {
 				final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 				final Vessel vessel = charterInMarket.getVessel();
 				if (vessel != null) {
@@ -72,8 +67,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				final Set<Port> inaccessiblePortSet = SetUtils.getObjects(inaccessiblePorts);
 				if (!inaccessiblePortSet.isEmpty()) {
 					EObject currentTarget = assignableElement;
-					if (currentTarget instanceof Slot) {
-						final Slot slot = (Slot) currentTarget;
+					if (currentTarget instanceof Slot<?> slot) {
 						if (slot.getCargo() != null) {
 							currentTarget = slot.getCargo();
 						} else {
@@ -87,9 +81,8 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 
-					if (currentTarget instanceof Cargo) {
-						final Cargo cargo = (Cargo) currentTarget;
-						for (final Slot slot : cargo.getSlots()) {
+					if (currentTarget instanceof Cargo cargo) {
+						for (final Slot<?> slot : cargo.getSlots()) {
 							if (inaccessiblePortSet.contains(slot.getPort())) {
 								final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
 								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
@@ -98,8 +91,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 								statues.add(dsd);
 							}
 						}
-					} else if (currentTarget instanceof VesselEvent) {
-						final VesselEvent vesselEvent = (VesselEvent) currentTarget;
+					} else if (currentTarget instanceof VesselEvent vesselEvent) {
 						if (inaccessiblePortSet.contains(vesselEvent.getPort())) {
 							final String msg = String.format("The port %s is not an accessible port for the assigned vessel", vesselEvent.getPort().getName());
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
@@ -120,13 +112,11 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-		} else if (target instanceof Slot) {
-			final Slot targetSlot = (Slot) target;
+		} else if (target instanceof Slot<?> targetSlot) {
 
 			List<APortSet<Port>> inaccessiblePorts = null;
-			final List<Slot> slotsToValidate = new LinkedList<>();
-			if (target instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) target;
+			final List<Slot<?>> slotsToValidate = new LinkedList<>();
+			if (targetSlot instanceof LoadSlot loadSlot) {
 				if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					final Vessel nominatedVessel = loadSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
@@ -135,8 +125,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			else if (target instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) target;
+			else if (targetSlot instanceof DischargeSlot dischargeSlot) {
 				if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					final Vessel nominatedVessel = dischargeSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
@@ -155,7 +144,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					slotsToValidate.add(targetSlot);
 				}
 
-				for (final Slot slot : slotsToValidate) {
+				for (final Slot<?> slot : slotsToValidate) {
 					if (inaccessiblePortSet.contains(slot.getPort())) {
 						final String msg = String.format("The port %s is not an accessible port for the nominated vessel", slot.getPort().getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
@@ -169,7 +158,5 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

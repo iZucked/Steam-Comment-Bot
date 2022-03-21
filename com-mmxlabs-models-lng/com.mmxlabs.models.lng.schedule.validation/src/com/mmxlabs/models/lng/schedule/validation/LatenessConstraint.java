@@ -33,10 +33,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class LatenessConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+
 		final EObject target = ctx.getTarget();
 		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 		if (target instanceof Event && target.eContainer() instanceof Sequence) {
 			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
@@ -48,14 +49,15 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					Sequence seq = allocation.getCargoAllocation().getSequence();
 					String tmp = "";
 					if (seq.isSetVesselAvailability() && seq.getVesselAvailability() != null) {
-			            tmp = seq.getVesselAvailability().getVessel().getName();
+						tmp = seq.getVesselAvailability().getVessel().getName();
 						tmp = AssignmentLabelProvider.getLabelFor(seq.getVesselAvailability().getVessel(), false);
 					} else if (seq.isSetCharterInMarket() && seq.getCharterInMarket() != null) {
 						CharterInMarket cim = seq.getCharterInMarket();
 						tmp = AssignmentLabelProvider.getLabelFor(cim, seq.getSpotIndex(), false);
-					}		        
-					if(tmp.isEmpty()) tmp ="Vessel";
-							
+					}
+					if (tmp.isEmpty())
+						tmp = "Vessel";
+
 					if (allocation != null) {
 						obj = allocation.getSlot();
 						message = String.format("%s is %s hrs late to reach %s in schedule.", tmp, LatenessUtils.getLatenessInHours((SlotVisit) target), ((Slot) obj).getName());
@@ -69,11 +71,11 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				} else if (target instanceof EndEvent) {
 					final EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
-					if (obj instanceof VesselAvailability && ((VesselAvailability) obj).getVessel() != null){
+					if (obj instanceof VesselAvailability && ((VesselAvailability) obj).getVessel() != null) {
 						String vesselName = ((VesselAvailability) obj).getVessel().getName();
 						feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
-						message = (vesselName != null? "'"+vesselName+"'" : "Vessel") + " is travelling after it is no longer available.";
-					} else 
+						message = (vesselName != null ? "'" + vesselName + "'" : "Vessel") + " is travelling after it is no longer available.";
+					} else
 						message = "Vessel in schedule is travelling after it is no longer available";
 				} else {
 					message = "Late arrival in schedule.";
@@ -92,7 +94,6 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
-		
 //		if (target instanceof Event && target.eContainer() instanceof Sequence) {
 //			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
 //				EObject obj = null;
@@ -138,7 +139,5 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 //				}
 //			}
 //		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

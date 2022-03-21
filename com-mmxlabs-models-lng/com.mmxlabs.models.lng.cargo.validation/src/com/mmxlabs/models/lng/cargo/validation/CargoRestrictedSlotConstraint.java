@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -22,18 +21,18 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CargoRestrictedSlotConstraint extends AbstractModelMultiConstraint {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof Slot) {
-			Slot slot = (Slot) object;
+		if (object instanceof Slot slot) {
 			if (slot.getCargo() != null) {
 				final Cargo cargo = slot.getCargo();
 				final List<Slot> srl = slot.getRestrictedSlots();
 				final boolean permissive = slot.isRestrictedSlotsArePermissive();
 				if (!srl.isEmpty()) {
 					for (final Slot s : cargo.getSlots()) {
-						if (s.equals(slot)) continue;
+						if (s.equals(slot))
+							continue;
 						boolean fail = false;
 						if (permissive) {
 							if (!srl.contains(s)) {
@@ -45,8 +44,8 @@ public class CargoRestrictedSlotConstraint extends AbstractModelMultiConstraint 
 							}
 						}
 						if (fail) {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) 
-									ctx.createFailureStatus(String.format("'%s' is not allowed to be paired to slot '%s'.",slot.getName(),s.getName())));
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus(String.format("'%s' is not allowed to be paired to slot '%s'.", slot.getName(), s.getName())));
 							failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__RESTRICTED_SLOTS);
 							failures.add(failure);
 						}
@@ -54,7 +53,5 @@ public class CargoRestrictedSlotConstraint extends AbstractModelMultiConstraint 
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

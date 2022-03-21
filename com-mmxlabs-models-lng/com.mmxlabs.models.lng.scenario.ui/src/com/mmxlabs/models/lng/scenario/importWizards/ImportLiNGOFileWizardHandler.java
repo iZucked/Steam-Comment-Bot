@@ -29,23 +29,20 @@ public class ImportLiNGOFileWizardHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
-		if (activeWorkbenchWindow == null) {
-			// action has been disposed
-			return null;
+		if (activeWorkbenchWindow != null) {
+			final ImportLiNGOFileWizard wizard = new ImportLiNGOFileWizard();
+
+			final IStructuredSelection selectionToPass = getSelectionToUse(event);
+			wizard.init(activeWorkbenchWindow.getWorkbench(), selectionToPass);
+
+			wizard.setForcePreviousAndNextButtons(true);
+
+			final Shell parent = activeWorkbenchWindow.getShell();
+			final WizardDialog dialog = new WizardDialog(parent, wizard);
+			dialog.create();
+
+			dialog.open();
 		}
-		final ImportLiNGOFileWizard wizard = new ImportLiNGOFileWizard();
-
-		final IStructuredSelection selectionToPass = getSelectionToUse(event);
-		wizard.init(activeWorkbenchWindow.getWorkbench(), selectionToPass);
-
-		wizard.setForcePreviousAndNextButtons(true);
-
-		final Shell parent = activeWorkbenchWindow.getShell();
-		final WizardDialog dialog = new WizardDialog(parent, wizard);
-		dialog.create();
- 
-		dialog.open();
-
 		return null;
 	}
 }

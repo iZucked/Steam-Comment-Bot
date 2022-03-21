@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
@@ -40,36 +39,31 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 	public static final String viewName = "Options";
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PartialCaseRow) {
-			final PartialCaseRow partialCaseRow = (PartialCaseRow) target;
+		if (target instanceof PartialCaseRow partialCaseRow) {
 			validateNonShipped(ctx, statuses, partialCaseRow, AnalyticsBuilder.isFOBPurchase(), AnalyticsBuilder.isFOBSale());
 			validateNonShipped(ctx, statuses, partialCaseRow, AnalyticsBuilder.isDESPurchase(), AnalyticsBuilder.isDESSale());
 		}
-		
-		return Activator.PLUGIN_ID;
 	}
 
-	private void validateNonShipped(final IValidationContext ctx, final List<IStatus> statuses, final PartialCaseRow partialCaseRow, 
-			final Predicate<BuyOption> purchaseType, final Predicate<SellOption> saleType) {
+	private void validateNonShipped(final IValidationContext ctx, final List<IStatus> statuses, final PartialCaseRow partialCaseRow, final Predicate<BuyOption> purchaseType,
+			final Predicate<SellOption> saleType) {
 		for (final BuyOption buyOption : partialCaseRow.getBuyOptions().stream().filter(purchaseType).collect(Collectors.toList())) {
 			if (!(buyOption instanceof BuyMarket)) {
 				for (final SellOption sellOption : partialCaseRow.getSellOptions().stream().filter(saleType).collect(Collectors.toList())) {
 					if (!(sellOption instanceof SellMarket)) {
 						final ZonedDateTime buyWindowStart = AnalyticsBuilder.getWindowStartDate(buyOption);
 						final ZonedDateTime buyWindowEnd = AnalyticsBuilder.getWindowEndDate(buyOption);
-						
+
 						final ZonedDateTime sellWindowStart = AnalyticsBuilder.getWindowStartDate(sellOption);
 						final ZonedDateTime sellWindowEnd = AnalyticsBuilder.getWindowEndDate(sellOption);
-						
+
 						if (buyWindowStart != null && buyWindowEnd != null && sellWindowStart != null && sellWindowEnd != null) {
 							if (!(isDateWithinPeriod(sellWindowStart, buyWindowStart, buyWindowEnd) || isDateWithinPeriod(sellWindowEnd, buyWindowStart, buyWindowEnd))) {
-								final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-										(IConstraintStatus) ctx.createFailureStatus(
-												String.format("%s - potential non-shipped cargo (%s - %s) has incompatible windows.", 
-														viewName, getOpportunityID(buyOption), getOpportunityID(sellOption))));
+								final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+										String.format("%s - potential non-shipped cargo (%s - %s) has incompatible windows.", viewName, getOpportunityID(buyOption), getOpportunityID(sellOption))));
 								deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 								statuses.add(deco);
 							}
@@ -79,15 +73,14 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 			}
 		}
 	}
-	
+
 	private boolean isDateWithinPeriod(final ZonedDateTime date, final ZonedDateTime start, final ZonedDateTime end) {
 		return !date.isBefore(start) && !date.isAfter(end);
 	}
-	
+
 	private String getOpportunityID(final Object object) {
 		final DateTimeFormatter datePattern = DateTimeFormatter.ofPattern("dd/MM/yy");
-		if (object instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
+		if (object instanceof BuyOpportunity buyOpportunity) {
 			final LocalDate date = buyOpportunity.getDate();
 			String dateStr = "<not set>";
 			if (date != null) {
@@ -116,8 +109,7 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 				return String.format("%s (%s) %s", portName, dateStr, priceExpression);
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) object;
+		} else if (object instanceof BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
@@ -126,9 +118,7 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID <not set>");
-		} else if (object instanceof SellOpportunity) {
-
-			final SellOpportunity sellOpportunity = (SellOpportunity) object;
+		} else if (object instanceof SellOpportunity sellOpportunity) {
 
 			final LocalDate date = sellOpportunity.getDate();
 			String dateStr = "<not set>";
@@ -159,8 +149,7 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 				return String.format("%s (%s) %s", portName, dateStr, priceExpression);
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof SellReference) {
-			final SellReference sellReference = (SellReference) object;
+		} else if (object instanceof SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();

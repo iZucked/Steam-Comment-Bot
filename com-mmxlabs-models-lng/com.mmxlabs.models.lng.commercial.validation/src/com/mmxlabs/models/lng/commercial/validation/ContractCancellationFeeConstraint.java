@@ -12,7 +12,6 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -21,11 +20,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ContractCancellationFeeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof Contract) {
-			final Contract contract = (Contract) target;
+		if (target instanceof Contract contract) {
 
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withTypedName("Contract", contract.getName());
@@ -36,7 +34,5 @@ public class ContractCancellationFeeConstraint extends AbstractModelMultiConstra
 				PriceExpressionUtils.validatePriceExpression(ctx, statuses, factory, contract, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION, true);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

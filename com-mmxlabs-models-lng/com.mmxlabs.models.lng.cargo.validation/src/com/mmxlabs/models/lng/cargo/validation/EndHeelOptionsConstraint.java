@@ -4,36 +4,33 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint which checks {@link StartHeelOptions}
  * 
  * @author Simon Goodall
  */
-public class EndHeelOptionsConstraint extends AbstractModelConstraint {
-	@Override
-	public IStatus validate(IValidationContext ctx) {
+public class EndHeelOptionsConstraint extends AbstractModelMultiConstraint {
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
+	@Override
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof EndHeelOptions) {
 			EndHeelOptions heelOptions = (EndHeelOptions) object;
@@ -48,7 +45,8 @@ public class EndHeelOptionsConstraint extends AbstractModelConstraint {
 
 			if (heelOptions.getPriceExpression() != null && !heelOptions.getPriceExpression().isEmpty()) {
 
-				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, heelOptions, CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION, heelOptions.getPriceExpression());
+				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, heelOptions, CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION,
+						heelOptions.getPriceExpression());
 				if (!result.isOk()) {
 					String message = String.format("[Heel Price] %s", result.getErrorDetails());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -72,18 +70,6 @@ public class EndHeelOptionsConstraint extends AbstractModelConstraint {
 
 			}
 		}
-		if (failures.isEmpty())
 
-		{
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
 	}
 }

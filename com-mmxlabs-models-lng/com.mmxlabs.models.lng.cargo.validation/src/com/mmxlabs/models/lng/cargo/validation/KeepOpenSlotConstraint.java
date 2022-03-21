@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -22,12 +21,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class KeepOpenSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 
 		if (!extraContext.isRelaxedChecking()) {
-			if (object instanceof Slot) {
-				final Slot slot = (Slot) object;
+			if (object instanceof Slot<?> slot) {
 				if (slot.isLocked()) {
 					Cargo cargo = slot.getCargo();
 					if (cargo != null) {
@@ -52,7 +50,5 @@ public class KeepOpenSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }
