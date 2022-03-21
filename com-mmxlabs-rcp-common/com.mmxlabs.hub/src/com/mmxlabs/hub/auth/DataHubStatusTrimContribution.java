@@ -29,9 +29,9 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class DataHubStatusTrimContribution {
 	
-	private final Image connectedAndAuth = CommonImages.getImageDescriptor(IconPaths.Hub, IconMode.Enabled).createImage();
-	private final Image connectedNotAuth = CommonImages.getImageDescriptor(IconPaths.ConnectedNotAuth, IconMode.Enabled).createImage();
-	private final Image disconnected = CommonImages.getImageDescriptor(IconPaths.Hub, IconMode.Disabled).createImage();
+	private final Image connectedAndAuth = CommonImages.getImage(IconPaths.Hub, IconMode.Enabled);
+	private final Image connectedNotAuth = CommonImages.getImage(IconPaths.ConnectedNotAuth, IconMode.Enabled);
+	private final Image disconnected = CommonImages.getImage(IconPaths.Hub, IconMode.Disabled);
 	
 	protected IDataHubStateChangeListener listener;
 	
@@ -143,19 +143,8 @@ public class DataHubStatusTrimContribution {
 		if (pListener != null) {
 			DataHubServiceProvider.getInstance().removeDataHubStateListener(pListener);
 		}
-		if (!connectedAndAuth.isDisposed()) {
-			connectedAndAuth.dispose();
-		}
-		if (!connectedNotAuth.isDisposed()) {
-			connectedNotAuth.dispose();
-		}
-		if (!disconnected.isDisposed()) {
-			disconnected.dispose();
-		}
+	 
 		if (mainLabel != null && !mainLabel.isDisposed()) {
-			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
-				mainLabel.getImage().dispose();
-			}
 			mainLabel.dispose();
 		}
 	}

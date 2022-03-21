@@ -199,6 +199,10 @@ public final class CommonImages {
 		return iconPath.getImageDescriptor(mode);
 	}
 
+	public static Image getImage(final IconPaths iconPath, final IconMode mode) {
+		return iconPath.getImage(mode);
+	}
+
 	public static void setImageDescriptors(final IAction a, final IconPaths iconPath) {
 		setImageDescriptors(a, iconPath, false);
 	}
