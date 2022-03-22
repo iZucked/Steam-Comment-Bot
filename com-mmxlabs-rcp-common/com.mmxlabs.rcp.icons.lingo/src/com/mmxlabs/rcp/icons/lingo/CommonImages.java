@@ -7,7 +7,6 @@ package com.mmxlabs.rcp.icons.lingo;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -103,16 +102,6 @@ public final class CommonImages {
 		private final String path;
 		private final String disabledPath;
 
-		private IconPaths(final int size, final String path, final String disabledPath) {
-			this.size = size;
-			this.path = path;
-			this.disabledPath = disabledPath;
-
-			final ImageRegistry imageRegistry = Activator.getInstance().getImageRegistry();
-			imageRegistry.put(path, ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, path).orElseThrow());
-			imageRegistry.put(disabledPath, ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, disabledPath).orElseThrow());
-		}
-
 		private IconPaths(final int size, final String path) {
 			this.size = size;
 			this.path = path;
@@ -122,7 +111,7 @@ public final class CommonImages {
 
 			final ImageRegistry imageRegistry = Activator.getInstance().getImageRegistry();
 
-			final ImageDescriptor enabledDescriptor = ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, path).orElseThrow();
+			final ImageDescriptor enabledDescriptor = ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, path).orElseThrow(() -> new RuntimeException("Unable to find image " + path));
 			imageRegistry.put(path, enabledDescriptor);
 
 			final ImageDescriptor d = ResourceLocator.imageDescriptorFromBundle(PLUGIN_ID, disabledPath).orElse(null);
@@ -167,6 +156,13 @@ public final class CommonImages {
 			}
 		}
 
+		/**
+		 * Returns a shared image instance. Do not dispose.
+		 * 
+		 * @param iconPath
+		 * @param mode
+		 * @return
+		 */
 		public Image getImage(IconMode mode) {
 			if (mode == IconMode.Enabled) {
 				return Activator.getInstance().getImageRegistry().get(path);
@@ -198,6 +194,13 @@ public final class CommonImages {
 		return iconPath.getImageDescriptor(mode);
 	}
 
+	/**
+	 * Returns a shared image instance. Do not dispose.
+	 * 
+	 * @param iconPath
+	 * @param mode
+	 * @return
+	 */
 	public static Image getImage(final IconPaths iconPath, final IconMode mode) {
 		return iconPath.getImage(mode);
 	}
