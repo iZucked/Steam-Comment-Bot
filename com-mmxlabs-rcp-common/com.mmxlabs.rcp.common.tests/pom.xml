@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
@@ -22,36 +24,13 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
+
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
-					<bundleStartLevel>
 
-						<bundle>
-							<id>org.eclipse.core.runtime</id>
-							<level>1</level>
-							<autoStart>true</autoStart>
-						</bundle>
-
-						<bundle>
-							<id>com.mmxlabs.rcp.icons.lingo</id>
-							<level>1</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.apache.felix.scr</id>
-							<level>1</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.eclipse.equinox.event</id>
-							<level>1</level>
-							<autoStart>true</autoStart>
-						</bundle>
-					</bundleStartLevel>
 
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

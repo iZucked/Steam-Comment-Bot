@@ -36,23 +36,15 @@ import javax.crypto.SecretKey;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.validation.model.Category;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.IConstraintDescriptor;
-import org.eclipse.emf.validation.service.IConstraintFilter;
-import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -100,13 +92,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationService;
-import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -175,8 +161,7 @@ public class ScenarioServicePushToCloudAction {
 			userSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 		}
 		if (userSettings != null) {
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-			uploadScenario(modelRecord, resultName, userSettings, optimisation, targetSlots, null, localOpti);
+			uploadScenario(scenarioInstance, resultName, userSettings, optimisation, targetSlots, null, localOpti);
 		}
 	}
 
@@ -204,8 +189,7 @@ public class ScenarioServicePushToCloudAction {
 		if (doPublish) {
 			final UserSettings userSettings = getSandboxUserSettings(scenarioInstance, sandboxModel);
 			if (userSettings != null) {
-				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-				uploadScenario(modelRecord, sandboxModel.getName(), userSettings, false, null, sandboxModel, false);
+				uploadScenario(scenarioInstance, sandboxModel.getName(), userSettings, false, null, sandboxModel, false);
 			}
 		}
 	}
@@ -281,11 +265,11 @@ public class ScenarioServicePushToCloudAction {
 		return userSettings;
 	}
 
-	public static void uploadScenario(final ScenarioModelRecord originalModelRecord, @Nullable final String resultName, final UserSettings userSettings, //
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, @Nullable final String resultName, final UserSettings userSettings, //
 			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, final boolean runLocal) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(originalModelRecord, resultName, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, resultName, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -314,9 +298,6 @@ public class ScenarioServicePushToCloudAction {
 					break;
 				case FAILED_TO_UPLOAD:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to upload the scenario. Unable to send.");
-					break;
-				case EVALUATION_FAILED:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to validate the scenario. Unable to send.");
 					break;
 				default:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send.");
@@ -351,26 +332,26 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void doUploadScenario(final ScenarioModelRecord originalModelRecord, final String resultName, final UserSettings userSettings, //
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String resultName, final UserSettings userSettings, //
 			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor,
 			final boolean runLocal) {
 
-		parentProgressMonitor.beginTask("Sending scenario", 1000);
+		parentProgressMonitor.beginTask("Send scenario", 1000);
 		final CloudManifestProblemType problemType = getProblemType(optimisation, targetSlots, originalSandboxModel);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
-			progressMonitor.subTask("Preparing scenario");
+			progressMonitor.subTask("Prepare scenario");
 			final CloudOptimisationDataResultRecord cRecord = new CloudOptimisationDataResultRecord();
-			cRecord.setUuid(originalModelRecord.getScenarioInstance().getUuid());
+			cRecord.setUuid(scenarioInstance.getUuid());
 			cRecord.setCreationDate(Instant.now());
 			if (resultName != null) {
 				cRecord.setResultName(resultName);
 			}
 			// This is the Data Hub user ID. It should be different.
 			cRecord.setCreator(UsernameProvider.INSTANCE.getUserID());
-			cRecord.setOriginalName(originalModelRecord.getScenarioInstance().getName());
+			cRecord.setOriginalName(scenarioInstance.getName());
 			cRecord.setType(problemType.toString());
-
+			
 			if (originalSandboxModel != null) {
 				switch (originalSandboxModel.getMode()) {
 				case SandboxModeConstants.MODE_DERIVE -> cRecord.setSubType("Define");
@@ -382,7 +363,9 @@ public class ScenarioServicePushToCloudAction {
 			if (originalSandboxModel != null) {
 				cRecord.setComponentUUID(originalSandboxModel.getUuid());
 			}
-			cRecord.setScenarioInstance(originalModelRecord.getScenarioInstance());
+			cRecord.setScenarioInstance(scenarioInstance);
+
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
 			LNGScenarioModel scenarioModel = null;
@@ -451,33 +434,26 @@ public class ScenarioServicePushToCloudAction {
 
 					// clear results since sending is unnecessary
 					sandboxModelCopy.setResults(null);
-
-					progressMonitor.subTask("Validating sandbox scenario");
-
-					boolean valid = validateScenario(originalScenarioDataProvider);
-					if (!valid) {
-						throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.EVALUATION_FAILED, new RuntimeException("Sandbox scenario failed validation. Please fix and resubmit."));
-					}
 				}
 
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(originalModelRecord.getManifest()), scenarioModel);
 				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
-				progressMonitor.subTask("Anonymising scenario");
+				progressMonitor.subTask("Anonymise scenario");
 
-				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + originalModelRecord.getScenarioInstance().getUuid() + ".amap";
-				cRecord.setAnonyMapFileName(originalModelRecord.getScenarioInstance().getUuid() + ".amap");
-				anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), originalModelRecord.getScenarioInstance().getUuid() + "_", ".amap").toFile();
+				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + ".amap";
+				cRecord.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
+				anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioInstance.getUuid() + "_", ".amap").toFile();
 
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
 					editingDomain.getCommandStack().execute(cmd);
 				}
 
-				progressMonitor.subTask("Evaluating scenario");
+				progressMonitor.subTask("Evaluate scenario");
 
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-				final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, originalModelRecord.getScenarioInstance()) //
+				final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
 						.withThreadCount(1) //
 						.withUserSettings(userSettings) //
 						.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
@@ -495,8 +471,6 @@ public class ScenarioServicePushToCloudAction {
 				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				if (e.getCause() instanceof final ScenarioMigrationException ee) {
 					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
-				} else if (e.getCause() instanceof final RuntimeException ee) {
-					throw e;
 				}
 				throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_UNKNOWN_ERROR, e);
 			} catch (IOException e) {
@@ -519,7 +493,7 @@ public class ScenarioServicePushToCloudAction {
 
 				// save encrypted symmetric key to a temp file
 				Path cloudOptiDir = new File(CLOUD_OPTI_PATH).toPath();
-				encryptedSymmetricKey = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), originalModelRecord.getScenarioInstance().getUuid() + "_", ".key").toFile();
+				encryptedSymmetricKey = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioInstance.getUuid() + "_", ".key").toFile();
 
 				// encrypt symmetric key with public key (to send to opti server)
 				CloudOptimisationDataService.INSTANCE.encryptSymmetricKey(optiServerPubKey, tmpKey, encryptedSymmetricKey);
@@ -584,7 +558,7 @@ public class ScenarioServicePushToCloudAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum", originalModelRecord.getScenarioInstance().getName(), //
+				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor), encryptedSymmetricKey);
 			} catch (final Exception e) {
 				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
@@ -638,7 +612,7 @@ public class ScenarioServicePushToCloudAction {
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
-					runLocalOptimisation(originalModelRecord.getScenarioInstance(), userSettings, anonymisedTargetSlots, problemType, progressMonitor, cRecord, scenarioDataProvider, anonymisationMap);
+					runLocalOptimisation(scenarioInstance, userSettings, anonymisedTargetSlots, problemType, progressMonitor, cRecord, scenarioDataProvider, anonymisationMap);
 				} catch (final Exception e) {
 					// Ignore - internal debug use only
 				}
@@ -646,66 +620,6 @@ public class ScenarioServicePushToCloudAction {
 		} finally {
 			progressMonitor.done();
 		}
-	}
-
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider) {
-		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
-		validator.addConstraintFilter(new IConstraintFilter() {
-
-			@Override
-			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
-
-				for (final Category cat : constraint.getCategories()) {
-					if (cat.getId().endsWith(".base")) {
-						return true;
-					} else if (cat.getId().endsWith(".optimisation")) {
-						return true;
-					} else if (cat.getId().endsWith(".adp")) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-		});
-		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
-		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
-			return helper.runValidation(validator, extraContext, rootObject, null);
-		});
-
-		if (status == null) {
-			return false;
-		}
-
-		if (status.isOK() == false) {
-
-			boolean ok = RunnerHelper.syncExecFunc(display -> {
-				ValidationStatusDialog dialog = new ValidationStatusDialog(display.getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
-
-				try {
-					if (dialog.open() == Window.CANCEL) {
-						return false;
-					}
-				} catch (Exception e) {
-					LOG.error(e.getMessage());
-				}
-				return true;
-			});
-
-			if (!ok) {
-				LOG.error("Cancelled validation dialog");
-				return false;
-			}
-		}
-
-		if (status.getSeverity() == IStatus.ERROR) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private static void runLocalOptimisation(final ScenarioInstance scenarioInstance, final EObject optiPlanOrUserSettings, final List<Slot<?>> targetSlots, final CloudManifestProblemType problemType,
