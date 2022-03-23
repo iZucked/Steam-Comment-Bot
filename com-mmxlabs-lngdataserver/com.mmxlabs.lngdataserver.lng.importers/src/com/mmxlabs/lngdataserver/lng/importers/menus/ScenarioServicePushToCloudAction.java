@@ -316,7 +316,7 @@ public class ScenarioServicePushToCloudAction {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to upload the scenario. Unable to send.");
 					break;
 				case EVALUATION_FAILED:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to validate the scenario. Unable to send.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Fix the validation errors and send again.");
 					break;
 				default:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send.");
@@ -451,13 +451,12 @@ public class ScenarioServicePushToCloudAction {
 
 					// clear results since sending is unnecessary
 					sandboxModelCopy.setResults(null);
+				}
 
-					progressMonitor.subTask("Validating sandbox scenario");
-
-					boolean valid = validateScenario(originalScenarioDataProvider);
-					if (!valid) {
-						throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.EVALUATION_FAILED, new RuntimeException("Sandbox scenario failed validation. Please fix and resubmit."));
-					}
+				progressMonitor.subTask("Validating scenario");
+				boolean valid = validateScenario(originalScenarioDataProvider);
+				if (!valid) {
+					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.EVALUATION_FAILED, new RuntimeException("Scenario failed validation. Please fix and resubmit."));
 				}
 
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(originalModelRecord.getManifest()), scenarioModel);
@@ -680,32 +679,29 @@ public class ScenarioServicePushToCloudAction {
 			return false;
 		}
 
-		if (status.isOK() == false) {
-
-			boolean ok = RunnerHelper.syncExecFunc(display -> {
-				ValidationStatusDialog dialog = new ValidationStatusDialog(display.getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
-
-				try {
-					if (dialog.open() == Window.CANCEL) {
-						return false;
-					}
-				} catch (Exception e) {
-					LOG.error(e.getMessage());
-				}
-				return true;
-			});
-
-			if (!ok) {
-				LOG.error("Cancelled validation dialog");
-				return false;
-			}
-		}
-
-		if (status.getSeverity() == IStatus.ERROR) {
-			return false;
+		if (!status.isOK()) {
+			return displayValidationDialog(status);
 		}
 
 		return true;
+	}
+
+	/** Returns true if the scenario doesn't contain errors & the user pressed on OK. False otherwise */
+	private static boolean displayValidationDialog(IStatus status) {
+		boolean ok = RunnerHelper.syncExecFunc(display -> {
+			final ValidationStatusDialog dialog = new ValidationStatusDialog(display.getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+
+			// Wait for use to press a button before continuing.
+			dialog.setBlockOnOpen(true);
+
+			return dialog.open() == Window.OK;
+		});
+		if (!ok) {
+			LOG.error("Cancelled validation dialog");
+			return false;
+		}
+
+		return status.getSeverity() != IStatus.ERROR;
 	}
 
 	private static void runLocalOptimisation(final ScenarioInstance scenarioInstance, final EObject optiPlanOrUserSettings, final List<Slot<?>> targetSlots, final CloudManifestProblemType problemType,
