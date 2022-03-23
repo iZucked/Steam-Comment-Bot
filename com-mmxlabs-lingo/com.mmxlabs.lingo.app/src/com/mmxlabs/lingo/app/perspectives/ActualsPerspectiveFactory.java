@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.lingo.platform.ui;
+package com.mmxlabs.lingo.app.perspectives;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;

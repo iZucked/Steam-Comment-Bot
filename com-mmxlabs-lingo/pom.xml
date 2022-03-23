@@ -23,11 +23,7 @@
 		<module>com.mmxlabs.lingo.app</module>
 		<module>com.mmxlabs.lingo.app.headless</module>
 
-		<module>com.mmxlabs.lingo.ui</module>
-
 		<module>com.mmxlabs.lingo.extensions</module>
-
-		<module>com.mmxlabs.lingo.product</module>
 
 		<module>com.mmxlabs.lingo.doc</module>
 

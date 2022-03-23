@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.lingo.app.intro;
+package com.mmxlabs.lingo.app;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -30,7 +30,7 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
-import com.mmxlabs.lingo.app.Activator;
+import com.mmxlabs.lingo.app.internal.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;

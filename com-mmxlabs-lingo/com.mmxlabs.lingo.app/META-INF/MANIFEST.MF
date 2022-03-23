@@ -35,9 +35,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.hub;bundle-version="5.3.9",
  org.apache.felix.scr;bundle-version="2.1.24",
  com.mmxlabs.rcp.icons.lingo,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ com.mmxlabs.lingo.reports.scheduleview
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.lingo.app
 Import-Package: org.slf4j
-Bundle-Activator: com.mmxlabs.lingo.app.Activator
+Bundle-Activator: com.mmxlabs.lingo.app.internal.Activator

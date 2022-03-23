@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.lingo.app.intro;
+package com.mmxlabs.lingo.app;
 
 import java.net.MalformedURLException;
 import java.net.URL;

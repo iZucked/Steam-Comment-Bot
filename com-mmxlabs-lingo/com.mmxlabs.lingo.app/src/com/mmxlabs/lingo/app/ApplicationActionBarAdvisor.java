@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.lingo.app.intro;
+package com.mmxlabs.lingo.app;
 
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
@@ -678,7 +678,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		{
 			{
 				final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
-				final IContributionItem showViewMenu = new com.mmxlabs.lingo.app.intro.ShowViewMenu(getWindow(), "viewsShortlist");
+				final IContributionItem showViewMenu = new com.mmxlabs.lingo.app.ShowViewMenu(getWindow(), "viewsShortlist");
 				showViewMenuMgr.add(showViewMenu);
 				menu.add(showViewMenuMgr);
 			}

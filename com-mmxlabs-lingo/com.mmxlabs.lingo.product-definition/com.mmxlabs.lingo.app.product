@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="5.3.9.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="5.3.9.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/logo-square-16.png"/>
@@ -11,8 +11,6 @@ Copyright 2010 - 2022
 
 Version: {0}
 Build: {1}
-
-
       </text>
    </aboutInfo>
 
@@ -20,7 +18,8 @@ Build: {1}
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server -XX:MaxRAMPercentage=75</vmArgs>
+      <vmArgs>-ea -server -XX:MaxRAMPercentage=75
+      </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
@@ -67,16 +66,16 @@ Build: {1}
       <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scenario.service.util" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />
-      <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
       <property name="applicationXMI" value="org.eclipse.platform/LegacyIDE.e4xmi" />
-      <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default" />
+      <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
       <property name="org.eclipse.update.reconcile" value="false" />
+      <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default" />
    </configurations>
 
    <preferencesInfo>

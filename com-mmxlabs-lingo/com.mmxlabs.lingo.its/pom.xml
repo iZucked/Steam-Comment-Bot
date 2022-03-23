@@ -81,7 +81,7 @@
 						<include>**/*Test.*</include>
 					</includes>
 
-					<product>com.mmxlabs.lingo.product.product</product>
+					<product>com.mmxlabs.lingo.app.product</product>
 					<application>com.mmxlabs.lingo.app.application</application>
 
 					<useUIHarness>true</useUIHarness>
