@@ -324,6 +324,61 @@ public class ScheduleCalculator {
 			return false;
 		}
 		
+		public boolean evaluate2(final IVessel vessel) {
+			if (validate()) {
+				
+				long fVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), fCargo.cv);
+				long sVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), sCargo.cv);
+				// We can run out of the safety heel!
+				
+				value = 0;
+				
+				// phase 1 - check the spare capacity on the second cargo and extra volume that can be bought on the first cargo
+				// determine spare capacity on second cargo
+				long sSpareCapacityMMBTu = Math.min(fVesselCapacityMMBTu - sCargo.startHeelMMBTu - sCargo.scheduledLoadVolumeMMBTu, //
+						Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu) - sCargo.scheduledDischargeVolumeMMBTu);
+				
+				HeelRetentionExtraData hrr1 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sSpareCapacityMMBTu);
+				
+				long value1 = 0;
+				while(hrr1.spareCapacityRemainderMMBTu >= 0){
+					value1 += extraLoadFirstShortLoadSecond(hrr1, 0L);
+				}
+				
+				// need to have a copy of the fCargo and sCargo!
+				HeelRetentionExtraData hrr2 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sSpareCapacityMMBTu);
+				
+				long value2 = 0;
+				while(hrr2.spareCapacityRemainderMMBTu >= 0){
+					value2 += shortDischargeFirstExtraDischargeSecond(hrr2);
+				}
+				
+				fCargo.endHeelMMBTu += hrr1.firstCargoTransferredVolumeMMBTu;
+				sCargo.startHeelMMBTu += hrr1.secondCargoTransferredVolumeMMBTu;
+				
+				//===========PHASE 2=============
+//				long sNewSpareCapacityMMBTu = sCargo.scheduledLoadVolumeMMBTu - sCargo.minLoadMMBTu;
+//				
+//				HeelRetentionExtraData hrr2 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sNewSpareCapacityMMBTu);
+//				{
+//					value += extraLoadFirstShortLoadSecond(hrr2, fCargo.startHeelMMBTu);
+//					value += shortDischargeFirstShortLoadSecond(hrr2);
+//				}
+//
+//				fCargo.endHeelMMBTu += hrr2.firstCargoTransferredVolumeMMBTu;
+//				sCargo.startHeelMMBTu += hrr2.secondCargoTransferredVolumeMMBTu;
+//				
+//				//use calculator
+//				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L)) //
+//						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L))) {
+//					return value > 0;
+//				}
+				
+				return false;
+			}
+			return false;
+		}
+		
 		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeel) {
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
@@ -412,7 +467,6 @@ public class ScheduleCalculator {
 		}
 		
 		private long shortDischargeFirstShortLoadSecond(HeelRetentionExtraData hrr) {
-			//long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.isInspected ? hrr.spareCapacityRemainderMMBTu : hrr.secondSpareCapacityMMBTu, sCargo.cv);
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine if short discharge is possible
@@ -434,7 +488,6 @@ public class ScheduleCalculator {
 					hrr.secondCargoTransferredVolumeMMBTu += f2sSpareDischargeCapacityMMMBTu;
 					sCargo.scheduledLoadVolumeMMBTu -= f2sSpareDischargeCapacityMMMBTu;
 					hrr.spareCapacityRemainderMMBTu -= f2sSpareDischargeCapacityMMMBTu;
-					//hrr.isInspected = true;
 					return fSpareDischargeValue;
 				}
 			}
@@ -453,8 +506,10 @@ public class ScheduleCalculator {
 	private class TempCargoRecord{
 		public final IPortSlot load;
 		public final IPortSlot discharge;
+		public final ICargoValueAnnotation cargoValueAnnotation;
 		
 		public TempCargoRecord(ICargoValueAnnotation cva) {
+			this.cargoValueAnnotation = cva;
 			this.load = getLoadSlot(cva);
 			this.discharge = getDischargeSlot(cva);
 			
@@ -532,6 +587,7 @@ public class ScheduleCalculator {
 		public final long firstCargoVesselCapacityMMBTu;
 		public final long secondCargoVesselCapacityMMBTu;
 		public long spareCapacityRemainderMMBTu;
+		//TODO: add a flag to control if it's just a value computation or not
 		
 		public HeelRetentionExtraData(long firstCargoVesselCapacityMMBTu, long secondCargoVesselCapacityMMBTu, long secondSpareCapacityMMBTu) {
 			firstCargoTransferredVolumeMMBTu = 0;
@@ -550,28 +606,7 @@ public class ScheduleCalculator {
 		final List<RetentionPair> allPairs = new LinkedList<>();
 		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
 		final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm = new HashMap<>();
-		{
-			VoyagePlanRecord lastRecord = null;
-			Iterator<VoyagePlanRecord> iter = voyagePlans.iterator();
-			while(iter.hasNext()) {
-				final VoyagePlanRecord current = iter.next();
-				if (current != null) {
-					if (lastRecord != null) {
-						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
-							allPairs.add(new RetentionPair(lastRecord, current));
-						}
-					}
-					lastRecord = current;
-					
-					final VoyagePlan vp = current.getVoyagePlan();
-					final IPortTimesRecord iptr = current.getPortTimesRecord();
-
-					Pair<VoyagePlan, IPortTimesRecord> pair = new Pair(vp, iptr);
-					otherVoyagePlansAndPortTimeRecords.add(pair);
-					mm.put(current, pair);
-				}
-			}
-		}
+		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm);
 		
 		final IVessel vessel = vesselAvailability.getVessel();
 		
@@ -579,32 +614,7 @@ public class ScheduleCalculator {
 		
 		if (nullablePairsToKeep != null) {
 			
-			final List<RetentionPair> pairsToKeep = new LinkedList<>();
-			pairsToKeep.addAll(nullablePairsToKeep);
-
-			if (!pairsToKeep.isEmpty()) {
-				RetentionPair lastRecord = null;
-				List<RetentionPair> toDelete = new LinkedList<>();
-
-				for (final RetentionPair current : pairsToKeep) {
-					if (lastRecord != null) {
-						if (lastRecord.first != current.second) {
-							if (lastRecord.value >= current.value) {
-								toDelete.add(current);
-								lastRecord = null;
-							} else {
-								toDelete.add(lastRecord);
-								lastRecord = null;
-							}
-						}
-					} else {
-						lastRecord = current;
-					}
-				}
-				if (!toDelete.isEmpty()) {
-					pairsToKeep.removeAll(toDelete);
-				}
-			}
+			final List<RetentionPair> pairsToKeep = removeOverlappingValidPairs(nullablePairsToKeep);
 
 			if (!pairsToKeep.isEmpty()) {
 				PortTimesRecord tempRecord = new PortTimesRecord();
@@ -627,6 +637,62 @@ public class ScheduleCalculator {
 			}
 		}
 		
+	}
+
+	private List<RetentionPair> removeOverlappingValidPairs(final List<RetentionPair> nullablePairsToKeep) {
+		final List<RetentionPair> pairsToKeep = new LinkedList<>();
+		pairsToKeep.addAll(nullablePairsToKeep);
+
+		if (!pairsToKeep.isEmpty()) {
+			RetentionPair lastRecord = null;
+			List<RetentionPair> toDelete = new LinkedList<>();
+
+			for (final RetentionPair current : pairsToKeep) {
+				if (lastRecord != null) {
+					if (lastRecord.first != current.second) {
+						if (lastRecord.value >= current.value) {
+							toDelete.add(current);
+							lastRecord = null;
+						} else {
+							toDelete.add(lastRecord);
+							lastRecord = null;
+						}
+					}
+				} else {
+					lastRecord = current;
+				}
+			}
+			if (!toDelete.isEmpty()) {
+				pairsToKeep.removeAll(toDelete);
+			}
+		}
+		return pairsToKeep;
+	}
+
+	private void createOverlappingPairs(final List<VoyagePlanRecord> voyagePlans, final List<RetentionPair> allPairs, final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords,
+			final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm) {
+		{
+			VoyagePlanRecord lastRecord = null;
+			Iterator<VoyagePlanRecord> iter = voyagePlans.iterator();
+			while(iter.hasNext()) {
+				final VoyagePlanRecord current = iter.next();
+				if (current != null) {
+					if (lastRecord != null) {
+						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
+							allPairs.add(new RetentionPair(lastRecord, current));
+						}
+					}
+					lastRecord = current;
+					
+					final VoyagePlan vp = current.getVoyagePlan();
+					final IPortTimesRecord iptr = current.getPortTimesRecord();
+
+					Pair<VoyagePlan, IPortTimesRecord> pair = new Pair(vp, iptr);
+					otherVoyagePlansAndPortTimeRecords.add(pair);
+					mm.put(current, pair);
+				}
+			}
+		}
 	}
 	
 	private void setRecord(TempCargoRecord tcr, VoyagePlanRecord vpr, Pair<VoyagePlan, IPortTimesRecord> pair, boolean isFirst) {
