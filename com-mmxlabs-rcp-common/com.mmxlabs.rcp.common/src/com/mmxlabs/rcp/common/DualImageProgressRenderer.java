@@ -13,8 +13,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.internal.Activator;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 
 /**
  * A progress renderer to render between two images flipping from enabled to

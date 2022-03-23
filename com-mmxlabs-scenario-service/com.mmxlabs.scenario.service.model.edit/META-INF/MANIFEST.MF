@@ -16,5 +16,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.manifest.edit;visibility:=reexport,
  com.mmxlabs.scenario.service.model;bundle-version="[5.3.1,6.0.0)";visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ org.eclipse.jface
 Bundle-ActivationPolicy: lazy

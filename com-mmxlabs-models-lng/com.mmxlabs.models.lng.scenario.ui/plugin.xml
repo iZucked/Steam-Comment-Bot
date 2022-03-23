@@ -531,8 +531,8 @@
             point="org.eclipse.ui.commandImages">
          <image
                commandId="com.mmxlabs.models.lng.scenario.ui.rollforward"
-               icon="icons/roll_forward.png"
-               disabledIcon="icons/roll_forward_disabled.png">
+               icon="icons:/icons/24x24/roll_forward.png"
+               disabledIcon="icons:/icons/24x24/roll_forward_disabled.png">
          </image>
       </extension>      
       <extension

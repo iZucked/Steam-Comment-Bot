@@ -18,9 +18,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.osgi.framework.FrameworkUtil;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Eclipse e4 command handler to copy {@link Grid} data to the clipboard

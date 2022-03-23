@@ -12,7 +12,7 @@
       <perspective
             class="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
             id="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
-            icon="icons/risk.png"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/risk.png"
             name="Risk">
       </perspective>
    </extension>

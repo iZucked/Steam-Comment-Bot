@@ -12,7 +12,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mmxlabs.lingo.platform.ui.AnalysisPerspective"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png"
+            icon="icons:/icons/16x16/scenario.png"
             id="com.mmxlabs.lingo.app.perspective.analysis"
             name="Analysis">
       </perspective>

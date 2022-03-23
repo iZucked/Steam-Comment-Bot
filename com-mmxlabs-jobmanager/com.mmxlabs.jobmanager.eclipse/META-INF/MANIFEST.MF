@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.common.common-util,
  org.eclipse.jface,
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ org.eclipse.ui.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
  com.mmxlabs.jobmanager.eclipse.manager,
