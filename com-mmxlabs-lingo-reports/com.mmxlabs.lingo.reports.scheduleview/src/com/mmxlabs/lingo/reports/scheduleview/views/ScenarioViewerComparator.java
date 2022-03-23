@@ -21,12 +21,8 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 
 /**
- * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
- * Implementation sort vessels alphabetically grouped into fleet and spot
- * vessels. There are currently two sort modes on top of this;
- * {@link Mode#STACK} will show multiple scenarios in sequence.
- * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
- * side-by-side.
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
+ * this; {@link Mode#STACK} will show multiple scenarios in sequence. {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios side-by-side.
  * 
  * @author Simon Goodall
  * 
@@ -34,7 +30,8 @@ import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 public class ScenarioViewerComparator extends ViewerComparator {
 
 	public enum Mode {
-		STACK("Stack", "Rows are grouped by scenario"), INTERLEAVE("Interleave", "Row are grouped by name");
+		STACK("Stack", "Rows are grouped by scenario"), //
+		INTERLEAVE("Interleave", "Row are grouped by name");
 
 		private final String displayName;
 		private final String tooltip;
@@ -55,7 +52,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	}
 
 	public enum Category {
-		BY_NAME("By name", "Rows are sorted by name, grouped by non-shipped, fleet and market"), BY_SIZE("By capacity", "Rows are sorted by capacity then name, grouped by non-shipped, fleet and market");
+		BY_NAME("By name", "Rows are sorted by name, grouped by non-shipped, fleet and market"), //
+		BY_SIZE("By size", "Rows are sorted by capacity then name, grouped by non-shipped, fleet and market");
 
 		private final String displayName;
 		private final String tooltip;
