@@ -324,61 +324,6 @@ public class ScheduleCalculator {
 			return false;
 		}
 		
-		public boolean evaluate2(final IVessel vessel) {
-			if (validate()) {
-				
-				long fVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), fCargo.cv);
-				long sVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), sCargo.cv);
-				// We can run out of the safety heel!
-				
-				value = 0;
-				
-				// phase 1 - check the spare capacity on the second cargo and extra volume that can be bought on the first cargo
-				// determine spare capacity on second cargo
-				long sSpareCapacityMMBTu = Math.min(fVesselCapacityMMBTu - sCargo.startHeelMMBTu - sCargo.scheduledLoadVolumeMMBTu, //
-						Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu) - sCargo.scheduledDischargeVolumeMMBTu);
-				
-				HeelRetentionExtraData hrr1 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sSpareCapacityMMBTu);
-				
-				long value1 = 0;
-				while(hrr1.spareCapacityRemainderMMBTu >= 0){
-					value1 += extraLoadFirstShortLoadSecond(hrr1, 0L);
-				}
-				
-				// need to have a copy of the fCargo and sCargo!
-				HeelRetentionExtraData hrr2 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sSpareCapacityMMBTu);
-				
-				long value2 = 0;
-				while(hrr2.spareCapacityRemainderMMBTu >= 0){
-					value2 += shortDischargeFirstExtraDischargeSecond(hrr2);
-				}
-				
-				fCargo.endHeelMMBTu += hrr1.firstCargoTransferredVolumeMMBTu;
-				sCargo.startHeelMMBTu += hrr1.secondCargoTransferredVolumeMMBTu;
-				
-				//===========PHASE 2=============
-//				long sNewSpareCapacityMMBTu = sCargo.scheduledLoadVolumeMMBTu - sCargo.minLoadMMBTu;
-//				
-//				HeelRetentionExtraData hrr2 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sNewSpareCapacityMMBTu);
-//				{
-//					value += extraLoadFirstShortLoadSecond(hrr2, fCargo.startHeelMMBTu);
-//					value += shortDischargeFirstShortLoadSecond(hrr2);
-//				}
-//
-//				fCargo.endHeelMMBTu += hrr2.firstCargoTransferredVolumeMMBTu;
-//				sCargo.startHeelMMBTu += hrr2.secondCargoTransferredVolumeMMBTu;
-//				
-//				//use calculator
-//				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L)) //
-//						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L))) {
-//					return value > 0;
-//				}
-				
-				return false;
-			}
-			return false;
-		}
-		
 		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeel) {
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
