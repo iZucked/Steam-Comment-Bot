@@ -53,6 +53,8 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png", "icons:/icons/16x16/compare.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png", "icons:/16/scenario");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
+		
 		
 		
 		mapIcons(application, iconMapping);
