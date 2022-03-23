@@ -61,6 +61,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Sets;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
@@ -454,7 +455,12 @@ public class ScenarioServicePushToCloudAction {
 				}
 
 				progressMonitor.subTask("Validating scenario");
-				boolean valid = validateScenario(originalScenarioDataProvider);
+				Set<String> extraCategories = new HashSet<>();
+				if (originalSandboxModel != null) {
+					extraCategories = Sets.newHashSet(".cargosandbox");
+				}
+				boolean relaxedValidation = "Period Scenario".equals(originalModelRecord.getName());
+				boolean valid = validateScenario(originalScenarioDataProvider, originalSandboxModel, extraCategories);
 				if (!valid) {
 					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.EVALUATION_FAILED, new RuntimeException("Scenario failed validation. Please fix and resubmit."));
 				}
@@ -647,7 +653,7 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, Set<String> extraCategories) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -664,6 +670,13 @@ public class ScenarioServicePushToCloudAction {
 					} else if (cat.getId().endsWith(".adp")) {
 						return true;
 					}
+
+					// Any extra validation category suffixes to include e.g. for sandbox
+					for (String catSuffix : extraCategories) {
+						if (cat.getId().endsWith(catSuffix)) {
+							return true;
+						}
+					}
 				}
 
 				return false;
@@ -672,7 +685,7 @@ public class ScenarioServicePushToCloudAction {
 		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
-			return helper.runValidation(validator, extraContext, rootObject, null);
+			return helper.runValidation(validator, extraContext, rootObject, extraTarget);
 		});
 
 		if (status == null) {
@@ -692,8 +705,6 @@ public class ScenarioServicePushToCloudAction {
 			final ValidationStatusDialog dialog = new ValidationStatusDialog(display.getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
 
 			// Wait for use to press a button before continuing.
-			dialog.setBlockOnOpen(true);
-
 			return dialog.open() == Window.OK;
 		});
 		if (!ok) {
