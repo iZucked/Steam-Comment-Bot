@@ -16,9 +16,13 @@ public final class SchedulerViewConstants {
 
 	}
 
+	public static final String SortMode = "Sort.Mode";
+	public static final String SortCategory = "Sort.Category";
+	
 	public static final String Show_ = "Show.";
 	public static final String Show_Canals = "Show.Canals";
 	public static final String Show_Nominals = "Show.Nominals";
+	public static final String Show_Days = "Show.Days";
 
 	public static final String Highlight_ = "Hi.";
 //	public static final String HighlightScheme = "SchedulerView.HighlightScheme";

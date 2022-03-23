@@ -234,7 +234,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (hi != null) {
 			currentHighlighters.add(hi);
 			hi.setViewer(viewer);
-			memento.putBoolean(hi.getID(), true);
+			memento.getChild(Highlight_).putBoolean(hi.getID(), true);
 		}
 	}
 
