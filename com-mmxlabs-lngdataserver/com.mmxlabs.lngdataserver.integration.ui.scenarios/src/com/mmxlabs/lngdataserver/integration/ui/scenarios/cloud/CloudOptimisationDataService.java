@@ -199,6 +199,10 @@ public class CloudOptimisationDataService implements IProgressProvider {
 	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		return client.getOptimisationServerPublicKey(pubkey);
 	}
+	
+	public String getInfo() throws IOException {
+		return client.getInfo();
+	}
 
 	public void encryptSymmetricKey(RSAPublicKey pubkey, SecretKey symkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {
 		var cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");

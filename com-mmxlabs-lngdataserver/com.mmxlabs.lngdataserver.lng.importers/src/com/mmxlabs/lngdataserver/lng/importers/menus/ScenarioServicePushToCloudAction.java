@@ -132,6 +132,7 @@ public class ScenarioServicePushToCloudAction {
 	private static final String MSG_ERROR_EVALUATING = "Error evaluating scenario";
 	private static final String MSG_ERROR_SAVE_ENCRYPTION_KEY = "Error saving the scenario encryption key";
 	private static final String MSG_ERROR_FAILED_GETTING_PUB_KEY = "Error getting the optimisation server's public key";
+	private static final String MSG_ERROR_FAILED_STATUS_CHECK = "Error reaching the cloud optimisation gateway";
 
 	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	private static final String CLOUD_OPTI_PATH = workspaceLocation.toOSString() + IPath.SEPARATOR + "cloud-opti";
@@ -318,6 +319,12 @@ public class ScenarioServicePushToCloudAction {
 					break;
 				case EVALUATION_FAILED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Fix the validation errors and send again.");
+					break;
+				case FAILED_UNSUPPORTED_VERSION:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, cause.getMessage() + " Check the version in the Cloud Optimiser preference page.");
+					break;
+				case FAILED_STATUS_CHECK:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, cause.getMessage() + ". Check your internet connectivity and verify the URL in the Cloud Optimiser preference page.");
 					break;
 				default:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send.");
@@ -508,6 +515,15 @@ public class ScenarioServicePushToCloudAction {
 				LOG.error("Failed to create temp anonymisation map file");
 				throw new CloudOptimisationPushException(MSG_ERROR_SAVING_ANOM_MAP, Type.FAILED_TO_SAVE, e);
 			}
+			
+			// gateway connectivity check
+			try {
+				String info = CloudOptimisationDataService.INSTANCE.getInfo();
+				LOG.info("gateway is reachable: " + info);
+			} catch (IOException e) {
+				throw new CloudOptimisationPushException(e.getLocalizedMessage(), Type.FAILED_STATUS_CHECK);
+			}
+			
 
 			// create shared symmetric key
 			progressMonitor.subTask("Preparing scenario encryption");
