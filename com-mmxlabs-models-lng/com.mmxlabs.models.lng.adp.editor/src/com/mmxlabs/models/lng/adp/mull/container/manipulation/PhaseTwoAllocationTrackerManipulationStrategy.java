@@ -4,7 +4,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.models.lng.adp.mull.container.IAllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.container.ICargoBlueprint;
-import com.mmxlabs.models.lng.adp.mull.old.OldCargoBlueprint;
 import com.mmxlabs.models.lng.cargo.Cargo;
 
 @NonNullByDefault
