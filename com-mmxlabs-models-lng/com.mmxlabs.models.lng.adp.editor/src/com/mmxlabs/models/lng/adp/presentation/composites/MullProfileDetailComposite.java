@@ -40,15 +40,12 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -56,7 +53,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPFactory;
-import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
 import com.mmxlabs.models.lng.adp.MullCargoWrapper;
@@ -97,7 +93,6 @@ import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
@@ -134,8 +129,6 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 
 	private Runnable releaseAdaptersRunnable = null;
 
-	private Color systemWhite;
-
 	protected DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 
 		@Override
@@ -169,9 +162,9 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			}
 		}
 	};
-	
+
 	private final AdapterImpl cargoAdapter = new SafeAdapterImpl() {
-		
+
 		@Override
 		protected void safeNotifyChanged(Notification msg) {
 			if (msg.isTouch() || oldValue == null || oldValue.getCargoesToKeep().isEmpty()) {
@@ -181,7 +174,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				if (msg.getOldValue() != null) {
 					final LoadSlot loadSlot = (LoadSlot) msg.getOldValue();
 					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getLoadSlot() == loadSlot).findFirst().ifPresent(wrapper -> {
-						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP,
+								Collections.singletonList(wrapper));
 						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
 					});
 				}
@@ -189,7 +183,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				if (msg.getOldValue() != null) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) msg.getOldValue();
 					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getDischargeSlot() == dischargeSlot).findFirst().ifPresent(wrapper -> {
-						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP,
+								Collections.singletonList(wrapper));
 						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
 					});
 				}
@@ -197,12 +192,13 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				if (msg.getOldValue() != null) {
 					final Cargo cargo = (Cargo) msg.getOldValue();
 					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getLoadSlot().getCargo() == cargo).findFirst().ifPresent(wrapper -> {
-						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP,
+								Collections.singletonList(wrapper));
 						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
 					});
 				}
 			}
-			
+
 		}
 	};
 
@@ -219,12 +215,10 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		inventoryTableComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		inventoryTableComposite.setLayout(new GridLayout());
 
-		this.systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-
-		this.viewer = getInventoryTableViewer(inventoryTableComposite);
-		this.entityTableViewer = getEntityTableViewer(inventoryTableComposite);
-		this.contractViewer = getContractTableViewer(inventoryTableComposite);
-		this.marketViewer = getMarketTableViewer(inventoryTableComposite);
+		this.viewer = getInventoryTableViewer(inventoryTableComposite, toolkit);
+		this.entityTableViewer = getEntityTableViewer(inventoryTableComposite, toolkit);
+		this.contractViewer = getContractTableViewer(inventoryTableComposite, toolkit);
+		this.marketViewer = getMarketTableViewer(inventoryTableComposite, toolkit);
 		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		this.mullRelativeEntitlementImportCommandProvider = activeWorkbenchWindow.getService(IMullRelativeEntitlementImportCommandProvider.class);
 	}
@@ -240,23 +234,12 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			final MullProfile mullProfile = (MullProfile) value;
 			final List<MullCargoWrapper> cargoesToKeep = mullProfile.getCargoesToKeep();
 			if (!cargoesToKeep.isEmpty()) {
-				final List<MullCargoWrapper> cargoWrappersToDelete = cargoesToKeep.stream()
-				.filter(cargoWrapper -> {
-					if (cargoWrapper.getLoadSlot() == null) {
-						return true;
-					}
-					if (cargoWrapper.getDischargeSlot() == null) {
-						return true;
-					}
-					if (cargoWrapper.getLoadSlot().getCargo() == null) {
-						return true;
-					}
-					if (cargoWrapper.getLoadSlot().getCargo().getSlots().get(1) != cargoWrapper.getDischargeSlot()) {
-						return true;
-					}
-					return false;
-				})
-				.collect(Collectors.toList());
+				final List<@NonNull MullCargoWrapper> cargoWrappersToDelete = cargoesToKeep.stream() //
+						.filter(cargoWrapper -> cargoWrapper.getLoadSlot() == null //
+								|| cargoWrapper.getDischargeSlot() == null //
+								|| cargoWrapper.getLoadSlot().getCargo() == null //
+								|| cargoWrapper.getLoadSlot().getCargo().getSlots().get(1) != cargoWrapper.getDischargeSlot())//
+						.toList();
 				if (!cargoWrappersToDelete.isEmpty()) {
 					final EditingDomain ed = dialogContext.getScenarioEditingLocation().getEditingDomain();
 					final Command deleteCommand = RemoveCommand.create(ed, mullProfile, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, cargoWrappersToDelete);
@@ -313,13 +296,13 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		return delegate.checkVisibility(context);
 	}
 
-	private EObjectTableViewer getInventoryTableViewer(final Composite parent) {
-		final Group inventoryTableGroup = buildTableGroup(parent, "Inventory Table");
+	private EObjectTableViewer getInventoryTableViewer(final Composite parent, final FormToolkit toolkit) {
+		final Group inventoryTableGroup = buildTableGroup(parent, toolkit, "Inventory Table");
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(inventoryTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(inventoryTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 
-		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
+		toolkit.adapt(buttonManager.getToolbarManager().getControl());
 
 		final Action addInventorySubprofileRows = new Action("Add") {
 			@Override
@@ -363,8 +346,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			deleteInventorySubprofileRows.setEnabled(!event.getSelection().isEmpty());
 			if (event.getStructuredSelection().size() == 1) {
 				final Object selection = event.getStructuredSelection().getFirstElement();
-				if (selection instanceof MullSubprofile) {
-					final MullSubprofile selectedRow = (MullSubprofile) selection;
+				if (selection instanceof final MullSubprofile selectedRow) {
 					final Inventory selectedInventory = selectedRow.getInventory();
 					if (selectedInventory != null) {
 						final String inventoryName = selectedInventory.getName();
@@ -392,13 +374,12 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		return eViewer;
 	}
 
-	private EObjectTableViewer getEntityTableViewer(final Composite parent) {
-		entityTableGroup = buildTableGroup(parent, "Entity Table");
+	private EObjectTableViewer getEntityTableViewer(final Composite parent, final FormToolkit toolkit) {
+		entityTableGroup = buildTableGroup(parent, toolkit, "Entity Table");
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(entityTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(entityTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-
-		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
+		toolkit.adapt(buttonManager.getToolbarManager().getControl());
 
 		final Action addAction = new AddAction("Add", parent);
 		CommonImages.setImageDescriptors(addAction, IconPaths.Plus);
@@ -444,8 +425,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 			deleteEntityRows.setEnabled(!event.getSelection().isEmpty());
 			if (event.getStructuredSelection().size() == 1) {
 				final Object selection = event.getStructuredSelection().getFirstElement();
-				if (selection instanceof MullEntityRow) {
-					final MullEntityRow selectedRow = (MullEntityRow) selection;
+				if (selection instanceof final MullEntityRow selectedRow) {
 					final BaseLegalEntity selectedEntity = selectedRow.getEntity();
 					if (selectedEntity != null) {
 						final String entityName = selectedEntity.getName();
@@ -491,8 +471,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				@Override
 				public void run() {
 					Object selection = viewer.getStructuredSelection().getFirstElement();
-					if (selection instanceof MullSubprofile) {
-						final MullSubprofile selectedRow = (MullSubprofile) selection;
+					if (selection instanceof final MullSubprofile selectedRow) {
 						final List<BaseLegalEntity> selectedEntities = openSelectionDialogBox(parent, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity,
 								ADPPackage.Literals.MULL_ENTITY_ROW, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY, "Entity");
 						updateStateWithSelection(selectedEntities, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity, "Entities", ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE,
@@ -515,20 +494,19 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		}
 	}
 
-	private EObjectTableViewer getContractTableViewer(final Composite parent) {
-		contractTableGroup = buildTableGroup(parent, "Contract allocations");
+	private EObjectTableViewer getContractTableViewer(final Composite parent, final FormToolkit toolkit) {
+		contractTableGroup = buildTableGroup(parent, toolkit, "Contract allocations");
 		contractTableGroup.setVisible(false);
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(contractTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(contractTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
+		toolkit.adapt(buttonManager.getToolbarManager().getControl());
 
 		final Action addContractRows = new Action("Add") {
 			@Override
 			public void run() {
 				Object selection = entityTableViewer.getStructuredSelection().getFirstElement();
-				if (selection instanceof MullEntityRow) {
-					final MullEntityRow selectedRow = (MullEntityRow) selection;
+				if (selection instanceof final MullEntityRow selectedRow) {
 					final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getSalesContractAllocationRows,
 							SalesContractAllocationRow::getContract, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT, "Sales Contract");
 					updateStateWithSelection(selectedSalesContracts, selectedRow, MullEntityRow::getSalesContractAllocationRows, SalesContractAllocationRow::getContract, "Sales Contracts",
@@ -586,21 +564,19 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		return eViewer;
 	}
 
-	private EObjectTableViewer getMarketTableViewer(final Composite parent) {
-		marketTableGroup = buildTableGroup(parent, "Market allocations");
+	private EObjectTableViewer getMarketTableViewer(final Composite parent, final FormToolkit toolkit) {
+		marketTableGroup = buildTableGroup(parent, toolkit, "Market allocations");
 		marketTableGroup.setVisible(false);
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(marketTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(marketTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-
-		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
+		toolkit.adapt(buttonManager.getToolbarManager().getControl());
 
 		final Action addMarketRows = new Action("Add") {
 			@Override
 			public void run() {
 				Object selection = entityTableViewer.getStructuredSelection().getFirstElement();
-				if (selection instanceof MullEntityRow) {
-					final MullEntityRow selectedRow = (MullEntityRow) selection;
+				if (selection instanceof final MullEntityRow selectedRow) {
 					final List<DESSalesMarket> selectedDesSalesMarkets = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getDesSalesMarketAllocationRows,
 							DESSalesMarketAllocationRow::getDesSalesMarket, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET,
 							"DES Sales Market");
@@ -650,8 +626,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		});
 		eViewer.addOpenListener(event -> {
 			final ISelection selection = eViewer.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			if (selection instanceof final IStructuredSelection structuredSelection) {
 				if (!structuredSelection.isEmpty()) {
 					DetailCompositeDialogUtil.editSelection(sel, structuredSelection);
 				}
@@ -724,7 +699,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 							valueSetter.accept(newRow, s);
 							return newRow;
 						}) //
-						.collect(Collectors.toList());
+						.toList();
 				cmd.append(AddCommand.create(commandHandler.getEditingDomain(), selectedRow, feature, newRows));
 			}
 			if (!cmd.isEmpty()) {
@@ -742,8 +717,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 					if (selection.isEmpty()) {
 						return;
 					}
-					if (selection instanceof IStructuredSelection) {
-						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+					if (selection instanceof final IStructuredSelection iStructuredSelection) {
 						final CompoundCommand cc = new CompoundCommand(String.format("Delete %s", deleteCommandText));
 						final EditingDomain ed = dialogContext.getScenarioEditingLocation().getEditingDomain();
 						final EObject firstLine = (EObject) iStructuredSelection.getFirstElement();
@@ -755,10 +729,10 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		};
 	}
 
-	private @NonNull Group buildTableGroup(final Composite parent, final String groupName) {
+	private @NonNull Group buildTableGroup(final Composite parent, final FormToolkit toolkit, final String groupName) {
 		final Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout(1, false));
-		group.setBackground(systemWhite);
+		toolkit.adapt(group);
 		group.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 		group.setText(groupName);
 		return group;
