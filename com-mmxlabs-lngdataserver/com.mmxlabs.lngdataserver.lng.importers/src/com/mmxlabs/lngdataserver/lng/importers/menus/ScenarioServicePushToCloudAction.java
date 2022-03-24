@@ -515,15 +515,16 @@ public class ScenarioServicePushToCloudAction {
 				LOG.error("Failed to create temp anonymisation map file");
 				throw new CloudOptimisationPushException(MSG_ERROR_SAVING_ANOM_MAP, Type.FAILED_TO_SAVE, e);
 			}
-			
+
 			// gateway connectivity check
 			try {
 				String info = CloudOptimisationDataService.INSTANCE.getInfo();
 				LOG.info("gateway is reachable: " + info);
 			} catch (IOException e) {
-				throw new CloudOptimisationPushException(e.getLocalizedMessage(), Type.FAILED_STATUS_CHECK);
+				LOG.error(e.getLocalizedMessage());
+				throw new CloudOptimisationPushException(MSG_ERROR_FAILED_STATUS_CHECK, Type.FAILED_STATUS_CHECK);
 			}
-			
+
 
 			// create shared symmetric key
 			progressMonitor.subTask("Preparing scenario encryption");
@@ -892,7 +893,7 @@ public class ScenarioServicePushToCloudAction {
 
 		final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
 		description.sandboxUUID = sandboxModel.getUuid();
-		description.userSettings = (UserSettingsImpl) us;
+		description.userSettings = us;
 		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
 			final String json = objectMapper.writeValueAsString(description);

@@ -199,7 +199,7 @@ public class CloudOptimisationDataService implements IProgressProvider {
 	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		return client.getOptimisationServerPublicKey(pubkey);
 	}
-	
+
 	public String getInfo() throws IOException {
 		return client.getInfo();
 	}

@@ -20,8 +20,6 @@ import java.util.List;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,17 +128,16 @@ public class CloudOptimisationDataServiceClient {
 		// }
 		return this.userid;
 	}
-	
-	
+
 	public String getInfo() throws IOException {
 		final String requestURL = String.format("%s", INFO_URL);
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return null;
 		}
-		
+
 		final Request request = requestBuilder.build();
-		
+
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (response.isSuccessful()) {
 				return response.body().string();

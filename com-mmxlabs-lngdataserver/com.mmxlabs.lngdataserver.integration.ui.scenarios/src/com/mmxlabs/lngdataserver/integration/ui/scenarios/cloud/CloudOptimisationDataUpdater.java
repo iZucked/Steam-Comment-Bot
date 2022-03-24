@@ -140,7 +140,7 @@ class CloudOptimisationDataUpdater {
 			if (cRecord.isComplete()) {
 				return;
 			}
-			if (cRecord.isHasError()) {
+			if (cRecord.isHasError() || cRecord.getStatus().isFailed()) {
 				// Error, mark is complete and return;
 				cRecord.setComplete(true);
 				return;
@@ -556,7 +556,7 @@ class CloudOptimisationDataUpdater {
 		for (final CloudOptimisationDataResultRecord r : currentRecords) {
 
 			// Do not request an update for complete jobs
-			if (r.isHasError() || r.isComplete()) {
+			if (r.isHasError() || r.isComplete() || r.getStatus().isFailed()) {
 				newList.add(r);
 				continue;
 			}
