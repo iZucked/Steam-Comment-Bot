@@ -9,7 +9,7 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension point="org.eclipse.ui.perspectives">
-		<perspective class="com.mmxlabs.lingo.platform.ui.ActualsPerspectiveFactory"
+		<perspective class="com.mmxlabs.lingo.app.perspectives.ActualsPerspectiveFactory"
 			id="com.mmxlabs.lingo.platform.ui.ActualsPerspectiveFactory" name="Actuals">
 		</perspective>
 	</extension>

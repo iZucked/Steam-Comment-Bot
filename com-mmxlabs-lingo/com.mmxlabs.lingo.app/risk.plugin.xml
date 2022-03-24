@@ -10,7 +10,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
+            class="com.mmxlabs.lingo.app.perspectives.RiskModelPerspective"
             id="com.mmxlabs.lingo.platform.ui.RiskModelPerspective"
             icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/risk.png"
             name="Risk">
