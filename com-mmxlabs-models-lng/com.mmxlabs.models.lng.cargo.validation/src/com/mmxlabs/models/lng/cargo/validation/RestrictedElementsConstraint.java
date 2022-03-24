@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -38,11 +37,10 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 	private static final String DISCHARGE = "discharge";
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof Cargo) {
-			final Cargo cargo = (Cargo) target;
+		if (target instanceof Cargo cargo) {
 
 			for (int i = 0; i < cargo.getSlots().size(); ++i) {
 				for (int j = 0; j < cargo.getSlots().size(); ++j) {
@@ -55,8 +53,6 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	/**
@@ -122,8 +118,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 				d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
 				statuses.add(d);
 			}
-		}
-		else if (restrictedContractsArePermissive) {
+		} else if (restrictedContractsArePermissive) {
 			final String msg = String.format(EMPTY_CONTRACT_RESTRICTION, cargoName, causeContract, typeA);
 			final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());

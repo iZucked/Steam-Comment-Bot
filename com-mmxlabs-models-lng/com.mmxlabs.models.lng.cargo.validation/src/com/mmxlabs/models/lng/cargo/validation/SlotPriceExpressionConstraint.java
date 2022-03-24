@@ -16,7 +16,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -30,18 +29,18 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 	private static double maxExpressionValue = 90.0;
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Slot) {
-			final Slot<?> slot = (Slot<?>) target;
+		if (target instanceof Slot<?> slot) {
 
 			if (slot.isSetPriceExpression()) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
 				if ("??".equals(priceExpression)) {
 					if (!(slot.eContainer() instanceof CargoModel)) {
-						// Special "changable price" expression for sandbox. Not expected to be in main scenario
+						// Special "changable price" expression for sandbox. Not expected to be in main
+						// scenario
 						checkExpression = false;
 					}
 				} else if ("?".equals(priceExpression)) {
@@ -76,7 +75,6 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 }

@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -23,11 +22,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class CharterOutConstraint extends AbstractModelMultiConstraint {
+
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof CharterOutEvent) {
-			final CharterOutEvent charterOutEvent = (CharterOutEvent) target;
+		if (target instanceof CharterOutEvent charterOutEvent) {
 
 			if (charterOutEvent.getHireRate() == 0) {
 				final String message = String.format("Charter out event %s has no hire cost set", charterOutEvent.getName());
@@ -35,8 +34,6 @@ public class CharterOutConstraint extends AbstractModelMultiConstraint {
 				dcsd.addEObjectAndFeature(charterOutEvent, CargoPackage.eINSTANCE.getCharterOutEvent_HireRate());
 				statuses.add(dcsd);
 			}
-
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

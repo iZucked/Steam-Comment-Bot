@@ -156,13 +156,13 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 

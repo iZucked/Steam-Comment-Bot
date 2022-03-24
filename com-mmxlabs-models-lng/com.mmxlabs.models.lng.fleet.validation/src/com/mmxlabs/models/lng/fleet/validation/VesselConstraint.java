@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.util.VesselConstants;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -34,7 +33,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class VesselConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof Vessel vessel) {
 
@@ -149,8 +148,6 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void validateMmxVesselProperties(Vessel vessel, DetailConstraintStatusFactory baseFactory, @NonNull IValidationContext ctx, @NonNull List<IStatus> statuses) {

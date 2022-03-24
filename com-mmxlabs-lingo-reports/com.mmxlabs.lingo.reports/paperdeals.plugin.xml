@@ -14,7 +14,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.paperdeals.PaperDealsReportView"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_flow_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.paperdeals.PaperDealsReportView"
             name="Paper Deals"
             restorable="true">

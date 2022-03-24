@@ -7,8 +7,8 @@ package com.mmxlabs.ganttviewer.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  */

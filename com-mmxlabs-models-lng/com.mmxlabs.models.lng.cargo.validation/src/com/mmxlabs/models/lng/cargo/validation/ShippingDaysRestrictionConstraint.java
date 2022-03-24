@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -52,19 +51,18 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	private static final int MAX_SHIPPING_DAYS = 90;
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
 		@NonNull
 		ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		// Valid slot data checks
 		if (object instanceof Slot) {
-			if (object instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) object;
+			if (object instanceof LoadSlot loadSlot) {
 				if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
 					if (loadSlot.getSlotOrDelegateShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
 						final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
@@ -87,9 +85,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 					final Cargo cargo = loadSlot.getCargo();
 					if (cargo != null) {
-						for (final Slot slot : cargo.getSlots()) {
-							if (slot instanceof DischargeSlot) {
-								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+						for (final Slot<?> slot : cargo.getSlots()) {
+							if (slot instanceof DischargeSlot dischargeSlot) {
 								if (loadSlot.getPort() != dischargeSlot.getPort()) {
 									final String message = String.format("DES Purchase|%s is not divertible, but is linked to a DES Sale at a different discharge port", loadSlot.getName());
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
@@ -103,18 +100,27 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				}
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
-				// if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+				// if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort)
+				// {
 				// if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
-				// final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
-				// final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-				// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-				// dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+				// final String message = String.format("FOB Sale|%s shipping days restriction
+				// is too big.", dischargeSlot.getName());
+				// final IConstraintStatus status = (IConstraintStatus)
+				// ctx.createFailureStatus(message);
+				// final DetailConstraintStatusDecorator dsd = new
+				// DetailConstraintStatusDecorator(status, IStatus.WARNING);
+				// dsd.addEObjectAndFeature(dischargeSlot,
+				// CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 				// failures.add(dsd);
 				// } else if (dischargeSlot.getShippingDaysRestriction() == 0) {
-				// final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
-				// final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-				// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-				// dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+				// final String message = String.format("FOB Sale|%s shipping days restriction
+				// is set to zero - unable to ship anywhere!", dischargeSlot.getName());
+				// final IConstraintStatus status = (IConstraintStatus)
+				// ctx.createFailureStatus(message);
+				// final DetailConstraintStatusDecorator dsd = new
+				// DetailConstraintStatusDecorator(status, IStatus.WARNING);
+				// dsd.addEObjectAndFeature(dischargeSlot,
+				// CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 				// failures.add(dsd);
 				// }
 				// } else
@@ -122,8 +128,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 					final Cargo cargo = dischargeSlot.getCargo();
 					if (cargo != null) {
 						for (final Slot<?> slot : cargo.getSlots()) {
-							if (slot instanceof LoadSlot) {
-								final LoadSlot loadSlot = (LoadSlot) slot;
+							if (slot instanceof LoadSlot loadSlot) {
 								if (loadSlot.getPort() != dischargeSlot.getPort()) {
 									final String message = String.format("FOB Sale|%s is not divertible, but is linked to a FOB Purchase at a different load port", dischargeSlot.getName());
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
@@ -150,7 +155,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 					if (cargo.getCargoType() == CargoType.DES) {
 
-						return ServiceHelper.withOptionalService(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
+						ServiceHelper.withOptionalServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
 							LoadSlot desPurchase = null;
 							DischargeSlot dischargeSlot = null;
@@ -171,7 +176,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final Vessel vessel = desPurchase.getNominatedVessel();
 
 									if (vessel == null) {
-										return Activator.PLUGIN_ID;
+										return;
 									}
 
 									final int loadDurationInHours = desPurchase.getSchedulingTimeWindow().getDuration();
@@ -197,7 +202,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										if (loadDateStart != null && dischargeDateEnd != null) {
 											ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
 										} else {
-											return Activator.PLUGIN_ID;
+											return;
 										}
 
 										if (loadDateEnd != null && dischargeDateStart != null) {
@@ -205,7 +210,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 											// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
 											ladenMinWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateStart) - (loadDurationInHours));
 										} else {
-											return Activator.PLUGIN_ID;
+											return;
 										}
 									}
 
@@ -217,7 +222,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										failures.add(dsd);
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
 										// No point going further!
-										return Activator.PLUGIN_ID;
+										return;
 									}
 
 									// Smallest amount of time permitted between slots
@@ -241,16 +246,15 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									}
 								}
 							}
-							return Activator.PLUGIN_ID;
 						});
 					} else if (cargo.getCargoType() == CargoType.FOB) {
 
 						// FOB?
-						return ServiceHelper.withOptionalService(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
+						ServiceHelper.withOptionalServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
 							LoadSlot fobPurchase = null;
 							DischargeSlot fobSale = null;
-							for (final Slot s : cargo.getSlots()) {
+							for (final Slot<?> s : cargo.getSlots()) {
 								if (s instanceof LoadSlot) {
 									final LoadSlot loadSlot = (LoadSlot) s;
 									if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
@@ -269,7 +273,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final Vessel vessel = fobSale.getNominatedVessel();
 
 									if (vessel == null) {
-										return Activator.PLUGIN_ID;
+										return;
 									}
 
 									final int loadDurationInHours = fobPurchase.getSchedulingTimeWindow().getDuration();
@@ -296,7 +300,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										if (loadDateStart != null && dischargeDateEnd != null) {
 											ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
 										} else {
-											return Activator.PLUGIN_ID;
+											return;
 										}
 
 										if (loadDateEnd != null && dischargeDateStart != null) {
@@ -304,7 +308,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 											// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
 											ladenMinWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateStart) - (loadDurationInHours));
 										} else {
-											return Activator.PLUGIN_ID;
+											return;
 										}
 									}
 
@@ -317,7 +321,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
 
 										// No point going further!
-										return Activator.PLUGIN_ID;
+										return;
 									}
 
 									// Smallest amount of time permitted between slots
@@ -343,14 +347,11 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									cargoDateConstraint(fobPurchase, fobSale, loadDurationInHours + ladenTimeInHours, ctx, failures);
 								}
 							}
-							return Activator.PLUGIN_ID;
 						});
 					}
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void cargoDateConstraint(LoadSlot load, DischargeSlot discharge, int ladenTravelTimeInHours, final IValidationContext ctx, final List<IStatus> failures) {

@@ -34,11 +34,29 @@ public class WorkbenchChangeProcessor {
 		// Note: Some images copied into many places are handled explicitly in the
 		// mapIcons functions
 		Map<String, String> iconMapping = new HashMap<>();
-		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png");
-		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png");
-		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png");
-		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "icons:/icons/16x16/schedule_view.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png", "icons:/icons/16x16/schedule_view.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "icons:/icons/16x16/vertical_schedule.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png", "icons:/icons/16x16/vertical_schedule.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "icons:/icons/16x16/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png", "icons:/icons/16x16/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "icons:/16/sandbox");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png", "icons:/16/sandbox");
+		iconMapping.put("platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif", "icons:/16/scenario");
 
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/cloud.png", "icons:/16/cloud");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif", "icons:/icons/legacy/16x16/exec_flow_view.gif");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif", "icons:/icons/legacy/16x16/exec_statistic_view.gif");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_view.png", "icons:/icons/16x16/schedule_view.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/vertical_schedule.png", "icons:/icons/16x16/vertical_schedule.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/compare.png", "icons:/icons/16x16/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png", "icons:/icons/16x16/compare.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png", "icons:/16/sandbox");
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png", "icons:/16/scenario");
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
+		
+		
+		
 		mapIcons(application, iconMapping);
 		
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
@@ -111,12 +129,19 @@ public class WorkbenchChangeProcessor {
 				// Special common mappings
 				if (existing.contains("cview16")) {
 					if (existing.endsWith("exec_statistic_view.gif")) {
-						label.setIconURI("platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif");
+						label.setIconURI("icons:/icons/legacy/16x16/exec_statistic_view.gif");
 					}
 					if (existing.endsWith("exec_flow_view.gif")) {
-						label.setIconURI("platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif");
+						label.setIconURI("icons:/icons/legacy/16x16/exec_flow_view.gif");
 					}
 				}
+				if (existing.startsWith("platform:/plugin/com.mmxlabs.rcp.icons.lingo")) {
+					label.setIconURI("icons:" + existing.substring("platform:/plugin/com.mmxlabs.rcp.icons.lingo".length()));
+				}
+				if (existing.startsWith("platform:/plugin/com.mmxlabs.rcp.common")) {
+					label.setIconURI("icons:" + existing.substring("platform:/plugin/com.mmxlabs.rcp.common".length()));
+				}
+				
 				String replacement = iconMapping.get(existing);
 				if (replacement != null) {
 					label.setIconURI(replacement);

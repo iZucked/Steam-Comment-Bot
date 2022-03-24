@@ -31,7 +31,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.e4.core.services,
  com.mmxlabs.models.mmxcore,
  com.mmxlabs.hub;bundle-version="5.3.1",
- com.googlecode.json-simple;bundle-version="1.1.1"
+ com.googlecode.json-simple;bundle-version="1.1.1",
+ com.mmxlabs.rcp.icons.lingo;bundle-version="5.3.1";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,

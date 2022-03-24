@@ -23,12 +23,15 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IDataHubStateChangeListener;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class DataHubStatusTrimContribution {
 	
-	private final Image connectedAndAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub.png"));
-	private final Image connectedNotAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
-	private final Image disconnected = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/hub_disabled.png"));
+	private final Image connectedAndAuth = CommonImages.getImage(IconPaths.Hub, IconMode.Enabled);
+	private final Image connectedNotAuth = CommonImages.getImage(IconPaths.ConnectedNotAuth, IconMode.Enabled);
+	private final Image disconnected = CommonImages.getImage(IconPaths.Hub, IconMode.Disabled);
 	
 	protected IDataHubStateChangeListener listener;
 	
@@ -140,19 +143,8 @@ public class DataHubStatusTrimContribution {
 		if (pListener != null) {
 			DataHubServiceProvider.getInstance().removeDataHubStateListener(pListener);
 		}
-		if (!connectedAndAuth.isDisposed()) {
-			connectedAndAuth.dispose();
-		}
-		if (!connectedNotAuth.isDisposed()) {
-			connectedNotAuth.dispose();
-		}
-		if (!disconnected.isDisposed()) {
-			disconnected.dispose();
-		}
+	 
 		if (mainLabel != null && !mainLabel.isDisposed()) {
-			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
-				mainLabel.getImage().dispose();
-			}
 			mainLabel.dispose();
 		}
 	}

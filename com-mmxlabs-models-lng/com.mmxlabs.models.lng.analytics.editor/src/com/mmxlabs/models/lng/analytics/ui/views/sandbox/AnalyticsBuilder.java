@@ -107,9 +107,10 @@ import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class AnalyticsBuilder {
-	private static VesselEventOptionDescriptionFormatter vesselEventOptionDescriptionFormatter = new VesselEventOptionDescriptionFormatter();
-	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
-	private static SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
+
+	private static final VesselEventOptionDescriptionFormatter vesselEventOptionDescriptionFormatter = new VesselEventOptionDescriptionFormatter();
+	private static final BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
+	private static final SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
 	private static final boolean DISABLE_FLEET = true;
 	private static final double DEFAULT_MAX_VOLUME = 140_000;
 
@@ -132,8 +133,8 @@ public class AnalyticsBuilder {
 		final String id = getUniqueID(baseName, usedIDStrings);
 		usedIDStrings.add(id);
 
-		if (buy instanceof BuyReference) {
-			final LoadSlot originalLoadSlot = ((BuyReference) buy).getSlot();
+		if (buy instanceof final BuyReference buyReference) {
+			final LoadSlot originalLoadSlot = buyReference.getSlot();
 			if (slotMode != SlotMode.ORIGINAL_SLOT) {
 				// TODO: Copy other params!
 				final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -175,8 +176,7 @@ public class AnalyticsBuilder {
 			}
 
 			return originalLoadSlot;
-		} else if (buy instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
+		} else if (buy instanceof final BuyOpportunity buyOpportunity) {
 			final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 			slot.setOptional(true);
 			slot.setName(id);
@@ -225,16 +225,14 @@ public class AnalyticsBuilder {
 			}
 
 			return slot;
-		} else if (buy instanceof BuyMarket) {
-			final BuyMarket buyMarket = (BuyMarket) buy;
+		} else if (buy instanceof final BuyMarket buyMarket) {
 			final SpotLoadSlot slot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 			slot.setOptional(true);
 			final SpotMarket market = buyMarket.getMarket();
 			if (market instanceof DESPurchaseMarket) {
 				slot.setDESPurchase(true);
-			} else if (market instanceof FOBPurchasesMarket) {
-				final FOBPurchasesMarket desSalesMarket = (FOBPurchasesMarket) market;
-				slot.setPort(desSalesMarket.getNotionalPort());
+			} else if (market instanceof final FOBPurchasesMarket fobPurchasesMarket) {
+				slot.setPort(fobPurchasesMarket.getNotionalPort());
 			}
 			slot.setMarket(market);
 
@@ -253,19 +251,33 @@ public class AnalyticsBuilder {
 	}
 
 	public static int getVesselCapacityInM3(final ShippingOption shippingOption) {
-		if (shippingOption instanceof SimpleVesselCharterOption) {
-			return ((SimpleVesselCharterOption) shippingOption).getVessel().getVesselOrDelegateCapacity();
-		} else if (shippingOption instanceof RoundTripShippingOption) {
-			return ((RoundTripShippingOption) shippingOption).getVessel().getVesselOrDelegateCapacity();
-		} else if (shippingOption instanceof NominatedShippingOption) {
-			return ((NominatedShippingOption) shippingOption).getNominatedVessel().getVesselOrDelegateCapacity();
-		} else if (shippingOption instanceof ExistingCharterMarketOption) {
-			return ((ExistingCharterMarketOption) shippingOption).getCharterInMarket().getVessel().getVesselOrDelegateCapacity();
-		} else if (shippingOption instanceof ExistingVesselCharterOption) {
-			return ((ExistingVesselCharterOption) shippingOption).getVesselCharter().getVessel().getVesselOrDelegateCapacity();
-		} else if (shippingOption instanceof FullVesselCharterOption) {
-			return ((FullVesselCharterOption) shippingOption).getVesselCharter().getVessel().getVesselOrDelegateCapacity();
+		Vessel vessel = null;
+		if (shippingOption instanceof final SimpleVesselCharterOption opt) {
+			vessel = opt.getVessel();
+		} else if (shippingOption instanceof final RoundTripShippingOption opt) {
+			vessel = opt.getVessel();
+		} else if (shippingOption instanceof final NominatedShippingOption opt) {
+			vessel = opt.getNominatedVessel();
+		} else if (shippingOption instanceof final ExistingCharterMarketOption opt) {
+			final CharterInMarket charterInMarket = opt.getCharterInMarket();
+			if (charterInMarket != null) {
+				vessel = charterInMarket.getVessel();
+			}
+		} else if (shippingOption instanceof final ExistingVesselCharterOption opt) {
+			final VesselAvailability vesselCharter = opt.getVesselCharter();
+			if (vesselCharter != null) {
+				vessel = vesselCharter.getVessel();
+			}
+		} else if (shippingOption instanceof final FullVesselCharterOption opt) {
+			final VesselAvailability vesselCharter = opt.getVesselCharter();
+			if (vesselCharter != null) {
+				vessel = vesselCharter.getVessel();
+			}
 		}
+		if (vessel != null) {
+			return vessel.getVesselOrDelegateCapacity();
+		}
+
 		return 0;
 	}
 
@@ -309,9 +321,9 @@ public class AnalyticsBuilder {
 		final String id = getUniqueID(baseName, usedIDStrings);
 		usedIDStrings.add(id);
 
-		if (sell instanceof SellReference) {
+		if (sell instanceof final SellReference sellReference) {
 
-			final DischargeSlot originalDischargeSlot = ((SellReference) sell).getSlot();
+			final DischargeSlot originalDischargeSlot = sellReference.getSlot();
 			if (slotMode != SlotMode.ORIGINAL_SLOT) {
 
 				final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
@@ -350,8 +362,7 @@ public class AnalyticsBuilder {
 			}
 
 			return originalDischargeSlot;
-		} else if (sell instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
+		} else if (sell instanceof final SellOpportunity sellOpportunity) {
 			final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
 			slot.setOptional(true);
 			slot.setName(id);
@@ -397,15 +408,13 @@ public class AnalyticsBuilder {
 				slot.setMaxQuantity(sellOpportunity.getMaxVolume());
 			}
 			return slot;
-		} else if (sell instanceof SellMarket) {
-			final SellMarket sellMarket = (SellMarket) sell;
+		} else if (sell instanceof final SellMarket sellMarket) {
 			final SpotDischargeSlot slot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 			slot.setOptional(true);
 			final SpotMarket market = sellMarket.getMarket();
 			if (market instanceof FOBSalesMarket) {
 				slot.setFOBSale(true);
-			} else if (market instanceof DESSalesMarket) {
-				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+			} else if (market instanceof final DESSalesMarket desSalesMarket) {
 				slot.setPort(desSalesMarket.getNotionalPort());
 			}
 			slot.setMarket(market);
@@ -423,7 +432,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateTravelHoursForLoad(final PortModel portModel, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption,
-			final ModelDistanceProvider modelDistanceProvider) {
+			final @NonNull ModelDistanceProvider modelDistanceProvider) {
 
 		final Port fromPort = loadSlot.getPort();
 		final Port toPort = dischargeSlot.getPort();
@@ -433,8 +442,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
-			return travelTime;
+			return CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 		}
 
 		return 0;
@@ -450,8 +458,7 @@ public class AnalyticsBuilder {
 		if (fromPort != null && toPort != null && vessel != null) {
 			// TODO: Get from input
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
-			final int travelTime = CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
-			return travelTime;
+			return CargoTravelTimeUtils.getMinTimeFromAllowedRoutes(loadSlot, dischargeSlot, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 		}
 
 		return 0;
@@ -496,8 +503,7 @@ public class AnalyticsBuilder {
 
 			if (windowStartDate != null && windowEndDate != null) {
 				final int loadDuration = AnalyticsBuilder.getDuration(buyOption);
-				final int availableTime = Hours.between(windowStartDate, windowEndDate) - loadDuration;
-				return availableTime;
+				return Hours.between(windowStartDate, windowEndDate) - loadDuration;
 			}
 		}
 		return 0;
@@ -632,19 +638,16 @@ public class AnalyticsBuilder {
 	public static ShippingType getBuyShippingType(@Nullable final BuyOption buy) {
 		if (buy == null || buy instanceof OpenBuy) {
 			return ShippingType.None;
-		} else if (buy instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) buy;
+		} else if (buy instanceof final BuyReference buyReference) {
 			final LoadSlot load = buyReference.getSlot();
 			if (load != null) {
 				return load.isDESPurchase() ? ShippingType.NonShipped : ShippingType.Shipped;
 			}
 			return ShippingType.Mixed;
 
-		} else if (buy instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
+		} else if (buy instanceof final BuyOpportunity buyOpportunity) {
 			return buyOpportunity.isDesPurchase() ? ShippingType.NonShipped : ShippingType.Shipped;
-		} else if (buy instanceof BuyMarket) {
-			final BuyMarket buyMarket = (BuyMarket) buy;
+		} else if (buy instanceof final BuyMarket buyMarket) {
 			final SpotMarket spotMarket = buyMarket.getMarket();
 			return spotMarket instanceof DESPurchaseMarket ? ShippingType.NonShipped : ShippingType.Shipped;
 		}
@@ -655,20 +658,17 @@ public class AnalyticsBuilder {
 	public static ShippingType getSellShippingType(@Nullable final SellOption sell) {
 		if (sell == null || sell instanceof OpenSell) {
 			return ShippingType.None;
-		} else if (sell instanceof SellReference) {
-			final SellReference sellReference = (SellReference) sell;
+		} else if (sell instanceof final SellReference sellReference) {
 			final DischargeSlot discharge = sellReference.getSlot();
 			if (discharge != null) {
 				return discharge.isFOBSale() ? ShippingType.NonShipped : ShippingType.Shipped;
 			}
 			return ShippingType.Mixed;
 
-		} else if (sell instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
+		} else if (sell instanceof final SellOpportunity sellOpportunity) {
 			return sellOpportunity.isFobSale() ? ShippingType.NonShipped : ShippingType.Shipped;
-		} else if (sell instanceof SellMarket) {
-			final SellMarket buyMarket = (SellMarket) sell;
-			final SpotMarket spotMarket = buyMarket.getMarket();
+		} else if (sell instanceof final SellMarket sellMarket) {
+			final SpotMarket spotMarket = sellMarket.getMarket();
 			return spotMarket instanceof FOBSalesMarket ? ShippingType.NonShipped : ShippingType.Shipped;
 		}
 
@@ -712,8 +712,8 @@ public class AnalyticsBuilder {
 
 	public static @Nullable BaseLegalEntity getDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation) {
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel((LNGScenarioModel) rootObject);
+		if (rootObject instanceof final LNGScenarioModel scenarioModel) {
+			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 			if (commercialModel.getEntities().size() == 1) {
 				return commercialModel.getEntities().get(0);
 			}
@@ -728,8 +728,7 @@ public class AnalyticsBuilder {
 
 		if (loadSlot != null) {
 			for (final BuyOption buy : optionAnalysisModel.getBuys()) {
-				if (buy instanceof BuyReference) {
-					final BuyReference buyReference = (BuyReference) buy;
+				if (buy instanceof final BuyReference buyReference) {
 					if (buyReference.getSlot() == loadSlot) {
 						buyRef = buyReference;
 						break;
@@ -752,14 +751,12 @@ public class AnalyticsBuilder {
 
 		if (vesselEvent != null) {
 			for (final VesselEventOption opt : optionAnalysisModel.getVesselEvents()) {
-				if (opt instanceof VesselEventReference) {
-					final VesselEventReference reference = (VesselEventReference) opt;
+				if (opt instanceof final VesselEventReference reference) {
 					if (reference.getEvent() == vesselEvent) {
 						veRef = reference;
 						break;
 					}
-				} else if (opt instanceof CharterOutOpportunity) {
-					final CharterOutOpportunity charterOutOpportunity = (CharterOutOpportunity) opt;
+				} else if (opt instanceof final CharterOutOpportunity charterOutOpportunity) {
 
 				}
 			}
@@ -829,12 +826,10 @@ public class AnalyticsBuilder {
 		if (cargo != null) {
 			if (cargo.getCargoType() == CargoType.FLEET) {
 				final VesselAssignmentType vat = cargo.getVesselAssignmentType();
-				if (vat instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) vat;
+				if (vat instanceof final VesselAvailability vesselAvailability) {
 					if (portfolioMode) {
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-							if (shipOpt instanceof ExistingVesselCharterOption) {
-								final ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
+							if (shipOpt instanceof final ExistingVesselCharterOption opt) {
 								if (opt.getVesselCharter() == vesselAvailability) {
 									return opt;
 								}
@@ -847,8 +842,7 @@ public class AnalyticsBuilder {
 					} else if (!DISABLE_FLEET) {
 
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-							if (shipOpt instanceof SimpleVesselCharterOption) {
-								final SimpleVesselCharterOption opt = (SimpleVesselCharterOption) shipOpt;
+							if (shipOpt instanceof final SimpleVesselCharterOption opt) {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
@@ -874,8 +868,7 @@ public class AnalyticsBuilder {
 					} else {
 						// create RT
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-							if (shipOpt instanceof RoundTripShippingOption) {
-								final RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+							if (shipOpt instanceof final RoundTripShippingOption opt) {
 								if (opt.getVessel() != vesselAvailability.getVessel()) {
 									continue;
 								}
@@ -901,13 +894,11 @@ public class AnalyticsBuilder {
 						return opt;
 
 					}
-				} else if (vat instanceof CharterInMarket) {
-					final CharterInMarket charterInMarket = (CharterInMarket) vat;
+				} else if (vat instanceof final CharterInMarket charterInMarket) {
 
 					if (portfolioMode) {
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-							if (shipOpt instanceof ExistingCharterMarketOption) {
-								final ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
+							if (shipOpt instanceof final ExistingCharterMarketOption opt) {
 								if (opt.getCharterInMarket() == charterInMarket && opt.getSpotIndex() == cargo.getSpotIndex()) {
 									return opt;
 								}
@@ -919,8 +910,7 @@ public class AnalyticsBuilder {
 						return opt;
 					} else {
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-							if (shipOpt instanceof RoundTripShippingOption) {
-								final RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+							if (shipOpt instanceof final RoundTripShippingOption opt) {
 								if (opt.getVessel() != charterInMarket.getVessel()) {
 									continue;
 								}
@@ -947,8 +937,7 @@ public class AnalyticsBuilder {
 		} else if (load != null && load.isDESPurchase() && load.getNominatedVessel() != null) {
 
 			for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-				if (shipOpt instanceof NominatedShippingOption) {
-					final NominatedShippingOption opt = (NominatedShippingOption) shipOpt;
+				if (shipOpt instanceof final NominatedShippingOption opt) {
 					if (opt.getNominatedVessel() != load.getNominatedVessel()) {
 						continue;
 					}
@@ -964,8 +953,7 @@ public class AnalyticsBuilder {
 		} else if (dischargeSlot != null && dischargeSlot.isFOBSale() && dischargeSlot.getNominatedVessel() != null) {
 
 			for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-				if (shipOpt instanceof NominatedShippingOption) {
-					final NominatedShippingOption opt = (NominatedShippingOption) shipOpt;
+				if (shipOpt instanceof final NominatedShippingOption opt) {
 					if (opt.getNominatedVessel() != dischargeSlot.getNominatedVessel()) {
 						continue;
 					}
@@ -986,12 +974,10 @@ public class AnalyticsBuilder {
 
 		if (vesselEvent != null) {
 			final VesselAssignmentType vat = vesselEvent.getVesselAssignmentType();
-			if (vat instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) vat;
+			if (vat instanceof final VesselAvailability vesselAvailability) {
 				if (portfolioMode) {
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof ExistingVesselCharterOption) {
-							final ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
+						if (shipOpt instanceof final ExistingVesselCharterOption opt) {
 							if (opt.getVesselCharter() == vesselAvailability) {
 								return opt;
 							}
@@ -1004,8 +990,7 @@ public class AnalyticsBuilder {
 				} else if (!DISABLE_FLEET) {
 
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof SimpleVesselCharterOption) {
-							final SimpleVesselCharterOption opt = (SimpleVesselCharterOption) shipOpt;
+						if (shipOpt instanceof final SimpleVesselCharterOption opt) {
 							if (opt.getVessel() != vesselAvailability.getVessel()) {
 								continue;
 							}
@@ -1031,8 +1016,7 @@ public class AnalyticsBuilder {
 				} else {
 					// create RT
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof RoundTripShippingOption) {
-							final RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+						if (shipOpt instanceof final RoundTripShippingOption opt) {
 							if (opt.getVessel() != vesselAvailability.getVessel()) {
 								continue;
 							}
@@ -1057,13 +1041,11 @@ public class AnalyticsBuilder {
 					return opt;
 
 				}
-			} else if (vat instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vat;
+			} else if (vat instanceof final CharterInMarket charterInMarket) {
 
 				if (portfolioMode) {
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof ExistingCharterMarketOption) {
-							final ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
+						if (shipOpt instanceof final ExistingCharterMarketOption opt) {
 							if (opt.getCharterInMarket() == charterInMarket && opt.getSpotIndex() == vesselEvent.getSpotIndex()) {
 								return opt;
 							}
@@ -1075,8 +1057,7 @@ public class AnalyticsBuilder {
 					return opt;
 				} else {
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof RoundTripShippingOption) {
-							final RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+						if (shipOpt instanceof final RoundTripShippingOption opt) {
 							if (opt.getVessel() != charterInMarket.getVessel()) {
 								continue;
 							}
@@ -1108,8 +1089,7 @@ public class AnalyticsBuilder {
 
 		if (dischargeSlot != null) {
 			for (final SellOption sell : optionAnalysisModel.getSells()) {
-				if (sell instanceof SellReference) {
-					final SellReference sellReference = (SellReference) sell;
+				if (sell instanceof final SellReference sellReference) {
 					if (sellReference.getSlot() == dischargeSlot) {
 						sellRef = sellReference;
 						break;
@@ -1127,8 +1107,7 @@ public class AnalyticsBuilder {
 
 	public static NominatedShippingOption getOrCreateNominatedShippingOption(final OptionAnalysisModel optionAnalysisModel, final Vessel vessel) {
 		for (final ShippingOption opt : optionAnalysisModel.getShippingTemplates()) {
-			if (opt instanceof NominatedShippingOption) {
-				final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) opt;
+			if (opt instanceof final NominatedShippingOption nominatedShippingOption) {
 				if (nominatedShippingOption.getNominatedVessel() == vessel) {
 					return nominatedShippingOption;
 				}
@@ -1188,8 +1167,7 @@ public class AnalyticsBuilder {
 		menuHelper.clearActions();
 		final ShippingOptionDescriptionFormatter f = new ShippingOptionDescriptionFormatter();
 		for (final ShippingOption option : optionAnalysisModel.getShippingTemplates()) {
-			if (option instanceof RoundTripShippingOption) {
-				final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) option;
+			if (option instanceof final RoundTripShippingOption roundTripShippingOption) {
 				if (roundTripShippingOption.getVessel() == vessel) {
 					menuHelper.addAction(new RunnableAction(f.render(option), () -> {
 						final CompoundCommand cmd = new CompoundCommand();
@@ -1223,11 +1201,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static Port getPort(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			return sellOpportunity.getPort();
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getPort();
@@ -1237,11 +1213,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static LocalDate getDate(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			return sellOpportunity.getDate();
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getWindowStart();
@@ -1251,11 +1225,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static boolean isShipped(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			return !buyOpportunity.isDesPurchase();
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return !slot.isDESPurchase();
@@ -1265,11 +1237,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static Port getPort(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			return buyOpportunity.getPort();
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getPort();
@@ -1279,11 +1249,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static LocalDate getDate(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			return buyOpportunity.getDate();
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getWindowStart();
@@ -1293,8 +1261,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ZonedDateTime getWindowStartDate(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
 				final LocalDate date = buyOpportunity.getDate();
@@ -1302,8 +1269,7 @@ public class AnalyticsBuilder {
 					return date.atStartOfDay(ZoneId.of(port.getLocation().getTimeZone())).plusHours(port.getDefaultStartTime());
 				}
 			}
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getStart();
@@ -1313,14 +1279,12 @@ public class AnalyticsBuilder {
 	}
 
 	public static ZonedDateTime getWindowStartDate(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
 				return sellOpportunity.getDate().atStartOfDay(port.getZoneId()).plusHours(port.getDefaultStartTime());
 			}
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getStart();
@@ -1330,8 +1294,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ZonedDateTime getWindowEndDate(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
 				ZonedDateTime t = buyOpportunity.getDate().atStartOfDay(ZoneId.of(port.getLocation().getTimeZone())).plusHours(port.getDefaultStartTime());
@@ -1358,8 +1321,7 @@ public class AnalyticsBuilder {
 				}
 				return t;
 			}
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getEnd();
@@ -1369,8 +1331,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ZonedDateTime getWindowEndDate(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
 				final LocalDate date = sellOpportunity.getDate();
@@ -1400,8 +1361,7 @@ public class AnalyticsBuilder {
 					return t;
 				}
 			}
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getEnd();
@@ -1411,11 +1371,9 @@ public class AnalyticsBuilder {
 	}
 
 	public static boolean isShipped(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			return !sellOpportunity.isFobSale();
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return !slot.isFOBSale();
@@ -1425,25 +1383,19 @@ public class AnalyticsBuilder {
 	}
 
 	public static int getDuration(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
+		if (option instanceof final SellOpportunity sellOpportunity) {
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
 				return port.getDischargeDuration();
 			}
-		} else if (option instanceof SellReference) {
-
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getDuration();
 			}
-		} else if (option instanceof SellMarket) {
-
-			final SellMarket sellMarket = (SellMarket) option;
+		} else if (option instanceof final SellMarket sellMarket) {
 			final SpotMarket market = sellMarket.getMarket();
-			if (market instanceof DESSalesMarket) {
-				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+			if (market instanceof final DESSalesMarket desSalesMarket) {
 				final Port port = desSalesMarket.getNotionalPort();
 				if (port != null) {
 					return port.getDischargeDuration();
@@ -1454,24 +1406,19 @@ public class AnalyticsBuilder {
 	}
 
 	public static int getDuration(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
 				return port.getDischargeDuration();
 			}
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getSchedulingTimeWindow().getDuration();
 			}
-		} else if (option instanceof BuyMarket) {
-
-			final BuyMarket buylMarket = (BuyMarket) option;
+		} else if (option instanceof final BuyMarket buylMarket) {
 			final SpotMarket market = buylMarket.getMarket();
-			if (market instanceof FOBPurchasesMarket) {
-				final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+			if (market instanceof final FOBPurchasesMarket fobPurchasesMarket) {
 				final Port port = fobPurchasesMarket.getNotionalPort();
 				if (port != null) {
 					return port.getLoadDuration();
@@ -1483,23 +1430,15 @@ public class AnalyticsBuilder {
 
 	public static Vessel getVessel(final ShippingOption shippingOption) {
 		Vessel vessel = null;
-		if (shippingOption instanceof RoundTripShippingOption) {
-			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shippingOption;
+		if (shippingOption instanceof final RoundTripShippingOption roundTripShippingOption) {
 			vessel = roundTripShippingOption.getVessel();
-
-		} else if (shippingOption instanceof SimpleVesselCharterOption) {
-			final SimpleVesselCharterOption roundTripShippingOption = (SimpleVesselCharterOption) shippingOption;
+		} else if (shippingOption instanceof final SimpleVesselCharterOption roundTripShippingOption) {
 			vessel = roundTripShippingOption.getVessel();
-		} else if (shippingOption instanceof ExistingVesselCharterOption) {
-
-			final ExistingVesselCharterOption existingVesselAvailability = (ExistingVesselCharterOption) shippingOption;
+		} else if (shippingOption instanceof final ExistingVesselCharterOption existingVesselAvailability) {
 			vessel = existingVesselAvailability.getVesselCharter().getVessel();
-		} else if (shippingOption instanceof FullVesselCharterOption) {
-
-			final FullVesselCharterOption existingVesselAvailability = (FullVesselCharterOption) shippingOption;
+		} else if (shippingOption instanceof final FullVesselCharterOption existingVesselAvailability) {
 			vessel = existingVesselAvailability.getVesselCharter().getVessel();
-		} else if (shippingOption instanceof ExistingCharterMarketOption) {
-			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shippingOption;
+		} else if (shippingOption instanceof final ExistingCharterMarketOption existingCharterMarketOption) {
 			final CharterInMarket market = existingCharterMarketOption.getCharterInMarket();
 			if (market != null) {
 				vessel = market.getVessel();
@@ -1533,42 +1472,38 @@ public class AnalyticsBuilder {
 		return 0;
 	}
 
-	public static double[] getCargoCVRange(final SellOption option) {
-		if (option instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) option;
-			if (sellOpportunity.getPort() != null) {
-				return new double[] { sellOpportunity.getPort().getMinCvValue(), sellOpportunity.getPort().getMaxCvValue() };
+	public static double @Nullable [] getCargoCVRange(final SellOption option) {
+		if (option instanceof final SellOpportunity sellOpportunity) {
+			final Port port = sellOpportunity.getPort();
+			if (port != null) {
+				return new double[] { port.getMinCvValue(), port.getMaxCvValue() };
 			}
-		} else if (option instanceof SellReference) {
-			final SellReference sellReference = (SellReference) option;
+		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return new double[] { slot.getSlotOrDelegateMinCv(), slot.getSlotOrDelegateMaxCv() };
 			}
-		} else if (option instanceof SellMarket) {
-			final SellMarket sellMarket = (SellMarket) option;
+		} else if (option instanceof final SellMarket sellMarket) {
 			final SpotMarket market = sellMarket.getMarket();
-			if (market instanceof FOBSalesMarket) {
-				final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+			if (market instanceof final FOBSalesMarket fobSalesMarket) {
 				// return fobSalesMarket.getCv();
-			} else if (market instanceof DESSalesMarket) {
-				final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
-				if (desSalesMarket.getNotionalPort() != null) {
-					return new double[] { desSalesMarket.getNotionalPort().getMinCvValue(), desSalesMarket.getNotionalPort().getMaxCvValue() };
+			} else if (market instanceof final DESSalesMarket desSalesMarket) {
+				final Port notionalPort = desSalesMarket.getNotionalPort();
+				if (notionalPort != null) {
+					return new double[] { notionalPort.getMinCvValue(), notionalPort.getMaxCvValue() };
 				}
 			}
 		}
 		return null;
 	}
 
-	public static int[] getBuyVolumeInMMBTU(final BuyOption buy) {
+	public static int @Nullable [] getBuyVolumeInMMBTU(final BuyOption buy) {
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
 			return null;
 		}
-		if (buy instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) buy;
-			final LoadSlot slot = ((BuyReference) buy).getSlot();
+		if (buy instanceof final BuyReference buyReference) {
+			final LoadSlot slot = buyReference.getSlot();
 			if (slot == null) {
 				return null;
 			}
@@ -1577,8 +1512,7 @@ public class AnalyticsBuilder {
 			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
 					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
 							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
-		} else if (buy instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
+		} else if (buy instanceof final BuyOpportunity buyOpportunity) {
 			if (buyOpportunity.getVolumeMode() == VolumeMode.FIXED) {
 				return new int[] { buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV),
 						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV) };
@@ -1588,29 +1522,30 @@ public class AnalyticsBuilder {
 			} else {
 				return new int[] { 0, (int) ((double) DEFAULT_MAX_VOLUME * cargoCV) };
 			}
-		} else if (buy instanceof BuyMarket) {
-			final BuyMarket market = (BuyMarket) buy;
-			return new int[] { market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
-					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV) };
+		} else if (buy instanceof final BuyMarket buyMarket) {
+			final SpotMarket spotMarket = buyMarket.getMarket();
+			return new int[] { spotMarket.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? spotMarket.getMinQuantity() : (int) ((double) spotMarket.getMinQuantity() * cargoCV),
+					spotMarket.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? spotMarket.getMaxQuantity() : (int) ((double) spotMarket.getMaxQuantity() * cargoCV) };
 		}
 		return null;
 	}
 
-	public static int[] getSellVolumeInMMBTU(final BuyOption buy, final SellOption sell) {
+	public static int @Nullable [] getSellVolumeInMMBTU(final BuyOption buy, final SellOption sell) {
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
 			return null;
 		}
-		if (sell instanceof SellReference) {
-			final SellReference sellReference = (SellReference) sell;
-			final DischargeSlot slot = ((SellReference) sell).getSlot();
-			final int slotOrContractMinQuantity = slot.getSlotOrDelegateMinQuantity();
-			final int slotOrContractMaxQuantity = slot.getSlotOrDelegateMaxQuantity();
-			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
-					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
-							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
-		} else if (sell instanceof SellOpportunity) {
-			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
+		if (sell instanceof final SellReference sellReference) {
+			final DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				final int slotOrContractMinQuantity = slot.getSlotOrDelegateMinQuantity();
+				final int slotOrContractMaxQuantity = slot.getSlotOrDelegateMaxQuantity();
+
+				return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
+						slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
+								: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
+			}
+		} else if (sell instanceof final SellOpportunity sellOpportunity) {
 			if (sellOpportunity.getVolumeMode() == VolumeMode.FIXED) {
 				return new int[] { sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV),
 						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV) };
@@ -1618,32 +1553,29 @@ public class AnalyticsBuilder {
 				return new int[] { sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMinVolume() : (int) ((double) sellOpportunity.getMinVolume() * cargoCV),
 						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV) };
 			}
-		} else if (sell instanceof SellMarket) {
-			final SellMarket market = (SellMarket) sell;
-			return new int[] { market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
-					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV) };
+		} else if (sell instanceof final SellMarket sellMarket) {
+			final SpotMarket spotMarket = sellMarket.getMarket();
+			if (spotMarket != null) {
+				return new int[] { spotMarket.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? spotMarket.getMinQuantity() : (int) ((double) spotMarket.getMinQuantity() * cargoCV),
+						spotMarket.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? spotMarket.getMaxQuantity() : (int) ((double) spotMarket.getMaxQuantity() * cargoCV) };
+			}
 		}
 		return null;
 	}
 
 	public static Collection<APortSet<Port>> getPortRestrictions(final ShippingOption option) {
+		Vessel vessel = null;
 		if (option == null) {
 			return Collections.emptyList();
-		} else if (option instanceof SimpleVesselCharterOption) {
-			final Vessel vessel = ((SimpleVesselCharterOption) option).getVessel();
-			if (vessel != null) {
-				return vessel.getVesselOrDelegateInaccessiblePorts();
-			}
-		} else if (option instanceof RoundTripShippingOption) {
-			final Vessel vessel = ((RoundTripShippingOption) option).getVessel();
-			if (vessel != null) {
-				return vessel.getVesselOrDelegateInaccessiblePorts();
-			}
-		} else if (option instanceof NominatedShippingOption) {
-			final Vessel nominatedVessel = ((NominatedShippingOption) option).getNominatedVessel();
-			if (nominatedVessel != null) {
-				nominatedVessel.getVesselOrDelegateInaccessiblePorts();
-			}
+		} else if (option instanceof SimpleVesselCharterOption opt) {
+			vessel = opt.getVessel();
+		} else if (option instanceof RoundTripShippingOption opt) {
+			vessel = opt.getVessel();
+		} else if (option instanceof NominatedShippingOption opt) {
+			vessel = opt.getNominatedVessel();
+		}
+		if (vessel != null) {
+			return vessel.getVesselOrDelegateInaccessiblePorts();
 		}
 		return Collections.emptyList();
 	}
@@ -1651,8 +1583,8 @@ public class AnalyticsBuilder {
 	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getBuyVesselRestrictions(final BuyOption buy) {
 		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 		boolean permitted = false;
-		if (buy instanceof BuyReference) {
-			final LoadSlot slot = ((BuyReference) buy).getSlot();
+		if (buy instanceof BuyReference buyReference) {
+			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final List<AVesselSet<Vessel>> allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
 				permitted = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
@@ -1673,8 +1605,8 @@ public class AnalyticsBuilder {
 	public static Pair<Boolean, Set<AVesselSet<Vessel>>> getSellVesselRestrictions(final SellOption sell) {
 		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 		boolean permitted = false;
-		if (sell instanceof SellReference) {
-			final DischargeSlot slot = ((SellReference) sell).getSlot();
+		if (sell instanceof SellReference sellReference) {
+			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final List<AVesselSet<Vessel>> allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
 				permitted = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
@@ -1695,8 +1627,8 @@ public class AnalyticsBuilder {
 	public static Pair<Boolean, Set<APortSet<Port>>> getBuyPortRestrictions(final BuyOption buy) {
 		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
 		boolean permitted = false;
-		if (buy instanceof BuyReference) {
-			final LoadSlot slot = ((BuyReference) buy).getSlot();
+		if (buy instanceof BuyReference buyReference) {
+			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final List<APortSet<Port>> allowedPorts = slot.getSlotOrDelegatePortRestrictions();
 				permitted = slot.getSlotOrDelegatePortRestrictionsArePermissive();
@@ -1715,8 +1647,8 @@ public class AnalyticsBuilder {
 	public static Pair<Boolean, Set<APortSet<Port>>> getSellPortRestrictions(final SellOption sell) {
 		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
 		boolean permitted = false;
-		if (sell instanceof SellReference) {
-			final DischargeSlot slot = ((SellReference) sell).getSlot();
+		if (sell instanceof SellReference sellReference) {
+			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final List<APortSet<Port>> allowedPorts = slot.getSlotOrDelegatePortRestrictions();
 				permitted = slot.getSlotOrDelegatePortRestrictionsArePermissive();
@@ -1733,27 +1665,27 @@ public class AnalyticsBuilder {
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false) //
-				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof FOBPurchasesMarket) //
-				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));
+		return b -> ((b instanceof BuyReference buyReference && buyReference.getSlot() != null && !buyReference.getSlot().isDESPurchase()) //
+				|| (b instanceof BuyMarket buyMarket && buyMarket.getMarket() instanceof FOBPurchasesMarket) //
+				|| (b instanceof BuyOpportunity buyOpportunity && !buyOpportunity.isDesPurchase()));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true) //
-				|| (b instanceof BuyMarket && ((BuyMarket) b).getMarket() instanceof DESPurchaseMarket) //
-				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
+		return b -> ((b instanceof BuyReference buyReference && buyReference.getSlot() != null && buyReference.getSlot().isDESPurchase()) //
+				|| (b instanceof BuyMarket buyMarket && buyMarket.getMarket() instanceof DESPurchaseMarket) //
+				|| (b instanceof BuyOpportunity buyOpportunity && buyOpportunity.isDesPurchase()));
 	}
 
 	public static Predicate<SellOption> isFOBSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true) //
-				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof FOBSalesMarket) //
-				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
+		return s -> ((s instanceof SellReference sellReference && sellReference.getSlot() != null && sellReference.getSlot().isFOBSale()) //
+				|| (s instanceof SellMarket sellMarket && sellMarket.getMarket() instanceof FOBSalesMarket) //
+				|| (s instanceof SellOpportunity sellOpportunity && sellOpportunity.isFobSale()));
 	}
 
 	public static Predicate<SellOption> isDESSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false) //
-				|| (s instanceof SellMarket && ((SellMarket) s).getMarket() instanceof DESSalesMarket) //
-				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == false));
+		return s -> ((s instanceof SellReference sellReference && sellReference.getSlot() != null && !sellReference.getSlot().isFOBSale()) //
+				|| (s instanceof SellMarket sellMarket && sellMarket.getMarket() instanceof DESSalesMarket) //
+				|| (s instanceof SellOpportunity sellOpportunity && !sellOpportunity.isFobSale()));
 	}
 
 	public static Predicate<ShippingOption> isNominated() {
@@ -1766,11 +1698,9 @@ public class AnalyticsBuilder {
 
 	public static VesselEvent makeVesselEvent(final VesselEventOption vesselEventOption, final LNGScenarioModel scenarioModel) {
 
-		if (vesselEventOption instanceof VesselEventReference) {
-			final VesselEventReference vesselEventReference = (VesselEventReference) vesselEventOption;
+		if (vesselEventOption instanceof VesselEventReference vesselEventReference) {
 			return vesselEventReference.getEvent();
-		} else if (vesselEventOption instanceof CharterOutOpportunity) {
-			final CharterOutOpportunity opportunity = (CharterOutOpportunity) vesselEventOption;
+		} else if (vesselEventOption instanceof CharterOutOpportunity opportunity) {
 
 			final String baseName = vesselEventOptionDescriptionFormatter.render(opportunity);
 
@@ -1801,8 +1731,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static boolean isSpot(final BuyOption buy) {
-		if (buy instanceof BuyReference) {
-			final BuyReference ref = (BuyReference) buy;
+		if (buy instanceof BuyReference ref) {
 			return ref.getSlot() instanceof SpotSlot;
 		} else if (buy instanceof BuyMarket) {
 			return true;
@@ -1811,8 +1740,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static boolean isSpot(final SellOption sell) {
-		if (sell instanceof SellReference) {
-			final SellReference ref = (SellReference) sell;
+		if (sell instanceof SellReference ref) {
 			return ref.getSlot() instanceof SpotSlot;
 		} else if (sell instanceof SellMarket) {
 			return true;

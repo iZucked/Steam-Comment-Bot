@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
@@ -29,13 +28,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 
 		final EObject object = ctx.getTarget();
-		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
+		if (object instanceof Cargo cargo) {
 
-			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.FLEET  ? CargoDeliveryType.SHIPPED : CargoDeliveryType.NOT_SHIPPED;
+			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.FLEET ? CargoDeliveryType.SHIPPED : CargoDeliveryType.NOT_SHIPPED;
 
 			for (final Slot slot : cargo.getSlots()) {
 
@@ -69,7 +67,7 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 						failures.add(dsd);
 					}
 				}
-				
+
 				if (slot instanceof LoadSlot) {
 
 					final LoadSlot loadSlot = (LoadSlot) slot;
@@ -97,8 +95,6 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

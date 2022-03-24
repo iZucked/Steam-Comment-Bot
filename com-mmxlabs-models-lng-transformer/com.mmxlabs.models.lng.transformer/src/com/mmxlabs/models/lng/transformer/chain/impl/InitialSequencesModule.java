@@ -30,11 +30,6 @@ public class InitialSequencesModule extends AbstractModule {
 
 	}
 
-	@Override
-	protected void configure() {
-
-	}
-
 	@Provides
 	@Singleton
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)

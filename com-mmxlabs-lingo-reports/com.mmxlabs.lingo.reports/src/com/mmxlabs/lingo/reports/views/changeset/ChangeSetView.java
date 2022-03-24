@@ -141,9 +141,6 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -157,6 +154,9 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -1026,7 +1026,7 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
-			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate16);
+			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate_16);
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
@@ -1493,7 +1493,7 @@ public class ChangeSetView extends ViewPart {
 
 				}
 			});
-			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate16);
+			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate_16);
 			helper.addAction(action);
 			showMenu = true;
 			return showMenu;

@@ -29,7 +29,6 @@ import com.mmxlabs.common.parser.nodes.Node;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -49,7 +48,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A model constraint for checking that curves which are attached to objects have data for the dates associated with those objects.
+ * A model constraint for checking that curves which are attached to objects
+ * have data for the dates associated with those objects.
  * 
  * @author Simon McGregor
  * 
@@ -119,8 +119,9 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	}
 
 	/**
-	 * Checks to see if a slot has any validation problems associated with missing curve data in: - market indices (in any associated contract or price expression) - entity tax rates (in any
-	 * associated contract)
+	 * Checks to see if a slot has any validation problems associated with missing
+	 * curve data in: - market indices (in any associated contract or price
+	 * expression) - entity tax rates (in any associated contract)
 	 * 
 	 * @param slot
 	 * @param ctx
@@ -171,8 +172,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 								continue;
 							}
 							@Nullable
-							final
-							YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+							final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || utcDate.isBefore(date)) {
 
 								final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
@@ -247,7 +247,8 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	}
 
 	/**
-	 * Checks to see if a slot has any validation problems associated with missing curve data in: - entity tax rates (for the shipping entity)
+	 * Checks to see if a slot has any validation problems associated with missing
+	 * curve data in: - entity tax rates (for the shipping entity)
 	 * 
 	 * @param cargo
 	 * @param ctx
@@ -257,20 +258,28 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 		// final MMXRootObject rootObject = extraContext.getRootObject();
 		// if (rootObject instanceof LNGScenarioModel) {
-		// final CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
+		// final CommercialModel commercialModel = ((LNGScenarioModel)
+		// rootObject).getCommercialModel();
 
 		// for (final Slot slot : cargo.getSlots()) {
 
 		// final ZonedDateTime date = slot.getWindowStartWithSlotOrPortTime();
-		// final BaseLegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
+		// final BaseLegalEntity entity = commercialModel.getShippingEntity(); // get
+		// default shipping entity
 
 		// check entity tax rates
-		// if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-		// String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
-		// final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
-		// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+		// if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(),
+		// ctx)) {
+		// String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo
+		// '%s'.";
+		// final String failureMessage = String.format(format, entity.getName(),
+		// sdf.format(date), cargo.getName());
+		// final DetailConstraintStatusDecorator dsd = new
+		// DetailConstraintStatusDecorator((IConstraintStatus)
+		// ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 		// dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
-		// dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
+		// dsd.addEObjectAndFeature(entity,
+		// CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
 		// failures.add(dsd);
 		// }
 		// }
@@ -280,13 +289,15 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
+	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse
+	 * .emf.validation.IValidationContext)
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 
-		// check slots for index data (price expressions or contracts) and tax rate data (entity)
+		// check slots for index data (price expressions or contracts) and tax rate data
+		// (entity)
 		if (object instanceof Slot) {
 			validateSlot((Slot<?>) object, ctx, extraContext, statuses);
 		}
@@ -298,8 +309,6 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		else if (object instanceof Vessel) {
 
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

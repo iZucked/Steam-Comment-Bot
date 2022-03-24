@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -40,25 +39,26 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+
 /**
  * 
  * @author SG
  * 
- * NOTE! Restricted elements constraint is in EmptyRestrictionsConstraint
+ *         NOTE! Restricted elements constraint is in
+ *         EmptyRestrictionsConstraint
  *
  */
 public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
 
 		final EObject object = ctx.getTarget();
-		if (object instanceof SpotSlot) {
-			final SpotSlot spotSlot = (SpotSlot) object;
+		if (object instanceof SpotSlot spotSlot) {
 
 			// Ignore extra spot slots.
 			if (!(extraContext.getContainer(spotSlot) instanceof CargoModel)) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final SpotMarket market = spotSlot.getMarket();
@@ -191,8 +191,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			if (spotSlot instanceof SpotLoadSlot) {
-				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
+			if (spotSlot instanceof SpotLoadSlot spotLoadSlot) {
 
 				if (spotLoadSlot.isSetCargoCV()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -201,8 +200,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				}
 
-				if (market instanceof DESPurchaseMarket) {
-					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+				if (market instanceof DESPurchaseMarket desPurchaseMarket) {
 
 					final EList<APortSet<Port>> destinationPortSets = desPurchaseMarket.getDestinationPorts();
 					final Set<Port> destinationPorts = SetUtils.getObjects(destinationPortSets);
@@ -215,8 +213,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 					}
 
-				} else if (market instanceof FOBPurchasesMarket) {
-					final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+				} else if (market instanceof FOBPurchasesMarket fobPurchasesMarket) {
 					if (spotLoadSlot.getPort() != fobPurchasesMarket.getNotionalPort()) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -229,11 +226,9 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 
-			} else if (spotSlot instanceof SpotDischargeSlot) {
-				final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) spotSlot;
+			} else if (spotSlot instanceof SpotDischargeSlot spotDischargeSlot) {
 
-				if (market instanceof DESSalesMarket) {
-					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+				if (market instanceof DESSalesMarket desSalesMarket) {
 
 					if (spotDischargeSlot.getPort() != desSalesMarket.getNotionalPort()) {
 
@@ -246,8 +241,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 					}
 
-				} else if (market instanceof FOBSalesMarket) {
-					final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+				} else if (market instanceof FOBSalesMarket fobSalesMarket) {
 
 					final Set<Port> originPorts = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
 					if (!originPorts.contains(spotDischargeSlot.getPort())) {
@@ -262,8 +256,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 			}
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				if (lngScenarioModel.getPromptPeriodStart() != null) {
 					final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEnd();
 					if (windowEndWithSlotOrPortTime.isBefore(lngScenarioModel.getPromptPeriodStart().atStartOfDay(ZoneId.from(windowEndWithSlotOrPortTime)))) {
@@ -279,8 +272,6 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

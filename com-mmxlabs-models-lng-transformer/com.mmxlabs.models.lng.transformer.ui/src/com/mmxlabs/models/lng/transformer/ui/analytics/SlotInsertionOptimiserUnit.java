@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -571,7 +572,7 @@ public class SlotInsertionOptimiserUnit {
 								checker.init(initialSimilarityState, thisSimilarityState, state.originalRawSequences);
 								record.complexity = checker.getFullDifferences().size();
 								return record;
-							}));
+							}, LinkedHashMap::new, Collectors.toList()));
 					// ,
 
 					// Sort

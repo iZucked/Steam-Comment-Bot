@@ -10,6 +10,9 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +26,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} object.
@@ -143,7 +147,7 @@ public class OptionAnalysisModelItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/sandbox-08.png"));
+		return overlayImage(object, CommonImages.getImageDescriptor(IconPaths.Sandbox, IconMode.Enabled).createImage());
 	}
 
 	/**

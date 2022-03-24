@@ -17,8 +17,8 @@ import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.osgi.framework.FrameworkUtil;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Eclipse e4 command handler to collapse all {@link AbstractTreeViewer} nodes.

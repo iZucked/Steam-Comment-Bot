@@ -21,12 +21,8 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 
 /**
- * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
- * Implementation sort vessels alphabetically grouped into fleet and spot
- * vessels. There are currently two sort modes on top of this;
- * {@link Mode#STACK} will show multiple scenarios in sequence.
- * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
- * side-by-side.
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
+ * this; {@link Mode#STACK} will show multiple scenarios in sequence. {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios side-by-side.
  * 
  * @author Simon Goodall
  * 
@@ -34,16 +30,45 @@ import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 public class ScenarioViewerComparator extends ViewerComparator {
 
 	public enum Mode {
-		STACK("Stack"), INTERLEAVE("Interleave");
+		STACK("Stack", "Rows are grouped by scenario"), //
+		INTERLEAVE("Interleave", "Row are grouped by name");
 
 		private final String displayName;
+		private final String tooltip;
 
-		private Mode(final String displayName) {
+		private Mode(final String displayName, String tooltip) {
 			this.displayName = displayName;
+			this.tooltip = tooltip;
+
 		}
 
 		public final String getDisplayName() {
 			return displayName;
+		}
+
+		public final String getTooltip() {
+			return tooltip;
+		}
+	}
+
+	public enum Category {
+		BY_NAME("By name", "Rows are sorted by name, grouped by non-shipped, fleet and market"), //
+		BY_SIZE("By size", "Rows are sorted by capacity then name, grouped by non-shipped, fleet and market");
+
+		private final String displayName;
+		private final String tooltip;
+
+		private Category(final String displayName, String tooltip) {
+			this.displayName = displayName;
+			this.tooltip = tooltip;
+		}
+
+		public final String getDisplayName() {
+			return displayName;
+		}
+
+		public final String getTooltip() {
+			return tooltip;
 		}
 	}
 
@@ -52,6 +77,15 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	}
 
 	private Mode mode = Mode.INTERLEAVE;
+	private Category category = Category.BY_NAME;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
 	@NonNull
 	private final ScenarioComparisonService selectedScenariosService;
@@ -110,6 +144,28 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		return "";
 	}
 
+	private int getSequenceCapacity(final Object obj) {
+		if (obj instanceof final CombinedSequence combinedSequence) {
+			final Vessel vessel = combinedSequence.getVessel();
+			if (vessel != null) {
+				return vessel.getVesselOrDelegateCapacity();
+			}
+		} else if (obj instanceof final Sequence s) {
+			Vessel vessel = null;
+			if (s.getVesselAvailability() != null) {
+				vessel = s.getVesselAvailability().getVessel();
+			} else if (s.getCharterInMarket() != null) {
+				vessel = s.getCharterInMarket().getVessel();
+			}
+
+			if (vessel != null) {
+				return vessel.getVesselOrDelegateCapacity();
+			}
+
+		}
+		return 0;
+	}
+
 	private Type getSequenceType(final Object obj) {
 		if (obj instanceof CombinedSequence) {
 			return Type.FLEET;
@@ -149,14 +205,33 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				return s1Type.ordinal() - s2Type.ordinal();
 			}
 
-			// Sort by name
-			final String s1Name = getSequenceName(e1);
-			final String s2Name = getSequenceName(e2);
+			if (category == Category.BY_SIZE) {
 
-			final int c = s1Name.compareTo(s2Name);
-			if (c != 0) {
-				return c;
+				// Sort by capacity
+				final int s1Value = getSequenceCapacity(e1);
+				final int s2Value = getSequenceCapacity(e2);
+
+				final int c = -Integer.compare(s1Value, s2Value);
+				if (c != 0) {
+					return c;
+				}
+
 			}
+
+			// if (category == WithCategory.BY_NAME)
+			{
+
+				// Sort by name
+				final String s1Name = getSequenceName(e1);
+				final String s2Name = getSequenceName(e2);
+
+				final int c = s1Name.compareTo(s2Name);
+				if (c != 0) {
+					return c;
+				}
+
+			}
+
 			{
 				// Add scenario instance name to field if multiple scenarios are selected
 				final Object input = viewer.getInput();
@@ -223,15 +298,29 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				if (s1Type != s2Type) {
 					return s1Type.ordinal() - s2Type.ordinal();
 				}
+				if (category == Category.BY_SIZE) {
 
-				// Sort by name
-				// Sort by name
-				final String s1Name = getSequenceName(e1);
-				final String s2Name = getSequenceName(e2);
+					// Sort by capacity
+					final int s1Value = getSequenceCapacity(e1);
+					final int s2Value = getSequenceCapacity(e2);
 
-				final int c = s1Name.compareTo(s2Name);
-				if (c != 0) {
-					return c;
+					final int c = -Integer.compare(s1Value, s2Value);
+					if (c != 0) {
+						return c;
+					}
+
+				}
+
+				// if (category == WithCategory.BY_NAME)
+				{
+					// Sort by name
+					final String s1Name = getSequenceName(e1);
+					final String s2Name = getSequenceName(e2);
+
+					final int c = s1Name.compareTo(s2Name);
+					if (c != 0) {
+						return c;
+					}
 				}
 				{
 					// Add scenario instance name to field if multiple scenarios are selected

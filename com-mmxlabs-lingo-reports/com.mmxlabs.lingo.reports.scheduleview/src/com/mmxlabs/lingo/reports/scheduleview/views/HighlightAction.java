@@ -13,12 +13,15 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 class HighlightAction extends SchedulerViewAction {
 
 	public HighlightAction(SchedulerView schedulerView, GanttChartViewer viewer, final EMFScheduleLabelProvider lp) {
 		super("Highlight", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
-		setImageDescriptor(Activator.getImageDescriptor("/icons/highlighter.png"));
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Highlighter, IconMode.Enabled));
 	}
 
 	@Override

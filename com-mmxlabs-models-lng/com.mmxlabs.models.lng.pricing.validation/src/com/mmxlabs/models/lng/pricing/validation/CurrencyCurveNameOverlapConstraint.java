@@ -18,7 +18,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -27,11 +26,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CurrencyCurveNameOverlapConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PricingModel) {
-			final PricingModel pricingModel = (PricingModel) target;
+		if (target instanceof PricingModel pricingModel) {
 			// Get list of existing names
 			final Set<String> currencyCurveNames = pricingModel.getCurrencyCurves().stream() //
 					.map(CurrencyCurve::getName) //
@@ -48,12 +46,10 @@ public class CurrencyCurveNameOverlapConstraint extends AbstractModelMultiConstr
 					statuses.add(dcsd);
 				}
 			};
-			pricingModel.getCommodityCurves().forEach(idx -> checker.accept(idx));
-			pricingModel.getBunkerFuelCurves().forEach(idx -> checker.accept(idx));
-			pricingModel.getCharterCurves().forEach(idx -> checker.accept(idx));
+			pricingModel.getCommodityCurves().forEach(checker::accept);
+			pricingModel.getBunkerFuelCurves().forEach(checker::accept);
+			pricingModel.getCharterCurves().forEach(checker::accept);
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

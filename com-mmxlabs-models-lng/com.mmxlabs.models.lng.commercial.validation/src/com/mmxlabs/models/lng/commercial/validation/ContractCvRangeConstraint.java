@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -21,18 +20,15 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ContractCvRangeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof SalesContract) {
-			final SalesContract salesContract = (SalesContract) target;
+		if (target instanceof SalesContract salesContract) {
 			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(salesContract, ctx);
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private DetailConstraintStatusDecorator checkRange(SalesContract salesContract, final IValidationContext ctx) {

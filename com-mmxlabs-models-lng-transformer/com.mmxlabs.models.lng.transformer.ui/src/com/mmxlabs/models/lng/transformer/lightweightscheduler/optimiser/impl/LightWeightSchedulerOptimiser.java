@@ -11,7 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -128,7 +128,7 @@ public class LightWeightSchedulerOptimiser {
 	private void updateSequences(@NonNull final IModifiableSequences rawSequences, final List<List<Integer>> sequences, final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
 		final List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
 
-		final Set<ISequenceElement> usedElements = new HashSet<>();
+		final Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
 			final IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
 			final IResource o_resource = vesselProvider.getResource(vesselAvailability);

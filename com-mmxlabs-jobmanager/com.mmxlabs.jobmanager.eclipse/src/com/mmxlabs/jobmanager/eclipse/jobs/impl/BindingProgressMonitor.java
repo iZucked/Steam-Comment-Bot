@@ -5,6 +5,7 @@
 package com.mmxlabs.jobmanager.eclipse.jobs.impl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.internal.progress.ProgressManager.JobMonitor;
 
 /**
  * Progress monitor used to bind progress monitors together. When running an
@@ -33,6 +34,11 @@ public class BindingProgressMonitor implements IProgressMonitor {
 	public BindingProgressMonitor(final AbstractEclipseJobControl control, final IProgressMonitor delegate) {
 		this.control = control;
 		this.delegate = delegate;
+		// Register this fake monitor so that if the job is cancelled from the UI, then
+		// propogate through here.
+		if (delegate instanceof JobMonitor jobMonitor) {
+			jobMonitor.addProgressListener(new CancelListeningProgressMonitor());
+		}
 	}
 
 	@Override
@@ -85,9 +91,57 @@ public class BindingProgressMonitor implements IProgressMonitor {
 	@Override
 	public void beginTask(final String name, final int totalWork) {
 		if (totalWork != 100) {
-//			throw new IllegalArgumentException("Only supports 100 work units");
+			// throw new IllegalArgumentException("Only supports 100 work units");
 		}
 		this.totalWork = totalWork;
 		delegate.beginTask(name, 100);
 	}
+
+	/**
+	 * {@link IProgressMonitor} implementation *only* for tracking cancelled.
+	 * 
+	 */
+	private final class CancelListeningProgressMonitor implements IProgressMonitor {
+
+		@Override
+		public void worked(int work) {
+			// Ignored
+		}
+
+		@Override
+		public void subTask(String name) {
+			// Ignored
+		}
+
+		@Override
+		public void setTaskName(String name) {
+			// Ignored
+		}
+
+		@Override
+		public void setCanceled(boolean value) {
+			BindingProgressMonitor.this.setCanceled(value);
+		}
+
+		@Override
+		public boolean isCanceled() {
+			return BindingProgressMonitor.this.isCanceled();
+		}
+
+		@Override
+		public void internalWorked(double work) {
+			// Ignored
+		}
+
+		@Override
+		public void done() {
+			// Ignored
+		}
+
+		@Override
+		public void beginTask(String name, int totalWork) {
+			// Ignored
+		}
+	}
+
 }

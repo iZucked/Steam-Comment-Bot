@@ -48,9 +48,6 @@ public class HolidayCalendarsViewerPane extends ScenarioTableViewerPane {
 	}
 
 	public void setInput(final HolidayCalendar data) {
-		if (data == null) {
-			return;
-		}
 		viewer.setInput(data);
 	}
 

@@ -15,8 +15,8 @@
 			<action
 				class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.LoadTriggerEditorActionDelegate"
 				definitionId="com.mmxlabs.lng.transformer.ui.navigator.handlers.editor.LoadTriggerEditorActionDelegate"
-				icon="icons/inventory.png"
-				disabledIcon="icons/inventory_disabled.png"
+				icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/inventory.png"
+				disabledIcon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/inventory_disabled.png"
 				id="com.mmxlabs.inventory.LoadTrigger" label="Load trigger"
 				toolbarPath="additions-end"
 				tooltip="Generate new scenario from a load trigger">

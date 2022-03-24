@@ -26,12 +26,12 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.analytics.editor";
 
-	private static final String IMG_DATE = "/icons/voyageopts/date.png";
-	private static final String IMG_FUEL = "/icons/voyageopts/fuel.png";
-	private static final String IMG_CANAL_MIXED = "/icons/voyageopts/canal-plain.png";
-	private static final String IMG_CANAL_DIRECT = "/icons/voyageopts/canal-plain.png";
-	private static final String IMG_CANAL_SUEZ = "/icons/voyageopts/canal-suez.png";
-	private static final String IMG_CANAL_PANAMA = "/icons/voyageopts/canal-panama.png";
+	private static final String IMG_DATE = "icons:/icons/16x16/date.png";
+	private static final String IMG_FUEL = "icons:/icons/16x16/fuel.png";
+	private static final String IMG_CANAL_MIXED = "icons:/icons/16x16/canal_plain.png";
+	private static final String IMG_CANAL_DIRECT = "icons:/icons/16x16/canal_plain.png";
+	private static final String IMG_CANAL_SUEZ = "icons:/icons/16x16/canal_suez.png";
+	private static final String IMG_CANAL_PANAMA = "icons:/icons/16x16/canal_panama.png";
 
 	private static final int IDX_DATE = 0;
 	private static final int IDX_FUEL = 1;

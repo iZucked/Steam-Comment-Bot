@@ -37,6 +37,9 @@ import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.tabular.SimpleCellRenderer;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * A component helper for SuezCanalTariff instances
@@ -201,14 +204,16 @@ public class SuezCanalTariffComponentHelper extends DefaultComponentHelper {
 					.withRMMaker((ed, rvp) -> new NumericAttributeManipulator(PricingPackage.Literals.SUEZ_CANAL_ROUTE_REBATE__REBATE, ed)) //
 					.build();
 
-			b.withAction("Add", (input, ch, sel) -> {
+			// Add action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
 				final SuezCanalTariff tariff = ScenarioModelUtil.getCostModel((LNGScenarioModel) ch.getModelReference().getInstance()).getSuezCanalTariff();
 				final SuezCanalRouteRebate rebate = PricingFactory.eINSTANCE.createSuezCanalRouteRebate();
 				final Command c = AddCommand.create(ch.getEditingDomain(), tariff, PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES, rebate);
 				ch.handleCommand(c, tariff, PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES);
 
 			});
-			b.withAction("Delete", (input, ch, sel) -> {
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 				if (sel instanceof IStructuredSelection ss && !ss.isEmpty()) {
 					final SuezCanalTariff tariff = ScenarioModelUtil.getCostModel((LNGScenarioModel) ch.getModelReference().getInstance()).getSuezCanalTariff();
 					final Command c = RemoveCommand.create(ch.getEditingDomain(), tariff, PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES, ss.toList());

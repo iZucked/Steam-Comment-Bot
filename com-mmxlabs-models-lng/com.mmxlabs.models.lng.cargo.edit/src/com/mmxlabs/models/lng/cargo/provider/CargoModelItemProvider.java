@@ -141,10 +141,13 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DEAL_SETS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
 		}
 		return childrenFeatures;
@@ -207,10 +210,13 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
 			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+			case CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES:
+			case CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING:
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -286,6 +292,11 @@ public class CargoModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS,
+				 CargoFactory.eINSTANCE.createInventory()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS,
 				 CargoFactory.eINSTANCE.createCanalBookings()));
 
@@ -311,8 +322,42 @@ public class CargoModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES,
+				 CargoFactory.eINSTANCE.createCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING,
+				 CargoFactory.eINSTANCE.createCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS,
 				 CargoFactory.eINSTANCE.createGroupedDischargeSlotsConstraint()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == CargoPackage.Literals.CARGO_MODEL__CARGOES ||
+			childFeature == CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES ||
+			childFeature == CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

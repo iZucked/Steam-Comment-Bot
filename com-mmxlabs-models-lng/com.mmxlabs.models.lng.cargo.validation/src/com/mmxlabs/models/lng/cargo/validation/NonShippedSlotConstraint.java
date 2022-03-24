@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -24,13 +23,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class NonShippedSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) target;
-			if (loadSlot.isDESPurchase() && (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE
-					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE)) {
+		if (target instanceof LoadSlot loadSlot) {
+			if (loadSlot.isDESPurchase()
+					&& (loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_WITH_SOURCE || loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE)) {
 				String type = "DES Purchase";
 				String name = loadSlot.getName();
 				if (loadSlot.getSlotOrDelegateContractRestrictions().isEmpty() && loadSlot.getSlotOrDelegatePortRestrictions().isEmpty()) {
@@ -44,8 +42,7 @@ public class NonShippedSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-		} else if (target instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) target;
+		} else if (target instanceof DischargeSlot dischargeSlot) {
 			if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_WITH_DEST) {
 				String type = "FOB Sale";
 				String name = dischargeSlot.getName();
@@ -60,7 +57,5 @@ public class NonShippedSlotConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

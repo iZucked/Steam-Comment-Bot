@@ -12,7 +12,6 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -23,11 +22,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CanalBookingSlot) {
-			final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
+		if (target instanceof CanalBookingSlot canalBookingSlot) {
 
 			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withName("Panama canal bookings");
 
@@ -44,7 +42,7 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Date must be specified.") //
 						.make(ctx));
 			}
-			
+
 			if (canalBookingSlot.getCanalEntrance() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE) //
@@ -52,7 +50,6 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 						.make(ctx));
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 
 }

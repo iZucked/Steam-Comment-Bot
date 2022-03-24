@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.Singleton;
 import com.mmxlabs.common.concurrent.JobExecutor;
@@ -30,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 @Singleton
+@NonNullByDefault
 public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndPreceders {
 
 	@Inject
@@ -52,32 +54,24 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 	 * element x is in the set mapped to by key y, x can legally follow y under some
 	 * circumstance
 	 */
-	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validFollowers = new ConcurrentHashMap<>();
-	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validPreceders = new ConcurrentHashMap<>();
+	private final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new ConcurrentHashMap<>();
+	private final Map<ISequenceElement, Followers<ISequenceElement>> validPreceders = new ConcurrentHashMap<>();
 
-	/**
-	 */
-	public Map<@NonNull ISequenceElement, Followers<@NonNull ISequenceElement>> getValidFollowers() {
+	public Map<ISequenceElement, Followers<ISequenceElement>> getValidFollowers() {
 		return validFollowers;
 	}
 
-	/**
-	 */
-	public Map<@NonNull ISequenceElement, Followers<@NonNull ISequenceElement>> getValidPreceeders() {
+	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
 		return validPreceders;
 	}
 
-	/**
-	 */
 	@Override
-	public Followers<@NonNull ISequenceElement> getValidFollowers(@NonNull ISequenceElement element) {
+	public Followers<ISequenceElement> getValidFollowers(ISequenceElement element) {
 		return validFollowers.get(element);
 	}
 
-	/**
-	 */
 	@Override
-	public Followers<@NonNull ISequenceElement> getValidPreceders(@NonNull ISequenceElement element) {
+	public Followers<ISequenceElement> getValidPreceders(ISequenceElement element) {
 		return validPreceders.get(element);
 	}
 
@@ -193,13 +187,11 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 
-	@NonNull
 	public static JobExecutorFactory createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
-	@NonNull
 	public static JobExecutorFactory createExecutorService(final int nThreads) {
 		return new DefaultJobExecutorFactory(nThreads);
 	}

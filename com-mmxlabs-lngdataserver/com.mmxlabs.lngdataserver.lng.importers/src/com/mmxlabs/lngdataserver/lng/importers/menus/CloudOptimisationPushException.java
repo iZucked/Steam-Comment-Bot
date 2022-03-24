@@ -17,6 +17,7 @@ public class CloudOptimisationPushException extends RuntimeException {
 		FAILED_SERVICE_LOCKED, // Service is locked by a different user
 		FAILED_TO_MIGRATE, //
 		FAILED_TO_EVALUATE, //
+		EVALUATION_FAILED, //
 		FAILED_TO_SAVE, //
 		FAILED_TO_UPLOAD, //
 		FAILED_UNSUPPORTED_VERSION, //
