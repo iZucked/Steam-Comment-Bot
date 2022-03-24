@@ -26,6 +26,9 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -173,7 +176,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter
 			}
 		}
 
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment.png"));
+		return overlayImage(object, CommonImages.getImage(IconPaths.ScenarioFragment, IconMode.Enabled));
 	}
 
 	/**

@@ -67,9 +67,11 @@ public final class CommonImages {
 		Pin(16, "icons/16x16/pin.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
+		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
 		Local(16, "icons/16x16/local.png"), //
 		Label(16, "icons/16x16/label.png"), //
+		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
 
 		Play_16(16, "icons/16x16/optimise.png"), //
 		CloudPlay_16(16, "icons/16x16/cloud_run.png"), //
