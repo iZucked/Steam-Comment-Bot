@@ -147,8 +147,10 @@ class CloudOptimisationDataUpdater {
 			}
 
 			try {
-				final File temp = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
-				temp.getParentFile().mkdirs();
+
+				// Put this in the temp folder as delete() doesn't always seem to it
+				final File temp = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), cRecord.getJobid(), ".lingo").toFile();
+
 				final IGatewayResponse downloadResult = downloadData(cRecord, temp);
 				if (downloadResult == null) {
 					// Failed!
@@ -261,7 +263,7 @@ class CloudOptimisationDataUpdater {
 								throw e;
 							}
 						}
-						//							}
+						// }
 
 						cRecord.setHasError(true);
 						cRecord.setComplete(true);
@@ -328,7 +330,7 @@ class CloudOptimisationDataUpdater {
 										}
 									}
 									case "OPTIMISATION" -> RunnerHelper
-									.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)), true);
+											.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)), true);
 
 									case "OPTIONISER" -> RunnerHelper.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)),
 											true);
@@ -345,7 +347,7 @@ class CloudOptimisationDataUpdater {
 						solutionFile.delete();
 					}
 
-					cleanup(basePath, cRecord.getJobid());
+					cleanup(basePath, cRecord.getJobid(), temp);
 
 					// Move the temp file
 					cRecord.setComplete(true);
@@ -688,18 +690,23 @@ class CloudOptimisationDataUpdater {
 				LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
 			}
 
-			return cleanup(basePath, cRecord.getJobid());
+			return cleanup(basePath, cRecord.getJobid(), null);
 		}
 		return false;
 	}
 
-	private boolean cleanup(File basePath, String jobid) {
+	private boolean cleanup(File basePath, String jobid, File resultFile) {
 		boolean amap = deleteFile(basePath, jobid, "amap");
-		boolean lngFile = deleteFile(basePath, jobid, "lingo");
-		boolean kFile = deleteFile(basePath, jobid, "key");
 		boolean kStore = deleteFile(basePath, jobid, "key.p12");
 
-		return amap && lngFile && kFile && kStore;
+		boolean lngFile = resultFile == null;
+		{
+			if (resultFile != null && resultFile.exists()) {
+				lngFile = resultFile.delete();
+			}
+		}
+
+		return amap && lngFile && kStore;
 	}
 
 	private boolean deleteFile(File basePath, String jobid, String extension) {
