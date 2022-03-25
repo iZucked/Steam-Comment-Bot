@@ -86,6 +86,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_MTM_OLD = "features:mtm-old";
 	
 	public static final String FEATURE_MTM = "features:mtm";
+	
+	public static final String FEATURE_HEEL_RETENTION = "features:heel-retention";
 
 	/**
 	 * Enable the charter length evaluation mode
