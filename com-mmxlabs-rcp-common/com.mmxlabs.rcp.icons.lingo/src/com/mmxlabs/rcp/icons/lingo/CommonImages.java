@@ -37,6 +37,15 @@ public final class CommonImages {
 	private static final String PLUGIN_ID = "com.mmxlabs.rcp.icons.lingo";
 
 	public enum IconPaths {
+		// 6x8
+		DarkArrowDown(8, "icons/6x8/dark_arrow_down.png"), //
+		DarkArrowUp(8, "icons/6x8/dark_arrow_up.png"), //
+		GreenArrowDown(8, "icons/6x8/green_arrow_down.png"), //
+		GreenArrowUp(8, "icons/6x8/green_arrow_up.png"), //
+		RedArrowDown(8, "icons/6x8/red_arrow_down.png"), //
+		RedArrowUp(8, "icons/6x8/red_arrow_up.png"), //
+		SteadyArrow(8, "icons/6x8/steady_arrow.png"), //
+		
 		// 8x8
 		Pin_8(8, "icons/8x8/pin.png"), //
 		PinnedRow(8, "icons/8x8/pin.png"), //
