@@ -226,7 +226,7 @@ public class OptimisationTestRunner {
 		analyticsModel.getOptimisations().clear();
 
 		// Convert user settings to a optimisation plan
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, sdp.getTypedScenario(LNGScenarioModel.class));
 		Assertions.assertNotNull(optimisationPlan);
 		// Extend the plan if needed
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);

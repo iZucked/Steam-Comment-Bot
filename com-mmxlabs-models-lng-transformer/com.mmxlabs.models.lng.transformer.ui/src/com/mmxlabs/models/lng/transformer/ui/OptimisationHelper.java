@@ -135,7 +135,7 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
+		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, scenario);
 		if (nameProvider != null) {
 			optimisationPlan.setResultName(nameProvider.getNameSuggestion());
 		}
@@ -186,7 +186,7 @@ public final class OptimisationHelper {
 		return null;
 	}
 
-	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
+	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, final LNGScenarioModel lngScenarioModel) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
@@ -282,7 +282,7 @@ public final class OptimisationHelper {
 				stage.getAnnealingSettings().setIterations(400_000);
 				stage.getAnnealingSettings().setRestarting(false);
 				stage.setCount(jobCount);
-				
+
 				plan.getStages().add(stage);
 			}
 			{

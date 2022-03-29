@@ -167,7 +167,7 @@ public class LNGOptimisationBuilder {
 
 			final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-			localOptimisationPlan = OptimisationHelper.transformUserSettings(localUserSettings, null, lngScenarioModel);
+			localOptimisationPlan = OptimisationHelper.transformUserSettings(localUserSettings, lngScenarioModel);
 			localOptimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(localOptimisationPlan);
 
 			if (optimisationPlanCustomiser != null) {
@@ -322,7 +322,7 @@ public class LNGOptimisationBuilder {
 	public static void quickEvaluation(final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final @Nullable Module extraModule) {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings,  lngScenarioModel);
 
 		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
 				.withExtraModule(extraModule) //

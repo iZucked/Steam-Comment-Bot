@@ -135,7 +135,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			userSettings.setShippingOnly(false);
 			userSettings.setSimilarityMode(mode);
 
-			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 			Assertions.assertNotNull(optimisationPlan);
 
 			if (limitedIterations) {
