@@ -128,8 +128,7 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets
-	 * evaluationOnly to false.
+	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets evaluationOnly to false.
 	 * 
 	 * @return
 	 */
@@ -139,8 +138,7 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Flag indicating whether to run the default export stages or just return the
-	 * {@link IMultiStateResult} without further processing.
+	 * Flag indicating whether to run the default export stages or just return the {@link IMultiStateResult} without further processing.
 	 * 
 	 * @return
 	 */
@@ -150,7 +148,11 @@ public class LNGOptimisationBuilder {
 	}
 
 	public LNGOptimisationBuilder withThreadCount(final int threadCount) {
-		this.threadCount = Integer.valueOf(threadCount);
+		if (threadCount == 0) {
+			this.threadCount = null;
+		} else {
+			this.threadCount = Integer.valueOf(threadCount);
+		}
 		return this;
 	}
 
@@ -224,7 +226,7 @@ public class LNGOptimisationBuilder {
 
 	private JobExecutorFactory createExecutorService() {
 		final JobExecutorFactory executorService;
-		if (threadCount != null) {
+		if (threadCount != null && threadCount > 0) {
 			executorService = LNGScenarioChainBuilder.createExecutorService(threadCount);
 		} else {
 			executorService = LNGScenarioChainBuilder.createExecutorService();
