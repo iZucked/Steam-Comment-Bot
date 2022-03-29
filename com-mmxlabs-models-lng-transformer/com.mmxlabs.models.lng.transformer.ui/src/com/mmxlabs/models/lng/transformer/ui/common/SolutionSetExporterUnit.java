@@ -78,9 +78,11 @@ public class SolutionSetExporterUnit {
 
 		final IChainLink link = new IChainLink() {
 			@Override
-			public @NonNull IMultiStateResult run(final LNGDataTransformer dt, @NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
-				SolutionSetExporterUnit.export(scenarioToOptimiserBridge, solutionSetFactory, dualPNLMode, portfolioBreakEvenTarget, initialSequences, inputState, monitor);
-
+			public @NonNull IMultiStateResult run(final LNGDataTransformer dt, @NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState,
+					@NonNull final IProgressMonitor monitor) {
+				// Use the real initial sequences rather then the one from the last "reset"
+				final SequencesContainer container = new SequencesContainer(dt.getInitialResult().getBestSolution());
+				SolutionSetExporterUnit.export(scenarioToOptimiserBridge, solutionSetFactory, dualPNLMode, portfolioBreakEvenTarget, container, inputState, monitor);
 				return inputState;
 			}
 
@@ -177,9 +179,9 @@ public class SolutionSetExporterUnit {
 						if (va != null && va.eContainer() == null) {
 							plan.getExtraVesselAvailabilities().add(va);
 						}
-						for (Event evt : seq.getEvents()) {
-							if (evt instanceof VesselEventVisit vesselEventVisit) {
-								VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+						for (final Event evt : seq.getEvents()) {
+							if (evt instanceof final VesselEventVisit vesselEventVisit) {
+								final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 								if (vesselEvent != null && vesselEvent.eContainer() == null) {
 									plan.getExtraVesselEvents().add(vesselEvent);
 								}
@@ -244,14 +246,14 @@ public class SolutionSetExporterUnit {
 	public static class Util<T extends SolutionOption> {
 		private TraderBasedInsertionHelper tradingHelper = null;
 		private SequencesToChangeDescriptionTransformer changeTransformer;
-		private LNGScenarioToOptimiserBridge bridge;
-		private Supplier<@NonNull T> optionFactory;
-		private boolean dualPNLMode;
+		private final LNGScenarioToOptimiserBridge bridge;
+		private final Supplier<@NonNull T> optionFactory;
+		private final boolean dualPNLMode;
 		private BreakEvenMode breakEvenMode;
 		private Long targetProfitAndLoss;
 		final ScheduleModelToScheduleSpecification scheduleTransformer = new ScheduleModelToScheduleSpecification();
-		private UserSettings userSettings;
-		private boolean enableChangeDescription;
+		private final UserSettings userSettings;
+		private final boolean enableChangeDescription;
 
 		public Util(final LNGScenarioToOptimiserBridge bridge, final UserSettings userSettings, final Supplier<@NonNull T> optionFactory, final boolean dualPNLMode,
 				final boolean enableChangeDescription) {
@@ -312,7 +314,7 @@ public class SolutionSetExporterUnit {
 				if (breakEvenMode == BreakEvenMode.PORTFOLIO && targetProfitAndLoss == null) {
 					targetProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
 				}
-			} catch (InfeasibleSolutionException e) {
+			} catch (final InfeasibleSolutionException e) {
 				// Ignore these errors. A typical cause of this error is sandbox forced route
 				// selection with e.g. Panama when there is no Panama distance.
 			} catch (final Throwable e) {
@@ -346,14 +348,14 @@ public class SolutionSetExporterUnit {
 				resultSet.setScheduleSpecification(scheduleSpecification);
 
 				// Convert from period to full sequences if needed
-				ISequences seq = bridge.getTransformedOriginalRawSequences(sequences);
+				final ISequences seq = bridge.getTransformedOriginalRawSequences(sequences);
 				if (tradingHelper != null) {
 					tradingHelper.processSolution((DualModeSolutionOption) resultSet, seq, scheduleModel);
 				}
 				if (changeTransformer != null) {
 					resultSet.setChangeDescription(changeTransformer.generateChangeDescription(seq));
 				}
-			} catch (InfeasibleSolutionException e) {
+			} catch (final InfeasibleSolutionException e) {
 				// Ignore these errors. A typical cause of this error is sandbox forced route
 				// selection with e.g. Panama when there is no Panama distance.
 			} catch (final Throwable e) {
@@ -387,49 +389,49 @@ public class SolutionSetExporterUnit {
 		}
 	}
 
-	public static void convertToSimpleResult(final AbstractSolutionSet result, boolean dualPNLMode) {
+	public static void convertToSimpleResult(final AbstractSolutionSet result, final boolean dualPNLMode) {
 		if (dualPNLMode) {
-			OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
+			final OtherPNL basePNL = ScheduleFactory.eINSTANCE.createOtherPNL();
 			{
 				ScheduleModelKPIUtils.updateOtherPNL(basePNL, result.getBaseOption().getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
 			}
 
-			long a = ScheduleModelKPIUtils.getScheduleProfitAndLoss(result.getBaseOption().getScheduleModel().getSchedule());
-			for (SolutionOption option : result.getOptions()) {
+			final long a = ScheduleModelKPIUtils.getScheduleProfitAndLoss(result.getBaseOption().getScheduleModel().getSchedule());
+			for (final SolutionOption option : result.getOptions()) {
 
-				if (option instanceof DualModeSolutionOption dualOption) {
+				if (option instanceof final DualModeSolutionOption dualOption) {
 
-					OtherPNL optionPNL = ScheduleFactory.eINSTANCE.createOtherPNL();
+					final OtherPNL optionPNL = ScheduleFactory.eINSTANCE.createOtherPNL();
 					ScheduleModelKPIUtils.updateOtherPNL(optionPNL, option.getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
-					long b = ScheduleModelKPIUtils.getScheduleProfitAndLoss(option.getScheduleModel().getSchedule());
+					final long b = ScheduleModelKPIUtils.getScheduleProfitAndLoss(option.getScheduleModel().getSchedule());
 
-					OtherPNL copyBasePNL = EMFCopier.copy(basePNL);
+					final OtherPNL copyBasePNL = EMFCopier.copy(basePNL);
 					{
-						Schedule s = dualOption.getMicroBaseCase().getScheduleModel().getSchedule();
+						final Schedule s = dualOption.getMicroBaseCase().getScheduleModel().getSchedule();
 						ScheduleModelKPIUtils.updateOtherPNL(copyBasePNL, s, ScheduleModelKPIUtils.Mode.DECREMENT);
 						s.setOtherPNL(copyBasePNL);
-						long c = ScheduleModelKPIUtils.getScheduleProfitAndLoss(s);
+						final long c = ScheduleModelKPIUtils.getScheduleProfitAndLoss(s);
 
 						assert c == a;
 					}
 					{
-						Schedule s = dualOption.getMicroTargetCase().getScheduleModel().getSchedule();
+						final Schedule s = dualOption.getMicroTargetCase().getScheduleModel().getSchedule();
 						ScheduleModelKPIUtils.updateOtherPNL(optionPNL, s, ScheduleModelKPIUtils.Mode.DECREMENT);
 						s.setOtherPNL(optionPNL);
-						long c = ScheduleModelKPIUtils.getScheduleProfitAndLoss(s);
+						final long c = ScheduleModelKPIUtils.getScheduleProfitAndLoss(s);
 
 						assert c == b;
 					}
 
 					// Replace existing schedule with a dummy one
 					{
-						Schedule tmp = ScheduleFactory.eINSTANCE.createSchedule();
+						final Schedule tmp = ScheduleFactory.eINSTANCE.createSchedule();
 
-						OtherPNL optionPNL1 = ScheduleFactory.eINSTANCE.createOtherPNL();
+						final OtherPNL optionPNL1 = ScheduleFactory.eINSTANCE.createOtherPNL();
 						ScheduleModelKPIUtils.updateOtherPNL(optionPNL1, option.getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);
 						tmp.setOtherPNL(optionPNL1);
 						option.getScheduleModel().setSchedule(tmp);
-						long d = ScheduleModelKPIUtils.getScheduleProfitAndLoss(tmp);
+						final long d = ScheduleModelKPIUtils.getScheduleProfitAndLoss(tmp);
 
 						assert d == b;
 					}
