@@ -245,22 +245,6 @@ public class OptimisationTestRunner {
 
 		final LNGScenarioRunner runner = builder.getScenarioRunner();
 
-		// final ScenarioFitnessState currentState = new ScenarioFitnessState();
-		//
-		// // Compute initial schedule state
-		// {
-		// final Schedule intialSchedule = runner.evaluateInitialState();
-		// Assertions.assertNotNull(intialSchedule);
-		// currentState.setInitialState(createSolutionStateFromSchedule(intialSchedule));
-		// }
-		//
-		// // Check and abort
-		// if (checkFitnesses) {
-		// Assertions.assertNotNull(existingState);
-		// Assertions.assertNotNull(existingState.getInitialState());
-		// Assertions.assertNotNull(existingState.getInitialState().isEquivalent(currentState.getInitialState()));
-		// }
-
 		// Run the optimisation
 		{
 			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
@@ -269,6 +253,7 @@ public class OptimisationTestRunner {
 		// As we cleared the results before, the only result present should be our result
 		Assertions.assertEquals(1, analyticsModel.getOptimisations().size());
 		final AbstractSolutionSet solutionSet = analyticsModel.getOptimisations().get(0);
+		solutionSet.setUseScenarioBase(false);
 
 		final ScenarioFitnessState currentState = new ScenarioFitnessState();
 
