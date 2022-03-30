@@ -53,60 +53,58 @@ public final class CommonImages {
 		// 16x16
 		BaseFlag(16, "icons/16x16/base_flag.png"), //
 		BaseFlagGreen(16, "icons/16x16/base_flag_green.png"), //
-		Pack(16, "icons/16x16/pack.png"), //
-		Plus(16, "icons/16x16/plus.png"), //
-		Plusplus(16, "icons/16x16/plusplus.png"), //
-		Delete(16, "icons/16x16/delete.png"), //
 		CanalPanama(16, "icons/16x16/canal_panama.png"), //
 		CanalPlain(16, "icons/16x16/canal_plain.png"), //
 		CanalSuez(16, "icons/16x16/canal_suez.png"), //
+		Cloud_16(16, "icons/16x16/cloud.png"), //
+		CloudPlay_16(16, "icons/16x16/cloud_run.png"), //
+		CollapseAll(16, "icons/16x16/collapse_all.png"), //
 		ConnectedNotAuth(16, "icons/16x16/connected_not_auth.png"), //
+		Console(16, "icons/16x16/console.png"), //
+		Copy(16, "icons/16x16/copy.png"), //
+		Cut(16, "icons/16x16/cut.png"), //
 		Date(16, "icons/16x16/date.png"), //
-		Fuel(16, "icons/16x16/fuel.png"), //
+		Delete(16, "icons/16x16/delete.png"), //
+		Edit(16, "icons/16x16/edit.png"), //
+		ExpandAll(16, "icons/16x16/expand_all.png"), //
 		Filter(16, "icons/16x16/filter.png"), //
 		Folder(16, "icons/16x16/folder.png"), //
-		Sort(16, "icons/16x16/sort.png"), //
-		Copy(16, "icons/16x16/copy.png"), //
-		Paste(16, "icons/16x16/paste.png"), //
-		CollapseAll(16, "icons/16x16/collapse_all.png"), //
-		ExpandAll(16, "icons/16x16/expand_all.png"), //
-		Cut(16, "icons/16x16/cut.png"), //
-		Edit(16, "icons/16x16/edit.png"), //
+		Fuel(16, "icons/16x16/fuel.png"), //
 		Highlighter(16, "icons/16x16/highlighter.png"), //
+		Hub(16, "icons/16x16/hub.png"), //
+		Label(16, "icons/16x16/label.png"), //
+		Local(16, "icons/16x16/local.png"), //
+		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
+		Pack(16, "icons/16x16/pack.png"), //
+		Paste(16, "icons/16x16/paste.png"), //
 		Pin(16, "icons/16x16/pin.png"), //
+		Play_16(16, "icons/16x16/optimise.png"), //
+		Plus(16, "icons/16x16/plus.png"), //
+		Plusplus(16, "icons/16x16/plusplus.png"), //
+		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
-		Hub(16, "icons/16x16/hub.png"), //
-		Local(16, "icons/16x16/local.png"), //
-		Label(16, "icons/16x16/label.png"), //
-		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
-
-		Play_16(16, "icons/16x16/optimise.png"), //
-		CloudPlay_16(16, "icons/16x16/cloud_run.png"), //
-		Cloud_16(16, "icons/16x16/cloud.png"), //
+		Sort(16, "icons/16x16/sort.png"), //
 		ZoomIn(16, "icons/16x16/zoom_in.png"), //
 		ZoomOut(16, "icons/16x16/zoom_out.png"), //
-		Console(16, "icons/16x16/console.png"), //
+
 
 		Error(16, "icons/legacy/16x16/error.gif"), //
-		Warning(16, "icons/legacy/16x16/warning.gif"), //
 		Information(16, "icons/legacy/16x16/information.gif"), //
+		Warning(16, "icons/legacy/16x16/warning.gif"), //
 
 		// 24x24
-		Play(24, "icons/24x24/optimise.png"), //
-		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
 		Cloud_24(24, "icons/24x24/cloud.png"), //
+		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
 		Evaluate(24, "icons/24x24/evaluate_schedule.png"), //
-
-//		Resume(24,"icons/24x24/terminate.png", true), //
-		Terminate(24, "icons/24x24/terminate.png"), //
 		Fork(24, "icons/24x24/fork.png"), //
-
+		Play(24, "icons/24x24/optimise.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
-		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
+		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
+//		Resume(24,"icons/24x24/terminate.png", true), //
 		;
 
 		private int size;
