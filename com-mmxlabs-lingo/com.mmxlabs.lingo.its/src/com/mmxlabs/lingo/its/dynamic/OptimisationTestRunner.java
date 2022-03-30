@@ -44,11 +44,11 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxRunner;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -126,10 +126,6 @@ public class OptimisationTestRunner {
 			cases.add(DynamicTest.dynamicTest(paramsFile.getName(), () -> {
 				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
-					final HeadlessSandboxOptions userSettings = OptimisationTestRunner.getSandboxOptions(paramsFile);
-					Assertions.assertNotNull(userSettings);
-					assert userSettings != null; // For null analysis
-
 					final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 					resultsFolder.mkdir();
 
@@ -144,7 +140,7 @@ public class OptimisationTestRunner {
 							Assertions.fail(e.getMessage(), e);
 						}
 					};
-					OptimisationTestRunner.runSandbox(modelRecord, scenarioDataProvider, userSettings, existingCompare, saver);
+					OptimisationTestRunner.runSandbox(modelRecord, scenarioDataProvider, paramsFile, existingCompare, saver);
 				});
 			}));
 		};
@@ -174,7 +170,7 @@ public class OptimisationTestRunner {
 		return allCases;
 	}
 
-	public static @Nullable HeadlessSandboxOptions getSandboxOptions(final File file) throws IOException {
+	public static @Nullable SandboxSettings getSandboxOptions(final File file) throws IOException {
 
 		if (!file.exists()) {
 			return null;
@@ -185,7 +181,7 @@ public class OptimisationTestRunner {
 			mapper.registerModule(new Jdk8Module());
 			mapper.enable(Feature.ALLOW_COMMENTS);
 
-			return mapper.readValue(file, HeadlessSandboxOptions.class);
+			return mapper.readValue(file, SandboxSettings.class);
 		}
 
 	}
@@ -307,14 +303,15 @@ public class OptimisationTestRunner {
 	}
 
 	public static void runSandbox(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider sdp, ///
-			@NonNull final HeadlessSandboxOptions options, @Nullable final String existingCompareContent, @Nullable final Consumer<String> saver) throws Exception {
+			@NonNull final File paramsFile, @Nullable final String existingCompareContent, @Nullable final Consumer<String> saver) throws Exception {
 
 		final boolean checkResults = TestingModes.OptimisationTestMode == TestMode.Run;
 		final boolean saveResults = TestingModes.OptimisationTestMode == TestMode.Generate;
 
-		final HeadlessSandboxRunner runner = new HeadlessSandboxRunner();
-
-		final AbstractSolutionSet solutionSet = runner.run(options, modelRecord, sdp, null, new NullProgressMonitor(), true);
+		final SandboxJobRunner runner = new SandboxJobRunner();
+		runner.withScenario(sdp);
+		runner.withParams(paramsFile);
+		final AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
 
 		final AnalyticsSolution solution = new AnalyticsSolution(modelRecord, solutionSet, "sandbox");
 		final String compareViewContent = ReportTester.generateAnalyticsSolutionReport(ReportTesterHelper.CHANGESET_REPORT_ID, solution);
@@ -328,6 +325,7 @@ public class OptimisationTestRunner {
 			saver.accept(compareViewContent);
 		}
 	}
+
 
 	private static SolutionState createSolutionStateFromSchedule(final Schedule schedule) {
 		final SolutionState ss = new SolutionState();

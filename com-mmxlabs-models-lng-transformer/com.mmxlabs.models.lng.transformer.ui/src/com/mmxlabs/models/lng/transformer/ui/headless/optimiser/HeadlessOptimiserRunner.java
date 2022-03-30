@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationSettings;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
@@ -543,4 +544,132 @@ public class HeadlessOptimiserRunner {
 
 		ScenarioStorageUtil.storeCopyToFile(sdp, new File(outputFile));
 	}
+	
+	public AbstractSolutionSet doJobRun(final IScenarioDataProvider sdp, final OptimisationSettings optimisationSettings, @Nullable final HeadlessOptimiserJSON loggingOutput, final int numThreads,
+			@NonNull final IProgressMonitor monitor) {
+
+		final boolean exportLogs = loggingOutput != null;
+
+		final UserSettings userSettings = optimisationSettings.getUserSettings();
+
+		// Default logging parameters
+		final LoggingParameters loggingParameters = new LoggingParameters();
+		loggingParameters.loggingInterval = 5000;
+		loggingParameters.metricsToLog = new String[0];
+
+		final JSONArray jsonStagesStorage = new JSONArray(); // array for output data at present
+
+		if (loggingOutput != null) {
+			loggingOutput.getMetrics().setStages(jsonStagesStorage);
+		}
+
+		// Create logging module
+		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+
+		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
+
+			@Override
+			protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+
+				final String stageAndJobID = getStageAndJobID();
+				final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+				if (logger != null) {
+					final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
+					lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+				}
+			}
+
+		};
+
+		// Create logging module
+		final IOptimiserInjectorService localOverrides = (exportLogs == false) ? null : new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+
+				// if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+				// return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule());
+				// }
+				if (moduleType == ModuleType.Module_Optimisation) {
+					final LinkedList<@NonNull Module> modules = new LinkedList<>();
+					if (exportLogs) {
+						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, runnerHook));
+					}
+
+					return modules;
+				}
+				return null;
+			}
+		};
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		try {
+
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+					.withRunnerHook(runnerHook) //
+					.withOptimiserInjectorService(localOverrides) //
+					.withHints(hints.toArray(new String[hints.size()])) //
+					.withUserSettings(userSettings) //
+					.withThreadCount(numThreads) //
+					.withOptimiseHint() //
+					.withIncludeDefaultExportStage(false) // Disable default export so we do not create it twice
+					.withOptimisationPlanCustomiser(plan -> {
+						// Set a default name is there is none
+						if (plan.getResultName() == null || plan.getResultName().isBlank()) {
+							plan.setResultName("Optimisation");
+						}
+						if (loggingOutput != null) {
+							loggingOutput.setOptimisationPlan(plan);
+						}
+					}) //
+			;
+			if (localOverrides != null) {
+				runnerBuilder.withOptimiserInjectorService(localOverrides);
+			}
+			final LNGScenarioRunner runner = runnerBuilder //
+					.buildDefaultRunner() //
+					.getScenarioRunner();
+
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+
+			final IMultiStateResult result = runner.runWithProgress(monitor);
+
+			final long runTime = System.currentTimeMillis() - startTime;
+
+			if (result == null) {
+				throw new RuntimeException("Error optimising scenario - null result");
+			}
+
+			if (loggingOutput != null) {
+				loggingOutput.getMetrics().setRuntime(runTime);
+			}
+
+			final boolean dualModeInsertions = userSettings.isDualMode();
+
+			final OptionalLong portfolioBreakEvenTarget = OptionalLong.empty();
+			final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+			options.setName("Optimisation");
+			options.setUserSettings(EcoreUtil.copy(userSettings));
+
+			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget);
+
+			final LNGDataTransformer dataTransformer = runner.getScenarioToOptimiserBridge().getDataTransformer();
+			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
+			link.run(dataTransformer, initialSequencesContainer, result, new NullProgressMonitor());
+
+			return options;
+
+		} catch (final Exception e) {
+			throw new RuntimeException("Error during optimisation", e);
+		}
+	}
+
 }

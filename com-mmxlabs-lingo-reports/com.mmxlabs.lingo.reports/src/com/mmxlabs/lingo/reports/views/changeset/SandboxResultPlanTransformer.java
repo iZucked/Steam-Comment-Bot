@@ -45,11 +45,6 @@ public class SandboxResultPlanTransformer {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
-		// We can get here when trying to display an empty result from the sandbox
-		if (plan.eContainer() == null) {
-			return root;
-		}
-
 		final ScenarioResult base;
 		if (plan.isUseScenarioBase()) {
 			// Hacky - compare to evaluated state

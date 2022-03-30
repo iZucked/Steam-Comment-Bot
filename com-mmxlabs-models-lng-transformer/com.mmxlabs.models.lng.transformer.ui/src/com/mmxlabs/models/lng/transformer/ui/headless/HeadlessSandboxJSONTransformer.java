@@ -6,15 +6,25 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
 
-public class HeadlessSandboxJSONTransformer extends HeadlessGenericJSONTransformer<HeadlessSandboxJSON.Params, HeadlessSandboxJSON.Metrics, HeadlessSandboxJSON>{
+import org.eclipse.jdt.annotation.Nullable;
 
-	public HeadlessSandboxJSON createJSONResultObject(String machineType, HeadlessSandboxOptions options, File scenarioFile, int threads) {
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
+
+public class HeadlessSandboxJSONTransformer extends HeadlessGenericJSONTransformer<HeadlessSandboxJSON.Params, HeadlessSandboxJSON.Metrics, HeadlessSandboxJSON> {
+
+	public HeadlessSandboxJSON createJSONResultObject(String machineType, SandboxSettings options, File scenarioFile, int threads) {
 		HeadlessSandboxJSON result = createJSONResultObject(HeadlessSandboxJSON.Params.class, HeadlessSandboxJSON.Metrics.class, HeadlessSandboxJSON.class);
 		result.setType("sandbox");
-		setBasicProperties(result, machineType, scenarioFile.getName(), threads);		
-//		result.getParams().setOptioniserProperties(createOptioniserProperties(options));
+		setBasicProperties(result, machineType, scenarioFile.getName(), threads);
+		// result.getParams().setOptioniserProperties(createOptioniserProperties(options));
 
-		return result;		
+		return result;
 	}
-//	 
+	//
+
+	public HeadlessSandboxJSON createJSONResultObject(@Nullable SandboxSettings sandboxSettings) {
+		HeadlessSandboxJSON result = createJSONResultObject(HeadlessSandboxJSON.Params.class, HeadlessSandboxJSON.Metrics.class, HeadlessSandboxJSON.class);
+		result.setType("sandbox");
+		return result;
+	}
 }

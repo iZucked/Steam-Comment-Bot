@@ -918,18 +918,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-								switch (mode) {
-								case SandboxModeConstants.MODE_OPTIONISE:
-									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
-									break;
-								case SandboxModeConstants.MODE_OPTIMISE:
-									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
-									break;
-								case SandboxModeConstants.MODE_DERIVE:
-								default:
-									WhatIfEvaluator.evaluate(OptionModellerView.this, m);
-									break;
-								}
+								WhatIfEvaluator.runSandbox(OptionModellerView.this, m);
 								if (m != null && m.getResults() != null) {
 									final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
 									data.open();
@@ -1071,6 +1060,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 								// No results, so show a blank case
 								final SandboxResult emptyResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
 								emptyResult.setName(m.getName());
+								emptyResult.setUseScenarioBase(false);
 								final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), emptyResult, m.getName());
 								data.open();
 							}

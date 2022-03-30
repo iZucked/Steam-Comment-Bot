@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -174,4 +176,42 @@ public class HeadlessOptioniserRunner {
 		}
 	}
 
+
+	public @NonNull SlotInsertionOptions doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull OptioniserSettings optioniserSettings, final @Nullable HeadlessOptioniserJSON loggingData,
+			int threadsAvailable, @NonNull IProgressMonitor monitor) {
+
+		final UserSettings userSettings = optioniserSettings.userSettings;
+
+		final List<Slot<?>> targetSlots = new LinkedList<>();
+		final List<VesselEvent> targetEvents = new LinkedList<>();
+
+		final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(sdp));
+		optioniserSettings.loadIds.forEach(id -> targetSlots.add(cargoFinder.findLoadSlot(id)));
+		optioniserSettings.dischargeIds.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlot(id)));
+		optioniserSettings.eventsIds.forEach(id -> targetEvents.add(cargoFinder.findVesselEvent(id)));
+
+		final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
+				sdp, sdp.getEditingDomain(), userSettings, //
+				targetSlots, targetEvents, //
+				null, // Optional extra data provider.
+				null, // Alternative initial solution provider
+				builder -> {
+					builder.withThreadCount(threadsAvailable);
+				});
+
+		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+
+		SlotInsertionOptimiserLogger logger = loggingData == null ? null : new SlotInsertionOptimiserLogger();
+
+		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
+
+		final SlotInsertionOptions result = insertionRunner.exportSolutions(results, subMonitor.split(10));
+
+		if (loggingData != null && logger != null) {
+			HeadlessOptioniserJSONTransformer.addRunResult(0, logger, loggingData);
+		}
+
+		return result;
+	}
+	
 }

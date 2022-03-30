@@ -41,12 +41,7 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
-	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-
-	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-
-	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+	@Nullable
+	AbstractSolutionSet runSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull OptionAnalysisModel model,
+			@Nullable Consumer<AbstractSolutionSet> action, boolean runAsync, @NonNull IProgressMonitor monitor);
 }
