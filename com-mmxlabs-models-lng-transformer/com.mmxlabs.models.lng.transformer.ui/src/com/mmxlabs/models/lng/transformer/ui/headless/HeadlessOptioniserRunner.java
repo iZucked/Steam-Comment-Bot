@@ -92,7 +92,7 @@ public class HeadlessOptioniserRunner {
 		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord,
+	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
 		final UserSettings userSettings = options.userSettings;
