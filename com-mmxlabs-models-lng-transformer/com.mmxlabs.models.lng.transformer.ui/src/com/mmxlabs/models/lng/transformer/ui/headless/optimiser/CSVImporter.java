@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -29,6 +28,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
+import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.models.lng.actuals.importer.ActualsModelExtraImporter;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -93,10 +93,10 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 public class CSVImporter {
 
@@ -455,7 +455,7 @@ public class CSVImporter {
 					importer.importModel(scenarioModel, readers, context);
 				} catch (final Throwable th) {
 					throw new RuntimeException(th);
-//					Assertions.fail(th.getMessage());
+					// Assertions.fail(th.getMessage());
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {
@@ -477,39 +477,32 @@ public class CSVImporter {
 		th.printStackTrace();
 	}
 
-	public static void runFromCSVDirectory(final File csvDirectory, Consumer<IScenarioDataProvider> action) {
+	public static void runFromCSVDirectory(final File csvDirectory, CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action) throws Exception {
 		// TODO: This is usually run in osgi - maybe we should be using the import
 		// wizard code to get the main importer and client customer hooks
-		try {
-			URL urlRoot = csvDirectory.toURI().toURL();
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
-					action.accept(scenarioDataProvider);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
+		URL urlRoot = csvDirectory.toURI().toURL();
+		try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
+
+			// wizard code to get the main importer and client customer hooks
+			// Note: Eclipse also supports jar: ! in a similar way
+			final ScenarioModelRecord modelRecord = ScenarioStorageUtil.createFromCopyOf("csvimport", scenarioDataProvider);
+			try (IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("runFromCSVZipFile")) {
+				action.accept(modelRecord, sdp);
+			}
 		}
 
 	}
 
-	public static void runFromCSVZipFile(final File zipFile, Consumer<IScenarioDataProvider> action) {
+	public static void runFromCSVZipFile(final File zipFile, CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action) throws Exception {
 		// TODO: This is usually run in osgi - maybe we should be using the import
 		// wizard code to get the main importer and client customer hooks
-		try {
-			// Note: Eclipse also supports jar: ! in a similar way
-			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
-					action.accept(scenarioDataProvider);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-			return;
+		// Note: Eclipse also supports jar: ! in a similar way
+		String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
+		try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
+			final ScenarioModelRecord modelRecord = ScenarioStorageUtil.createFromCopyOf("csvimport", scenarioDataProvider);
+			try (IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("runFromCSVZipFile")) {
+				action.accept(modelRecord, sdp);
+			}
 		}
-
 	}
 }

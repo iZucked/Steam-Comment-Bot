@@ -59,10 +59,8 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting
-	 * seed, with the specified options. The optioniser output is logged to the
-	 * logger, which can then be used to extract information about the optioniser
-	 * run.
+	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
+	 * information about the optioniser run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -81,22 +79,22 @@ public class HeadlessOptioniserRunner {
 	}
 
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVDirectory(csvDirectory, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVZipFile(zipFile, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
 		final UserSettings userSettings = options.userSettings;
-//		 
+		//
 
 		final List<Slot<?>> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
@@ -176,7 +174,6 @@ public class HeadlessOptioniserRunner {
 		}
 	}
 
-
 	public @NonNull SlotInsertionOptions doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull OptioniserSettings optioniserSettings, final @Nullable HeadlessOptioniserJSON loggingData,
 			int threadsAvailable, @NonNull IProgressMonitor monitor) {
 
@@ -213,5 +210,5 @@ public class HeadlessOptioniserRunner {
 
 		return result;
 	}
-	
+
 }

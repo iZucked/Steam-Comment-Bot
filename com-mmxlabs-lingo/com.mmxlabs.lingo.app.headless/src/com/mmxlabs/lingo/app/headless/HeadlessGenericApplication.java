@@ -45,6 +45,7 @@ import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
@@ -190,6 +191,21 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		json.getMeta().setCustomInfo(hOptions.customInfo);
 		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
 		json.getParams().setCores(threads);
+	}
+	
+	protected Meta writeMetaFields( File scenarioFile, HeadlessApplicationOptions hOptions) {
+		Meta meta = new Meta();
+		meta.setDate(LocalDateTime.now());
+		meta.setCheckSum(mD5Checksum(scenarioFile));
+		meta.setUseCase(hOptions.useCase);
+		meta.setClient(clientCode);
+		meta.setVersion(buildVersion);
+		meta.setMachineType(machineInfo);
+		meta.setCustomInfo(hOptions.customInfo);
+		meta.setMaxHeapSize(Runtime.getRuntime().maxMemory());
+//		json.getParams().setCores(threads);
+		
+		return meta;
 	}
 
 	private void writeRunFailure(HeadlessApplicationOptions hOptions, int run, Exception e) {
