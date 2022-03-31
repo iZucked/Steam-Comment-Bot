@@ -879,8 +879,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createRunButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Play, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
@@ -889,7 +887,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Play, IconMode.Enabled));
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -930,13 +928,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
-			}
-		});
-
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
@@ -946,9 +937,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createCloudRunButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.CloudPlay_24, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
-
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
@@ -956,7 +944,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.CloudPlay_24, IconMode.Enabled));
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -1012,13 +1000,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
-			}
-		});
-
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
@@ -1028,9 +1009,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createDisplayButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
-
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
@@ -1038,7 +1016,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Console, IconMode.Enabled));
 
 		generateButton.setToolTipText("Display results");
 
@@ -1070,13 +1048,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
-			}
-		});
-
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
@@ -1093,9 +1064,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
 
-		final Image imageGenerate = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-		generateButton.addDisposeListener(e -> imageGenerate.dispose());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 
 		generateButton.setToolTipText("Delete current results");
 
