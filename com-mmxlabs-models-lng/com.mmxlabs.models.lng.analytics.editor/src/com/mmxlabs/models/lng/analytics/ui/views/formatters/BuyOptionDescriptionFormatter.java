@@ -32,29 +32,24 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof MTMRow) {
-			final MTMRow row = (MTMRow) object;
+		if (object instanceof MTMRow row) {
 			final BuyOption buy = row.getBuyOption();
-			if (buy instanceof BuyReference) {
-				final LoadSlot slot = ((BuyReference) buy).getSlot();
+			if (buy instanceof BuyReference ref) {
+				final LoadSlot slot = ref.getSlot();
 				return slot.getName();
 			}
 			return render(buy);
-		} else if (object instanceof ViabilityRow) {
-			final ViabilityRow row = (ViabilityRow) object;
+		} else if (object instanceof ViabilityRow row) {
 			final BuyOption buy = row.getBuyOption();
 			return render(buy);
-		} else if (object instanceof BreakEvenAnalysisRow) {
-			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
-			final BuyOption buy = partialCaseRow.getBuyOption();
+		} else if (object instanceof BreakEvenAnalysisRow row) {
+			final BuyOption buy = row.getBuyOption();
 			return render(buy);
-		} else if (object instanceof PartialCaseRow) {
-			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
-			final Collection<?> buys = partialCaseRow.getBuyOptions();
+		} else if (object instanceof PartialCaseRow row) {
+			final Collection<?> buys = row.getBuyOptions();
 			return render(buys);
 
-		} else if (object instanceof Collection<?>) {
-			final Collection<?> collection = (Collection<?>) object;
+		} else if (object instanceof Collection<?> collection) {
 
 			if (collection.isEmpty()) {
 				return "<open>";
@@ -71,8 +66,8 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
-		} else if (object instanceof Object[]) {
-			final Object[] objects = (Object[]) object;
+		} else if (object instanceof Object[] arr) {
+			final Object[] objects = arr;
 
 			if (objects.length == 0) {
 				return "<open>";
@@ -89,8 +84,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof OpenBuy) {
 			return "<open>";
-		} else if (object instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
+		} else if (object instanceof BuyOpportunity buyOpportunity) {
 			final LocalDate date = buyOpportunity.getDate();
 			String dateStr = "<not set>";
 			if (date != null) {
@@ -101,8 +95,13 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			if (priceExpression != null && priceExpression.length() > 5) {
 				priceExpression = priceExpression.substring(0, 4) + "...";
 			}
+
 			if (priceExpression == null) {
-				priceExpression = "<not set>";
+				if (buyOpportunity.getContract() != null) {
+					priceExpression = "";
+				} else {
+					priceExpression = "<not set>";
+				}
 			}
 			String portName = "<not set>";
 			final Port port = buyOpportunity.getPort();
@@ -117,11 +116,11 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				}
 			}
 			if (portName != null && dateStr != null && priceExpression != null) {
-				return String.format("%s (%s) %s", portName, dateStr, priceExpression);
+				// Use trim() as empty expression would leave a training space.
+				return String.format("%s (%s) %s", portName, dateStr, priceExpression).trim();
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) object;
+		} else if (object instanceof BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
@@ -131,8 +130,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID <not set>");
-		} else if (object instanceof BuyMarket) {
-			final BuyMarket buyMarket = (BuyMarket) object;
+		} else if (object instanceof BuyMarket buyMarket) {
 			final SpotMarket market = buyMarket.getMarket();
 			if (market != null) {
 				return String.format("Market %s", market.getName());

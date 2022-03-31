@@ -101,7 +101,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 11, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -204,7 +204,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 11, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //

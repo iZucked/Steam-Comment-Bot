@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
@@ -19,8 +20,6 @@ import java.util.List;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +64,7 @@ public class CloudOptimisationDataServiceClient {
 	private static final String JOB_STATUS_URL = "/status";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; // for localhost - "/scenarios/v1/cloud/opti/upload"
 	private static final String PUBLIC_KEY_URL = "/publickey";
+	private static final String INFO_URL = "/info";
 	//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
 	//	private final IEclipsePreferences preferences;
 	//	private final String optimisationServiceURL;
@@ -127,6 +127,25 @@ public class CloudOptimisationDataServiceClient {
 		// CloudOptimisationDataService.INSTANCE.start();
 		// }
 		return this.userid;
+	}
+
+	public String getInfo() throws IOException {
+		final String requestURL = String.format("%s", INFO_URL);
+		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder.build();
+
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (response.isSuccessful()) {
+				return response.body().string();
+			}
+			throw new IOException("Unexpected code: " + response);
+		}  catch (UnknownHostException e) {
+			throw new IOException("Could not resolve host: " + e.getLocalizedMessage());
+		}
 	}
 
 	public String upload(final File scenario, //

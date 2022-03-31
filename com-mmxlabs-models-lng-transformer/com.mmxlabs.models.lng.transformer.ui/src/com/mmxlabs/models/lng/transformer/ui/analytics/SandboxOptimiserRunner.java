@@ -81,7 +81,7 @@ public class SandboxOptimiserRunner {
 		this.userSettings = userSettings;
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		plan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		plan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan);
 		final IOptimiserInjectorService extraService = buildExtraModules(extraDataProvider, initialSolutionProvider);
 

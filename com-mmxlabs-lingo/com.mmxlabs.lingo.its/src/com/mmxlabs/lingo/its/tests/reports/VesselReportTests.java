@@ -233,7 +233,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
 				.withOptimisationPlan(optimisationPlan) //

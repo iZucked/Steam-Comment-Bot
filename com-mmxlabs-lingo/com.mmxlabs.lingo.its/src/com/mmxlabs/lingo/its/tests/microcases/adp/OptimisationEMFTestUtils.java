@@ -30,7 +30,7 @@ public class OptimisationEMFTestUtils {
 		userSettings.setMode(OptimisationMode.ADP);
 		userSettings.setCleanSlateOptimisation(true);
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);
 

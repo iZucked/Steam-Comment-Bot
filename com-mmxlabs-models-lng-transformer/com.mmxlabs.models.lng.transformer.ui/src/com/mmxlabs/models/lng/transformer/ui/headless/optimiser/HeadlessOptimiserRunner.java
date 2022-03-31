@@ -99,7 +99,7 @@ public class HeadlessOptimiserRunner {
 
 			final UserSettings optionSettings = options.getUserSettingsContent();
 			final @NonNull UserSettings userSettings = (optionSettings == null ? UserSettingsHelper.createDefaultUserSettings() : optionSettings);
-			result.plan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
+			result.plan = OptimisationHelper.transformUserSettings(userSettings, sdp.getTypedScenario(LNGScenarioModel.class));
 			result.overrideNumThreads(LNGScenarioChainBuilder.getNumberOfAvailableCores());
 
 		}

@@ -79,7 +79,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -148,7 +148,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -216,7 +216,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -307,7 +307,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -394,7 +394,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2017, 1, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2017, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -477,7 +477,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		// Generate internal data
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //

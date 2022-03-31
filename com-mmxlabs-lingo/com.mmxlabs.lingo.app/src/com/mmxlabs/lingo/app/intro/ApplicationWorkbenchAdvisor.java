@@ -5,44 +5,35 @@
 package com.mmxlabs.lingo.app.intro;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
-import org.eclipse.ui.internal.ide.IDEInternalWorkbenchImages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.osgi.framework.Bundle;
 
 import com.mmxlabs.lingo.app.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceSaveHook;
 
 @SuppressWarnings("restriction")
