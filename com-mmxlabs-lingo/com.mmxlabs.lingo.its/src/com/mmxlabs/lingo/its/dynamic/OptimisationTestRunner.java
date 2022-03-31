@@ -5,12 +5,10 @@
 package com.mmxlabs.lingo.its.dynamic;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -22,10 +20,8 @@ import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
@@ -34,23 +30,11 @@ import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
-import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
-import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -64,12 +48,7 @@ public class OptimisationTestRunner {
 
 		final TriConsumer<List<DynamicNode>, File, File> consumer = (cases, scenarioFile, paramsFile) -> {
 			cases.add(DynamicTest.dynamicTest(paramsFile.getName(), () -> {
-				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-
-					final UserSettings userSettings = OptimisationTestRunner.getUserSettings(paramsFile);
-					Assertions.assertNotNull(userSettings);
-					assert userSettings != null; // For null analysis
-
+				CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 					final ObjectMapper objectMapper = new ObjectMapper();
 
 					final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
@@ -90,8 +69,10 @@ public class OptimisationTestRunner {
 							Assertions.fail(e.getMessage(), e);
 						}
 					};
-					OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, userSettings, null, existingState, existingCompare, saver);
-				});
+					OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver);
+				};
+
+				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
 			}));
 		};
 
@@ -170,49 +151,9 @@ public class OptimisationTestRunner {
 		return allCases;
 	}
 
-	public static @Nullable SandboxSettings getSandboxOptions(final File file) throws IOException {
-
-		if (!file.exists()) {
-			return null;
-		} else {
-
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-			mapper.enable(Feature.ALLOW_COMMENTS);
-
-			return mapper.readValue(file, SandboxSettings.class);
-		}
-
-	}
-
-	public static @Nullable UserSettings getUserSettings(final File file) {
-
-		if (!file.exists()) {
-			return null;
-		} else {
-
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-			mapper.enable(Feature.ALLOW_COMMENTS);
-
-			mapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
-			mapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
-
-			try {
-				return mapper.readValue(file, UserSettings.class);
-			} catch (final IOException e) {
-				Assertions.fail(e.getMessage(), e);
-				return null;
-			}
-		}
-
-	}
-
 	public static void runOptimisation(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider sdp, ///
-			@NonNull final UserSettings userSettings, @Nullable final Consumer<OptimisationPlan> planCustomiser, @Nullable final ScenarioFitnessState existingState,
-			@Nullable final String existingCompareContent, @Nullable final BiConsumer<ScenarioFitnessState, String> saver) throws Exception {
+			@NonNull final File paramsFile, @Nullable final ScenarioFitnessState existingState, @Nullable final String existingCompareContent,
+			@Nullable final BiConsumer<ScenarioFitnessState, String> saver) throws Exception {
 
 		final boolean checkFitnesses = TestingModes.OptimisationTestMode == TestMode.Run;
 		final boolean saveFitnesses = TestingModes.OptimisationTestMode == TestMode.Generate;
@@ -221,35 +162,12 @@ public class OptimisationTestRunner {
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 		analyticsModel.getOptimisations().clear();
 
-		// Convert user settings to a optimisation plan
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, sdp.getTypedScenario(LNGScenarioModel.class));
-		Assertions.assertNotNull(optimisationPlan);
-		// Extend the plan if needed
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
-		Assertions.assertNotNull(optimisationPlan);
-
-		// Give caller opportunity to tweak final plan (e.g. set iterations)
-		if (planCustomiser != null) {
-			planCustomiser.accept(optimisationPlan);
-		}
-
-		// Build a default runner.
-		final LNGOptimisationRunnerBuilder builder = LNGOptimisationBuilder.begin(sdp, null) //
-				.withOptimisationPlan(optimisationPlan) //
-				.withOptimiseHint() //
-				.buildDefaultRunner();
-
-		final LNGScenarioRunner runner = builder.getScenarioRunner();
+		final OptimisationJobRunner runner = new OptimisationJobRunner();
+		runner.withParams(paramsFile);
+		runner.withScenario(sdp);
 
 		// Run the optimisation
-		{
-			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-			Assertions.assertNotNull(result);
-		}
-		// As we cleared the results before, the only result present should be our result
-		Assertions.assertEquals(1, analyticsModel.getOptimisations().size());
-		final AbstractSolutionSet solutionSet = analyticsModel.getOptimisations().get(0);
-		solutionSet.setUseScenarioBase(false);
+		AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
 
 		final ScenarioFitnessState currentState = new ScenarioFitnessState();
 
@@ -266,9 +184,6 @@ public class OptimisationTestRunner {
 			Assertions.assertNotNull(existingState.getInitialState());
 			Assertions.assertNotNull(existingState.getInitialState().isEquivalent(currentState.getInitialState()));
 		}
-
-		// // Run the optimisation
-		// final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
 
 		// Calculate state for all solutions
 		if (!solutionSet.getOptions().isEmpty()) {
@@ -326,7 +241,6 @@ public class OptimisationTestRunner {
 		}
 	}
 
-
 	private static SolutionState createSolutionStateFromSchedule(final Schedule schedule) {
 		final SolutionState ss = new SolutionState();
 		for (final Fitness f : schedule.getFitnesses()) {
@@ -334,17 +248,4 @@ public class OptimisationTestRunner {
 		}
 		return ss;
 	}
-
-	private static SolutionState createSolutionStateFromExtraAnnotations(@NonNull final Map<String, Object> extraAnnotations) {
-		final SolutionState ss = new SolutionState();
-		final Map<String, Long> fitnesses = (Map<String, Long>) extraAnnotations.get(OptimiserConstants.G_AI_fitnessComponents);
-		if (fitnesses != null) {
-			for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
-				ss.addFitnesses(entry.getKey(), entry.getValue());
-			}
-		}
-
-		return ss;
-	}
-
 }
