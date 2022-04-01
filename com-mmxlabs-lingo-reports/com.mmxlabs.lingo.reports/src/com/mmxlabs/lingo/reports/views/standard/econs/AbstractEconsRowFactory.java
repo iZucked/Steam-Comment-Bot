@@ -149,45 +149,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 	}
 
-	protected Image createImage(String path) {
-		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
-		return imageDescriptor.createImage();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		dispose();
-	}
-
-	public void dispose() {
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
-		}
-	}
-
 	protected static CargoEconsReportRow createRow(final int order, final @NonNull String name, final boolean includeUnits, final @NonNull String prefixUnit, final String suffixUnit,
 			final @NonNull ICellRenderer renderer) {
 		return createRow(order, name, true, prefixUnit, suffixUnit, renderer, null);

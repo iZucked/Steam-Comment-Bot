@@ -83,45 +83,6 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 		cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 	}
 
-	protected Image createImage(final String path) {
-		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
-		return imageDescriptor.createImage();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		dispose();
-	}
-
-	public void dispose() {
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
-		}
-	}
-
 	/**
 	 * 
 	 * @param order

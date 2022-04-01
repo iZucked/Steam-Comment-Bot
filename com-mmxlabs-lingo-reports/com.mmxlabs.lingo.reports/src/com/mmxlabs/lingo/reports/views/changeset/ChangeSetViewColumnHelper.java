@@ -195,7 +195,11 @@ public class ChangeSetViewColumnHelper {
 		final ImageDescriptor openCircleDescriptor = getImageDescriptor("icons/open-circle.png");
 		final ImageDescriptor closedCircleDescriptor = getImageDescriptor("icons/closed-circle.png");
 		final ImageDescriptor halfCircleDescriptor = getImageDescriptor("icons/half-circle.png");
+		imageOpenCircle = openCircleDescriptor.createImage();
+		imageClosedCircle = closedCircleDescriptor.createImage();
+		imageHalfCircle = halfCircleDescriptor.createImage();
 
+		// Shared images, do not dispose
 		imageSteadyArrow = CommonImages.getImage(IconPaths.SteadyArrow, IconMode.Enabled);
 		imageGreenArrowDown = CommonImages.getImage(IconPaths.GreenArrowDown, IconMode.Enabled);
 		imageGreenArrowUp = CommonImages.getImage(IconPaths.GreenArrowUp, IconMode.Enabled);
@@ -204,9 +208,6 @@ public class ChangeSetViewColumnHelper {
 		imageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
 		imageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
 
-		imageOpenCircle = openCircleDescriptor.createImage();
-		imageClosedCircle = closedCircleDescriptor.createImage();
-		imageHalfCircle = halfCircleDescriptor.createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
@@ -2874,34 +2875,7 @@ public class ChangeSetViewColumnHelper {
 			imageClosedCircle.dispose();
 			imageClosedCircle = null;
 		}
-		if (imageSteadyArrow != null) {
-			imageSteadyArrow.dispose();
-			imageSteadyArrow = null;
-		}
-		if (imageGreenArrowUp != null) {
-			imageGreenArrowUp.dispose();
-			imageGreenArrowUp = null;
-		}
-		if (imageGreenArrowDown != null) {
-			imageGreenArrowDown.dispose();
-			imageGreenArrowDown = null;
-		}
-		if (imageRedArrowUp != null) {
-			imageRedArrowUp.dispose();
-			imageRedArrowUp = null;
-		}
-		if (imageRedArrowDown != null) {
-			imageRedArrowDown.dispose();
-			imageRedArrowDown = null;
-		}
-		if (imageDarkArrowUp != null) {
-			imageDarkArrowUp.dispose();
-			imageDarkArrowUp = null;
-		}
-		if (imageDarkArrowDown != null) {
-			imageDarkArrowDown.dispose();
-			imageDarkArrowDown = null;
-		}
+		 
 		if (colour_VesselTypeColumn != null) {
 			colour_VesselTypeColumn.dispose();
 			colour_VesselTypeColumn = null;
