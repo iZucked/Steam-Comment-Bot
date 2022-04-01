@@ -94,6 +94,9 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ChangeSetViewColumnHelper {
@@ -189,37 +192,21 @@ public class ChangeSetViewColumnHelper {
 		this.view = view;
 		this.viewer = viewer;
 
-		final ImageDescriptor imageDescriptorSteadyArrow;
-		final ImageDescriptor imageDescriptorGreenArrowDown;
-		final ImageDescriptor imageDescriptorGreenArrowUp;
-		final ImageDescriptor imageDescriptorRedArrowDown;
-		final ImageDescriptor imageDescriptorRedArrowUp;
-		final ImageDescriptor imageDescriptorDarkArrowDown;
-		final ImageDescriptor imageDescriptorDarkArrowUp;
-
 		final ImageDescriptor openCircleDescriptor = getImageDescriptor("icons/open-circle.png");
 		final ImageDescriptor closedCircleDescriptor = getImageDescriptor("icons/closed-circle.png");
 		final ImageDescriptor halfCircleDescriptor = getImageDescriptor("icons/half-circle.png");
 
-		imageDescriptorSteadyArrow = getImageDescriptor("icons/steady_arrow.png");
-		imageDescriptorGreenArrowDown = getImageDescriptor("icons/green_arrow_down.png");
-		imageDescriptorGreenArrowUp = getImageDescriptor("icons/green_arrow_up.png");
-		imageDescriptorRedArrowDown = getImageDescriptor("icons/red_arrow_down.png");
-		imageDescriptorRedArrowUp = getImageDescriptor("icons/red_arrow_up.png");
-		imageDescriptorDarkArrowDown = getImageDescriptor("icons/dark_arrow_down.png");
-		imageDescriptorDarkArrowUp = getImageDescriptor("icons/dark_arrow_up.png");
+		imageSteadyArrow = CommonImages.getImage(IconPaths.SteadyArrow, IconMode.Enabled);
+		imageGreenArrowDown = CommonImages.getImage(IconPaths.GreenArrowDown, IconMode.Enabled);
+		imageGreenArrowUp = CommonImages.getImage(IconPaths.GreenArrowUp, IconMode.Enabled);
+		imageRedArrowDown = CommonImages.getImage(IconPaths.RedArrowDown, IconMode.Enabled);
+		imageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
+		imageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
+		imageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
 
 		imageOpenCircle = openCircleDescriptor.createImage();
 		imageClosedCircle = closedCircleDescriptor.createImage();
 		imageHalfCircle = halfCircleDescriptor.createImage();
-
-		imageSteadyArrow = imageDescriptorSteadyArrow.createImage();
-		imageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
-		imageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
-		imageRedArrowDown = imageDescriptorRedArrowDown.createImage();
-		imageRedArrowUp = imageDescriptorRedArrowUp.createImage();
-		imageDarkArrowDown = imageDescriptorDarkArrowDown.createImage();
-		imageDarkArrowUp = imageDescriptorDarkArrowUp.createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
