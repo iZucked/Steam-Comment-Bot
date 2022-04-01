@@ -27,7 +27,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setSimilarityMode(SimilarityMode.ALL);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings,  null);
 
 		Assertions.assertNotNull(optimisationPlan);
 		Assertions.assertNotNull(optimisationPlan.getUserSettings());
@@ -42,7 +42,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings,  null);
 
 		Assertions.assertNotNull(plan);
 		for (OptimisationStage stage : plan.getStages()) {
@@ -62,7 +62,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setWithSpotCargoMarkets(false);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null);
 
 		Assertions.assertNotNull(optimisationPlan);
 		Assertions.assertNotNull(optimisationPlan.getUserSettings());

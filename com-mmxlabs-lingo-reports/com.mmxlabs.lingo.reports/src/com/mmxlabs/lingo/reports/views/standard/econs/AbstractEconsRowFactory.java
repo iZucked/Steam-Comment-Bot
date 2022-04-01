@@ -44,6 +44,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	// Make into abstract parent
@@ -139,11 +142,11 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	public static final DecimalFormat CVFormat = new DecimalFormat("##.#");
 
 	protected AbstractEconsRowFactory() {
-		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
-		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
-		cellImageGreenArrowUp = createImage("icons/green_arrow_up.png");
-		cellImageRedArrowDown = createImage("icons/red_arrow_down.png");
-		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
+		cellImageSteadyArrow = CommonImages.getImage(IconPaths.SteadyArrow, IconMode.Enabled);
+		cellImageGreenArrowDown = CommonImages.getImage(IconPaths.GreenArrowDown, IconMode.Enabled);
+		cellImageGreenArrowUp = CommonImages.getImage(IconPaths.GreenArrowUp, IconMode.Enabled);
+		cellImageRedArrowDown = CommonImages.getImage(IconPaths.RedArrowDown, IconMode.Enabled);
+		cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 	}
 
 	protected Image createImage(String path) {

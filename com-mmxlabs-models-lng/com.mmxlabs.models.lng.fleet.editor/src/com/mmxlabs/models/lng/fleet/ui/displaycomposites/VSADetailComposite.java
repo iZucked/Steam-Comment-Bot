@@ -332,6 +332,40 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		buttons.setLayout(buttonLayout);
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
+
+		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
+		{
+			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
+			add.setImage(img);
+			add.addDisposeListener(e -> img.dispose());
+		}
+
+		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+
+		add.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final ISelection sel = tableViewer.getSelection();
+
+				FuelConsumption selection;
+				if (!sel.isEmpty() && sel instanceof IStructuredSelection) {
+					selection = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
+				} else {
+					selection = null;
+					for (final FuelConsumption c : oldValue.getVesselOrDelegateFuelConsumption()) {
+						if (selection == null || selection.getSpeed() < c.getSpeed())
+							selection = c;
+					}
+				}
+				final FuelConsumption newConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
+				newConsumption.setConsumption(selection == null ? 0 : selection.getConsumption() + 1);
+				newConsumption.setSpeed(selection == null ? 15 : selection.getSpeed() + 1);
+				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), newConsumption),
+						oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
+				tableViewer.setSelection(new StructuredSelection(newConsumption));
+			}
+		});
+
 		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
 		{
 			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
@@ -363,38 +397,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				}
 			}
 		});
-		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
-		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-			add.setImage(img);
-			add.addDisposeListener(e -> img.dispose());
-		}
-		
-		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
-		add.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final ISelection sel = tableViewer.getSelection();
-
-				FuelConsumption selection;
-				if (!sel.isEmpty() && sel instanceof IStructuredSelection) {
-					selection = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
-				} else {
-					selection = null;
-					for (final FuelConsumption c : oldValue.getVesselOrDelegateFuelConsumption()) {
-						if (selection == null || selection.getSpeed() < c.getSpeed())
-							selection = c;
-					}
-				}
-				final FuelConsumption newConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
-				newConsumption.setConsumption(selection == null ? 0 : selection.getConsumption() + 1);
-				newConsumption.setSpeed(selection == null ? 15 : selection.getSpeed() + 1);
-				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), newConsumption),
-						oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
-				tableViewer.setSelection(new StructuredSelection(newConsumption));
-			}
-		});
 	}
 
 	@Override

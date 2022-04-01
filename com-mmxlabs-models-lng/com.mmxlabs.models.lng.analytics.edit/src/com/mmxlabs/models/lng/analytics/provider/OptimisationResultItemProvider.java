@@ -9,6 +9,9 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 import java.util.Collection;
 import java.util.List;
@@ -58,7 +61,7 @@ public class OptimisationResultItemProvider extends AbstractSolutionSetItemProvi
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationResult.png"));
+		return overlayImage(object, CommonImages.getImage(IconPaths.OptimisationResult, IconMode.Enabled));
 	}
 
 	/**

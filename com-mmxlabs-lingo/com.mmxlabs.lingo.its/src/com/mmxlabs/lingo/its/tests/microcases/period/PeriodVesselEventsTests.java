@@ -88,7 +88,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 1, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 
@@ -164,7 +164,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 

@@ -35,9 +35,9 @@ public class PluginRegistryHook {
 	public void registerEnablements() {
 
 		// Dynamically register UI elements.
-		if (extensionRegistry instanceof ExtensionRegistry) {
+		if (extensionRegistry instanceof ExtensionRegistry reg) {
 			// This is marked as experimental functionality.
-			final Object token = ((ExtensionRegistry) extensionRegistry).getTemporaryUserToken();
+			final Object token = reg.getTemporaryUserToken();
 
 			for (final PluginXMLEnablementExtension ext : featureEnablements) {
 
@@ -49,7 +49,7 @@ public class PluginRegistryHook {
 					try (InputStream is = bundle.getResource(ext.getPluginXML()).openStream()) {
 						extensionRegistry.addContribution(is, contributor, false, null, null, token);
 					} catch (final Exception e) {
-						log.error(e.getMessage(), e);
+						log.error("Error opening " + ext.getPluginXML() + " " + e.getMessage(), e);
 					}
 				}
 			}

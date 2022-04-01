@@ -8,10 +8,19 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransformer<HeadlessOptioniserJSON.Params, HeadlessOptioniserJSON.Metrics, HeadlessOptioniserJSON> {
 
+	public HeadlessOptioniserJSON createJSONResultObject( OptioniserSettings options) {
+		HeadlessOptioniserJSON result = createJSONResultObject(HeadlessOptioniserJSON.Params.class, HeadlessOptioniserJSON.Metrics.class, HeadlessOptioniserJSON.class);
+		result.setType("optioniser");
+		result.getParams().setOptioniserProperties(createOptioniserProperties(options));
+		
+		return result;
+	}
+	
 	public HeadlessOptioniserJSON createJSONResultObject(String machineType, HeadlessOptioniserRunner.Options options, File scenarioFile, int threads) {
 		HeadlessOptioniserJSON result = createJSONResultObject(HeadlessOptioniserJSON.Params.class, HeadlessOptioniserJSON.Metrics.class, HeadlessOptioniserJSON.class);
 		result.setType("optioniser");
@@ -21,7 +30,7 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 		return result;
 	}
 
-	public HeadlessOptioniserJSON createJSONResultObject(String machineType, HeadlessOptioniserOptions options, File scenarioFile, int threads) {
+	public HeadlessOptioniserJSON createJSONResultObject(String machineType, OptioniserSettings options, File scenarioFile, int threads) {
 		HeadlessOptioniserJSON result = createJSONResultObject(HeadlessOptioniserJSON.Params.class, HeadlessOptioniserJSON.Metrics.class, HeadlessOptioniserJSON.class);
 		result.setType("optioniser");
 		setBasicProperties(result, machineType, scenarioFile.getName(), threads);
@@ -30,7 +39,7 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 		return result;
 	}
 
-	public void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
+	public static void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
 		HeadlessOptioniserJSON.Metrics metrics = new HeadlessOptioniserJSON.Metrics();
 		metrics.setSeed(startTry);
 		metrics.setRuntime(logger.getRuntime());
@@ -54,7 +63,7 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 		result.setMetrics(metrics);
 	}
 
-	private HeadlessOptioniserJSON.OptioniserProperties createOptioniserProperties(HeadlessOptioniserOptions options) {
+	private HeadlessOptioniserJSON.OptioniserProperties createOptioniserProperties(OptioniserSettings options) {
 		HeadlessOptioniserJSON.OptioniserProperties op = new HeadlessOptioniserJSON.OptioniserProperties();
 
 		op.setLoadIds(options.loadIds.toArray(new String[0]));

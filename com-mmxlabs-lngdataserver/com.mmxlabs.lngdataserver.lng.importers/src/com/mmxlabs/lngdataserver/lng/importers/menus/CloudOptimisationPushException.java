@@ -25,6 +25,7 @@ public class CloudOptimisationPushException extends RuntimeException {
 		FAILED_TO_SAVE_ENCRYPTION_KEY, //
 		FAILED_MISSING_KEY_UUID, //
 		FAILED_GETTING_PUB_KEY, //
+		FAILED_STATUS_CHECK, //
 	};
 
 	private final Type type;

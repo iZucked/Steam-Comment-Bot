@@ -93,7 +93,7 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 	protected OptimisationPlan createOptimisationPlan(final UserSettings userSettings) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 50_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 10_000);

@@ -168,7 +168,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		// Evaluate initial case
 		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
-		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, null, sourceModel::setResults, false, new NullProgressMonitor());
+		evaluator.runSandbox(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false, new NullProgressMonitor());
 
 		{
 			AbstractSolutionSet results = sourceModel.getResults();

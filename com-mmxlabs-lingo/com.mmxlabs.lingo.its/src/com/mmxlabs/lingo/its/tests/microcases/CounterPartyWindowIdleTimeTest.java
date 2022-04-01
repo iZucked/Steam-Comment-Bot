@@ -123,7 +123,7 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 		userSettings.setPeriodStartDate(LocalDate.of(2020, 8, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2021, 4));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10);
 

@@ -101,7 +101,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 	protected OptimisationPlan createOptimisationPlan(final UserSettings userSettings) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 1_000_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 50_000);

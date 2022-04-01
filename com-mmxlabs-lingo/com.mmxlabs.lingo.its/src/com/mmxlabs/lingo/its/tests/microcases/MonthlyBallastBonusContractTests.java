@@ -238,7 +238,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		userSettings.setPeriodStartDate(LocalDate.of(2016, 2, 5));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 6));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 

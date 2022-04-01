@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -36,7 +38,7 @@ public class HeadlessOptioniserRunner {
 
 	public static class Options {
 
-		public LocalDate periodStart;
+		public LocalDate periodStartDate;
 		public YearMonth periodEnd;
 
 		public List<String> loadIds = new LinkedList<>();
@@ -57,10 +59,8 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting
-	 * seed, with the specified options. The optioniser output is logged to the
-	 * logger, which can then be used to extract information about the optioniser
-	 * run.
+	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
+	 * information about the optioniser run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -79,22 +79,22 @@ public class HeadlessOptioniserRunner {
 	}
 
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVDirectory(csvDirectory, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVZipFile(zipFile, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord,
+	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
 		final UserSettings userSettings = options.userSettings;
-//		 
+		//
 
 		final List<Slot<?>> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
@@ -130,8 +130,8 @@ public class HeadlessOptioniserRunner {
 
 		final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
 
-		if (options.periodStart != null) {
-			userSettings.setPeriodStartDate(options.periodStart);
+		if (options.periodStartDate != null) {
+			userSettings.setPeriodStartDate(options.periodStartDate);
 		}
 		if (options.periodEnd != null) {
 			userSettings.setPeriodEnd(options.periodEnd);
@@ -158,7 +158,7 @@ public class HeadlessOptioniserRunner {
 
 		// Override iterations
 		if (options.iterations > 0) {
-			insertionRunner.setIteration(options.iterations);
+			insertionRunner.setIterations(options.iterations);
 		}
 
 		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
@@ -173,5 +173,7 @@ public class HeadlessOptioniserRunner {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
 	}
+
+	
 
 }
