@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -97,8 +96,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -867,7 +866,7 @@ public class ScenarioServicePushToCloudAction {
 
 	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
 
-		final HeadlessOptioniserOptions settings = new HeadlessOptioniserOptions();
+		final OptioniserSettings settings = new OptioniserSettings();
 		settings.userSettings = us;
 		settings.loadIds = new ArrayList<>();
 		settings.dischargeIds = new ArrayList<>();
@@ -898,9 +897,9 @@ public class ScenarioServicePushToCloudAction {
 
 	private static String createSandboxSettingsJson(final UserSettings us, final String sandboxModelUUID) {
 
-		final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
-		description.sandboxUUID = sandboxModelUUID;
-		description.userSettings = us;
+		final SandboxSettings description = new SandboxSettings();
+		description.setSandboxUUID(sandboxModelUUID);
+		description.setUserSettings(us);
 		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
 			final String json = objectMapper.writeValueAsString(description);

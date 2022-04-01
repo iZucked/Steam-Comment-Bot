@@ -170,11 +170,11 @@ public class LNGOptimisationBuilder {
 			localOptimisationPlan = OptimisationHelper.transformUserSettings(localUserSettings, lngScenarioModel);
 			localOptimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(localOptimisationPlan);
 
-			if (optimisationPlanCustomiser != null) {
-				optimisationPlanCustomiser.accept(localOptimisationPlan);
-			}
 		}
 
+		if (optimisationPlanCustomiser != null) {
+			optimisationPlanCustomiser.accept(localOptimisationPlan);
+		}
 		final JobExecutorFactory executorService = createExecutorService();
 
 		try {

@@ -879,8 +879,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createRunButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Play, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
@@ -889,7 +887,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Play, IconMode.Enabled));
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -918,18 +916,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-								switch (mode) {
-								case SandboxModeConstants.MODE_OPTIONISE:
-									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
-									break;
-								case SandboxModeConstants.MODE_OPTIMISE:
-									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
-									break;
-								case SandboxModeConstants.MODE_DERIVE:
-								default:
-									WhatIfEvaluator.evaluate(OptionModellerView.this, m);
-									break;
-								}
+								WhatIfEvaluator.runSandbox(OptionModellerView.this, m);
 								if (m != null && m.getResults() != null) {
 									final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
 									data.open();
@@ -938,13 +925,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						}
 					}
 				}
-			}
-		});
-
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
 			}
 		});
 
@@ -957,9 +937,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createCloudRunButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.CloudPlay_24, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
-
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
@@ -967,7 +944,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.CloudPlay_24, IconMode.Enabled));
 		generateButton.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -1023,13 +1000,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
-			}
-		});
-
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
 
 		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
@@ -1039,9 +1009,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createDisplayButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled);
-		final Image imageGenerate = generateDesc.createImage();
-
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
@@ -1049,7 +1016,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Console, IconMode.Enabled));
 
 		generateButton.setToolTipText("Display results");
 
@@ -1071,19 +1038,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 								// No results, so show a blank case
 								final SandboxResult emptyResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
 								emptyResult.setName(m.getName());
+								emptyResult.setUseScenarioBase(false);
 								final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), emptyResult, m.getName());
 								data.open();
 							}
 						}
 					});
 				}
-			}
-		});
-
-		//
-		generateButton.addDisposeListener(e -> {
-			if (imageGenerate != null) {
-				imageGenerate.dispose();
 			}
 		});
 
@@ -1103,9 +1064,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
 
-		final Image imageGenerate = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-		generateButton.addDisposeListener(e -> imageGenerate.dispose());
-		generateButton.setImage(imageGenerate);
+		generateButton.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 
 		generateButton.setToolTipText("Delete current results");
 

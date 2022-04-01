@@ -6,12 +6,15 @@ package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
@@ -21,12 +24,12 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisatio
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 public class HeadlessUtils {
 
 	/**
-	 * Returns an {@link Options} object with the default required options for an
-	 * OSGI application.
+	 * Returns an {@link Options} object with the default required options for an OSGI application.
 	 * 
 	 * @return
 	 */
@@ -103,7 +106,7 @@ public class HeadlessUtils {
 	}
 
 	@NonNullByDefault
-	public static void saveResult(EObject result, IScenarioDataProvider scenarioDataProvider, File resultOutput) throws IOException {
+	public static void saveResult(EObject result, IScenarioDataProvider scenarioDataProvider, File resultOutput, IScenarioCipherProvider cipher) throws IOException {
 
 		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
@@ -120,8 +123,12 @@ public class HeadlessUtils {
 		// referencing and hook in the encryption code path
 		final Resource r = editingDomain.getResourceSet().createResource(resultURI);
 		r.getContents().add(result);
-		
-		r.save(null);
+
+		Map<String, URIConverter.Cipher> options = new HashMap<>();
+		if (cipher != null) {
+			options.put(Resource.OPTION_CIPHER, cipher.getSharedCipher());
+		}
+		r.save(options);
 	}
 
 }
