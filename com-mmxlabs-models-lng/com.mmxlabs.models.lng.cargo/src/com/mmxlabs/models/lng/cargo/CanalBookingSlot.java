@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -26,7 +26,6 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingCode <em>Booking Code</em>}</li>
@@ -127,32 +126,6 @@ public interface CanalBookingSlot extends MMXObject {
 	 * @generated
 	 */
 	void setCanalEntrance(CanalEntry value);
-
-	/**
-	 * Returns the value of the '<em><b>Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Slot</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slot</em>' reference.
-	 * @see #setSlot(Slot)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot_Slot()
-	 * @model
-	 * @generated
-	 */
-	Slot getSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Slot</em>' reference.
-	 * @see #getSlot()
-	 * @generated
-	 */
-	void setSlot(Slot value);
 
 	/**
 	 * Returns the value of the '<em><b>Notes</b></em>' attribute.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -16,6 +16,8 @@
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.MtMScenarioEditorActionDelegate"
                   definitionId="com.mmxlabs.scenario.service.ui.mtm"
                   id="com.mmxlabs.scenario.service.ui.mtm.action"
+                  icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/mtm.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/mtm_disabled.png"
                   label="MtM"
                   style="push"
                   toolbarPath="evaluategroup2"

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -72,32 +72,17 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	}
 
 	@SuppressWarnings("unused")
-	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
-			throws Exception {
-		runAdvancedOptimisationTestCase(limitedIterations, mode, withActionSets, withGeneratedCharterOuts, LNGScenarioRunnerCreator.createITSService());
+	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withGeneratedCharterOuts) throws Exception {
+		runAdvancedOptimisationTestCase(limitedIterations, mode, withGeneratedCharterOuts, LNGScenarioRunnerCreator.createITSService());
 	}
 
 	@SuppressWarnings("unused")
-	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts,
+	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withGeneratedCharterOuts,
 			final IOptimiserInjectorService optimiserInjectorService, String... extraHints) throws Exception {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		if (withGeneratedCharterOuts) {
 			Assumptions.assumeTrue(runGCO);
-		}
-
-		if (withActionSets) {
-			// Preconditions check - ensure period, otherwise ignore test case
-			Assumptions.assumeTrue(periodStart != null);
-			Assumptions.assumeTrue(periodEnd != null);
-
-			// Should match OptimisationHelper (Repeated null checks for null analysis code)
-			if (periodStart != null && periodEnd != null) {
-				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) <= 6);
-			}
-			if (periodStart != null && periodEnd != null) {
-				Assumptions.assumeTrue(Months.between(periodStart, periodEnd) < 3 || mode != SimilarityMode.LOW);
-			}
 		}
 
 		// Only run full iterations if the flag is set
@@ -115,9 +100,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			components.add("full-iters");
 		}
 		components.add(String.format("similarity-%s", mode.toString()));
-		if (withActionSets) {
-			components.add("actionset");
-		}
 		if (withGeneratedCharterOuts) {
 			components.add("gco");
 		}
@@ -149,12 +131,11 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 				userSettings.setPeriodEnd(periodEnd);
 			}
 
-			userSettings.setBuildActionSets(withActionSets);
 			userSettings.setGenerateCharterOuts(withGeneratedCharterOuts);
 			userSettings.setShippingOnly(false);
 			userSettings.setSimilarityMode(mode);
 
-			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 			Assertions.assertNotNull(optimisationPlan);
 
 			if (limitedIterations) {
@@ -166,7 +147,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 
 			}
 			final UserSettings planUserSettings = optimisationPlan.getUserSettings();
-			Assertions.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
 			Assertions.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
 			Assertions.assertFalse(planUserSettings.isShippingOnly());
 			Assertions.assertEquals(periodStart, planUserSettings.getPeriodStartDate());

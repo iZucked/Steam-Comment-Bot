@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.actionablesets;
@@ -16,8 +16,6 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
@@ -42,13 +40,13 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -121,13 +119,18 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 			final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
 			// TODO: Filter
-			// final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
+			// final Iterator<Constraint> iterator =
+			// constraintAndFitnessSettings.getConstraints().iterator();
 			// while (iterator.hasNext()) {
 			// final Constraint constraint = iterator.next();
-			// if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+			// if
+			// (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME))
+			// {
 			// iterator.remove();
 			// }
-			// if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+			// if
+			// (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME))
+			// {
 			// iterator.remove();
 			// }
 			//
@@ -139,8 +142,8 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 			stageSettings.setName("actionplan");
 			stageSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
-			final ActionableSetsTransformerUnit actionPlanUnit = new ActionableSetsTransformerUnit(dataTransformer, "actionplan", dataTransformer.getUserSettings(), stageSettings,
-					scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+			final ActionableSetsTransformerUnit actionPlanUnit = new ActionableSetsTransformerUnit("actionplan", dataTransformer.getUserSettings(), stageSettings,
+					scenarioRunner.getJobExecutorFactory(), 100);
 
 			// final Function<Integer, String> nameFactory = changeSetIdx -> {
 			// String newName;
@@ -152,7 +155,9 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 			// }
 			// return newName;
 			// };
-			final IMultiStateResult results = actionPlanUnit.run(new SubProgressMonitor(progressMonitor, 90));
+			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
+
+			final IMultiStateResult results = actionPlanUnit.run(dataTransformer, initialSequencesContainer, dataTransformer.getInitialResult(), new SubProgressMonitor(progressMonitor, 90));
 			{
 				final IProgressMonitor monitor = new SubProgressMonitor(progressMonitor, 10);
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
@@ -228,7 +233,8 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 							plan.getOptions().add(option);
 
-							// scenarioToOptimiserBridge.storeAsCopy(changeSet.getFirst(), newName, scenarioInstance, null);
+							// scenarioToOptimiserBridge.storeAsCopy(changeSet.getFirst(), newName,
+							// scenarioInstance, null);
 						} catch (final Exception e) {
 							throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);
 						}
@@ -256,14 +262,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
-	@Override
-	protected void kill() {
-	}
+ 
 
 	@Override
 	public void dispose() {
@@ -283,10 +282,4 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
-	}
-
 }

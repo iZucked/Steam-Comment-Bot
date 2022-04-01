@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.browser.ui;
@@ -19,6 +19,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public class DataBrowserLabelProvider extends ColumnLabelProvider implements IColorProvider {
@@ -48,7 +51,7 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 		img_published = Activator.createScaledImage("published");
 		img_local = Activator.createScaledImage("local");
-		img_bc = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/base-flag.png").createImage();
+		img_bc = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	}
 
 	@Override

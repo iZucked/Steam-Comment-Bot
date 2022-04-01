@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
@@ -28,6 +28,9 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.hub.services.users.UsernameProvider;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider.IBaseCaseChanged;
@@ -238,8 +241,8 @@ public class BaseCaseStatusTrimContribution {
 		return "You have the latest base case \nor you have dismissed the notification";
 	}
 	
-	private final Image baseFlagGreen = new Image(Display.getDefault(), BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
-	private final Image baseFlagEmpty = new Image(Display.getDefault(), BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+	private final Image baseFlagGreen = CommonImages.getImageDescriptor(IconPaths.BaseFlagGreen, IconMode.Enabled).createImage();
+	private final Image baseFlagEmpty = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	
 	private Image dataHubStatusImage(final boolean changed) {
 		if (changed && !myRecord.isDismissed) {

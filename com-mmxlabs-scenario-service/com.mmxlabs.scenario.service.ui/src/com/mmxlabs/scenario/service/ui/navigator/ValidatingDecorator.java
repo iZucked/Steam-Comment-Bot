@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.navigator;
@@ -18,11 +18,11 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.validation.IValidationApplicableProvider;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -95,9 +95,9 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
 		if (element instanceof ScenarioService scenarioService) {
-			if (!scenarioService.isLocal()) {
-				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
-			}
+//			if (!scenarioService.isLocal()) {
+//				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
+//			}
 		} else if (element instanceof ScenarioInstance scenarioInstance) {
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);

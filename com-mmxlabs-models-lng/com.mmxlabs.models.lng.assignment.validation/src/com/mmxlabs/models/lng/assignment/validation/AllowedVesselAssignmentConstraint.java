@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -10,7 +10,6 @@ package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +20,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -43,7 +41,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Constraint to check the Assigned Vessel is in the allowed vessel list, if specified.
+ * Constraint to check the Assigned Vessel is in the allowed vessel list, if
+ * specified.
  * 
  */
 public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstraint {
@@ -51,35 +50,33 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) object;
+		if (object instanceof AssignableElement assignableElement) {
 
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 			if (vesselAssignmentType == null) {
 				if (assignableElement instanceof CharterOutEvent && ((CharterOutEvent) assignableElement).isOptional()) {
-					return Activator.PLUGIN_ID;
+					return;
 				}
 				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
 					status.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 					failures.add(status);
-					return Activator.PLUGIN_ID;
+					return;
 				} else {
-					return Activator.PLUGIN_ID;
+					return;
 				}
 			}
 
 			final Set<EObject> targets = new HashSet<>();
-			if (assignableElement instanceof Cargo) {
-				final Cargo cargo = (Cargo) assignableElement;
+			if (assignableElement instanceof Cargo cargo) {
 				targets.addAll(cargo.getSlots());
 
 			} else {
@@ -122,7 +119,8 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					if (s instanceof Vessel) {
 						expandedVessels.add(s);
 					} else {
-						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit contained Vessels
+						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit
+						// contained Vessels
 						expandedVessels.addAll(SetUtils.getObjects(s));
 					}
 				}
@@ -140,7 +138,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					vesselAssignment = charterInMarket.getVessel();
 				} else {
 					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
-					return Activator.PLUGIN_ID;
+					return;
 				}
 
 				boolean permitted = false;
@@ -172,7 +170,5 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

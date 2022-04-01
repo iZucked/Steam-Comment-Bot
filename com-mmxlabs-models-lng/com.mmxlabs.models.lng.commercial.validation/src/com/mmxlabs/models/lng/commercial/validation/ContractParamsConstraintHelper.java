@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
@@ -20,6 +20,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class ContractParamsConstraintHelper {
+
+	private ContractParamsConstraintHelper() {
+
+	}
 
 	public static void pricingEventConstraint(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, Contract contract, PricingEvent restrictedEvent,
 			final String contractName) {

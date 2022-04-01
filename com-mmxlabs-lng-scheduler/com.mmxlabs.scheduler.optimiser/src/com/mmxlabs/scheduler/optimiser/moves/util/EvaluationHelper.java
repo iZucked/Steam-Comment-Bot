@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -126,7 +126,7 @@ public class EvaluationHelper {
 	}
 
 	public boolean checkConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
@@ -154,7 +154,7 @@ public class EvaluationHelper {
 	 * @return
 	 */
 	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: checkConstraintsForRelaxedConstraints", this.getClass().getName()));
@@ -182,7 +182,7 @@ public class EvaluationHelper {
 	}
 
 	public boolean doesMovePassConstraints(final @NonNull ISequences rawSequences) {
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: doesMovePassConstraints", this.getClass().getName()));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSalesContractProfiles <em>Sales Contract Profiles</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getFleetProfile <em>Fleet Profile</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getMullProfile <em>Mull Profile</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.ADPModel#getSpacingProfile <em>Spacing Profile</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel()
@@ -164,5 +165,27 @@ public interface ADPModel extends UUIDObject {
 	 * @generated
 	 */
 	void setMullProfile(MullProfile value);
+
+	/**
+	 * Returns the value of the '<em><b>Spacing Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Spacing Profile</em>' containment reference.
+	 * @see #setSpacingProfile(SpacingProfile)
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getADPModel_SpacingProfile()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	SpacingProfile getSpacingProfile();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.ADPModel#getSpacingProfile <em>Spacing Profile</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Spacing Profile</em>' containment reference.
+	 * @see #getSpacingProfile()
+	 * @generated
+	 */
+	void setSpacingProfile(SpacingProfile value);
 
 } // ADPModel

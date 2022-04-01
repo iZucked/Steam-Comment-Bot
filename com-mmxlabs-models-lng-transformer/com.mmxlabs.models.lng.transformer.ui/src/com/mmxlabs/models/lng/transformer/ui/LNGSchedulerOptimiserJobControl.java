@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -32,6 +32,9 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -49,7 +52,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
+	private static final ImageDescriptor imgEval = CommonImages.getImageDescriptor(IconPaths.Evaluate, IconMode.Enabled);
 
 	private final LNGOptimisationRunnerBuilder builder;
 	private final LNGScenarioRunner scenarioRunner;
@@ -205,10 +208,4 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
-	}
-
 }

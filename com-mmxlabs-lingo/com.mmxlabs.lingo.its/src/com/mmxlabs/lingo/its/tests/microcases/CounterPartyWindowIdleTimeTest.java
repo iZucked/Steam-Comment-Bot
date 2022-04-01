@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -115,7 +115,6 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
 
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -124,7 +123,7 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 		userSettings.setPeriodStartDate(LocalDate.of(2020, 8, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2021, 4));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10);
 

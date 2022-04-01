@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -80,7 +80,6 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 
 	protected @NonNull UserSettings createUserSettings() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
 		userSettings.setCleanSlateOptimisation(false);
@@ -94,11 +93,10 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 	protected OptimisationPlan createOptimisationPlan(final UserSettings userSettings) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 50_000);
 		ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 10_000);
-		ScenarioUtils.setActionPlanStageParameters(optimisationPlan, 5_000_000, 1_500_000, 5_000);
 		ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 
 		return optimisationPlan;

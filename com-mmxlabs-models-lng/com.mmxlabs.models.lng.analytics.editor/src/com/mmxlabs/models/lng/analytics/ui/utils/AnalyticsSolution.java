@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.utils;
@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -26,6 +27,7 @@ public class AnalyticsSolution {
 	private ScenarioInstance scenarioInstance;
 	private UUIDObject solution;
 	private final ModelReference modelReference;
+	private @Nullable ScenarioModelRecord modelRecord;
 
 	public AnalyticsSolution(final ScenarioInstance instance, final UUIDObject solution, final String title) {
 		scenarioInstance = instance;
@@ -39,6 +41,7 @@ public class AnalyticsSolution {
 	}
 
 	public AnalyticsSolution(final ScenarioModelRecord modelRecord, final UUIDObject solution, final String title) {
+		this.modelRecord = modelRecord;
 		this.solution = solution;
 		id = UUID.randomUUID().toString() + title;
 		this.title = title;
@@ -90,5 +93,9 @@ public class AnalyticsSolution {
 	public void openAndSwitchScreen() {
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventBroker.post(OPEN_RESULTS_VIEW_WITH_SCREEN, this);
+	}
+
+	public @Nullable ScenarioModelRecord getModelRecord() {
+		return modelRecord;
 	}
 }

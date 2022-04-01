@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain;
@@ -77,7 +77,7 @@ public class ChainRunner implements IChainRunner {
 				// if (!firstLink) {
 				// link.init();
 				// }
-				r = link.run(initialSequencesContainer, r, new SubProgressMonitor(monitor, link.getProgressTicks()));
+				r = link.run(dataTransformer, initialSequencesContainer, r, new SubProgressMonitor(monitor, link.getProgressTicks()));
 				// firstLink = false;
 				if (monitor.isCanceled()) {
 					throw new OperationCanceledException();

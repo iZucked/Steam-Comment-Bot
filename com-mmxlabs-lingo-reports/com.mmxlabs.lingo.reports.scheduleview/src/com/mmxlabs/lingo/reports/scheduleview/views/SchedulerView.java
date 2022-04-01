@@ -1,15 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
-
-import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Highlight_;
-import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
-import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -62,6 +58,7 @@ import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
+import org.eclipse.nebula.widgets.grid.internal.DefaultBottomLeftRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -81,7 +78,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.actions.PackAction;
 import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
@@ -95,6 +91,8 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
+import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -122,18 +120,16 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-public class SchedulerView extends ViewPart implements
-		// org.eclipse.e4.ui.workbench.modeling.ISelectionListener,
-		IPreferenceChangeListener {
+public class SchedulerView extends ViewPart implements IPreferenceChangeListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
 
@@ -198,16 +194,16 @@ public class SchedulerView extends ViewPart implements
 
 		if (memento != null) {
 			if (memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
-				memento.putString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
+				memento.putString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME));
 			}
 			if (memento.getBoolean(SchedulerViewConstants.Show_Canals) == null) {
-				memento.putBoolean(SchedulerViewConstants.Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+				memento.putBoolean(SchedulerViewConstants.Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(SchedulerViewConstants.Show_Canals));
 			}
 			if (memento.getBoolean(SchedulerViewConstants.Show_Nominals) == null) {
 				memento.putBoolean(SchedulerViewConstants.Show_Nominals, Activator.getDefault().getPreferenceStore().getBoolean(SchedulerViewConstants.Show_Nominals));
 			}
-			if (memento.getChild(Highlight_) == null) {
-				memento.createChild(Highlight_);
+			if (memento.getChild(SchedulerViewConstants.Highlight_) == null) {
+				memento.createChild(SchedulerViewConstants.Highlight_);
 			}
 
 			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
@@ -217,11 +213,17 @@ public class SchedulerView extends ViewPart implements
 
 	@Override
 	public void saveState(final IMemento memento) {
-		this.memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+
+		// Copy existing attributes
+		memento.putMemento(this.memento);
+
+		// Set anything that hasn't been updated in the shared memento
+		memento.putBoolean(SchedulerViewConstants.Show_Days, viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
+		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
 
 		super.saveState(memento);
-		memento.putMemento(this.memento);
 	}
 
 	/**
@@ -503,6 +505,13 @@ public class SchedulerView extends ViewPart implements
 
 		viewer.getGanttChart().getGanttComposite().setLegendProvider(() -> legendItems);
 
+		// Restore show days setting
+		{
+			final Boolean v = memento.getBoolean(SchedulerViewConstants.Show_Days);
+			if (v != null) {
+				viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(v);
+			}
+		}
 		// make sure this viewer is listening to preference changes
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.addPreferenceChangeListener(this);
@@ -573,9 +582,35 @@ public class SchedulerView extends ViewPart implements
 				labelProvider.addColourScheme(extID, cs);
 			}
 		}
+		// Restore highlighter settings
+		{
+			final IMemento highlightSettings = memento.getChild(SchedulerViewConstants.Highlight_);
+			if (highlightSettings != null) {
+				for (final var hi : labelProvider.getHighlighters()) {
+					if (highlightSettings.getBoolean(hi.getID()) == Boolean.TRUE) {
+						labelProvider.toggleHighlighter(hi);
+					}
+				}
+			}
+		}
 
 		viewer.setLabelProvider(labelProvider);
 		viewerComparator = new ScenarioViewerComparator(scenarioComparisonService);
+
+		// Restore sort mode settings
+		{
+			final String v = memento.getString(SchedulerViewConstants.SortMode);
+			if (v != null) {
+				viewerComparator.setMode(Mode.valueOf(v));
+			}
+		}
+		{
+			final String v = memento.getString(SchedulerViewConstants.SortCategory);
+			if (v != null) {
+				viewerComparator.setCategory(Category.valueOf(v));
+			}
+		}
+
 		viewer.setComparator(viewerComparator);
 
 		viewer.setComparer(new IElementComparer() {
@@ -1019,12 +1054,37 @@ public class SchedulerView extends ViewPart implements
 						viewer.setInput(viewer.getInput());
 					}
 				};
+				a.setToolTipText(mode.getTooltip());
 
 				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
 				actionContributionItem.fill(menu, -1);
 
 				// Set initially checked item.
 				if (comparator.getMode() == mode) {
+					a.setChecked(true);
+				}
+			}
+
+			{
+				final Separator actionContributionItem = new Separator();
+				actionContributionItem.fill(menu, -1);
+			}
+			for (final ScenarioViewerComparator.Category category : ScenarioViewerComparator.Category.values()) {
+
+				final Action a = new Action(category.getDisplayName(), IAction.AS_RADIO_BUTTON) {
+					@Override
+					public void run() {
+						comparator.setCategory(category);
+						viewer.setInput(viewer.getInput());
+					}
+				};
+				a.setToolTipText(category.getTooltip());
+
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+				actionContributionItem.fill(menu, -1);
+
+				// Set initially checked item.
+				if (comparator.getCategory() == category) {
 					a.setChecked(true);
 				}
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
@@ -33,7 +32,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		Vessel nominatedVessel = null;
 
@@ -41,13 +40,12 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 		String type = "";
 		String name = "";
 		final EObject target = ctx.getTarget();
-		if (target instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) target;
+		if (target instanceof LoadSlot loadSlot) {
 			if (loadSlot.isDESPurchase()) {
 				nominatedVessel = loadSlot.getNominatedVessel();
 
 				if (loadSlot.getWindowStart() == null) {
-					return Activator.PLUGIN_ID;
+					return;
 				}
 				final ZonedDateTime start = loadSlot.getSchedulingTimeWindow().getStart();
 				ZonedDateTime end = loadSlot.getSchedulingTimeWindow().getEnd();
@@ -59,11 +57,10 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				type = "DES Purchase";
 				name = loadSlot.getName();
 			}
-		} else if (target instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) target;
+		} else if (target instanceof DischargeSlot dischargeSlot) {
 			if (dischargeSlot.isFOBSale()) {
 				if (dischargeSlot.getWindowStart() == null) {
-					return Activator.PLUGIN_ID;
+					return;
 				}
 
 				nominatedVessel = dischargeSlot.getNominatedVessel();
@@ -76,12 +73,11 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 		}
 
 		if (nominatedVessel == null) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 				NonNullPair<ZonedDateTime, ZonedDateTime> availabilityInterval = null;
@@ -149,7 +145,5 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

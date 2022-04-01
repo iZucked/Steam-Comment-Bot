@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -16,14 +17,25 @@ import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class InsertionPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final SlotInsertionOptions plan, final IProgressMonitor monitor, NamedObject target) {
+	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
+		if (modelRecord != null) {
+			return new ScenarioResultImpl(modelRecord, scheduleModel);
+		} else {
+			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
+		}
+	}
+
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final SlotInsertionOptions plan, final IProgressMonitor monitor,
+			NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -40,14 +52,14 @@ public class InsertionPlanTransformer {
 				if (scenarioModel == null || scenarioModel.getScheduleModel().getSchedule() == null) {
 					throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 				}
-				base = new ScenarioResultImpl(scenarioInstance, scenarioModel.getScheduleModel());
+				base = make(scenarioInstance, modelRecord, scenarioModel.getScheduleModel());
 			} else {
-				base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
+				base = make(scenarioInstance, modelRecord, plan.getBaseOption().getScheduleModel());
 			}
 
 			for (final SolutionOption option : plan.getOptions()) {
 				ChangeDescription changeDescription = option.getChangeDescription();
-				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = make(scenarioInstance, modelRecord, option.getScheduleModel());
 
 				{
 
@@ -56,8 +68,8 @@ public class InsertionPlanTransformer {
 					if (option instanceof DualModeSolutionOption) {
 						final DualModeSolutionOption slotInsertionOption = (DualModeSolutionOption) option;
 						if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
-							altBase = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
-							altCurrent = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
+							altBase = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroBaseCase().getScheduleModel());
+							altCurrent = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroTargetCase().getScheduleModel());
 						}
 					}
 					if (plan.isHasDualModeSolutions()) {

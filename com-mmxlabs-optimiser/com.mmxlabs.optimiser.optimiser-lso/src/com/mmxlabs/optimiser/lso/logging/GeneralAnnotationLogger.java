@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.logging;
@@ -21,22 +21,22 @@ public class GeneralAnnotationLogger {
 	private final @NonNull IOptimisationContext context;
 	private ISequences sequences;
 	private IAnnotatedSolution solution;
-	JSONArray rows = new JSONArray();
+	private final JSONArray rows = new JSONArray();
 
-	public GeneralAnnotationLogger(@NonNull IFitnessEvaluator fitnessEvaluator, @NonNull IOptimisationContext context) {
+	public GeneralAnnotationLogger(@NonNull final IFitnessEvaluator fitnessEvaluator, @NonNull final IOptimisationContext context) {
 		this.fitnessEvaluator = fitnessEvaluator;
 		this.context = context;
 		solution = null;
 	}
 
-	public void report(int iterations) {
+	public void report(final int iterations) {
 		rows.add(getLatenessRow(iterations, getBestAnnotatedSolution()));
 	}
 
 	private IAnnotatedSolution getBestAnnotatedSolution() {
-		Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		final Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
 		assert bestSequences != null;
-		ISequences sequencesFromEvaluator = bestSequences.getSecond();
+		final ISequences sequencesFromEvaluator = bestSequences.getSecond();
 		assert sequencesFromEvaluator != null;
 
 		if (sequencesFromEvaluator == sequences) {
@@ -48,19 +48,19 @@ public class GeneralAnnotationLogger {
 		}
 	}
 
-	public void exportData(JSONArray node) {
+	public void exportData(final JSONArray node) {
 		if (node == null) {
 			return;
 		}
 		node.addAll(rows);
 	}
 
-	private JSONObject getLatenessRow(int iterations, IAnnotatedSolution annotatedSolution) {
+	private JSONObject getLatenessRow(final int iterations, final IAnnotatedSolution annotatedSolution) {
 
-		JSONObject row = new JSONObject();
+		final JSONObject row = new JSONObject();
 		row.put("iterations", iterations);
-		for (String key : annotatedSolution.getGeneralAnnotationKeys()) {
-			Object o = annotatedSolution.getGeneralAnnotation(key, Object.class);
+		for (final String key : annotatedSolution.getGeneralAnnotationKeys()) {
+			final Object o = annotatedSolution.getGeneralAnnotation(key, Object.class);
 			if (o instanceof Number) {
 				row.put(key, o);
 			} else {

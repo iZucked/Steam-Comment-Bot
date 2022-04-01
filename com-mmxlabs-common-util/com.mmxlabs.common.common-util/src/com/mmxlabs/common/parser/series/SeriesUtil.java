@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series;
@@ -98,7 +98,7 @@ public class SeriesUtil {
 
 	public static String toString(final ISeries s) {
 		final int[] points = s.getChangePoints();
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		for (final int p : points) {
 			sb.append(p);
 			sb.append("=>");

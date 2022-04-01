@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
@@ -198,6 +198,10 @@ public class CloudOptimisationDataService implements IProgressProvider {
 
 	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		return client.getOptimisationServerPublicKey(pubkey);
+	}
+
+	public String getInfo() throws IOException {
+		return client.getInfo();
 	}
 
 	public void encryptSymmetricKey(RSAPublicKey pubkey, SecretKey symkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {

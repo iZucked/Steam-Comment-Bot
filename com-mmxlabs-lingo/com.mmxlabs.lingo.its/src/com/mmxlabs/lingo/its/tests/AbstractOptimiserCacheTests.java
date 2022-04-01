@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -63,7 +63,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 				tests.add(DynamicTest.dynamicTest(label, () -> {
 					Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 					init(scenarioURL, periodStart, periodEnd);
-					runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, withGCO, withCacheSettings(//
+					runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, withGCO, withCacheSettings(//
 							cacheType == CacheType.VoyageEvaluator ? CacheMode.Verify : CacheMode.Off, //
 							cacheType == CacheType.TimeWindow ? CacheMode.Verify : CacheMode.Off, //
 							cacheType == CacheType.PNLTrimmerCache ? CacheMode.Verify : CacheMode.Off //

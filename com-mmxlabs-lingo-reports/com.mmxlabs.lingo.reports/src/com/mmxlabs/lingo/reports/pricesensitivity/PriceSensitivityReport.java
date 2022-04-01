@@ -11,9 +11,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
@@ -35,8 +35,8 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 	}
 
 	@Override
-	protected AbstractSimpleTabularReportContentProvider<PriceSensitivityData> createContentProvider() {
-		return new AbstractSimpleTabularReportContentProvider<PriceSensitivityData>() {
+	protected SimpleTabularReportContentProvider createContentProvider() {
+		return new SimpleTabularReportContentProvider() {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			}

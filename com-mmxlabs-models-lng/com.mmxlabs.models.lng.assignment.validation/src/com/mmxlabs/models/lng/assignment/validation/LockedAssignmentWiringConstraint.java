@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -22,13 +21,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement elementAssignment = (AssignableElement) object;
-			if (elementAssignment instanceof Cargo) {
-				Cargo cargo = (Cargo) elementAssignment;
+		if (object instanceof final AssignableElement elementAssignment) {
+			if (elementAssignment instanceof final Cargo cargo) {
 				// Locked only applies to fleet cargoes
 				if (cargo.getCargoType() == CargoType.FLEET) {
 					if (cargo.isAllowRewiring()) {
@@ -55,6 +52,5 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

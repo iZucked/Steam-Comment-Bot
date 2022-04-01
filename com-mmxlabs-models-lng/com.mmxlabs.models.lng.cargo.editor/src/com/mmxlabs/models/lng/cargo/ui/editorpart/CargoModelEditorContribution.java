@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -16,19 +16,20 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -70,6 +71,9 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  */
@@ -173,19 +177,22 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final Composite selector = new Composite(sectionParent, SWT.NONE);
 			selector.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).grab(true, false).create());
 
-			Button btn_new = new Button(selector, SWT.PUSH);
-			btn_new.setText("New");
-
 			final Label label = new Label(selector, SWT.NONE);
 			label.setText("Facility: ");
-			selector.setLayout(new GridLayout(4, false));
+			selector.setLayout(new GridLayout(5, false));
 			inventorySelectionViewer = new ComboViewer(selector);
 			inventorySelectionViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().hint(70, SWT.DEFAULT).create());
 
+			Button editBtn;
 			{
 				Button btn = new Button(selector, SWT.PUSH);
-				btn.setText("Edit");
-				btn.addSelectionListener(new SelectionListener() {
+				Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled).createImage();
+				btn.setImage(imgEnabled);
+				btn.addDisposeListener(e -> imgEnabled.dispose());
+
+				btn.setEnabled(false);
+
+				btn.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -193,13 +200,59 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 						DetailCompositeDialogUtil.editSelection(editorPart, selection);
 						inventorySelectionViewer.refresh();
 					}
+				});
+
+				editBtn = btn;
+			}
+
+			Button deleteBtn;
+			{
+				Button btn = new Button(selector, SWT.PUSH);
+
+				Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+				btn.setImage(imgEnabled);
+				btn.addDisposeListener(e -> imgEnabled.dispose());
+
+				btn.setEnabled(false);
+
+				btn.addSelectionListener(new SelectionAdapter() {
 
 					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
+					public void widgetSelected(SelectionEvent e) {
+						IStructuredSelection selection = inventorySelectionViewer.getStructuredSelection();
+						if (!selection.isEmpty()) {
+							final CompoundCommand cmd = new CompoundCommand("Delete storage");
+							cmd.append(DeleteCommand.create(editorPart.getEditingDomain(), selection.toList()));
 
+							CommandStack commandStack = editorPart.getModelReference().getCommandStack();
+							commandStack.execute(cmd);
+
+							if (!modelObject.getInventoryModels().isEmpty()) {
+								// Pick first model.
+								final Inventory inventory = modelObject.getInventoryModels().get(0);
+								inventoryFeedPane.getViewer().setInput(inventory);
+								inventoryOfftakePane.getViewer().setInput(inventory);
+								inventoryCapacityPane.getViewer().setInput(inventory);
+								inventorySelectionViewer.setSelection(new StructuredSelection(inventory));
+							} else {
+								inventoryFeedPane.getViewer().setInput(null);
+								inventoryOfftakePane.getViewer().setInput(null);
+								inventoryCapacityPane.getViewer().setInput(null);
+								inventorySelectionViewer.setSelection(new StructuredSelection());
+							}
+						}
 					}
 				});
+
+				deleteBtn = btn;
 			}
+
+			Button btn_new = new Button(selector, SWT.PUSH);
+
+			Image addImg = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
+			btn_new.setImage(addImg);
+			btn_new.addDisposeListener(e -> addImg.dispose());
+
 			final SashForm sash = new SashForm(sectionParent, SWT.HORIZONTAL);
 			sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 			sash.setLayout(new GridLayout(3, true));
@@ -230,20 +283,25 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					return ((Inventory) element).getName();
 				}
 			});
-			inventorySelectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			inventorySelectionViewer.addSelectionChangedListener(event -> {
 
-				@Override
-				public void selectionChanged(final SelectionChangedEvent event) {
-					final Inventory inventory = (Inventory) ((IStructuredSelection) inventorySelectionViewer.getSelection()).getFirstElement();
+				ISelection selection = inventorySelectionViewer.getSelection();
+				if (selection.isEmpty()) {
+					deleteBtn.setEnabled(false);
+					editBtn.setEnabled(false);
+				} else {
+					final Inventory inventory = (Inventory) ((IStructuredSelection) selection).getFirstElement();
 					inventoryFeedPane.getViewer().setInput(inventory);
 					inventoryOfftakePane.getViewer().setInput(inventory);
 					inventoryCapacityPane.getViewer().setInput(inventory);
 					lastFacility = inventory.getName();
 
+					deleteBtn.setEnabled(true);
+					editBtn.setEnabled(true);
 				}
 			});
 
-			btn_new.addSelectionListener(new SelectionListener() {
+			btn_new.addSelectionListener(new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -259,12 +317,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorPart, inventory, commandStack.getMostRecentCommand());
 					});
 					inventorySelectionViewer.setInput(modelObject.getInventoryModels());
+					inventorySelectionViewer.setSelection(new StructuredSelection(inventory));
 				}
 
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
 
 			inventorySelectionViewer.setInput(modelObject.getInventoryModels());
@@ -403,10 +458,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final EObject target = dcsd.getTarget();
 
 			if (dcsd.getTag() == ValidationConstants.TAG_ADP) {
-				//Ignore as is coming from the ADP model.
+				// Ignore as is coming from the ADP model.
 				return false;
 			}
-			
+
 			for (final Class<?> clazz : handledClasses) {
 				if (clazz.isInstance(target)) {
 					return true;
@@ -431,7 +486,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			EObject target = dcsd.getTarget();
-			
+
 			// Look in child items for potentially handles classes.
 			{
 				boolean foundTarget = false;

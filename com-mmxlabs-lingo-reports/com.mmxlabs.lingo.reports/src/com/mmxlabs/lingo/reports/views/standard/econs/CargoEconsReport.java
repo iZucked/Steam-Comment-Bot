@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
@@ -99,6 +99,9 @@ import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -157,7 +160,8 @@ public class CargoEconsReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 
-		pinImage = createImage("icons/Pinned.gif");
+		pinImage = CommonImages.getImageDescriptor(IconPaths.Pin, IconMode.Enabled).createImage();
+//		createImage("icons/Pinned.gif");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 

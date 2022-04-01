@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -10,10 +10,13 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 
@@ -24,6 +27,7 @@ import com.google.common.base.Objects;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
@@ -39,13 +43,15 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluatingLSOTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -53,6 +59,7 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -104,7 +111,7 @@ public class MicroTestUtils {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(fullSequences, null, new ArrayList<>())) {
-				//checker.checkConstraints(fullSequences, null, new ArrayList<>());
+				// checker.checkConstraints(fullSequences, null, new ArrayList<>());
 				failedCheckers.add(checker);
 			}
 		}
@@ -265,10 +272,14 @@ public class MicroTestUtils {
 	 */
 	public static boolean evaluateLSOSequences(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
-		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings(), false);
-		
-		final LNGLSOOptimiserTransformerUnit unit = new LNGLSOOptimiserTransformerUnit(dataTransformer, IRunnerHook.STAGE_LSO, 0, dataTransformer.getUserSettings(), stage,
-				dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(), dataTransformer.getHints(), new DefaultJobExecutorFactory(1));
+		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+
+		final LNGEvaluatingLSOTransformerUnit unit = new LNGEvaluatingLSOTransformerUnit(IRunnerHook.STAGE_LSO, dataTransformer.getUserSettings(), stage, new DefaultJobExecutorFactory(1), 1);
+
+		IMultiStateResult result = new MultiStateResult(rawSequences, new HashMap<>());
+		SequencesContainer container = new SequencesContainer(new NonNullPair<ISequences, Map<String, Object>>(rawSequences, new HashMap<>()));
+
+		unit.run(dataTransformer, container, result, new NullProgressMonitor());
 
 		return true;
 	}
@@ -331,10 +342,11 @@ public class MicroTestUtils {
 		Assertions.fail("End Event not found");
 		throw new IllegalStateException();
 	}
-	
+
 	/**
-	 * Compares two given lists for equality, entry-by-entry, field-by-field. Uses myClass to determine fields. 
-	 * Ignores fields with LingoIgnore annotation.
+	 * Compares two given lists for equality, entry-by-entry, field-by-field. Uses
+	 * myClass to determine fields. Ignores fields with LingoIgnore annotation.
+	 * 
 	 * @param <T>
 	 * @param etalons
 	 * @param generated
@@ -345,7 +357,7 @@ public class MicroTestUtils {
 		if (etalons.size() != generated.size()) {
 			return false;
 		}
-		
+
 		int size = etalons.size();
 		int strike = 0;
 		final List<Field> fields = new ArrayList<Field>();
@@ -355,10 +367,10 @@ public class MicroTestUtils {
 			}
 			fields.add(field);
 		}
-		
-		for(final T gen : generated) {
+
+		for (final T gen : generated) {
 			for (final T et : etalons) {
-		
+
 				boolean allFieldsEqual = true;
 				for (final Field f : fields) {
 					try {
@@ -372,20 +384,22 @@ public class MicroTestUtils {
 						e.printStackTrace();
 					}
 				}
-				
+
 				if (allFieldsEqual) {
 					strike++;
 				}
 			}
 		}
-		
+
 		return size == strike;
 	}
-	
+
 	/**
-	 * Locates given fileName JSON file at urlRoot and tries to return a list of given typeRef
+	 * Locates given fileName JSON file at urlRoot and tries to return a list of
+	 * given typeRef
+	 * 
 	 * @param <T>
-	 * @param urlRoot full path to the folder
+	 * @param urlRoot  full path to the folder
 	 * @param fileName JSON file name
 	 * @param typeRef
 	 * @return List of given typeRef
@@ -400,21 +414,21 @@ public class MicroTestUtils {
 			e.printStackTrace();
 			return Collections.emptyList();
 		}
-		
+
 		InputStream inputStream = null;
-		
+
 		try {
 			inputStream = url.openStream();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return Collections.emptyList();
 		}
-		
+
 		if (inputStream != null) {
 			final ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.registerModule(new JavaTimeModule());
-			
-			try {	
+
+			try {
 				etalons = objectMapper.readValue(inputStream, typeRef);
 			} catch (final Exception e) {
 				e.printStackTrace();

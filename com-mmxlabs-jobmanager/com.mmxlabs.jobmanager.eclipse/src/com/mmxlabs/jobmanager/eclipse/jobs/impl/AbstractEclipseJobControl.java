@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.jobmanager.eclipse.jobs.impl;
@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,66 +40,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
-	public class WrappedProgressMonitor implements IProgressMonitor {
-
-		private double dtotal = 0.0;
-		private int totalWork;
-		private IProgressMonitor delegate;
-
-		private WrappedProgressMonitor(IProgressMonitor delegate) {
-			this.delegate = delegate;
-
-		}
-
-		@Override
-		public void worked(int work) {
-			AbstractEclipseJobControl.this.setProgress(progress + (int) work);
-
-			double w = (double) work / (double) totalWork;
-			internalWorked(w);
-			delegate.worked(work);
-		}
-
-		@Override
-		public void subTask(String name) {
-			delegate.subTask(name);
-		}
-
-		@Override
-		public void setTaskName(String name) {
-			delegate.setTaskName(name);
-		}
-
-		@Override
-		public void setCanceled(boolean canceled) {
-			delegate.setCanceled(canceled);
-		}
-
-		@Override
-		public boolean isCanceled() {
-			return delegate.isCanceled();
-		}
-
-		@Override
-		public void internalWorked(double work) {
-			dtotal += work;
-			delegate.internalWorked(work);
-			AbstractEclipseJobControl.this.setProgress(progress + work);
-
-		}
-
-		@Override
-		public void done() {
-			delegate.done();
-		}
-
-		@Override
-		public void beginTask(String name, int totalWork) {
-			delegate.beginTask(name, totalWork);
-			this.totalWork = totalWork;
-		}
-	}
-
 	private class Runner extends Job {
 
 		public Runner(final String name) {
@@ -107,14 +47,16 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		}
 
 		@Override
-		public IStatus run(final IProgressMonitor monitor) {
+		public IStatus run(final IProgressMonitor parentMonitor) {
+
+			final BindingProgressMonitor monitor = new BindingProgressMonitor(AbstractEclipseJobControl.this, parentMonitor);
+
 			monitor.beginTask("", 100);
 			try {
 				setJobState(EJobState.RUNNING);
 
-				doRunJob(new WrappedProgressMonitor(monitor));
+				doRunJob(SubMonitor.convert(monitor, 100));
 				if (monitor.isCanceled()) {
-					kill();
 					setJobState(EJobState.CANCELLED);
 					return Status.CANCEL_STATUS;
 				}
@@ -122,12 +64,10 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				setJobState(EJobState.COMPLETED);
 				return Status.OK_STATUS;
 			} catch (final OperationCanceledException e) {
-				kill();
 				setJobState(EJobState.CANCELLED);
 				return Status.CANCEL_STATUS;
 			} catch (final UserFeedbackException e) {
 				LOG.warn(e.getMessage());
-				kill();
 				setJobState(EJobState.CANCELLED);
 
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
@@ -140,14 +80,12 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} catch (final Exception | Error e) {
 
 				boolean visualStudioError = false;
-				if (e instanceof NoClassDefFoundError) {
-					NoClassDefFoundError noClassDefFoundError = (NoClassDefFoundError) e;
+				if (e instanceof final NoClassDefFoundError noClassDefFoundError) {
 					if (noClassDefFoundError.getMessage().contains("ortools")) {
 						visualStudioError = true;
 					}
 				}
 
-				kill();
 				setJobState(EJobState.CANCELLED);
 
 				if (visualStudioError) {
@@ -159,12 +97,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} finally {
 				monitor.done();
 			}
-		}
-
-		@Override
-		protected void canceling() {
-			super.canceling();
-			resume();
 		}
 	}
 
@@ -233,8 +165,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	@Override
 	public synchronized void start() {
 		switch (getJobState()) {
-		case UNKNOWN:
-		case INITIALISING:
+		case UNKNOWN, INITIALISING:
 			this.addListener(new IJobControlListener() {
 				@Override
 				public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
@@ -262,31 +193,16 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	@Override
 	public void cancel() {
 		switch (getJobState()) {
-		case CANCELLING:
-		case CANCELLED:
+		case CANCELLING, CANCELLED:
 			return;
-		case PAUSED:
-			resume();
-			break;
 		case RUNNING:
 			runner.cancel();
 			setJobState(EJobState.CANCELLING);
 			break;
 		default:
 			setJobState(EJobState.CANCELLING);
-			kill();
 			setJobState(EJobState.CANCELLED);
 		}
-	}
-
-	@Override
-	public void pause() {
-		// DO NOTHING
-	}
-
-	@Override
-	public void resume() {
-		// DO NOTHING
 	}
 
 	@Override
@@ -336,13 +252,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	 * This method should prepare the job for execution
 	 */
 	protected abstract void reallyPrepare();
-
-	/**
-	 * This method will be called if the job gets killed; clean up any resources.
-	 */
-	protected void kill() {
-		// For sub-classes to override
-	}
 
 	public void setJobProperty(final QualifiedName name, final Object value) {
 		if (this.runner != null) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -115,6 +115,86 @@
                </message>
                <target
                      class="SubContractProfile">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.SpacingProfileConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.SpacingProfileConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SpacingProfileConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SpacingProfile">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.SpacingAllocationConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.SpacingAllocationConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SpacingAllocationConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SpacingAllocation">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.FobSpacingAllocationConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.FobSpacingAllocationConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="FobSpacingAllocationConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="FobSpacingAllocation">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.DesSpacingAllocationConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.DesSpacingAllocationConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DesSpacingAllocationConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DesSpacingAllocation">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.DesSpacingRowConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.DesSpacingRowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DesSpacingRowConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DesSpacingRow">
                </target>
             </constraint>
             <constraint

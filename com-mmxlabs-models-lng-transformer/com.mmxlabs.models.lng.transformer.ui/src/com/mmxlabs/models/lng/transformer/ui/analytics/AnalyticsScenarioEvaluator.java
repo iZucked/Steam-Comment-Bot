@@ -1,9 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
-	 * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -41,31 +37,30 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.TriConsumer;
-import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.MTMModel;
-import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.Mapper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -74,7 +69,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
@@ -109,6 +103,9 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificatio
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner.SandboxJob;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -123,7 +120,6 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
@@ -317,7 +313,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
@@ -353,7 +349,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		customiseConstraints(constraints);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
@@ -366,7 +362,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void evaluateMTMSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			final MTMModel model, final IMapperClass mapper, final IProgressMonitor progressMonitor) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
@@ -432,7 +428,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
 		final ExecutorService executorService = Executors.newFixedThreadPool(LNGScenarioChainBuilder.getNumberOfAvailableCores());
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, (bridge) -> {
+		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(lngScenarioModel, dataTransformer, "break-even-sandbox", userSettings, constraints, executorService,
 					dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
@@ -442,320 +438,78 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void runSandboxOptions(@NonNull final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
-			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
+	public @Nullable AbstractSolutionSet runSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
+			@NonNull final OptionAnalysisModel model, @Nullable final Consumer<AbstractSolutionSet> action, final boolean runAsync, @NonNull final IProgressMonitor monitor) {
+		if (scenarioDataProvider.getScenario() instanceof final LNGScenarioModel root) {
+			final SandboxJobRunner runner = new SandboxJobRunner();
+			runner.withScenario(scenarioDataProvider);
 
-		final String taskName = "Sandbox result";
+			UserSettings userSettings = null;
 
-		final EObject object = scenarioDataProvider.getScenario();
-		if (userSettings == null && object instanceof LNGScenarioModel) {
-			final LNGScenarioModel root = (LNGScenarioModel) object;
-
-			UserSettings previousSettings = null;
-			if (model.getResults() != null) {
-				previousSettings = model.getResults().getUserSettings();
-			}
-			if (previousSettings == null) {
-				previousSettings = root.getUserSettings();
-			}
 			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
+			final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
 
-			userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
-		}
-		if (userSettings == null) {
-			return;
-		}
-		// Reset settings not supplied to the user
-		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
-		userSettings.setCleanSlateOptimisation(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final String pTaskName = taskName;
-		final UserSettings pUserSettings = userSettings;
-
-		if (runAsync) {
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
-			};
-
-			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
-				if (newState == EJobState.COMPLETED) {
-					action.accept((AbstractSolutionSet) jobControl.getJobOutput());
-				}
-			};
-			assert scenarioInstance != null;
-
-			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
-			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
-			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
-		} else {
-			final AbstractSolutionSet result = createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(progressMonitor);
-			action.accept(result);
-		}
-
-	}
-
-	@Override
-	public void runSandboxInsertion(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
-			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
-
-		final String taskName = "Sandbox result";
-
-		if (userSettings == null) {
-			return;
-		}
-		// Reset settings not supplied to the user
-		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
-		userSettings.setCleanSlateOptimisation(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final String pTaskName = taskName;
-		final UserSettings pUserSettings = userSettings;
-
-		if (runAsync) {
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
-			};
-
-			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
-				if (newState == EJobState.COMPLETED) {
-					action.accept((AbstractSolutionSet) jobControl.getJobOutput());
-				}
-			};
-			assert scenarioInstance != null;
-
-			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
-			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
-			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
-		} else {
-			final AbstractSolutionSet result = createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(progressMonitor);
-			action.accept(result);
-		}
-
-	}
-
-	public interface SandboxJob {
-		LNGScenarioToOptimiserBridge getScenarioRunner();
-
-		IMultiStateResult run(IProgressMonitor monitor);
-	}
-
-	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptionsFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model) {
-
-		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
-		sandboxResult.setUseScenarioBase(false);
-
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
-
-			final SandboxManualRunner insertionRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
-
-			return new SandboxJob() {
-				@Override
-				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getBridge();
-				}
-
-				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runSandbox(monitor);
-				}
-			};
-		});
-	}
-
-	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxInsertionFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model) {
-
-		final SlotInsertionOptions sandboxResult = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
-		sandboxResult.setUseScenarioBase(false);
-
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
-
-			final List<Slot<?>> targetSlots = new LinkedList<>();
-			final List<VesselEvent> targetEvents = new LinkedList<>();
-
-			final List<EObject> objectsToInsert = new LinkedList<>();
-			for (final BaseCaseRow row : model.getBaseCase().getBaseCase()) {
-				if (!row.isOptionise()) {
-					continue;
-				}
-				if (row.getVesselEventOption() != null) {
-					objectsToInsert.add(mapper.getOriginal(row.getVesselEventOption()));
-				}
-				if (row.getBuyOption() != null) {
-					objectsToInsert.add(mapper.getOriginal(row.getBuyOption()));
-				}
-				if (row.getSellOption() != null) {
-					objectsToInsert.add(mapper.getOriginal(row.getSellOption()));
-				}
+			switch (model.getMode()) {
+			case SandboxModeConstants.MODE_OPTIONISE: {
+				userSettings = UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, false, null, previousSettings);
+				break;
 			}
-
-			if (objectsToInsert.isEmpty()) {
-				throw new UserFeedbackException("No targets are selected to optionise");
+			case SandboxModeConstants.MODE_OPTIMISE: {
+				userSettings = UserSettingsHelper.promptForUserSettings(root, false, promptUser, false, null, previousSettings);
+				break;
 			}
-
-			for (final EObject obj : objectsToInsert) {
-				if (obj instanceof final Slot<?> slot) {
-					if (slot instanceof SpotSlot) {
-						// Ignore spot market slots.
-						continue;
-					}
-					targetSlots.add(slot);
-					sandboxResult.getSlotsInserted().add(slot);
-				} else if (obj instanceof final VesselEvent vesselEvent) {
-					targetEvents.add(vesselEvent);
-					sandboxResult.getEventsInserted().add(vesselEvent);
-				}
+			case SandboxModeConstants.MODE_DERIVE: {
+				userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
+				break;
 			}
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
-			final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
-					extraDataProvider, (mem, data, injector) -> {
-						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
-					});
-
-			return new SandboxJob() {
-				@Override
-				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
-				}
-
-				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
-				}
-			};
-		});
-	}
-
-	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptimiserFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model) {
-
-		final OptimisationResult sandboxResult = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-		sandboxResult.setUseScenarioBase(false);
-
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
-
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
-			final SandboxOptimiserRunner insertionRunner = new SandboxOptimiserRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
-				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
-			});
-
-			return new SandboxJob() {
-				@Override
-				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return insertionRunner.getLNGScenarioRunner().getScenarioToOptimiserBridge();
-				}
-
-				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
-					return insertionRunner.runOptimiser(monitor);
-				}
-			};
-		});
-	}
-
-	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
-
-		return monitor -> {
-
-			final boolean dualPNLMode = false;
-
-			final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
-			final IMapperClass mapper = new Mapper(lngScenarioModel, false);
-			final ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
-
-			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
-
-			final IMultiStateResult results = sandboxJob.run(monitor);
-
-			if (results == null) {
-				sandboxResult.setName("SandboxResult");
-				sandboxResult.setHasDualModeSolutions(dualPNLMode);
-				sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
-				return sandboxResult;
 			}
+			if (userSettings != null) {
+				final SandboxSettings settings = new SandboxSettings();
+				settings.setUserSettings(userSettings);
+				settings.setSandboxUUID(model.getUuid());
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
-			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+				try {
+					runner.withParams(runner.createObjectMapper().writeValueAsString(settings));
+				} catch (final Exception e) {
+					throw new RuntimeException(e.getMessage(), e);
+				}
 
-			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
-					dualPNLMode, true /* enableChangeDescription */);
+				//
+				if (runAsync) {
 
-			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
-			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+					final String taskName = "Sandbox result";
 
-			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
-
-				final List<Future<?>> jobs = new LinkedList<>();
-
-				if (results != null) {
-					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
-					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
-
-						jobs.add(jobExecutor.submit(() -> {
-
-							final ISequences seq = p.getFirst();
-							final SolutionOption resultSet = exporter.computeOption(seq);
-							synchronized (sandboxResult) {
-								sandboxResult.getOptions().add(resultSet);
+					final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
+						return new LNGSandboxJobDescriptor(taskName, scenarioInstance, m -> {
+							final AbstractSolutionSet result = runner.run(0, m);
+							if (action != null) {
+								action.accept(result);
 							}
+							return result;
+						}, model);
+					};
 
-							return null;
-						}));
-					}
-
-					jobs.forEach(f -> {
-						try {
-							f.get();
-						} catch (final Exception e) {
-							// Ignore exceptions;
+					final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
+						if (newState == EJobState.COMPLETED) {
+							action.accept((AbstractSolutionSet) jobControl.getJobOutput());
 						}
-					});
-				}
-				exporter.applyPostTasks(sandboxResult);
-			}
+					};
+					assert scenarioInstance != null;
 
-			sandboxResult.setName("SandboxResult");
-			sandboxResult.setHasDualModeSolutions(dualPNLMode);
-			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
-
-			// Request this now one all other parts have run to get correct data.
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
-			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
-			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
-
-			for (final VesselAvailability va : extraDataProvider.extraVesselAvailabilities) {
-				if (va != null && va.eContainer() == null) {
-					sandboxResult.getExtraVesselAvailabilities().add(va);
+					final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
+					final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
+					jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
+					return null;
+				} else {
+					final AbstractSolutionSet result = runner.run(0, monitor);
+					if (action != null) {
+						action.accept(result);
+					}
+					return result;
 				}
 			}
-			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
-			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
-			sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);
-
-			// Check that all the spot slot references are properly contained. E.g. Schedule
-			// specification may have extra spot slot instances not used in the schedule
-			// models.
-			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
-			for (final SolutionOption opt : sandboxResult.getOptions()) {
-				addExtraData(opt, sandboxResult);
-			}
-
-			if (dualPNLMode) {
-				SolutionSetExporterUnit.convertToSimpleResult(sandboxResult, dualPNLMode);
-			}
-
-			return sandboxResult;
-		};
+		}
+		return null;
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxPriceSetFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
@@ -865,12 +619,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		};
 	}
 
+
 	/**
 	 * Check solution option for any extra un-contained objects. E.g. market slots.
 	 * 
 	 * @param opt
 	 * @param sandboxResult
 	 */
+	
 	private void addExtraData(final SolutionOption opt, final AbstractSolutionSet solutionSet) {
 		if (opt != null) {
 			final ScheduleSpecification scheduleSpecification = opt.getScheduleSpecification();
@@ -885,8 +641,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 			}
 		}
+//		return null;
 	}
 
+	
 	private void addExtraData(final AbstractSolutionSet solutionSet, final ScheduleSpecification scheduleSpecification) {
 		if (scheduleSpecification != null) {
 			final Consumer<SlotSpecification> action = e -> {
@@ -929,7 +687,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					});
 		}
 	}
-
+/*
 	@Override
 	public void runSandboxOptimisation(@NonNull final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
 			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
@@ -964,7 +722,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			action.accept(result);
 		}
 	}
-
+*/
 	private ScheduleSpecification createBaseScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final OptionAnalysisModel model, final IMapperClass mapper) {
 		ScheduleSpecification baseScheduleSpecification;
 
@@ -989,7 +747,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
+//		userSettings.setBuildActionSets(false);
 		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -1052,4 +810,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			};
 		});
 	}
+//=======
+//>>>>>>> origin/master
 }

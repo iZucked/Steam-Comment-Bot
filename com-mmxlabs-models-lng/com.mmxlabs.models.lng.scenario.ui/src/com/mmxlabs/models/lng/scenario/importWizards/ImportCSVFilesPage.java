@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
@@ -87,18 +87,20 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	private abstract class Chunk {
 		public final Map<String, String> keys;
-		public final Map<String, String> friendlyNames = new HashMap<String, String>();
+		public final Map<String, String> friendlyNames = new HashMap<>();
 
-		public final Map<String, FileFieldEditor> editors = new HashMap<String, FileFieldEditor>();
+		public final Map<String, FileFieldEditor> editors = new HashMap<>();
 
 		public Chunk() {
 			super();
-			this.keys = new HashMap<String, String>();
+			this.keys = new HashMap<>();
 		}
 
 		public void setFromDirectory(final File directory) {
-			for (final String k : friendlyNames.keySet()) {
-				final File sub = new File(directory, friendlyNames.get(k) + ".csv");
+			for (final Map.Entry<String, String> entry : friendlyNames.entrySet()) {
+				final String k = entry.getKey();
+				final String v = entry.getValue();
+				final File sub = new File(directory, v + ".csv");
 				if (sub.exists()) {
 					try {
 						final String str = sub.getCanonicalPath();
@@ -129,17 +131,17 @@ public class ImportCSVFilesPage extends WizardPage {
 		}
 	}
 
-	private final List<SubModelChunk> subModelChunks = new LinkedList<SubModelChunk>();
-	private final List<ExtraModelChunk> extraModelChunks = new LinkedList<ExtraModelChunk>();
+	private final List<SubModelChunk> subModelChunks = new LinkedList<>();
+	private final List<ExtraModelChunk> extraModelChunks = new LinkedList<>();
 
 	private IImportContext importContext;
 
 	private final ScenarioServiceNewScenarioPage mainPage;
 
 	private ScenarioInstance scenarioInstance;
-	private final int CHOICE_COMMA = 0;
-	private final int CHOICE_SEMICOLON = 1;
-	private final int CHOICE_PERIOD = 1;
+	private static final int CHOICE_COMMA = 0;
+	private static final int CHOICE_SEMICOLON = 1;
+	private static final int CHOICE_PERIOD = 1;
 	private RadioSelectionGroup csvSelectionGroup;
 	private RadioSelectionGroup decimalSelectionGroup;
 
@@ -181,7 +183,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
-		Label directory = new Label(holder, SWT.NONE);
+		final Label directory = new Label(holder, SWT.NONE);
 		directory.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		if (lastDirectoryName != null) {
 			directory.setText(lastDirectoryName);
@@ -231,7 +233,8 @@ public class ImportCSVFilesPage extends WizardPage {
 		fieldComposite.setText("Advanced");
 		fieldComposite.setLayout(new GridLayout(1, false));
 		layout = new GridData(SWT.FILL, SWT.FILL, true, true);
-		// for some reason, horizontal and vertical fill do not work without width / height hints set
+		// for some reason, horizontal and vertical fill do not work without width /
+		// height hints set
 		layout.heightHint = 300;
 		layout.widthHint = 600;
 		fieldComposite.setLayoutData(layout);
@@ -267,12 +270,16 @@ public class ImportCSVFilesPage extends WizardPage {
 		/*
 		 * fieldComposite.addExpansionListener(new IExpansionListener() {
 		 * 
-		 * @Override public void expansionStateChanging(ExpansionEvent e) { // TODO Auto-generated method stub
+		 * @Override public void expansionStateChanging(ExpansionEvent e) { // TODO
+		 * Auto-generated method stub
 		 * 
 		 * }
 		 * 
-		 * @Override public void expansionStateChanged(ExpansionEvent e) { inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT)); inner.layout();
-		 * fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT)); fieldScroller.layout(); fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		 * @Override public void expansionStateChanged(ExpansionEvent e) {
+		 * inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT)); inner.layout();
+		 * fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		 * fieldScroller.layout();
+		 * fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		 * fieldComposite.layout(); } });
 		 */
 
@@ -452,28 +459,28 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	private void setSubModel(final LNGScenarioModel scenarioModel, final EObject subModel) {
 		final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
-		if (subModel instanceof PortModel) {
-			referenceModel.setPortModel((PortModel) subModel);
-		} else if (subModel instanceof FleetModel) {
-			referenceModel.setFleetModel((FleetModel) subModel);
-		} else if (subModel instanceof PricingModel) {
-			referenceModel.setPricingModel((PricingModel) subModel);
-		} else if (subModel instanceof CostModel) {
-			referenceModel.setCostModel((CostModel) subModel);
-		} else if (subModel instanceof CommercialModel) {
-			referenceModel.setCommercialModel((CommercialModel) subModel);
-		} else if (subModel instanceof SpotMarketsModel) {
-			referenceModel.setSpotMarketsModel((SpotMarketsModel) subModel);
-		} else if (subModel instanceof AnalyticsModel) {
-			scenarioModel.setAnalyticsModel((AnalyticsModel) subModel);
-		} else if (subModel instanceof CargoModel) {
-			scenarioModel.setCargoModel((CargoModel) subModel);
-		} else if (subModel instanceof ActualsModel) {
-			scenarioModel.setActualsModel((ActualsModel) subModel);
-		} else if (subModel instanceof ScheduleModel) {
-			scenarioModel.setScheduleModel((ScheduleModel) subModel);
-		} else if (subModel instanceof NominationsModel) {
-			scenarioModel.setNominationsModel((NominationsModel) subModel);
+		if (subModel instanceof final PortModel portModel) {
+			referenceModel.setPortModel(portModel);
+		} else if (subModel instanceof final FleetModel fleetModel) {
+			referenceModel.setFleetModel(fleetModel);
+		} else if (subModel instanceof final PricingModel pricingModel) {
+			referenceModel.setPricingModel(pricingModel);
+		} else if (subModel instanceof final CostModel costModel) {
+			referenceModel.setCostModel(costModel);
+		} else if (subModel instanceof final CommercialModel commercialModel) {
+			referenceModel.setCommercialModel(commercialModel);
+		} else if (subModel instanceof final SpotMarketsModel spotMarketsModel) {
+			referenceModel.setSpotMarketsModel(spotMarketsModel);
+		} else if (subModel instanceof final AnalyticsModel analyticsModel) {
+			scenarioModel.setAnalyticsModel(analyticsModel);
+		} else if (subModel instanceof final CargoModel cargoModel) {
+			scenarioModel.setCargoModel(cargoModel);
+		} else if (subModel instanceof final ActualsModel actualsModel) {
+			scenarioModel.setActualsModel(actualsModel);
+		} else if (subModel instanceof final ScheduleModel scheduleModel) {
+			scenarioModel.setScheduleModel(scheduleModel);
+		} else if (subModel instanceof final NominationsModel scheduleModel) {
+			scenarioModel.setNominationsModel(scheduleModel);
 		} else {
 			log.error("Unknown sub model type: " + subModel.eClass().getName());
 		}

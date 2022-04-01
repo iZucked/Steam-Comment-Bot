@@ -1,16 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -22,41 +18,16 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 
 public class OptimisationHelperTest {
 
-	@Test
-	public void testTransformUserSettings_Similarity_Medium() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
+	
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
 
-		Assertions.assertNotNull(optimisationPlan);
-		Assertions.assertNotNull(optimisationPlan.getUserSettings());
-		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assertions.assertFalse(optimisationPlan.getStages().isEmpty());
-		// hard to test this now...
-		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
-	}
 
 	@Test
-	public void testTransformUserSettings_Similarity_High() {
+	public void testTransformUserSettings_Similarity_All() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.HIGH);
+		userSettings.setSimilarityMode(SimilarityMode.ALL);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(optimisationPlan);
-		Assertions.assertNotNull(optimisationPlan.getUserSettings());
-		Assertions.assertSame(userSettings, optimisationPlan.getUserSettings());
-		Assertions.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
-		// Assertions.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
-	}
-
-	@Test
-	public void testTransformUserSettings_Similarity_Low() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setSimilarityMode(SimilarityMode.LOW);
-
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings,  null);
 
 		Assertions.assertNotNull(optimisationPlan);
 		Assertions.assertNotNull(optimisationPlan.getUserSettings());
@@ -71,7 +42,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings,  null);
 
 		Assertions.assertNotNull(plan);
 		for (OptimisationStage stage : plan.getStages()) {
@@ -87,108 +58,11 @@ public class OptimisationHelperTest {
 	}
 
 	@Test
-	public void testTransformUserSettings_ActionSet_disabled_NoPeriod_SimOff() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertFalse(userSettings.isBuildActionSets());
-		for (OptimisationStage stage : plan.getStages()) {
-			Assertions.assertFalse(stage instanceof ActionPlanOptimisationStage);
-		}
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_disabled_3m_SimOff() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_disabled_4m_SimLow() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setSimilarityMode(SimilarityMode.LOW);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 6));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_enabled_6m_SimMedium() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 8));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertTrue(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_disabled_7m_SimMedium() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 9));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_enabled_6m_SimHigh() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setSimilarityMode(SimilarityMode.HIGH);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 8));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertTrue(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
-	public void testTransformUserSettings_ActionSet_disabled_7m_SimHigh() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(true);
-		userSettings.setSimilarityMode(SimilarityMode.HIGH);
-		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
-		userSettings.setPeriodEnd(YearMonth.of(2015, 9));
-
-		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
-
-		Assertions.assertNotNull(plan);
-		Assertions.assertFalse(plan.getUserSettings().isBuildActionSets());
-	}
-
-	@Test
 	public void testTransformUserSettings_SpotCargoMarkets_On() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setWithSpotCargoMarkets(false);
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null);
 
 		Assertions.assertNotNull(optimisationPlan);
 		Assertions.assertNotNull(optimisationPlan.getUserSettings());

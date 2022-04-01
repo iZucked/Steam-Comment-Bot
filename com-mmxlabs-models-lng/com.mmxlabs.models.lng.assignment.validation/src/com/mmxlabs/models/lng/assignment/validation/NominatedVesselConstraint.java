@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -10,9 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -24,15 +22,15 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
+
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (!(extraContext.getContainer(object) instanceof CargoModel)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
 
-		if (object instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) object;
+		if (object instanceof LoadSlot slot) {
 
 			// DES Purchase
 			if (slot.isDESPurchase() && slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
@@ -45,8 +43,7 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
-		else if (object instanceof DischargeSlot) {
-			final DischargeSlot slot = (DischargeSlot) object;
+		else if (object instanceof DischargeSlot slot) {
 
 			// FOB Sale
 			if (slot.isFOBSale() && slot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
@@ -58,18 +55,6 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
-	private @Nullable LoadSlot getValidObject(@Nullable final EObject eObj) {
-
-		if (eObj instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) eObj;
-			if (loadSlot.isDESPurchase()) {
-				return loadSlot;
-			}
-		}
-		return null;
-	}
 }

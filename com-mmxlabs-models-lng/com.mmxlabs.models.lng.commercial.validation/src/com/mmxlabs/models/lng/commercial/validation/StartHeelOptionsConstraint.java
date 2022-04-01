@@ -1,39 +1,36 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint which checks {@link StartHeelOptions}
  * 
  * @author Simon Goodall
  */
-public class StartHeelOptionsConstraint extends AbstractModelConstraint {
+public class StartHeelOptionsConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public IStatus validate(IValidationContext ctx) {
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> failures) {
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
 		final EObject object = ctx.getTarget();
-		if (object instanceof StartHeelOptions) {
-			StartHeelOptions heelOptions = (StartHeelOptions) object;
+		if (object instanceof StartHeelOptions heelOptions) {
 
 			if (heelOptions.getMinVolumeAvailable() > heelOptions.getMaxVolumeAvailable()) {
 
@@ -68,18 +65,6 @@ public class StartHeelOptionsConstraint extends AbstractModelConstraint {
 				}
 			}
 		}
-		if (failures.isEmpty())
 
-		{
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
 	}
 }

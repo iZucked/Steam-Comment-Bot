@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.config;
@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 
 /**
@@ -81,6 +82,24 @@ public class OptimiserConfigurationOptions {
 		rawNumThreads = n;
 	}
 	
+	public static OptimiserConfigurationOptions readFromRawJSON(String inputJSONX, Map<String, String> customInfo) throws IOException {
+
+		HashMap<String, Object> inputParameters = new HashMap<>();
+		// populate input with "custom-" literals
+		customInfo.forEach((k, v) -> inputParameters.put("custom-" + k, v));
+
+		JSONObject obj = new JSONObject(inputJSONX);
+
+		DefaultingJsonEngine engine = new DefaultingJsonEngine(".").withLiteralValues(inputParameters);
+
+		String inputPlainJSON = engine.newDefaultingJsonStructure(obj).outputString();
+
+		return readFromPlainJSONString(inputPlainJSON);
+
+	}
+
+	
+	
 	public static OptimiserConfigurationOptions readFromFile(String jsonFilename, Map<String, String> customInfo) {
 		try {
 			String inputJSONX = new String(Files.readAllBytes(Paths.get(jsonFilename)));
@@ -105,7 +124,7 @@ public class OptimiserConfigurationOptions {
 	@SuppressWarnings("null")
 	public static OptimiserConfigurationOptions readFromPlainJSONString(String plainInputJSON) {
 		OptimiserConfigurationOptions result = new OptimiserConfigurationOptions();
-		
+		Object literals = ParametersPackage.Literals.ACTION_PLAN_OPTIMISATION_STAGE; 
 		try {
  			ObjectMapper mapper = OptimisationJSONDeserialiser.getMapper();
 			

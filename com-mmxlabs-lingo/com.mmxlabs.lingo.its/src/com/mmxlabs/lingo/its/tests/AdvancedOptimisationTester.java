@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -45,25 +45,19 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 
 			final String limitedLabel = withLimited ? "Limited_" : "";
 			final String gcoLabel = withGCO ? "GCO_" : "";
-			for (final boolean withActionSets : BOOLS) {
-				// Check period for ITS.
-				if (withActionSets && (periodStart == null || periodEnd == null)) {
+
+			for (final SimilarityMode similarityMode : SIMILARITY_MODES) {
+				if (similarityMode == SimilarityMode.ALL) {
 					continue;
 				}
-				final String actionLabel = withActionSets ? "_ActionSets" : "";
-				for (final SimilarityMode similarityMode : SIMILARITY_MODES) {
-					if (similarityMode == SimilarityMode.ALL) {
-						continue;
-					}
-					final String label = String.format("%s%s_Similarity%s%s", limitedLabel, gcoLabel, similarityMode, actionLabel);
-					tests.add(DynamicTest.dynamicTest(label, () -> {
-						Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
-						// // No tests defined yet...
-						// Assumptions.assumeFalse(similarityMode == SimilarityMode.ALL);
-						init(scenarioURL, periodStart, periodEnd, withGCO);
-						runAdvancedOptimisationTestCase(withLimited, similarityMode, withActionSets, withGCO);
-					}));
-				}
+				final String label = String.format("%s%s_Similarity%s", limitedLabel, gcoLabel, similarityMode);
+				tests.add(DynamicTest.dynamicTest(label, () -> {
+					Assumptions.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
+					// // No tests defined yet...
+					// Assumptions.assumeFalse(similarityMode == SimilarityMode.ALL);
+					init(scenarioURL, periodStart, periodEnd, withGCO);
+					runAdvancedOptimisationTestCase(withLimited, similarityMode, withGCO);
+				}));
 			}
 		}
 		if (periodStart != null || periodEnd != null) {
@@ -92,34 +86,42 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	}
 	//
 	// /**
-	// * Test the transformed scenario is pretty close to the original - specifically scheduling should be consistent.
+	// * Test the transformed scenario is pretty close to the original -
+	// specifically scheduling should be consistent.
 	// *
 	// * @throws Exception
 	// */
 	// @Test
 	// @Tag(TestCategories.MICRO_TEST)
-	// public void validatePeriodTransform(@NonNull final String _unused_method_prefix, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd,
+	// public void validatePeriodTransform(@NonNull final String
+	// _unused_method_prefix, @NonNull final String scenarioURL, @Nullable final
+	// LocalDate periodStart, @Nullable final YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
 	// Assumptions.assumeTrue(periodStart != null || periodEnd != null);
 	// final URL url = getClass().getResource(scenarioURL);
 	// Assertions.assertNotNull(url);
-	// ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (modelReference, scenarioDataProvider) -> {
-	// final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
+	// ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url,
+	// (modelReference, scenarioDataProvider) -> {
+	// final OptimisationPlan optimiserSettings =
+	// LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 	// if (periodStart != null) {
 	// optimiserSettings.getUserSettings().setPeriodStartDate(periodStart);
 	// }
 	// if (periodEnd != null) {
 	// optimiserSettings.getUserSettings().setPeriodEnd(periodEnd);
 	// }
-	// LNGScenarioRunnerCreator.withEvaluationRunner(scenarioDataProvider, optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
+	// LNGScenarioRunnerCreator.withEvaluationRunner(scenarioDataProvider,
+	// optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
 	// });
 	// }
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_NoSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_NoSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -128,7 +130,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_LowSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_LowSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -137,7 +141,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_MediumSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_MediumSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -146,7 +152,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_HighSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_HighSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -156,7 +164,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	// @Disabled("Not yet permitted")
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_NoSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// public void advancedOptimisation_Full_NoSimilarity_ActionSet(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth
 	// periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
@@ -166,7 +176,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_LowSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// public void advancedOptimisation_Full_LowSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart, @Nullable YearMonth
 	// periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
@@ -176,7 +188,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_MediumSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Full_MediumSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -185,7 +199,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_HighSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// public void advancedOptimisation_Full_HighSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart, @Nullable YearMonth
 	// periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
@@ -195,7 +211,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_NoSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_NoSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -204,7 +222,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_LowSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_LowSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -213,7 +233,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_MediumSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_MediumSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -222,7 +244,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_HighSimilarity(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_HighSimilarity(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -232,7 +256,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	// @Disabled("Not yet permitted")
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -241,7 +267,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_LowSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Limited_LowSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -250,7 +278,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_MediumSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Limited_MediumSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -259,7 +289,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_HighSimilarity_ActionSet(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Limited_HighSimilarity_ActionSet(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -268,7 +300,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_NoSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_NoSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -277,7 +311,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_LowSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_LowSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -286,7 +322,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_MediumSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_MediumSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -295,7 +333,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_HighSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Full_HighSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -305,7 +345,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	// @Disabled("Not yet permitted")
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_NoSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Full_NoSimilarity_ActionSet_GCO(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -314,7 +356,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_LowSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Full_LowSimilarity_ActionSet_GCO(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -323,7 +367,10 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_MediumSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void
+	// advancedOptimisation_Full_MediumSimilarity_ActionSet_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -332,7 +379,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Full_HighSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Full_HighSimilarity_ActionSet_GCO(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -341,7 +390,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_NoSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_NoSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -350,7 +401,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_LowSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_LowSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	//
@@ -359,7 +412,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_MediumSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth
+	// public void advancedOptimisation_Limited_MediumSimilarity_GCO(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart, @Nullable YearMonth
 	// periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
@@ -368,7 +423,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_HighSimilarity_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd,
+	// public void advancedOptimisation_Limited_HighSimilarity_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart, @Nullable YearMonth periodEnd,
 	// boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, true);
@@ -377,7 +434,9 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	// @Disabled("Not yet permitted")
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void advancedOptimisation_Limited_NoSimilarity_ActionSet_GCO(@Nullable
+	// String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable
+	// LocalDate periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	// runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, true);
@@ -385,7 +444,10 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_LowSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void
+	// advancedOptimisation_Limited_LowSimilarity_ActionSet_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	// runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, true);
@@ -393,7 +455,10 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_MediumSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void
+	// advancedOptimisation_Limited_MediumSimilarity_ActionSet_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	// runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, true);
@@ -401,7 +466,10 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	//
 	// @Test
 	// @Tag(TestCategories.OPTIMISATION_TEST)
-	// public void advancedOptimisation_Limited_HighSimilarity_ActionSet_GCO(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart,
+	// public void
+	// advancedOptimisation_Limited_HighSimilarity_ActionSet_GCO(@Nullable String
+	// _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate
+	// periodStart,
 	// @Nullable YearMonth periodEnd, boolean gco) throws Exception {
 	// init(scenarioURL, periodStart, periodEnd, gco);
 	// runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, true);

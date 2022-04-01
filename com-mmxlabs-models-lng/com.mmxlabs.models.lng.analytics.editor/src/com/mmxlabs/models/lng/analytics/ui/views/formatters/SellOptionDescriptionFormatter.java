@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
@@ -30,22 +30,18 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof ViabilityRow) {
-			final ViabilityRow row = (ViabilityRow) object;
+		if (object instanceof ViabilityRow row) {
 			final SellOption sell = row.getSellOption();
 			return render(sell);
-		} else if (object instanceof BreakEvenAnalysisRow) {
-			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
-			final SellOption sell = partialCaseRow.getSellOption();
+		} else if (object instanceof BreakEvenAnalysisRow row) {
+			final SellOption sell = row.getSellOption();
 			return render(sell);
-		} else if (object instanceof PartialCaseRow) {
-			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
-			final Collection<?> sells = partialCaseRow.getSellOptions();
+		} else if (object instanceof PartialCaseRow row) {
+			final Collection<?> sells = row.getSellOptions();
 
 			return render(sells);
 
-		} else if (object instanceof Collection<?>) {
-			final Collection<?> collection = (Collection<?>) object;
+		} else if (object instanceof Collection<?> collection) {
 
 			if (collection.isEmpty()) {
 				return "<open>";
@@ -61,8 +57,8 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
-		} else if (object instanceof Object[]) {
-			final Object[] objects = (Object[]) object;
+		} else if (object instanceof Object[] arr) {
+			final Object[] objects = arr;
 			if (objects.length == 0) {
 				return "<open>";
 			}
@@ -79,9 +75,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof OpenSell) {
 			return "<open>";
-		} else if (object instanceof SellOpportunity) {
-
-			final SellOpportunity sellOpportunity = (SellOpportunity) object;
+		} else if (object instanceof SellOpportunity sellOpportunity) {
 
 			final LocalDate date = sellOpportunity.getDate();
 			String dateStr = "<not set>";
@@ -95,7 +89,11 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			}
 
 			if (priceExpression == null) {
-				priceExpression = "<not set>";
+				if (sellOpportunity.getContract() != null) {
+					priceExpression = "";
+				} else {
+					priceExpression = "<not set>";
+				}
 			}
 			String portName = "<not set>";
 			final Port port = sellOpportunity.getPort();
@@ -110,11 +108,11 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				}
 			}
 			if (portName != null && dateStr != null && priceExpression != null) {
-				return String.format("%s (%s) %s", portName, dateStr, priceExpression);
+				// Use trim() as empty expression would leave a training space.
+				return String.format("%s (%s) %s", portName, dateStr, priceExpression).trim();
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof SellReference) {
-			final SellReference sellReference = (SellReference) object;
+		} else if (object instanceof SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
@@ -123,8 +121,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID %s", "<not set>");
-		} else if (object instanceof SellMarket) {
-			final SellMarket sellMarket = (SellMarket) object;
+		} else if (object instanceof SellMarket sellMarket) {
 			final SpotMarket market = sellMarket.getMarket();
 			if (market != null) {
 				return String.format("Market %s", market.getName());

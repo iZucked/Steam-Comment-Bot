@@ -1,27 +1,25 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.arithmetic;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.IFunctionFactory;
 import com.mmxlabs.common.parser.IInfixOperatorFactory;
 import com.mmxlabs.common.parser.IPrefixOperatorFactory;
-import com.mmxlabs.common.parser.ITermFactory;
 
+@NonNullByDefault
 public class ArithmeticParser extends ExpressionParser<Double> {
-	private final @NonNull Map<@NonNull String, @NonNull Double> variables = new HashMap<>();
+	private final Map<String, Double> variables = new HashMap<>();
 
 	public ArithmeticParser() {
-		setPrefixOperatorFactory(new IPrefixOperatorFactory<@NonNull Double>() {
+		setPrefixOperatorFactory(new IPrefixOperatorFactory<Double>() {
 
 			@Override
 			public boolean isPrefixOperator(final char operator) {
@@ -29,7 +27,7 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 			}
 
 			@Override
-			public IExpression<Double> createPrefixOperator(final char operator, @NonNull final IExpression<@NonNull Double> argument) {
+			public IExpression<Double> createPrefixOperator(final char operator, final IExpression<Double> argument) {
 				return new NegationOperator(argument);
 			}
 		});
@@ -48,6 +46,7 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 					return b == '-';
 				case '-':
 					return false;
+				default:
 				}
 				return false;
 			}
@@ -58,43 +57,23 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 			}
 
 			@Override
-			public @NonNull IExpression<Double> createInfixOperator(final char operator, final IExpression<Double> lhs, final IExpression<Double> rhs) {
+			public IExpression<Double> createInfixOperator(final char operator, final IExpression<Double> lhs, final IExpression<Double> rhs) {
 				return new ArithmeticOperator(operator, lhs, rhs);
 			}
 		});
 
-		setFunctionFactory(new IFunctionFactory<@NonNull Double>() {
-
-			@Override
-			public IExpression<Double> createFunction(@NonNull final String name, final List<IExpression<@NonNull Double>> arguments) {
-				if (name.equals("avg")) {
-					return new MeanFunction(arguments);
-				} else {
-					throw new RuntimeException("unknown function: " + name);
-				}
+		setFunctionFactory((name, arguments) -> {
+			if (name.equals("avg")) {
+				return new MeanFunction(arguments);
+			} else {
+				throw new RuntimeException("unknown function: " + name);
 			}
 		});
 
-		setTermFactory(new ITermFactory<@NonNull Double>() {
-			@Override
-			public @NonNull IExpression<@NonNull Double> createTerm(@NonNull final String term) {
-				return new ArithmeticTerm(term, variables);
-			}
-		});
+		setTermFactory(term -> new ArithmeticTerm(term, variables));
 	}
 
-	public void addVariable(final @NonNull String name, final double value) {
+	public void addVariable(final String name, final double value) {
 		variables.put(name, value);
-	}
-
-	public static void main(final String[] args) {
-		final ArithmeticParser parser = new ArithmeticParser();
-		for (int i = 1; i < args.length; i += 2) {
-			final String name = args[i];
-			assert name != null;
-			parser.addVariable(name, Double.parseDouble(args[i + 1]));
-		}
-		final IExpression<Double> expression = parser.parse(args[0]);
-		System.err.println(expression + " = " + expression.evaluate());
 	}
 }

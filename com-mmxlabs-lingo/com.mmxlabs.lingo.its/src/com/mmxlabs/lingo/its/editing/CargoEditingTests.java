@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.editing;
@@ -146,9 +146,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 	 */
 	private void testGetOpenSlotsIterable(CargoModel cargoModel) {
 				
-		Set<Slot<?>> allSlots = new HashSet<Slot<?>>();
-		Set<Slot<?>> openSlots = new HashSet<Slot<?>>();
-		Set<Slot<?>> cargoSlots = new HashSet<Slot<?>>();
+		Set<Slot<?>> allSlots = new HashSet<>();
+		Set<Slot<?>> openSlots = new HashSet<>();
+		Set<Slot<?>> cargoSlots = new HashSet<>();
 		
 		allSlots.addAll(cargoModel.getLoadSlots());
 		allSlots.addAll(cargoModel.getDischargeSlots());
@@ -170,17 +170,17 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 		}
 		
 		// sanity check that there is no overlap between the sets		
-		HashSet<Slot<?>> intersection = new HashSet<Slot<?>>(openSlots);
+		HashSet<Slot<?>> intersection = new HashSet<>(openSlots);
 		intersection.retainAll(cargoSlots);
 		Assertions.assertTrue(intersection.isEmpty(), "Cargo model inconsistency: slots with null cargo in cargo.");
 		
 		// sanity check that the lists are exhaustive
-		HashSet<Slot<?>> union = new HashSet<Slot<?>>(openSlots);
+		HashSet<Slot<?>> union = new HashSet<>(openSlots);
 		union.addAll(cargoSlots);
 		Assertions.assertTrue(union.equals(allSlots), "Cargo model inconsistency: load & discharge slot lists do not match up with open and closed slot lists.");
 				
 		// build a set of all slots returned by getOpenSlotsIterable()
-		HashSet<Slot<?>> testSet = new HashSet<Slot<?>>();		
+		HashSet<Slot<?>> testSet = new HashSet<>();		
 		for (Slot<?> slot: CargoUtils.getOpenSlotsIterable(cargoModel)) {
 			testSet.add(slot);
 		}

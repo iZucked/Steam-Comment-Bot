@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -314,6 +314,51 @@ public interface ADPFactory extends EFactory {
 	 * @generated
 	 */
 	MullCargoWrapper createMullCargoWrapper();
+
+	/**
+	 * Returns a new object of class '<em>Spacing Profile</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spacing Profile</em>'.
+	 * @generated
+	 */
+	SpacingProfile createSpacingProfile();
+
+	/**
+	 * Returns a new object of class '<em>Fob Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fob Spacing Allocation</em>'.
+	 * @generated
+	 */
+	FobSpacingAllocation createFobSpacingAllocation();
+
+	/**
+	 * Returns a new object of class '<em>Des Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Des Spacing Allocation</em>'.
+	 * @generated
+	 */
+	DesSpacingAllocation createDesSpacingAllocation();
+
+	/**
+	 * Returns a new object of class '<em>Des Spacing Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Des Spacing Row</em>'.
+	 * @generated
+	 */
+	DesSpacingRow createDesSpacingRow();
+
+	/**
+	 * Returns a new object of class '<em>Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spacing Allocation</em>'.
+	 * @generated
+	 */
+	SpacingAllocation createSpacingAllocation();
 
 	/**
 	 * Returns the package supported by this factory.

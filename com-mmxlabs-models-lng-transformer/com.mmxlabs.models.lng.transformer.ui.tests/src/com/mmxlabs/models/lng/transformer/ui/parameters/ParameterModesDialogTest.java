@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
@@ -53,7 +53,7 @@ public class ParameterModesDialogTest {
 	@BeforeAll
 	public static void init() {
 		// Enable these features for the dialog test
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-charter-out-generation", "optimisation-period", "optimisation-similarity", "optimisation-actionset", "charter-length");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-charter-out-generation", "optimisation-period", "optimisation-similarity", "charter-length");
 	}
 
 	@BeforeAll
@@ -274,191 +274,6 @@ public class ParameterModesDialogTest {
 		});
 	}
 
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Off_NoPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeInvalidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-		}, b -> {
-			Assertions.assertFalse(b.button("OK").isEnabled());
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Low_1mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeValidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("02/2015"); //
-		}, u -> {
-			Assertions.assertTrue(u.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
-			UserSettingsHelper.mergeFields(u, settings);
-			Assertions.assertTrue(settings.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 2), settings.getPeriodEnd()); //
-
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Low_3mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeValidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
-		}, u -> {
-			Assertions.assertTrue(u.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
-			UserSettingsHelper.mergeFields(u, settings);
-			Assertions.assertTrue(settings.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
-
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Medium_6mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeValidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
-		}, u -> {
-			Assertions.assertTrue(u.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
-			UserSettingsHelper.mergeFields(u, settings);
-			Assertions.assertTrue(settings.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
-
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_High_6mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeValidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
-		}, u -> {
-			Assertions.assertTrue(u.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
-			UserSettingsHelper.mergeFields(u, settings);
-			Assertions.assertTrue(settings.isBuildActionSets());//
-			Assertions.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
-			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
-			Assertions.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
-
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Low_4mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeInvalidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
-		}, b -> {
-			Assertions.assertFalse(b.button("OK").isEnabled());
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_Med_7mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeInvalidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
-		}, b -> {
-			Assertions.assertFalse(b.button("OK").isEnabled());
-		});
-	}
-
-	@Test
-	@Disabled("Action set not enabled")
-	public void testActionSet_High_7mPeriod() throws Exception {
-		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
-		settings.unsetPeriodStartDate();
-		settings.unsetPeriodEnd();
-		settings.setSimilarityMode(SimilarityMode.OFF);
-		settings.setBuildActionSets(false);
-
-		executeInvalidTest(settings, b -> {
-			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
-		}, b -> {
-			Assertions.assertFalse(b.button("OK").isEnabled());
-		});
-	}
-
 	@FunctionalInterface
 	interface IManipulatorFunction {
 		void manipulate(SWTBot b);
@@ -489,8 +304,11 @@ public class ParameterModesDialogTest {
 		final Future<UserSettings> future = executeTest(initialSettings, manipulator);
 		final SWTBot b = new SWTBot(bot.shell("Optimisation Settings").widget);
 
-		// Buttons react quickly to changes. Text fields take some time to propagate to the model so we try to control with syncExec and sleep calls, otherwise the returned settings object may not yet
-		// have the settings! This could be an issue in the application should the user be quick fingered....
+		// Buttons react quickly to changes. Text fields take some time to propagate to
+		// the model so we try to control with syncExec and sleep calls, otherwise the
+		// returned settings object may not yet
+		// have the settings! This could be an issue in the application should the user
+		// be quick fingered....
 		display.syncExec(new Runnable() {
 			@Override
 			public void run() {

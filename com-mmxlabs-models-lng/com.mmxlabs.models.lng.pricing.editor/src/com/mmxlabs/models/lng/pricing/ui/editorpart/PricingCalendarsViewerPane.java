@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -51,9 +51,6 @@ public class PricingCalendarsViewerPane extends ScenarioTableViewerPane {
 	}
 
 	public void setInput(final PricingCalendar data) {
-		if (data == null) {
-			return;
-		}
 		viewer.setInput(data);
 	}
 

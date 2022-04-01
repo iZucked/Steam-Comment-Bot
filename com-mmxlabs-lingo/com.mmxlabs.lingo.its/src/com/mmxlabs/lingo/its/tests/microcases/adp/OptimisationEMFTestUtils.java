@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.adp;
@@ -22,7 +22,6 @@ public class OptimisationEMFTestUtils {
 	
 	public static OptimisationPlan setUpBasicADPSettingsWithNoLSOOrHill(LNGScenarioModel lngScenarioModel) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
@@ -31,7 +30,7 @@ public class OptimisationEMFTestUtils {
 		userSettings.setMode(OptimisationMode.ADP);
 		userSettings.setCleanSlateOptimisation(true);
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);
 

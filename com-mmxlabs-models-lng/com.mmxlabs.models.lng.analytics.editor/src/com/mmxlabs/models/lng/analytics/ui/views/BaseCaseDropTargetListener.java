@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -97,17 +97,15 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 				final Object o = selection.getFirstElement();
 
 				BaseCaseRow existing = null;
-				if (event.item instanceof GridItem) {
-					final GridItem gridItem = (GridItem) event.item;
+				if (event.item instanceof GridItem gridItem) {
 
 					final Object d = gridItem.getData();
-					if (d instanceof BaseCaseRow) {
-						existing = (BaseCaseRow) d;
+					if (d instanceof BaseCaseRow row) {
+						existing = row;
 					}
 				}
 
-				if (o instanceof VesselEventOption) {
-					final VesselEventOption option = (VesselEventOption) o;
+				if (o instanceof VesselEventOption option) {
 					if (existing != null) {
 						CompoundCommand cmd = new CompoundCommand();
 
@@ -126,8 +124,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__VESSEL_EVENT_OPTION, option));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
-				} else if (o instanceof BuyOption) {
-					final BuyOption buyOption = (BuyOption) o;
+				} else if (o instanceof BuyOption buyOption) {
 					if (existing != null) {
 
 						CompoundCommand cmd = new CompoundCommand();
@@ -144,8 +141,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 
 					}
-				} else if (o instanceof SellOption) {
-					final SellOption sellOption = (SellOption) o;
+				} else if (o instanceof SellOption sellOption) {
 					if (existing != null) {
 						CompoundCommand cmd = new CompoundCommand();
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, sellOption));
@@ -160,8 +156,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, sellOption));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
-				} else if (o instanceof Vessel) {
-					final Vessel vessel = (Vessel) o;
+				} else if (o instanceof Vessel vessel) {
 
 					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel);
 
@@ -188,8 +183,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						}
 					}
-				} else if (o instanceof VesselEvent) {
-					VesselEvent vesselEvent = (VesselEvent) o;
+				} else if (o instanceof VesselEvent vesselEvent) {
 					// Lazily evaluated command to avoid adding shipping multiple times.
 					CompoundCommand c = new CompoundCommand() {
 						@Override
@@ -215,8 +209,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						}
 					};
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(c, null, null);
-				} else if (o instanceof CargoModelRowTransformer.RowData) {
-					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+				} else if (o instanceof CargoModelRowTransformer.RowData rowData) {
 					// Lazily evaluated command to avoid adding shipping multiple times.
 					CompoundCommand c = new CompoundCommand() {
 						@Override
@@ -252,12 +245,11 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 			} else if (selection.size() > 1) {
 
 				BaseCaseRow existing = null;
-				if (event.item instanceof GridItem) {
-					final GridItem gridItem = (GridItem) event.item;
+				if (event.item instanceof GridItem gridItem) {
 
 					final Object d = gridItem.getData();
-					if (d instanceof BaseCaseRow) {
-						existing = (BaseCaseRow) d;
+					if (d instanceof BaseCaseRow row) {
+						existing = row;
 					}
 				}
 
@@ -265,8 +257,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 				Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					Object o = itr.next();
-					if (o instanceof CargoModelRowTransformer.RowData) {
-						final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+					if (o instanceof CargoModelRowTransformer.RowData rowData) {
 
 						// Lazily evaluated command to avoid adding shipping multiple times.
 						CompoundCommand c = new CompoundCommand() {

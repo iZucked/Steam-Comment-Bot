@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -22,11 +21,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class VesselEventReferenceConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselEventReference) {
-			final VesselEventReference eventReference = (VesselEventReference) target;
+		if (target instanceof VesselEventReference eventReference) {
 
 			if (eventReference.getEvent() == null) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel event is missing existing event."));
@@ -34,8 +32,6 @@ public class VesselEventReferenceConstraint extends AbstractModelMultiConstraint
 				statuses.add(deco);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -54,11 +54,11 @@ public class OptimisationResultItemProvider extends AbstractSolutionSetItemProvi
 	 * This returns OptimisationResult.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationResult"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/OptimisationResult.png"));
 	}
 
 	/**

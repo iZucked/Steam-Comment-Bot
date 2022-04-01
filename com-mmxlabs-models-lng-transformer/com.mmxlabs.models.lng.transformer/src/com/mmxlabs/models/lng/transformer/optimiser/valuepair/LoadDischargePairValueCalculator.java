@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.optimiser.valuepair;
@@ -75,7 +75,7 @@ public class LoadDischargePairValueCalculator {
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
@@ -116,7 +116,7 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: isValidPair", this.getClass().getName()));
@@ -150,7 +150,7 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: isValidPair", this.getClass().getName()));
@@ -162,8 +162,9 @@ public class LoadDischargePairValueCalculator {
 			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 				if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v), messages)) {
-					if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+					if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
 						messages.stream().forEach(LOG::debug);
+					}
 					//checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(v));
 					isValid = false;//return false;
 				}
@@ -251,14 +252,14 @@ public class LoadDischargePairValueCalculator {
 				.map(portSlotProvider::getPortSlot)//
 				.filter(IDischargeOption.class::isInstance) //
 				.map(IDischargeOption.class::cast)//
-				.collect(Collectors.toList());
+				.toList();
 	}
 	
 	public static List<IVesselAvailability> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
 
 		return optimisationData.getResources().stream()
 				.map(vesselProvider::getVesselAvailability)//
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public void generate(final ILoadOption loadOption, final IDischargeOption dischargeOption, //

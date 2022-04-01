@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -21,18 +20,15 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class DischargeSlotCVRangeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof DischargeSlot) {
-			final DischargeSlot slot = (DischargeSlot) target;
+		if (target instanceof DischargeSlot slot) {
 			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(slot, ctx);
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private DetailConstraintStatusDecorator checkRange(DischargeSlot slot, final IValidationContext ctx) {

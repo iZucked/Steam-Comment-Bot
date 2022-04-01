@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -22,8 +21,6 @@ import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
@@ -85,9 +82,8 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.SIMILARITY_INTERVAL: return createSimilarityInterval();
 			case ParametersPackage.OPTIMISATION_PLAN: return createOptimisationPlan();
 			case ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS: return createConstraintAndFitnessSettings();
-			case ParametersPackage.PARALLISABLE_OPTIMISATION_STAGE: return createParallisableOptimisationStage();
-			case ParametersPackage.PARALLEL_OPTIMISATION_STAGE: return createParallelOptimisationStage();
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE: return createCleanStateOptimisationStage();
+			case ParametersPackage.STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE: return createStrategicLocalSearchOptimisationStage();
 			case ParametersPackage.LOCAL_SEARCH_OPTIMISATION_STAGE: return createLocalSearchOptimisationStage();
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: return createHillClimbOptimisationStage();
 			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: return createActionPlanOptimisationStage();
@@ -97,11 +93,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
 			case ParametersPackage.MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createMultipleSolutionSimilarityOptimisationStage();
-			case ParametersPackage.PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE: return createParallelMultipleSolutionSimilarityOptimisationStage();
-			case ParametersPackage.PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE: return createParallelHillClimbOptimisationStage();
-			case ParametersPackage.PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE: return createParallelLocalSearchOptimisationStage();
 			case ParametersPackage.MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createMultiobjectiveSimilarityOptimisationStage();
-			case ParametersPackage.PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE: return createParallelMultiobjectiveSimilarityOptimisationStage();
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_SETTINGS: return createCleanStateOptimisationSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -214,31 +206,20 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	@Override
-	public ParallisableOptimisationStage createParallisableOptimisationStage() {
-		ParallisableOptimisationStageImpl parallisableOptimisationStage = new ParallisableOptimisationStageImpl();
-		return parallisableOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public <T extends ParallisableOptimisationStage> ParallelOptimisationStage<T> createParallelOptimisationStage() {
-		ParallelOptimisationStageImpl<T> parallelOptimisationStage = new ParallelOptimisationStageImpl<T>();
-		return parallelOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public CleanStateOptimisationStage createCleanStateOptimisationStage() {
 		CleanStateOptimisationStageImpl cleanStateOptimisationStage = new CleanStateOptimisationStageImpl();
 		return cleanStateOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public StrategicLocalSearchOptimisationStage createStrategicLocalSearchOptimisationStage() {
+		StrategicLocalSearchOptimisationStageImpl strategicLocalSearchOptimisationStage = new StrategicLocalSearchOptimisationStageImpl();
+		return strategicLocalSearchOptimisationStage;
 	}
 
 	/**
@@ -368,53 +349,9 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	@Override
-	public ParallelMultipleSolutionSimilarityOptimisationStage createParallelMultipleSolutionSimilarityOptimisationStage() {
-		ParallelMultipleSolutionSimilarityOptimisationStageImpl parallelMultipleSolutionSimilarityOptimisationStage = new ParallelMultipleSolutionSimilarityOptimisationStageImpl();
-		return parallelMultipleSolutionSimilarityOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ParallelHillClimbOptimisationStage createParallelHillClimbOptimisationStage() {
-		ParallelHillClimbOptimisationStageImpl parallelHillClimbOptimisationStage = new ParallelHillClimbOptimisationStageImpl();
-		return parallelHillClimbOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ParallelLocalSearchOptimisationStage createParallelLocalSearchOptimisationStage() {
-		ParallelLocalSearchOptimisationStageImpl parallelLocalSearchOptimisationStage = new ParallelLocalSearchOptimisationStageImpl();
-		return parallelLocalSearchOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public MultiobjectiveSimilarityOptimisationStage createMultiobjectiveSimilarityOptimisationStage() {
 		MultiobjectiveSimilarityOptimisationStageImpl multiobjectiveSimilarityOptimisationStage = new MultiobjectiveSimilarityOptimisationStageImpl();
 		return multiobjectiveSimilarityOptimisationStage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ParallelMultiobjectiveSimilarityOptimisationStage createParallelMultiobjectiveSimilarityOptimisationStage() {
-		ParallelMultiobjectiveSimilarityOptimisationStageImpl parallelMultiobjectiveSimilarityOptimisationStage = new ParallelMultiobjectiveSimilarityOptimisationStageImpl();
-		return parallelMultiobjectiveSimilarityOptimisationStage;
 	}
 
 	/**

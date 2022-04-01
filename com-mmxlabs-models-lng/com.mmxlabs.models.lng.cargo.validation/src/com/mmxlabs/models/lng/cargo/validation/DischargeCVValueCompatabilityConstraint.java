@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
@@ -30,24 +29,20 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Cargo) {
-			final Cargo cargo = (Cargo) target;
+		if (target instanceof Cargo cargo) {
 
-			for (final Slot slot : cargo.getSlots()) {
-				if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			for (final Slot<?> slot : cargo.getSlots()) {
+				if (slot instanceof DischargeSlot dischargeSlot) {
 
 					final Contract contract = dischargeSlot.getContract();
 					final Port port = dischargeSlot.getPort();
 
 					if (contract instanceof SalesContract || dischargeSlot.isSetPriceExpression()) {
 						for (final Slot slot2 : cargo.getSlots()) {
-							if (slot2 instanceof LoadSlot) {
-
-								final LoadSlot loadSlot = (LoadSlot) slot2;
+							if (slot2 instanceof LoadSlot loadSlot) {
 								final SalesContract salesContract = (SalesContract) contract;
 								final double loadCV = loadSlot.getSlotOrDelegateCV();
 								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for %s '%s'.";
@@ -63,8 +58,6 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	/*

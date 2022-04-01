@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.dynamic;
@@ -9,31 +9,22 @@ import java.util.List;
 
 public class ScenarioFitnessState {
 	private SolutionState initialState;
-	private SolutionState bestState;
-	private List<SolutionState> otherSolutions = new LinkedList<>();
+	private List<SolutionState> solutions = new LinkedList<>();
 
 	public SolutionState getInitialState() {
 		return initialState;
 	}
 
-	public void setInitialState(SolutionState initialState) {
+	public void setInitialState(final SolutionState initialState) {
 		this.initialState = initialState;
 	}
 
-	public SolutionState getBestState() {
-		return bestState;
+	public List<SolutionState> getSolutions() {
+		return solutions;
 	}
 
-	public void setBestState(SolutionState bestState) {
-		this.bestState = bestState;
-	}
-
-	public List<SolutionState> getOtherSolutions() {
-		return otherSolutions;
-	}
-
-	public void setOtherSolutions(List<SolutionState> otherSolutions) {
-		this.otherSolutions = otherSolutions;
+	public void setSolutions(final List<SolutionState> solutions) {
+		this.solutions = solutions;
 	}
 
 }

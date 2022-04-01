@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.lingo.app.updater.internal.PluginStartup">
+      </startup>
+   </extension>
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="lingo-updater"
+            plugin.xml="updater-plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
+</plugin>

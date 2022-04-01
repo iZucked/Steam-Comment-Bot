@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -16,7 +16,7 @@
       </category>
       <view
             name="Job Manager"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/xec_statistic_view.gif"
+            icon="icons:/icons/legacy/16x16/exec_statistic_view.gif"
             category="com.mmxlabs.jobmanager"
             class="com.mmxlabs.jobmanager.views.JobManagerView"
             id="com.mmxlabs.jobcontroller.views.JobManager">

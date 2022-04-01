@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
@@ -12,13 +13,23 @@ import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ActionableSetPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final ActionableSetPlan plan, final IProgressMonitor monitor) {
+	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
+		if (modelRecord != null) {
+			return new ScenarioResultImpl(modelRecord, scheduleModel);
+		} else {
+			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
+		}
+	}
+
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final ActionableSetPlan plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -31,14 +42,14 @@ public class ActionableSetPlanTransformer {
 
 			boolean first = true;
 			if (plan.getBaseOption() != null) {
-				base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
+				base = make(scenarioInstance, modelRecord, plan.getBaseOption().getScheduleModel());
 				first = false;
 			}
 
 			// Assuming first option is the base.
 			ScenarioResult prev = base;
 			for (final SolutionOption option : plan.getOptions()) {
-				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = make(scenarioInstance, modelRecord, option.getScheduleModel());
 				if (first) {
 					base = current;
 					first = false;

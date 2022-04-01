@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.actions;
@@ -22,22 +22,22 @@ public abstract class LockableAction extends Action {
 	protected boolean lockedForEditing;
 	protected boolean enabledIfUnlocked = true;
 
-	public LockableAction() {
+	protected LockableAction() {
 		super();
 	}
 
-	public LockableAction(final String text, final ImageDescriptor image) {
+	protected LockableAction(final String text, final ImageDescriptor image) {
 		super(text, image);
 	}
 
-	public LockableAction(final String text, final int style) {
+	protected LockableAction(final String text, final int style) {
 		super(text, style);
 	}
 
-	public LockableAction(final String text) {
+	protected LockableAction(final String text) {
 		super(text);
 	}
-
+	
 	@Override
 	public void setEnabled(final boolean enabled) {
 		this.enabledIfUnlocked = enabled;

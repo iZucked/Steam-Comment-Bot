@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -23,7 +23,6 @@ import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -72,7 +71,7 @@ public class MultipleVesselAvailabilitiesConstraint extends AbstractModelMultiCo
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof VesselAvailability) {
@@ -89,8 +88,6 @@ public class MultipleVesselAvailabilitiesConstraint extends AbstractModelMultiCo
 				validateAvailability(ctx, statuses, currentConstraintData, (VesselAvailability) target);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void validateAvailability(final IValidationContext ctx, final List<IStatus> statuses, final HashMap<Vessel, List<VesselAvailability>> currentConstraintData,

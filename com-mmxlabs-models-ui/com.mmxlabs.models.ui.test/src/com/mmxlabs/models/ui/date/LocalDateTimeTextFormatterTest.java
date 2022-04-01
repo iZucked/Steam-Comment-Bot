@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.date;
@@ -9,14 +9,14 @@ import java.util.Calendar;
 
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@RunWith(SWTBotJunit4ClassRunner.class)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class LocalDateTimeTextFormatterTest extends AbstractSWTBotTest {
 
 	@Test
@@ -31,7 +31,7 @@ public class LocalDateTimeTextFormatterTest extends AbstractSWTBotTest {
 		runTest("04/03/2015 01:00", 2015, Calendar.MARCH, 4, 1);
 	}
 
-	@Ignore("2 digit years currently not valid")
+	@Disabled("2 digit years currently not valid")
 	@Test
 	public void testManipulate_2DigitYear() throws InterruptedException {
 
@@ -60,15 +60,15 @@ public class LocalDateTimeTextFormatterTest extends AbstractSWTBotTest {
 
 				final Object value = text[0].getValue();
 
-				Assert.assertNotNull(value);
+				Assertions.assertNotNull(value);
 				if (value instanceof LocalDateTime) {
 					final LocalDateTime mDate = (LocalDateTime) value;
-					Assert.assertEquals(hourOfDay, mDate.getHour());
-					Assert.assertEquals(day, mDate.getDayOfMonth());
-					Assert.assertEquals(1L + month, mDate.getMonthValue());
-					Assert.assertEquals(year, mDate.getYear());
+					Assertions.assertEquals(hourOfDay, mDate.getHour());
+					Assertions.assertEquals(day, mDate.getDayOfMonth());
+					Assertions.assertEquals(1L + month, mDate.getMonthValue());
+					Assertions.assertEquals(year, mDate.getYear());
 				} else {
-					Assert.fail("Unexpected result");
+					Assertions.fail("Unexpected result");
 				}
 			}
 		});

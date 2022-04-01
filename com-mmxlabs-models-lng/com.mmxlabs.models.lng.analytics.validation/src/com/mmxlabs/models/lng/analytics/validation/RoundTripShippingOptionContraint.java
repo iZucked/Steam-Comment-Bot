@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -24,11 +23,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class RoundTripShippingOptionContraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof RoundTripShippingOption) {
-			final RoundTripShippingOption option = (RoundTripShippingOption) target;
+		if (target instanceof RoundTripShippingOption option) {
 
 			if (option.getVessel() == null) {
 				final String message = "No vessel specified";
@@ -53,7 +51,5 @@ public class RoundTripShippingOptionContraint extends AbstractModelMultiConstrai
 				failures.add(dsd);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

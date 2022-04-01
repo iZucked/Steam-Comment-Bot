@@ -1,19 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.validation;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -28,21 +26,18 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
-import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class SpotMarketConstraint extends AbstractModelConstraint {
-
+public class SpotMarketConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		final List<IStatus> failures = new LinkedList<>();
-
-		if (target instanceof SpotMarket) {
-			final SpotMarket spotMarket = (SpotMarket) target;
+		if (target instanceof SpotMarket spotMarket) {
 
 			SpotAvailability availability = spotMarket.getAvailability();
 			if (availability != null) {
@@ -155,45 +150,32 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 			}
 			if (spotMarket.isMtm()) {
 				if (spotMarket.getMinQuantity() == 0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("MtM markets require a minimum volume"));
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("MtM markets require a minimum volume"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
 					failures.add(dsd);
 				}
 			}
-			
+
 			if (spotMarket.getRestrictedPorts().isEmpty() && spotMarket.isRestrictedPortsArePermissive()) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Spot market %s has an empty list of allowed ports.", spotMarket.getName())));
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("Spot market %s has an empty list of allowed ports.", spotMarket.getName())));
 				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedPorts());
 				failures.add(status);
 			}
-			
+
 			if (spotMarket.getRestrictedContracts().isEmpty() && spotMarket.isRestrictedContractsArePermissive()) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Spot market %s has an empty list of allowed contracts.", spotMarket.getName())));
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("Spot market %s has an empty list of allowed contracts.", spotMarket.getName())));
 				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedContracts());
 				failures.add(status);
 			}
-			
+
 			if (spotMarket.getRestrictedVessels().isEmpty() && spotMarket.isRestrictedVesselsArePermissive()) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Spot market %s has an empty list of allowed vessels.", spotMarket.getName())));
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("Spot market %s has an empty list of allowed vessels.", spotMarket.getName())));
 				status.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_RestrictedVessels());
 				failures.add(status);
 			}
-		}
-
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
 		}
 	}
 

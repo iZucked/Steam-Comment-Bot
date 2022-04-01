@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.optimiser.lso.moves.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveMapper;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveTypes;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.ShuffleElementsMoveHandler;

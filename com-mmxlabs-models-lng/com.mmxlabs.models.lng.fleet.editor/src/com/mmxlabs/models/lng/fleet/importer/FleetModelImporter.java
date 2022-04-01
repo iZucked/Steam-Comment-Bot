@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.importer;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 /**
@@ -51,9 +52,6 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 	@Inject
 	private IImporterRegistry importerRegistry;
-
-	@Inject
-	private ILingoReferenceVesselImportCommandProvider referenceVesselImportCommand;
 
 	private IClassImporter vesselImporter;
 	private IClassImporter baseFuelImporter;
@@ -70,7 +68,6 @@ public class FleetModelImporter implements ISubmodelImporter {
 			importerRegistry = activator.getImporterRegistry();
 			registryInit();
 		}
-		this.referenceVesselImportCommand = Activator.getDefault().getWorkbench().getService(ILingoReferenceVesselImportCommandProvider.class);
 	}
 
 	@Inject
@@ -100,11 +97,13 @@ public class FleetModelImporter implements ISubmodelImporter {
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MMX_REFERENCE_VESSELS)) {
-			try {
-				referenceVesselImportCommand.run(fleetModel, context);
-			} catch (IOException e) {
-				context.addProblem(context.createProblem("Unable to import LiNGO DB reference vessels.", true, true, true));
-			}
+			ServiceHelper.withServiceConsumer(ILingoReferenceVesselImportCommandProvider.class, referenceVesselImportCommand -> {
+				try {
+					referenceVesselImportCommand.run(fleetModel, context);
+				} catch (IOException e) {
+					context.addProblem(context.createProblem("Unable to import LiNGO DB reference vessels.", true, true, true));
+				}
+			});
 		}
 
 		if (inputs.containsKey(VESSELS_KEY))

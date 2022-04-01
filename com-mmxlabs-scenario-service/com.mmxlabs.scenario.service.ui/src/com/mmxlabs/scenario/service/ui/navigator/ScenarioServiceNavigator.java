@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.navigator;
@@ -65,11 +65,11 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -163,18 +163,18 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker = new ServiceTracker<>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 
-//		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
+		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
-		statusColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/base-flag.png").createImage();
+		statusColumnImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	}
 
 	@Override
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
-//		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
+		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		showColumnImage.dispose();
 		statusColumnImage.dispose();

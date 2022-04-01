@@ -5,13 +5,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-SymbolicName: com.mmxlabs.common.common-util
 Automatic-Module-Name: com.mmxlabs.common.common-util
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 5.1.5.qualifier
-Import-Package: javax.tools,
- org.eclipse.emf.common.util,
- org.eclipse.emf.ecore.resource.impl,
- org.json.simple;version="[1.1,2)",
- org.objectweb.asm;version="5.0.0",
- org.slf4j;version="[1.6.0,2.0.0)"
+Bundle-Version: 5.3.1.qualifier
+Import-Package: org.slf4j;version="[1.6.0,2.0.0)"
 Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.caches,
  com.mmxlabs.common.calendars,
@@ -45,7 +40,7 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.util,
  com.mmxlabs.common.util.exceptions
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- org.apache.httpcomponents.httpclient;bundle-version="4.3.6",
- org.apache.httpcomponents.httpcore;bundle-version="4.3.3"
+ com.googlecode.json-simple;bundle-version="1.1.1",
+ org.eclipse.emf.ecore;bundle-version="2.25.0"
 Bundle-ClassPath: java-cup-11b-runtime.jar,
  .

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -138,15 +138,29 @@
          <menuContribution
                allPopups="false"
                locationURI="menu:file?after=additions">
-            <command
-                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="Import scenario from CSV"
-                  style="push">
-            </command>
+            <menu
+                  id="file_import"
+                  label="Import scenario from">
+            </menu>
             <menu
                   id="file_export"
                   label="Export scenario to">
             </menu>
+         </menuContribution>
+         <!-- Import menu -->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file_import">
+  				<command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  label="CSV"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+                  label=".lingo"
+                  style="push">
+            </command>
          </menuContribution>
          <!-- Export menu -->
          <menuContribution
@@ -427,6 +441,11 @@
                name="Export Scenario as .lingo file">
          </command>
          <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+               name="Import Scenario as .lingo file">
+         </command>
+         <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCommodityCurveHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
                name="Bulk import commodity curves from CSV">
@@ -512,8 +531,8 @@
             point="org.eclipse.ui.commandImages">
          <image
                commandId="com.mmxlabs.models.lng.scenario.ui.rollforward"
-               icon="icons/roll_forward.png"
-               disabledIcon="icons/roll_forward_disabled.png">
+               icon="icons:/icons/24x24/roll_forward.png"
+               disabledIcon="icons:/icons/24x24/roll_forward_disabled.png">
          </image>
       </extension>      
       <extension

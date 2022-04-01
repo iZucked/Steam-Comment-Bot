@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.adp.validation;
@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
-import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -28,11 +27,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class SupplyFromProfileFlowConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof SupplyFromProfileFlow) {
-			final SupplyFromProfileFlow flow = (SupplyFromProfileFlow) target;
+		if (target instanceof SupplyFromProfileFlow flow) {
 
 			if (flow.getProfile() == null) {
 				createSimpleStatus(ctx, statuses, "Missing profile", flow, ADPPackage.Literals.SUPPLY_FROM_PROFILE_FLOW__PROFILE);
@@ -81,7 +79,5 @@ public class SupplyFromProfileFlowConstraint extends AbstractModelMultiConstrain
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

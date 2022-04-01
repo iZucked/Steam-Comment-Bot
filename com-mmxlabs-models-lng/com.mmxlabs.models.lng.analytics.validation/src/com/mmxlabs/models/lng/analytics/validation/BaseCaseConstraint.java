@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -18,14 +18,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -33,11 +31,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof BaseCase) {
-			final BaseCase baseCase = (BaseCase) target;
+		if (target instanceof BaseCase baseCase) {
 
 			// Check for duplicated existing slots.
 			{
@@ -116,9 +113,6 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
-
 	}
 
 	public void processBaseCase(final BaseCase baseCase, final BiConsumer<BaseCaseRow, BuyOption> visitLoadSlot, final BiConsumer<BaseCaseRow, SellOption> visitDischargeSlot) {

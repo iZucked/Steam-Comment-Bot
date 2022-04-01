@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -21,32 +21,10 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mmxlabs.lingo.app.intro.EditingPerspective"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
+            icon="icons:/icons/16x16/table.png"
             id="com.mmxlabs.lingo.app.perspective.editing"
             name="Data">
       </perspective>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro.config">
-      <config
-            introId="com.mmxlabs.lingo.app.intro"
-            content="introContent.xml"
-            id="com.mmxlabs.lingo.app.configId">
-         <presentation
-               home-page-id="root">
-            <implementation
-                  kind="html"
-                  os="win32,linux,macosx">
-            </implementation>
-         </presentation>
-      </config>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro.configExtension">
-      <configExtension
-            content="ext.xml"
-            configId="com.mmxlabs.lingo.app.configId">
-      </configExtension>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
@@ -118,7 +96,4 @@
             class="com.mmxlabs.lingo.app.e4.WorkbenchChangeProcessor">
       </processor>
    </extension>
- 
-
-
 </plugin>

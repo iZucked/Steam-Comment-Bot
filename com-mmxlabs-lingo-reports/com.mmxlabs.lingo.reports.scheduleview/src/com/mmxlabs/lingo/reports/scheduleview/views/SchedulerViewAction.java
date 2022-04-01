@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
@@ -18,7 +18,7 @@ public abstract class SchedulerViewAction extends Action implements IMenuCreator
 	protected final EMFScheduleLabelProvider lp;
 	private Menu lastMenu = null;
 
-	public SchedulerViewAction(String name, int type, SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp) {
+	protected SchedulerViewAction(String name, int type, SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp) {
 		super(name, type);
 		this.schedulerView = schedulerView;
 		this.viewer = viewer;

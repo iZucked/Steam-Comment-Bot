@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getAnnealingSettings <em>Annealing Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl#getCleanStateSettings <em>Clean State Settings</em>}</li>
@@ -37,17 +36,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class CleanStateOptimisationStageImpl extends ParallisableOptimisationStageImpl implements CleanStateOptimisationStage {
-	/**
-	 * The cached value of the '{@link #getConstraintAndFitnessSettings() <em>Constraint And Fitness Settings</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConstraintAndFitnessSettings()
-	 * @generated
-	 * @ordered
-	 */
-	protected ConstraintAndFitnessSettings constraintAndFitnessSettings;
-
+public class CleanStateOptimisationStageImpl extends ConstraintsAndFitnessSettingsStageImpl implements CleanStateOptimisationStage {
 	/**
 	 * The default value of the '{@link #getSeed() <em>Seed</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -226,55 +215,8 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	 * @generated
 	 */
 	@Override
-	public ConstraintAndFitnessSettings getConstraintAndFitnessSettings() {
-		return constraintAndFitnessSettings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetConstraintAndFitnessSettings(ConstraintAndFitnessSettings newConstraintAndFitnessSettings, NotificationChain msgs) {
-		ConstraintAndFitnessSettings oldConstraintAndFitnessSettings = constraintAndFitnessSettings;
-		constraintAndFitnessSettings = newConstraintAndFitnessSettings;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS, oldConstraintAndFitnessSettings, newConstraintAndFitnessSettings);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setConstraintAndFitnessSettings(ConstraintAndFitnessSettings newConstraintAndFitnessSettings) {
-		if (newConstraintAndFitnessSettings != constraintAndFitnessSettings) {
-			NotificationChain msgs = null;
-			if (constraintAndFitnessSettings != null)
-				msgs = ((InternalEObject)constraintAndFitnessSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS, null, msgs);
-			if (newConstraintAndFitnessSettings != null)
-				msgs = ((InternalEObject)newConstraintAndFitnessSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS, null, msgs);
-			msgs = basicSetConstraintAndFitnessSettings(newConstraintAndFitnessSettings, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS, newConstraintAndFitnessSettings, newConstraintAndFitnessSettings));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
-				return basicSetConstraintAndFitnessSettings(null, msgs);
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
 				return basicSetAnnealingSettings(null, msgs);
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS:
@@ -291,8 +233,6 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
-				return getConstraintAndFitnessSettings();
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__SEED:
 				return getSeed();
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
@@ -311,9 +251,6 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
-				setConstraintAndFitnessSettings((ConstraintAndFitnessSettings)newValue);
-				return;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__SEED:
 				setSeed((Integer)newValue);
 				return;
@@ -335,9 +272,6 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
-				setConstraintAndFitnessSettings((ConstraintAndFitnessSettings)null);
-				return;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__SEED:
 				setSeed(SEED_EDEFAULT);
 				return;
@@ -359,8 +293,6 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS:
-				return constraintAndFitnessSettings != null;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__SEED:
 				return seed != SEED_EDEFAULT;
 			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS:
@@ -369,38 +301,6 @@ public class CleanStateOptimisationStageImpl extends ParallisableOptimisationSta
 				return cleanStateSettings != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ConstraintsAndFitnessSettingsStage.class) {
-			switch (derivedFeatureID) {
-				case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS: return ParametersPackage.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ConstraintsAndFitnessSettingsStage.class) {
-			switch (baseFeatureID) {
-				case ParametersPackage.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS: return ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**

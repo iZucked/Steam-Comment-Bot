@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.validation;
@@ -31,7 +31,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Ensures that the name attribute of all {@link NamedObject}s in a collection are unique.
+ * Ensures that the name attribute of all {@link NamedObject}s in a collection
+ * are unique.
  * 
  * TODO use ctx.addResults and ctx.skipCurrentConstraintFor...
  * 
@@ -139,15 +140,13 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof OtherNamesObject) {
 			validate(ctx, extraContext, statuses, MMXCorePackage.eINSTANCE.getNamedObject_Name(), MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames());
 		} else if (target instanceof NamedObject) {
 			validate(ctx, extraContext, statuses, MMXCorePackage.eINSTANCE.getNamedObject_Name(), null);
 		}
-		return Activator.PLUGIN_ID;
-
 	}
 
 }

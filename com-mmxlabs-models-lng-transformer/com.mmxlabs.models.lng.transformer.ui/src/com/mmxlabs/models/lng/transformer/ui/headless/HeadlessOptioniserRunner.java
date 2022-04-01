@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -57,10 +59,8 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting
-	 * seed, with the specified options. The optioniser output is logged to the
-	 * logger, which can then be used to extract information about the optioniser
-	 * run.
+	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
+	 * information about the optioniser run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -79,22 +79,22 @@ public class HeadlessOptioniserRunner {
 	}
 
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVDirectory(csvDirectory, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
-		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVZipFile(zipFile, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord,
+	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
 		final UserSettings userSettings = options.userSettings;
-//		 
+		//
 
 		final List<Slot<?>> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
@@ -172,6 +172,43 @@ public class HeadlessOptioniserRunner {
 		if (completedHook != null) {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
+	}
+
+	public @NonNull SlotInsertionOptions doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull OptioniserSettings optioniserSettings, final @Nullable HeadlessOptioniserJSON loggingData,
+			int threadsAvailable, @NonNull IProgressMonitor monitor) {
+
+		final UserSettings userSettings = optioniserSettings.userSettings;
+
+		final List<Slot<?>> targetSlots = new LinkedList<>();
+		final List<VesselEvent> targetEvents = new LinkedList<>();
+
+		final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(sdp));
+		optioniserSettings.loadIds.forEach(id -> targetSlots.add(cargoFinder.findLoadSlot(id)));
+		optioniserSettings.dischargeIds.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlot(id)));
+		optioniserSettings.eventsIds.forEach(id -> targetEvents.add(cargoFinder.findVesselEvent(id)));
+
+		final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
+				sdp, sdp.getEditingDomain(), userSettings, //
+				targetSlots, targetEvents, //
+				null, // Optional extra data provider.
+				null, // Alternative initial solution provider
+				builder -> {
+					builder.withThreadCount(threadsAvailable);
+				});
+
+		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+
+		SlotInsertionOptimiserLogger logger = loggingData == null ? null : new SlotInsertionOptimiserLogger();
+
+		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
+
+		final SlotInsertionOptions result = insertionRunner.exportSolutions(results, subMonitor.split(10));
+
+		if (loggingData != null && logger != null) {
+			HeadlessOptioniserJSONTransformer.addRunResult(0, logger, loggingData);
+		}
+
+		return result;
 	}
 
 }

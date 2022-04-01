@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -25,11 +25,9 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
@@ -46,16 +44,14 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof BaseCaseRow) {
-			final BaseCaseRow baseCaseRow = (BaseCaseRow) target;
+		if (target instanceof BaseCaseRow baseCaseRow) {
 
 			PortModel portModel = null;
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
@@ -159,8 +155,6 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				statuses.add(deco);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void validateTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel,

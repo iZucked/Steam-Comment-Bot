@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.validation;
@@ -32,15 +32,14 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
-			return Activator.PLUGIN_ID;
+			return;
 		}
-		if (target instanceof Sequence) {
-			final Sequence sequence = (Sequence) target;
+		if (target instanceof Sequence sequence) {
 			if (sequence.getEvents().isEmpty()) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 			final Event startEvent = sequence.getEvents().get(0);
 
@@ -92,9 +91,6 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

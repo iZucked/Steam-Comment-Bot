@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.hub.auth;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
@@ -39,7 +41,7 @@ public class OAuthDialog extends Window {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthDialog.class);
 
-	private static Browser browser;
+	private Browser browser;
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
 	private String baseUrl;
@@ -47,10 +49,19 @@ public class OAuthDialog extends Window {
 
 	private List<Runnable> disposeHandlers = new LinkedList<>();
 
-	public OAuthDialog(final String upstreamUrl, String path, @Nullable Shell shell) {
+	/**
+	 * Static var to store whether to try EDGE browser. Will be set to false if we
+	 * have tried but support was not found.
+	 */
+	private static boolean tryEdge = true;
+
+	private boolean preferEdgeBrowser;
+
+	public OAuthDialog(final String upstreamUrl, String path, @Nullable Shell shell, boolean preferEdgeBrowser) {
 		super(shell);
 		this.baseUrl = upstreamUrl;
 		this.fragment = path;
+		this.preferEdgeBrowser = preferEdgeBrowser;
 
 		setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.MAX | SWT.RESIZE | getDefaultOrientation());
 		setBlockOnOpen(true);
@@ -99,8 +110,25 @@ public class OAuthDialog extends Window {
 		// Make sure the URL isn't editable
 		txtLocation.setEnabled(false);
 		txtLocation.setEditable(false);
-
-		browser = new Browser(oauthComposite, SWT.NONE);
+		// TODO: Set the system property AND/OR add a preference page entry.
+		// org.eclipse.swt.browser.DefaultType=edge
+		// Needs webview2
+		// see
+		// https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution
+		// see
+		// https://developer.microsoft.com/en-us/microsoft-edge/webview2/#webview-title
+		// (SG used the Evergreen Bootstrapper)
+		System.out.println(preferEdgeBrowser);
+		if (preferEdgeBrowser && tryEdge) {
+			try {
+				browser = new Browser(oauthComposite, SWT.EDGE);
+			} catch (SWTError e) {
+				tryEdge = false;
+				browser = new Browser(oauthComposite, SWT.NONE);
+			}
+		} else {
+			browser = new Browser(oauthComposite, SWT.NONE);
+		}
 
 		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_browser.heightHint = 691;
@@ -155,12 +183,27 @@ public class OAuthDialog extends Window {
 		});
 
 		browser.setUrl(baseUrl + fragment);
-
+		// Edge doesn't retain the cookie between runs
+		Optional<String> value = AuthenticationManager.getInstance().retrieveFromSecurePreferences(OAuthManager.COOKIE);
+		if (value.isPresent()) {
+			Browser.setCookie(value.get(), baseUrl);
+		}
 		return oauthComposite;
 	}
 
 	@Override
 	public boolean close() {
+		// Clear cookies *before* we close the browser instance
+		if (fragment.equals(UpstreamUrlProvider.LOGOUT_PATH)) {
+			Browser.clearSessions();
+			// edge doesn't support getCookie() and setCookie()
+			// see https://www.eclipse.org/swt/faq.php#edgelimitations
+			if ("ie".equals(browser.getBrowserType())) {
+				Browser.setCookie("JSESSIONID=;", baseUrl);
+				Browser.setCookie("authenticated=;", baseUrl + "/authenticated");
+			}
+		}
+
 		try {
 			disposeHandlers.forEach(Runnable::run);
 		} catch (Exception e) {

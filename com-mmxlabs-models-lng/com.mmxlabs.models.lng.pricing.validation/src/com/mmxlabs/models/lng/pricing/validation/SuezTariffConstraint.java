@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.validation;
@@ -35,8 +35,7 @@ public class SuezTariffConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof SuezCanalTariff) {
-			final SuezCanalTariff suezCanalTariff = (SuezCanalTariff) target;
+		if (target instanceof SuezCanalTariff suezCanalTariff) {
 			final Map<Pair<Port, Port>, SuezCanalRouteRebate> items = new HashMap<>();
 
 			for (final SuezCanalRouteRebate r : suezCanalTariff.getRouteRebates()) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
@@ -2412,18 +2412,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getCanalBookingSlot_Slot() {
-		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getCanalBookingSlot_Notes() {
-		return (EAttribute)canalBookingSlotEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)canalBookingSlotEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2433,7 +2423,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getCanalBookingSlot_Vessel() {
-		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(5);
+		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -2443,7 +2433,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getCanalBookingSlot_BookingCode() {
-		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(6);
+		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2472,7 +2462,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCanalBookings_StrictBoundaryOffsetDays() {
+	public EAttribute getCanalBookings_ArrivalMarginHours() {
 		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2482,58 +2472,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCanalBookings_RelaxedBoundaryOffsetDays() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCanalBookings_ArrivalMarginHours() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCanalBookings_FlexibleBookingAmountNorthbound() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCanalBookings_FlexibleBookingAmountSouthbound() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getCanalBookings_BookingExemptVessels() {
-		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getCanalBookings_VesselGroupCanalParameters() {
-		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(7);
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -2543,7 +2483,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getCanalBookings_PanamaSeasonalityRecords() {
-		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(8);
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -3510,19 +3450,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ROUTE_OPTION);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__CANAL_ENTRANCE);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__BOOKING_DATE);
-		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__NOTES);
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__VESSEL);
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__BOOKING_CODE);
 
 		canalBookingsEClass = createEClass(CANAL_BOOKINGS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
-		createEReference(canalBookingsEClass, CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS);
 
@@ -4016,7 +3950,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookingSlot_RouteOption(), thePortPackage.getRouteOption(), "routeOption", "PANAMA", 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_CanalEntrance(), thePortPackage.getCanalEntry(), "canalEntrance", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_BookingDate(), theDateTimePackage.getLocalDate(), "bookingDate", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanalBookingSlot_Slot(), this.getSlot(), null, "slot", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());
 		g2 = createEGenericType(theFleetPackage.getVessel());
@@ -4026,12 +3959,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(canalBookingsEClass, CanalBookings.class, "CanalBookings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalBookings_CanalBookingSlots(), this.getCanalBookingSlot(), null, "canalBookingSlots", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_StrictBoundaryOffsetDays(), ecorePackage.getEInt(), "strictBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_RelaxedBoundaryOffsetDays(), ecorePackage.getEInt(), "relaxedBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_ArrivalMarginHours(), ecorePackage.getEInt(), "arrivalMarginHours", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_FlexibleBookingAmountNorthbound(), ecorePackage.getEInt(), "flexibleBookingAmountNorthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanalBookings_BookingExemptVessels(), theFleetPackage.getVessel(), null, "bookingExemptVessels", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookings_VesselGroupCanalParameters(), this.getVesselGroupCanalParameters(), null, "vesselGroupCanalParameters", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookings_PanamaSeasonalityRecords(), this.getPanamaSeasonalityRecord(), null, "panamaSeasonalityRecords", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.propertytesters;
@@ -28,9 +28,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			if (expectedValue != null && state != null) {
 				return expectedValue.toString().equalsIgnoreCase(state.name());
 			}
-		} else if ("canPause".equals(property)) {
-			if (state == EJobState.RUNNING)
-				return true;
 		} else if ("canPlay".equals(property)) {
 			if (state == null) {
 				return true;
@@ -38,7 +35,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			switch (state) {
 			case CANCELLED:
 			case COMPLETED:
-			case PAUSED:
 			case INITIALISED:
 			case CREATED:
 				return true;
@@ -51,8 +47,6 @@ public class JobStatePropertyTester extends PropertyTester {
 			}
 			switch (state) {
 			case RUNNING:
-			case PAUSED:
-				return true;
 			default:
 				return false;
 			}
@@ -61,12 +55,9 @@ public class JobStatePropertyTester extends PropertyTester {
 				return false;
 			switch (state) {
 			case RUNNING:
-			case PAUSED:
-			case PAUSING:
 			case INITIALISED:
 			case INITIALISING:
 			case CANCELLING:
-			case RESUMING:
 				return true;
 			default:
 				return false;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
@@ -168,7 +168,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	 * @return
 	 */
 	@Provides
-	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES)
+	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES)
 	List<String> provideMultiObjectiveFitnessComponentNames(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
 		LinkedList<String> objectiveNames = new LinkedList<>(Arrays.asList("SimilarityFitnessCore"));
 		assert (enabledFitnessNames.containsAll(objectiveNames));

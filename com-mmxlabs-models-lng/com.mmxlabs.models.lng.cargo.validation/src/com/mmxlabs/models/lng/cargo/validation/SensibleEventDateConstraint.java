@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -15,7 +15,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -29,10 +28,9 @@ public class SensibleEventDateConstraint extends AbstractModelMultiConstraint {
 	 * Impose sensible date cutoffs for vessel availabilities and events
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof VesselEvent) {
-			final VesselEvent event = (VesselEvent) object;
+		if (object instanceof VesselEvent event) {
 			for (final EStructuralFeature feature : eventDateFields) {
 				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
 				if (date != null && date.isBefore(earliestDate)) {
@@ -42,9 +40,6 @@ public class SensibleEventDateConstraint extends AbstractModelMultiConstraint {
 					failures.add(status);
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

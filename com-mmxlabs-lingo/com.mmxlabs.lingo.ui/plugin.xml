@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -12,7 +12,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mmxlabs.lingo.platform.ui.AnalysisPerspective"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
+            icon="icons:/icons/16x16/scenario.png"
             id="com.mmxlabs.lingo.app.perspective.analysis"
             name="Analysis">
       </perspective>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
@@ -47,7 +46,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
- * Check that the end of any cargo's discharge window is not before the start of its load window.
+ * Check that the end of any cargo's discharge window is not before the start of
+ * its load window.
  * 
  * @author Tom Hinton
  * 
@@ -99,7 +99,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	/**
-	 * Validate that the available time is enough to get from A to B, if it's not negative
+	 * Validate that the available time is enough to get from A to B, if it's not
+	 * negative
 	 * 
 	 * @param ctx
 	 * @param cargo
@@ -164,7 +165,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					if (minTime > availableTime) {
 						// If difference is within the slot flex, then downgrade to warning.
 						final long diff = minTime - availableTime;
-						// We want to sum the negative flex on the from to the positive flex on the to - this gives the sum additional flex on top of the windows.
+						// We want to sum the negative flex on the from to the positive flex on the to -
+						// this gives the sum additional flex on top of the windows.
 						final int totalFlex = -from.getWindowFlex() + to.getWindowFlex();
 						if (diff < totalFlex) {
 							severity = IStatus.WARNING;
@@ -210,12 +212,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof Cargo) {
+		if (object instanceof Cargo cargo) {
 			final String constraintID = ctx.getCurrentConstraintId();
-			final Cargo cargo = (Cargo) object;
 			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
 				Slot<?> prevSlot = null;
@@ -256,8 +257,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
@@ -305,8 +304,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						int slotDur = from.getSchedulingTimeWindow().getDuration();
 						final boolean isCP = from.isWindowCounterParty();
 						if (travelTime + from.getSchedulingTimeWindow().getDuration() > windowLength) {
-							// final String message = String.format("Purchase %s is being shipped to %s but the laden leg (%s travel, %s loading) is greater than the shortest journey by %s.",
-							// from.getName(), to.getPort().getName(), TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
+							// final String message = String.format("Purchase %s is being shipped to %s but
+							// the laden leg (%s travel, %s loading) is greater than the shortest journey by
+							// %s.",
+							// from.getName(), to.getPort().getName(),
+							// TravelTimeUtils.formatShortHours(travelTime),TravelTimeUtils.formatShortHours(slotDur),
 							// TravelTimeUtils.formatHours((travelTime + slotDur) - windowLength));
 							final String message = String.format(
 									"Purchase '%s': Laden leg to %s is too long: %s " + (isCP ? "C/P window and " : "") + "loading, %s travel is %s more than the %s available.", from.getName(),

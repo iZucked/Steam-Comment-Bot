@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -13,14 +13,14 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.mmxlabs.lingo.app.application"
-            name="LiNGO - Vanilla">
+            name="LiNGO">
          <property
                name="windowImages"
                value="icons/logo-square-16.png,icons/logo-square-32.png,icons/logo-square-48.png,icons/logo-square-64.png,icons/logo-square-128.png">
          </property>
          <property
                name="appName"
-               value="LiNGO - Vanilla">
+               value="LiNGO">
          </property>
          <property
                name="startupProgressRect"
@@ -32,15 +32,15 @@
          </property>
 	 <property
         name="aboutText"
-        value="LiNGO - Vanilla  - Developer Version">
+        value="LiNGO&#x0A;Copyright 2010 - 2022&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
        </property>
   <property
         name="startupForegroundColor"
-        value="000000">
+        value="FFFFFF">
   </property>
   <property
         name="startupMessageRect"
-        value="20,220,440,20">
+        value="0,0,0,0">
   </property>
   <property
         name="preferenceCustomization"

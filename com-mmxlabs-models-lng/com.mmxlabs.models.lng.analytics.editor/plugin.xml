@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -196,7 +196,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox"
-               icon="icons/sandbox.gif"
+               icon="icons:/16/sandbox"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -257,7 +257,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
-               icon="icons/sandbox.gif"
+               icon="icons:/16/sandbox"
                style="push">
             <visibleWhen
                   checkEnabled="false">

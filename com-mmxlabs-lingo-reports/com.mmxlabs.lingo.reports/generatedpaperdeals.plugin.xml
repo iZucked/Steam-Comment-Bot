@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.paperdeals.GeneratedPaperDealsReportView"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_flow_view.gif"
+            id="com.mmxlabs.lingo.reports.views.standard.paperdeals.GeneratedPaperDealsReportView"
+            name="Generated Paper Deals"
+            restorable="true">
+      </view>
+	</extension>
+
+</plugin>

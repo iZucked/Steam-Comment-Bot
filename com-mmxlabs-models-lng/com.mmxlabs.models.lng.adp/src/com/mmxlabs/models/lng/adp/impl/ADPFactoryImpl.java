@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -95,6 +95,11 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.MULL_PROFILE: return createMullProfile();
 			case ADPPackage.MULL_SUBPROFILE: return createMullSubprofile();
 			case ADPPackage.MULL_CARGO_WRAPPER: return createMullCargoWrapper();
+			case ADPPackage.SPACING_PROFILE: return createSpacingProfile();
+			case ADPPackage.FOB_SPACING_ALLOCATION: return createFobSpacingAllocation();
+			case ADPPackage.DES_SPACING_ALLOCATION: return createDesSpacingAllocation();
+			case ADPPackage.DES_SPACING_ROW: return createDesSpacingRow();
+			case ADPPackage.SPACING_ALLOCATION: return createSpacingAllocation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -484,6 +489,61 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public MullCargoWrapper createMullCargoWrapper() {
 		MullCargoWrapperImpl mullCargoWrapper = new MullCargoWrapperImpl();
 		return mullCargoWrapper;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SpacingProfile createSpacingProfile() {
+		SpacingProfileImpl spacingProfile = new SpacingProfileImpl();
+		return spacingProfile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FobSpacingAllocation createFobSpacingAllocation() {
+		FobSpacingAllocationImpl fobSpacingAllocation = new FobSpacingAllocationImpl();
+		return fobSpacingAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DesSpacingAllocation createDesSpacingAllocation() {
+		DesSpacingAllocationImpl desSpacingAllocation = new DesSpacingAllocationImpl();
+		return desSpacingAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DesSpacingRow createDesSpacingRow() {
+		DesSpacingRowImpl desSpacingRow = new DesSpacingRowImpl();
+		return desSpacingRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SpacingAllocation createSpacingAllocation() {
+		SpacingAllocationImpl spacingAllocation = new SpacingAllocationImpl();
+		return spacingAllocation;
 	}
 
 	/**

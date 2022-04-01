@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.sandbox;
@@ -168,7 +168,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		// Evaluate initial case
 		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
-		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, null, sourceModel::setResults, false, new NullProgressMonitor());
+		evaluator.runSandbox(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false, new NullProgressMonitor());
 
 		{
 			AbstractSolutionSet results = sourceModel.getResults();

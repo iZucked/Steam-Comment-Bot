@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.period;
@@ -80,7 +80,6 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -89,7 +88,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 1, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 
@@ -157,7 +156,6 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -166,7 +164,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 

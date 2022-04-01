@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
-import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
@@ -32,11 +31,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class OpportunityExpressionConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof BuyOpportunity) {
-			final BuyOpportunity slot = (BuyOpportunity) target;
+		if (target instanceof BuyOpportunity slot) {
 			if (slot.getPriceExpression() != null && !slot.getPriceExpression().contains("?") && !slot.getPriceExpression().equals("")) {
 				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), slot.getPriceExpression(),
 						PriceIndexType.COMMODITY);
@@ -238,13 +236,10 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
-	
+
 	private static PricingModel getPricingModel(final IExtraValidationContext extraContext) {
-		if (extraContext.getRootObject() instanceof LNGScenarioModel) {
-			LNGScenarioModel model =
-			(LNGScenarioModel) extraContext.getRootObject();
+		if (extraContext.getRootObject() instanceof LNGScenarioModel model) {
 			return model.getReferenceModel().getPricingModel();
 		} else {
 			return null;

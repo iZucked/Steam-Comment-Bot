@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -37,8 +37,7 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 		final IChainLink link = new IChainLink() {
 
 			@Override
-			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
+			public IMultiStateResult run(final LNGDataTransformer dt, SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				LNGEvaluationTransformerUnit t = new LNGEvaluationTransformerUnit(dt, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
 				return t.run(monitor);
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.headless;
@@ -8,18 +8,15 @@ import java.io.File;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions.ScenarioFileFormat;
-import com.mmxlabs.models.lng.transformer.ui.headless.common.CustomTypeResolverBuilder;
-import com.mmxlabs.models.lng.transformer.ui.headless.common.HeadlessRunnerUtils;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserRunner;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationJobRunner;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
  * Headless Optimisation Runner
@@ -33,62 +30,32 @@ public class HeadlessOptimiserApplication extends HeadlessGenericApplication {
 	/**
 	 * Runs the optimiser and writes the output log results.
 	 * 
-	 * The headless optimiser shares a lot of logic with the headless optioniser,
-	 * but the code paths differ significantly, particularly the code that actually
-	 * writes data to the output object.
+	 * The headless optimiser shares a lot of logic with the headless optioniser, but the code paths differ significantly, particularly the code that actually writes data to the output object.
 	 * 
-	 * Hence, this method does some things that ought to be handled in
-	 * HeadlessGenericApplication. Future implementations should probably refactor
-	 * this method and clean up the separation of concerns.
+	 * Hence, this method does some things that ought to be handled in HeadlessGenericApplication. Future implementations should probably refactor this method and clean up the separation of concerns.
 	 */
-	protected void runAndWriteResults(int run, HeadlessApplicationOptions hOptions, File scenarioFile, File outputFile, int threads) throws Exception {
-		HeadlessOptimiserJSON json = (new HeadlessOptimiserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), scenarioFile, threads);
-		writeMetaFields(json, scenarioFile, hOptions, threads);
+	protected void runAndWriteResults(final int run, final HeadlessApplicationOptions hOptions, final File scenarioFile, final File outputFile, final int threads) throws Exception {
+		final Meta meta = writeMetaFields(scenarioFile, hOptions);
+		meta.setScenario(scenarioFile.getName());
 
-		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
+		final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
+		jobRunner.withLogging(meta);
+		jobRunner.withParams(new File(hOptions.algorithmConfigFile));
+		// Consumer taking the SDP. We need to run within the action to avoid the SDP being closed when the scope closes
+		final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> runnerAction = (modelRecord, scenarioDataProvider) -> {
+			jobRunner.withScenario(scenarioDataProvider);
+			jobRunner.run(0, new NullProgressMonitor());
+		};
 
-		ScenarioFileFormat type = hOptions.getExpectedScenarioFormat();
-
+		final ScenarioFileFormat type = hOptions.getExpectedScenarioFormat();
 		switch (type) {
-		case LINGO_FILE: {
-			runner.run(scenarioFile, hOptions, new NullProgressMonitor(), null, json);
-			break;
-		}
-		case CSV_FOLDER: {
-			runner.runFromCsvDirectory(scenarioFile, hOptions, new NullProgressMonitor(), null, json);
-			break;
-		}
-		case CSV_ZIP: {
-			runner.runFromCsvZipFile(scenarioFile, hOptions, new NullProgressMonitor(), null, json);
-			break;
-		}
-		default: {
-			throw new UnhandledScenarioTypeException(String.format("No method for handling scenario file %s", scenarioFile.getName()));
-		}
+		case LINGO_FILE -> ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), runnerAction);
+		case CSV_FOLDER -> CSVImporter.runFromCSVDirectory(scenarioFile, runnerAction);
+		case CSV_ZIP -> CSVImporter.runFromCSVZipFile(scenarioFile, runnerAction);
+		default -> throw new UnhandledScenarioTypeException(String.format("No method for handling scenario file %s", scenarioFile.getName()));
 		}
 
-		HeadlessRunnerUtils.renameInvalidBsonFields(json.getMetrics().getStages());
-
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-
-			CustomTypeResolverBuilder resolver = new CustomTypeResolverBuilder();
-			resolver.init(JsonTypeInfo.Id.CLASS, null);
-			resolver.inclusion(JsonTypeInfo.As.PROPERTY);
-			resolver.typeProperty("@class");
-			mapper.setDefaultTyping(resolver);
-
-			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
-
-			mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, json);
-		} catch (Exception e) {
-			System.err.println("Error writing to file:");
-			e.printStackTrace();
-		}
-
+		jobRunner.saveLogs(outputFile);
 	}
 
 	@Override

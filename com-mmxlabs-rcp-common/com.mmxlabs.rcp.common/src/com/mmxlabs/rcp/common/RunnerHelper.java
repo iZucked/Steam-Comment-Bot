@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common;
@@ -22,8 +22,13 @@ import org.eclipse.ui.PlatformUI;
  */
 public final class RunnerHelper {
 
+	private RunnerHelper() {
+
+	}
+
 	/**
-	 * Returns the {@link Display} for the {@link IWorkbench}, or null if not yet created or disposed
+	 * Returns the {@link Display} for the {@link IWorkbench}, or null if not yet
+	 * created or disposed
 	 * 
 	 * @return
 	 */
@@ -52,7 +57,8 @@ public final class RunnerHelper {
 	 * Run the task in a blocking manner.
 	 * 
 	 * @param runnable
-	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to
+	 *         execute the task on.
 	 */
 	public static <R> R syncExecFunc(@NonNull final Function<Display, R> runnable) {
 
@@ -74,7 +80,8 @@ public final class RunnerHelper {
 	 * Run the task in a blocking manner.
 	 * 
 	 * @param runnable
-	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to
+	 *         execute the task on.
 	 */
 	public static boolean syncExec(@NonNull final Runnable runnable) {
 
@@ -95,14 +102,13 @@ public final class RunnerHelper {
 	 * Run the task in a blocking manner.
 	 * 
 	 * @param runnable
-	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
 	 */
-	public static boolean syncExecDisplayOptional(@NonNull final Runnable runnable) {
+	public static void syncExecDisplayOptional(@NonNull final Runnable runnable) {
 
 		final Display display = getWorkbenchDisplay();
 		if (display == null) {
 			runnable.run();
-			return true;
+			return;
 		}
 
 		if (display.getThread() == Thread.currentThread()) {
@@ -110,7 +116,6 @@ public final class RunnerHelper {
 		} else {
 			display.syncExec(runnable);
 		}
-		return true;
 	}
 
 	public static boolean inDisplayThread() {
@@ -120,16 +125,14 @@ public final class RunnerHelper {
 			return true;
 		}
 
-		if (display.getThread() == Thread.currentThread()) {
-			return true;
-		}
-		return false;
+		return display.getThread() == Thread.currentThread();
 	}
 
 	/**
 	 * Run the task asynchronously.
 	 * 
-	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to
+	 *         execute the task on.
 	 */
 	public static boolean asyncExec(@NonNull final Runnable runnable) {
 
@@ -144,7 +147,8 @@ public final class RunnerHelper {
 	/**
 	 * Run the task asynchronously.
 	 * 
-	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to
+	 *         execute the task on.
 	 */
 	public static boolean asyncExec(@NonNull final Consumer<@NonNull Display> consumer) {
 

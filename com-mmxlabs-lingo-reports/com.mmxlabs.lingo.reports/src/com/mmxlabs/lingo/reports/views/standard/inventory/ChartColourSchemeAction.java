@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.inventory;
@@ -13,6 +13,9 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.standard.InventoryReport;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class ChartColourSchemeAction extends Action implements IMenuCreator {
 
@@ -33,7 +36,7 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 				report.setCargoVisibilityInInventoryChart(showingCargoes);
 			}
 		};
-		setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/colour_scheme.gif"));
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Label, IconMode.Enabled));
 	}
 
 	@Override

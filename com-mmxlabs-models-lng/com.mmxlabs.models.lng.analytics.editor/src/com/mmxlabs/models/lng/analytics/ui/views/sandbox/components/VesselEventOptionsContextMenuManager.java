@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.components;
@@ -90,8 +90,7 @@ public class VesselEventOptionsContextMenuManager implements MenuDetectListener 
 
 			final Object ed = items[0].getData();
 			final VesselEventOption row = (VesselEventOption) ed;
-			if (row instanceof VesselEventReference) {
-				final VesselEventReference eventReference = (VesselEventReference) row;
+			if (row instanceof VesselEventReference eventReference) {
 				final VesselEvent slot = eventReference.getEvent();
 				// if (slot != null) {
 				// mgr.add(new RunnableAction("Copy", () -> {

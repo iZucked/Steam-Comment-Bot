@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -48,6 +48,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -80,6 +81,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
@@ -257,7 +261,12 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
 
-		final Button add = toolkit.createButton(buttons, "+", SWT.NONE);
+		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
+		{
+			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
+			add.setImage(img);
+			add.addDisposeListener(e -> img.dispose());
+		}
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		FormattedText[] minMaxControls = new FormattedText[2];
 
@@ -274,7 +283,12 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 			}
 		});
 
-		final Button remove = toolkit.createButton(buttons, "-", SWT.NONE);
+		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
+		{
+			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+			remove.setImage(img);
+			remove.addDisposeListener(e -> img.dispose());
+		}
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener((event) -> remove.setEnabled(!event.getSelection().isEmpty()));

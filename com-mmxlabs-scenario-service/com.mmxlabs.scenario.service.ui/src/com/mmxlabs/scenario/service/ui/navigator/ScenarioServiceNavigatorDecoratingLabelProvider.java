@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.navigator;
@@ -32,10 +32,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.DualImageProgressRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
@@ -242,7 +244,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 
 		initTracker();
 
-		bcImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.scenario.service.ui", "icons/base-flag.png").createImage();
+		bcImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
 	}
 
 	/*

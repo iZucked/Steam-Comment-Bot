@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.inject;
@@ -52,10 +52,6 @@ public class LNGTransformerHelper {
 	 * Hint to indicate this is for evaluation only
 	 */
 	public static final @NonNull String HINT_EVALUATION_ONLY = "hint-lngtransformer-evaluation";
-	/**
-	 */
-	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
-
 	public static final @NonNull String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 	public static final @NonNull String HINT_CHARTER_LENGTH = "hint-lngtransformer-charter-length";
 
@@ -97,13 +93,6 @@ public class LNGTransformerHelper {
 			hints.add(HINT_SHIPPING_ONLY);
 		} else if (userSettings.isWithSpotCargoMarkets()) {
 			hints.add(HINT_SPOT_CARGO_MARKETS);
-		}
-
-		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
-		if (userSettings.isBuildActionSets()) {
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
-				hints.add(HINT_OPTIMISE_BREAKDOWN);
-			}
 		}
 
 		if (userSettings.isNominalOnly()) {

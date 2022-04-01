@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.validation;
@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
@@ -38,7 +37,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint for ensuring that all ports have a cooldown constraint in the given pricing model.
+ * A constraint for ensuring that all ports have a cooldown constraint in the
+ * given pricing model.
  * 
  * @author hinton
  * 
@@ -46,11 +46,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	protected void doValidate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CooldownPrice) {
-			CooldownPrice c = (CooldownPrice) target;
+		if (target instanceof CooldownPrice c) {
 
 			final String portSetName = ScenarioElementNameHelper.getName(c.getPorts(), "Cooldown Cost <No ports>");
 			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus().withName(portSetName);
@@ -81,8 +80,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					final Set<APortSet<Port>> explicit = new HashSet<>();
 					final Set<Port> implicit = new HashSet<>();
 					for (final EObject obj : objects) {
-						if (obj instanceof CooldownPrice) {
-							final CooldownPrice otherCooldownPrice = (CooldownPrice) obj;
+						if (obj instanceof CooldownPrice otherCooldownPrice) {
 
 							if (otherCooldownPrice == c) {
 								continue;
@@ -122,8 +120,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-		} else if (target instanceof CostModel) {
-			CostModel costModel = (CostModel) target;
+		} else if (target instanceof CostModel costModel) {
 			{
 				final PortModel portModel = ScenarioModelUtil.getPortModel(extraContext.getScenarioDataProvider());
 				// count the number of cooldown prices attached to each port
@@ -156,11 +153,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
-
 	}
 
 	@NonNull

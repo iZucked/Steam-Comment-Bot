@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,49 +24,58 @@ import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class SandboxResultPlanTransformer {
 	private static final Logger logger = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final SandboxResult plan, final IProgressMonitor monitor) {
+	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final ScheduleModel scheduleModel) {
+		if (modelRecord != null) {
+			return new ScenarioResultImpl(modelRecord, scheduleModel);
+		} else {
+			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
+		}
+	}
+
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
 		final ScenarioResult base;
 		if (plan.isUseScenarioBase()) {
 			// Hacky - compare to evaluated state
-			AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer().eContainer();
-			LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
+			final AnalyticsModel analyticsModel = (AnalyticsModel) plan.eContainer().eContainer();
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) analyticsModel.eContainer();
 			if (scenarioModel.getScheduleModel().getSchedule() == null) {
 				throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 			}
-			base = new ScenarioResultImpl(scenarioInstance, scenarioModel.getScheduleModel());
+			base = make(scenarioInstance, modelRecord, scenarioModel.getScheduleModel());
 		} else {
 			if (plan.getBaseOption() == null) {
 				return root;
 			}
-			base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
+			base = make(scenarioInstance, modelRecord, plan.getBaseOption().getScheduleModel());
 		}
 		try {
 			monitor.beginTask("Opening solutions", plan.getOptions().size());
 			final ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
 			final UserSettings userSettings = plan.getUserSettings();
 
-			List<ChangeSet> changeSets = new LinkedList<>();
+			final List<ChangeSet> changeSets = new LinkedList<>();
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
-				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = make(scenarioInstance, modelRecord, option.getScheduleModel());
 
 				ScenarioResult altBase = null;
 				ScenarioResult altCurrent = null;
-				if (option instanceof DualModeSolutionOption) {
-					final DualModeSolutionOption slotInsertionOption = (DualModeSolutionOption) option;
+				if (option instanceof final DualModeSolutionOption slotInsertionOption) {
 					if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
-						altBase = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
-						altCurrent = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
+						altBase = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroBaseCase().getScheduleModel());
+						altCurrent = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroTargetCase().getScheduleModel());
 					}
 				}
 				// TODO: FIX ME!!! The null guards below are a patch for when either base or

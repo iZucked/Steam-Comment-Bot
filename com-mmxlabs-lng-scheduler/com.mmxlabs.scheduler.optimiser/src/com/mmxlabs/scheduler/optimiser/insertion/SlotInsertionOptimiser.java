@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.insertion;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -218,11 +217,12 @@ public class SlotInsertionOptimiser {
 
 				metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, true, null, null);
 				if (metrics == null) {
+
 					valid = false;
 				}
 			}
 			if (!valid) {
-				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
+//				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
 
 				// Re-check sequences
 				{
@@ -263,8 +263,8 @@ public class SlotInsertionOptimiser {
 
 		
 		final List<ISequenceElement> elements = portSlots.stream() //
-				.map(s -> portSlotProvider.getElement(s)) //
-				.collect(Collectors.toList());
+				.map(portSlotProvider::getElement) //
+				.toList();
 		final Pair<ISequences, Long> result = insert(state, seed, elements);
 		if (result != null) {
 		assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());

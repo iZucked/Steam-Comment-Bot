@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.validation;
@@ -92,7 +92,7 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 							vesselName = " for " + sequence.getVesselAvailability().getVessel().getName();
 						}
 					}
-					
+
 					message = String.format("Volume issue: [%s] cooldown is required%s in schedule but is not permitted at load", marketName, vesselName);
 				} else {
 					message = String.format("Volume issue: %s cooldown is required in schedule but is not permitted at load", nameString);
@@ -106,7 +106,7 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 					typeDescription = "minimum heel is breached";
 					break;
 				case MAX_HEEL:
-					typeDescription = "maximum heel is breached"; 
+					typeDescription = "maximum heel is breached";
 					break;
 				default:
 					typeDescription += " is breached";
@@ -132,11 +132,11 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CapacityViolationsHolder) {
-			final EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) target).getViolations();
+		if (target instanceof CapacityViolationsHolder holder) {
+			final EMap<CapacityViolationType, Long> violations = holder.getViolations();
 
 			if (!violations.isEmpty()) {
 
@@ -146,7 +146,5 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
@@ -49,13 +49,13 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.SandboxScenario;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.PieChartRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -64,14 +64,14 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public class CloudManagerView extends ViewPart {
 
 	//
-//	/**
-//	 * The ID of the view as specified by the extension.
-//	 */
-//	public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
-//
+	// /**
+	// * The ID of the view as specified by the extension.
+	// */
+	// public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
+	//
 	private GridTableViewer viewer;
 	private Action packAction;
-//	private Action stopAction;
+	// private Action stopAction;
 	private Action removeAction;
 
 	private IUpdateListener listener;
@@ -152,23 +152,25 @@ public class CloudManagerView extends ViewPart {
 			}));
 			GridViewerHelper.configureLookAndFeel(tvc1);
 		}
-//		{
-//			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
-//			tvc0.getColumn().setText("Job ID");
-//			tvc0.getColumn().setWidth(200);
-//			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getJobid));
-//			GridViewerHelper.configureLookAndFeel(tvc0);
-//		}
+		// {
+		// final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
+		// tvc0.getColumn().setText("Job ID");
+		// tvc0.getColumn().setWidth(200);
+		// tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getJobid));
+		// GridViewerHelper.configureLookAndFeel(tvc0);
+		// }
 		{
 			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
 			tvc0.getColumn().setText("Type");
 			tvc0.getColumn().setWidth(200);
 			tvc0.setLabelProvider(createLP(r -> {
 				String lbl = r.getType();
-				switch (r.getType()) {
-				case "OPTIMISATION" -> lbl = "Optimisation";
-				case "OPTIONISER" -> lbl = "Optioniser";
-				case "SANDBOX" -> lbl = "Sandbox";
+				if (lbl != null) {
+					switch (lbl) {
+					case "OPTIMISATION" -> lbl = "Optimisation";
+					case "OPTIONISER" -> lbl = "Optioniser";
+					case "SANDBOX" -> lbl = "Sandbox";
+					}
 				}
 				if (r.getSubType() != null) {
 					lbl = lbl + ": " + r.getSubType();
@@ -225,16 +227,16 @@ public class CloudManagerView extends ViewPart {
 			}
 		};
 		CloudOptimisationDataService.INSTANCE.addListener(listener);
-// 
+		//
 
-//		viewer.setLabelProvider(new ITableLabelProviderImplementation());
+		// viewer.setLabelProvider(new ITableLabelProviderImplementation());
 		// Create the help context id for the viewer's control
-//		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
+		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
 
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-//
+		//
 		viewer.addSelectionChangedListener(event -> {
 
 			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
@@ -301,16 +303,16 @@ public class CloudManagerView extends ViewPart {
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-//
+	//
 	private void fillLocalPullDown(final IMenuManager manager) {
-//		manager.add(stopAction);
-//		manager.add(removeAction);
+		// manager.add(stopAction);
+		// manager.add(removeAction);
 	}
 
-//
+	//
 	private void fillContextMenu(final IMenuManager manager) {
-//		manager.add(stopAction);
-//		manager.add(removeAction);
+		// manager.add(stopAction);
+		// manager.add(removeAction);
 		manager.add(new RunnableAction("Copy optimisation ID to clipboard", () -> {
 
 			if (viewer.getSelection() instanceof IStructuredSelection ss) {
@@ -337,14 +339,14 @@ public class CloudManagerView extends ViewPart {
 				}
 			}
 		}));
-//
-//		// Other plug-ins can contribute there actions here
-//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		//
+		// // Other plug-ins can contribute there actions here
+		// manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packAction);
-//		manager.add(stopAction);
+		// manager.add(stopAction);
 		manager.add(removeAction);
 	}
 
@@ -352,15 +354,15 @@ public class CloudManagerView extends ViewPart {
 
 		packAction = PackActionFactory.createPackColumnsAction(viewer);
 
-//		stopAction = new Action() {
-//			@Override
-//			public void run() {
-//
-//			}
-//		};
-//		stopAction.setText("Abort");
-//		stopAction.setToolTipText("Abort Job");
-//		CommonImages.setImageDescriptors(stopAction, IconPaths.Terminate);
+		// stopAction = new Action() {
+		// @Override
+		// public void run() {
+		//
+		// }
+		// };
+		// stopAction.setText("Abort");
+		// stopAction.setToolTipText("Abort Job");
+		// CommonImages.setImageDescriptors(stopAction, IconPaths.Terminate);
 
 		removeAction = new Action() {
 			@Override
@@ -385,16 +387,16 @@ public class CloudManagerView extends ViewPart {
 		CommonImages.setImageDescriptors(removeAction, IconPaths.Delete);
 	}
 
-//	/**
-//	 * Passing the focus request to the viewer's control.
-//	 */
+	// /**
+	// * Passing the focus request to the viewer's control.
+	// */
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
 	}
 
 	private void updateActionEnablement(final ISelection selection) {
-//		stopAction.setEnabled(false);
+		// stopAction.setEnabled(false);
 		removeAction.setEnabled(false);
 		if (!selection.isEmpty()) {
 			if (selection instanceof final IStructuredSelection ss) {
@@ -403,11 +405,11 @@ public class CloudManagerView extends ViewPart {
 					if (obj instanceof final CloudOptimisationDataResultRecord cRecord) {
 						if (cRecord.getStatus() != null && cRecord.getStatus().isRunning()) {
 							// No upstream API yet
-//								stopEnabled = true;
+							// stopEnabled = true;
 						}
 					}
 				}
-//				stopAction.setEnabled(stopEnabled);
+				// stopAction.setEnabled(stopEnabled);
 				removeAction.setEnabled(!ss.isEmpty());
 			}
 

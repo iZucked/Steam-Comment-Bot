@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -38,8 +38,7 @@ public class LNGReduceToBestSolutionUnit {
 		final IChainLink link = new IChainLink() {
 
 			@Override
-			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+			public IMultiStateResult run(final LNGDataTransformer dataTransformer, final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 
 				dataTransformer.getLifecyleManager().startPhase(stage);
 

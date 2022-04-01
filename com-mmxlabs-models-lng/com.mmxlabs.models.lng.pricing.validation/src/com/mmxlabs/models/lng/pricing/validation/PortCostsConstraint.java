@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.validation;
@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -42,11 +41,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class PortCostsConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CostModel) {
-			CostModel costModel = (CostModel) target;
+		if (target instanceof CostModel costModel) {
 			Map<Pair<Port, PortCapability>, Boolean> hasCost = new HashMap<>();
 
 			for (PortCost portCost : costModel.getPortCosts()) {
@@ -61,8 +59,7 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 			}
 
 			MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 				for (Port p : portModel.getPorts()) {
 					for (PortCapability capability : p.getCapabilities()) {
@@ -92,7 +89,8 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 				factory.make(ctx, failures);
 			}
 
-			// TODO: Need to copy canal cost/cooldown cost constraint logic for implicit/explicit checks. But split into load/discharge costs.
+			// TODO: Need to copy canal cost/cooldown cost constraint logic for
+			// implicit/explicit checks. But split into load/discharge costs.
 			// TODO: Check the transformer logic here!
 			// TODO: Make mini test cases! -> Transform logic and grab the DCP and test
 
@@ -197,9 +195,6 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				}
 			}
-
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

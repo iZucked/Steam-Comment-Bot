@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -19,7 +19,7 @@
          point="org.eclipse.ui.views">
       <view
             class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
-            icon="icons/sandbox.gif"
+            icon="icons:/16/sandbox"
             id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
             name="Sandbox"
             restorable="true">

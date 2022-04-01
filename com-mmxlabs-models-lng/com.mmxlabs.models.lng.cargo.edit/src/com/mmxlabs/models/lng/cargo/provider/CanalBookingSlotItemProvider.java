@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -54,7 +54,6 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 			addRouteOptionPropertyDescriptor(object);
 			addCanalEntrancePropertyDescriptor(object);
 			addBookingDatePropertyDescriptor(object);
-			addSlotPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addBookingCodePropertyDescriptor(object);
@@ -124,28 +123,6 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Slot feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSlotPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CanalBookingSlot_slot_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_slot_feature", "_UI_CanalBookingSlot_type"),
-				 CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

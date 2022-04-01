@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
     All rights reserved.
 
 -->
@@ -14,7 +14,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.paperdeals.PaperDealsReportView"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_flow_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.paperdeals.PaperDealsReportView"
             name="Paper Deals"
             restorable="true">

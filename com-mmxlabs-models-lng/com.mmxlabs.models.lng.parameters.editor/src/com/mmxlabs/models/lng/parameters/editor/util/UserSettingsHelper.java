@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.editor.util;
@@ -23,7 +23,6 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -33,7 +32,6 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -495,9 +493,6 @@ public final class UserSettingsHelper {
 	}
 
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
-		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
-			copy.setBuildActionSets(false);
-		}
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			copy.unsetPeriodStartDate();
 			copy.unsetPeriodEnd();
@@ -560,8 +555,6 @@ public final class UserSettingsHelper {
 		if (from.getSimilarityMode() != null) {
 			to.setSimilarityMode(from.getSimilarityMode());
 		}
-		to.setBuildActionSets(from.isBuildActionSets());
-
 		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
 
 		to.setGeneratedPapersInPNL(from.isGeneratedPapersInPNL());
@@ -575,64 +568,15 @@ public final class UserSettingsHelper {
 				// Only valid if clean slate is checked.
 				to.setNominalOnly(false);
 			}
-			to.setBuildActionSets(false);
 			to.setSimilarityMode(SimilarityMode.OFF);
 		} else if (to.getMode() == OptimisationMode.STRATEGIC) {
 			to.setCleanSlateOptimisation(false);
-			to.setBuildActionSets(false);
 			to.setSimilarityMode(SimilarityMode.OFF);
 		} else {
 			to.setCleanSlateOptimisation(false);
 			to.setNominalOnly(false);
 		}
-
-		// Turn off if settings are not nice
-		if (to.isBuildActionSets()) {
-
-			String actionSetErrorMessage = null;
-
-			if (to.getSimilarityMode() == SimilarityMode.OFF) {
-				to.setBuildActionSets(false);
-				actionSetErrorMessage = "Unable to run with Action Sets as similarity is turned off";
-			}
-			if (to.isBuildActionSets()) {
-				if (to.getPeriodStartDate() == null && to.getPeriodEnd() == null) {
-					actionSetErrorMessage = "Unable to run with Action Sets as there is no period range set";
-					to.setBuildActionSets(false);
-				} else {
-					final LocalDate periodStart = to.getPeriodStartDate();
-					final YearMonth periodEnd = to.getPeriodEnd();
-					if (periodStart != null && periodEnd != null) {
-						// 3 month window?
-						if (Months.between(periodStart, periodEnd) > 6) {
-							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long";
-							to.setBuildActionSets(false);
-						} else if (Months.between(periodStart, periodEnd) > 3 && to.getSimilarityMode() == SimilarityMode.LOW) {
-							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long for the low similarity setting. Please try medium or high";
-							to.setBuildActionSets(false);
-						}
-					} else {
-						actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long";
-						to.setBuildActionSets(false);
-					}
-				}
-			}
-
-			if (!quiet && actionSetErrorMessage != null) {
-				log.info(actionSetErrorMessage);
-
-				if (System.getProperty("lingo.suppress.dialogs") == null) {
-					final String errMessage = actionSetErrorMessage;
-					final Display display = PlatformUI.getWorkbench().getDisplay();
-					if (display != null) {
-						display.syncExec(() -> {
-							MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
-						});
-					}
-				}
-				return false;
-			}
-		}
+ 
 		return true;
 	}
 
@@ -1028,9 +972,6 @@ public final class UserSettingsHelper {
 					if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
 						return ValidationStatus.error(String.format("Period optimisation must be disabled with %s optimisation", mode));
 					}
-					if (userSettings.isBuildActionSets()) {
-						return ValidationStatus.error(String.format("Action sets must be disabled with %s optimisation", mode));
-					}
 					if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
 						return ValidationStatus.error(String.format("Similarity must be disabled with %s optimisation", mode));
 					}
@@ -1065,49 +1006,6 @@ public final class UserSettingsHelper {
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
 	}
 
-	private static void createActionSetsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
-			final boolean[] optionsAdded) {
-		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
-
-		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-		choiceData.addChoice("Off", Boolean.FALSE);
-		choiceData.addChoice("On", Boolean.TRUE);
-
-		choiceData.enabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET);
-
-		final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
-		dialog.addValidation(option, new IValidator() {
-
-			@Override
-			public IStatus validate(final Object value) {
-				if (value instanceof UserSettings userSettings) {
-					if (userSettings.isBuildActionSets()) {
-						if (userSettings.getSimilarityMode() == SimilarityMode.OFF || userSettings.getSimilarityMode() == SimilarityMode.ALL) {
-							return ValidationStatus.error("Similarity (low, medium, high) must be enabled to use action sets");
-						}
-						final LocalDate periodStart = userSettings.getPeriodStartDate();
-						final YearMonth periodEnd = userSettings.getPeriodEnd();
-						if (periodStart != null && periodEnd != null) {
-							// 3 month window?
-							if (Months.between(periodStart, periodEnd) > 6) {
-								return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-							} else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
-								return ValidationStatus
-										.error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
-							}
-						} else {
-							return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
-						}
-					}
-				}
-				return Status.OK_STATUS;
-			}
-		});
-		optionsAdded[IDX_OPTION_ADDED] |= true;
-		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
-	}
-
 	private static void setPeriodEnd(final UserSettings copy) {
 		LocalDate temp = LocalDate.now();
 		if (copy.getPeriodStartDate() != null) {
@@ -1121,7 +1019,6 @@ public final class UserSettingsHelper {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences;
@@ -30,6 +30,13 @@ public class CloudOptimiserPreferencePage extends FieldEditorPreferencePage impl
 
 		StringFieldEditor version = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_DEV_VERSION, "Version", getFieldEditorParent());
 		addField(version);
+
+		StringFieldEditor username = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_USERNAME, "Username", getFieldEditorParent());
+		addField(username);
+
+		StringFieldEditor password = new StringFieldEditor(CloudOptimiserPreferenceConstants.P_PASSWORD, "Password", getFieldEditorParent());
+		password.getTextControl(getFieldEditorParent()).setEchoChar('*');
+		addField(password);
 
 	}
 

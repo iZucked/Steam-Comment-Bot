@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.Move3over2;
+import com.mmxlabs.optimiser.lso.moves.impl.Move3over2;
 
 /**
  * Move generator which tries to remove charter out elements

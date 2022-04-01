@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -87,6 +87,7 @@ import com.google.common.base.Objects;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.IAnalyticSolutionGenerator;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
@@ -140,9 +141,6 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -156,6 +154,9 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -170,7 +171,8 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected
+	 * ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -188,10 +190,8 @@ public class ChangeSetView extends ViewPart {
 			final Object original_e2 = e2;
 
 			// If both rows of the same parent group..
-			if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
+			if (e1 instanceof ChangeSetTableRow r1 && e2 instanceof ChangeSetTableRow r2) {
 				// Retain original ordering in the datamodel
-				final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
-				final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
 				if (r1.eContainer() == r2.eContainer()) {
 					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
 					if (sortByVesselAndDate) {
@@ -278,7 +278,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	public enum ViewMode {
-		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
+		COMPARE, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
 	}
 
 	public static class ViewState {
@@ -574,11 +574,36 @@ public class ChangeSetView extends ViewPart {
 						// listener.selectedDataProviderChanged(null, canExportChangeSet);
 						//
 						// ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
-						// final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-						// final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
+						// final PinDiffResultPlanTransformer transformer = new
+						// PinDiffResultPlanTransformer();
+						// final ChangeSetRoot newRoot = transformer.createDataModel(pin, other,
+						// monitor);
 						// return new ViewState(newRoot, SortMode.BY_GROUP);
 						// }, false, null);
 						// ViewerHelper.refresh(viewer, true);
+
+						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+
+						final String contents = util.convert();
+
+						ChangeSetView.this.setEmptyData();
+						// Prefix this header for rendering purposes
+						return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
+
+					} finally {
+						columnHelper.setTextualVesselMarkers(false);
+					}
+				}
+			};
+		}
+		if (IAnalyticSolutionGenerator.class.isAssignableFrom(adapter)) {
+			return (T) new IAnalyticSolutionGenerator() {
+
+				public IReportContents getReportContents(final AnalyticsSolution solution) {
+					try {
+						columnHelper.setTextualVesselMarkers(true);
+
+						openAnalyticsSolution(solution, false, null);
 
 						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 
@@ -640,21 +665,19 @@ public class ChangeSetView extends ViewPart {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+				if (selection instanceof IStructuredSelection iStructuredSelection) {
 
-					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected rows
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
+					// rows
 					ISelection newSelection;
 					{
 						final Set<Object> selectedElements = new LinkedHashSet<>();
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							final Object o = itr.next();
-							if (o instanceof ChangeSetTableRow) {
-								final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) o;
+							if (o instanceof ChangeSetTableRow changeSetRow) {
 								selectRow(selectedElements, changeSetRow);
-							} else if (o instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup group = (ChangeSetTableGroup) o;
+							} else if (o instanceof ChangeSetTableGroup group) {
 								final List<ChangeSetTableRow> rows = group.getRows();
 								for (final ChangeSetTableRow changeSetRow : rows) {
 									selectRow(selectedElements, changeSetRow);
@@ -672,16 +695,16 @@ public class ChangeSetView extends ViewPart {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							Object o = itr.next();
-							if (o instanceof ChangeSetTableRow) {
-								o = ((ChangeSetTableRow) o).eContainer();
+							if (o instanceof ChangeSetTableRow row) {
+								o = row.eContainer();
 							}
-							if (o instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
+							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
 
 								// Set the flag so we don't end up in compare mode.
 								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
 									try {
-										// This is a bit inefficient if we are just changing selected row(s) rather than change set.
+										// This is a bit inefficient if we are just changing selected row(s) rather than
+										// change set.
 										scenarioComparisonService.setSelection(newSelection);
 										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
 									} finally {
@@ -698,7 +721,6 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 
-			
 		});
 
 		final ViewerFilter[] filters = new ViewerFilter[2];
@@ -709,16 +731,14 @@ public class ChangeSetView extends ViewPart {
 
 				if (!showNegativePNLChanges) {
 
-					if (element instanceof ChangeSetTableGroup) {
-						final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+					if (element instanceof ChangeSetTableGroup changeSet) {
 						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 						if (totalPNLDelta <= 0) {
 							return false;
 						}
 					} else {
 
-						if (parentElement instanceof ChangeSetTableGroup) {
-							final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+						if (parentElement instanceof ChangeSetTableGroup changeSet) {
 							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 							if (totalPNLDelta <= 0) {
 								return false;
@@ -727,14 +747,12 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 				if (!showMinorChanges) {
-					if (element instanceof ChangeSetTableRow) {
-						final ChangeSetTableRow row = (ChangeSetTableRow) element;
+					if (element instanceof ChangeSetTableRow row) {
 						if (!row.isMajorChange()) {
 							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
 									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
-							if (parentElement instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+							if (parentElement instanceof ChangeSetTableGroup changeSet) {
 								totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 							}
 							if (Math.abs(delta) < 250_000L) {
@@ -759,8 +777,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public void open(final OpenEvent event) {
-				if (viewer.getSelection() instanceof IStructuredSelection) {
-					final IStructuredSelection structuredSelection = (IStructuredSelection) viewer.getSelection();
+				if (viewer.getSelection() instanceof IStructuredSelection structuredSelection) {
 					if (!structuredSelection.isEmpty()) {
 
 						// Attempt to detect the column we clicked on.
@@ -797,18 +814,14 @@ public class ChangeSetView extends ViewPart {
 		setViewMode(ViewMode.COMPARE, false);
 
 		{
-			// final MenuManager mgr = new MenuManager();
-			// LocalMenuHelper menuHelper = new LocalMenuHelper(viewer.getGrid());
-			final ContextMenuManager listener = new ContextMenuManager();
-			viewer.getGrid().addMenuDetectListener(listener);
+			viewer.getGrid().addMenuDetectListener(new ContextMenuManager());
 		}
 
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		eventHandlerCloseScenario = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
-			if (o instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+			if (o instanceof ScenarioInstance scenarioInstance) {
 				onClosingScenario(scenarioInstance);
 			}
 		};
@@ -816,8 +829,7 @@ public class ChangeSetView extends ViewPart {
 		eventHandlerCloseSolution = event -> {
 			// event.getProperty(name)
 			final Object o = event.getProperty("org.eclipse.e4.data");
-			if (o instanceof AnalyticsSolution) {
-				final AnalyticsSolution sol = (AnalyticsSolution) o;
+			if (o instanceof AnalyticsSolution sol) {
 				onClosingAnalyticsSolution(sol);
 			}
 		};
@@ -971,7 +983,8 @@ public class ChangeSetView extends ViewPart {
 								protected void populate(final Menu menu2) {
 
 									for (final NamedObject target : currentViewState.allTargetElements) {
-										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH, () -> openAnalyticsSolution(currentViewState.lastSolution, target.getName()));
+										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
+												() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
 										if (currentViewState.lastTargetElement == target) {
 											action.setChecked(true);
 											action.setEnabled(false);
@@ -1004,8 +1017,7 @@ public class ChangeSetView extends ViewPart {
 				// solution.
 				if (solution != null) {
 					final UUIDObject object = solution.getSolution();
-					if (object instanceof AbstractSolutionSet) {
-						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
 						final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(solution.getScenarioInstance());
 						EvaluateSolutionSetHelper.recomputeSolution(record, solution.getScenarioInstance(), abstractSolutionSet, //
 								false, // Generate from specification model only
@@ -1014,7 +1026,7 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
-			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate16);
+			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate_16);
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
@@ -1022,13 +1034,7 @@ public class ChangeSetView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
-	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final @Nullable String targetSlotId) {
-		setNewDataData(target, action, true, targetSlotId);
-	}
-
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
-
-		// columnHelper.cleanUpVesselColumns();
 
 		if (target == null) {
 			setEmptyData();
@@ -1091,7 +1097,7 @@ public class ChangeSetView extends ViewPart {
 		newViewState.root = newRoot;
 		newViewState.tableRootAlternative = newTableRoot;
 		newViewState.tableRootDefault = newTableRoot;
-
+		
 		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 	}
 
@@ -1141,16 +1147,6 @@ public class ChangeSetView extends ViewPart {
 		return new ITreeContentProvider() {
 
 			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
-
-			@Override
-			public void dispose() {
-
-			}
-
-			@Override
 			public boolean hasChildren(final Object element) {
 				if (element instanceof ChangeSetTableRoot) {
 					return true;
@@ -1164,8 +1160,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof EObject) {
-					final EObject eObject = (EObject) element;
+				if (element instanceof EObject eObject) {
 					return eObject.eContainer();
 				}
 				return null;
@@ -1174,8 +1169,7 @@ public class ChangeSetView extends ViewPart {
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
-				if (inputElement instanceof ChangeSetTableRoot) {
-					final ChangeSetTableRoot changeSetRoot = (ChangeSetTableRoot) inputElement;
+				if (inputElement instanceof ChangeSetTableRoot changeSetRoot) {
 					return changeSetRoot.getGroups().toArray();
 				}
 
@@ -1184,8 +1178,7 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof ChangeSetTableGroup) {
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) parentElement;
+				if (parentElement instanceof ChangeSetTableGroup group) {
 					final List<ChangeSetTableRow> rows = group.getRows();
 					return rows.toArray();
 				}
@@ -1241,17 +1234,8 @@ public class ChangeSetView extends ViewPart {
 
 		if (viewState != null) {
 			final String id = viewState.getTargetSlotID();
-			openAnalyticsSolution(viewState.lastSolution, id);
+			openAnalyticsSolution(viewState.lastSolution, true, id);
 		}
-	}
-
-	public void openOldStlyeActionSets(final ScenarioInstance target) {
-		setPartName("Action Sets");
-		setViewMode(ViewMode.OLD_ACTION_SET, false);
-		setNewDataData(target, (monitor, targetSlotId) -> {
-			final ActionSetTransformer transformer = new ActionSetTransformer();
-			return new ViewState(transformer.createDataModel(target, monitor), SortMode.BY_GROUP);
-		}, null);
 	}
 
 	private void openView(final @NonNull String viewId) {
@@ -1287,12 +1271,12 @@ public class ChangeSetView extends ViewPart {
 			final Set<ChangeSetTableRow> directSelectedRows = new LinkedHashSet<>();
 			final Set<ChangeSetTableGroup> directSelectedGroups = new LinkedHashSet<>();
 			if (false && items.length == 2) {
-				// Experimental code.  Select two change set and right-click
+				// Experimental code. Select two change set and right-click
 				// Pin/diff against the selected two change-sets.
-				
+
 				ChangeSetTableGroup groupA = null;
 				ChangeSetTableGroup groupB = null;
-				
+
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
@@ -1307,48 +1291,48 @@ public class ChangeSetView extends ViewPart {
 						}
 					}
 				}
-				
+
 				if (groupA != null && groupB != null) {
-					
-					
-					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected rows
+
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
+					// rows
 					ISelection newSelection;
 					{
 						final Set<Object> selectedElements = new LinkedHashSet<>();
 						{
-						final List<ChangeSetTableRow> rows = groupA.getRows();
-						for (final ChangeSetTableRow changeSetRow : rows) {
-							selectAfterRows(selectedElements, changeSetRow);
-						}}{
-						final List<ChangeSetTableRow> rows = groupB.getRows();
-						for (final ChangeSetTableRow changeSetRow : rows) {
-							selectAfterRows(selectedElements, changeSetRow);
-						}}
+							final List<ChangeSetTableRow> rows = groupA.getRows();
+							for (final ChangeSetTableRow changeSetRow : rows) {
+								selectAfterRows(selectedElements, changeSetRow);
+							}
+						}
+						{
+							final List<ChangeSetTableRow> rows = groupB.getRows();
+							for (final ChangeSetTableRow changeSetRow : rows) {
+								selectAfterRows(selectedElements, changeSetRow);
+							}
+						}
 						while (selectedElements.remove(null))
 							;
 
 						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
 					}
 
-					
 					// Set the flag so we don't end up in compare mode.
 					if (inChangingChangeSetSelection.compareAndSet(false, true)) {
 						try {
-							ISelection ss = null;
-							// This is a bit inefficient if we are just changing selected row(s) rather than change set.
+							// This is a bit inefficient if we are just changing selected row(s) rather than
+							// change set.
 							scenarioComparisonService.setSelection(newSelection);
 							scenarioComparisonService.setPinnedPair(groupA.getCurrentScenario(), groupB.getCurrentScenario(), newSelection, true);
 						} finally {
 							inChangingChangeSetSelection.set(false);
 						}
 					}
-					
+
 				}
-				
+
 			}
-			
-			
-			
+
 			if (items.length >= 1) {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
@@ -1358,8 +1342,7 @@ public class ChangeSetView extends ViewPart {
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
 						directSelectedGroups.add((ChangeSetTableGroup) obj);
-					} else if (obj instanceof ChangeSetTableRow) {
-						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
+					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
 						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
 						directSelectedRows.add(changeSetRow);
 					}
@@ -1447,8 +1430,7 @@ public class ChangeSetView extends ViewPart {
 					final UUIDObject object = solution.getSolution();
 					ssHelper.processSolution(sandboxResult.getBaseOption().getScheduleSpecification(), sandboxResult.getBaseOption().getScheduleModel());
 
-					if (object instanceof AbstractSolutionSet) {
-						final AbstractSolutionSet abstractSolutionSet = (AbstractSolutionSet) object;
+					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
 						ssHelper.processExtraData(abstractSolutionSet);
 
 						userSettings = abstractSolutionSet.getUserSettings();
@@ -1502,7 +1484,7 @@ public class ChangeSetView extends ViewPart {
 
 						if (viewState != null) {
 							final String id = viewState.getTargetSlotID();
-							RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, id));
+							RunnerHelper.asyncExec(() -> openAnalyticsSolution(viewState.lastSolution, true, id));
 						}
 					});
 					job.setUser(true);
@@ -1511,7 +1493,7 @@ public class ChangeSetView extends ViewPart {
 
 				}
 			});
-			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate16);
+			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate_16);
 			helper.addAction(action);
 			showMenu = true;
 			return showMenu;
@@ -1552,7 +1534,7 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> directSelectedGroups, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
-			if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
+			if (ChangeSetView.this.viewMode != ViewMode.COMPARE) {
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 
 					final ChangeSetTableGroup changeSetTableGroup;
@@ -1587,7 +1569,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
-		openAnalyticsSolution(solution, null);
+		openAnalyticsSolution(solution, true, null);
 	}
 
 	private EObject lastParent = null;
@@ -1599,12 +1581,10 @@ public class ChangeSetView extends ViewPart {
 		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getEventType() == Notification.REMOVE) {
 				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
-					setEmptyData();
-					getSite().getPage().hideView(ChangeSetView.this);
+					resetView();
 				}
 			}
-		};
-
+		}
 	};
 
 	private Action copyAction;
@@ -1623,7 +1603,7 @@ public class ChangeSetView extends ViewPart {
 	private EventHandler eventHandlerCloseScenario;
 	private EventHandler eventHandlerCloseSolution;
 
-	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
+	public void openAnalyticsSolution(final AnalyticsSolution solution, boolean runAsync, @Nullable final String slotId) {
 
 		// Set the flag so we do not end up in compare mode
 		inChangingChangeSetSelection.set(true);
@@ -1635,11 +1615,12 @@ public class ChangeSetView extends ViewPart {
 			lastParent = null;
 			lastParentFeature = null;
 
-			this.viewMode = ViewMode.OLD_ACTION_SET;
+			this.viewMode = ViewMode.GENERIC;
 
 			final ScenarioInstance scenarioInstance = solution.getScenarioInstance();
 			final Object target = solution;
 			final EObject plan = solution.getSolution();
+			final @Nullable ScenarioModelRecord modelRecord = solution.getModelRecord();
 			setPartName(solution.getTitle());
 
 			lastParent = plan.eContainer();
@@ -1656,10 +1637,10 @@ public class ChangeSetView extends ViewPart {
 					final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
 					// Sorting by Group as the label provider uses the provided ordering for
 					// indexing
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
 					viewState.lastSolution = solution;
 					return viewState;
-				}, slotId);
+				}, runAsync, slotId);
 			} else if (plan instanceof SandboxResult) {
 				setViewMode(ViewMode.SANDBOX, ((SandboxResult) plan).isHasDualModeSolutions());
 				setNewDataData(target, (monitor, targetSlotId) -> {
@@ -1669,22 +1650,27 @@ public class ChangeSetView extends ViewPart {
 					final SandboxResult sandboxResult = (SandboxResult) plan;
 					// Sorting by Group as the label provider uses the provided ordering for
 					// indexing
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, sandboxResult, monitor), SortMode.BY_PNL);
+
+					SortMode sortMode = SortMode.BY_PNL;
+					if (sandboxResult.isPortfolioBreakEvenMode()) {
+						sortMode = SortMode.BY_GROUP;
+					}
+
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, sandboxResult, monitor), sortMode);
 					viewState.lastSolution = solution;
 					viewState.allTargetElements.clear();
 					// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
 					return viewState;
-				}, slotId);
+				}, runAsync, slotId);
 			} else if (plan instanceof ActionableSetPlan) {
 				setViewMode(ViewMode.NEW_ACTION_SET, false);
 				setNewDataData(target, (monitor, targetSlotId) -> {
 					final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
 					viewState.lastSolution = solution;
 					return viewState;
-				}, slotId);
-			} else if (plan instanceof SlotInsertionOptions) {
-				final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
+				}, runAsync, slotId);
+			} else if (plan instanceof SlotInsertionOptions slotInsertionOptions) {
 				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
 				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
@@ -1723,13 +1709,13 @@ public class ChangeSetView extends ViewPart {
 					viewState.allTargetElements.addAll(slotInsertionOptions.getEventsInserted());
 
 					final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
-					final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, slotInsertionOptions, monitor, pTargetSlot);
+					final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, modelRecord, slotInsertionOptions, monitor, pTargetSlot);
 
 					viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 
 					viewState.root = newRoot;
 					return viewState;
-				}, slotId);
+				}, runAsync, slotId);
 			}
 
 		} finally {
@@ -1757,13 +1743,7 @@ public class ChangeSetView extends ViewPart {
 		final ViewState viewState = currentViewState;
 		if (viewState != null && viewState.lastSolution != null //
 				&& ((viewState.lastSolution == solution) || (viewState.lastSolution.getSolution() == solution.getSolution()))) {
-			setViewMode(ViewMode.COMPARE, false);
-
-			setEmptyData();
-			// // Close view if dynamic
-			// if (viewMode != ViewMode.COMPARE) {
-			// getSite().getPage().hideView(ChangeSetView.this);
-			// }
+			resetView();
 		}
 	}
 
@@ -1772,12 +1752,12 @@ public class ChangeSetView extends ViewPart {
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		
+
 		if (modelRecord == null) {
 			return;
 		}
 
-		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
+		final Function<ScenarioResult, Boolean> checker = sr -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;
 		if (viewState != null) {
 			final ChangeSetRoot pRoot = viewState.root;
@@ -1803,13 +1783,15 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 			if (linked) {
-				setEmptyData();
-				// Close view if dynamic
-				if (viewMode != ViewMode.COMPARE) {
-					getSite().getPage().hideView(ChangeSetView.this);
-				}
+				resetView();
 			}
 		}
+	}
+	
+	private void resetView() {
+		setViewMode(ViewMode.COMPARE, false);
+		setPartName("Changes");
+		setEmptyData();
 	}
 
 	public ViewState getCurrentViewState() {
@@ -1861,11 +1843,6 @@ public class ChangeSetView extends ViewPart {
 			altPNLToolTipBase = altPNLToolTipBase_Default;
 			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
 			break;
-		case OLD_ACTION_SET:
-			showToggleAltPNLBaseAction = true;
-			altPNLToolTipBase = altPNLToolTipBase_Default;
-			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
-			break;
 		case SANDBOX:
 			// Show mini-view by default
 			showAlternativeChangeModel = dualPNLMode;
@@ -1905,7 +1882,7 @@ public class ChangeSetView extends ViewPart {
 
 		if (reEvaluateAction != null) {
 
-			if (viewMode != ViewMode.COMPARE && viewMode != ViewMode.OLD_ACTION_SET) {
+			if (viewMode != ViewMode.COMPARE) {
 				if (!reEvaluateActionItemAdded) {
 					getViewSite().getActionBars().getToolBarManager().add(reEvaluateActionItem);
 					reEvaluateActionItemAdded = true;
@@ -1926,7 +1903,7 @@ public class ChangeSetView extends ViewPart {
 			columnHelper.showCompareColumns(true);
 		}
 	}
-	
+
 	private void selectRow(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
 		selectedElements.add(tableRow);
 		selectRow(selectedElements, tableRow.getLhsBefore());
@@ -1934,6 +1911,7 @@ public class ChangeSetView extends ViewPart {
 		selectRow(selectedElements, tableRow.getRhsBefore());
 		selectRow(selectedElements, tableRow.getRhsAfter());
 	}
+
 	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
 		selectedElements.add(tableRow);
 //		selectRow(selectedElements, tableRow.getLhsBefore());
@@ -1977,14 +1955,13 @@ public class ChangeSetView extends ViewPart {
 			selectedElements.add(eventGrouping);
 			selectedElements.addAll(eventGrouping.getEvents());
 		}
-		if (eventGrouping instanceof Event) {
-			final Event event = (Event) eventGrouping;
+		if (eventGrouping instanceof Event event) {
 			selectedElements.add(event.getSequence());
 		}
-		if (eventGrouping instanceof CargoAllocation) {
-			final Sequence sequence = ((CargoAllocation) eventGrouping).getSequence();
+		if (eventGrouping instanceof CargoAllocation ca) {
+			final Sequence sequence = ca.getSequence();
 			if (sequence != null) {
-				selectedElements.add(((CargoAllocation) eventGrouping).getSequence());
+				selectedElements.add(ca.getSequence());
 			}
 		}
 		// //

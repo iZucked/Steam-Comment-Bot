@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.actionplan;
@@ -10,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
-import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 
 public class LNGParameters_ActionPlanSettingsModule extends AbstractModule {
 
@@ -26,22 +25,22 @@ public class LNGParameters_ActionPlanSettingsModule extends AbstractModule {
 		// Nothing to do here
 	}
 
-	@Provides
-	@Named(BagOptimiser.ACTION_PLAN_TOTAL_EVALUATIONS)
-	private int actionPlanTotalEvals() {
-		return settings.getTotalEvaluations();
-	}
-
-	@Provides
-	@Named(BagOptimiser.ACTION_PLAN_IN_RUN_EVALUATIONS)
-	private int actionPlanInRunEvals() {
-		return settings.getInRunEvaluations();
-	}
-
-	@Provides
-	@Named(BagOptimiser.ACTION_PLAN_MAX_SEARCH_DEPTH)
-	private int actionPlanInRunSearchDepth() {
-		return settings.getSearchDepth();
-	}
+//	@Provides
+//	@Named(BagOptimiser.ACTION_PLAN_TOTAL_EVALUATIONS)
+//	private int actionPlanTotalEvals() {
+//		return settings.getTotalEvaluations();
+//	}
+//
+//	@Provides
+//	@Named(BagOptimiser.ACTION_PLAN_IN_RUN_EVALUATIONS)
+//	private int actionPlanInRunEvals() {
+//		return settings.getInRunEvaluations();
+//	}
+//
+//	@Provides
+//	@Named(BagOptimiser.ACTION_PLAN_MAX_SEARCH_DEPTH)
+//	private int actionPlanInRunSearchDepth() {
+//		return settings.getSearchDepth();
+//	}
 
 }

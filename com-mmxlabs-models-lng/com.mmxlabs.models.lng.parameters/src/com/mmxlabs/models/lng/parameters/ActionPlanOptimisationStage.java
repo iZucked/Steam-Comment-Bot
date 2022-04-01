@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -29,10 +29,6 @@ public interface ActionPlanOptimisationStage extends ConstraintsAndFitnessSettin
 	/**
 	 * Returns the value of the '<em><b>Total Evaluations</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Total Evaluations</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Total Evaluations</em>' attribute.
 	 * @see #setTotalEvaluations(int)
@@ -55,10 +51,6 @@ public interface ActionPlanOptimisationStage extends ConstraintsAndFitnessSettin
 	/**
 	 * Returns the value of the '<em><b>In Run Evaluations</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>In Run Evaluations</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Run Evaluations</em>' attribute.
 	 * @see #setInRunEvaluations(int)
@@ -81,10 +73,6 @@ public interface ActionPlanOptimisationStage extends ConstraintsAndFitnessSettin
 	/**
 	 * Returns the value of the '<em><b>Search Depth</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Search Depth</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Search Depth</em>' attribute.
 	 * @see #setSearchDepth(int)

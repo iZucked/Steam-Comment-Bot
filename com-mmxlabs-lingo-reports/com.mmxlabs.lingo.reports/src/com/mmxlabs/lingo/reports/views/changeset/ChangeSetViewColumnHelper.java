@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -691,7 +692,7 @@ public class ChangeSetViewColumnHelper {
 						c = a.charterNumber.compareTo(b.charterNumber);
 					return c;
 				}) // Sort alphabetically
-				.collect(Collectors.groupingBy(d -> d.type)); // Group by type
+				.collect(Collectors.groupingBy(d -> d.type, LinkedHashMap::new, Collectors.toList())); // Group by type
 
 		boolean showSpacer = true;
 		for (final ChangeSetVesselType type : displayedVesselType) {
@@ -717,7 +718,6 @@ public class ChangeSetViewColumnHelper {
 						gvc.getColumn().setCellRenderer(createGrayCellRenderer());
 						gvc.getColumn().setHeaderFont(boldFont);
 						gvc.getColumn().setDetail(true);
-						gvc.getColumn().setSummary(false);
 						gvc.getColumn().setSummary(false);
 					}
 

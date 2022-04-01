@@ -1,55 +1,55 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
 
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint {
-	final DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+public class EntityBookTaxRateRangeConstraint extends AbstractModelMultiConstraint {
+	private static final DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@Override
-	public IStatus validate(IValidationContext ctx) {
-		final EObject target = ctx.getTarget();
-		final List<IStatus> failures = new LinkedList<IStatus>();
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> failures) {
 
-		if (target instanceof BaseEntityBook) {
-			final BaseEntityBook entityBook = (BaseEntityBook) target;
+		final EObject target = ctx.getTarget();
+
+		if (target instanceof BaseEntityBook entityBook) {
 			final EList<TaxRate> rates = entityBook.getTaxRates();
 
 			String entityName = ((BaseLegalEntity) entityBook.eContainer()).getName();
-			// if there are no tax rates, raise a validation error and do not check any more problems
+			// if there are no tax rates, raise a validation error and do not check any more
+			// problems
 			if (rates.isEmpty()) {
 				String failureMessage = String.format("Entity '%s' has no tax data", entityName);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 				dsd.addEObjectAndFeature(entityBook, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
-				return dsd;
+				failures.add(dsd);
+				return;
 			}
 
 			// count number of entries per date (to amalgamate multiple duplicates
 			// for the same date into one validation error)
-			final Map<String, Integer> dateCount = new LinkedHashMap<String, Integer>();
+			final Map<String, Integer> dateCount = new LinkedHashMap<>();
 			for (final TaxRate rate : rates) {
 				final String date = rate.getDate().format(shortDate);
 				Integer count = dateCount.get(date);
@@ -67,18 +67,6 @@ public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 			}
-		}
-
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
 		}
 	}
 

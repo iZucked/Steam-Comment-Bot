@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
@@ -17,6 +17,7 @@ public class CloudOptimisationPushException extends RuntimeException {
 		FAILED_SERVICE_LOCKED, // Service is locked by a different user
 		FAILED_TO_MIGRATE, //
 		FAILED_TO_EVALUATE, //
+		EVALUATION_FAILED, //
 		FAILED_TO_SAVE, //
 		FAILED_TO_UPLOAD, //
 		FAILED_UNSUPPORTED_VERSION, //
@@ -24,6 +25,7 @@ public class CloudOptimisationPushException extends RuntimeException {
 		FAILED_TO_SAVE_ENCRYPTION_KEY, //
 		FAILED_MISSING_KEY_UUID, //
 		FAILED_GETTING_PUB_KEY, //
+		FAILED_STATUS_CHECK, //
 	};
 
 	private final Type type;

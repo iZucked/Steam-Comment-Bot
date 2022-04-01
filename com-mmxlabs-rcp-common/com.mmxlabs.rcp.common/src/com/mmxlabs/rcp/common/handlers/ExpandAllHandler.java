@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.handlers;
@@ -17,8 +17,8 @@ import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.osgi.framework.FrameworkUtil;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Eclipse e4 command handler to expand all {@link AbstractTreeViewer} nodes.

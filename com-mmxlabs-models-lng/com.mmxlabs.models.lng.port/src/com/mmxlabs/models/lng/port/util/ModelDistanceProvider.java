@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.util;
@@ -304,6 +304,33 @@ public class ModelDistanceProvider extends EContentAdapter {
 					if (southEntrance != null) {
 						return southEntrance.getPort();
 					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public @Nullable CanalEntry getClosestCanalEntry(final RouteOption routeOption, final Port port) {
+		for (Route r : portModel.getRoutes()) {
+			if (r.getRouteOption() == routeOption) {
+				final EntryPoint northEntrance = r.getNorthEntrance();
+				final int distanceToNorthEntrance;
+				if (northEntrance != null && northEntrance.getPort() != null) {
+					distanceToNorthEntrance = getDistance(port, northEntrance.getPort(), RouteOption.DIRECT);
+				} else {
+					distanceToNorthEntrance = Integer.MAX_VALUE;
+				}
+				final EntryPoint southEntrance = r.getSouthEntrance();
+				final int distanceToSouthEntrance;
+				if (southEntrance != null && southEntrance.getPort() != null) {
+					distanceToSouthEntrance = getDistance(port, southEntrance.getPort(), RouteOption.DIRECT);
+				} else {
+					distanceToSouthEntrance = Integer.MAX_VALUE;
+				}
+				if (distanceToNorthEntrance != Integer.MAX_VALUE || distanceToSouthEntrance != Integer.MAX_VALUE) {
+					return distanceToNorthEntrance < distanceToSouthEntrance ? CanalEntry.NORTHSIDE : CanalEntry.SOUTHSIDE;
+				} else {
+					return null;
 				}
 			}
 		}

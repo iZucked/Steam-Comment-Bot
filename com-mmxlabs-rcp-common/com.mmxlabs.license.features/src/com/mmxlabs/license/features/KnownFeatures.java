@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.license.features;
@@ -28,7 +28,6 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_MODULE_PARALLELISATION = "features:module-parallelisation";
 
-	public static final String FEATURE_OPTIMISATION_ACTIONSET = "features:optimisation-actionset";
 	public static final String FEATURE_OPTIMISATION_HILLCLIMB = "features:optimisation-hillclimb";
 	public static final String FEATURE_OPTIMISATION_PERIOD = "features:optimisation-period";
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
@@ -125,6 +124,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
 
 	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
+
+	public static final String FEATURE_ADP_SPACING_RATEABILITY = "features:adp-spacing-rateability";
 
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 

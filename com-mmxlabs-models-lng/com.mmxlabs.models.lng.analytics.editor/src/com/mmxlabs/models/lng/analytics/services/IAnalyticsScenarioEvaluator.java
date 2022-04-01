@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.services;
@@ -41,15 +41,21 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
-	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-
-	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-
-	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+//<<<<<<< HEAD
+//	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+//
+//	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+//
+//	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 
 	void runSandboxPriceSensitivity(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
 			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+	
+	@Nullable
+	AbstractSolutionSet runSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull OptionAnalysisModel model,
+			@Nullable Consumer<AbstractSolutionSet> action, boolean runAsync, @NonNull IProgressMonitor monitor);
+
 }

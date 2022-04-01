@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -14,7 +14,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -33,14 +32,13 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 	/**
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselAvailability) {
-			final VesselAvailability availablility = (VesselAvailability) target;
+		if (target instanceof VesselAvailability availablility) {
 			final Vessel vessel = availablility.getVessel();
 
 			if (vessel == null) {
-				return Activator.PLUGIN_ID;
+				return;
 			}
 
 			final Set<Port> inaccessiblePortSet = vessel.getVesselOrDelegateInaccessiblePorts().isEmpty() ? SetUtils.getObjects(vessel.getVesselOrDelegateInaccessiblePorts())
@@ -64,8 +62,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 				for (APortSet<Port> entry : availablility.getEndAt()) {
 					// Check explicit ports
-					if (entry instanceof Port) {
-						Port p = (Port) entry;
+					if (entry instanceof Port p) {
 						if (inaccessiblePortSet.contains(p)) {
 							final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel %s cannot dock at %s.", vessel.getName(), "end", p.getName(),
 									vessel.getName(), p.getName());
@@ -73,7 +70,6 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 							dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_EndAt());
 							statuses.add(dcsd);
-
 						}
 					}
 				}
@@ -88,10 +84,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 					dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_EndAt());
 					statuses.add(dcsd);
-
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

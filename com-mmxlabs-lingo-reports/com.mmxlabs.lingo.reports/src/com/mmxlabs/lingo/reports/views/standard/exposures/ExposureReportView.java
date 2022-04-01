@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
@@ -25,7 +25,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -35,7 +34,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.exposures.ExposureEnumerations.AggregationMode;
 import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
@@ -44,7 +42,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -68,11 +66,11 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -512,13 +510,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	@Override
-	protected AbstractSimpleTabularReportContentProvider<IndexExposureData> createContentProvider() {
-		return new AbstractSimpleTabularReportContentProvider<IndexExposureData>() {
-
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
+	protected SimpleTabularReportContentProvider createContentProvider() {
+		return new SimpleTabularReportContentProvider() {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
@@ -528,11 +521,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					return collection.toArray();
 				}
 				return new Object[0];
-			}
-
-			@Override
-			public void dispose() {
-
 			}
 
 			@Override

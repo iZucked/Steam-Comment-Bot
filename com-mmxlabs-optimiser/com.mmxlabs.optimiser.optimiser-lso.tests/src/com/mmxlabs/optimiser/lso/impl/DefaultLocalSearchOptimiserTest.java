@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -14,6 +15,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
@@ -24,13 +28,17 @@ import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
+import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 
 public class DefaultLocalSearchOptimiserTest {
 
@@ -73,15 +81,18 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
-		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, pData, random, numberOfIterations, 1, monitor);
-		lso.setLookupManager(new ILookupManager() {
+		final Pair<SingleThreadLocalSearchOptimiser, Injector> p  = GeneralTestUtils.buildOptimiser(context, data, pData, random, numberOfIterations, 1, monitor);
+		SingleThreadLocalSearchOptimiser lso = p.getFirst();
+		Injector parent = p.getSecond();
+		
+		ILookupManager nullLookupManager =	new ILookupManager() {
 			@Override
 			public void createLookup(@NonNull ISequences sequences) {
 
 			}
 
 			@Override
-			public void updateLookup(@NonNull ISequences sequences, @Nullable Collection<IResource> changedResources) {
+			public void updateLookup(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
 
 			}
 
@@ -99,7 +110,27 @@ public class DefaultLocalSearchOptimiserTest {
 			public @NonNull ISequences getRawSequences() {
 				throw new IllegalStateException();
 			}
+		};
+		
+		Injector c = parent.createChildInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(ILookupManager.class).toInstance(nullLookupManager);
+				bind(ISequencesManipulator.class).to(NullSequencesManipulator.class);
+				bind(boolean.class).annotatedWith(Names.named(LocalSearchOptimiserModule.USE_RESTARTING_OPTIMISER)).toInstance(Boolean.FALSE);
+				bind(int.class).annotatedWith(Names.named(SingleThreadLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)).toInstance(-1);
+				
+				
+				ISequences seq = new ModifiableSequences(Collections.emptyList());
+				bind(ISequences.class).annotatedWith(Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)).toInstance(seq);
+//				bind(IFitnessCombiner.class).toInstance(((LinearSimulatedAnnealingFitnessEvaluator)lso.getFitnessEvaluator()).getFitnessCombiner());
+			}
+
 		});
+
+		c.injectMembers(lso);
+		
 		lso.setRandom(random);
 		// Perform the optimisation
 		lso.optimise(context, null);

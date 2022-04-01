@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui;
@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -57,7 +57,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		selectionProviderTracker.open();
 		showEnabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage(); 
 		showDisabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Disabled).createImage(); 
-		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_scenario.png").createImage();
+		pinImage = CommonImages.getImageDescriptor(IconPaths.Pin, IconMode.Enabled).createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		// Clone the font data

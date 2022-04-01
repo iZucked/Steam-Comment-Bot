@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.customizable;
@@ -203,7 +203,7 @@ public class CustomReportsRegistry {
 		"       <view\r\n" + 
 		"             category=\""+categoryId+"\"\r\n" + 
 		"             class=\"org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport\"\r\n" + 
-		"             icon=\"platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif\"\r\n" + 
+		"             icon=\"platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_statistic_view.gif\"\r\n" + 
 		"             id=\"");
 		out.print(rd.getUuid());
 		out.print("\"\r\n" + 

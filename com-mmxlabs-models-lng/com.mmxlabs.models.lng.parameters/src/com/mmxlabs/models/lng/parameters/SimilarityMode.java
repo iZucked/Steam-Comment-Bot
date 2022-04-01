@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 /**
@@ -106,51 +106,6 @@ public enum SimilarityMode implements Enumerator {
 	public static final int OFF_VALUE = 1;
 
 	/**
-	 * The '<em><b>LOW</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>LOW</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #LOW
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int LOW_VALUE = 2;
-
-	/**
-	 * The '<em><b>MEDIUM</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>MEDIUM</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #MEDIUM
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int MEDIUM_VALUE = 3;
-
-	/**
-	 * The '<em><b>HIGH</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>HIGH</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #HIGH
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int HIGH_VALUE = 4;
-
-	/**
 	 * An array of all the '<em><b>Similarity Mode</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -160,9 +115,6 @@ public enum SimilarityMode implements Enumerator {
 		new SimilarityMode[] {
 			ALL,
 			OFF,
-			LOW,
-			MEDIUM,
-			HIGH,
 		};
 
 	/**
@@ -221,9 +173,6 @@ public enum SimilarityMode implements Enumerator {
 		switch (value) {
 			case ALL_VALUE: return ALL;
 			case OFF_VALUE: return OFF;
-			case LOW_VALUE: return LOW;
-			case MEDIUM_VALUE: return MEDIUM;
-			case HIGH_VALUE: return HIGH;
 		}
 		return null;
 	}

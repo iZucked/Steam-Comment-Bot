@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.jobmanager.jobs;
@@ -32,18 +32,6 @@ public enum EJobState {
 	 * The job is currently running
 	 */
 	RUNNING,
-	/**
-	 * The job is currently attempting to pause and will transition to the PAUSED state
-	 */
-	PAUSING,
-	/**
-	 * The job is currently paused
-	 */
-	PAUSED,
-	/**
-	 * The job is currently resuming from a PAUSED state and will transition back to the RUNNING state
-	 */
-	RESUMING,
 	/**
 	 * The job has successfully completed.
 	 */

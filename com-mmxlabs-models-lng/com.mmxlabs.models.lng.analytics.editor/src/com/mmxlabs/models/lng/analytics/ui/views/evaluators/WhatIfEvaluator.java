@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
@@ -30,7 +30,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class WhatIfEvaluator {
 
-	public static void doOptimise(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, boolean isOptionise) {
+	public static void runSandbox(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model) {
 
 		// Pin references as they could change during the optimisation run
 		EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
@@ -38,8 +38,6 @@ public class WhatIfEvaluator {
 		ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
 
 		final long a = System.currentTimeMillis();
-
-		boolean dualPNLMode = model.getBaseCase().isKeepExistingScenario();
 
 		Consumer<AbstractSolutionSet> action = sandboxResult -> {
 
@@ -61,78 +59,7 @@ public class WhatIfEvaluator {
 				});
 			}
 		};
-		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
-			if (isOptionise) {
-				final EObject object = sdp.getScenario();
-				if (object instanceof final LNGScenarioModel root) {
-					final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
-					final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-					final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, false, null, previousSettings);
-					if (userSettings != null) {
-						evaluator.runSandboxInsertion(sdp, scenarioInstance, model, userSettings, action, true, new NullProgressMonitor());
-					}
-				}
-			} else {
-				final EObject object = sdp.getScenario();
-				if (object instanceof final LNGScenarioModel root) {
-					final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
-					final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-					final UserSettings userSettings = UserSettingsHelper.promptForUserSettings(root, false, promptUser, false, null, previousSettings);
-					if (userSettings != null) {
-						evaluator.runSandboxOptimisation(sdp, scenarioInstance, model, userSettings, action, true, new NullProgressMonitor());
-					}
-				}
-			}
-		};
-
-		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
-	}
-
-	public static void evaluate(IScenarioEditingLocation scenarioEditingLocation, OptionAnalysisModel model) {
-
-		// Pin references as they could change during the optimisation run
-		EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
-		IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
-		ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
-		EObject scenario = sdp.getScenario();
-
-		final long a = System.currentTimeMillis();
-
-		boolean dualPNLMode = false;// model.getBaseCase().isKeepExistingScenario();
-
-		Consumer<AbstractSolutionSet> action = sandboxResult -> {
-
-			final long b = System.currentTimeMillis();
-			System.out.printf("Eval %d\n", b - a);
-
-			CompoundCommand cmd = new CompoundCommand();
-			cmd.append(SetCommand.create(editingDomain, model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, sandboxResult));
-
-			if (!cmd.isEmpty()) {
-				RunnerHelper.asyncExec(() -> {
-					editingDomain.getCommandStack().execute(cmd);
-					EMFUtils.checkValidContainment(scenario);
-
-					if (sandboxResult != null) {
-						final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, sandboxResult, sandboxResult.getName());
-						data.open();
-					}
-				});
-			}
-		};
-
-		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
-			final EObject object = sdp.getScenario();
-			if (object instanceof final LNGScenarioModel root) {
-				final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
-				final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-				final UserSettings userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
-				if (userSettings != null) {
-					evaluator.runSandboxOptions(sdp, scenarioInstance, model, userSettings, action, true, new NullProgressMonitor());
-				}
-			}
-		};
-
+		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> evaluator.runSandbox(sdp, scenarioInstance, model, action, true, new NullProgressMonitor());
 		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
 	}
 

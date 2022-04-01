@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -17,6 +17,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -104,7 +105,7 @@ public final class GeneralTestUtils {
 		return registry;
 	}
 
-	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents,
+	public static Pair<LinearSimulatedAnnealingFitnessEvaluator, Injector> createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents,
 			IOptimisationData optimisationData) {
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
@@ -125,14 +126,11 @@ public final class GeneralTestUtils {
 		thresholder.setInitialThreshold(initialThreshold);
 
 		final FitnessHelper fitnessHelper = new FitnessHelper();
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses,
-				optimisationData);
-
-		return fitnessEvaluator;
+		return createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses, optimisationData);
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, PhaseOptimisationData pData, @NonNull final Random random, final int numberOfIterations,
-			final int stepSize, final IOptimiserProgressMonitor monitor) {
+	public static Pair<SingleThreadLocalSearchOptimiser, Injector> buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, PhaseOptimisationData pData,
+			@NonNull final Random random, final int numberOfIterations, final int stepSize, final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(context.getEvaluationProcessRegistry(), context.getEvaluationProcesses(),
@@ -148,10 +146,11 @@ public final class GeneralTestUtils {
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, data);
+		final Pair<LinearSimulatedAnnealingFitnessEvaluator, Injector> p = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, data);
+		LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = p.getFirst();
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
-		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		final SingleThreadLocalSearchOptimiser lso = new SingleThreadLocalSearchOptimiser();
 
 		lso.setNumberOfIterations(numberOfIterations);
 		lso.setSequenceManipulator(new NullSequencesManipulator());
@@ -167,17 +166,36 @@ public final class GeneralTestUtils {
 
 		lso.init();
 
-		return lso;
+		return Pair.of(lso, p.getSecond().createChildInjector(new AbstractModule() {
+			@Provides
+			List<IConstraintChecker> getCC() {
+				return constraintCheckers;
+			}
+
+			@Provides
+			List<IEvaluatedStateConstraintChecker> getEVC() {
+				return evaluatedStateConstraintCheckers;
+			}
+
+			@Provides
+			List<IEvaluationProcess> getEP() {
+				return evaluationProcesses;
+			}
+
+			@Provides
+			List<IFitnessComponent> getFC() {
+				return fitnessComponents;
+			}
+		}));
 	}
 
-	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder,
+	private static Pair<LinearSimulatedAnnealingFitnessEvaluator, Injector> createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder,
 			@NonNull final IFitnessHelper fitnessHelper, @NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses,
 			IOptimisationData optimisationData) {
-		
-		
+
 		PhaseOptimisationData phaseOptimisationData = new PhaseOptimisationData();
-		
-		return Guice.createInjector(new AbstractModule() {
+
+		Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -196,7 +214,9 @@ public final class GeneralTestUtils {
 				return evaluator;
 			}
 
-		}).getInstance(LinearSimulatedAnnealingFitnessEvaluator.class);
+		});
+
+		return Pair.of(injector.getInstance(LinearSimulatedAnnealingFitnessEvaluator.class), injector);
 	}
 
 }

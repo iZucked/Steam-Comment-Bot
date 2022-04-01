@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.scenario.model.util;
@@ -102,12 +102,10 @@ public class ScenarioElementNameHelper {
 
 	public static @Nullable Triple<@NonNull String, @NonNull EObject, @NonNull EStructuralFeature> getContainerName(@NonNull final LNGPriceCalculatorParameters params) {
 		final EObject eContainer = params.eContainer();
-		if (eContainer instanceof Contract) {
-			final Contract contract = (Contract) eContainer;
+		if (eContainer instanceof Contract contract) {
 			final String name = String.format("%s|'%s'", TYPE_CONTRACT, getName(contract, "Un-named contract"));
 			return new Triple<>(name, eContainer, CommercialPackage.Literals.CONTRACT__PRICE_INFO);
-		} else if (eContainer instanceof SpotMarket) {
-			final SpotMarket spotMarket = (SpotMarket) eContainer;
+		} else if (eContainer instanceof SpotMarket spotMarket) {
 			final String name = String.format("%s|'%s'", TYPE_SPOT_MARKET, getName(spotMarket, "Un-named market"));
 			return new Triple<>(name, eContainer, SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO);
 		}

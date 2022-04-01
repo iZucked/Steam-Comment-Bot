@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
@@ -39,6 +39,7 @@ import org.eclipse.nebula.widgets.formattedtext.PercentFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -61,6 +62,9 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
@@ -259,7 +263,12 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 		buttons.setLayout(buttonLayout);
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
-		final Button remove = toolkit.createButton(buttons, "-", SWT.NONE);
+		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
+		{
+			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+			remove.setImage(img);
+			remove.addDisposeListener(e -> img.dispose());
+		}
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -283,7 +292,13 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 				}
 			}
 		});
-		final Button add = toolkit.createButton(buttons, "+", SWT.NONE);
+		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
+		{
+			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
+			add.setImage(img);
+			add.addDisposeListener(e -> img.dispose());
+		}
+		
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		add.addSelectionListener(new SelectionAdapter() {

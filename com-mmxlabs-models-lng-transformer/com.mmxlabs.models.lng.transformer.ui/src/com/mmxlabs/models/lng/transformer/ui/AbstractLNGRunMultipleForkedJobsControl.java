@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -30,6 +30,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -53,7 +56,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	private final LNGScenarioModel originalScenario;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
+	private static final ImageDescriptor imgEval = CommonImages.getImageDescriptor(IconPaths.Evaluate, IconMode.Enabled);
 
 	private final List<SimilarityFuture> jobs;
 	private final JobExecutorFactory jobExecutorFactory;
@@ -160,11 +163,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			job.init();
 		}
 	}
-
-	@Override
-	protected void kill() {
-
-	}
+ 
 
 	@Override
 	public void dispose() {
@@ -189,11 +188,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	@Override
 	public IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
-	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
 	}
 
 	@Override
