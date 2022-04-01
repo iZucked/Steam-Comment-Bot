@@ -543,7 +543,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 			scheduleSpecification.getOpenEvents().add(spec);
 		}
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null, null, null));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(newAvailabilities, null, newCharterInMarketOverrides, null, null, null, null, null));
 	}
 
 	private <K, V extends VesselAssignmentType> void buildAvailabilities(final ScheduleSpecification scheduleSpecification, final List<V> newAvailabilities,

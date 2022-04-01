@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SlotDescriptor;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
@@ -541,6 +542,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass commodityCurveOverlayEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sensitivityModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3204,6 +3212,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getSensitivityModel() {
+		return sensitivityModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSensitivityModel_SensitivityModel() {
+		return (EReference)sensitivityModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -3766,6 +3794,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(commodityCurveOverlayEClass, COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE);
 		createEReference(commodityCurveOverlayEClass, COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES);
 
+		sensitivityModelEClass = createEClass(SENSITIVITY_MODEL);
+		createEReference(sensitivityModelEClass, SENSITIVITY_MODEL__SENSITIVITY_MODEL);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -3870,6 +3901,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		breakEvenAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		commodityCurveOverlayEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		commodityCurveOverlayEClass.getESuperTypes().add(this.getCommodityCurveOption());
+		sensitivityModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -4210,6 +4242,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(commodityCurveOverlayEClass, CommodityCurveOverlay.class, "CommodityCurveOverlay", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCommodityCurveOverlay_ReferenceCurve(), thePricingPackage.getCommodityCurve(), null, "referenceCurve", null, 0, 1, CommodityCurveOverlay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCommodityCurveOverlay_AlternativeCurves(), thePricingPackage.getYearMonthPointContainer(), null, "alternativeCurves", null, 0, -1, CommodityCurveOverlay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sensitivityModelEClass, SensitivityModel.class, "SensitivityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSensitivityModel_SensitivityModel(), this.getOptionAnalysisModel(), null, "sensitivityModel", null, 0, 1, SensitivityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");

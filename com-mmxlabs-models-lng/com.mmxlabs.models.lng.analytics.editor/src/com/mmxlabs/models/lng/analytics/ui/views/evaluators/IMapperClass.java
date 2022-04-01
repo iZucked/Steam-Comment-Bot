@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
@@ -41,7 +42,9 @@ public interface IMapperClass {
 	DischargeSlot getChangable(SellOption sell);
 
 	void addMapping(VesselEventOption opt, VesselEvent original);
-	
+
+	void addMapping(CommodityCurveOverlay overlay);
+
 	void addMapping(BuyOption buy, LoadSlot original, LoadSlot breakEven, LoadSlot changable);
 
 	void addMapping(SellOption sell, DischargeSlot original, DischargeSlot breakEven, DischargeSlot changable);

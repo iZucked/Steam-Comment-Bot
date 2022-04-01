@@ -29,4 +29,10 @@ public class MeanFunction implements ArithmeticExpression {
 	public String toString() {
 		return "avg(" + arguments + ")";
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

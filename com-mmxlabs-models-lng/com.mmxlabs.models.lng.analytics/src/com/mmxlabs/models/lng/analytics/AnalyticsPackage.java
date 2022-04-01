@@ -4449,6 +4449,52 @@ s	 * <!-- end-user-doc -->
 	int COMMODITY_CURVE_OVERLAY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl <em>Sensitivity Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
+	 * @generated
+	 */
+	int SENSITIVITY_MODEL = 67;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Sensitivity Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__SENSITIVITY_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Sensitivity Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4456,7 +4502,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 67;
+	int VOLUME_MODE = 68;
 
 
 	/**
@@ -4467,7 +4513,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 68;
+	int SLOT_TYPE = 69;
 
 
 	/**
@@ -7203,6 +7249,27 @@ s	 * <!-- end-user-doc -->
 	EReference getCommodityCurveOverlay_AlternativeCurves();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sensitivity Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel
+	 * @generated
+	 */
+	EClass getSensitivityModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Sensitivity Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivityModel()
+	 * @see #getSensitivityModel()
+	 * @generated
+	 */
+	EReference getSensitivityModel_SensitivityModel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9593,6 +9660,24 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES = eINSTANCE.getCommodityCurveOverlay_AlternativeCurves();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl <em>Sensitivity Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
+		 * @generated
+		 */
+		EClass SENSITIVITY_MODEL = eINSTANCE.getSensitivityModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Sensitivity Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SENSITIVITY_MODEL__SENSITIVITY_MODEL = eINSTANCE.getSensitivityModel_SensitivityModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

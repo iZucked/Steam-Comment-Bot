@@ -39,4 +39,9 @@ public class ShiftFunctionConstructor implements IExpression<ISeries> {
 	public @NonNull ISeries evaluate() {
 		return new ShiftedSeries(seriesParserData, toShift.evaluate(), shiftBy);
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return toShift.canEvaluate();
+	}
 }

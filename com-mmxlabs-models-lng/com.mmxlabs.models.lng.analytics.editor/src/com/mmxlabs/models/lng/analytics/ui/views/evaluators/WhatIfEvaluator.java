@@ -135,4 +135,52 @@ public class WhatIfEvaluator {
 
 		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
 	}
+
+	public static void doPriceSensitivity(IScenarioEditingLocation scenarioEditingLocation, OptionAnalysisModel model) {
+
+		// Pin references as they could change during the optimisation run
+		EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
+		IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
+		EObject scenario = sdp.getScenario();
+
+		final long a = System.currentTimeMillis();
+
+		boolean dualPNLMode = false;// model.getBaseCase().isKeepExistingScenario();
+
+		Consumer<AbstractSolutionSet> action = sandboxResult -> {
+
+			final long b = System.currentTimeMillis();
+			System.out.printf("Eval %d\n", b - a);
+
+			CompoundCommand cmd = new CompoundCommand();
+			cmd.append(SetCommand.create(editingDomain, model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, sandboxResult));
+
+			if (!cmd.isEmpty()) {
+				RunnerHelper.asyncExec(() -> {
+					editingDomain.getCommandStack().execute(cmd);
+					EMFUtils.checkValidContainment(scenario);
+
+					if (sandboxResult != null) {
+						final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, sandboxResult, sandboxResult.getName());
+						data.open();
+					}
+				});
+			}
+		};
+
+		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
+			final EObject object = sdp.getScenario();
+			if (object instanceof final LNGScenarioModel root) {
+				final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
+				final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
+				final UserSettings userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
+				if (userSettings != null) {
+					evaluator.runSandboxPriceSensitivity(sdp, scenarioInstance, model, userSettings, action, true, new NullProgressMonitor());
+				}
+			}
+		};
+
+		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
+	}
 }

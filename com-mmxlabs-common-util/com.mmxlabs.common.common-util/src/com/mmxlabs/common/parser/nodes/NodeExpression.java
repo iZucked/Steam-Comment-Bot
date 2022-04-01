@@ -26,4 +26,9 @@ public final class NodeExpression implements IExpression<Node> {
 	public @NonNull Node evaluate() {
 		return node;
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return true;
+	}
 }

@@ -163,7 +163,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/sells"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/vesselEvents"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/shippingTemplates"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/commodityCurves"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractAnalysisModel/commodityCurves"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//OptionAnalysisModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//OptionAnalysisModel/baseCase"/>
@@ -344,6 +344,9 @@
     <genClasses ecoreClass="analytics.ecore#//CommodityCurveOverlay">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CommodityCurveOverlay/referenceCurve"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CommodityCurveOverlay/alternativeCurves"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SensitivityModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivityModel/sensitivityModel"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

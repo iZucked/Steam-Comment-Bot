@@ -1399,6 +1399,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SensitivityModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SensitivityModelItemProvider sensitivityModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SensitivityModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSensitivityModelAdapter() {
+		if (sensitivityModelItemProvider == null) {
+			sensitivityModelItemProvider = new SensitivityModelItemProvider(this);
+		}
+
+		return sensitivityModelItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1685,6 +1708,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (localDateTimeHolderItemProvider != null) localDateTimeHolderItemProvider.dispose();
 		if (commodityCurveOptionItemProvider != null) commodityCurveOptionItemProvider.dispose();
 		if (commodityCurveOverlayItemProvider != null) commodityCurveOverlayItemProvider.dispose();
+		if (sensitivityModelItemProvider != null) sensitivityModelItemProvider.dispose();
 	}
 
 }

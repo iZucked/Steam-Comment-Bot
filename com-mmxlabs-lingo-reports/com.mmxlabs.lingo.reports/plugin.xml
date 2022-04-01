@@ -159,6 +159,14 @@
       </view>
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
+            id="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
+            name="Price Sensitivity"
+            restorable="true">
+      </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
             icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"

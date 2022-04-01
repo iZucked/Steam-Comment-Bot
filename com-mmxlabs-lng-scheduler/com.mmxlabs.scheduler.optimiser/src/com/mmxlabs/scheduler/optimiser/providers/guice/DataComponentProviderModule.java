@@ -63,6 +63,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortVisitDurationProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPriceExpressionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
@@ -330,6 +331,15 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultLockedCargoProviderEditor.class).in(Singleton.class);
 		bind(ILockedCargoProvider.class).to(DefaultLockedCargoProviderEditor.class);
 		bind(ILockedCargoProviderEditor.class).to(DefaultLockedCargoProviderEditor.class);
+
+		// Price curves
+		bind(HashMapPriceExpressionProviderEditor.class).in(Singleton.class);
+		bind(IPriceExpressionProvider.class).to(HashMapPriceExpressionProviderEditor.class);
+		bind(IPriceExpressionProviderEditor.class).to(HashMapPriceExpressionProviderEditor.class);
+
+		bind(DefaultLazyExpressionManager.class).in(Singleton.class);
+		bind(ILazyExpressionManagerContainer.class).to(DefaultLazyExpressionManager.class);
+		bind(ILazyExpressionManagerEditor.class).to(DefaultLazyExpressionManager.class);
 		
 		bind(HashMapFullCargoLotProvider.class).in(Singleton.class);
 		bind(IFullCargoLotProvider.class).to(HashMapFullCargoLotProvider.class);

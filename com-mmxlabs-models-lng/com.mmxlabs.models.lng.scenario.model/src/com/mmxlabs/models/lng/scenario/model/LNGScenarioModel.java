@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getNominationsModel <em>Nominations Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isAnonymised <em>Anonymised</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSensitivityModel <em>Sensitivity Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -402,5 +404,27 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setAnonymised(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Sensitivity Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sensitivity Model</em>' containment reference.
+	 * @see #setSensitivityModel(SensitivityModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_SensitivityModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	SensitivityModel getSensitivityModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSensitivityModel <em>Sensitivity Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sensitivity Model</em>' containment reference.
+	 * @see #getSensitivityModel()
+	 * @generated
+	 */
+	void setSensitivityModel(SensitivityModel value);
 
 } // LNGScenarioModel

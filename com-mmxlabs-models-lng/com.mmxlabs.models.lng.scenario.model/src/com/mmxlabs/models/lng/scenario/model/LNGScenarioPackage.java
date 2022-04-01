@@ -208,13 +208,22 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__ANONYMISED = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Sensitivity Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_SCENARIO_MODEL__SENSITIVITY_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 13;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -531,6 +540,17 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLNGScenarioModel_Anonymised();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Sensitivity Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSensitivityModel()
+	 * @see #getLNGScenarioModel()
+	 * @generated
+	 */
+	EReference getLNGScenarioModel_SensitivityModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel <em>LNG Reference Model</em>}'.

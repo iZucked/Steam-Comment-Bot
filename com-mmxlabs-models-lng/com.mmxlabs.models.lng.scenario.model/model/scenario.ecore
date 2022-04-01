@@ -25,6 +25,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="longTerm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="anonymised" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensitivityModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.analytics/model/analytics.ecore#//SensitivityModel"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGReferenceModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//PortModel"

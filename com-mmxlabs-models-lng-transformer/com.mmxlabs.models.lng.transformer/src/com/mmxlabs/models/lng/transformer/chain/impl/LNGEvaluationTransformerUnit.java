@@ -80,7 +80,8 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
-			final IAnnotatedSolution annotatedSolution = LNGSchedulerJobUtils.evaluateCurrentState(injector, inputSequences).getFirst();
+//			final IAnnotatedSolution annotatedSolution = LNGSchedulerJobUtils.evaluateCurrentState(injector, inputSequences).getFirst();
+			final IAnnotatedSolution annotatedSolution = LNGSchedulerJobUtils.tempEvaluateCurrentState(injector, inputSequences).getFirst();
 			assert annotatedSolution != null;
 			inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(annotatedSolution));
 		}

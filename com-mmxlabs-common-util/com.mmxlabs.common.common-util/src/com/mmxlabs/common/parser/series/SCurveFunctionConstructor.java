@@ -44,4 +44,9 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 						x, new ConstantSeriesExpression(Double.valueOf(a))), //
 				new ConstantSeriesExpression(Double.valueOf(b)));
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return base.canEvaluate() && lowerSeries.canEvaluate() && middleSeries.canEvaluate() && higherSeries.canEvaluate();
+	}
 }

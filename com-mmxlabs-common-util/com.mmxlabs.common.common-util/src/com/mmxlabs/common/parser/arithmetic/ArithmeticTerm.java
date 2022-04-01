@@ -30,4 +30,10 @@ public class ArithmeticTerm implements ArithmeticExpression {
 	public String toString() {
 		return term;
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

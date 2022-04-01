@@ -574,6 +574,15 @@ public interface AnalyticsFactory extends EFactory {
 	CommodityCurveOverlay createCommodityCurveOverlay();
 
 	/**
+	 * Returns a new object of class '<em>Sensitivity Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sensitivity Model</em>'.
+	 * @generated
+	 */
+	SensitivityModel createSensitivityModel();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

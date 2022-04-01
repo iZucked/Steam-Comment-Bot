@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -125,6 +126,10 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer;
+import com.mmxlabs.scheduler.optimiser.providers.IPriceExpressionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PriceCurveKey;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
@@ -753,6 +758,113 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		};
 	}
 
+	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxPriceSetFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
+			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
+
+		return monitor -> {
+
+			final boolean dualPNLMode = false;
+
+			final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
+			final IMapperClass mapper = new Mapper(lngScenarioModel, false);
+			final ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
+
+			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
+
+			final IMultiStateResult results = sandboxJob.run(monitor);
+
+			if (results == null) {
+				sandboxResult.setName("SandboxResult");
+				sandboxResult.setHasDualModeSolutions(dualPNLMode);
+				sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+				return sandboxResult;
+			}
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
+			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+
+			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
+					dualPNLMode, true /* enableChangeDescription */);
+
+			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
+			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+
+			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+
+				final List<Future<?>> jobs = new LinkedList<>();
+
+				if (results != null) {
+					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
+
+						jobs.add(jobExecutor.submit(() -> {
+
+							final IPriceExpressionProvider priceExpressionProvider = scenarioToOptimiserBridge.getInjector().getInstance(IPriceExpressionProvider.class);
+							final ILazyExpressionManagerContainer lazyExpressionManagerContainer = scenarioToOptimiserBridge.getInjector().getInstance(ILazyExpressionManagerContainer.class);
+							final ISequences seq = p.getFirst();
+							final SolutionOption resultSet;
+							try (ILazyExpressionManager lazyExpressionManager = lazyExpressionManagerContainer.getExpressionManager()) {
+								final List<PriceCurveKey> priceCurveCombination = (List<PriceCurveKey>) p.getSecond().get("combination");
+								for (final PriceCurveKey key : priceCurveCombination) {
+									lazyExpressionManager.setPriceCurve(key.getIndexName().toLowerCase(), priceExpressionProvider.getExpression(key));
+								}
+								lazyExpressionManager.initialiseAllPricingData();
+								resultSet = exporter.computeOption(seq);
+							}
+							synchronized (sandboxResult) {
+								sandboxResult.getOptions().add(resultSet);
+							}
+
+							return null;
+						}));
+					}
+
+					jobs.forEach(f -> {
+						try {
+							f.get();
+						} catch (final Exception e) {
+							// Ignore exceptions;
+						}
+					});
+				}
+				exporter.applyPostTasks(sandboxResult);
+			}
+
+			sandboxResult.setName("SandboxResult");
+			sandboxResult.setHasDualModeSolutions(dualPNLMode);
+			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+
+			// Request this now one all other parts have run to get correct data.
+			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
+
+			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
+			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
+
+			for (final VesselAvailability va : extraDataProvider.extraVesselAvailabilities) {
+				if (va != null && va.eContainer() == null) {
+					sandboxResult.getExtraVesselAvailabilities().add(va);
+				}
+			}
+			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
+			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
+			sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);
+
+			// Check that all the spot slot references are properly contained. E.g. Schedule
+			// specification may have extra spot slot instances not used in the schedule
+			// models.
+			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
+			for (final SolutionOption opt : sandboxResult.getOptions()) {
+				addExtraData(opt, sandboxResult);
+			}
+
+			if (dualPNLMode) {
+				SolutionSetExporterUnit.convertToSimpleResult(sandboxResult, dualPNLMode);
+			}
+
+			return sandboxResult;
+		};
+	}
+
 	/**
 	 * Check solution option for any extra un-contained objects. E.g. market slots.
 	 * 
@@ -865,5 +977,79 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			baseScheduleSpecification = builder.generate(model.getBaseCase());
 		}
 		return baseScheduleSpecification;
+	}
+
+	@Override
+	public void runSandboxPriceSensitivity(@NonNull final IScenarioDataProvider scenarioDataProvider, final ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
+			@Nullable final UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, final IProgressMonitor monitor) {
+		final String taskName = "Sandbox result";
+
+		if (userSettings == null) {
+			return;
+		}
+		// Reset settings not supplied to the user
+		userSettings.setShippingOnly(false);
+		userSettings.setBuildActionSets(false);
+		userSettings.setCleanSlateOptimisation(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		final String pTaskName = taskName;
+		final UserSettings pUserSettings = userSettings;
+
+		if (runAsync) {
+			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
+				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxPriceSensitivityFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
+			};
+
+			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
+				if (newState == EJobState.COMPLETED) {
+					action.accept((AbstractSolutionSet) jobControl.getJobOutput());
+				}
+			};
+			assert scenarioInstance != null;
+
+			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
+			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
+		} else {
+			final AbstractSolutionSet result = createSandboxPriceSensitivityFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(monitor);
+			action.accept(result);
+		}
+
+	}
+
+	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxPriceSensitivityFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance,
+			final UserSettings userSettings, final OptionAnalysisModel model) {
+
+		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
+		sandboxResult.setUseScenarioBase(false);
+
+		return createSandboxPriceSetFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
+
+			model.getCommodityCurves().stream() //
+					.filter(CommodityCurveOverlay.class::isInstance) //
+					.map(CommodityCurveOverlay.class::cast) //
+					.forEach(mapper::addMapping);
+
+			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
+
+			final LNGSchedulerPriceCurveSetRunner insertionRunner = new LNGSchedulerPriceCurveSetRunner(scenarioInstance, model, sdp, sdp.getEditingDomain(), userSettings,
+					extraDataProvider, (mem, data, injector) -> {
+						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
+						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
+					}, new LinkedList<>());
+
+			return new SandboxJob() {
+				@Override
+				public LNGScenarioToOptimiserBridge getScenarioRunner() {
+					return insertionRunner.getBridge();
+				}
+
+				@Override
+				public IMultiStateResult run(final IProgressMonitor monitor) {
+					return insertionRunner.run();
+				}
+			};
+		});
 	}
 }

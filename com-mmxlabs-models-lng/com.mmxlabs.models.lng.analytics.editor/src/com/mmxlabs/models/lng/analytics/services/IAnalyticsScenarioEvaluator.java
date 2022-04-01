@@ -49,4 +49,7 @@ public interface IAnalyticsScenarioEvaluator {
 
 	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
 			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+
+	void runSandboxPriceSensitivity(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 }

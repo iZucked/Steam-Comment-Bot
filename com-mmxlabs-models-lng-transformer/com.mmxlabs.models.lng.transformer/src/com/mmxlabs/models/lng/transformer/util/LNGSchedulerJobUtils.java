@@ -80,6 +80,8 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer;
 
 /**
  * @author Simon Goodall
@@ -640,6 +642,38 @@ public class LNGSchedulerJobUtils {
 
 		process.annotate(mSequences, state, solution);
 
+		return new Pair<>(solution, state);
+	}
+
+	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> tempEvaluateCurrentState(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {
+		/**
+		 * Start the full evaluation process.
+		 */
+
+		// Step 1. Get or derive the initial sequences from the input scenario data
+		final IModifiableSequences mSequences = new ModifiableSequences(rawSequences);
+
+		// Run through the sequences manipulator of things such as start/end port
+		// replacement
+
+		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+		// this will set the return elements to the right places, and remove the start
+		// elements.
+		manipulator.manipulate(mSequences);
+
+		final EvaluationState state = new EvaluationState();
+
+		final AnnotatedSolution solution = new AnnotatedSolution(mSequences, state);
+
+		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+
+		final ILazyExpressionManagerContainer lazyExpressionManagerContainer = injector.getInstance(ILazyExpressionManagerContainer.class);
+		try(ILazyExpressionManager manager = lazyExpressionManagerContainer.getExpressionManager()) {
+			manager.initialiseAllPricingData();
+			process.annotate(mSequences, state, solution);
+		} catch (Exception e) {
+			
+		}
 		return new Pair<>(solution, state);
 	}
 

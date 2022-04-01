@@ -50,6 +50,7 @@ import com.mmxlabs.common.parser.nodes.ShiftNode;
 import com.mmxlabs.common.parser.nodes.SplitNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -530,7 +531,12 @@ public class ExposuresCalculator {
 			final CommodityNode commodityNode = (CommodityNode) node;
 
 			// Should really look up actual value from curve...
-			final ISeries series = commodityIndices.getSeries(commodityNode.getName());
+			ISeries series;
+			try {
+				series = commodityIndices.getSeries(commodityNode.getName());
+			} catch (UnknownSeriesException e) {
+				series = commodityIndices.getLazyNamedSeries(commodityNode.getName()).evaluate();
+			}
 			// The series is in EXTERNAL format
 			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 

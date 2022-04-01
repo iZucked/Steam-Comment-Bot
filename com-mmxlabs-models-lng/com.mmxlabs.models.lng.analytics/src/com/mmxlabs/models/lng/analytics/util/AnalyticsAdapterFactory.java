@@ -344,6 +344,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createCommodityCurveOverlayAdapter();
 			}
 			@Override
+			public Adapter caseSensitivityModel(SensitivityModel object) {
+				return createSensitivityModelAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -1254,6 +1258,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCommodityCurveOverlayAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel
+	 * @generated
+	 */
+	public Adapter createSensitivityModelAdapter() {
 		return null;
 	}
 

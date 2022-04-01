@@ -40,4 +40,9 @@ public class ArithmeticOperator implements ArithmeticExpression {
 	public String toString() {
 		return "(" + lhs + op + rhs + ")";
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return true;
+	}
 }

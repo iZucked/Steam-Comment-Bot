@@ -532,4 +532,8 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//YearMonthPointContainer"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SensitivityModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensitivityModel" eType="#//OptionAnalysisModel"
+        containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

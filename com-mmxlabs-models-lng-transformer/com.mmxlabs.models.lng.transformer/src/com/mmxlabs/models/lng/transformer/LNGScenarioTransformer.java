@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import javax.inject.Named;
 
@@ -42,13 +43,18 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILazyCurve;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesUtil;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -107,6 +113,7 @@ import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -193,32 +200,32 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPric
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.LazyIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPriceExpressionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.PriceCurveKey;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
- * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility
- * methods to convert it into an optimisation job. Typical usage is to construct
- * an LNGScenarioTransformer with a given Scenario, and then call the
- * {@link createOptimisationData} method. It is only expected that an instance
- * will be used once. I.e. a single call to
- * {@link #createOptimisationData(ModelEntityMap)}
+ * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
+ * Scenario, and then call the {@link createOptimisationData} method. It is only expected that an instance will be used once. I.e. a single call to {@link #createOptimisationData(ModelEntityMap)}
  * 
  * @author hinton, Simon Goodall
  * 
@@ -226,8 +233,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 public class LNGScenarioTransformer {
 
 	/**
-	 * Constant used to inject a limit for spot slot creation. Negative numbers do
-	 * not apply a cap.
+	 * Constant used to inject a limit for spot slot creation. Negative numbers do not apply a cap.
 	 */
 	public static final String LIMIT_SPOT_SLOT_CREATION = "limit-spot-slot-creation";
 
@@ -242,6 +248,7 @@ public class LNGScenarioTransformer {
 	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
 	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
 	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
+	public static final String EXTRA_PRICE_CURVES = "extra_price_curves";
 
 	private final @NonNull LNGScenarioModel rootObject;
 
@@ -272,6 +279,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(EXTRA_DISCHARGE_SLOTS)
 	private List<DischargeSlot> extraDischargeSlots;
+
+	@Inject(optional = true)
+	@Named(EXTRA_PRICE_CURVES)
+	private List<CommodityCurveOverlay> extraPriceCurves;
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
@@ -333,16 +344,20 @@ public class LNGScenarioTransformer {
 	@Inject
 	private ILockedCargoProviderEditor lockedCargoProviderEditor;
 
+	@Inject
+	private IPriceExpressionProviderEditor priceExpressionProviderEditor;
+
+	@Inject
+	private ILazyExpressionManagerEditor lazyExpressionManagerEditor;
+
 	/**
-	 * Contains the contract transformers for each known contract type, by the
-	 * EClass of the contract they transform.
+	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
 	@NonNull
 	private final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<>();
 
 	/**
-	 * A set of all contract transformers being used; these should be mapped to in
-	 * {@link #contractTransformersByEClass}
+	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
 	 */
 	@NonNull
 	private final Set<IContractTransformer> contractTransformers = new LinkedHashSet<>();
@@ -360,8 +375,7 @@ public class LNGScenarioTransformer {
 	private final Set<IVesselAvailabilityTransformer> vesselAvailabilityTransformers = new LinkedHashSet<>();
 
 	/**
-	 * A set of all transformer extensions being used (should contain
-	 * {@link #contractTransformers})
+	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
 	 */
 	@NonNull
 	private final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<>();
@@ -377,16 +391,13 @@ public class LNGScenarioTransformer {
 	private final Map<Vessel, IVessel> allVessels = new HashMap<>();
 
 	/**
-	 * The {@link Set} of ID strings already used. The UI should restrict user
-	 * entered data items from clashing, but generated ID's may well clash with user
-	 * ones.
+	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
 	 */
 	@NonNull
 	private final Set<String> usedIDStrings = new HashSet<>();
 
 	/**
-	 * A {@link Map} of existing spot market slots by ID. This map is used later
-	 * when building the spot market options.
+	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
 	 */
 	@NonNull
 	private final Map<String, @NonNull Slot<?>> marketSlotsByID = new HashMap<>();
@@ -440,9 +451,7 @@ public class LNGScenarioTransformer {
 	private final Set<ISlotTransformer> slotTransformers = new LinkedHashSet<>();
 
 	/**
-	 * Create a transformer for the given scenario; the class holds a reference, so
-	 * changes made to the scenario after construction will be reflected in calls to
-	 * the various helper methods.
+	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
 	 */
@@ -454,8 +463,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from
-	 * the platform's registry.
+	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from the platform's registry.
 	 */
 	@Inject
 	public boolean addPlatformTransformerExtensions() {
@@ -522,8 +530,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the
-	 * contained scenario.
+	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
 	 * 
 	 * @return
 	 * @throws IncompleteScenarioException
@@ -570,7 +577,8 @@ public class LNGScenarioTransformer {
 		for (final CommodityCurve commodityIndex : pricingModel.getCommodityCurves()) {
 			final String name = commodityIndex.getName();
 			assert name != null;
-			registerIndex(name, commodityIndex, commodityIndices);
+			registerCommodityIndex(name, commodityIndices);
+			// registerIndex(name, commodityIndex, commodityIndices);
 		}
 		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
 			registerIndex(baseFuelIndex.getName(), baseFuelIndex, baseFuelIndices);
@@ -597,23 +605,92 @@ public class LNGScenarioTransformer {
 		// Now pre-compute our various curve data objects...
 		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
-				final ISeries parsed = commodityIndices.getSeries(index.getName());
+				final AbstractYearMonthCurve ymCurve = index;
+				final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
+				for (final YearMonthPoint pt : ymCurve.getPoints()) {
+					vals.add(new Pair<>(pt.getDate(), pt.getValue()));
+				}
+				final int[] times = new int[vals.size()];
+				final Number[] nums = new Number[vals.size()];
+				int k = 0;
+				for (final Pair<YearMonth, Number> e : vals) {
+					times[k] = dateHelper.convertTime(e.getFirst());
+					nums[k++] = e.getSecond();
+				}
+				final ISeries concreteSeries = new ISeries() {
+					@Override
+					public int[] getChangePoints() {
+						return times;
+					}
+
+					@Override
+					public Number evaluate(final int point) {
+						int pos = SeriesUtil.floor(times, point);
+						if (pos == -1) {
+							return 0;
+						}
+						return nums.length == 0 ? 0 : nums[pos];
+					}
+				};
+
+				// final ISeries parsed = commodityIndices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				curve.setDefaultValue(0);
-				final int[] changePoints = parsed.getChangePoints();
+				final int[] changePoints = concreteSeries.getChangePoints();
 				if (changePoints.length == 0) {
 					if (index.isSetExpression()) {
-						curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+						curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(concreteSeries.evaluate(0).doubleValue()));
 					}
 				} else {
 					for (final int i : changePoints) {
-						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(concreteSeries.evaluate(i).doubleValue()));
 					}
 				}
 				modelEntityMap.addModelObject(index, curve);
 				commodityIndexAssociation.add(index, curve);
+				final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null);
+				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 			} catch (final Exception exception) {
 				log.warn("Error evaluating series " + index.getName(), exception);
+			}
+		}
+
+		for (final CommodityCurveOverlay overlay : extraPriceCurves) {
+			final String indexName = overlay.getReferenceCurve().getName().toLowerCase();
+			for (final YearMonthPointContainer ympContainer : overlay.getAlternativeCurves()) {
+				final String curveName = ympContainer.getName().toLowerCase();
+				if (curveName == null) {
+					throw new IllegalStateException("Commodity curve option name must be provided");
+				}
+				
+				final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
+				for (final YearMonthPoint pt : ympContainer.getPoints()) {
+					vals.add(new Pair<>(pt.getDate(), pt.getValue()));
+				}
+				final int[] times = new int[vals.size()];
+				final Number[] nums = new Number[vals.size()];
+				int k = 0;
+				for (final Pair<YearMonth, Number> e : vals) {
+					times[k] = dateHelper.convertTime(e.getFirst());
+					nums[k++] = e.getSecond();
+				}
+				final ISeries concreteSeries = new ISeries() {
+					@Override
+					public int[] getChangePoints() {
+						return times;
+					}
+
+					@Override
+					public Number evaluate(final int point) {
+						int pos = SeriesUtil.floor(times, point);
+						if (pos == -1) {
+							return 0;
+						}
+						return nums.length == 0 ? 0 : nums[pos];
+					}
+				};
+				final PriceCurveKey key = new PriceCurveKey(indexName, curveName);
+				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 			}
 		}
 
@@ -621,7 +698,6 @@ public class LNGScenarioTransformer {
 			try {
 				final ISeries parsed = baseFuelIndices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-				curve.setDefaultValue(0);
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
@@ -664,8 +740,7 @@ public class LNGScenarioTransformer {
 		}
 
 		/**
-		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the
-		 * builder.
+		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
 		final Association<Port, IPort> portAssociation = new Association<>();
 		/**
@@ -678,9 +753,7 @@ public class LNGScenarioTransformer {
 		final Map<IPort, Integer> portIndices = new HashMap<>();
 
 		/*
-		 * Construct ports for each port in the scenario port model, and keep them in a
-		 * two-way lookup table (the two-way lookup is needed to do things like setting
-		 * distances later).
+		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
 		 */
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 
@@ -947,6 +1020,12 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	private void registerCommodityIndex(final String name, @NonNull final SeriesParser indices) {
+		assert name != null;
+		indices.initialiseLazyNamedSeriesContainer(name);
+		lazyExpressionManagerEditor.addPriceCurve(name.toLowerCase(), indices.getLazyNamedSeries(name));
+	}
+
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
 		final String name = PriceIndexUtils.createConversionFactorName(factor);
 		final String reverseName = PriceIndexUtils.createReverseConversionFactorName(factor);
@@ -1149,8 +1228,8 @@ public class LNGScenarioTransformer {
 	/**
 	 * Extract the cargoes from the scenario and add them to the given builder.
 	 * 
-	 * @param builder              current builder. should already have
-	 *                             ports/distances/vessels built
+	 * @param builder
+	 *            current builder. should already have ports/distances/vessels built
 	 * @param indexAssociation
 	 * @param contractTransformers
 	 * @param modelEntityMap
@@ -1214,22 +1293,22 @@ public class LNGScenarioTransformer {
 			// Compulsary slots on nominals are considered to be unused. This marks all
 			// slots in the prompt as compulsary too.
 			// TODO: Is this really a good idea?
-//			if (noNominalsInPrompt) {
-//				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
-//					if (!eCargo.isLocked()) { // Locked cargoes will not be unpaired
-//						final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
-//						if (promptPeriodEnd != null) {
-//							final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
-//							if (!sortedSlots.isEmpty()) {
-//								final Slot<?> slot = sortedSlots.get(0);
-//								if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
-//									isSoftRequired = true;
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
+			// if (noNominalsInPrompt) {
+			// if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+			// if (!eCargo.isLocked()) { // Locked cargoes will not be unpaired
+			// final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
+			// if (promptPeriodEnd != null) {
+			// final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
+			// if (!sortedSlots.isEmpty()) {
+			// final Slot<?> slot = sortedSlots.get(0);
+			// if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
+			// isSoftRequired = true;
+			// }
+			// }
+			// }
+			// }
+			// }
+			// }
 
 			for (final Slot<?> slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;
@@ -1574,27 +1653,32 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
-
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-				if (parsed.getChangePoints().length == 0) {
-					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-				} else {
-
-					curve.setDefaultValue(0);
-					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
-					}
-				}
 				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
-
 				final String splitMonthToken = "splitmonth(";
 				final boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+				final ICurve curve;
+				if (expression.canEvaluate()) {
+					final ISeries parsed = expression.evaluate();
+					curve = buildStepwiseIntegerCurve(parsed);
 
-				if (isSplitMonth) {
-					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+					if (isSplitMonth) {
+						priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+					}
+				} else {
+					final Consumer<ISeries> parsedSeriesConsumer;
+					if (isSplitMonth) {
+						final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(priceIntervals,
+								parsed -> integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
+						priceIntervals = lazyIntervalCurve;
+						parsedSeriesConsumer = lazyIntervalCurve::initialise;
+						lazyExpressionManagerEditor.addLazyIntervalCurve(lazyIntervalCurve);
+					} else {
+						parsedSeriesConsumer = null;
+					}
+					ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, LNGScenarioTransformer::buildStepwiseIntegerCurve, parsedSeriesConsumer);
+					curve = lazyCurve;
+					lazyExpressionManagerEditor.addLazyCurve(lazyCurve);
 				}
-
 				dischargePriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(dischargePriceCalculator);
 			}
@@ -1656,17 +1740,12 @@ public class LNGScenarioTransformer {
 			}
 
 			/*
-			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract =
-			 * (SalesContract) dischargeSlot.getContract();
+			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
 			 * 
-			 * if (salesContract.isSetMinCvValue()) { minCv =
-			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
-			 * getMinCvValue()); } else { minCv = 0; }
+			 * if (salesContract.isSetMinCvValue()) { minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract. getMinCvValue()); } else { minCv = 0; }
 			 * 
-			 * if (salesContract.isSetMaxCvValue()) { maxCv =
-			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
-			 * getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv = 0;
-			 * maxCv = Long.MAX_VALUE; }
+			 * if (salesContract.isSetMaxCvValue()) { maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract. getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else {
+			 * minCv = 0; maxCv = Long.MAX_VALUE; }
 			 */
 
 			final boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
@@ -1777,26 +1856,32 @@ public class LNGScenarioTransformer {
 					loadPriceCalculator = new BreakEvenLoadPriceCalculator();
 				}
 			} else {
+				final ICurve curve;
+				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-				final ISeries parsed = expression.evaluate();
-
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-				if (parsed.getChangePoints().length == 0) {
-					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-				} else {
-
-					curve.setDefaultValue(0);
-					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
-					}
-				}
-
 				final String splitMonthToken = "splitmonth(";
 				final boolean isSplitMonth = priceExpression.toLowerCase().contains(splitMonthToken.toLowerCase());
+				if (expression.canEvaluate()) {
+					final ISeries parsed = expression.evaluate();
+					curve = buildStepwiseIntegerCurve(parsed);
 
-				IIntegerIntervalCurve priceIntervals = monthIntervalsInHoursCurve;
-				if (isSplitMonth) {
-					priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+					if (isSplitMonth) {
+						priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+					}
+				} else {
+					final Consumer<ISeries> parsedSeriesConsumer;
+					if (isSplitMonth) {
+						final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(priceIntervals,
+								parsed -> integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
+						priceIntervals = lazyIntervalCurve;
+						parsedSeriesConsumer = lazyIntervalCurve::initialise;
+						lazyExpressionManagerEditor.addLazyIntervalCurve(lazyIntervalCurve);
+					} else {
+						parsedSeriesConsumer = null;
+					}
+					ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, LNGScenarioTransformer::buildStepwiseIntegerCurve, parsedSeriesConsumer);
+					curve = lazyCurve;
+					lazyExpressionManagerEditor.addLazyCurve(lazyCurve);
 				}
 
 				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
@@ -2358,8 +2443,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given a UTC based time window, extend it's range to cover the whole range of
-	 * possible UTC offsets from UTC-12 to UTC+14
+	 * Given a UTC based time window, extend it's range to cover the whole range of possible UTC offsets from UTC-12 to UTC+14
 	 * 
 	 * @param builder
 	 * @param startTime
@@ -2819,11 +2903,14 @@ public class LNGScenarioTransformer {
 	/**
 	 * Create the distance matrix for the given builder.
 	 * 
-	 * @param builder           the builder we are working with
-	 * @param portAssociation   an association between ports in the EMF model and
-	 *                          IPorts in the builder
-	 * @param allPorts          the list of all IPorts constructed so far
-	 * @param portIndices       a reverse-lookup for the ports in allPorts
+	 * @param builder
+	 *            the builder we are working with
+	 * @param portAssociation
+	 *            an association between ports in the EMF model and IPorts in the builder
+	 * @param allPorts
+	 *            the list of all IPorts constructed so far
+	 * @param portIndices
+	 *            a reverse-lookup for the ports in allPorts
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
@@ -2885,8 +2972,7 @@ public class LNGScenarioTransformer {
 		}
 
 		/*
-		 * Now fill out the distances from the distance model. Firstly we need to create
-		 * the default distance matrix.
+		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
 		for (final Route r : portModel.getRoutes()) {
@@ -3096,10 +3182,10 @@ public class LNGScenarioTransformer {
 	/**
 	 * Construct the fleet model for the scenario
 	 * 
-	 * @param builder         a builder which has had its ports and distances
-	 *                        instantiated
-	 * @param portAssociation the Port <-> IPort association to connect EMF Ports
-	 *                        with builder IPorts
+	 * @param builder
+	 *            a builder which has had its ports and distances instantiated
+	 * @param portAssociation
+	 *            the Port <-> IPort association to connect EMF Ports with builder IPorts
 	 * @param modelEntityMap
 	 * @return
 	 */
@@ -3583,8 +3669,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3611,8 +3696,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3639,8 +3723,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3801,8 +3884,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given the number spot slots available to create, optionally limit this
-	 * number.
+	 * Given the number spot slots available to create, optionally limit this number.
 	 * 
 	 * @param count
 	 * @return
@@ -3920,5 +4002,24 @@ public class LNGScenarioTransformer {
 		portModel.getRoutes().forEach(r -> {
 			distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int) r.getDistance());
 		});
+	}
+
+	private static StepwiseIntegerCurve buildStepwiseIntegerCurve(final IExpression<ISeries> expression) {
+		final ISeries parsed = expression.evaluate();
+		return buildStepwiseIntegerCurve(parsed);
+	}
+
+	private static StepwiseIntegerCurve buildStepwiseIntegerCurve(final ISeries parsed) {
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (parsed.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+		} else {
+
+			curve.setDefaultValue(0);
+			for (final int i : parsed.getChangePoints()) {
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+			}
+		}
+		return curve;
 	}
 }

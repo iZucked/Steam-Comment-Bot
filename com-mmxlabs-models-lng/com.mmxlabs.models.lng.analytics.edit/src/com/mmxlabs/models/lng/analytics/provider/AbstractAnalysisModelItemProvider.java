@@ -55,7 +55,6 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addCommodityCurvesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -83,28 +82,6 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Commodity Curves feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCommodityCurvesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AbstractAnalysisModel_commodityCurves_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractAnalysisModel_commodityCurves_feature", "_UI_AbstractAnalysisModel_type"),
-				 AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -120,6 +97,7 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES);
 		}
 		return childrenFeatures;
 	}
@@ -171,6 +149,7 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -282,6 +261,16 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 				 AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
+				 AnalyticsFactory.eINSTANCE.createCommodityCurveOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
+				 AnalyticsFactory.eINSTANCE.createCommodityCurveOverlay()));
 	}
 
 }

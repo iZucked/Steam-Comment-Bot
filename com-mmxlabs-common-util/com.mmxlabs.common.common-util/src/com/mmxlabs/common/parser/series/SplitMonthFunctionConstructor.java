@@ -39,4 +39,10 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 		return new SplitMonthSeries(seriesParserData, series1.evaluate(), series2.evaluate(), splitPoint);
 	}
 
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return series1.canEvaluate() && series2.canEvaluate();
+	}
+
 }

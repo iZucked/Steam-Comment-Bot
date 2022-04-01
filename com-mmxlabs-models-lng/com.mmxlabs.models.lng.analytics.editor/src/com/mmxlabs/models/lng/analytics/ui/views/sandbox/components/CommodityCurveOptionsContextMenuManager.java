@@ -21,15 +21,11 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
-import com.google.common.collect.Streams;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.VesselEventOption;
-import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.ui.views.ResultsSetDeletionHelper;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;

@@ -938,7 +938,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 									break;
 								case SandboxModeConstants.MODE_DERIVE:
 								default:
-									WhatIfEvaluator.evaluate(OptionModellerView.this, m);
+									if (m.getCommodityCurves().isEmpty()) {
+										WhatIfEvaluator.evaluate(OptionModellerView.this, m);
+									} else {
+										WhatIfEvaluator.doPriceSensitivity(OptionModellerView.this, m);
+									}
 									break;
 								}
 								if (m != null && m.getResults() != null) {

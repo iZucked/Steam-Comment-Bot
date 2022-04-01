@@ -91,6 +91,12 @@
           priority="0"
           subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
     </jointModelEditor>
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.editor.sensitivityModelEditor"
+          implementation="com.mmxlabs.models.lng.analytics.ui.editorpart.SensitivityModelEditorContribution"
+          priority="100"
+          subModelClass="com.mmxlabs.models.lng.analytics.SensitivityModel">
+    </jointModelEditor>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -220,6 +226,36 @@
             allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
+               commandId="com.mmxlabs.models.lng.analytics.editor.createSensitivity"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <test
+                        args="features:sandbox"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+         <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
                icon="icons/sandbox.gif"
                style="push">
@@ -255,6 +291,10 @@
             name="Create sandbox">
       </command>
       <command
+            id="com.mmxlabs.models.lng.analytics.editor.createSensitivity"
+            name="Create sensitivity model">
+      </command>
+      <command
             id="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
             name="Create break-even sandbox">
       </command>
@@ -264,6 +304,52 @@
       <handler
             class="com.mmxlabs.models.lng.analytics.ui.views.CreateSandboxHandler"
             commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox">
+         <enabledWhen>
+                  <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                        </test>
+                     </not>
+                  </and>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </enabledWhen>
+            <activeWhen>
+                   <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </activeWhen>
+      </handler>
+      <handler
+            class="com.mmxlabs.models.lng.analytics.ui.views.CreateSensitivityHandler"
+            commandId="com.mmxlabs.models.lng.analytics.editor.createSensitivity">
          <enabledWhen>
                   <and>
                   <with

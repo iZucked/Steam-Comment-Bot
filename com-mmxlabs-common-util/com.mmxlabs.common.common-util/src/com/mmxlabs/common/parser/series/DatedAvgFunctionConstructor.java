@@ -45,4 +45,9 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 	public @NonNull ISeries evaluate() {
 		return new DatedAverageSeries(series.evaluate(), months, lag, reset, calendarMonthMapper);
 	}
+	
+	@Override
+	public boolean canEvaluate() {
+		return series.canEvaluate();
+	}
 }

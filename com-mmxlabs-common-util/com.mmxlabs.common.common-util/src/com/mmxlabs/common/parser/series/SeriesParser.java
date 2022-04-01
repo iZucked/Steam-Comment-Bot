@@ -24,6 +24,7 @@ public class SeriesParser {
 	private final @NonNull Map<@NonNull String, @NonNull ISeries> evaluatedSeries = new HashMap<>();
 	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
+	private final @NonNull Map<@NonNull String, ILazyNamedSeriesContainer> lazySeriesContainers = new HashMap<>();
 
 	private final @NonNull SeriesParserData seriesParserData;
 
@@ -41,6 +42,18 @@ public class SeriesParser {
 		} else {
 			throw new UnknownSeriesException("No series with name " + name + " defined");
 		}
+	}
+
+	public @NonNull ILazyNamedSeriesContainer getLazyNamedSeries(@NonNull final String name) {
+		@NonNull
+		final String lowercaseName = name.toLowerCase();
+		@Nullable
+		ILazyNamedSeriesContainer lazySeries = lazySeriesContainers.get(lowercaseName);
+		if (lazySeries == null) {
+			// Lazy series should be initialised before parsing
+			throw new UnknownSeriesException("No series with name " + name + " defined");
+		}
+		return lazySeries;
 	}
 
 	public IExpression<ISeries> parse(final String expression) {
@@ -128,6 +141,17 @@ public class SeriesParser {
 			}
 		}
 		unevaluatedSeries.put(name.toLowerCase(), expression);
+	}
+
+	public void initialiseLazyNamedSeriesContainer(@NonNull final String name) {
+		@NonNull
+		final String lowercaseName = name.toLowerCase();
+		if (lazySeriesContainers.containsKey(lowercaseName)) {
+			throw new IllegalStateException("Name already populated");
+		}
+		@NonNull
+		final ILazyNamedSeriesContainer container = new DefaultLazyNamedSeriesContainer(lowercaseName);
+		lazySeriesContainers.put(lowercaseName, container);
 	}
 
 	public SeriesParserData getSeriesParserData() {

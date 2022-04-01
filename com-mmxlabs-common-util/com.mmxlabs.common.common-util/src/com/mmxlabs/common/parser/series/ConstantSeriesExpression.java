@@ -30,4 +30,10 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 			}
 		};
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

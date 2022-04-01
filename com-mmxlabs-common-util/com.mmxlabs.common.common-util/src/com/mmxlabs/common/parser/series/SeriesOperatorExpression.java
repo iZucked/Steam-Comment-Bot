@@ -109,4 +109,9 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 			}
 		};
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return lhs.canEvaluate() && rhs.canEvaluate();
+	}
 }
