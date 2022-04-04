@@ -127,8 +127,8 @@ public class BasicAuthenticationTests {
 		bot.buttonWithId("login").click();
 		Matcher<Shell> basicLoginShellMatcher = withText("Data Hub Basic Login");
 		bot.waitUntil(Conditions.waitForShell(basicLoginShellMatcher));
-		bot.textWithLabel("Username: ").setText("philippe");
-		bot.textWithLabel("Password: ").setText("philippe");
+		bot.textWithLabel("Username: ").setText("test");
+		bot.textWithLabel("Password: ").setText("test");
 		bot.button("OK").click();
 
 		// force update online state refresh
