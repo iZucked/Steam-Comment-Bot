@@ -209,7 +209,7 @@ public class CustomTeamReportsTests {
 	 * @throws IOException
 	 */
 	@Test
-	public void createUserReportThenAddToTeam() throws IOException {
+	public void createUserReportThenAddToTeam() throws Exception {
 		openUserReportsManager();
 		createUserReport("test2");
 		bot.table().select("test2");
@@ -218,6 +218,8 @@ public class CustomTeamReportsTests {
 		bot.button("Add to Team").click();
 		bot.radio("Team reports").click();
 		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		// Delay to allow UI to catch up before trying to find it.	
+		Thread.sleep(2000);
 		assertTrue(bot.tableWithId("customReportsViewer").containsItem("test2"));
 	}
 

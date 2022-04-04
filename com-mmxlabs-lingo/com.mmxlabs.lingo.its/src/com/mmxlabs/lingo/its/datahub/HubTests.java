@@ -177,7 +177,7 @@ public class HubTests {
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		// FIXME typeText is supposed to notify event listeners...
-		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.CR);
+		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
 		assertFalse(bot.buttonWithId("login").isEnabled());
