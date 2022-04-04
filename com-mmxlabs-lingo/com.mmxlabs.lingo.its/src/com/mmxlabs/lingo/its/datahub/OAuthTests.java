@@ -59,7 +59,7 @@ public class OAuthTests {
 	@Container
 	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
