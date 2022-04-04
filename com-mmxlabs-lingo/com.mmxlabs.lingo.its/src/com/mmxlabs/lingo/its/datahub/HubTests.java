@@ -55,7 +55,8 @@ public class HubTests {
 	.withExposedService(oauthHubContainer, 8090)
 	.withExposedService(basicHubContainer, 8091)
 	.waitingFor("datahub-oauth", Wait.forHttp("/ping").forStatusCode(200))
-	.withLocalCompose(true);
+	.waitingFor("datahub-basic", Wait.forHttp("/ping").forStatusCode(200))
+	.withLocalCompose(false);
 	// @formatter:on
 
 	private static SWTWorkbenchBot bot;
