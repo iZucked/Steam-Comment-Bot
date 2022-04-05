@@ -362,6 +362,12 @@
 				<version>3.14.2</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>com.squareup.okio</groupId>
+				<artifactId>okio</artifactId>
+				<version>1.17.4</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</location>
 </locations>
