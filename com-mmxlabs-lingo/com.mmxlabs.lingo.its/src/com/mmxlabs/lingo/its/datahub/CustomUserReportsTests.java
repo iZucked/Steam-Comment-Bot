@@ -129,7 +129,6 @@ public class CustomUserReportsTests {
 	public boolean viewWithTitleExists(SWTBotShell[] shells, @NonNull String title) {
 		boolean exists = false;
 		for (SWTBotShell shell : shells) {
-			logger.info(shell.getId());
 			logger.info(shell.getText());
 			if (title.equals(shell.getText())) {
 				exists = true;

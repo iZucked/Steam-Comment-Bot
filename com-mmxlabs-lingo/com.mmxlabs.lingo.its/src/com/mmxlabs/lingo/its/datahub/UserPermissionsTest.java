@@ -75,7 +75,7 @@ public class UserPermissionsTest {
 	}
 
 	public void asAlternativeBaseCaseUser() {
-		BasicAuthenticationManager.getInstance().withCredentials("simon", "simon");
+		BasicAuthenticationManager.getInstance().withCredentials("test", "test");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 

@@ -16,6 +16,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -93,7 +94,7 @@ public class OAuthTests {
 		// slow down tests' playback speed to 500ms
 		SWTBotPreferences.PLAYBACK_DELAY = 500;
 		// increase timeout to 10 seconds
-		SWTBotPreferences.TIMEOUT = 30000;
+		SWTBotPreferences.TIMEOUT = 10000;
 		// force trigger refresh
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
@@ -167,15 +168,22 @@ public class OAuthTests {
 	public void oauthLogin() throws InterruptedException {
 		openDatahubPreferencePage();
 		// logout if necessary
+		logger.info(Boolean.toString("Logout".equals(bot.buttonWithId("login").getText())));
 		if ("Logout".equals(bot.buttonWithId("login").getText())) {
 			bot.buttonWithId("login").click();
 			Thread.sleep(2000);
 		}
 		bot.buttonWithId("login").click();
-		Thread.sleep(2000);
+
+		logger.info(Boolean.toString(datahubServiceProvider.isLoggedIn()));
 
 		// if user was previously authenticated, clikcing on Login will automatically log them back in
 		if (!datahubServiceProvider.isLoggedIn()) {
+			bot.buttonWithId("login").click();
+			SWTBotShell[] swtshells = bot.shells();
+			for (SWTBotShell shell : swtshells) {
+				logger.info(shell.getText());
+			}
 			Matcher<Shell> oauthLoginShellMatcher = withText("Data Hub OAuth Login");
 			bot.waitUntil(Conditions.waitForShell(oauthLoginShellMatcher));
 			SWTBotBrowser browser = bot.browser();

@@ -21,6 +21,7 @@ import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -181,6 +182,11 @@ public class HubTests {
 		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
+		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
+		SWTBotShell[] swtshells = bot.shells();
+		for (SWTBotShell shell : swtshells) {
+			logger.info(shell.getText());
+		}
 		assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 
