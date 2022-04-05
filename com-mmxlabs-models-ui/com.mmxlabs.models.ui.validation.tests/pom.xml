@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>5.3.1-SNAPSHOT</version>
+		<version>5.3.9-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.models.ui.validation.tests</artifactId>
