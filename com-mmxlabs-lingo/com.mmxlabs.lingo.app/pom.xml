@@ -10,4 +10,16 @@
 	</parent>
 	<artifactId>com.mmxlabs.lingo.app</artifactId>
 	<packaging>eclipse-plugin</packaging>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>about.mappings</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 </project>
