@@ -128,6 +128,11 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					public int compare(PriceSensitivityData obj1, PriceSensitivityData obj2) {
 						final String s1 = obj1.key != null ? obj1.key : "";
 						final String s2 = obj2.key != null ? obj2.key : "";
+						if (s1.equalsIgnoreCase("Portfolio PnL")) {
+							return -1;
+						} else if (s2.equalsIgnoreCase("Portfolio PnL")) {
+							return 1;
+						}
 						return s1.compareTo(s2);
 					}
 
