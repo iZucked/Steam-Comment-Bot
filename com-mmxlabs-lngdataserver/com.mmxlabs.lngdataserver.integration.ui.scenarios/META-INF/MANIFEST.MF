@@ -55,7 +55,10 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.migration,
  com.mmxlabs.models.lng.analytics.editor,
  com.mmxlabs.jobmanager,
- com.mmxlabs.jobmanager.eclipse
+ com.mmxlabs.jobmanager.eclipse,
+ com.mmxlabs.models.lng.parameters.editor,
+ com.mmxlabs.optimiser.optimiser-core,
+ com.mmxlabs.models.migration.scenario
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Import-Package: com.fasterxml.jackson.datatype.jdk8;version="2.12.5",
  com.mmxlabs.models.lng.scenario.actions.anonymisation,

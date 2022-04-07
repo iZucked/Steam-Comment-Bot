@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.lng.importers.menus;
+package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -65,12 +65,9 @@ import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.users.UsernameProvider;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationPushException.Type;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
-import com.mmxlabs.lngdataserver.lng.importers.menus.CloudOptimisationPushException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
