@@ -531,12 +531,8 @@ public class ExposuresCalculator {
 			final CommodityNode commodityNode = (CommodityNode) node;
 
 			// Should really look up actual value from curve...
-			ISeries series;
-			try {
-				series = commodityIndices.getSeries(commodityNode.getName());
-			} catch (UnknownSeriesException e) {
-				series = commodityIndices.getLazyNamedSeries(commodityNode.getName()).evaluate();
-			}
+			// Lazy commodity curves should be initialised by now.
+			ISeries series = commodityIndices.getSeries(commodityNode.getName()).get();
 			// The series is in EXTERNAL format
 			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 
@@ -568,7 +564,8 @@ public class ExposuresCalculator {
 			final CurrencyNode currencyNode = (CurrencyNode) node;
 
 			// Should really look up actual value from curve...
-			final ISeries series = currencyIndices.getSeries(currencyNode.getName());
+			// Currency curves should not be lazy
+			final ISeries series = currencyIndices.getSeries(currencyNode.getName()).get();
 			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 
 			final int unitPrice =  OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());

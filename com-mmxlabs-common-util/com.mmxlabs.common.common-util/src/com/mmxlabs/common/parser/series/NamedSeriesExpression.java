@@ -9,19 +9,25 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.parser.IExpression;
 
 public class NamedSeriesExpression implements IExpression<ISeries> {
-	private final @NonNull ISeries series;
+	
+	@NonNull
+	private final ISeriesContainer seriesContainer;
 
 	public NamedSeriesExpression(final @NonNull ISeries series) {
-		this.series = series;
+		this.seriesContainer = new DefaultSeriesContainer(series);
+	}
+
+	public NamedSeriesExpression(@NonNull final ISeriesContainer seriesContainer) {
+		this.seriesContainer = seriesContainer;
 	}
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return series;
+		return seriesContainer.get();
 	}
 
 	@Override
 	public boolean canEvaluate() {
-		return true;
+		return seriesContainer.canGet();
 	}
 }

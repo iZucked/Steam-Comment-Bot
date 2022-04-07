@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultGroupedSlotsConstraintDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLazyExpressionManager;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;

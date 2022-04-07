@@ -49,9 +49,11 @@ import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.series.ILazyExpressionContainer;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesUtil;
+import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
@@ -577,7 +579,7 @@ public class LNGScenarioTransformer {
 		for (final CommodityCurve commodityIndex : pricingModel.getCommodityCurves()) {
 			final String name = commodityIndex.getName();
 			assert name != null;
-			registerCommodityIndex(name, commodityIndices);
+			registerCommodityIndex(name, commodityIndex, commodityIndices);
 			// registerIndex(name, commodityIndex, commodityIndices);
 		}
 		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
@@ -605,35 +607,7 @@ public class LNGScenarioTransformer {
 		// Now pre-compute our various curve data objects...
 		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
-				final AbstractYearMonthCurve ymCurve = index;
-				final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
-				for (final YearMonthPoint pt : ymCurve.getPoints()) {
-					vals.add(new Pair<>(pt.getDate(), pt.getValue()));
-				}
-				final int[] times = new int[vals.size()];
-				final Number[] nums = new Number[vals.size()];
-				int k = 0;
-				for (final Pair<YearMonth, Number> e : vals) {
-					times[k] = dateHelper.convertTime(e.getFirst());
-					nums[k++] = e.getSecond();
-				}
-				final ISeries concreteSeries = new ISeries() {
-					@Override
-					public int[] getChangePoints() {
-						return times;
-					}
-
-					@Override
-					public Number evaluate(final int point) {
-						int pos = SeriesUtil.floor(times, point);
-						if (pos == -1) {
-							return 0;
-						}
-						return nums.length == 0 ? 0 : nums[pos];
-					}
-				};
-
-				// final ISeries parsed = commodityIndices.getSeries(index.getName());
+				final ISeries concreteSeries = constructConcreteSeries(index);
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				curve.setDefaultValue(0);
 				final int[] changePoints = concreteSeries.getChangePoints();
@@ -648,8 +622,11 @@ public class LNGScenarioTransformer {
 				}
 				modelEntityMap.addModelObject(index, curve);
 				commodityIndexAssociation.add(index, curve);
-				final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null);
-				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
+				if (commodityIndices.getSeries(index.getName()) instanceof ILazyExpressionContainer) {
+					// Only the lazy curves need to be added - the series parser should already have initialised on lazy curves
+					final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null);
+					priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
+				}
 			} catch (final Exception exception) {
 				log.warn("Error evaluating series " + index.getName(), exception);
 			}
@@ -657,38 +634,12 @@ public class LNGScenarioTransformer {
 
 		for (final CommodityCurveOverlay overlay : extraPriceCurves) {
 			final String indexName = overlay.getReferenceCurve().getName().toLowerCase();
-			for (final YearMonthPointContainer ympContainer : overlay.getAlternativeCurves()) {
-				final String curveName = ympContainer.getName().toLowerCase();
-				if (curveName == null) {
+			for (final YearMonthPointContainer ymPointContainer : overlay.getAlternativeCurves()) {
+				if (ymPointContainer.getName() == null) {
 					throw new IllegalStateException("Commodity curve option name must be provided");
 				}
-				
-				final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
-				for (final YearMonthPoint pt : ympContainer.getPoints()) {
-					vals.add(new Pair<>(pt.getDate(), pt.getValue()));
-				}
-				final int[] times = new int[vals.size()];
-				final Number[] nums = new Number[vals.size()];
-				int k = 0;
-				for (final Pair<YearMonth, Number> e : vals) {
-					times[k] = dateHelper.convertTime(e.getFirst());
-					nums[k++] = e.getSecond();
-				}
-				final ISeries concreteSeries = new ISeries() {
-					@Override
-					public int[] getChangePoints() {
-						return times;
-					}
-
-					@Override
-					public Number evaluate(final int point) {
-						int pos = SeriesUtil.floor(times, point);
-						if (pos == -1) {
-							return 0;
-						}
-						return nums.length == 0 ? 0 : nums[pos];
-					}
-				};
+				final String curveName = ymPointContainer.getName().toLowerCase();
+				final ISeries concreteSeries = constructConcreteSeries(ymPointContainer);
 				final PriceCurveKey key = new PriceCurveKey(indexName, curveName);
 				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 			}
@@ -696,7 +647,7 @@ public class LNGScenarioTransformer {
 
 		for (final BunkerFuelCurve index : pricingModel.getBunkerFuelCurves()) {
 			try {
-				final ISeries parsed = baseFuelIndices.getSeries(index.getName());
+				final ISeries parsed = baseFuelIndices.getSeries(index.getName()).get();
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 				final int[] changePoints = parsed.getChangePoints();
@@ -717,7 +668,7 @@ public class LNGScenarioTransformer {
 
 		for (final CharterCurve index : pricingModel.getCharterCurves()) {
 			try {
-				final ISeries parsed = charterIndices.getSeries(index.getName());
+				final ISeries parsed = charterIndices.getSeries(index.getName()).get();
 				final StepwiseLongCurve curve = new StepwiseLongCurve();
 				curve.setDefaultValue(0L);
 
@@ -1020,10 +971,19 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private void registerCommodityIndex(final String name, @NonNull final SeriesParser indices) {
+	private void registerCommodityIndex(final String name, @NonNull final AbstractYearMonthCurve curve, @NonNull final SeriesParser indices) {
 		assert name != null;
-		indices.initialiseLazyNamedSeriesContainer(name);
-		lazyExpressionManagerEditor.addPriceCurve(name.toLowerCase(), indices.getLazyNamedSeries(name));
+		final boolean hasLazyEntry = extraPriceCurves.stream() //
+				.map(CommodityCurveOverlay::getReferenceCurve) //
+				.map(CommodityCurve::getName) //
+				.anyMatch(name::equalsIgnoreCase);
+		if (hasLazyEntry) {
+			final ILazyExpressionContainer lazyContainer = new ThreadLocalLazyExpressionContainer();
+			indices.addSeriesData(name, lazyContainer);
+			lazyExpressionManagerEditor.addPriceCurve(name, lazyContainer);
+		} else {
+			registerIndex(name, curve, indices);
+		}
 	}
 
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
@@ -4021,5 +3981,34 @@ public class LNGScenarioTransformer {
 			}
 		}
 		return curve;
+	}
+
+	private ISeries constructConcreteSeries(final YearMonthPointContainer ymPointContainer) {
+		final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
+		for (final YearMonthPoint pt : ymPointContainer.getPoints()) {
+			vals.add(new Pair<>(pt.getDate(), pt.getValue()));
+		}
+		final int[] times = new int[vals.size()];
+		final Number[] nums = new Number[vals.size()];
+		int k = 0;
+		for (final Pair<YearMonth, Number> e : vals) {
+			times[k] = dateHelper.convertTime(e.getFirst());
+			nums[k++] = e.getSecond();
+		}
+		return new ISeries() {
+			@Override
+			public int[] getChangePoints() {
+				return times;
+			}
+
+			@Override
+			public Number evaluate(final int point) {
+				int pos = SeriesUtil.floor(times, point);
+				if (pos == -1) {
+					return 0;
+				}
+				return nums.length == 0 ? 0 : nums[pos];
+			}
+		};
 	}
 }

@@ -658,7 +658,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 				if (seriesParser != null) {
 					if (name != null && !name.isEmpty()) {
 						try {
-							final ISeries series = seriesParser.getSeries(name);
+							// Pricing model should not have lazy curves
+							final ISeries series = seriesParser.getSeries(name).get();
 							if (series != null) {
 								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
 							}

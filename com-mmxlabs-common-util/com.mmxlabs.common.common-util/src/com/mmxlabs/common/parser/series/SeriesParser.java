@@ -21,10 +21,9 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Symbol;
 
 public class SeriesParser {
-	private final @NonNull Map<@NonNull String, @NonNull ISeries> evaluatedSeries = new HashMap<>();
+	private final @NonNull Map<@NonNull String, @NonNull ISeriesContainer> evaluatedSeries = new HashMap<>();
 	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
-	private final @NonNull Map<@NonNull String, ILazyNamedSeriesContainer> lazySeriesContainers = new HashMap<>();
 
 	private final @NonNull SeriesParserData seriesParserData;
 
@@ -32,28 +31,24 @@ public class SeriesParser {
 		this.seriesParserData = seriesParserData;
 	}
 
-	public @NonNull ISeries getSeries(final @NonNull String name) {
-		if (evaluatedSeries.containsKey(name.toLowerCase())) {
-			return evaluatedSeries.get(name.toLowerCase());
-		} else if (unevaluatedSeries.containsKey(name.toLowerCase())) {
-			final ISeries ser = parse(unevaluatedSeries.get(name.toLowerCase())).evaluate();
-			evaluatedSeries.put(name.toLowerCase(), ser);
+	public @NonNull ISeriesContainer getSeries(@NonNull final String name) {
+		final String lowercaseName = name.toLowerCase();
+		if (evaluatedSeries.containsKey(lowercaseName)) {
+			return evaluatedSeries.get(lowercaseName);
+		} else if (unevaluatedSeries.containsKey(lowercaseName)) {
+			final IExpression<ISeries> parsed = parse(unevaluatedSeries.get(lowercaseName));
+			final ISeriesContainer ser;
+			if (parsed.canEvaluate()) {
+				ser = new DefaultSeriesContainer(parsed.evaluate());
+			} else {
+				ser = new DefaultExpressionContainer(parsed);
+			}
+			evaluatedSeries.put(lowercaseName, ser);
 			return ser;
 		} else {
-			throw new UnknownSeriesException("No series with name " + name + " defined");
+			throw new UnknownSeriesException("No series with name " + name + "defined");
 		}
-	}
-
-	public @NonNull ILazyNamedSeriesContainer getLazyNamedSeries(@NonNull final String name) {
-		@NonNull
-		final String lowercaseName = name.toLowerCase();
-		@Nullable
-		ILazyNamedSeriesContainer lazySeries = lazySeriesContainers.get(lowercaseName);
-		if (lazySeries == null) {
-			// Lazy series should be initialised before parsing
-			throw new UnknownSeriesException("No series with name " + name + " defined");
-		}
-		return lazySeries;
+		
 	}
 
 	public IExpression<ISeries> parse(final String expression) {
@@ -85,15 +80,17 @@ public class SeriesParser {
 	}
 
 	public void addConstant(@NonNull final String name, @NonNull final Number value) {
-		evaluatedSeries.put(name.toLowerCase(), new ConstantSeriesExpression(value).evaluate());
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(new ConstantSeriesExpression(value).evaluate());
+		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
 	public void addSeriesData(final @NonNull String name, final @NonNull ISeries series) {
-		evaluatedSeries.put(name.toLowerCase(), series);
-		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
-		for (final String expr : expressionCurves) {
-			evaluatedSeries.remove(expr);
-		}
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(series);
+		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
+	}
+
+	public void addSeriesData(final @NonNull String name, @NonNull final ISeriesContainer seriesContainer) {
+		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
 	public void removeSeriesData(@Nullable final String name) {
@@ -110,8 +107,16 @@ public class SeriesParser {
 		}
 	}
 
+	private void addSeriesContainerToEvaluatedSeries(@NonNull final String name, @NonNull final ISeriesContainer seriesContainer) {
+		evaluatedSeries.put(name.toLowerCase(), seriesContainer);
+		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		for (final String expr : expressionCurves) {
+			evaluatedSeries.remove(expr);
+		}
+	}
+
 	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
-		evaluatedSeries.put(name.toLowerCase(), new ISeries() {
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(new ISeries() {
 			@Override
 			public int[] getChangePoints() {
 				return points;
@@ -126,10 +131,7 @@ public class SeriesParser {
 				return values.length == 0 ? 0 : values[pos];
 			}
 		});
-		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
-		for (final String expr : expressionCurves) {
-			evaluatedSeries.remove(expr);
-		}
+		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
 	public void addSeriesExpression(final @NonNull String name, final @NonNull String expression) {
@@ -141,17 +143,6 @@ public class SeriesParser {
 			}
 		}
 		unevaluatedSeries.put(name.toLowerCase(), expression);
-	}
-
-	public void initialiseLazyNamedSeriesContainer(@NonNull final String name) {
-		@NonNull
-		final String lowercaseName = name.toLowerCase();
-		if (lazySeriesContainers.containsKey(lowercaseName)) {
-			throw new IllegalStateException("Name already populated");
-		}
-		@NonNull
-		final ILazyNamedSeriesContainer container = new DefaultLazyNamedSeriesContainer(lowercaseName);
-		lazySeriesContainers.put(lowercaseName, container);
 	}
 
 	public SeriesParserData getSeriesParserData() {

@@ -594,7 +594,6 @@ class CUP$Parser$actions {
 
 						@Override
 						public boolean canEvaluate() {
-							// TODO Auto-generated method stub
 							return e.canEvaluate();
 						}
 					};         
@@ -645,11 +644,7 @@ class CUP$Parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		try {
 		 RESULT =  new NamedSeriesExpression(seriesParser.getSeries(n));           
-		} catch (final UnknownSeriesException e) {
-		 RESULT = new LazyNamedSeriesExpression(seriesParser.getLazyNamedSeries(n));
-		}
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
