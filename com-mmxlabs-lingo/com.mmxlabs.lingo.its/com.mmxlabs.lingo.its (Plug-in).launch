@@ -47,7 +47,7 @@
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea -Xmx3G -Dlingo.suppress.dialogs=true"/>
     <stringAttribute key="pde.version" value="3.3"/>
-    <stringAttribute key="product" value="com.mmxlabs.lingo.product.product"/>
+    <stringAttribute key="product" value="com.mmxlabs.lingo.app.product"/>
     <booleanAttribute key="run_in_ui_thread" value="false"/>
     <setAttribute key="selected_features">
         <setEntry value="com.google.ortools.feature:default"/>

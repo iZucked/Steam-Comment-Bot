@@ -22,4 +22,6 @@ public class OptioniserSettings {
 
 	@JsonDeserialize(as = UserSettingsImpl.class)
 	public UserSettings userSettings;
+	
+	public Integer numThreads;
 }

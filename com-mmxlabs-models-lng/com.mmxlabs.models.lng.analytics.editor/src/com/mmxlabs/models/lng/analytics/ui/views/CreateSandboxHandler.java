@@ -85,7 +85,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 						final EditingDomain domain = reference.getEditingDomain();
 						final Display display = PlatformUI.getWorkbench().getDisplay();
 
-						final Image img = CommonImages.getImageDescriptor(IconPaths.Sandbox, IconMode.Enabled).createImage();
+						final Image img = CommonImages.getImage(IconPaths.Sandbox, IconMode.Enabled);
 						final InputDialog dialog = new InputDialog(display.getActiveShell(), "Create sandbox", "Choose name for sandbox", "sandbox", null) {
 							@Override
 							protected void configureShell(final Shell shell) {
@@ -93,11 +93,6 @@ public class CreateSandboxHandler extends AbstractHandler {
 								shell.setImage(img);
 							}
 
-							@Override
-							public boolean close() {
-								img.dispose();
-								return super.close();
-							}
 						};
 
 						if (dialog.open() == Window.OK) {

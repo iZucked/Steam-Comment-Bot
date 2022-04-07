@@ -13,17 +13,23 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="com.mmxlabs.lingo.app.intro.Application">
+               class="com.mmxlabs.lingo.app.Application">
          </run>
       </application>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.mmxlabs.lingo.app.intro.EditingPerspective"
+            class="com.mmxlabs.lingo.app.perspectives.EditingPerspective"
             icon="icons:/icons/16x16/table.png"
             id="com.mmxlabs.lingo.app.perspective.editing"
             name="Data">
+      </perspective>
+      <perspective
+            class="com.mmxlabs.lingo.app.perspectives.AnalysisPerspective"
+            icon="icons:/icons/16x16/scenario.png"
+            id="com.mmxlabs.lingo.app.perspective.analysis"
+            name="Analysis">
       </perspective>
    </extension>
    <extension
@@ -95,5 +101,77 @@
             beforefragment="false"
             class="com.mmxlabs.lingo.app.e4.WorkbenchChangeProcessor">
       </processor>
+   </extension>
+   
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.mmxlabs.lingo.app.application"
+            name="LiNGO">
+         <property
+               name="windowImages"
+               value="icons/logo-square-16.png,icons/logo-square-32.png,icons/logo-square-48.png,icons/logo-square-64.png,icons/logo-square-128.png">
+         </property>
+         <property
+               name="appName"
+               value="LiNGO">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="20,210,440,15">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/logo-square-16.png">
+         </property>
+	 <property
+        name="aboutText"
+        value="LiNGO&#x0A;Copyright 2010 - 2022&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
+       </property>
+  <property
+        name="startupForegroundColor"
+        value="FFFFFF">
+  </property>
+  <property
+        name="startupMessageRect"
+        value="0,0,0,0">
+  </property>
+  <property
+        name="preferenceCustomization"
+        value="plugin_customization.ini">
+  </property>
+      </product>
+   </extension>
+   <extension
+	       point="org.eclipse.ui.activities">
+	    <activity
+	          id="com.mmxlabs.lingo.default.activity"
+	          name="Default App Activity">
+	    </activity>
+	    <activityPatternBinding
+	          activityId="com.mmxlabs.lingo.default.activity"
+	          isEqualityPattern="false"
+	          pattern=".*">
+	    </activityPatternBinding>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.migration.DefaultMigrationContext">
+      <DefaultMigrationContext
+            context="com.mmxlabs.lingo">
+      </DefaultMigrationContext>
+   </extension>
+   
+   
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="risk"
+            plugin.xml="risk.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="cargo-actuals"
+            plugin.xml="actuals.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
 </plugin>

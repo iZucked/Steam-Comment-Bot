@@ -55,7 +55,7 @@ public class CustomTeamReportsTests {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -209,7 +209,7 @@ public class CustomTeamReportsTests {
 	 * @throws IOException
 	 */
 	@Test
-	public void createUserReportThenAddToTeam() throws IOException {
+	public void createUserReportThenAddToTeam() throws Exception {
 		openUserReportsManager();
 		createUserReport("test2");
 		bot.table().select("test2");
@@ -218,6 +218,8 @@ public class CustomTeamReportsTests {
 		bot.button("Add to Team").click();
 		bot.radio("Team reports").click();
 		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		// Delay to allow UI to catch up before trying to find it.	
+		Thread.sleep(3000);
 		assertTrue(bot.tableWithId("customReportsViewer").containsItem("test2"));
 	}
 

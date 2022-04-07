@@ -33,6 +33,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 
@@ -73,51 +76,11 @@ public abstract class AbstractPNLCalcRowFactory implements IPNLCalcsRowFactory {
 	public static final DecimalFormat CVFormat = new DecimalFormat("##.#");
 	
 	protected AbstractPNLCalcRowFactory() {
-		cellImageSteadyArrow = createImage("icons/steady_arrow.png");
-		cellImageGreenArrowDown = createImage("icons/green_arrow_down.png");
-		cellImageGreenArrowUp = createImage("icons/green_arrow_up.png");
-		cellImageRedArrowDown = createImage("icons/red_arrow_down.png");
-		cellImageRedArrowUp = createImage("icons/red_arrow_up.png");
-
-	}
-
-	protected Image createImage(final String path) {
-		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
-		return imageDescriptor.createImage();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		dispose();
-	}
-
-	public void dispose() {
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
-		}
+		cellImageSteadyArrow = CommonImages.getImage(IconPaths.SteadyArrow, IconMode.Enabled);
+		cellImageGreenArrowDown = CommonImages.getImage(IconPaths.GreenArrowDown, IconMode.Enabled);
+		cellImageGreenArrowUp = CommonImages.getImage(IconPaths.GreenArrowUp, IconMode.Enabled);
+		cellImageRedArrowDown = CommonImages.getImage(IconPaths.RedArrowDown, IconMode.Enabled);
+		cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 	}
 
 	/**

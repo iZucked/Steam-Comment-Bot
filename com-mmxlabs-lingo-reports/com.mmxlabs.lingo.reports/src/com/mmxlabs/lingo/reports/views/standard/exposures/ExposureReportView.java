@@ -453,10 +453,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 
-		ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_down.png");
-		cellImageDarkArrowDown = imageDescriptor.createImage();
-		imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_up.png");
-		cellImageDarkArrowUp = imageDescriptor.createImage();
+		cellImageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
+		cellImageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
 
 		colourBlue = new Color(Display.getDefault(), 135, 206, 235);
 		colourLightBlue = new Color(Display.getDefault(), 135, 206, 250);
@@ -471,12 +469,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	public void dispose() {
 
-		if (cellImageDarkArrowDown != null) {
-			cellImageDarkArrowDown.dispose();
-		}
-		if (cellImageDarkArrowUp != null) {
-			cellImageDarkArrowUp.dispose();
-		}
 		if (colourBlue != null) {
 			colourBlue.dispose();
 		}

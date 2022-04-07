@@ -45,6 +45,9 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IRowSpanProvider;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
@@ -52,19 +55,12 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 	private final EObjectTableViewerSortingSupport sortingSupport;
 	private final EObjectTableViewerFilterSupport filterSupport;
 
-	private static final ImageDescriptor imageDescriptorGreenArrowDown = Activator.getPlugin().getImageDescriptor("icons/green_arrow_down.png");
-	private static final ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
-	private static final ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
-	private static final ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
-	private static final ImageDescriptor imageDescriptorDarkArrowDown = Activator.getPlugin().getImageDescriptor("icons/dark_arrow_down.png");
-	private static final ImageDescriptor imageDescriptorDarkArrowUp = Activator.getPlugin().getImageDescriptor("icons/dark_arrow_up.png");
-
-	private static final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
-	private static final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
-	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
-	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
-	private static final Image cellImageDarkArrowDown = imageDescriptorDarkArrowDown.createImage();
-	private static final Image cellImageDarkArrowUp = imageDescriptorDarkArrowUp.createImage();
+	private final Image cellImageGreenArrowDown = CommonImages.getImage(IconPaths.GreenArrowDown, IconMode.Enabled);
+	private final Image cellImageGreenArrowUp = CommonImages.getImage(IconPaths.GreenArrowUp, IconMode.Enabled);
+	private final Image cellImageRedArrowDown = CommonImages.getImage(IconPaths.RedArrowDown, IconMode.Enabled);
+	private final Image cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
+	private final Image cellImageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
+	private final Image cellImageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
 	private BooleanSupplier copyPasteMode;
 
 	private final TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider;
@@ -440,9 +436,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 		// But try and create an observable based label provider for better data
 		// linkage.
-		try
-
-		{
+		try {
 			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
 
 				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();

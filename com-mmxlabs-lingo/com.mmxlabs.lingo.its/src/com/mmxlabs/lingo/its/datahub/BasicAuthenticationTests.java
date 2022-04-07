@@ -50,7 +50,7 @@ public class BasicAuthenticationTests {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -127,8 +127,8 @@ public class BasicAuthenticationTests {
 		bot.buttonWithId("login").click();
 		Matcher<Shell> basicLoginShellMatcher = withText("Data Hub Basic Login");
 		bot.waitUntil(Conditions.waitForShell(basicLoginShellMatcher));
-		bot.textWithLabel("Username: ").setText("philippe");
-		bot.textWithLabel("Password: ").setText("philippe");
+		bot.textWithLabel("Username: ").setText("test");
+		bot.textWithLabel("Password: ").setText("test");
 		bot.button("OK").click();
 
 		// force update online state refresh

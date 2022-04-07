@@ -38,7 +38,7 @@ public class HeadlessOptioniserRunner {
 
 	public static class Options {
 
-		public LocalDate periodStart;
+		public LocalDate periodStartDate;
 		public YearMonth periodEnd;
 
 		public List<String> loadIds = new LinkedList<>();
@@ -130,8 +130,8 @@ public class HeadlessOptioniserRunner {
 
 		final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
 
-		if (options.periodStart != null) {
-			userSettings.setPeriodStartDate(options.periodStart);
+		if (options.periodStartDate != null) {
+			userSettings.setPeriodStartDate(options.periodStartDate);
 		}
 		if (options.periodEnd != null) {
 			userSettings.setPeriodEnd(options.periodEnd);
@@ -158,7 +158,7 @@ public class HeadlessOptioniserRunner {
 
 		// Override iterations
 		if (options.iterations > 0) {
-			insertionRunner.setIteration(options.iterations);
+			insertionRunner.setIterations(options.iterations);
 		}
 
 		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
@@ -174,41 +174,6 @@ public class HeadlessOptioniserRunner {
 		}
 	}
 
-	public @NonNull SlotInsertionOptions doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull OptioniserSettings optioniserSettings, final @Nullable HeadlessOptioniserJSON loggingData,
-			int threadsAvailable, @NonNull IProgressMonitor monitor) {
-
-		final UserSettings userSettings = optioniserSettings.userSettings;
-
-		final List<Slot<?>> targetSlots = new LinkedList<>();
-		final List<VesselEvent> targetEvents = new LinkedList<>();
-
-		final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(sdp));
-		optioniserSettings.loadIds.forEach(id -> targetSlots.add(cargoFinder.findLoadSlot(id)));
-		optioniserSettings.dischargeIds.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlot(id)));
-		optioniserSettings.eventsIds.forEach(id -> targetEvents.add(cargoFinder.findVesselEvent(id)));
-
-		final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
-				sdp, sdp.getEditingDomain(), userSettings, //
-				targetSlots, targetEvents, //
-				null, // Optional extra data provider.
-				null, // Alternative initial solution provider
-				builder -> {
-					builder.withThreadCount(threadsAvailable);
-				});
-
-		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
-
-		SlotInsertionOptimiserLogger logger = loggingData == null ? null : new SlotInsertionOptimiserLogger();
-
-		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
-
-		final SlotInsertionOptions result = insertionRunner.exportSolutions(results, subMonitor.split(10));
-
-		if (loggingData != null && logger != null) {
-			HeadlessOptioniserJSONTransformer.addRunResult(0, logger, loggingData);
-		}
-
-		return result;
-	}
+	
 
 }

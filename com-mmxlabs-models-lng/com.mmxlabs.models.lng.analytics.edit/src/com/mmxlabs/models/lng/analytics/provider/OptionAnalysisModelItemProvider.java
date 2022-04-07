@@ -147,7 +147,7 @@ public class OptionAnalysisModelItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, CommonImages.getImageDescriptor(IconPaths.Sandbox, IconMode.Enabled).createImage());
+		return overlayImage(object, CommonImages.getImage(IconPaths.Sandbox, IconMode.Enabled));
 	}
 
 	/**

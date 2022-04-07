@@ -24,6 +24,11 @@ public interface IJobRunner {
 
 	void withScenario(IScenarioDataProvider sdp);
 
+	default AbstractSolutionSet run(IProgressMonitor monitor) {
+		// 0 Means query system for available threads.
+		return run(0, monitor);
+	}
+
 	AbstractSolutionSet run(int threadsAvailable, IProgressMonitor monitor);
 
 	void saveLogs(File file) throws IOException;
