@@ -21,7 +21,7 @@ public class CloudOptimisationSharedCipherProvider implements IScenarioCipherPro
 	}
 
 	@Override
-	public synchronized Cipher getSharedCipher() {
+	public synchronized DelegatingEMFCipher getSharedCipher() {
 		final DelegatingEMFCipher cipher = new DelegatingEMFCipher();
 		// add keyfile to cipher
 		if (this.keyfile != null) {

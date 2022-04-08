@@ -33,11 +33,14 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+
 
 public class OptimisationTestRunner {
 	private OptimisationTestRunner() {
@@ -72,7 +75,11 @@ public class OptimisationTestRunner {
 					OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver);
 				};
 
-				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+				if (scenarioFile.toString().endsWith(".lingo")) {
+					ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+				} else if (scenarioFile.toString().endsWith(".zip")) {
+					CSVImporter.runFromCSVZipFile(scenarioFile, action);
+				}
 			}));
 		};
 
@@ -81,8 +88,18 @@ public class OptimisationTestRunner {
 			for (final File f : baseDirectory.listFiles()) {
 				if (f.isDirectory()) {
 					final String name = f.getName();
-					final File scenario = new File(f, "scenario.lingo");
-					if (scenario.exists()) {
+					File scenario = null;
+
+					final File scenarioLingo = new File(f, "scenario.lingo");
+					if (scenarioLingo.exists()) {
+						scenario = scenarioLingo;
+					} else {
+						final File scenarioZip = new File(f, "scenario.zip");
+						if (scenarioZip.exists()) {
+							scenario = scenarioZip;
+						}
+					}
+					if (scenario != null) {
 						final List<DynamicNode> cases = new LinkedList<>();
 
 						for (final File params : f.listFiles()) {

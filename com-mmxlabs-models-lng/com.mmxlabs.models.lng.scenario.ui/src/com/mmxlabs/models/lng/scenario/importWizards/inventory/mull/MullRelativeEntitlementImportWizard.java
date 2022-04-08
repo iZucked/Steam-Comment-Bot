@@ -122,7 +122,7 @@ public class MullRelativeEntitlementImportWizard extends Wizard implements IImpo
 		final List<String> allProblems = new ArrayList<>();
 
 		try {
-			if (instance.isReadonly() || instance.isCloudLocked()) {
+			if (instance.isReadonly()) {
 				allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 			} else {
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);

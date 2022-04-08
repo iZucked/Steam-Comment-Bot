@@ -19,7 +19,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
@@ -39,15 +38,8 @@ public class Activator extends AbstractUIPlugin {
 
 	private ServiceListener serviceListener;
 
-	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerTracker;
 	private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
-
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
-
+ 
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -57,9 +49,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
-		jobManagerTracker = new ServiceTracker<>(context, IEclipseJobManager.class, null);
-		jobManagerTracker.open();
 
 		scenarioServiceSelectionProviderTracker = new ServiceTracker<>(context, IScenarioServiceSelectionProvider.class, null);
 		scenarioServiceSelectionProviderTracker.open();
@@ -104,7 +93,6 @@ public class Activator extends AbstractUIPlugin {
 		context.removeServiceListener(serviceListener);
 		services.clear();
 		// scenarioServiceSelectionProvider.deselectAll(false);
-		jobManagerTracker.close();
 		scenarioServiceSelectionProviderTracker.close();
 		plugin = null;
 		super.stop(context);
@@ -126,11 +114,7 @@ public class Activator extends AbstractUIPlugin {
 	public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
 		return scenarioServiceSelectionProviderTracker.getService();
 	}
-
-	public IEclipseJobManager getEclipseJobManager() {
-		return jobManagerTracker.getService();
-	}
-
+ 
 	/**
 	 * @param service
 	 * @return
