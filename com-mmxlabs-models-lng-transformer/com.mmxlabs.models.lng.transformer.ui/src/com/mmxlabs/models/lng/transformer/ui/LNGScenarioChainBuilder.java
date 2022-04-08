@@ -76,7 +76,7 @@ public class LNGScenarioChainBuilder {
 				options.setName(name);
 				options.setUserSettings(EcoreUtil.copy(dataTransformer.getUserSettings()));
 				return options;
-			}, false, OptionalLong.empty());
+			}, false, OptionalLong.empty(), true);
 
 			if (!optimisationPlan.getStages().isEmpty()) {
 

@@ -16,40 +16,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.FeatureNotFoundException;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,30 +38,19 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
-import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
-import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCipher;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 
 class CloudOptimisationDataUpdater {
+	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationDataUpdater.class);
 
 	private final CloudOptimisationDataServiceClient client;
 
@@ -90,26 +60,22 @@ class CloudOptimisationDataUpdater {
 	private final File tasksFile;
 	private final File userIdFile;
 
-	private final Set<String> warnedLoadFailures = new HashSet<>();
-
-	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationDataUpdater.class);
-
 	private Thread updateThread;
 	private final ReentrantLock updateLock = new ReentrantLock();
-
-	private final Consumer<CloudOptimisationDataResultRecord> readyCallback;
 
 	private ImmutableList<CloudOptimisationDataResultRecord> currentRecords = ImmutableList.of();
 
 	private boolean shortPoll = false;
 	private boolean runUpdateThread = false;
 
-	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
+	private CloudJobManager mgr;
+
+	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, CloudJobManager mgr) {
 		this.basePath = basePath;
+		this.mgr = mgr;
 		this.tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
 		this.userIdFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "userId.txt");
 		this.client = client;
-		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
 	}
 
@@ -123,7 +89,7 @@ class CloudOptimisationDataUpdater {
 				// Task status is complete, but record is not complete
 				if (!cRecord.isComplete() && cRecord.getStatus().isComplete()) {
 					try {
-						taskExecutor.execute(new DownloadTask(cRecord));
+						taskExecutor.execute(new DownloadTask(cRecord.task, cRecord));
 					} catch (final Exception e) {
 						LOG.error(e.getMessage(), e);
 					}
@@ -134,8 +100,10 @@ class CloudOptimisationDataUpdater {
 
 	private class DownloadTask implements Runnable {
 		private final CloudOptimisationDataResultRecord cRecord;
+		private Task task;
 
-		public DownloadTask(final CloudOptimisationDataResultRecord cRecord) {
+		public DownloadTask(Task task, final CloudOptimisationDataResultRecord cRecord) {
+			this.task = task;
 			this.cRecord = cRecord;
 		}
 
@@ -145,40 +113,37 @@ class CloudOptimisationDataUpdater {
 			if (cRecord.isComplete()) {
 				return;
 			}
-			if (cRecord.isHasError() || cRecord.getStatus().isFailed()) {
-				// Error, mark is complete and return;
-				cRecord.setComplete(true);
+			if (!cRecord.getStatus().isComplete()) {
+				// Not ready to download yet
 				return;
 			}
 
+			// References so the finally block can clean up
+			File temp = null;
+			File solutionFile = null;
 			try {
 
 				// Put this in the temp folder as delete() doesn't always seem to it
-				final File temp = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), cRecord.getJobid(), ".lingo").toFile();
+				temp = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), cRecord.getJobid(), ".solution").toFile();
 
 				final IGatewayResponse downloadResult = downloadData(cRecord, temp);
 				if (downloadResult == null) {
-					// Failed!
-					temp.delete();
+					// Failed, probably offline, we can try again
 					return;
 				} else if (!downloadResult.isResultDownloaded()) {
-					temp.delete();
+					// Download failed, but we got a response from our gateway.
+					// Should we try again? Some errors are temporary issues, some are permanent
 					if (!downloadResult.shouldPollAgain()) {
-						cRecord.setHasError(downloadResult.isError());
+						// Mark record as complete as we will not attempt anything further
 						cRecord.setComplete(true);
-						cRecord.setStatus(ResultStatus.from(String.format("{ \"status\" : \"complete\", \"reason\" : \"%s\"  }", downloadResult.getResultReason()), null));
-						readyCallback.accept(cRecord);
+						// Record the failure state
+						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to download result"));
 					}
 					return;
+
 				} else {
 
-					// System.out.println("Downloaded " + temp);
-
-					// final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
-
-					final File solutionFile = new File(String.format("%s/%s.xmi", basePath, cRecord.getJobid()));
-					final URI solutionFileURI = URI.createFileURI(solutionFile.getAbsolutePath());
-
+					// Successful download. Now we need to de-crypt the result and import it.
 					final File keyfileFile = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
 					if (!keyfileFile.exists()) {
 						throw new RuntimeException(String.format("Failed to get the result decryption key for job %s", cRecord.getJobid()));
@@ -191,11 +156,16 @@ class CloudOptimisationDataUpdater {
 					final CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfilev2);
 					final Cipher cloudCipher = scenarioCipherProvider.getSharedCipher();
 
+					// Target file to save into
+					solutionFile = new File(String.format("%s/%s.xmi", basePath, cRecord.getJobid()));
+
+					File pSolutionFile = solutionFile;
+					File pTempFile = temp;
 					// Re-encrypt the results file.
 					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
 						final Cipher localCipher = cipherProvider.getSharedCipher();
-						try (FileOutputStream fout = new FileOutputStream(solutionFile)) {
-							try (FileInputStream fin = new FileInputStream(temp)) {
+						try (FileOutputStream fout = new FileOutputStream(pSolutionFile)) {
+							try (FileInputStream fin = new FileInputStream(pTempFile)) {
 								// Data needs to be decrypted then encrypted
 								try (InputStream is = cloudCipher.decrypt(fin)) {
 									try (OutputStream os = localCipher.encrypt(fout)) {
@@ -207,114 +177,28 @@ class CloudOptimisationDataUpdater {
 						}
 					});
 
-					// Load the temp file into the original scenario.
-					{
-
-						// Look up the original scenario.
-						final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
-
-						if (instanceRef != null) {
-							final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef);
-							try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("DownloadTask:patchScenario")) {
-								final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(sdp);
-
-								final EditingDomain ed = sdp.getEditingDomain();
-
-								// Find the root object and create a URI mapping to the real URI so the result
-								// xmi can resolve
-								for (final var r : ed.getResourceSet().getResources()) {
-									if (!r.getContents().isEmpty() && r.getContents().get(0) instanceof LNGScenarioModel) {
-										ed.getResourceSet().getURIConverter().getURIMap().put(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI), r.getURI());
-									}
-								}
-
-								// Load in the result.
-								final Resource rr = ed.getResourceSet().createResource(solutionFileURI);
-								try {
-									ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
-										final Map<String, URIConverter.Cipher> options = new HashMap<>();
-										options.put(Resource.OPTION_CIPHER, cipherProvider.getSharedCipher());
-										rr.load(options);
-									});
-								} catch (final Exception e) {
-									// Clean up resource
-									ed.getResourceSet().getResources().remove(rr);
-
-									if (e.getCause() instanceof final IOWrappedException we) {
-										if (we.getCause() instanceof final FeatureNotFoundException fnfe) {
-											cRecord.setHasError(true);
-											cRecord.setComplete(true);
-											cRecord.setStatus(ResultStatus.from("{ \"status\" : \"failed\", \"reason\" : \"Data model version issue\"  }", null));
-											readyCallback.accept(cRecord);
-											throw e;
-										}
-									}
-								}
-								final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
-
-								if (cRecord.getResultName() != null && !cRecord.getResultName().isBlank()) {
-									res.setName(cRecord.getResultName());
-								}
-
-								assert res != null;
-
-								// "Resolve" the references. The result references to the main scenario may be
-								// "proxy" objects
-								EcoreUtil.resolveAll(ed.getResourceSet());
-
-								// Remove the obsolete resource
-								ed.getResourceSet().getResources().remove(rr);
-								// Clear the mapping
-								ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
-
-								rr.getContents().clear();
-
-								if (cRecord.getType() != null) {
-									final String type = cRecord.getType();
-									switch (type) {
-									case "SANDBOX" -> {
-										for (final var om : am.getOptionModels()) {
-											if (Objects.equals(cRecord.getComponentUUID(), om.getUuid())) {
-												RunnerHelper.exec(() -> ed.getCommandStack().execute(SetCommand.create(ed, om, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, res)), true);
-												break;
-											}
-										}
-									}
-									case "OPTIMISATION" -> RunnerHelper
-											.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)), true);
-
-									case "OPTIONISER" -> RunnerHelper.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)),
-											true);
-
-									}
-								}
-								cRecord.setResultUUID(res.getUuid());
-							}
-						}
-					}
-
-					if (solutionFile.exists()) {
-						solutionFile.delete();
-					}
-
-					cleanup(basePath, cRecord.getJobid(), temp);
-
-					// Move the temp file
+					// Nothing further for this task to do regarding upstream.
 					cRecord.setComplete(true);
+					deleteRecord(cRecord);
 
-					// force write to tasks.json
-					try {
-						final String json = CloudOptimisationDataServiceClient.getJSON(currentRecords);
-						Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
-					} catch (final Exception e) {
-						LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
+					boolean success = mgr.solutionReady(task, solutionFile);
+
+					if (success) {
+						mgr.updateTaskStatus(task, TaskStatus.complete());
+					} else {
+						mgr.updateTaskStatus(task, TaskStatus.failed("Solution import failed"));
 					}
-
-					readyCallback.accept(cRecord);
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
-				return;
+				task.errorHandler.accept("Error importing solution " + e.getMessage(), e);
+				mgr.updateTaskStatus(task, TaskStatus.failed(e.getMessage()));
+			} finally {
+				if (solutionFile != null && solutionFile.exists()) {
+					solutionFile.delete();
+				}
+				if (temp != null && temp.exists()) {
+					temp.delete();
+				}
 			}
 
 		}
@@ -362,81 +246,6 @@ class CloudOptimisationDataUpdater {
 	public void start() {
 		createUserIdFile();
 
-		if (tasksFile.exists() && tasksFile.canRead()) {
-			try {
-				final String json = Files.readString(tasksFile.toPath());
-				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-				final List<CloudOptimisationDataResultRecord> obsoleteTasks = new LinkedList<>();
-				final Set<String> linkedScenarioUUID = new HashSet<>();
-				if (tasks != null && !tasks.isEmpty()) {
-					// Update downloaded state
-					for (final var r : tasks) {
-						linkedScenarioUUID.add(r.getUuid());
-
-						final ScenarioInstance[] instanceRef = new ScenarioInstance[1];
-						ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
-							// Really want to make sure this is the "My Scenarios" services, but local is a
-							// good proxy for now.
-							if (ss.getServiceModel().isLocal()) {
-								// Does the UUID exist in the service?
-								if (ss.exists(r.getUuid())) {
-									final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
-									while (itr.hasNext()) {
-										final EObject obj = itr.next();
-										if (obj instanceof final ScenarioInstance si) {
-											if (Objects.equals(r.getUuid(), si.getUuid())) {
-												instanceRef[0] = si;
-												return false;
-											}
-										}
-									}
-								}
-
-							}
-							return false;
-						});
-						if (instanceRef[0] == null) {
-							obsoleteTasks.add(r);
-						} else {
-							r.setScenarioInstance(instanceRef[0]);
-						}
-					}
-
-					// Find any scenario which is cloud locked, but not known by the tasks list and
-					// unlock them.
-					ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
-						// Really want to make sure this is the "My Scenarios" services, but local is a
-						// good proxy for now.
-						if (ss.getServiceModel().isLocal()) {
-							// Does the UUID exist in the service?
-							final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
-							while (itr.hasNext()) {
-								final EObject obj = itr.next();
-								if (obj instanceof final ScenarioInstance si) {
-									if (si.isCloudLocked() && !linkedScenarioUUID.contains(si.getUuid())) {
-										RunnerHelper.asyncExec(() -> si.setCloudLocked(false));
-									}
-								}
-							}
-
-						}
-						return false;
-					});
-
-					tasks.removeAll(obsoleteTasks);
-
-					currentRecords = ImmutableList.copyOf(tasks);
-					runDownloadTasks(currentRecords);
-
-					currentRecords.forEach(this::setScenarioCloudLocked);
-
-					// Trigger UI update
-					readyCallback.accept(null);
-				}
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		}
 		runUpdateThread = true;
 		updateThread = new Thread("CloudOptimisationUpdaterThread") {
 			@Override
@@ -472,6 +281,39 @@ class CloudOptimisationDataUpdater {
 			}
 
 		};
+
+		if (tasksFile.exists() && tasksFile.canRead()) {
+			try {
+				final String json = Files.readString(tasksFile.toPath());
+				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+				if (tasks != null && !tasks.isEmpty()) {
+					// Update downloaded state
+					for (final var r : tasks) {
+						if (r.job == null) {
+							continue;
+						}
+						if (r.isComplete()) {
+							continue;
+						}
+						ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
+							// Really want to make sure this is the "My Scenarios" services, but local is a
+							// good proxy for now.
+							if (ss.getServiceModel().isLocal()) {
+								// Does the UUID exist in the service?
+								ScenarioInstance si = ss.getScenarioInstance(r.job.getScenarioUUID());
+								if (si != null) {
+									CloudJobManager.INSTANCE.resumeTask(si, r);
+								}
+							}
+							return false;
+						});
+					}
+				}
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		updateThread.start();
 	}
 
@@ -508,12 +350,13 @@ class CloudOptimisationDataUpdater {
 		for (final CloudOptimisationDataResultRecord r : currentRecords) {
 
 			// Do not request an update for complete jobs
-			if (r.isHasError() || r.isComplete() || r.getStatus().isFailed()) {
-				newList.add(r);
+			if (r.isComplete()) {
+				// Clean up
+				deleteRecord(r);
+				// Record will not be added to the updated list
 				continue;
 			}
 
-			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
 			// What is the status?
 			try {
@@ -521,20 +364,37 @@ class CloudOptimisationDataUpdater {
 			} catch (final Exception e) {
 				// Keep old status if there is some kind of exception.
 			}
-			// Is the record still available upstream?
-			r.setRemote(r.getStatus() != null && !r.getStatus().isNotFound());
 
-			if (oldStatus != null && !oldStatus.isComplete() && r.getStatus().isComplete()) {
-				final Instant n = Instant.now();
-				r.setCloudRuntime(n.toEpochMilli() - r.getCreationDate().toEpochMilli());
+			if (r.getStatus().isNotFound()) {
+				// Record is not available upstream
+				r.setComplete(true);
+				// Clean up
+				deleteRecord(r);
+				continue;
 			}
 
-			changed |= oldRemote != r.isRemote();
-			if (!r.isActive()) {
-				changed |= !Objects.equals(oldStatus, r.getStatus());
+			// Has the upstream status changed in some way?
+			if (!Objects.equals(oldStatus, r.getStatus())) {
+				changed = true;
+
+				// Check upstream status and update the task accordingly.
+				ResultStatus rs = r.getStatus();
+				if (rs.isSubmitted()) {
+					mgr.updateTaskStatus(r.task, TaskStatus.submitted());
+				} else if (rs.isRunning()) {
+					mgr.updateTaskStatus(r.task, TaskStatus.running(rs.getProgress() / 100.0));
+				} else if (rs.isComplete()) {
+					mgr.updateTaskStatus(r.task, TaskStatus.running(1.0));
+				} else if (rs.isFailed()) {
+					mgr.updateTaskStatus(r.task, TaskStatus.failed(rs.getReason()));
+
+					r.setComplete(true);
+					deleteRecord(r);
+					continue;
+				}
 			}
 
-			if (r.getStatus().isComplete() && !r.isComplete()) {
+			if (!r.isComplete()) {
 				// Result not downloaded, so mark as changed.
 				changed = true;
 				shortPoll = true;
@@ -543,20 +403,12 @@ class CloudOptimisationDataUpdater {
 			newList.add(r);
 
 			shortPoll |= r.isActive();
-
-			if (r.isActive()) {
-				readyCallback.accept(r);
-			}
 		}
 		changed |= currentRecords.size() != newList.size();
+
 		if (changed) {
 			saveAndUpdateCurrentRecords(newList);
 			runDownloadTasks(currentRecords);
-
-			currentRecords.forEach(this::setScenarioCloudLocked);
-
-			// Trigger UI update
-			readyCallback.accept(null);
 		}
 	}
 
@@ -568,10 +420,6 @@ class CloudOptimisationDataUpdater {
 				.build();
 
 		saveAndUpdateCurrentRecords(currentRecords);
-		setScenarioCloudLocked(r);
-
-		// Refresh all
-		readyCallback.accept(null);
 
 		// Tell refresh job to wake up
 		shortPoll = true;
@@ -584,10 +432,27 @@ class CloudOptimisationDataUpdater {
 			for (final String jobId : jobIds) {
 				final CloudOptimisationDataResultRecord cRecord = getRecord(jobId);
 				if (cRecord != null) {
-					final boolean result = deleteRecord(cRecord);
+					deleteRecord(cRecord);
 				}
 			}
-			readyCallback.accept(null);
+		} finally {
+			resume();
+		}
+	}
+
+	public void deleteDownloaded(Task task) {
+		pause();
+		try {
+
+			final List<CloudOptimisationDataResultRecord> records = currentRecords;
+			if (records != null && !records.isEmpty()) {
+				for (final CloudOptimisationDataResultRecord cRecord : records) {
+					if (cRecord.task == task) {
+						deleteRecord(cRecord);
+						break;
+					}
+				}
+			}
 		} finally {
 			resume();
 		}
@@ -602,7 +467,7 @@ class CloudOptimisationDataUpdater {
 	 * @return
 	 */
 	private synchronized CloudOptimisationDataResultRecord getRecord(final String jobId) {
-		final List<CloudOptimisationDataResultRecord> records = getRecords();
+		final List<CloudOptimisationDataResultRecord> records = currentRecords;
 		if (records != null && !records.isEmpty()) {
 			for (final CloudOptimisationDataResultRecord record : records) {
 				if (record.getJobid().equalsIgnoreCase(jobId)) {
@@ -613,20 +478,7 @@ class CloudOptimisationDataUpdater {
 		return null;
 	}
 
-	/**
-	 * Returns a master list of records
-	 *
-	 * @return
-	 */
-	public ImmutableList<CloudOptimisationDataResultRecord> getRecords() {
-		return currentRecords;
-	}
-
-	private synchronized boolean deleteRecord(final CloudOptimisationDataResultRecord cRecord) {
-
-		cRecord.setDeleted(true);
-
-		setScenarioCloudLocked(cRecord);
+	private synchronized void deleteRecord(final CloudOptimisationDataResultRecord cRecord) {
 
 		if (currentRecords.contains(cRecord)) {
 			final List<CloudOptimisationDataResultRecord> l = new LinkedList<>(currentRecords);
@@ -639,10 +491,9 @@ class CloudOptimisationDataUpdater {
 			} catch (final Exception e) {
 				LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
 			}
-
-			return cleanup(basePath, cRecord.getJobid(), null);
 		}
-		return false;
+
+		cleanup(basePath, cRecord.getJobid(), null);
 	}
 
 	private boolean cleanup(final File basePath, final String jobid, final File resultFile) {
@@ -680,91 +531,13 @@ class CloudOptimisationDataUpdater {
 		updateLock.unlock();
 	}
 
-	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record, final boolean readOnly) {
-		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
-		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
-		if (manifest != null) {
-			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(readOnly);
-			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(record.getJobid());
-
-			scenarioInstance.setRootObjectURI(archiveURI.toString());
-
-			scenarioInstance.setName(record.getOriginalName());
-			scenarioInstance.setVersionContext(manifest.getVersionContext());
-			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
-
-			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
-			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
-
-			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			meta.setCreator(record.getCreator());
-			meta.setCreated(Date.from(record.getCreationDate()));
-
-			scenarioInstance.setMetadata(meta);
-			meta.setContentType(manifest.getScenarioType());
-			// Probably better pass in from service
-			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try {
-					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
-					if (modelRecord != null) {
-						modelRecord.setName(scenarioInstance.getName());
-						modelRecord.setScenarioInstance(scenarioInstance);
-						SSDataManager.Instance.register(scenarioInstance, modelRecord);
-						scenarioInstance.setRootObjectURI(archiveURI.toString());
-					}
-				} catch (final ScenarioEncryptionException e) {
-					LOG.error(e.getMessage(), e);
-				} catch (final Exception e) {
-					LOG.error(e.getMessage(), e);
-				}
-			});
-			return scenarioInstance;
-		}
-
-		if (warnedLoadFailures.add(f.getName())) {
-			LOG.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
-		}
-		return null;
-	}
-
 	private synchronized void saveAndUpdateCurrentRecords(final List<CloudOptimisationDataResultRecord> newList) {
 		try {
 			final String json = CloudOptimisationDataServiceClient.getJSON(newList);
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
 		} catch (final Exception e) {
-			final int ii = 0;
 			e.printStackTrace();
 		}
 		currentRecords = ImmutableList.copyOf(newList);
-	}
-
-	public synchronized void setLocalRuntime(final String jobId, final long runtime) {
-		final CloudOptimisationDataResultRecord record = getRecord(jobId);
-		if (record != null) {
-			record.setLocalRuntime(runtime);
-		}
-		readyCallback.accept(record);
-	}
-
-	private void setScenarioCloudLocked(final CloudOptimisationDataResultRecord cRecord) {
-		// Look up the original scenario.
-		final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
-
-		if (instanceRef != null) {
-			final boolean shouldBeLocked;
-			if (cRecord.isDeleted() || cRecord.isComplete() || cRecord.isHasError() || cRecord.getStatus().isFailed()) {
-				shouldBeLocked = false;
-			} else if (cRecord.getStatus().isSubmitted() || cRecord.getStatus().isRunning()) {
-				shouldBeLocked = true;
-			} else {
-				shouldBeLocked = false;
-			}
-
-			if (instanceRef.isCloudLocked() != shouldBeLocked) {
-				RunnerHelper.exec(() -> instanceRef.setCloudLocked(shouldBeLocked), false);
-			}
-		}
 	}
 }

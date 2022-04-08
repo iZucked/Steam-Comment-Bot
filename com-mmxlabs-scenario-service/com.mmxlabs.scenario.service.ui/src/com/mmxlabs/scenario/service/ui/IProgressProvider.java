@@ -18,6 +18,10 @@ public interface IProgressProvider {
 	
 	public interface IProgressChanged {
 		void changed(Object element);
+		
+		default void listChanged() {
+			
+		}
 	}
 
 	@Nullable Pair<Double, RunType> getProgress(ScenarioInstance scenarioInstance, ScenarioFragment fragment);

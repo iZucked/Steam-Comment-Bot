@@ -10,12 +10,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaluatorService;
-import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.manager.ILiveEvaluatorService;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
+import com.mmxlabs.scenario.service.model.manager.IScenarioInstanceEvaluator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;

@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scenario.service;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -14,6 +14,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public interface IScenarioServiceListener {
 
 	/**
@@ -22,7 +23,8 @@ public interface IScenarioServiceListener {
 	 * @param scenarioService
 	 * @param scenarioInstance
 	 */
-	public void onPreScenarioInstanceDelete(@NonNull IScenarioService scenarioService, @NonNull ScenarioInstance scenarioInstance);
+	default void onPreScenarioInstanceDelete(IScenarioService scenarioService, ScenarioInstance scenarioInstance) {
+	}
 
 	/**
 	 * Callback fired after a {@link ScenarioInstance} has been unloaded via {@link IScenarioService#save(ScenarioInstance)}. NOTE: Unload is currently not part of API
@@ -30,5 +32,6 @@ public interface IScenarioServiceListener {
 	 * @param scenarioService
 	 * @param scenarioInstance
 	 */
-	void onPreScenarioInstanceUnload(@NonNull IScenarioService scenarioService, @NonNull ScenarioInstance scenarioInstance);
+	default void onPreScenarioInstanceUnload(IScenarioService scenarioService, ScenarioInstance scenarioInstance) {
+	}
 }

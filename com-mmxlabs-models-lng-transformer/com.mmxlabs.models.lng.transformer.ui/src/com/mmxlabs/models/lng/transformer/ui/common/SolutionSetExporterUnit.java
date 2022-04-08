@@ -74,7 +74,7 @@ public class SolutionSetExporterUnit {
 	private static final Logger LOG = LoggerFactory.getLogger(SolutionSetExporterUnit.class);
 
 	public static IChainLink exportMultipleSolutions(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge,
-			final Supplier<AbstractSolutionSet> solutionSetFactory, final boolean dualPNLMode, final OptionalLong portfolioBreakEvenTarget) {
+			final Supplier<AbstractSolutionSet> solutionSetFactory, final boolean dualPNLMode, final OptionalLong portfolioBreakEvenTarget, boolean addToModel) {
 
 		final IChainLink link = new IChainLink() {
 			@Override
@@ -82,7 +82,7 @@ public class SolutionSetExporterUnit {
 					@NonNull final IProgressMonitor monitor) {
 				// Use the real initial sequences rather then the one from the last "reset"
 				final SequencesContainer container = new SequencesContainer(dt.getInitialResult().getBestSolution());
-				SolutionSetExporterUnit.export(scenarioToOptimiserBridge, solutionSetFactory, dualPNLMode, portfolioBreakEvenTarget, container, inputState, monitor);
+				SolutionSetExporterUnit.export(scenarioToOptimiserBridge, solutionSetFactory, dualPNLMode, portfolioBreakEvenTarget, container, inputState, monitor, addToModel);
 				return inputState;
 			}
 
@@ -100,7 +100,7 @@ public class SolutionSetExporterUnit {
 	public static void export(
 
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final Supplier<AbstractSolutionSet> solutionSetFactory, final boolean dualPNLMode,
-			final OptionalLong portfolioBreakEvenTarget, @NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor) {
+			final OptionalLong portfolioBreakEvenTarget, @NonNull final SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final IProgressMonitor monitor, boolean addToModel) {
 		final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 		final ScheduleModelToScheduleSpecification scheduleTransformer = new ScheduleModelToScheduleSpecification();
 		SequencesToChangeDescriptionTransformer changeTransformer = null;
@@ -226,17 +226,19 @@ public class SolutionSetExporterUnit {
 				final EditingDomain originalEditingDomain = scenarioToOptimiserBridge.getScenarioDataProvider().getEditingDomain();
 				helper.generateResults(scenarioToOptimiserBridge.getScenarioInstance(), userSettings, originalEditingDomain, plan);
 			}
-			RunnerHelper.syncExecDisplayOptional(() -> {
-				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioToOptimiserBridge.getScenarioDataProvider());
-				analyticsModel.getOptimisations().add(plan);
-				final ScenarioInstance instance = scenarioToOptimiserBridge.getScenarioInstance();
-				if (instance != null) {
-					final ModelReference sharedReference = SSDataManager.Instance.getModelRecord(instance).getSharedReference();
-					if (sharedReference != null) {
-						sharedReference.setDirty();
+			if (addToModel) {
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioToOptimiserBridge.getScenarioDataProvider());
+					analyticsModel.getOptimisations().add(plan);
+					final ScenarioInstance instance = scenarioToOptimiserBridge.getScenarioInstance();
+					if (instance != null) {
+						final ModelReference sharedReference = SSDataManager.Instance.getModelRecord(instance).getSharedReference();
+						if (sharedReference != null) {
+							sharedReference.setDirty();
+						}
 					}
-				}
-			});
+				});
+			}
 
 		} finally {
 			monitor.done();

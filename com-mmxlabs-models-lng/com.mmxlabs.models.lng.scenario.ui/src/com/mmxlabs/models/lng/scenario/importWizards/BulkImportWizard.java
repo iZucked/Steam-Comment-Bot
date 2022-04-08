@@ -141,7 +141,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly() || instance.isCloudLocked()) {
+				if (instance.isReadonly()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}

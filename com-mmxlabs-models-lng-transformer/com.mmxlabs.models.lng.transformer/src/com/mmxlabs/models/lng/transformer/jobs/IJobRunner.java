@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -24,12 +25,20 @@ public interface IJobRunner {
 
 	void withScenario(IScenarioDataProvider sdp);
 
-	default AbstractSolutionSet run(IProgressMonitor monitor) {
+	/**
+	 * Returns null if cancelled.
+	 * 
+	 * @param threadsAvailable
+	 * @param monitor
+	 * @return
+	 */
+	@Nullable
+	AbstractSolutionSet run(int threadsAvailable, IProgressMonitor monitor);
+
+	default @Nullable AbstractSolutionSet run(IProgressMonitor monitor) {
 		// 0 Means query system for available threads.
 		return run(0, monitor);
 	}
-
-	AbstractSolutionSet run(int threadsAvailable, IProgressMonitor monitor);
 
 	void saveLogs(File file) throws IOException;
 

@@ -9,14 +9,14 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionDelegate;
 
-import com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaluatorService;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.manager.ILiveEvaluatorService;
 
 public class LiveEvaluatorStateEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
 
 	private static final String TOOLTIP_ACTIVE = "Auto evaluate is on";
 	private static final String TOOLTIP_INACTIVE = "Auto evaluate is off";
-	
+
 	@Override
 	public void run(final IAction action) {
 
