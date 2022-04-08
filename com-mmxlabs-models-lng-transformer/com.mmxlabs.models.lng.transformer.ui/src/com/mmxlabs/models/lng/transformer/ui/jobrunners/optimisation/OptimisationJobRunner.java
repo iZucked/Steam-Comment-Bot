@@ -39,8 +39,14 @@ import com.google.inject.Module;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -52,9 +58,11 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.CustomTypeResolverBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.HeadlessRunnerUtils;
+import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.EvaluationSettingsOverrideModule;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
@@ -126,6 +134,9 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			if (meta != null) {
 				json.setMeta(meta);
 			}
+//			if (scenarioMeta != null) {
+//				json.setScenarioMeta(scenarioMeta);
+//			}
 			json.getParams().setCores(threadsAvailable);
 
 			loggingData = json;
@@ -164,6 +175,8 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			final ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
+			mapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+			mapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 
 			final CustomTypeResolverBuilder resolver = new CustomTypeResolverBuilder();
 			resolver.init(JsonTypeInfo.Id.CLASS, null);
@@ -307,7 +320,17 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			final LNGDataTransformer dataTransformer = runner.getScenarioToOptimiserBridge().getDataTransformer();
 			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
 			link.run(dataTransformer, initialSequencesContainer, result, new NullProgressMonitor());
-
+			
+			if (loggingOutput != null) {
+				if (scenarioMeta == null ) {
+					scenarioMeta = ScenarioMetaUtils.writeOptimisationMetrics(
+									runner.getScenarioToOptimiserBridge().getOptimiserScenario(),
+									userSettings);
+				}
+				
+				loggingOutput.setScenarioMeta(scenarioMeta);
+			}
+			
 			return options;
 
 		} catch (final Exception e) {

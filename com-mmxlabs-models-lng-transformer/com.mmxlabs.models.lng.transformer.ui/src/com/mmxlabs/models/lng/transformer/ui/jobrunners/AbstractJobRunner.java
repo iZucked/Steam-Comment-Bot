@@ -14,12 +14,14 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.transformer.jobs.IJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 
 @NonNullByDefault
 public abstract class AbstractJobRunner implements IJobRunner {
 
 	protected boolean enableLogging = false;
 	protected @Nullable Meta meta;
+	protected @Nullable ScenarioMeta scenarioMeta;
 
 	public static ObjectMapper createObjectMapper() {
 
@@ -36,6 +38,8 @@ public abstract class AbstractJobRunner implements IJobRunner {
 		enableLogging = true;
 		if (object instanceof Meta m) {
 			this.meta = m;
+		} else if (object instanceof ScenarioMeta om) {
+			this.scenarioMeta = om;
 		}
 	}
 }

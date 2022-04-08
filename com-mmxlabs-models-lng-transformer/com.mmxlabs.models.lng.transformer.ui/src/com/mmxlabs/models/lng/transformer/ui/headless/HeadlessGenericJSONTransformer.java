@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 import java.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 
 public class HeadlessGenericJSONTransformer<Params extends HeadlessGenericJSON.Params, Metrics extends HeadlessGenericJSON.Metrics, T extends HeadlessGenericJSON<Params,Metrics>> {
 
@@ -19,6 +20,7 @@ public class HeadlessGenericJSONTransformer<Params extends HeadlessGenericJSON.P
 			result.setMetrics(createMetrics(clazzM));
 			result.setMeta(createMetaData());
 			result.setParams(createParams(clazzP));
+			result.setScenarioMeta(createScenarioMeta());
 			return result;
 		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
@@ -69,5 +71,9 @@ public class HeadlessGenericJSONTransformer<Params extends HeadlessGenericJSON.P
 		return meta;
 	}
 	
-	
+	private ScenarioMeta createScenarioMeta() {
+		HeadlessGenericJSON.ScenarioMeta scenarioMeta = new HeadlessGenericJSON.ScenarioMeta();
+		
+		return scenarioMeta;
+	}
 }
