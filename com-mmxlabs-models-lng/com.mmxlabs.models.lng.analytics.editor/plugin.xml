@@ -348,52 +348,6 @@
             </activeWhen>
       </handler>
       <handler
-            class="com.mmxlabs.models.lng.analytics.ui.views.CreateSensitivityHandler"
-            commandId="com.mmxlabs.models.lng.analytics.editor.createSensitivity">
-         <enabledWhen>
-                  <and>
-                  <with
-                        variable="selection">
-               <iterate
-                     ifEmpty="false">
-               
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
-                     <not>
-                        <test
-                              forcePluginActivation="true"
-                              property="com.mmxlabs.scenario.service.ui.flags.readonly">
-                        </test>
-                     </not>
-                  </and>
-               </iterate>
-                  </with>
-                      <count
-                              value="1">
-                        </count>
-                          </and>
-            </enabledWhen>
-            <activeWhen>
-                   <and>
-                  <with
-                        variable="selection">
-               <iterate
-                     ifEmpty="false">
-               
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                  </instanceof>
-               </iterate>
-                  </with>
-                      <count
-                              value="1">
-                        </count>
-                          </and>
-            </activeWhen>
-      </handler>
-      <handler
             class="com.mmxlabs.models.lng.analytics.ui.views.breakeven.CreateBreakEvenHandler"
             commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven">
          <enabledWhen>

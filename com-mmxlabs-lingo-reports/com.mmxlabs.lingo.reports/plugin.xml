@@ -159,14 +159,6 @@
       </view>
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
-            icon="icons:/icons/16x16/table.png"
-            id="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
-            name="Price Sensitivity"
-            restorable="true">
-      </view>
-      <view
-            category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
             icon="icons:/icons/16x16/table.png"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
@@ -910,6 +902,10 @@
       <PluginXMLEnablement
             feature="fitness-view"
             plugin.xml="fitness.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="price-sensitivity"
+            plugin.xml="pricesensitivity.plugin.xml">
       </PluginXMLEnablement>
    </extension>
    <extension
