@@ -204,7 +204,7 @@ public class DataBrowser extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		final Bundle bundle = FrameworkUtil.getBundle(DataBrowser.class);
 
-		bcImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
+		bcImage = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
 
 		scenarioTracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(bundle.getBundleContext(), ScenarioServiceRegistry.class, null) {
 			@Override
@@ -661,10 +661,6 @@ public class DataBrowser extends ViewPart {
 		}
 		if (dataExtensionTracker != null) {
 			dataExtensionTracker.close();
-		}
-		if (bcImage != null) {
-			bcImage.dispose();
-			bcImage = null;
 		}
 		super.dispose();
 	}

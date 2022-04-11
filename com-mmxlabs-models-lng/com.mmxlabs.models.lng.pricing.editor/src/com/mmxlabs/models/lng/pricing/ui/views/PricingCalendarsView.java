@@ -12,7 +12,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -23,12 +22,10 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -162,9 +159,7 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 
 		{
 			editBtn = new Button(selector, SWT.PUSH);
-			final Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled).createImage();
-			editBtn.setImage(imgEnabled);
-			editBtn.addDisposeListener(e -> imgEnabled.dispose());
+			editBtn.setImage(CommonImages.getImage(IconPaths.Edit, IconMode.Enabled));
 
 			editBtn.setEnabled(false);
 
@@ -182,9 +177,7 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 		{
 			deleteBtn = new Button(selector, SWT.PUSH);
 
-			final Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-			deleteBtn.setImage(imgEnabled);
-			deleteBtn.addDisposeListener(e -> imgEnabled.dispose());
+			deleteBtn.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 
 			deleteBtn.setEnabled(false);
 
@@ -229,10 +222,7 @@ public class PricingCalendarsView extends ScenarioTableViewerView<PricingCalenda
 		}
 
 		final Button btn_new = new Button(selector, SWT.PUSH);
-
-		final Image addImg = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-		btn_new.setImage(addImg);
-		btn_new.addDisposeListener(e -> addImg.dispose());
+		btn_new.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 
 		btn_new.addSelectionListener(new SelectionAdapter() {
 

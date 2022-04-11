@@ -265,9 +265,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 		buttonLayout.marginWidth = 0;
 		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-			remove.setImage(img);
-			remove.addDisposeListener(e -> img.dispose());
+			remove.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 		}
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
@@ -294,11 +292,9 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 		});
 		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-			add.setImage(img);
-			add.addDisposeListener(e -> img.dispose());
+			add.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 		}
-		
+
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		add.addSelectionListener(new SelectionAdapter() {

@@ -51,7 +51,6 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.internal.navigator.actions.CollapseAllAction;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
@@ -166,8 +165,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
-		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
-		statusColumnImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
+		showColumnImage = CommonImages.getImage(IconPaths.Console, IconMode.Enabled);
+		statusColumnImage = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
 	}
 
 	@Override
@@ -175,9 +174,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
-
-		showColumnImage.dispose();
-		statusColumnImage.dispose();
 
 		linkHelper.dispose();
 

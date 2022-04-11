@@ -657,7 +657,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				};
 
-//				copy.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 				copy.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled));
 
 				barManager.add(copy);

@@ -186,9 +186,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			Button editBtn;
 			{
 				Button btn = new Button(selector, SWT.PUSH);
-				Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled).createImage();
-				btn.setImage(imgEnabled);
-				btn.addDisposeListener(e -> imgEnabled.dispose());
+				btn.setImage(CommonImages.getImage(IconPaths.Edit, IconMode.Enabled));
 
 				btn.setEnabled(false);
 
@@ -209,9 +207,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			{
 				Button btn = new Button(selector, SWT.PUSH);
 
-				Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-				btn.setImage(imgEnabled);
-				btn.addDisposeListener(e -> imgEnabled.dispose());
+				btn.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 
 				btn.setEnabled(false);
 
@@ -248,10 +244,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			}
 
 			Button btn_new = new Button(selector, SWT.PUSH);
-
-			Image addImg = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-			btn_new.setImage(addImg);
-			btn_new.addDisposeListener(e -> addImg.dispose());
+			btn_new.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 
 			final SashForm sash = new SashForm(sectionParent, SWT.HORIZONTAL);
 			sectionParent.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());

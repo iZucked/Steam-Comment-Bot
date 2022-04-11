@@ -25,7 +25,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -42,8 +41,8 @@ import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 import com.mmxlabs.scenario.service.ui.IProgressProvider;
-import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 import com.mmxlabs.scenario.service.ui.IProgressProvider.RunType;
+import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 /**
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override
@@ -244,7 +243,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 
 		initTracker();
 
-		bcImage = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
+		bcImage = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
 	}
 
 	/*
@@ -272,10 +271,6 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 				service.removeChangedListener(changeListenerProgress);
 			}
 			progressProviderTracker.close();
-		}
-		if (bcImage != null) {
-			bcImage.dispose();
-			bcImage = null;
 		}
 	}
 
