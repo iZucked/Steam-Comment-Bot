@@ -370,7 +370,6 @@ public class ScenarioServicePushToCloudAction {
 		File tmpEncryptedScenarioFile = null;
 		File zipToUpload = null;
 
-		
 		try { // Try for the progress monitor and cleanup
 
 			// gateway connectivity check
@@ -782,8 +781,10 @@ public class ScenarioServicePushToCloudAction {
 
 	private static void cleanup(final File anonyMap, final KeyData keyData, File tmpEncryptedScenarioFile, File zipToUpload) {
 		deleteFile(anonyMap);
-		deleteFile(keyData.keyStore());
-		deleteFile(keyData.encryptedSymmetricKey());
+		if (keyData != null) {
+			deleteFile(keyData.keyStore());
+			deleteFile(keyData.encryptedSymmetricKey());
+		}
 		deleteFile(tmpEncryptedScenarioFile);
 		deleteFile(zipToUpload);
 	}
