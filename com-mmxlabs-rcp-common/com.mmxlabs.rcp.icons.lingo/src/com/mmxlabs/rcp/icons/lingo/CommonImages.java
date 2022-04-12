@@ -99,6 +99,7 @@ public final class CommonImages {
 		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
 		Evaluate(24, "icons/24x24/evaluate_schedule.png"), //
 		Fork(24, "icons/24x24/fork.png"), //
+		Pin_24(24, "icons/24x24/pin.png"), //
 		Play(24, "icons/24x24/optimise.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
