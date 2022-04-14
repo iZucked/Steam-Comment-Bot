@@ -40,7 +40,7 @@ public final class FileDeleter {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static boolean delete(final File file, boolean secureDelete) throws IOException, FileNotFoundException {
+	public static boolean delete(final File file, boolean secureDelete) throws IOException {
 
 		if (!file.exists()) {
 			return false;
