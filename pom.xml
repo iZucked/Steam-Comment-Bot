@@ -89,14 +89,20 @@
 				<!-- Enable tycho packaging types -->
 				<extensions>true</extensions>
 			</plugin>
-			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<configuration>
+					<release>17</release>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 
 					<resolver>p2</resolver>
-					<executionEnvironment>JavaSE-16</executionEnvironment>
+					<executionEnvironment>JavaSE-17</executionEnvironment>
 
 					<target>
 						<artifact>

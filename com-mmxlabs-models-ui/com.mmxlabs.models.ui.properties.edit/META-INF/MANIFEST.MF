@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.ui.properties.provider.PropertiesEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.ui.properties.provider
 Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui.properties;bundle-version="[5.3.9,6.0.0)";visibility:=reexport,

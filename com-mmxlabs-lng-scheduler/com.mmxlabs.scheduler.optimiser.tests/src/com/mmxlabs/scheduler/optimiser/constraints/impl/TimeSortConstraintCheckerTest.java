@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -253,6 +254,8 @@ public class TimeSortConstraintCheckerTest {
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(IStartEndRequirementProvider.class).toInstance(Mockito.mock(IStartEndRequirementProvider.class));
+
 			}
 
 			@Provides

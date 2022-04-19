@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.adp.provider.ADPEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.adp.provider
 Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.adp;visibility:=reexport,

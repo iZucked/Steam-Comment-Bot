@@ -6,7 +6,11 @@ package com.mmxlabs.lingo.reports;
 
 public final class ReportContents {
 
-	public static IReportContents makeHTML(String html) {
+	private ReportContents() {
+
+	}
+
+	public static IReportContents makeHTML(final String html) {
 		return new IReportContents() {
 			@Override
 			public String getHTMLContents() {
@@ -15,7 +19,7 @@ public final class ReportContents {
 		};
 	}
 
-	public static IReportContents makeJSON(String json) {
+	public static IReportContents makeJSON(final String json) {
 		return new IReportContents() {
 			@Override
 			public String getJSONContents() {
@@ -24,7 +28,7 @@ public final class ReportContents {
 		};
 	}
 
-	public static IReportContents make(String html, String json) {
+	public static IReportContents make(final String html, final String json) {
 		return new IReportContents() {
 			@Override
 			public String getHTMLContents() {
