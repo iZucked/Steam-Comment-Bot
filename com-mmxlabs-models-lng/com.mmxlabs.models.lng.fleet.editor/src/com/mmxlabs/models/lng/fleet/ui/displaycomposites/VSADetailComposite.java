@@ -30,7 +30,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -49,7 +48,6 @@ import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -82,8 +80,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
- * Detail composite for vessel state attributes; adds an additional bit to the
- * bottom of the composite which contains a fuel curve table.
+ * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
  * 
  * @author hinton
  * 
@@ -335,9 +332,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-			add.setImage(img);
-			add.addDisposeListener(e -> img.dispose());
+			add.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 		}
 
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
@@ -368,11 +363,9 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-			remove.setImage(img);
-			remove.addDisposeListener(e -> img.dispose());
+			remove.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 		}
-		
+
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -482,9 +475,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.mmxlabs.models.ui.editors.IDisplayComposite#setEditorWrapper(com.mmxlabs.
-	 * models.ui.editors.IInlineEditorWrapper)
+	 * @see com.mmxlabs.models.ui.editors.IDisplayComposite#setEditorWrapper(com.mmxlabs. models.ui.editors.IInlineEditorWrapper)
 	 */
 	@Override
 	public void setEditorWrapper(IInlineEditorWrapper wrapper) {

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -19,10 +20,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -33,9 +36,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public final class TimeSortConstraintChecker implements IPairwiseConstraintChecker {
 
-	@NonNull
 	private final String name;
 
 	@Inject
@@ -47,9 +50,10 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	/**
-	 */
-	public TimeSortConstraintChecker(@NonNull final String name) {
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	public TimeSortConstraintChecker(final String name) {
 		this.name = name;
 	}
 
@@ -60,9 +64,9 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<IResource> changedResources, final @Nullable List<String> messages) {
 
-		final Collection<@NonNull IResource> loopResources;
+		final Collection<IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
 		} else {
@@ -76,14 +80,14 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 			}
 			final ISequence sequence = sequences.getSequence(resource);
 			assert sequence != null;
-			if (!checkSequence(sequence, messages, vesselInstanceType)) {
+			if (!checkSequence(resource, sequence, messages, vesselInstanceType)) {
 				return false;
 			}
 		}
 
 		return true;
 	}
- 
+
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 
@@ -91,13 +95,21 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 * @param messages
 	 * @return
 	 */
-	public final boolean checkSequence(@NonNull final ISequence sequence, final List<String> messages, @NonNull final VesselInstanceType instanceType) {
+	private final boolean checkSequence(final IResource resource, final ISequence sequence, final @Nullable List<String> messages, final VesselInstanceType instanceType) {
 
 		ITimeWindow lastTimeWindow = null;
 		PortType lastType = null;
 
 		for (final ISequenceElement t : sequence) {
 			final PortType currentType = portTypeProvider.getPortType(t);
+
+			if (currentType == PortType.End) {
+				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				// Don't bother checking timewindow if there is no real time window
+				if (endRequirement != null && !endRequirement.hasTimeRequirement()) {
+					continue;
+				}
+			}
 
 			final IPortSlot currentSlot = portSlotProvider.getPortSlot(t);
 			final ITimeWindow tw = currentType == PortType.Round_Trip_Cargo_End ? null : currentSlot.getTimeWindow();
@@ -121,7 +133,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
+	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final @Nullable List<String> messages) {
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
@@ -131,6 +143,14 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 			if (!(t1 == PortType.Load && t2 == PortType.Discharge)) {
 				return true;
 			}
+
+			if (t2 == PortType.End) {
+				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				// Don't bother checking timewindow if there is no real time window
+				if (endRequirement != null && !endRequirement.hasTimeRequirement()) {
+					return true;
+				}
+			}
 		}
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
@@ -138,8 +158,12 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
 			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
-				if (messages != null)
-					messages.add(explain(first, second, resource));
+				if (messages != null) {
+					String msg = explain(first, second, resource);
+					if (msg != null) {
+						messages.add(msg);
+					}
+				}
 				return false;
 			}
 		}
@@ -148,7 +172,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	public @Nullable String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();

@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.util,
  com.mmxlabs.common.common-util,
  com.mmxlabs.rcp.common
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
 Automatic-Module-Name: com.mmxlabs.models.lng.analytics.navigator

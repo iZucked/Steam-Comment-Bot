@@ -8,16 +8,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.ui.validation.internal.Activator;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
- * Simple label provider for {@link IStatus} objects showing the message and an
- * icon based on severity.
+ * Simple label provider for {@link IStatus} objects showing the message and an icon based on severity.
  * 
  * @author Simon Goodall
  * 
@@ -30,22 +27,19 @@ public class ValidationStatusLabelProvider implements ILabelProvider {
 
 	public ValidationStatusLabelProvider() {
 
-		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
-		imgWarn = CommonImages.getImageDescriptor(IconPaths.Warning, IconMode.Enabled).createImage();
-		imgInfo = CommonImages.getImageDescriptor(IconPaths.Information, IconMode.Enabled).createImage();
+		imgError = CommonImages.getImage(IconPaths.Error, IconMode.Enabled);
+		imgWarn = CommonImages.getImage(IconPaths.Warning, IconMode.Enabled);
+		imgInfo = CommonImages.getImage(IconPaths.Information, IconMode.Enabled);
 	}
 
 	@Override
 	public void dispose() {
-		imgError.dispose();
-		imgWarn.dispose();
-		imgInfo.dispose();
+		
 	}
-
+	
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof GroupedValidationStatusContentProvider.Node) {
-			GroupedValidationStatusContentProvider.Node node = (GroupedValidationStatusContentProvider.Node) element;
+		if (element instanceof GroupedValidationStatusContentProvider.Node node) {
 
 			int severity = IStatus.OK;
 			for (IStatus s : node.status) {

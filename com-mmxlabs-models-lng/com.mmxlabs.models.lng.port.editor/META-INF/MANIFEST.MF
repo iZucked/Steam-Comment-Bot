@@ -6,7 +6,7 @@ Automatic-Module-Name: com.mmxlabs.models.lng.port.editor
 Bundle-Version: 5.3.9.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.port.importer,
  com.mmxlabs.models.lng.port.ui.distanceeditor,
  com.mmxlabs.models.lng.port.ui.editorpart,

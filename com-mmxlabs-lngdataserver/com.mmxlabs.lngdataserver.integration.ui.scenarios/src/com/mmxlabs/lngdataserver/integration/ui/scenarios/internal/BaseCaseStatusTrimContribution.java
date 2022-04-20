@@ -176,12 +176,7 @@ public class BaseCaseStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
-		if (!baseFlagEmpty.isDisposed()) {
-			baseFlagEmpty.dispose();
-		}
-		if (!baseFlagGreen.isDisposed()) {
-			baseFlagGreen.dispose();
-		}
+ 
 		if (mainLabel != null && !mainLabel.isDisposed()) {
 			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
 				mainLabel.getImage().dispose();
@@ -241,8 +236,8 @@ public class BaseCaseStatusTrimContribution {
 		return "You have the latest base case \nor you have dismissed the notification";
 	}
 	
-	private final Image baseFlagGreen = CommonImages.getImageDescriptor(IconPaths.BaseFlagGreen, IconMode.Enabled).createImage();
-	private final Image baseFlagEmpty = CommonImages.getImageDescriptor(IconPaths.BaseFlag, IconMode.Enabled).createImage();
+	private final Image baseFlagGreen = CommonImages.getImage(IconPaths.BaseFlagGreen, IconMode.Enabled);
+	private final Image baseFlagEmpty = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
 	
 	private Image dataHubStatusImage(final boolean changed) {
 		if (changed && !myRecord.isDismissed) {

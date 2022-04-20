@@ -112,9 +112,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		{
 			final Button btn = new Button(buttonBar, SWT.PUSH);
 			{
-				Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-				btn.setImage(img);
-				btn.addDisposeListener(e -> img.dispose());
+				btn.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 			}
 			btn.setLayoutData(GridDataFactory.fillDefaults().create());
 			btn.addSelectionListener(new SelectionAdapter() {
@@ -131,9 +129,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		{
 			final Button btn = new Button(buttonBar, SWT.PUSH);
 			{
-				Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-				btn.setImage(img);
-				btn.addDisposeListener(e -> img.dispose());
+				btn.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 			}
 			btn.setLayoutData(GridDataFactory.fillDefaults().create());
 

@@ -84,7 +84,7 @@ public class CloudManagerView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
+		imgError = CommonImages.getImage(IconPaths.Error, IconMode.Enabled);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
@@ -420,7 +420,6 @@ public class CloudManagerView extends ViewPart {
 	public void dispose() {
 
 		CloudOptimisationDataService.INSTANCE.removeListener(listener);
-		imgError.dispose();
 		super.dispose();
 	}
 

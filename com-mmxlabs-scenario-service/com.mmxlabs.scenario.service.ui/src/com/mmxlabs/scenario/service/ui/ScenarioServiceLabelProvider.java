@@ -55,9 +55,9 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
-		showEnabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage(); 
-		showDisabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Disabled).createImage(); 
-		pinImage = CommonImages.getImageDescriptor(IconPaths.Pin, IconMode.Enabled).createImage();
+		showEnabledImage = CommonImages.getImage(IconPaths.Console, IconMode.Enabled); 
+		showDisabledImage = CommonImages.getImage(IconPaths.Console, IconMode.Disabled); 
+		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		// Clone the font data
@@ -70,10 +70,6 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	@Override
 	public void dispose() {
 		selectionProviderTracker.close();
-
-		showEnabledImage.dispose();
-		showDisabledImage.dispose();
-		pinImage.dispose();
 
 		boldFont.dispose();
 

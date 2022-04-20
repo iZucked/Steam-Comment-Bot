@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.lng.fleet,
  com.mmxlabs.scenario.service.model;bundle-version="[5.3.9,6.0.0)",
  com.mmxlabs.models.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.models.lng.commercial.validation,
  javax.inject;version="1.0.0"

@@ -48,7 +48,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -193,24 +192,23 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		maxCargoesColumn.getColumn().setText("Max");
 
 		{
-			rangeColumn.setEditingSupport(
-					new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, commandHandler, a -> {
-						return String.format("%s %02d", //
-								((YearMonth) a).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
-								((YearMonth) a).getYear());
-					}, () -> {
-						final List<Object> toAdd = new LinkedList<>();
-						final ADPModel adpModel = ADPModelUtil.getADPModel(oldValue);
-						if (adpModel != null) {
-							YearMonth start = adpModel.getYearStart();
-							while (start.isBefore(adpModel.getYearEnd())) {
+			rangeColumn.setEditingSupport(new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, commandHandler, a -> {
+				return String.format("%s %02d", //
+						((YearMonth) a).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
+						((YearMonth) a).getYear());
+			}, () -> {
+				final List<Object> toAdd = new LinkedList<>();
+				final ADPModel adpModel = ADPModelUtil.getADPModel(oldValue);
+				if (adpModel != null) {
+					YearMonth start = adpModel.getYearStart();
+					while (start.isBefore(adpModel.getYearEnd())) {
 
-								toAdd.add(start);
-								start = start.plusMonths(1);
-							}
-						}
-						return toAdd;
-					})));
+						toAdd.add(start);
+						start = start.plusMonths(1);
+					}
+				}
+				return toAdd;
+			})));
 		}
 		// Use hyphen for consecutive months, comma otherwise
 		rangeColumn.setLabelProvider(ColumnLabelProviderFactory.make(PeriodDistribution.class, "", periodDistribution -> {
@@ -232,13 +230,13 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 			return "";
 		}, colourProvider));
 
-		minCargoesColumn.setEditingSupport(
-				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES, commandHandler)));
-		maxCargoesColumn.setEditingSupport(
-				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES, commandHandler)));
+		minCargoesColumn
+				.setEditingSupport(new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES, commandHandler)));
+		maxCargoesColumn
+				.setEditingSupport(new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES, commandHandler)));
 
 		tableViewer.setContentProvider(new IStructuredContentProvider() {
-			 
+
 			@Override
 			public Object[] getElements(final Object inputElement) {
 				final PeriodDistributionProfileConstraint model = (PeriodDistributionProfileConstraint) inputElement;
@@ -263,9 +261,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 
 		final Button add = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-			add.setImage(img);
-			add.addDisposeListener(e -> img.dispose());
+			add.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 		}
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		FormattedText[] minMaxControls = new FormattedText[2];
@@ -285,9 +281,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 
 		final Button remove = toolkit.createButton(buttons, null, SWT.NONE);
 		{
-			Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-			remove.setImage(img);
-			remove.addDisposeListener(e -> img.dispose());
+			remove.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 		}
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
