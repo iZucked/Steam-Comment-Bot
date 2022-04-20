@@ -87,11 +87,6 @@ public class WhatIfEvaluator {
 				RunnerHelper.asyncExec(() -> {
 					editingDomain.getCommandStack().execute(cmd);
 					EMFUtils.checkValidContainment(scenario);
-
-					if (sandboxResult != null) {
-						final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, sandboxResult, sandboxResult.getName());
-						data.open();
-					}
 				});
 			}
 		};

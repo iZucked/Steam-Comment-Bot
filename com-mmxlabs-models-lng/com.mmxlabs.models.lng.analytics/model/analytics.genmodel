@@ -343,7 +343,7 @@
     <genClasses ecoreClass="analytics.ecore#//CommodityCurveOption"/>
     <genClasses ecoreClass="analytics.ecore#//CommodityCurveOverlay">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CommodityCurveOverlay/referenceCurve"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CommodityCurveOverlay/alternativeCurves"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CommodityCurveOverlay/alternativeCurves"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SensitivityModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivityModel/sensitivityModel"/>

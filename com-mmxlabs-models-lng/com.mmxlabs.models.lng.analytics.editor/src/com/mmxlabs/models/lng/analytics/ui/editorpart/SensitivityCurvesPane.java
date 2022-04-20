@@ -1,9 +1,11 @@
 package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -182,7 +184,7 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 				}
 				return super.render(object);
 			}
-			
+
 			@Override
 			public boolean canEdit(Object object) {
 				if (object instanceof CommodityCurveOverlay) {
@@ -221,35 +223,30 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 				return "";
 			}
 		});
-		
+
 		getScenarioViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				
+
 				final IStructuredSelection selection = event.getStructuredSelection();
-				if (selection.isEmpty()) {
-					addAction.setEnabled(false);
-				} else {
-					List<?> selections = selection.toList();
+				if (!selection.isEmpty()) {
+					final List<?> selections = selection.toList();
 					if (selections.size() == 1) {
 						final Object selectedRow = selections.get(0);
 						if (selectedRow instanceof CommodityCurveOverlay) {
 							addAction.setEnabled(true);
+							return;
 						}
-					} else {
-						addAction.setEnabled(false);
 					}
 				}
-				
+				addAction.setEnabled(false);
 			}
 		});
 
 		final Action runAction = createRunButton();
-		getMenuManager().insert(0, new ActionContributionItem(runAction));
-//		getMenuManager().appendToGroup(, runAction);
-//		getMenuManager().add(runAction);
-		getMenuManager().update(true);
+		getToolBarManager().insert(0, new ActionContributionItem(runAction));
+		getToolBarManager().update(true);
 	}
 
 	private Action createRunButton() {
@@ -261,14 +258,10 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 				if (m != null) {
 					WhatIfEvaluator.doPriceSensitivity(getScenarioEditingLocation(), m);
 				}
-				if (m != null && m.getResults() != null) {
-					final AnalyticsSolution data = new AnalyticsSolution(getScenarioEditingLocation().getScenarioInstance(), m.getResults(), m.getName());
-					int i = 0;
-					data.open();
-				}
 			}
 		};
 		runSensitivityAction.setImageDescriptor(genDesc);
+		runSensitivityAction.setToolTipText("Run sensitivity model");
 		return runSensitivityAction;
 	}
 
@@ -542,14 +535,25 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 		return null;
 	}
 
+	@Override
+	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
+		return new ScenarioTableViewerDeleteAction(null) {
+			@Override
+			protected boolean isApplicableToSelection(ISelection selection) {
+				return super.isApplicableToSelection(selection) && ((List<Object>) (((IStructuredSelection) selection).toList())).stream() //
+						.allMatch(YearMonthPointContainer.class::isInstance);
+			}
+		};
+	}
+
 	public void setInput(final SensitivityModel sensitivityModel, final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
 		this.sensitivityModel = sensitivityModel;
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, null);
-//		final EObject root = transformer.getRoot();
+		// final EObject root = transformer.getRoot();
 		transformer.update(pricingModel);
 		getScenarioViewer().setInput(Pair.of(sensitivityModel, pricingModel));
-//		setInitialExpandedState();
+		// setInitialExpandedState();
 	}
 
 	private void setInitialExpandedState() {
@@ -565,8 +569,6 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 		}
 		getScenarioViewer().setExpandedElements(expandedObjects.toArray());
 	}
-
-	
 
 	private void editIndex() {
 		if (scenarioViewer.getSelection() instanceof final IStructuredSelection iStructuredSelection) {

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.Function;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -131,12 +133,23 @@ public class LNGSchedulerPriceCurveSetRunner {
 
 				final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(originalScenarioDataProvider);
-				final Map<String, List<PriceCurveKey>> curveOptions = pricingModel.getCommodityCurves().stream() //
+
+				// Doing this to populate the base case curves first - order should not matter so this can probably be removed if wanted
+				final Set<CommodityCurve> curvesToOverlay = model.getCommodityCurves().stream() //
+						.filter(CommodityCurveOverlay.class::isInstance) //
+						.map(CommodityCurveOverlay.class::cast) //
+						.filter(overlay -> !overlay.getAlternativeCurves().isEmpty()) //
+						.map(CommodityCurveOverlay::getReferenceCurve) //
+						.collect(Collectors.toSet());
+
+				final Map<String, List<PriceCurveKey>> curveOptions = curvesToOverlay.stream() //
 						.map(curve -> curve.getName().toLowerCase()) //
 						.collect(Collectors.toMap(Function.identity(), curveName -> new LinkedList<>(Collections.singleton(new PriceCurveKey(curveName, null)))));
+
 				model.getCommodityCurves().stream() //
 						.filter(CommodityCurveOverlay.class::isInstance) //
 						.map(CommodityCurveOverlay.class::cast) //
+						.filter(overlay -> !overlay.getAlternativeCurves().isEmpty()) //
 						.forEach(overlay -> {
 							final String referenceCurveName = overlay.getReferenceCurve().getName().toLowerCase();
 							overlay.getAlternativeCurves().stream() //
