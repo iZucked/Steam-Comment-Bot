@@ -9,6 +9,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
+
 public class DiffAction extends Action {
 	private final Viewer viewer;
 	private final ConfigurableVesselSummaryReport reportView;
@@ -18,7 +22,7 @@ public class DiffAction extends Action {
 		this.viewer = viewer;
 		this.reportView = reportView;
 
-		setText("Δ");
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delta, IconMode.Enabled));
 		setDescription("Toggle diff rows");
 		setToolTipText("Toggle diff rows");
 		setChecked(reportView.isDiffMode());

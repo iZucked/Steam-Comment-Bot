@@ -65,6 +65,7 @@ public final class CommonImages {
 		Cut(16, "icons/16x16/cut.png"), //
 		Date(16, "icons/16x16/date.png"), //
 		Delete(16, "icons/16x16/delete.png"), //
+		Delta(16, "icons/16x16/delta.png"), //
 		Edit(16, "icons/16x16/edit.png"), //
 		ExpandAll(16, "icons/16x16/expand_all.png"), //
 		Filter(16, "icons/16x16/filter.png"), //

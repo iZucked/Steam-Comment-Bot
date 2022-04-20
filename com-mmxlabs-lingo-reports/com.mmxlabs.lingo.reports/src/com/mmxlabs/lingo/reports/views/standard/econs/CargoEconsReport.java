@@ -135,6 +135,7 @@ public class CargoEconsReport extends ViewPart {
 	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<>();
 
 	private Image pinImage = null;
+	private Image deltaImage = null;
 
 	private boolean onlyDiffMode = false;
 
@@ -162,7 +163,8 @@ public class CargoEconsReport extends ViewPart {
 
 		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 //		createImage("icons/Pinned.gif");
-
+		deltaImage = CommonImages.getImage(IconPaths.Delta, IconMode.Enabled);
+		
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -230,7 +232,7 @@ public class CargoEconsReport extends ViewPart {
 			showPnLCalcs.setChecked(true);
 			getViewSite().getActionBars().getMenuManager().add(showPnLCalcs);
 
-			final Action showOnlyDiff = new Action("Δ", SWT.TOGGLE) {
+			final Action showOnlyDiff = new Action("", SWT.TOGGLE) {
 				@Override
 				public void run() {
 					toggleShowDiffOnly();
@@ -238,6 +240,7 @@ public class CargoEconsReport extends ViewPart {
 					rebuild();
 				}
 			};
+			showOnlyDiff.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delta, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
 			// Default to sales volume
@@ -988,8 +991,9 @@ public class CargoEconsReport extends ViewPart {
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
 
-					gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
-					gvc.getColumn().setText("𝚫");
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(deltaImage);
+					gvc.getColumn().setText("");
 					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 					gvc.getColumn().setWidth(100);
 				}
