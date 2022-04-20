@@ -411,7 +411,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			@NonNull final OptionAnalysisModel model, @Nullable final Consumer<AbstractSolutionSet> action, final boolean runAsync, @NonNull final IProgressMonitor monitor) {
 		if (scenarioDataProvider.getScenario() instanceof final LNGScenarioModel root) {
 			final SandboxJobRunner runner = new SandboxJobRunner();
-			runner.withScenario(scenarioDataProvider);
 
 			UserSettings userSettings = null;
 
@@ -450,11 +449,15 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 					final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
 						return new LNGSandboxJobDescriptor(taskName, scenarioInstance, m -> {
-							final AbstractSolutionSet result = runner.run(0, m);
-							if (action != null) {
-								action.accept(result);
+							assert scenarioInstance != null;
+							try (IScenarioDataProvider sdp = SSDataManager.Instance.getModelRecordChecked(scenarioInstance).aquireScenarioDataProvider("ASE")) {
+								runner.withScenario(sdp);
+								final AbstractSolutionSet result = runner.run(0, m);
+								if (action != null) {
+									action.accept(result);
+								}
+								return result;
 							}
-							return result;
 						}, model);
 					};
 
