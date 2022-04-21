@@ -208,11 +208,6 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 	@PreDestroy
 	public void dispose() {
-		if (pinImage != null) {
-			pinImage.dispose();
-			pinImage = null;
-		}
-
 		if (selectedObjects != null) {
 			selectedObjects.clear();
 		}
