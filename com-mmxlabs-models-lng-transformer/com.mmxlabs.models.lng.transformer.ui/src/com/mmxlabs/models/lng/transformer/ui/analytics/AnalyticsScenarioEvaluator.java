@@ -513,6 +513,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 					return null;
 				} else {
+					runner.withScenario(scenarioDataProvider);
 					final AbstractSolutionSet result = runner.run(0, monitor);
 					if (action != null) {
 						action.accept(result);
