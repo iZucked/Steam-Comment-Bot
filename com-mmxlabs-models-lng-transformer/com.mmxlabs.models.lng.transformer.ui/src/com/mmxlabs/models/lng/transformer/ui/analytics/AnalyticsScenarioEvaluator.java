@@ -474,6 +474,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 					return null;
 				} else {
+					runner.withScenario(scenarioDataProvider);
 					final AbstractSolutionSet result = runner.run(0, monitor);
 					if (action != null) {
 						action.accept(result);
