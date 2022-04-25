@@ -75,6 +75,7 @@ public final class CommonImages {
 		Hub(16, "icons/16x16/hub.png"), //
 		Label(16, "icons/16x16/label.png"), //
 		Local(16, "icons/16x16/local.png"), //
+		Nominations(16, "icons/16x16/nominations.png"), //
 		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
 		Pack(16, "icons/16x16/pack.png"), //
 		Paste(16, "icons/16x16/paste.png"), //
@@ -83,6 +84,7 @@ public final class CommonImages {
 		Plus(16, "icons/16x16/plus.png"), //
 		Plusplus(16, "icons/16x16/plusplus.png"), //
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
+		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //

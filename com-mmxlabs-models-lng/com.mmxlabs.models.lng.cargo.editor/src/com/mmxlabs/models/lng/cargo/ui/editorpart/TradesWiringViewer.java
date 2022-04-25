@@ -1036,8 +1036,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			};
 			resetSortOrder.setText("Reset Wiring");
-			resetSortOrder.setImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING));
-			resetSortOrder.setDisabledImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING_DISABLED));
+			resetSortOrder.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.ResetWiring, IconMode.Enabled));
+			resetSortOrder.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.ResetWiring, IconMode.Disabled));
+//			resetSortOrder.setImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING));
+//			resetSortOrder.setDisabledImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING_DISABLED));
 			toolbar.add(resetSortOrder);
 
 		}
