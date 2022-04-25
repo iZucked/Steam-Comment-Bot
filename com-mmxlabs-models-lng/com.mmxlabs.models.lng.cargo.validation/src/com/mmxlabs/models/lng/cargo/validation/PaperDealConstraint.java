@@ -144,6 +144,12 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
+			if (paperDeal.getQuantity() > 100_000_000) {
+				factory.copyName() //
+						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__QUANTITY) //
+						.withMessage("Paper deal quantity should be at most 100,000,000") //
+						.make(ctx, statuses);
+			}
 
 		}
 	}
