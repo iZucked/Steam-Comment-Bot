@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
+import com.mmxlabs.models.lng.analytics.AbstractSensitivityResult;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CargoChange;
+import com.mmxlabs.models.lng.analytics.CargoPnLResult;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
@@ -58,6 +60,7 @@ import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
+import com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult;
 import com.mmxlabs.models.lng.analytics.PositionDescriptor;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.RealSlotDescriptor;
@@ -68,6 +71,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.SensitivityModel;
+import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SlotDescriptor;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
@@ -549,6 +553,34 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass sensitivityModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sensitivitySolutionSetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractSensitivityResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portfolioSensitivityResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cargoPnLResultEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3232,6 +3264,126 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getSensitivityModel_SensitivitySolution() {
+		return (EReference)sensitivityModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSensitivitySolutionSet() {
+		return sensitivitySolutionSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSensitivitySolutionSet_PorfolioPnLResult() {
+		return (EReference)sensitivitySolutionSetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSensitivitySolutionSet_CargoPnLResults() {
+		return (EReference)sensitivitySolutionSetEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAbstractSensitivityResult() {
+		return abstractSensitivityResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractSensitivityResult_MinPnL() {
+		return (EAttribute)abstractSensitivityResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractSensitivityResult_MaxPnL() {
+		return (EAttribute)abstractSensitivityResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractSensitivityResult_AveragePnL() {
+		return (EAttribute)abstractSensitivityResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAbstractSensitivityResult_Variance() {
+		return (EAttribute)abstractSensitivityResultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPortfolioSensitivityResult() {
+		return portfolioSensitivityResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCargoPnLResult() {
+		return cargoPnLResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoPnLResult_Cargo() {
+		return (EReference)cargoPnLResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -3796,6 +3948,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		sensitivityModelEClass = createEClass(SENSITIVITY_MODEL);
 		createEReference(sensitivityModelEClass, SENSITIVITY_MODEL__SENSITIVITY_MODEL);
+		createEReference(sensitivityModelEClass, SENSITIVITY_MODEL__SENSITIVITY_SOLUTION);
+
+		sensitivitySolutionSetEClass = createEClass(SENSITIVITY_SOLUTION_SET);
+		createEReference(sensitivitySolutionSetEClass, SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT);
+		createEReference(sensitivitySolutionSetEClass, SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS);
+
+		abstractSensitivityResultEClass = createEClass(ABSTRACT_SENSITIVITY_RESULT);
+		createEAttribute(abstractSensitivityResultEClass, ABSTRACT_SENSITIVITY_RESULT__MIN_PN_L);
+		createEAttribute(abstractSensitivityResultEClass, ABSTRACT_SENSITIVITY_RESULT__MAX_PN_L);
+		createEAttribute(abstractSensitivityResultEClass, ABSTRACT_SENSITIVITY_RESULT__AVERAGE_PN_L);
+		createEAttribute(abstractSensitivityResultEClass, ABSTRACT_SENSITIVITY_RESULT__VARIANCE);
+
+		portfolioSensitivityResultEClass = createEClass(PORTFOLIO_SENSITIVITY_RESULT);
+
+		cargoPnLResultEClass = createEClass(CARGO_PN_LRESULT);
+		createEReference(cargoPnLResultEClass, CARGO_PN_LRESULT__CARGO);
 
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
@@ -3902,6 +4070,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		commodityCurveOverlayEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		commodityCurveOverlayEClass.getESuperTypes().add(this.getCommodityCurveOption());
 		sensitivityModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		sensitivitySolutionSetEClass.getESuperTypes().add(this.getAbstractSolutionSet());
+		abstractSensitivityResultEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		portfolioSensitivityResultEClass.getESuperTypes().add(this.getAbstractSensitivityResult());
+		cargoPnLResultEClass.getESuperTypes().add(this.getAbstractSensitivityResult());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -4245,6 +4417,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(sensitivityModelEClass, SensitivityModel.class, "SensitivityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSensitivityModel_SensitivityModel(), this.getOptionAnalysisModel(), null, "sensitivityModel", null, 0, 1, SensitivityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSensitivityModel_SensitivitySolution(), this.getSensitivitySolutionSet(), null, "sensitivitySolution", null, 0, 1, SensitivityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sensitivitySolutionSetEClass, SensitivitySolutionSet.class, "SensitivitySolutionSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSensitivitySolutionSet_PorfolioPnLResult(), this.getPortfolioSensitivityResult(), null, "porfolioPnLResult", null, 0, 1, SensitivitySolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSensitivitySolutionSet_CargoPnLResults(), this.getCargoPnLResult(), null, "cargoPnLResults", null, 0, -1, SensitivitySolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractSensitivityResultEClass, AbstractSensitivityResult.class, "AbstractSensitivityResult", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractSensitivityResult_MinPnL(), ecorePackage.getELong(), "minPnL", null, 0, 1, AbstractSensitivityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractSensitivityResult_MaxPnL(), ecorePackage.getELong(), "maxPnL", null, 0, 1, AbstractSensitivityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractSensitivityResult_AveragePnL(), ecorePackage.getELong(), "averagePnL", null, 0, 1, AbstractSensitivityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractSensitivityResult_Variance(), ecorePackage.getEDouble(), "variance", null, 0, 1, AbstractSensitivityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portfolioSensitivityResultEClass, PortfolioSensitivityResult.class, "PortfolioSensitivityResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(cargoPnLResultEClass, CargoPnLResult.class, "CargoPnLResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCargoPnLResult_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoPnLResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");

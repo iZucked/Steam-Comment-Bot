@@ -535,5 +535,24 @@
   <eClassifiers xsi:type="ecore:EClass" name="SensitivityModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="sensitivityModel" eType="#//OptionAnalysisModel"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensitivitySolution" eType="#//SensitivitySolutionSet"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SensitivitySolutionSet" eSuperTypes="#//AbstractSolutionSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="porfolioPnLResult" eType="#//PortfolioSensitivityResult"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoPnLResults" upperBound="-1"
+        eType="#//CargoPnLResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSensitivityResult" abstract="true"
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minPnL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxPnL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="averagePnL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortfolioSensitivityResult" eSuperTypes="#//AbstractSensitivityResult"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CargoPnLResult" eSuperTypes="#//AbstractSensitivityResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -14,6 +14,8 @@ public class PriceSensitivityData {
 	public final List<PriceSensitivityData> children = new LinkedList<>();
 	public long maxPnl;
 	public long minPnl;
+	public long averagePnl;
+	public double variance;
 	public Schedule schedule;
 	public String loadId;
 	public String dischargeId;

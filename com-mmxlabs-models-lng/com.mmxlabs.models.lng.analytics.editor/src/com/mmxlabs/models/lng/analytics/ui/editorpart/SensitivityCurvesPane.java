@@ -256,7 +256,7 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 			public void run() {
 				final OptionAnalysisModel m = sensitivityModel.getSensitivityModel();
 				if (m != null) {
-					WhatIfEvaluator.doPriceSensitivity(getScenarioEditingLocation(), m);
+					WhatIfEvaluator.doPriceSensitivity(getScenarioEditingLocation(), sensitivityModel);
 				}
 			}
 		};

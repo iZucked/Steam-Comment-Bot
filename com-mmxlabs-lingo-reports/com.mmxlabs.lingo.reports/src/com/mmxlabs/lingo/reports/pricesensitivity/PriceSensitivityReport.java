@@ -1,10 +1,8 @@
 package com.mmxlabs.lingo.reports.pricesensitivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -16,16 +14,11 @@ import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
-import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
-import com.mmxlabs.models.lng.analytics.SensitivityModel;
-import com.mmxlabs.models.lng.analytics.SolutionOption;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.analytics.CargoPnLResult;
+import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensitivityData> {
@@ -128,9 +121,9 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					public int compare(PriceSensitivityData obj1, PriceSensitivityData obj2) {
 						final String s1 = obj1.key != null ? obj1.key : "";
 						final String s2 = obj2.key != null ? obj2.key : "";
-						if (s1.equalsIgnoreCase("Portfolio PnL")) {
+						if (s1.equalsIgnoreCase("Portfolio")) {
 							return -1;
-						} else if (s2.equalsIgnoreCase("Portfolio PnL")) {
+						} else if (s2.equalsIgnoreCase("Portfolio")) {
 							return 1;
 						}
 						return s1.compareTo(s2);
@@ -181,11 +174,11 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				});
 
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Max PnL") {
+				result.add(new ColumnManager<PriceSensitivityData>("Max") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,d", obj.maxPnl);
-						return !"Cargo PnL".equals(obj.key) ? formattedString : "";
+						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
 					@Override
@@ -194,11 +187,11 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Min PnL") {
+				result.add(new ColumnManager<PriceSensitivityData>("Min") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,d", obj.minPnl);
-						return !"Cargo PnL".equals(obj.key) ? formattedString : "";
+						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
 					@Override
@@ -207,6 +200,32 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 
+				result.add(new ColumnManager<PriceSensitivityData>("Mean") {
+					@Override
+					public String getColumnText(PriceSensitivityData obj) {
+						final String formattedString = String.format("%,d", obj.averagePnl);
+						return !"Cargo".equals(obj.key) ? formattedString : "";
+					}
+
+					@Override
+					public boolean isTree() {
+						return false;
+					}
+				});
+
+				result.add(new ColumnManager<PriceSensitivityData>("Var") {
+					@Override
+					public String getColumnText(PriceSensitivityData obj) {
+						final String formattedString = String.format("%f", obj.variance);
+						return !"Cargo".equals(obj.key) ? formattedString : "";
+					}
+
+					@Override
+					public boolean isTree() {
+						return false;
+					}
+				});
+				
 				return result;
 			}
 
@@ -216,15 +235,14 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				final List<PriceSensitivityData> output = new LinkedList<>();
 				for (final Pair<@NonNull Schedule, ScenarioResult> p : otherPairs) {
 					final LNGScenarioModel sm = ScenarioModelUtil.getScenarioModel(p.getSecond().getScenarioDataProvider());
+					if (sm.getSensitivityModel() != null && sm.getSensitivityModel().getSensitivityModel() != null && sm.getSensitivityModel().getSensitivityModel().getResults() != null) {
+						sm.getSensitivityModel().getSensitivityModel().setResults(null);
+					}
+					
 					final boolean earlyBreak = sm.getSensitivityModel() == null //
 							|| sm.getSensitivityModel().getSensitivityModel() == null //
-							|| sm.getSensitivityModel().getSensitivityModel().getResults() == null //
-							|| sm.getSensitivityModel().getSensitivityModel().getResults().getOptions() == null //
-							|| sm.getSensitivityModel().getSensitivityModel().getResults().getOptions().isEmpty();
+							|| sm.getSensitivityModel().getSensitivitySolution() == null;
 					if (earlyBreak) {
-						break;
-					}
-					if (ScenarioModelUtil.getScenarioModel(p.getSecond().getScenarioDataProvider()).getSensitivityModel().getSensitivityModel().getResults() == null) {
 						break;
 					}
 					output.addAll(createData(p.getFirst(), p.getSecond()));
@@ -237,78 +255,31 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				final List<PriceSensitivityData> output = new ArrayList<>();
 				final PriceSensitivityData pnlData = new PriceSensitivityData(scenarioResult, schedule);
 				// Do main pnl
-				pnlData.key = "Portfolio PnL";
-				calculatePortfolioPnL(pnlData);
+				pnlData.key = "Portfolio";
+				final SensitivitySolutionSet sensitivityResult = ScenarioModelUtil.getScenarioModel(pnlData.scenarioResult.getScenarioDataProvider()).getSensitivityModel().getSensitivitySolution();
+				pnlData.minPnl = sensitivityResult.getPorfolioPnLResult().getMinPnL();
+				pnlData.maxPnl = sensitivityResult.getPorfolioPnLResult().getMaxPnL();
+				pnlData.averagePnl = sensitivityResult.getPorfolioPnLResult().getAveragePnL();
+				pnlData.variance = sensitivityResult.getPorfolioPnLResult().getVariance();
 				output.add(pnlData);
-				// Do per cargo pnl
-				final List<LoadSlot> sortedLoadSlots = ScenarioModelUtil.getScenarioModel(scenarioResult.getScenarioDataProvider()).getCargoModel().getCargoes().stream() //
-						.map(c -> (LoadSlot) c.getSlots().get(0)) //
-						.sorted((l1, l2) -> l1.getSchedulingTimeWindow().getStart().compareTo(l2.getSchedulingTimeWindow().getStart())) //
-						.toList();
-				final Map<LoadSlot, List<CargoAllocation>> loadSlotToCargoAllocations = new HashMap<>();
-				final SensitivityModel sensitivityModel = ScenarioModelUtil.getScenarioModel(pnlData.scenarioResult.getScenarioDataProvider()).getSensitivityModel();
-				final AbstractSolutionSet solutions = sensitivityModel.getSensitivityModel().getResults();
-				for (final SolutionOption solutionOption : solutions.getOptions()) {
-					final Schedule schedule2 = solutionOption.getScheduleModel().getSchedule();
-					for (final CargoAllocation cargoAllocation : schedule2.getCargoAllocations()) {
-						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-							if (slotAllocation.getSlot() instanceof final LoadSlot loadSlot) {
-								loadSlotToCargoAllocations.computeIfAbsent(loadSlot, k -> new ArrayList<>()).add(cargoAllocation);
-								break;
-							}
-						}
-					}
-				}
+
 				final PriceSensitivityData cargoData = new PriceSensitivityData(scenarioResult, schedule);
-				cargoData.key = "Cargo PnL";
+				cargoData.key = "Cargo";
 				final List<PriceSensitivityData> aggregatedCargoData = new ArrayList<>();
-				for (final LoadSlot loadSlot : sortedLoadSlots) {
-					final List<CargoAllocation> cargoAllocations = loadSlotToCargoAllocations.get(loadSlot);
-					long minPnL = Long.MAX_VALUE;
-					long maxPnL = Long.MIN_VALUE;
-					for (final CargoAllocation cargoAllocation : cargoAllocations) {
-						final long thisPnL = ScheduleModelKPIUtils.getElementPNL(cargoAllocation);
-						if (thisPnL < minPnL) {
-							minPnL = thisPnL;
-						}
-						if (thisPnL > maxPnL) {
-							maxPnL = thisPnL;
-						}
-					}
+				for (final CargoPnLResult cargoPnlResult : sensitivityResult.getCargoPnLResults()) {
 					final PriceSensitivityData data = new PriceSensitivityData(scenarioResult, schedule);
-					data.loadId = loadSlot.getName();
-					data.dischargeId = loadSlot.getCargo().getSlots().get(1).getName();
-					data.minPnl = minPnL;
-					data.maxPnl = maxPnL;
+					data.loadId = cargoPnlResult.getCargo().getSlots().get(0).getName();
+					data.dischargeId = cargoPnlResult.getCargo().getSlots().get(1).getName();
+					data.minPnl = cargoPnlResult.getMinPnL();
+					data.maxPnl = cargoPnlResult.getMaxPnL();
+					data.averagePnl = cargoPnlResult.getAveragePnL();
+					data.variance = cargoPnlResult.getVariance();
 					data.parent = cargoData;
 					aggregatedCargoData.add(data);
 				}
-				
 				cargoData.children.addAll(aggregatedCargoData);
 				output.add(cargoData);
 				return output;
-			}
-
-			private void calculatePortfolioPnL(final PriceSensitivityData pnlData) {
-				long minPnL = Long.MAX_VALUE;
-				long maxPnL = Long.MIN_VALUE;
-				final SensitivityModel sensitivityModel = ScenarioModelUtil.getScenarioModel(pnlData.scenarioResult.getScenarioDataProvider()).getSensitivityModel();
-				final AbstractSolutionSet solutions = sensitivityModel.getSensitivityModel().getResults();
-				if (solutions == null) {
-					return;
-				}
-				for (final SolutionOption solutionOption : solutions.getOptions()) {
-					final Schedule schedule = solutionOption.getScheduleModel().getSchedule();
-					final long thisPnL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
-					if (thisPnL < minPnL) {
-						minPnL = thisPnL;
-					}
-					if (thisPnL > maxPnL) {
-						maxPnL = thisPnL;
-					}
-				}
-				pnlData.minPnl = minPnL;
-				pnlData.maxPnl = maxPnL;
 			}
 
 		};

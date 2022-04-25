@@ -15,7 +15,7 @@
             class="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
             icon="icons:/icons/16x16/table.png"
             id="com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport"
-            name="Price Sensitivity"
+            name="P&amp;L Sensitivity"
             restorable="true">
       </view>
    </extension>

@@ -347,6 +347,21 @@
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SensitivityModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivityModel/sensitivityModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivityModel/sensitivitySolution"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SensitivitySolutionSet">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivitySolutionSet/porfolioPnLResult"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SensitivitySolutionSet/cargoPnLResults"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="analytics.ecore#//AbstractSensitivityResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSensitivityResult/minPnL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSensitivityResult/maxPnL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSensitivityResult/averagePnL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSensitivityResult/variance"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//PortfolioSensitivityResult"/>
+    <genClasses ecoreClass="analytics.ecore#//CargoPnLResult">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CargoPnLResult/cargo"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

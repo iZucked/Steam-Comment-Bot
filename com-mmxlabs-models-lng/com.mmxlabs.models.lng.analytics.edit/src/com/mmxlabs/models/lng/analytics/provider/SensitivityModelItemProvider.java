@@ -65,6 +65,7 @@ public class SensitivityModelItemProvider extends UUIDObjectItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_MODEL);
+			childrenFeatures.add(AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_SOLUTION);
 		}
 		return childrenFeatures;
 	}
@@ -121,6 +122,7 @@ public class SensitivityModelItemProvider extends UUIDObjectItemProvider {
 
 		switch (notification.getFeatureID(SensitivityModel.class)) {
 			case AnalyticsPackage.SENSITIVITY_MODEL__SENSITIVITY_MODEL:
+			case AnalyticsPackage.SENSITIVITY_MODEL__SENSITIVITY_SOLUTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -142,6 +144,11 @@ public class SensitivityModelItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_MODEL,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_SOLUTION,
+				 AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet()));
 	}
 
 }

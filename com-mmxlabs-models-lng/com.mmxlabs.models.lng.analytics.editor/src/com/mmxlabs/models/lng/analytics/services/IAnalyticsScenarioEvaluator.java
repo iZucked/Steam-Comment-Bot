@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -41,18 +42,8 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
-//<<<<<<< HEAD
-//	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-//
-//	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-//
-//	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-//			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
-
 	void runSandboxPriceSensitivity(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
-			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
+			Consumer<SensitivitySolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 	
 	@Nullable
 	AbstractSolutionSet runSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull OptionAnalysisModel model,

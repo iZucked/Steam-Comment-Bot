@@ -590,6 +590,42 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.SENSITIVITY_SOLUTION_SET: {
+				SensitivitySolutionSet sensitivitySolutionSet = (SensitivitySolutionSet)theEObject;
+				T result = caseSensitivitySolutionSet(sensitivitySolutionSet);
+				if (result == null) result = caseAbstractSolutionSet(sensitivitySolutionSet);
+				if (result == null) result = caseUUIDObject(sensitivitySolutionSet);
+				if (result == null) result = caseNamedObject(sensitivitySolutionSet);
+				if (result == null) result = caseMMXObject(sensitivitySolutionSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.ABSTRACT_SENSITIVITY_RESULT: {
+				AbstractSensitivityResult abstractSensitivityResult = (AbstractSensitivityResult)theEObject;
+				T result = caseAbstractSensitivityResult(abstractSensitivityResult);
+				if (result == null) result = caseUUIDObject(abstractSensitivityResult);
+				if (result == null) result = caseMMXObject(abstractSensitivityResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.PORTFOLIO_SENSITIVITY_RESULT: {
+				PortfolioSensitivityResult portfolioSensitivityResult = (PortfolioSensitivityResult)theEObject;
+				T result = casePortfolioSensitivityResult(portfolioSensitivityResult);
+				if (result == null) result = caseAbstractSensitivityResult(portfolioSensitivityResult);
+				if (result == null) result = caseUUIDObject(portfolioSensitivityResult);
+				if (result == null) result = caseMMXObject(portfolioSensitivityResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.CARGO_PN_LRESULT: {
+				CargoPnLResult cargoPnLResult = (CargoPnLResult)theEObject;
+				T result = caseCargoPnLResult(cargoPnLResult);
+				if (result == null) result = caseAbstractSensitivityResult(cargoPnLResult);
+				if (result == null) result = caseUUIDObject(cargoPnLResult);
+				if (result == null) result = caseMMXObject(cargoPnLResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1551,6 +1587,66 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSensitivityModel(SensitivityModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sensitivity Solution Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sensitivity Solution Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSensitivitySolutionSet(SensitivitySolutionSet object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Sensitivity Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Sensitivity Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractSensitivityResult(AbstractSensitivityResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Portfolio Sensitivity Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Portfolio Sensitivity Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortfolioSensitivityResult(PortfolioSensitivityResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cargo Pn LResult</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cargo Pn LResult</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoPnLResult(CargoPnLResult object) {
 		return null;
 	}
 

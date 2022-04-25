@@ -1,40 +1,38 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.provider;
 
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.AnalyticsModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class AnalyticsModelItemProvider
-	extends UUIDObjectItemProvider {
+public class SensitivitySolutionSetItemProvider extends AbstractSolutionSetItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AnalyticsModelItemProvider(AdapterFactory adapterFactory) {
+	public SensitivitySolutionSetItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,25 +47,25 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addViabilityModelPropertyDescriptor(object);
+			addCargoPnLResultsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Viability Model feature.
+	 * This adds a property descriptor for the Cargo Pn LResults feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addViabilityModelPropertyDescriptor(Object object) {
+	protected void addCargoPnLResultsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AnalyticsModel_viabilityModel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_viabilityModel_feature", "_UI_AnalyticsModel_type"),
-				 AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
+				 getString("_UI_SensitivitySolutionSet_cargoPnLResults_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SensitivitySolutionSet_cargoPnLResults_feature", "_UI_SensitivitySolutionSet_type"),
+				 AnalyticsPackage.Literals.SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS,
 				 true,
 				 false,
 				 true,
@@ -88,11 +86,8 @@ public class AnalyticsModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__BREAKEVEN_MODELS);
+			childrenFeatures.add(AnalyticsPackage.Literals.SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT);
+			childrenFeatures.add(AnalyticsPackage.Literals.SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS);
 		}
 		return childrenFeatures;
 	}
@@ -111,14 +106,14 @@ public class AnalyticsModelItemProvider
 	}
 
 	/**
-	 * This returns AnalyticsModel.gif.
+	 * This returns SensitivitySolutionSet.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AnalyticsModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SensitivitySolutionSet"));
 	}
 
 	/**
@@ -129,11 +124,12 @@ public class AnalyticsModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AnalyticsModel)object).getUuid();
+		String label = ((SensitivitySolutionSet)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AnalyticsModel_type") :
-			getString("_UI_AnalyticsModel_type") + " " + label;
+			getString("_UI_SensitivitySolutionSet_type") :
+			getString("_UI_SensitivitySolutionSet_type") + " " + label;
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -146,12 +142,9 @@ public class AnalyticsModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(AnalyticsModel.class)) {
-			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
-			case AnalyticsPackage.ANALYTICS_MODEL__OPTIMISATIONS:
-			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
-			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
-			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+		switch (notification.getFeatureID(SensitivitySolutionSet.class)) {
+			case AnalyticsPackage.SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT:
+			case AnalyticsPackage.SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -171,48 +164,36 @@ public class AnalyticsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS,
-				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+				(AnalyticsPackage.Literals.SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT,
+				 AnalyticsFactory.eINSTANCE.createPortfolioSensitivityResult()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
-				 AnalyticsFactory.eINSTANCE.createSandboxResult()));
+				(AnalyticsPackage.Literals.SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS,
+				 AnalyticsFactory.eINSTANCE.createCargoPnLResult()));
+	}
 
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
-				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
 
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
-				 AnalyticsFactory.eINSTANCE.createSlotInsertionOptions()));
+		boolean qualify =
+			childFeature == AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION ||
+			childFeature == AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS;
 
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
-				 AnalyticsFactory.eINSTANCE.createOptimisationResult()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
-				 AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
-				 AnalyticsFactory.eINSTANCE.createViabilityModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL,
-				 AnalyticsFactory.eINSTANCE.createMTMModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__BREAKEVEN_MODELS,
-				 AnalyticsFactory.eINSTANCE.createBreakEvenAnalysisModel()));
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

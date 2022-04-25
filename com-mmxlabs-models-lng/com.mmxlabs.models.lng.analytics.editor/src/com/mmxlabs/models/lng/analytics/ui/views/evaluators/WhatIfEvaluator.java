@@ -15,6 +15,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
+import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
@@ -63,7 +65,7 @@ public class WhatIfEvaluator {
 		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
 	}
 
-	public static void doPriceSensitivity(IScenarioEditingLocation scenarioEditingLocation, OptionAnalysisModel model) {
+	public static void doPriceSensitivity(IScenarioEditingLocation scenarioEditingLocation, SensitivityModel sensitivityModel) {
 
 		// Pin references as they could change during the optimisation run
 		EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
@@ -75,13 +77,13 @@ public class WhatIfEvaluator {
 
 		boolean dualPNLMode = false;// model.getBaseCase().isKeepExistingScenario();
 
-		Consumer<AbstractSolutionSet> action = sandboxResult -> {
+		Consumer<SensitivitySolutionSet> action = sensitivityResult -> {
 
 			final long b = System.currentTimeMillis();
 			System.out.printf("Eval %d\n", b - a);
 
 			CompoundCommand cmd = new CompoundCommand();
-			cmd.append(SetCommand.create(editingDomain, model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, sandboxResult));
+			cmd.append(SetCommand.create(editingDomain, sensitivityModel, AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_SOLUTION, sensitivityResult));
 
 			if (!cmd.isEmpty()) {
 				RunnerHelper.asyncExec(() -> {
@@ -94,6 +96,7 @@ public class WhatIfEvaluator {
 		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
 			final EObject object = sdp.getScenario();
 			if (object instanceof final LNGScenarioModel root) {
+				final OptionAnalysisModel model = sensitivityModel.getSensitivityModel();
 				final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
 				final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
 				final UserSettings userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
