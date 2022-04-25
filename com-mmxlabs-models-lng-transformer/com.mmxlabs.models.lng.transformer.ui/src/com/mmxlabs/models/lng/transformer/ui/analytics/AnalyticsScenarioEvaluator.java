@@ -620,7 +620,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						portfolioSensitivityResult.setVariance(portfolioPnls.stream() //
 								.mapToLong(p -> p.longValue() - portfolioSensitivityResult.getAveragePnL()) //
 								.map(val -> val * val) //
-								// .mapToDouble(Math::sqrt) //
+								.mapToDouble(Math::sqrt) //
 								.sum() / (double) (portfolioPnls.size() - 1));
 					}
 					sensitivityResult.setPorfolioPnLResult(portfolioSensitivityResult);
@@ -637,7 +637,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 							pnlResult.setVariance(entry.getValue().stream() //
 									.mapToLong(p -> p.longValue() - pnlResult.getAveragePnL()) //
 									.map(val -> val * val) //
-									// .mapToDouble(Math::sqrt) //
+									.mapToDouble(Math::sqrt) //
 									.sum() / (double) (entry.getValue().size() - 1));
 						}
 						sensitivityResult.getCargoPnLResults().add(pnlResult);

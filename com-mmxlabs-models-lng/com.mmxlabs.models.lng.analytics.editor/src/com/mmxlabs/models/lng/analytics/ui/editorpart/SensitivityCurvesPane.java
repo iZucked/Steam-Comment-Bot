@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ui.editorpart.CurveTreeTransformer.DataType;
-import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -581,5 +580,11 @@ public class SensitivityCurvesPane extends ScenarioTableViewerPane {
 				}
 			}
 		}
+	}
+
+	/**
+	 */
+	@Override
+	protected void enableOpenListener() {
 	}
 }

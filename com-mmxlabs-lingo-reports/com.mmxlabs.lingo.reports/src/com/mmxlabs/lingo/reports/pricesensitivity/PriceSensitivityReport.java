@@ -23,6 +23,8 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensitivityData> {
 
+	private static final long SCALE_DOWN_FACTOR = 1_000_000L;
+
 	public PriceSensitivityReport() {
 		super("com.mmxlabs.lingo.reports.Reports_PriceSensitivity");
 	}
@@ -174,10 +176,10 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				});
 
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Max") {
+				result.add(new ColumnManager<PriceSensitivityData>("Max (m)") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
-						final String formattedString = String.format("%,d", obj.maxPnl);
+						final String formattedString = String.format("%,.2f", scaleDown(obj.maxPnl));
 						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
@@ -187,10 +189,10 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Min") {
+				result.add(new ColumnManager<PriceSensitivityData>("Min (m)") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
-						final String formattedString = String.format("%,d", obj.minPnl);
+						final String formattedString = String.format("%,.2f", scaleDown(obj.minPnl));
 						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
@@ -200,10 +202,10 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 
-				result.add(new ColumnManager<PriceSensitivityData>("Mean") {
+				result.add(new ColumnManager<PriceSensitivityData>("Mean (m)") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
-						final String formattedString = String.format("%,d", obj.averagePnl);
+						final String formattedString = String.format("%,.2f", scaleDown(obj.averagePnl));
 						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
@@ -213,10 +215,10 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 
-				result.add(new ColumnManager<PriceSensitivityData>("Var") {
+				result.add(new ColumnManager<PriceSensitivityData>("Std Dev (m)") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
-						final String formattedString = String.format("%f", obj.variance);
+						final String formattedString = String.format("%,.2f", scaleDown((long) obj.variance));
 						return !"Cargo".equals(obj.key) ? formattedString : "";
 					}
 
@@ -227,6 +229,14 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				});
 				
 				return result;
+			}
+
+			private double scaleDown(final long val) {
+				if (val == 0L) {
+					return 0.0;
+				}
+				final double scaledDownVal = ((double) val)/ SCALE_DOWN_FACTOR;
+				return scaledDownVal;
 			}
 
 			@Override
