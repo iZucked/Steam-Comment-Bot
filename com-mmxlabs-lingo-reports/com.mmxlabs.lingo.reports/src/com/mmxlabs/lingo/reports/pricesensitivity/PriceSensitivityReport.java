@@ -176,7 +176,7 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 				});
 
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Max (m)") {
+				result.add(new ColumnManager<PriceSensitivityData>("Max") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,.2f", scaleDown(obj.maxPnl));
@@ -189,7 +189,7 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 				
-				result.add(new ColumnManager<PriceSensitivityData>("Min (m)") {
+				result.add(new ColumnManager<PriceSensitivityData>("Min") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,.2f", scaleDown(obj.minPnl));
@@ -202,7 +202,7 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 
-				result.add(new ColumnManager<PriceSensitivityData>("Mean (m)") {
+				result.add(new ColumnManager<PriceSensitivityData>("Mean") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,.2f", scaleDown(obj.averagePnl));
@@ -215,7 +215,7 @@ public class PriceSensitivityReport extends SimpleTabularReportView<PriceSensiti
 					}
 				});
 
-				result.add(new ColumnManager<PriceSensitivityData>("Std Dev (m)") {
+				result.add(new ColumnManager<PriceSensitivityData>("Std Dev") {
 					@Override
 					public String getColumnText(PriceSensitivityData obj) {
 						final String formattedString = String.format("%,.2f", scaleDown((long) obj.variance));
