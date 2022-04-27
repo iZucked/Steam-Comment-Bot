@@ -68,12 +68,6 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions">
   </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CommodityCurveOverlayComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.CommodityCurveOverlayComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.CommodityCurveOverlay">
-  </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -226,36 +220,6 @@
             allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
-               commandId="com.mmxlabs.models.lng.analytics.editor.createSensitivity"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <and>
-                  <test
-                        args="features:sandbox"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-                  <with
-                        variable="selection">
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                        </instanceof>
-                     </iterate>
-                  </with>
-                  <count
-                        value="1">
-                  </count>
-               </and>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
-         <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
                icon="icons:/16/sandbox"
                style="push">
@@ -289,10 +253,6 @@
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createSandbox"
             name="Create sandbox">
-      </command>
-      <command
-            id="com.mmxlabs.models.lng.analytics.editor.createSensitivity"
-            name="Create sensitivity model">
       </command>
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createBreakEven"

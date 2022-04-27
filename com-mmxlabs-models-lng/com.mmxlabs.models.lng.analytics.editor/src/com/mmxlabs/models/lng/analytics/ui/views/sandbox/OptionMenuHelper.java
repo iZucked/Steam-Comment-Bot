@@ -24,7 +24,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.internal.C;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
@@ -34,7 +33,6 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
-import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -42,7 +40,6 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.CommodityCurveOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -53,7 +50,6 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -599,78 +595,6 @@ public class OptionMenuHelper {
 					return "Maintenance";
 				}
 				return p.getName();
-			}
-
-		};
-
-	}
-
-	public static MouseListener createNewCommodityCurveOptionMenuListener(Composite parent, @NonNull IScenarioEditingLocation scenarioEditingLocation,
-			@NonNull Supplier<AbstractAnalysisModel> modelProvider) {
-
-		final EStructuralFeature containerFeature;
-
-		final Function<CommodityCurve, EObject> referenceFactory;
-		final Function<AbstractAnalysisModel, List<CommodityCurve>> existingCommodityCurves;
-		final ICellRenderer f;
-
-		{
-			containerFeature = AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
-			f = new CommodityCurveOptionDescriptionFormatter();
-			referenceFactory = cc -> {
-				final CommodityCurveOverlay row = AnalyticsFactory.eINSTANCE.createCommodityCurveOverlay();
-				row.setReferenceCurve(cc);
-				return row;
-			};
-			existingCommodityCurves = model -> {
-				final Set<CommodityCurve> used = model.getCommodityCurves().stream() //
-						.filter(CommodityCurveOverlay.class::isInstance) //
-						.map(b -> ((CommodityCurveOverlay) b).getReferenceCurve())//
-						.collect(Collectors.toSet());
-				final List<CommodityCurve> list = ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel().getCommodityCurves();
-
-				final List<CommodityCurve> existing = list.stream() //
-						.filter(cc -> cc.getName() != null && !cc.getName().isBlank()).filter(cc -> !used.contains(cc)) //
-						.collect(Collectors.toList());
-
-				return existing;
-			};
-
-		}
-
-		return new MouseAdapter() {
-			LocalMenuHelper helper = new LocalMenuHelper(parent);
-
-			@Override
-			public void mouseUp(final MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseDown(final MouseEvent e) {
-
-				helper.clearActions();
-
-				final AbstractAnalysisModel model = modelProvider.get();
-				if (model != null) {
-					final SubLocalMenuHelper existingMenuHelper = new SubLocalMenuHelper("Curves");
-					helper.addSubMenu(existingMenuHelper);
-
-					final List<CommodityCurve> existing = existingCommodityCurves.apply(model);
-					final List<IAction> actions = new ArrayList<>(existing.size());
-					for (final CommodityCurve commodityCurve : existing) {
-						final EObject row = referenceFactory.apply(commodityCurve);
-						actions.add(new RunnableAction(f.render(row), () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
-									containerFeature);
-						}));
-					}
-					actions.sort((a, b) -> a.getText().compareTo(b.getText()));
-					actions.forEach(existingMenuHelper::addAction);
-				}
-
-				helper.open();
-
 			}
 
 		};
