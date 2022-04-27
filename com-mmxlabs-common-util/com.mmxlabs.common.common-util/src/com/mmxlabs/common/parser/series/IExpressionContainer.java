@@ -1,0 +1,9 @@
+package com.mmxlabs.common.parser.series;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.parser.IExpression;
+
+public interface IExpressionContainer extends ISeriesContainer {
+	void setExpression(@NonNull IExpression<ISeries> expression);
+}

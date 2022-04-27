@@ -10,6 +10,8 @@ public interface IExpression<T> {
 	@NonNull
 	T evaluate();
 
+	boolean canEvaluate();
+
 //	@NonNull
 //	T evaluate(Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime);
 }
