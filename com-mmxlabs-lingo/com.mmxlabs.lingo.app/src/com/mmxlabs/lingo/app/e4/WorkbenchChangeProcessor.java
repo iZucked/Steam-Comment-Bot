@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
@@ -58,6 +59,9 @@ public class WorkbenchChangeProcessor {
 		
 		
 		mapIcons(application, iconMapping);
+		
+		// Replace a specific view icon. 
+		// setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/icons/16/econs");
 		
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif
@@ -160,4 +164,33 @@ public class WorkbenchChangeProcessor {
 			}
 		}
 	}
+
+	private void setElementIcon(MElementContainer parent, String elementID, String iconURI) {
+		for (var child : parent.getChildren()) {
+			setElementIconRecursive(child, elementID, iconURI);
+		}
+		if (parent instanceof MWindow window) {
+			for (var child : window.getSharedElements()) {
+				setElementIconRecursive(child, elementID, iconURI);
+			}
+		}
+	}
+
+	private void setElementIconRecursive(Object child, String elementID, String iconURI) {
+		if (child instanceof MElementContainer ec) {
+			setElementIcon(ec, elementID, iconURI);
+		}
+
+		if (child instanceof MUILabel label) {
+			if (label instanceof MApplicationElement element) {
+				if (elementID.equals(element.getElementId())) {
+					String existing = label.getIconURI();
+					if (existing != null) {
+						label.setIconURI(iconURI);
+					}
+				}
+			}
+		}
+	}
+
 }
