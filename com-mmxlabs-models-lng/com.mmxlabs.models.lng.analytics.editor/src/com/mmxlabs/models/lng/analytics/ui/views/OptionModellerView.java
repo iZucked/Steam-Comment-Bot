@@ -916,23 +916,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-//<<<<<<< HEAD
-//								switch (mode) {
-//								case SandboxModeConstants.MODE_OPTIONISE:
-//									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
-//									break;
-//								case SandboxModeConstants.MODE_OPTIMISE:
-//									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
-//									break;
-//								case SandboxModeConstants.MODE_DERIVE:
-//								default:
-//									if (m.getCommodityCurves().isEmpty()) {
-//										WhatIfEvaluator.evaluate(OptionModellerView.this, m);
-//									} else {
-//										WhatIfEvaluator.doPriceSensitivity(OptionModellerView.this, m);
-//									}
-//									break;
-//								}
 								WhatIfEvaluator.runSandbox(OptionModellerView.this, m);
 								if (m != null && m.getResults() != null) {
 									final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
