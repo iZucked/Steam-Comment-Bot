@@ -145,7 +145,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
 	private VesselEventOptionsComponent eventsComponent;
-//	private CommodityCurveOptionsComponent commodityCurvesComponent;
 
 	private BaseCaseComponent baseCaseComponent;
 	private PartialCaseCompoment partialCaseComponent;
