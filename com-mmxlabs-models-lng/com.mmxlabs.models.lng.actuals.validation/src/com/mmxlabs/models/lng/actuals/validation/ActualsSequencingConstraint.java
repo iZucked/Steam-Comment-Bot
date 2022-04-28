@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.actuals.validation;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -52,9 +53,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * This constraint ensures that an {@link CargoActuals} is preceded by another
- * {@link CargoActuals}, or the vessel start. (or a vessel event with warning).
- * This ensures proper heel tracking etc.
+ * This constraint ensures that an {@link CargoActuals} is preceded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
  * 
  * @author Simon Goodall
  * 
@@ -159,8 +158,9 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 									ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
 									if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
-										final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-												getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
+										final String msg = String.format("Actualised Cargo %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
+												getDateString(actualOperationsStart.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), getVesselName(va.getVessel()),
+												getDateString(va.getStartAfter()));
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
@@ -171,8 +171,9 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									}
 									ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
 									if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
-										final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-												getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
+										final String msg = String.format("Actualised Cargo %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
+												getDateString(actualOperationsStart.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), getVesselName(va.getVessel()),
+												getDateString(va.getStartBy()));
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
@@ -278,7 +279,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private String getDateString(final LocalDateTime date) {
-		return date.format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter());
+		return date.format(DateTimeFormatsProvider.INSTANCE.createDateTimeStringDisplayFormatter());
 	}
 
 	private String getID(final EObject target) {

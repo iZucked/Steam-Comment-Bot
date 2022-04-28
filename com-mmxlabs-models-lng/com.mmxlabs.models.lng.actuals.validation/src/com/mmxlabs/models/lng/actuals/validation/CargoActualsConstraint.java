@@ -84,9 +84,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 
 					final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-					if (vesselAssignmentType instanceof VesselAvailability) {
-
-						final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+					if (vesselAssignmentType instanceof VesselAvailability vesselAvailability) {
 						final Vessel vessel = vesselAvailability.getVessel();
 
 						if (vessel != null && !vessel.equals(cargoActuals.getVessel())) {
@@ -99,8 +97,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				} else {
 
 					for (final Slot slot : cargo.getSlots()) {
-						if (slot instanceof LoadSlot) {
-							final LoadSlot loadSlot = (LoadSlot) slot;
+						if (slot instanceof LoadSlot loadSlot) {
 							if (loadSlot.isDESPurchase()) {
 								if (loadSlot.getNominatedVessel() != null && !loadSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -114,8 +111,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 								}
 
 							}
-						} else if (slot instanceof DischargeSlot) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+						} else if (slot instanceof DischargeSlot dischargeSlot) {
 							if (dischargeSlot.isFOBSale()) {
 								if (dischargeSlot.getNominatedVessel() != null && !dischargeSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -223,8 +219,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__VOLUME_IN_MM_BTU);
 						failures.add(status);
 					}
-					if (slotActuals instanceof LoadActuals) {
-						final LoadActuals loadActuals = (LoadActuals) slotActuals;
+					if (slotActuals instanceof LoadActuals loadActuals) {
 						if (Math.abs((loadActuals.getStartingHeelMMBTu() / slotActuals.getCV()) - loadActuals.getStartingHeelM3()) > 0.5) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
@@ -233,8 +228,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_MMB_TU);
 							failures.add(status);
 						}
-					} else if (slotActuals instanceof DischargeActuals) {
-						final DischargeActuals dischargeActuals = (DischargeActuals) slotActuals;
+					} else if (slotActuals instanceof DischargeActuals dischargeActuals) {
 						if (Math.abs((dischargeActuals.getEndHeelMMBTu() / slotActuals.getCV()) - dischargeActuals.getEndHeelM3()) > 0.5) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
