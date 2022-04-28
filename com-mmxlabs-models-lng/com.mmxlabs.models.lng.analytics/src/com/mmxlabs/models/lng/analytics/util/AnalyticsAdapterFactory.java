@@ -336,6 +336,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createLocalDateTimeHolderAdapter();
 			}
 			@Override
+			public Adapter caseCommodityCurveOption(CommodityCurveOption object) {
+				return createCommodityCurveOptionAdapter();
+			}
+			@Override
+			public Adapter caseCommodityCurveOverlay(CommodityCurveOverlay object) {
+				return createCommodityCurveOverlayAdapter();
+			}
+			@Override
+			public Adapter caseSensitivityModel(SensitivityModel object) {
+				return createSensitivityModelAdapter();
+			}
+			@Override
+			public Adapter caseSensitivitySolutionSet(SensitivitySolutionSet object) {
+				return createSensitivitySolutionSetAdapter();
+			}
+			@Override
+			public Adapter caseAbstractSensitivityResult(AbstractSensitivityResult object) {
+				return createAbstractSensitivityResultAdapter();
+			}
+			@Override
+			public Adapter casePortfolioSensitivityResult(PortfolioSensitivityResult object) {
+				return createPortfolioSensitivityResultAdapter();
+			}
+			@Override
+			public Adapter caseCargoPnLResult(CargoPnLResult object) {
+				return createCargoPnLResultAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -1218,6 +1246,104 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLocalDateTimeHolderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOption <em>Commodity Curve Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOption
+	 * @generated
+	 */
+	public Adapter createCommodityCurveOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay <em>Commodity Curve Overlay</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay
+	 * @generated
+	 */
+	public Adapter createCommodityCurveOverlayAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel
+	 * @generated
+	 */
+	public Adapter createSensitivityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet <em>Sensitivity Solution Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivitySolutionSet
+	 * @generated
+	 */
+	public Adapter createSensitivitySolutionSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult <em>Abstract Sensitivity Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult
+	 * @generated
+	 */
+	public Adapter createAbstractSensitivityResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult <em>Portfolio Sensitivity Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult
+	 * @generated
+	 */
+	public Adapter createPortfolioSensitivityResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CargoPnLResult <em>Cargo Pn LResult</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CargoPnLResult
+	 * @generated
+	 */
+	public Adapter createCargoPnLResultAdapter() {
 		return null;
 	}
 

@@ -556,6 +556,60 @@ public interface AnalyticsFactory extends EFactory {
 	LocalDateTimeHolder createLocalDateTimeHolder();
 
 	/**
+	 * Returns a new object of class '<em>Commodity Curve Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Curve Option</em>'.
+	 * @generated
+	 */
+	CommodityCurveOption createCommodityCurveOption();
+
+	/**
+	 * Returns a new object of class '<em>Commodity Curve Overlay</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Curve Overlay</em>'.
+	 * @generated
+	 */
+	CommodityCurveOverlay createCommodityCurveOverlay();
+
+	/**
+	 * Returns a new object of class '<em>Sensitivity Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sensitivity Model</em>'.
+	 * @generated
+	 */
+	SensitivityModel createSensitivityModel();
+
+	/**
+	 * Returns a new object of class '<em>Sensitivity Solution Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sensitivity Solution Set</em>'.
+	 * @generated
+	 */
+	SensitivitySolutionSet createSensitivitySolutionSet();
+
+	/**
+	 * Returns a new object of class '<em>Portfolio Sensitivity Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Portfolio Sensitivity Result</em>'.
+	 * @generated
+	 */
+	PortfolioSensitivityResult createPortfolioSensitivityResult();
+
+	/**
+	 * Returns a new object of class '<em>Cargo Pn LResult</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Pn LResult</em>'.
+	 * @generated
+	 */
+	CargoPnLResult createCargoPnLResult();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

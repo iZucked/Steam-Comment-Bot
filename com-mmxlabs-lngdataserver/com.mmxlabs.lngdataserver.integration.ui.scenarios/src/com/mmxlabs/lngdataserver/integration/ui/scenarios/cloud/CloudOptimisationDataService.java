@@ -188,8 +188,11 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		listeners.remove(l);
 	}
 
-	public void delete(final Collection<String> jobIdsToDelete) {
+	public void delete(final Collection<String> jobIdsToDelete) throws IOException {
 		updater.deleteDownloaded(jobIdsToDelete);
+		for (String jobid : jobIdsToDelete) {
+			client.abort(jobid);
+		}
 	}
 
 	public void setLocalRuntime(final String jobId, final long runtime) {

@@ -74,6 +74,11 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
 						public ISeries evaluate() {
 							return new Minus(e.evaluate());
 						}
+						
+						@Override
+						public boolean canEvaluate() {
+							return e.canEvaluate()
+						}
 					};         :}
   	     %prec UMINUS
              | PLUS expr:e                 {: RESULT = e;         :}

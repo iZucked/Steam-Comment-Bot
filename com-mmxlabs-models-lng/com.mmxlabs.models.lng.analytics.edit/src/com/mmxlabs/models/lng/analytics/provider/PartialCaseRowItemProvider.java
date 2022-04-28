@@ -71,6 +71,7 @@ public class PartialCaseRowItemProvider
 			addSellOptionsPropertyDescriptor(object);
 			addVesselEventOptionsPropertyDescriptor(object);
 			addShippingPropertyDescriptor(object);
+			addCommodityCurveOptionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -155,6 +156,28 @@ public class PartialCaseRowItemProvider
 				 getString("_UI_PartialCaseRow_shipping_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PartialCaseRow_shipping_feature", "_UI_PartialCaseRow_type"),
 				 AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Commodity Curve Options feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCommodityCurveOptionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PartialCaseRow_commodityCurveOptions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PartialCaseRow_commodityCurveOptions_feature", "_UI_PartialCaseRow_type"),
+				 AnalyticsPackage.Literals.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS,
 				 true,
 				 false,
 				 true,

@@ -97,6 +97,7 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES);
 		}
 		return childrenFeatures;
 	}
@@ -148,6 +149,7 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS:
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -259,6 +261,16 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 				 AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
+				 AnalyticsFactory.eINSTANCE.createCommodityCurveOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
+				 AnalyticsFactory.eINSTANCE.createCommodityCurveOverlay()));
 	}
 
 }
