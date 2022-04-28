@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
