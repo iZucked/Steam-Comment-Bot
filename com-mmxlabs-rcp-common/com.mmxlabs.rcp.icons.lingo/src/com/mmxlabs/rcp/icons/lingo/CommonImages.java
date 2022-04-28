@@ -102,6 +102,7 @@ public final class CommonImages {
 		Play(24, "icons/24x24/optimise.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
+		Today(24, "icons/24x24/today.png"), //
 		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
 //		Resume(24,"icons/24x24/terminate.png", true), //
