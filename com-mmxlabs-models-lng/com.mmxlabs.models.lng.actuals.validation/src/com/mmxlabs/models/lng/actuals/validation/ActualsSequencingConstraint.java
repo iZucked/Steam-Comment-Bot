@@ -142,7 +142,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								final Port startPort = va.getStartAt();
 								if (startPort != null && !startPort.equals(actualPort)) {
 									// Error
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
+									final String msg = String.format("Actualised %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
 											getPortName(actualPort), getPortName(startPort));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
@@ -158,7 +158,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 									ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
 									if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
-										final String msg = String.format("Actualised Cargo %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
+										final String msg = String.format("Actualised %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
 												getDateString(actualOperationsStart.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), getVesselName(va.getVessel()),
 												getDateString(va.getStartAfter()));
 
@@ -171,7 +171,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									}
 									ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
 									if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
-										final String msg = String.format("Actualised Cargo %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
+										final String msg = String.format("Actualised %s operations start date (%s in UTC) and vessel %s start date (%s) do not match", getID(assignment),
 												getDateString(actualOperationsStart.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()), getVesselName(va.getVessel()),
 												getDateString(va.getStartBy()));
 
@@ -186,7 +186,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								final StartHeelOptions startHeel = va.getStartHeel();
 								if (loadActuals.getStartingHeelM3() > 0 || startHeel.getMaxVolumeAvailable() > 0) {
 									if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.0005) {
-										final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment),
+										final String msg = String.format("Actualised %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment),
 												getVesselName(va.getVessel()), loadActuals.getCV(), startHeel.getCvValue());
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
@@ -200,7 +200,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								}
 								if (loadActuals.getStartingHeelM3() < startHeel.getMinVolumeAvailable() || loadActuals.getStartingHeelM3() > startHeel.getMaxVolumeAvailable()) {
 									// Error
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - [%,.3f, %,.3f])", getID(assignment),
+									final String msg = String.format("Actualised %s and vessel %s starting heel quantities do not match (%,.3f - [%,.3f, %,.3f])", getID(assignment),
 											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getMinVolumeAvailable(),
 											(double) startHeel.getMaxVolumeAvailable());
 
