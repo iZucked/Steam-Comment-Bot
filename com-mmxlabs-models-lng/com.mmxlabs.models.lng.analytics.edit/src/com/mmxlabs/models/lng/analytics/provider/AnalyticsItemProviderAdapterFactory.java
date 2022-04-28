@@ -1353,6 +1353,144 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityCurveOptionItemProvider commodityCurveOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityCurveOptionAdapter() {
+		if (commodityCurveOptionItemProvider == null) {
+			commodityCurveOptionItemProvider = new CommodityCurveOptionItemProvider(this);
+		}
+
+		return commodityCurveOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityCurveOverlayItemProvider commodityCurveOverlayItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityCurveOverlayAdapter() {
+		if (commodityCurveOverlayItemProvider == null) {
+			commodityCurveOverlayItemProvider = new CommodityCurveOverlayItemProvider(this);
+		}
+
+		return commodityCurveOverlayItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SensitivityModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SensitivityModelItemProvider sensitivityModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SensitivityModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSensitivityModelAdapter() {
+		if (sensitivityModelItemProvider == null) {
+			sensitivityModelItemProvider = new SensitivityModelItemProvider(this);
+		}
+
+		return sensitivityModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SensitivitySolutionSetItemProvider sensitivitySolutionSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSensitivitySolutionSetAdapter() {
+		if (sensitivitySolutionSetItemProvider == null) {
+			sensitivitySolutionSetItemProvider = new SensitivitySolutionSetItemProvider(this);
+		}
+
+		return sensitivitySolutionSetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortfolioSensitivityResultItemProvider portfolioSensitivityResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortfolioSensitivityResultAdapter() {
+		if (portfolioSensitivityResultItemProvider == null) {
+			portfolioSensitivityResultItemProvider = new PortfolioSensitivityResultItemProvider(this);
+		}
+
+		return portfolioSensitivityResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CargoPnLResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CargoPnLResultItemProvider cargoPnLResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CargoPnLResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCargoPnLResultAdapter() {
+		if (cargoPnLResultItemProvider == null) {
+			cargoPnLResultItemProvider = new CargoPnLResultItemProvider(this);
+		}
+
+		return cargoPnLResultItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1637,6 +1775,12 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (breakEvenAnalysisResultSetItemProvider != null) breakEvenAnalysisResultSetItemProvider.dispose();
 		if (breakEvenAnalysisResultItemProvider != null) breakEvenAnalysisResultItemProvider.dispose();
 		if (localDateTimeHolderItemProvider != null) localDateTimeHolderItemProvider.dispose();
+		if (commodityCurveOptionItemProvider != null) commodityCurveOptionItemProvider.dispose();
+		if (commodityCurveOverlayItemProvider != null) commodityCurveOverlayItemProvider.dispose();
+		if (sensitivityModelItemProvider != null) sensitivityModelItemProvider.dispose();
+		if (sensitivitySolutionSetItemProvider != null) sensitivitySolutionSetItemProvider.dispose();
+		if (portfolioSensitivityResultItemProvider != null) portfolioSensitivityResultItemProvider.dispose();
+		if (cargoPnLResultItemProvider != null) cargoPnLResultItemProvider.dispose();
 	}
 
 }

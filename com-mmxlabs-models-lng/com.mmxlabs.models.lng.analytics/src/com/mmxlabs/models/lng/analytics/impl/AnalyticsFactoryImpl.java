@@ -121,6 +121,12 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET: return createBreakEvenAnalysisResultSet();
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT: return createBreakEvenAnalysisResult();
 			case AnalyticsPackage.LOCAL_DATE_TIME_HOLDER: return createLocalDateTimeHolder();
+			case AnalyticsPackage.COMMODITY_CURVE_OPTION: return createCommodityCurveOption();
+			case AnalyticsPackage.COMMODITY_CURVE_OVERLAY: return createCommodityCurveOverlay();
+			case AnalyticsPackage.SENSITIVITY_MODEL: return createSensitivityModel();
+			case AnalyticsPackage.SENSITIVITY_SOLUTION_SET: return createSensitivitySolutionSet();
+			case AnalyticsPackage.PORTFOLIO_SENSITIVITY_RESULT: return createPortfolioSensitivityResult();
+			case AnalyticsPackage.CARGO_PN_LRESULT: return createCargoPnLResult();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -763,6 +769,72 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public LocalDateTimeHolder createLocalDateTimeHolder() {
 		LocalDateTimeHolderImpl localDateTimeHolder = new LocalDateTimeHolderImpl();
 		return localDateTimeHolder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommodityCurveOption createCommodityCurveOption() {
+		CommodityCurveOptionImpl commodityCurveOption = new CommodityCurveOptionImpl();
+		return commodityCurveOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommodityCurveOverlay createCommodityCurveOverlay() {
+		CommodityCurveOverlayImpl commodityCurveOverlay = new CommodityCurveOverlayImpl();
+		return commodityCurveOverlay;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SensitivityModel createSensitivityModel() {
+		SensitivityModelImpl sensitivityModel = new SensitivityModelImpl();
+		return sensitivityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SensitivitySolutionSet createSensitivitySolutionSet() {
+		SensitivitySolutionSetImpl sensitivitySolutionSet = new SensitivitySolutionSetImpl();
+		return sensitivitySolutionSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PortfolioSensitivityResult createPortfolioSensitivityResult() {
+		PortfolioSensitivityResultImpl portfolioSensitivityResult = new PortfolioSensitivityResultImpl();
+		return portfolioSensitivityResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CargoPnLResult createCargoPnLResult() {
+		CargoPnLResultImpl cargoPnLResult = new CargoPnLResultImpl();
+		return cargoPnLResult;
 	}
 
 	/**

@@ -130,8 +130,11 @@ public class CloudOptimisationDataService {
 		}
 	}
 
-	public void delete(final Collection<String> jobIdsToDelete) {
+	public void delete(final Collection<String> jobIdsToDelete) throws IOException {
 		updater.deleteDownloaded(jobIdsToDelete);
+		for (String jobid : jobIdsToDelete) {
+			client.abort(jobid);
+		}
 	}
 
 	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {

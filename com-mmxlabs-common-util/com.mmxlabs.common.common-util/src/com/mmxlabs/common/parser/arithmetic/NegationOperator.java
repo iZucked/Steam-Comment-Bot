@@ -25,4 +25,10 @@ public class NegationOperator implements ArithmeticExpression {
 	public String toString() {
 		return "-" + argument;
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

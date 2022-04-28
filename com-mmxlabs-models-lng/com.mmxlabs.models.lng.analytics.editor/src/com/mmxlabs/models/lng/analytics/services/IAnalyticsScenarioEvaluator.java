@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -40,4 +41,6 @@ public interface IAnalyticsScenarioEvaluator {
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
 	void runSandbox(@NonNull ScenarioInstance scenarioInstance, @NonNull OptionAnalysisModel model);
+
+	void runPriceSensitivity(ScenarioInstance scenarioInstance, SensitivityModel model);
 }

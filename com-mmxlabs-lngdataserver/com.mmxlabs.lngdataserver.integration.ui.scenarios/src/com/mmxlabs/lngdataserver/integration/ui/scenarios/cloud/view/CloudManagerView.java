@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -35,9 +36,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudJobManager;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -67,6 +71,17 @@ import com.mmxlabs.scenario.service.ui.IProgressProvider.RunType;
 
 public class CloudManagerView extends ViewPart {
 
+//<<<<<<< HEAD
+//=======
+	private static final Logger log = LoggerFactory.getLogger(CloudManagerView.class);
+
+	//
+	// /**
+	// * The ID of the view as specified by the extension.
+	// */
+	// public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
+	//
+//>>>>>>> origin/master
 	private GridTableViewer viewer;
 	private Action packAction;
 	// private Action stopAction;
@@ -396,6 +411,16 @@ public class CloudManagerView extends ViewPart {
 							}
 						}
 					}
+////<<<<<<< HEAD
+////=======
+//					if (!jobs.isEmpty()) {
+//						try {
+//							CloudOptimisationDataService.INSTANCE.delete(jobs);
+//						} catch (IOException e) {
+//							log.info("failed to cancel remote job");
+//						}
+//					}
+////>>>>>>> origin/master
 				}
 
 			}

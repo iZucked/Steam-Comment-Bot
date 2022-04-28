@@ -65,6 +65,7 @@ public class CloudOptimisationDataServiceClient {
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; // for localhost - "/scenarios/v1/cloud/opti/upload"
 	private static final String PUBLIC_KEY_URL = "/publickey";
 	private static final String INFO_URL = "/info";
+	private static final String ABORT_URL = "/abort";
 	//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
 	//	private final IEclipsePreferences preferences;
 	//	private final String optimisationServiceURL;
@@ -271,6 +272,27 @@ public class CloudOptimisationDataServiceClient {
 					return (RSAPublicKey) factory.generatePublic(pubKeySpec);
 				}
 			}
+		}
+	}
+
+	public boolean abort(String jobid) throws IOException {
+		final String requestURL = String.format("%s/%s/%s", ABORT_URL, jobid, getUserId());
+		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
+		if (requestBuilder == null) {
+			return false;
+		}
+
+		final Request request = requestBuilder //
+				.build();
+
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				if (response.code() == 500) {
+					log.error("failed to abort remote optimisation job");
+				}
+				return false;
+			}
+			return true;
 		}
 	}
 

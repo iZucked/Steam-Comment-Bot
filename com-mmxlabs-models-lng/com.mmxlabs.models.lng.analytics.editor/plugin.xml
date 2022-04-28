@@ -68,7 +68,6 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions">
   </componentHelper>
-  
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -85,6 +84,12 @@
           implementation="com.mmxlabs.models.lng.analytics.ui.editorpart.AnalyticsModelEditorContribution"
           priority="0"
           subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
+    </jointModelEditor>
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.editor.sensitivityModelEditor"
+          implementation="com.mmxlabs.models.lng.analytics.ui.editorpart.SensitivityModelEditorContribution"
+          priority="100"
+          subModelClass="com.mmxlabs.models.lng.analytics.SensitivityModel">
     </jointModelEditor>
  </extension>
  <extension

@@ -540,7 +540,7 @@ public class ChangeModelToScheduleSpecification {
 
 		assert leftOvers.isEmpty();
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges, null, null));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges, null, null, null));
 	}
 
 	private @NonNull SpotType map(SlotType slotType) {

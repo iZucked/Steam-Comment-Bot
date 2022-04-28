@@ -230,6 +230,11 @@ public class OptionAnalysisModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
 				 AnalyticsFactory.eINSTANCE.createOptimisationResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS,
+				 AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet()));
 	}
 
 }
