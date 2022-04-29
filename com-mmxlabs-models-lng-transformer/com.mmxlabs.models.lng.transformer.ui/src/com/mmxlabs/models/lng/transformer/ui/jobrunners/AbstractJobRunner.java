@@ -21,7 +21,6 @@ public abstract class AbstractJobRunner implements IJobRunner {
 
 	protected boolean enableLogging = false;
 	protected @Nullable Meta meta;
-	protected @Nullable ScenarioMeta scenarioMeta;
 
 	public static ObjectMapper createObjectMapper() {
 
@@ -38,8 +37,6 @@ public abstract class AbstractJobRunner implements IJobRunner {
 		enableLogging = true;
 		if (object instanceof Meta m) {
 			this.meta = m;
-		} else if (object instanceof ScenarioMeta om) {
-			this.scenarioMeta = om;
 		}
 	}
 }
