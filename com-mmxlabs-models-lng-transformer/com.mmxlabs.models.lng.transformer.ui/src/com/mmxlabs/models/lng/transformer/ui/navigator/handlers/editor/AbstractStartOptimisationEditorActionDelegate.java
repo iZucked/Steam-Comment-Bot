@@ -65,7 +65,7 @@ public abstract class AbstractStartOptimisationEditorActionDelegate extends Acti
 		}
 	};
 
-	protected final IScenarioLockListener scenarioLockListener = (mr, value) -> setActiveEditor(action, editor);
+	protected final IScenarioLockListener scenarioLockListener = (mr, value) -> updateState();
 
 	@Override
 	public void run(final IAction methodAction) {
@@ -106,9 +106,18 @@ public abstract class AbstractStartOptimisationEditorActionDelegate extends Acti
 			lastModelRecord = null;
 		}
 
+		updateState();
+
+		if (lastModelRecord != null) {
+			lastModelRecord.addLockListener(scenarioLockListener);
+		}
+	}
+
+	public void updateState() {
+
 		if (action != null) {
 			action.setEnabled(false);
-			if (targetEditor != null && targetEditor.getEditorInput() instanceof final IScenarioServiceEditorInput editorInput) {
+			if (editor != null && editor.getEditorInput() instanceof final IScenarioServiceEditorInput editorInput) {
 
 				final ScenarioInstance instance = editorInput.getScenarioInstance();
 				if (instance == null) {
@@ -121,7 +130,6 @@ public abstract class AbstractStartOptimisationEditorActionDelegate extends Acti
 				}
 
 				lastModelRecord = modelRecord;
-				lastModelRecord.addLockListener(scenarioLockListener);
 
 				if (instance.isReadonly()) {
 					return;
@@ -138,6 +146,5 @@ public abstract class AbstractStartOptimisationEditorActionDelegate extends Acti
 				}
 			}
 		}
-
 	}
 }

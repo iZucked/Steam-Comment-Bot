@@ -205,9 +205,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 		case SandboxModeConstants.MODE_DERIVE:
 			return runSandboxOptions(sdp, null, model, userSettings, subMonitor);
 		}
-
 		throw new IllegalArgumentException("Unknown sandbox mode");
-
 	}
 
 	public @Nullable AbstractSolutionSet runSandboxInsertion(final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, final OptionAnalysisModel model,

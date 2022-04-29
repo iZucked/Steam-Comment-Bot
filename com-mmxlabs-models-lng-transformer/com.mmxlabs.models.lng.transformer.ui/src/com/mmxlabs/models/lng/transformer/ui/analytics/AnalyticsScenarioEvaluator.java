@@ -404,5 +404,4 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void runPriceSensitivity(final ScenarioInstance scenarioInstance, final SensitivityModel model) {
 		PriceSensitivityTask.submit(scenarioInstance, model, LocalJobManager.INSTANCE);
 	}
-
 }

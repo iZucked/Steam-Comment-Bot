@@ -71,12 +71,6 @@ public class CloudManagerView extends ViewPart {
 
 	private static final Logger log = LoggerFactory.getLogger(CloudManagerView.class);
 
-	//
-	// /**
-	// * The ID of the view as specified by the extension.
-	// */
-	// public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
-	//
 	private GridTableViewer viewer;
 	private Action packAction;
 	// private Action stopAction;
@@ -230,7 +224,6 @@ public class CloudManagerView extends ViewPart {
 				Collections.sort(tasks, (a, b) -> b.job.getCreationDate().compareTo(a.job.getCreationDate()));
 
 				return tasks.toArray();
-
 			};
 		});
 

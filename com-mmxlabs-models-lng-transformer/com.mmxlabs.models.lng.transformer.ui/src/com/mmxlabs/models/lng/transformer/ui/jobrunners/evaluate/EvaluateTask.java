@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.evaluate;
 
+import java.util.Collections;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -56,6 +58,12 @@ public class EvaluateTask {
 							EMFCopier.copy(userSettings)));
 					editingDomain.getCommandStack().execute(cmd);
 				});
+
+				boolean relaxedValidation = "Period Scenario".equals(scenarioModelRecord.getName());
+				// New optimisation, so check there are no validation errors.
+				if (!OptimisationHelper.validateScenario(sdp, null, false, true, relaxedValidation, Collections.emptySet())) {
+					return;
+				}
 
 				final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
 						.withUserSettings(userSettings);
