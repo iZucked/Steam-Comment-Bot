@@ -16,44 +16,16 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public class ScenarioServiceListener implements IScenarioServiceListener {
-
-//	@Override
-//	public void onPreScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
-//
-//	@Override
-//	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
-//
-//	@Override
-//	public void onPreScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
-
-//	@Override
-//	public void onPostScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
+ 
 
 	@Override
 	public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
 	}
-
-//	@Override
-//	public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
-
+ 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
 	}
-
-//	@Override
-//	public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-//
-//	}
+ 
 }

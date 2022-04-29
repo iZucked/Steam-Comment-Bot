@@ -237,7 +237,7 @@ public class Activator extends AbstractUIPlugin {
 			props.put("component.id", CloudOptimisationDataService.class.getCanonicalName());
 
 			cloudOptimisationServiceRegistration = getBundle().getBundleContext().registerService(CloudOptimisationDataService.class, cloudOptimisationService, props);
-			cloudOptimisationProgressServiceRegistration = getBundle().getBundleContext().registerService(IProgressProvider.class, cloudOptimisationService, props);
+//			cloudOptimisationProgressServiceRegistration = getBundle().getBundleContext().registerService(IProgressProvider.class, cloudOptimisationService, props);
 		}
 
 	}

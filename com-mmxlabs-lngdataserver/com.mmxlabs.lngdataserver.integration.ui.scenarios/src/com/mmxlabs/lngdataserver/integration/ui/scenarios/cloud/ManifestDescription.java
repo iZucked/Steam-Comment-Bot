@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
-
+ 
 public class ManifestDescription {
 	public String scenario;
 	public String type;

@@ -5,140 +5,95 @@
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.actions.ActionDelegate;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.ui.IProgressProvider;
+import com.mmxlabs.scenario.service.ui.IProgressProvider.IProgressChanged;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEditorActionDelegate {
+public class StopOptimisationEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
+
+	protected IEditorPart editor;
+	protected IAction action;
+
+	@Override
+	public void dispose() {
+
+		ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+			mgr.removeChangedListener(listener);
+			return true;
+		});
+
+		action = null;
+		editor = null;
+
+	}
+
+	private final IProgressChanged listener = new IProgressChanged() {
+		@Override
+		public void changed(final Object element) {
+			setActiveEditor(action, editor);
+		}
+
+		@Override
+		public void listChanged() {
+			setActiveEditor(action, editor);
+		}
+	};
+
+	public StopOptimisationEditorActionDelegate() {
+
+		ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+			mgr.addChangedListener(listener);
+			return true;
+		});
+	}
 
 	@Override
 	public void run(final IAction action) {
 
-		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput scenarioServiceEditorInput) {
-			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
+		if (editor.getEditorInput() instanceof final IScenarioServiceEditorInput editorInput) {
+			final ScenarioInstance instance = editorInput.getScenarioInstance();
 
-			if (instance.isReadonly() || instance.isCloudLocked()) {
+			if (instance.isReadonly()) {
 				action.setEnabled(false);
 				return;
 			}
 
-			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-			final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
-			final IJobControl control = jobManager.getControlForJob(job);
-
-			if (control != null) {
-				final EJobState jobState = control.getJobState();
-
-				// Can job still be cancelled?
-				if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
-					control.cancel();
-				}
-			}
-		}
-	}
-
-	@Override
-	protected void stateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
-
-		boolean enabled = false;
-		switch (newState) {
-		case CANCELLED:
-			break;
-		case CANCELLING:
-			break;
-		case COMPLETED:
-			break;
-		case CREATED:
-			enabled = true;
-			break;
-		case INITIALISED:
-			enabled = true;
-			break;
-		case INITIALISING:
-			enabled = true;
-			break;
-		case RUNNING:
-			enabled = true;
-			break;
-		case UNKNOWN:
-			break;
-		}
-		if (action != null) {
-			action.setEnabled(enabled);
+			ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+				mgr.cancelAll(instance.getUuid());
+				return true;
+			});
 		}
 	}
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-		super.setActiveEditor(action, targetEditor);
+		this.editor = targetEditor;
+		this.action = action;
 
-		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof final IScenarioServiceEditorInput editorInput) {
 
-			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
-
-			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-			if (instance == null) {
-				action.setEnabled(false);
-				return;
-			}
-
-			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-			if (modelRecord == null || modelRecord.isLoadFailure()) {
-				action.setEnabled(false);
-				return;
-			}
-
-			try (final ModelReference modelReference = modelRecord.aquireReference("StopOptimisationEditorActionDelegate")) {
-				final Object object = modelReference.getInstance();
-				if (object instanceof MMXRootObject) {
-					final String uuid = instance.getUuid();
-
-					final IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job != null) {
-						final IJobControl control = jobManager.getControlForJob(job);
-						final EJobState jobState = control.getJobState();
-						if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
-							action.setEnabled(true);
-							return;
-						}
-					}
-
-				}
-			}
-		}
-		if (action != null) {
 			action.setEnabled(false);
+
+			final ScenarioInstance instance = editorInput.getScenarioInstance();
+
+			if (instance != null) {
+				ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+					final boolean runningJob = mgr.hasActiveJob(instance.getUuid());
+					if (runningJob) {
+						action.setEnabled(true);
+						return false;
+					}
+					return true;
+				});
+			}
 		}
-	}
-
-	@Override
-	protected void runLastMode() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected void runWithMode(final String mode) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected void runCustomMode() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected void editAndRunCustomMode() {
-		throw new UnsupportedOperationException();
 	}
 }

@@ -133,7 +133,7 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly() || instance.isCloudLocked()) {
+				if (instance.isReadonly()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}

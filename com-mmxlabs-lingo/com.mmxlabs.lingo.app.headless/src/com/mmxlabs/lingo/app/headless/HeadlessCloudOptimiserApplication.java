@@ -118,7 +118,9 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 				// end hack
 								
 				AbstractSolutionSet result = runner.run(numThreads, monitor);
-
+				if (result == null) {
+					throw new NullPointerException("Result is null");
+				}
 				// final File resultOutput = new File(outputScenarioFileName + ".xmi");
 				HeadlessUtils.saveResult(result, scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
 				//

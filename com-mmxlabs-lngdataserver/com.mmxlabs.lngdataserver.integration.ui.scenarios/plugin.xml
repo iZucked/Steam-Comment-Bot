@@ -36,4 +36,23 @@
                plugin.xml="cloud-opti.plugin.xml">
          </PluginXMLEnablement>
       </extension>   
+         <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
+            icon="icons:/16/cloud"
+            id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"
+            name="Task Manager"
+            restorable="true">
+      </view>
+   </extension>
+         <extension
+               point="com.mmxlabs.rcp.common.ViewPartRewrite">
+            <ViewPartRewrite
+                  newViewID="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"
+                  oldViewID="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView">
+            </ViewPartRewrite>
+         </extension>
+   
+   
 </plugin>

@@ -11,14 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -32,8 +27,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -52,20 +46,14 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
@@ -79,14 +67,71 @@ public final class OptimisationHelper {
 	private OptimisationHelper() {
 	}
 
-	public static final String PARAMETER_MODE_CUSTOM = "Custom";
-
 	public static final int EPOCH_LENGTH_PERIOD = 10_000;
 	public static final int EPOCH_LENGTH_FULL = 10_000;
 
 	@Nullable
-	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
-			final boolean promptOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+	public static Pair<String, UserSettings> getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			final NameProvider nameProvider) {
+
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
+
+		final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+
+		// Only permit LT mode for an LT scenario
+		if (scenario != null && scenario.isLongTerm()) {
+			userSettings.setMode(OptimisationMode.LONG_TERM);
+			previousSettings.setMode(OptimisationMode.LONG_TERM);
+		}
+
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
+		if (promptUser) {
+			final boolean forADP = scenario.getAdpModel() != null;
+
+			// Do not allow optimisation if break even present in slots.
+			if (UserSettingsHelper.checkForBreakEven(scenario)) {
+				final String errMessage = "Optimisation does not support break-evens. Replace \"?\" in price expressions.";
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				if (display != null) {
+					display.syncExec(() -> MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage));
+				}
+
+				return null;
+			}
+
+			previousSettings = UserSettingsHelper.openUserDialog(scenario, false, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
+		UserSettingsHelper.mergeFields(previousSettings, userSettings);
+
+		if (!UserSettingsHelper.checkUserSettings(userSettings, false)) {
+			return null;
+		}
+		String name = null;
+		// final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
+		if (nameProvider != null) {
+			name = nameProvider.getNameSuggestion();
+		}
+
+		return Pair.of(name, userSettings);
+	}
+
+	@Nullable
+	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+			final NameProvider nameProvider) {
 
 		UserSettings previousSettings = null;
 		if (scenario != null) {
@@ -143,48 +188,90 @@ public final class OptimisationHelper {
 		return optimisationPlan;
 	}
 
-	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final String nameSuggestion, final Set<String> existingNames) {
-		return evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, promptOnlyIfOptionsEnabled, new NameProvider(nameSuggestion, existingNames));
-	}
+	@Nullable
+	public static UserSettings getEvaluationSettings(@NonNull final LNGScenarioModel scenario, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
 
-	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
 
-		final IScenarioService service = SSDataManager.Instance.findScenarioService(instance);
-		if (service == null) {
+		final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+
+		// Only permit LT mode for an LT scenario
+		if (scenario != null && scenario.isLongTerm()) {
+			userSettings.setMode(OptimisationMode.LONG_TERM);
+			previousSettings.setMode(OptimisationMode.LONG_TERM);
+		}
+
+		// Permit the user to override the settings object. Use the previous settings as
+		// the initial value
+		if (promptUser) {
+			final boolean forADP = scenario.getAdpModel() != null;
+
+			previousSettings = UserSettingsHelper.openUserDialog(scenario, true, previousSettings, userSettings, promptOnlyIfOptionsEnabled, null, forADP);
+		}
+
+		if (previousSettings == null) {
 			return null;
 		}
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 
-		final OptimisationPlan[] planRef = new OptimisationPlan[1];
-		final BiPredicate<IScenarioDataProvider, LNGScenarioModel> prepareCallback = (ref, root) -> {
-			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled, nameProvider);
+		// Only merge across specific fields - not all of them. This permits additions
+		// to the default settings to pass through to the scenario.
+		UserSettingsHelper.mergeFields(previousSettings, userSettings);
 
-			if (optimisationPlan == null) {
-				return false;
-			}
-			final EditingDomain editingDomain = ref.getEditingDomain();
-			if (editingDomain != null) {
-				final CompoundCommand cmd = new CompoundCommand("Update settings");
-				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EMFCopier.copy(optimisationPlan.getUserSettings())));
-				RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
-			}
+		if (!UserSettingsHelper.checkUserSettings(userSettings, false)) {
+			return null;
+		}
 
-			planRef[0] = optimisationPlan;
-			return true;
-		};
-
-		final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-			return new LNGSchedulerJobDescriptor(instance.getName(), instance, planRef[0], optimising);
-		};
-		final String taskName = "Optimise " + instance.getName();
-
-		final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
-		jobRunner.run(taskName, instance, modelRecord, prepareCallback, createJobDescriptorCallback, null);
-
-		return null;
+		return userSettings;
 	}
+//
+//	public static Object evaluateScenarioInstance(@NonNull final ScenarioInstance instance, final boolean promptForOptimiserSettings,
+//			final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final String nameSuggestion, final Set<String> existingNames) {
+//		return evaluateScenarioInstance( instance, promptForOptimiserSettings, optimising, promptOnlyIfOptionsEnabled, new NameProvider(nameSuggestion, existingNames));
+//	}
+//
+//	public static Object evaluateScenarioInstance( @NonNull final ScenarioInstance instance, final boolean promptForOptimiserSettings,
+//			final boolean optimising, final boolean promptOnlyIfOptionsEnabled, final NameProvider nameProvider) {
+//
+//		final IScenarioService service = SSDataManager.Instance.findScenarioService(instance);
+//		if (service == null) {
+//			return null;
+//		}
+//		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
+//
+//		final OptimisationPlan[] planRef = new OptimisationPlan[1];
+//		final BiPredicate<IScenarioDataProvider, LNGScenarioModel> prepareCallback = (ref, root) -> {
+//			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, promptForOptimiserSettings, promptOnlyIfOptionsEnabled, nameProvider);
+//
+//			if (optimisationPlan == null) {
+//				return false;
+//			}
+//			final EditingDomain editingDomain = ref.getEditingDomain();
+//			if (editingDomain != null) {
+//				final CompoundCommand cmd = new CompoundCommand("Update settings");
+//				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EMFCopier.copy(optimisationPlan.getUserSettings())));
+//				RunnerHelper.syncExecDisplayOptional(() -> editingDomain.getCommandStack().execute(cmd));
+//			}
+//
+//			planRef[0] = optimisationPlan;
+//			return true;
+//		};
+//
+//		final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
+//			return new LNGSchedulerJobDescriptor(instance.getName(), instance, planRef[0], optimising);
+//		};
+//		final String taskName = "Optimise " + instance.getName();
+//
+//		final EvaluateJobRunner jobRunner = new EvaluateJobRunner();
+//		jobRunner.run(taskName, instance, modelRecord, prepareCallback, createJobDescriptorCallback, null);
+//
+//		return null;
+//	}
 
 	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, final LNGScenarioModel lngScenarioModel) {
 
