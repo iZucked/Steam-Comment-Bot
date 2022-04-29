@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.app.e4;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -55,67 +56,38 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png", "icons:/16/scenario");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
-		
-		
-		
+
 		mapIcons(application, iconMapping);
-		
-		// Replace a specific view icon. 
+
+		// Replace a specific view icon.
 		// setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/icons/16/econs");
+
+		// Change to new part ID
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView", p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));
 		
-//		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
-//		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif
-//		platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif
-//		platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif
-//		platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/full/obj16/NominationsModelFile.gif
-//		platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
-//		platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
+		// Make sure the new name is picked up
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", p -> p.setLabel("Task Manager"));
 
-		// Remove ADP view part
-		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
+		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
+		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif
+		// platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif
+		// platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif
+		// platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/full/obj16/NominationsModelFile.gif
+		// platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
+		// platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
 
-		// Removed from *.port.editor/plugin.xml
-		// <view
-		// category="com.mmxlabs.models.lng.views.physical"
-		// class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-		// id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-		// name="Port Groups">
-		// </view>
-		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.port.editor.views.PortGroupView", application, modelService);
+	 
 
 		if (!LicenseFeatures.isPermitted("features:fitness-view")) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView", application, modelService);
 		}
 
-		// Added for 3.8.x to 3.9.0 changes
-		// Rename Diff Tools Perspective to Compare
-		for (final MWindow window : application.getChildren()) {
-			for (final MWindowElement mWindowElement : window.getChildren()) {
-				if (mWindowElement instanceof MPartSashContainer) {
-					final MPartSashContainer mPartSashContainer = (MPartSashContainer) mWindowElement;
-					for (final MPartSashContainerElement mPartSashContainerElement : mPartSashContainer.getChildren()) {
-						if (mPartSashContainerElement instanceof MPerspectiveStack) {
-							final MPerspectiveStack mPerspectiveStack = (MPerspectiveStack) mPartSashContainerElement;
-							for (final MPerspective perspective : mPerspectiveStack.getChildren()) {
-								if (perspective.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective") && perspective.getLabel().equals("Diff Tools")) {
-									perspective.setLabel("Compare");
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.diff.DiffGroupView", application, modelService);
-
+		 
 		// Only remove if not permitted.
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
 		}
-		// View no longer present
-		E4ModelHelper.removeViewPart("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView", application, modelService);
-
+		 
 		// Remove Job Manager.
 		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
 
@@ -145,7 +117,7 @@ public class WorkbenchChangeProcessor {
 				if (existing.startsWith("platform:/plugin/com.mmxlabs.rcp.common")) {
 					label.setIconURI("icons:" + existing.substring("platform:/plugin/com.mmxlabs.rcp.common".length()));
 				}
-				
+
 				String replacement = iconMapping.get(existing);
 				if (replacement != null) {
 					label.setIconURI(replacement);
@@ -188,6 +160,35 @@ public class WorkbenchChangeProcessor {
 					if (existing != null) {
 						label.setIconURI(iconURI);
 					}
+				}
+			}
+		}
+	}
+
+	private <T extends MApplicationElement & MUILabel> void forEach(MElementContainer parent, String elementID, Consumer<T> action) {
+		for (var child : parent.getChildren()) {
+			doForEach(child, elementID, action);
+		}
+		if (parent instanceof MWindow window) {
+			for (var child : window.getSharedElements()) {
+				doForEach(child, elementID, action);
+			}
+		}
+	}
+
+	private <T extends MApplicationElement & MUILabel> void doForEach(Object child, String elementID, Consumer<T> action) {
+		if (child instanceof MElementContainer ec) {
+			forEach(ec, elementID, action);
+		}
+
+		if (child instanceof MUILabel label) {
+			if (label instanceof MApplicationElement element) {
+				if (elementID.equals(element.getElementId())) {
+					action.accept((T) element);
+					// String existing = label.getIconURI();
+					// if (existing != null) {
+					// label.setIconURI(iconURI);
+					// }
 				}
 			}
 		}
