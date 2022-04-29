@@ -224,7 +224,6 @@ public class CloudManagerView extends ViewPart {
 				Collections.sort(tasks, (a, b) -> b.job.getCreationDate().compareTo(a.job.getCreationDate()));
 
 				return tasks.toArray();
-
 			};
 		});
 

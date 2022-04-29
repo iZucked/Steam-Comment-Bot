@@ -131,6 +131,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_MMX_REFERENCE_VESSELS = "features:mmx-reference-vessels";
 
+	public static final String FEATURE_PRICE_SENSITIVITY = "features:price-sensitivity";
+
 	/**
 	 * Scenario repair features
 	 */

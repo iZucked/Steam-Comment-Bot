@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getNominationsModel <em>Nominations Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isAnonymised <em>Anonymised</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getSensitivityModel <em>Sensitivity Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -240,6 +242,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected boolean anonymised = ANONYMISED_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSensitivityModel() <em>Sensitivity Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSensitivityModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected SensitivityModel sensitivityModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -952,6 +964,74 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @generated
 	 */
 	@Override
+	public SensitivityModel getSensitivityModel() {
+		if (sensitivityModel != null && sensitivityModel.eIsProxy()) {
+			InternalEObject oldSensitivityModel = (InternalEObject)sensitivityModel;
+			sensitivityModel = (SensitivityModel)eResolveProxy(oldSensitivityModel);
+			if (sensitivityModel != oldSensitivityModel) {
+				InternalEObject newSensitivityModel = (InternalEObject)sensitivityModel;
+				NotificationChain msgs = oldSensitivityModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, null, null);
+				if (newSensitivityModel.eInternalContainer() == null) {
+					msgs = newSensitivityModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, oldSensitivityModel, sensitivityModel));
+			}
+		}
+		return sensitivityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SensitivityModel basicGetSensitivityModel() {
+		return sensitivityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSensitivityModel(SensitivityModel newSensitivityModel, NotificationChain msgs) {
+		SensitivityModel oldSensitivityModel = sensitivityModel;
+		sensitivityModel = newSensitivityModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, oldSensitivityModel, newSensitivityModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSensitivityModel(SensitivityModel newSensitivityModel) {
+		if (newSensitivityModel != sensitivityModel) {
+			NotificationChain msgs = null;
+			if (sensitivityModel != null)
+				msgs = ((InternalEObject)sensitivityModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, null, msgs);
+			if (newSensitivityModel != null)
+				msgs = ((InternalEObject)newSensitivityModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, null, msgs);
+			msgs = basicSetSensitivityModel(newSensitivityModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL, newSensitivityModel, newSensitivityModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
@@ -970,6 +1050,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetAdpModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 				return basicSetNominationsModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+				return basicSetSensitivityModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1016,6 +1098,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return isLongTerm();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				return isAnonymised();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+				if (resolve) return getSensitivityModel();
+				return basicGetSensitivityModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1068,6 +1153,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				setAnonymised((Boolean)newValue);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+				setSensitivityModel((SensitivityModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1119,6 +1207,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				setAnonymised(ANONYMISED_EDEFAULT);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+				setSensitivityModel((SensitivityModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1157,6 +1248,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return longTerm != LONG_TERM_EDEFAULT;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANONYMISED:
 				return anonymised != ANONYMISED_EDEFAULT;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+				return sensitivityModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

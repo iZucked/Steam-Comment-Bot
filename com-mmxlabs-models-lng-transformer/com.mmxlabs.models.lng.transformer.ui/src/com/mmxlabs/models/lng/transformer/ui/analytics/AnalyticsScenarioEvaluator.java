@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
@@ -71,6 +72,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificatio
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.pricesensitivity.PriceSensitivityTask;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -396,5 +398,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	@Override
 	public void runSandbox(@NonNull final ScenarioInstance scenarioInstance, @NonNull final OptionAnalysisModel model) {
 		SandboxTask.submit(scenarioInstance, model, LocalJobManager.INSTANCE);
+	}
+
+	@Override
+	public void runPriceSensitivity(final ScenarioInstance scenarioInstance, final SensitivityModel model) {
+		PriceSensitivityTask.submit(scenarioInstance, model, LocalJobManager.INSTANCE);
 	}
 }

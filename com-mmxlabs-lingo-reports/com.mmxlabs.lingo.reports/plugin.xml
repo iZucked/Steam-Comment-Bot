@@ -903,6 +903,10 @@
             feature="fitness-view"
             plugin.xml="fitness.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="price-sensitivity"
+            plugin.xml="pricesensitivity.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">

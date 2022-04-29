@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.Optimisatio
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimiserTask;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserTask;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.pricesensitivity.PriceSensitivityJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -34,6 +35,7 @@ public class JobRegistry {
 		register(OptimisationJobRunner.JOB_TYPE, "Optimisation", OptimisationJobRunner::new);
 		register(OptioniserJobRunner.JOB_TYPE, "Optioniser", OptioniserJobRunner::new);
 		register(ActionablePlanJobRunner.JOB_TYPE, "Actionable Plan", ActionablePlanJobRunner::new);
+		register(PriceSensitivityJobRunner.JOB_TYPE, "Price Sensitivity", PriceSensitivityJobRunner::new);
 
 		taskResumeFactories.put(SandboxJobRunner.JOB_TYPE, SandboxTask::createResumedApplyFactory);
 		taskResumeFactories.put(OptimisationJobRunner.JOB_TYPE, OptimiserTask::createResumedApplyFactory);

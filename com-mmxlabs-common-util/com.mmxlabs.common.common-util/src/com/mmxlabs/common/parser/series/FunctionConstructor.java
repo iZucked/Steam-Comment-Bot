@@ -46,4 +46,10 @@ public class FunctionConstructor implements IExpression<ISeries> {
 	public @NonNull ISeries evaluate() {
 		return construct();
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		// TODO Auto-generated method stub
+		return arguments.stream().allMatch(IExpression::canEvaluate);
+	}
 }

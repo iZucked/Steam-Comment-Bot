@@ -25,6 +25,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/nominationsModel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.ecore#//LNGScenarioModel/longTerm"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.ecore#//LNGScenarioModel/anonymised"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/sensitivityModel"/>
     </genClasses>
     <genClasses ecoreClass="scenario.ecore#//LNGReferenceModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGReferenceModel/portModel"/>

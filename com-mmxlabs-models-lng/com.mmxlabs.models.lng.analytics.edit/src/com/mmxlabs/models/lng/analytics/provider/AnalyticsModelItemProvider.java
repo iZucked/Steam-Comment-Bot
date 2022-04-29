@@ -196,6 +196,11 @@ public class AnalyticsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS,
+				 AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL,
 				 AnalyticsFactory.eINSTANCE.createViabilityModel()));
 

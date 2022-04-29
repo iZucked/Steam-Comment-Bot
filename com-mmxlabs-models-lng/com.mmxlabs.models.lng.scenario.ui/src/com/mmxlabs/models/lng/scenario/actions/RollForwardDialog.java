@@ -147,34 +147,26 @@ public class RollForwardDialog extends FormDialog {
 		int days = period.getDays();
 		
 		if (years > 0) {
-			result += years + " year";
-			if (years > 1) {
-				result += "s";
-			}
+			result += years + "y";
 		}
 
 		if (months > 0) {
-			if (result != "") {
+			if (!result.isBlank()) {
 				result += ", ";
 			}
-			result += months + " month";
-			if (months > 1) {
-				result += "s";
-			}
+			result += months + "m";
 		}
 
 		if (days > 0) {
-			if (result != "") {
+			if (!result.isBlank()) {
 				result += ", ";
 			}
-			result += days + " day";
-			if (days > 1) {
-				result += "s";
-			}
+			result += days + "d";
+		
 		}
 		
-		if (result == "") {
-			result = "0 days";
+		if (result.isBlank()) {
+			result = "0d";
 		}
 		
 		return result;
@@ -212,7 +204,7 @@ public class RollForwardDialog extends FormDialog {
 		List<Control> result = createLabelAndDateControl(mform, parent, label, date);
 		DateTime dateField = (DateTime) result.get(1);
 
-		String relativeTimeLabel = "Prompt start plus " + periodToNiceString(amount);
+		String relativeTimeLabel = "Prompt start +" + periodToNiceString(amount);
 		
 		String persistenceKey = id + DIALOG_RELATIVE_CHECKBOX_SUFFIX;
 		
@@ -327,7 +319,7 @@ public class RollForwardDialog extends FormDialog {
 
 			// Freeze Date
 			{
-				List<Control> controls = createRelativeDateControls(mform, inputGroup, "Freeze before", DIALOG_FREEZE_DATE_NAME, LocalDate.now().plusMonths(1), Period.of(0,  1,  0) );
+				List<Control> controls = createRelativeDateControls(mform, inputGroup, "Archive before", DIALOG_FREEZE_DATE_NAME, LocalDate.now().plusMonths(1), Period.of(0,  1,  0) );
 				freezeDate = (DateTime) controls.get(1);
 				Control lbl = controls.get(0);
 				

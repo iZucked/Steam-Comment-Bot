@@ -43,7 +43,11 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPriceExpressionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PriceCurveKey;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
@@ -70,6 +74,12 @@ public class EvaluationHelper {
 	private IPhaseOptimisationData phaseOptimisationData;
 
 	@Inject
+	private IPriceExpressionProvider priceExpressionProvider;
+
+	@Inject
+	ILazyExpressionManagerContainer lazyManagerContainer;
+
+	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
 	private boolean generatedPapersInPNL;
 
@@ -77,7 +87,6 @@ public class EvaluationHelper {
 
 	private int flexibleViolationCount;
 
-	 
 	public void setFlexibleCapacityViolationCount(final int flexibleSoftViolations) {
 
 		flexibleViolationCount = flexibleSoftViolations;
@@ -139,6 +148,7 @@ public class EvaluationHelper {
 
 	/**
 	 * To be used only for Manual Sandbox, when user expects results similar to manual rewiring
+	 * 
 	 * @param currentFullSequences
 	 * @param currentChangedResources
 	 * @return
@@ -204,6 +214,29 @@ public class EvaluationHelper {
 			}
 		}
 		return thisUnusedCompulsarySlotCount;
+	}
+
+	public @Nullable Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> evalulateSequences(@NonNull final ISequences sequences,
+			@NonNull List<@NonNull PriceCurveKey> priceCurveCombination) {
+		try (final ILazyExpressionManager expressionManager = lazyManagerContainer.getExpressionManager()) {
+			for (final PriceCurveKey key : priceCurveCombination) {
+				expressionManager.setPriceCurve(key.getIndexName().toLowerCase(), priceExpressionProvider.getExpression(key));
+			}
+			expressionManager.initialiseAllPricingData();
+			
+			final IEvaluationState evaluationState = new EvaluationState();
+			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+				if (!evaluationProcess.evaluate(sequences, evaluationState)) {
+					return null;
+				}
+			}
+			final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
+			assert volumeAllocatedSequences != null;
+			
+			return Pair.of(volumeAllocatedSequences, evaluationState);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public @Nullable Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
@@ -351,7 +384,7 @@ public class EvaluationHelper {
 		}
 
 		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers);
-	
+
 		if (p1 == null) {
 			return null;
 		}

@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 import java.util.function.Consumer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -18,6 +19,13 @@ public class WhatIfEvaluator {
 
 		ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
 		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> evaluator.runSandbox(scenarioInstance, model);
+		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
+	}
+
+	public static void doPriceSensitivity(IScenarioEditingLocation scenarioEditingLocation, SensitivityModel sensitivityModel) {
+
+		final ScenarioInstance scenarioInstance = scenarioEditingLocation.getScenarioInstance();
+		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> evaluator.runPriceSensitivity(scenarioInstance, sensitivityModel);
 		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);
 	}
 }
