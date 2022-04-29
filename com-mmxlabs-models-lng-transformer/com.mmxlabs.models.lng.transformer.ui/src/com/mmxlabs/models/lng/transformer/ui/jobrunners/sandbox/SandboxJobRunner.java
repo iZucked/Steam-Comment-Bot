@@ -505,7 +505,6 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 	public @Nullable AbstractSolutionSet runSandboxOptions(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
 			UserSettings userSettings, IProgressMonitor progressMonitor) {
-
 		return createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, userSettings, model).apply(progressMonitor);
 	}
 

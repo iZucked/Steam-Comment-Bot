@@ -53,7 +53,7 @@ public class PriceSensitivityTask {
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(sensitivityModel.getSensitivityModel(), root);
 					userSettings[0] = UserSettingsHelper.promptForSandboxUserSettings(root, false, useDialogs, false, null, previousSettings);
-					
+
 				});
 				if (userSettings[0] != null) {
 					settings = new PriceSensitivitySettings();
@@ -80,10 +80,8 @@ public class PriceSensitivityTask {
 					final CompoundCommand cmd = new CompoundCommand();
 					cmd.append(SetCommand.create(ed, sensitivityModel, AnalyticsPackage.Literals.SENSITIVITY_MODEL__SENSITIVITY_SOLUTION, result));
 					if (!cmd.isEmpty()) {
-						RunnerHelper.asyncExec(() -> {
-							ed.getCommandStack().execute(cmd);
-//							EMFUtils.checkValidContainment(sdp.getScenario());
-						});
+						ed.getCommandStack().execute(cmd);
+						EMFUtils.checkValidContainment(sdp.getScenario());
 					}
 				});
 			}
