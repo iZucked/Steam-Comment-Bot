@@ -231,6 +231,7 @@ public class ScheduleCalculator {
 	}
 	
 	private class RetentionPair {
+		private static final long MinVolumeCutOff = 500L;
 		public final VoyagePlanRecord first;
 		public final VoyagePlanRecord second;
 		public final TempCargoRecord fCargo;
@@ -314,8 +315,9 @@ public class ScheduleCalculator {
 				sCargo.startHeelMMBTu += hrr2.secondCargoTransferredVolumeMMBTu;
 				
 				//use calculator
-				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L)) //
-						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (500L * fCargo.cv / 1000L))) {
+				Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv);
+				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (MinVolumeCutOff * fCargo.cv / 1000L)) //
+						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (MinVolumeCutOff * sCargo.cv / 1000L))) {
 					return value > 0;
 				}
 				
@@ -324,12 +326,12 @@ public class ScheduleCalculator {
 			return false;
 		}
 		
-		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeel) {
+		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeelM3FullDelta) {
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine extra volume which can be bought on first cargo (valued with load price)
 			long fExtraLoadVolumeMMBTu = Math.min(s2fSpareCapacityMMBTu, //
-					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeel);
+					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelM3FullDelta);
 			long fExtraLoadValue = 0;
 			if (fExtraLoadVolumeMMBTu > 0) {
 				
@@ -500,29 +502,23 @@ public class ScheduleCalculator {
 		public long endHeelMMBTu;
 		
 		private IPortSlot getLoadSlot(final ICargoValueAnnotation cva) {
-			IPortSlot result = null;
-			
 			for(final IPortSlot slot : cva.getSlots()) {
 				if (slot instanceof LoadSlot ls) {
 					return ls;
 				}
 			}
 			
-			assert result != null;
-			return result;
+			throw new IllegalStateException("Cargo Value Annotation must have a Load Slot reference.");
 		}
 		
 		private IPortSlot getDischargeSlot(final ICargoValueAnnotation cva) {
-			IPortSlot result = null;
-			
 			for(final IPortSlot slot : cva.getSlots()) {
 				if (slot instanceof DischargeSlot ds) {
 					return ds;
 				}
 			}
 			
-			assert result != null;
-			return result;
+			throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
 		}
 	}
 	
