@@ -171,8 +171,7 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected
-	 * ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -1097,7 +1096,7 @@ public class ChangeSetView extends ViewPart {
 		newViewState.root = newRoot;
 		newViewState.tableRootAlternative = newTableRoot;
 		newViewState.tableRootDefault = newTableRoot;
-		
+
 		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 	}
 
@@ -1581,7 +1580,7 @@ public class ChangeSetView extends ViewPart {
 		public void safeNotifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getEventType() == Notification.REMOVE) {
 				if (msg.getFeature() == lastParentFeature && msg.getOldValue() == lastObject) {
-					resetView();
+					RunnerHelper.asyncExec(ChangeSetView.this::resetView);
 				}
 			}
 		}
@@ -1787,7 +1786,7 @@ public class ChangeSetView extends ViewPart {
 			}
 		}
 	}
-	
+
 	private void resetView() {
 		setViewMode(ViewMode.COMPARE, false);
 		setPartName("Changes");
@@ -1914,9 +1913,9 @@ public class ChangeSetView extends ViewPart {
 
 	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
 		selectedElements.add(tableRow);
-//		selectRow(selectedElements, tableRow.getLhsBefore());
+		// selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
-//		selectRow(selectedElements, tableRow.getRhsBefore());
+		// selectRow(selectedElements, tableRow.getRhsBefore());
 		selectRow(selectedElements, tableRow.getRhsAfter());
 	}
 

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.jobs;
 
 import java.io.File;
@@ -23,6 +27,11 @@ public interface IJobRunner {
 	void withLogging(Object machineInfo);
 
 	void withScenario(IScenarioDataProvider sdp);
+
+	default AbstractSolutionSet run(IProgressMonitor monitor) {
+		// 0 Means query system for available threads.
+		return run(0, monitor);
+	}
 
 	AbstractSolutionSet run(int threadsAvailable, IProgressMonitor monitor);
 

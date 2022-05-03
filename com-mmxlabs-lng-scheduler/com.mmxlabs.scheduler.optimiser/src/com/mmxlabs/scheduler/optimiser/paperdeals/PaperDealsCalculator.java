@@ -216,7 +216,7 @@ public class PaperDealsCalculator {
 					final LocalDate start = LocalDate.of(month.getYear(), month.getMonthValue(), 1);
 					final LocalDate end = LocalDate.of(month.getYear(), month.getMonthValue(), month.lengthOfMonth());
 					final int startTime = dateProvider.convertTime(start);
-					final ISeries series = commodityIndices.getSeries(flatCurve);
+					final ISeries series = commodityIndices.getSeries(flatCurve).get();
 					double price = series.evaluate(startTime).doubleValue();
 					final int paperUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 
@@ -291,7 +291,7 @@ public class PaperDealsCalculator {
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final String curveName = basicPaperDealData.getIndexName();
 		final Map<LocalDate, Double> settledPrices = lookupData.settledPrices.get(curveName);
-		final ISeries series = commodityIndices.getSeries(curveName);
+		final ISeries series = commodityIndices.getSeries(curveName).get();
 		final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
 		final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(curveName);
 

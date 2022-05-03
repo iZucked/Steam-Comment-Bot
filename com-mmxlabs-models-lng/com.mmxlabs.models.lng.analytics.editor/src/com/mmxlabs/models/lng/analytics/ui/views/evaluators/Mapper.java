@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
@@ -60,6 +61,7 @@ public class Mapper implements IMapperClass {
 	private Set<DischargeSlot> extraDischarges = new LinkedHashSet<>();
 	private Set<CharterInMarket> extraCharterInMarkets = new LinkedHashSet<>();
 	private Set<VesselAvailability> extraVesselAvailabilities = new LinkedHashSet<>();
+	private Set<CommodityCurveOverlay> extraPriceCurves = new LinkedHashSet<>();
 
 	Map<ShippingOption, VesselAvailability> fleetOptionMap = new HashMap<>();
 	Map<RoundTripShippingOption, CharterInMarket> roundTripOptionMap = new HashMap<>();
@@ -290,7 +292,7 @@ public class Mapper implements IMapperClass {
 	@Override
 	public ExtraDataProvider getExtraDataProvider() {
 		return new ExtraDataProvider(new ArrayList<>(extraVesselAvailabilities), new ArrayList<>(extraCharterInMarkets), Collections.emptyList(), new ArrayList<>(extraLoads),
-				new ArrayList<>(extraDischarges), new ArrayList<>(extraVesselEvents), new ArrayList<>(extraSpotCargoMarkets));
+				new ArrayList<>(extraDischarges), new ArrayList<>(extraVesselEvents), new ArrayList<>(extraSpotCargoMarkets), new ArrayList<>(extraPriceCurves));
 	}
 
 	@Override
@@ -309,5 +311,12 @@ public class Mapper implements IMapperClass {
 	@Override
 	public boolean isCreateBEOptions() {
 		return makeBETableOptions;
+	}
+
+	@Override
+	public void addMapping(CommodityCurveOverlay overlay) {
+		if (overlay != null) {
+			extraPriceCurves.add(overlay);
+		}
 	}
 }

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +37,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
@@ -63,6 +66,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class CloudManagerView extends ViewPart {
 
+	private static final Logger log = LoggerFactory.getLogger(CloudManagerView.class);
+
 	//
 	// /**
 	// * The ID of the view as specified by the extension.
@@ -84,7 +89,7 @@ public class CloudManagerView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
+		imgError = CommonImages.getImage(IconPaths.Error, IconMode.Enabled);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
@@ -376,7 +381,11 @@ public class CloudManagerView extends ViewPart {
 						}
 					}
 					if (!jobs.isEmpty()) {
-						CloudOptimisationDataService.INSTANCE.delete(jobs);
+						try {
+							CloudOptimisationDataService.INSTANCE.delete(jobs);
+						} catch (IOException e) {
+							log.info("failed to cancel remote job");
+						}
 					}
 				}
 
@@ -420,7 +429,6 @@ public class CloudManagerView extends ViewPart {
 	public void dispose() {
 
 		CloudOptimisationDataService.INSTANCE.removeListener(listener);
-		imgError.dispose();
 		super.dispose();
 	}
 

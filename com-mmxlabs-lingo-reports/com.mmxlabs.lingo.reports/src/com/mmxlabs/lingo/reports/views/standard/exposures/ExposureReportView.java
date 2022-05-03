@@ -469,12 +469,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	public void dispose() {
 
-		if (cellImageDarkArrowDown != null) {
-			cellImageDarkArrowDown.dispose();
-		}
-		if (cellImageDarkArrowUp != null) {
-			cellImageDarkArrowUp.dispose();
-		}
 		if (colourBlue != null) {
 			colourBlue.dispose();
 		}

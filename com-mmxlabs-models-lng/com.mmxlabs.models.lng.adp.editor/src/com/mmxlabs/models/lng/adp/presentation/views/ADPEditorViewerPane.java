@@ -91,7 +91,6 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
 
 		editorData = new ADPEditorData(this.scenarioEditingLocation);
 
@@ -387,15 +386,8 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		endEditor.getControl().setEnabled(adpModel != null);
 	}
 
-	private Image imgError;
-
 	@Override
 	public void dispose() {
-
-		if (imgError != null) {
-			imgError.dispose();
-			imgError = null;
-		}
 
 		if (releaseAdaptersRunnable != null) {
 			releaseAdaptersRunnable.run();

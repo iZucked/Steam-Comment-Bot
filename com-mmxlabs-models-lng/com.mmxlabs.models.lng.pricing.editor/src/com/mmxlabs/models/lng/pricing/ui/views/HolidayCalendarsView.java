@@ -26,7 +26,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -160,9 +159,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 
 		{
 			editBtn = new Button(selector, SWT.PUSH);
-			final Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled).createImage();
-			editBtn.setImage(imgEnabled);
-			editBtn.addDisposeListener(e -> imgEnabled.dispose());
+			editBtn.setImage(CommonImages.getImage(IconPaths.Edit, IconMode.Enabled));
 
 			editBtn.setEnabled(false);
 
@@ -180,9 +177,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 		{
 			deleteBtn = new Button(selector, SWT.PUSH);
 
-			final Image imgEnabled = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-			deleteBtn.setImage(imgEnabled);
-			deleteBtn.addDisposeListener(e -> imgEnabled.dispose());
+			deleteBtn.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
 
 			deleteBtn.setEnabled(false);
 
@@ -227,10 +222,7 @@ public class HolidayCalendarsView extends ScenarioTableViewerView<HolidayCalenda
 		}
 
 		final Button btn_new = new Button(selector, SWT.PUSH);
-
-		final Image addImg = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled).createImage();
-		btn_new.setImage(addImg);
-		btn_new.addDisposeListener(e -> addImg.dispose());
+		btn_new.setImage(CommonImages.getImage(IconPaths.Plus, IconMode.Enabled));
 
 		btn_new.addSelectionListener(new SelectionAdapter() {
 

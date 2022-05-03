@@ -6,7 +6,6 @@ package com.mmxlabs.lngdataserver.lng.importers.update;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
@@ -22,13 +21,6 @@ public class UpdateItemLabelProvider extends ColumnLabelProvider {
 	private final Image imgWarn;
 	private final Image imgInfo;
 
-	@Override
-	public void dispose() {
-		imgError.dispose();
-		imgWarn.dispose();
-		imgInfo.dispose();
-	}
-
 	private int colIdx;
 
 	public UpdateItemLabelProvider() {
@@ -38,9 +30,9 @@ public class UpdateItemLabelProvider extends ColumnLabelProvider {
 	public UpdateItemLabelProvider(int colIdx) {
 		this.colIdx = colIdx;
 
-		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
-		imgWarn = CommonImages.getImageDescriptor(IconPaths.Warning, IconMode.Enabled).createImage();
-		imgInfo = CommonImages.getImageDescriptor(IconPaths.Information, IconMode.Enabled).createImage();
+		imgError = CommonImages.getImage(IconPaths.Error, IconMode.Enabled);
+		imgWarn = CommonImages.getImage(IconPaths.Warning, IconMode.Enabled);
+		imgInfo = CommonImages.getImage(IconPaths.Information, IconMode.Enabled);
 	}
 
 	@Override
@@ -55,35 +47,35 @@ public class UpdateItemLabelProvider extends ColumnLabelProvider {
 			}
 		}
 
-//		if (element instanceof GroupedValidationStatusContentProvider.Node) {
-//			GroupedValidationStatusContentProvider.Node node = (GroupedValidationStatusContentProvider.Node) element;
-//
-//			int severity = IStatus.OK;
-//			for (IStatus s : node.status) {
-//				if (s.getSeverity() > severity) {
-//					severity = s.getSeverity();
-//				}
-//			}
-//
-//			if (severity == IStatus.ERROR) {
-//				return imgError;
-//			} else if (severity == IStatus.WARNING) {
-//				return imgWarn;
-//			} else if (severity == IStatus.INFO) {
-//				return imgInfo;
-//			}
-//		}
-//		if (element instanceof IStatus) {
-//			final int severity = ((IStatus) element).getSeverity();
-//
-//			if (severity == IStatus.ERROR) {
-//				return imgError;
-//			} else if (severity == IStatus.WARNING) {
-//				return imgWarn;
-//			} else if (severity == IStatus.INFO) {
-//				return imgInfo;
-//			}
-//		}
+		// if (element instanceof GroupedValidationStatusContentProvider.Node) {
+		// GroupedValidationStatusContentProvider.Node node = (GroupedValidationStatusContentProvider.Node) element;
+		//
+		// int severity = IStatus.OK;
+		// for (IStatus s : node.status) {
+		// if (s.getSeverity() > severity) {
+		// severity = s.getSeverity();
+		// }
+		// }
+		//
+		// if (severity == IStatus.ERROR) {
+		// return imgError;
+		// } else if (severity == IStatus.WARNING) {
+		// return imgWarn;
+		// } else if (severity == IStatus.INFO) {
+		// return imgInfo;
+		// }
+		// }
+		// if (element instanceof IStatus) {
+		// final int severity = ((IStatus) element).getSeverity();
+		//
+		// if (severity == IStatus.ERROR) {
+		// return imgError;
+		// } else if (severity == IStatus.WARNING) {
+		// return imgWarn;
+		// } else if (severity == IStatus.INFO) {
+		// return imgInfo;
+		// }
+		// }
 		return null;
 	}
 

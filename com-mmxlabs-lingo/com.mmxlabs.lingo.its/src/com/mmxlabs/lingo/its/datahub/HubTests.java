@@ -21,6 +21,7 @@ import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,7 +56,8 @@ public class HubTests {
 	.withExposedService(oauthHubContainer, 8090)
 	.withExposedService(basicHubContainer, 8091)
 	.waitingFor("datahub-oauth", Wait.forHttp("/ping").forStatusCode(200))
-	.withLocalCompose(true);
+	.waitingFor("datahub-basic", Wait.forHttp("/ping").forStatusCode(200))
+	.withLocalCompose(false);
 	// @formatter:on
 
 	private static SWTWorkbenchBot bot;
@@ -103,8 +105,8 @@ public class HubTests {
 		bot.button("Login").click();
 		Matcher<Shell> basicLoginShellMatcher = withText("Data Hub Basic Login");
 		bot.waitUntil(Conditions.waitForShell(basicLoginShellMatcher));
-		bot.textWithLabel("Username: ").setText("philippe");
-		bot.textWithLabel("Password: ").setText("philippe");
+		bot.textWithLabel("Username: ").setText("test");
+		bot.textWithLabel("Password: ").setText("test");
 		bot.button("OK").click();
 	}
 
@@ -177,9 +179,14 @@ public class HubTests {
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		// FIXME typeText is supposed to notify event listeners...
-		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.CR);
+		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
+		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
+		SWTBotShell[] swtshells = bot.shells();
+		for (SWTBotShell shell : swtshells) {
+			logger.info(shell.getText());
+		}
 		assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 

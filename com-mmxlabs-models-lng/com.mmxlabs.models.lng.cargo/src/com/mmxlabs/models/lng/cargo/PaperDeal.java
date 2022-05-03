@@ -51,7 +51,7 @@ public interface PaperDeal extends NamedObject {
 	 * @return the value of the '<em>Quantity</em>' attribute.
 	 * @see #setQuantity(double)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_Quantity()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###,###,###'"
 	 * @generated
 	 */
 	double getQuantity();

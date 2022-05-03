@@ -75,15 +75,12 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		public Image getImage(final Object element) {
 			if (element instanceof DeltaPair || element instanceof List<?>) {
 				final T t = getRawValue(element);
-				if (t instanceof Number) {
-					final Number value = (Number) t;
-					if (value.doubleValue() != 0.0) {
-						final boolean isNegative = value.doubleValue() < 0.0;
-						if (rowType == RowType.COST) {
-							return isNegative ? cellImageGreenArrowDown : cellImageRedArrowUp;
-						} else {
-							return isNegative ? cellImageRedArrowDown : cellImageGreenArrowUp;
-						}
+				if (t instanceof Number value && value.doubleValue() != 0.0) {
+					final boolean isNegative = value.doubleValue() < 0.0;
+					if (rowType == RowType.COST) {
+						return isNegative ? cellImageGreenArrowDown : cellImageRedArrowUp;
+					} else {
+						return isNegative ? cellImageRedArrowDown : cellImageGreenArrowUp;
 					}
 				}
 			}
@@ -149,45 +146,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		cellImageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 	}
 
-	protected Image createImage(String path) {
-		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
-		return imageDescriptor.createImage();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		dispose();
-	}
-
-	public void dispose() {
-
-		if (cellImageSteadyArrow != null) {
-			cellImageSteadyArrow.dispose();
-			cellImageSteadyArrow = null;
-		}
-
-		if (cellImageGreenArrowDown != null) {
-			cellImageGreenArrowDown.dispose();
-			cellImageGreenArrowDown = null;
-		}
-
-		if (cellImageGreenArrowUp != null) {
-			cellImageGreenArrowUp.dispose();
-			cellImageGreenArrowUp = null;
-		}
-
-		if (cellImageRedArrowDown != null) {
-			cellImageRedArrowDown.dispose();
-			cellImageRedArrowDown = null;
-		}
-
-		if (cellImageRedArrowUp != null) {
-			cellImageRedArrowUp.dispose();
-			cellImageRedArrowUp = null;
-		}
-	}
-
 	protected static CargoEconsReportRow createRow(final int order, final @NonNull String name, final boolean includeUnits, final @NonNull String prefixUnit, final String suffixUnit,
 			final @NonNull ICellRenderer renderer) {
 		return createRow(order, name, true, prefixUnit, suffixUnit, renderer, null);
@@ -209,43 +167,23 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 	protected <T> Function<Object, @Nullable T> createMappingFunction(final Class<T> type, final Function<Object, T> helper) {
 		return object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
-				return helper.apply(cargoAllocation);
-			} else if (object instanceof OpenSlotAllocation) {
-				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
-				return helper.apply(openSlotAllocation);
-			} else if (object instanceof CharterLengthEvent) {
-				final CharterLengthEvent charterLength = (CharterLengthEvent) object;
-				return helper.apply(charterLength);
-			} else if (object instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) object;
-				return helper.apply(startEvent);
-			} else if (object instanceof EndEvent) {
-				final EndEvent endEvent = (EndEvent) object;
-				return helper.apply(endEvent);
-			} else if (object instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) object;
-				return helper.apply(vesselEvent);
-			} else if (object instanceof GeneratedCharterOut) {
-				final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) object;
-				return helper.apply(generatedCharterOut);
-			} else if (object instanceof VesselEventVisit) {
-				final VesselEventVisit eventVisit = (VesselEventVisit) object;
-				return helper.apply(eventVisit);
-			} else if (object instanceof Purge) {
-				final Purge purge = (Purge) object;
-				return helper.apply(purge);
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
-				return helper.apply(marketAllocation);
+			if (object instanceof CargoAllocation //
+					|| object instanceof OpenSlotAllocation //
+					|| object instanceof CharterLengthEvent //
+					|| object instanceof StartEvent //
+					|| object instanceof EndEvent //
+					|| object instanceof VesselEvent //
+					|| object instanceof GeneratedCharterOut //
+					|| object instanceof VesselEventVisit //
+					|| object instanceof Purge //
+					|| object instanceof MarketAllocation //
+					|| object instanceof PaperDealAllocation //
+			) {
+				return helper.apply(object);
 			} else if (object instanceof DeltaPair) {
 				return getFromDeltaPair(type, helper, object);
 			} else if (object instanceof List<?>) {
 				return getFromDeltaPairPairList(type, helper, object);
-			} else if (object instanceof PaperDealAllocation) {
-				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
-				return helper.apply(paperDealAllocation);
 			}
 			return null;
 		};
@@ -283,7 +221,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		}, transformer);
 	}
 
-	protected <T, U> T getFromDeltaPairPairList(final Class<T> type, final Function<U, T> f, final Object object) {
+	protected <T, U> @Nullable T getFromDeltaPairPairList(final Class<T> type, final Function<U, T> f, final Object object) {
 		final List<DeltaPair> deltaPairs = (List<DeltaPair>) object;
 
 		if (type == Integer.class) {
@@ -291,7 +229,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			for (final DeltaPair deltaPair : deltaPairs) {
 				Integer v = (Integer) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
-					acc += (int) v;
+					acc += v;
 				}
 			}
 			return type.cast(acc);
@@ -300,7 +238,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			for (final DeltaPair deltaPair : deltaPairs) {
 				Double v = (Double) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
-					acc += (double) v;
+					acc += v;
 				}
 			}
 			return type.cast(acc);
@@ -309,7 +247,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			for (final DeltaPair deltaPair : deltaPairs) {
 				Long v = (Long) getFromDeltaPair(type, f, deltaPair);
 				if (v != null) {
-					acc += (long) v;
+					acc += v;
 				}
 			}
 			return type.cast(acc);
@@ -322,8 +260,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		Object first = null;
 		Object second = null;
 
-		if (object instanceof DeltaPair) {
-			final DeltaPair deltaPair = (DeltaPair) object;
+		if (object instanceof DeltaPair deltaPair) {
 			first = deltaPair.first();
 			second = deltaPair.second();
 		}
@@ -353,8 +290,6 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 					return type.cast(((double) valueSecond + (double) valueFirst));
 				} else if (valueSecond instanceof Long) {
 					return type.cast(((long) valueSecond + (long) valueFirst));
-				} else {
-					int ii = 0;
 				}
 			}
 		}
@@ -389,17 +324,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected <T> Function<Object, @Nullable T> createFirstPurchaseTransformer(final Class<T> cls, final Function<SlotAllocation, T> func) {
 		return createMappingFunction(cls, object -> {
 			try {
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) object;
+				if (object instanceof CargoAllocation cargoAllocation) {
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 							return func.apply(slotAllocation);
 						}
 					}
 				}
-				if (object instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) object;
-
+				if (object instanceof SlotAllocation slotAllocation) {
 					if (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 						return func.apply(slotAllocation);
 					}
@@ -417,8 +349,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			public @Nullable String render(final Object object) {
 
 				try {
-					if (object instanceof PaperDealAllocation) {
-						final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+					if (object instanceof PaperDealAllocation paperDealAllocation) {
 						return func.apply(paperDealAllocation);
 					}
 				} catch (final NullPointerException e) {
@@ -435,17 +366,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			public @Nullable String render(final Object object) {
 
 				try {
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation cargoAllocation = (CargoAllocation) object;
+					if (object instanceof CargoAllocation cargoAllocation) {
 						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 							if (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 								return func.apply(slotAllocation);
 							}
 						}
 					}
-					if (object instanceof SlotAllocation) {
-						final SlotAllocation slotAllocation = (SlotAllocation) object;
-
+					if (object instanceof SlotAllocation slotAllocation) {
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 							return func.apply(slotAllocation);
 						}
@@ -461,16 +389,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected <T> Function<Object, @Nullable T> createFirstSaleTransformer(final Class<T> cls, final Function<SlotAllocation, T> func) {
 		return createMappingFunction(cls, object -> {
 			try {
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) object;
+				if (object instanceof CargoAllocation cargoAllocation) {
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
 							return func.apply(slotAllocation);
 						}
 					}
 				}
-				if (object instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) object;
+				if (object instanceof SlotAllocation slotAllocation) {
 					if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
 						return func.apply(slotAllocation);
 					}
@@ -489,16 +415,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 			public @Nullable String render(final Object object) {
 
 				try {
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation cargoAllocation = (CargoAllocation) object;
+					if (object instanceof CargoAllocation cargoAllocation) {
 						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 							if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
 								return func.apply(slotAllocation);
 							}
 						}
 					}
-					if (object instanceof SlotAllocation) {
-						final SlotAllocation slotAllocation = (SlotAllocation) object;
+					if (object instanceof SlotAllocation slotAllocation) {
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
 							return func.apply(slotAllocation);
 						}
@@ -518,8 +442,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 				SlotVisit slotVisit = null;
 				Journey journey = null;
 				Idle idle = null;
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) object;
+				if (object instanceof CargoAllocation cargoAllocation) {
 					int legNumber = -1;
 					for (final Event event : cargoAllocation.getEvents()) {
 						if (event instanceof PortVisit) {
@@ -534,14 +457,14 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 								return null;
 							}
 						}
-						if (event instanceof SlotVisit) {
-							slotVisit = (SlotVisit) event;
+						if (event instanceof SlotVisit sv) {
+							slotVisit = sv;
 						}
-						if (event instanceof Journey) {
-							journey = (Journey) event;
+						if (event instanceof Journey j) {
+							journey = j;
 						}
-						if (event instanceof Idle) {
-							idle = (Idle) event;
+						if (event instanceof Idle i) {
+							idle = i;
 						}
 					}
 					if (legNumber == index) {
@@ -549,17 +472,16 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 					}
 
 				}
-				if (object instanceof EventGrouping) {
-					final EventGrouping eg = (EventGrouping) object;
+				if (object instanceof EventGrouping eg) {
 					for (final Event event : eg.getEvents()) {
-						if (event instanceof SlotVisit) {
-							slotVisit = (SlotVisit) event;
+						if (event instanceof SlotVisit sv) {
+							slotVisit = sv;
 						}
-						if (event instanceof Journey) {
-							journey = (Journey) event;
+						if (event instanceof Journey j) {
+							journey = j;
 						}
-						if (event instanceof Idle) {
-							idle = (Idle) event;
+						if (event instanceof Idle i) {
+							idle = i;
 						}
 					}
 					return func.apply(slotVisit, journey, idle);
@@ -574,8 +496,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 	protected <T> Function<Object, @Nullable T> createFullLegTransformer(final Class<T> resultType, final int index, final BiFunction<Journey, Idle, T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) object;
+				if (object instanceof CargoAllocation cargoAllocation) {
 					Journey journey = null;
 					Idle idle = null;
 					int legNumber = -1;
@@ -591,11 +512,11 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 								return null;
 							}
 						}
-						if (event instanceof Journey) {
-							journey = (Journey) event;
+						if (event instanceof Journey j) {
+							journey = j;
 						}
-						if (event instanceof Idle) {
-							idle = (Idle) event;
+						if (event instanceof Idle i) {
+							idle = i;
 						}
 
 					}

@@ -160,7 +160,7 @@ public class CargoEconsReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 
-		pinImage = CommonImages.getImageDescriptor(IconPaths.Pin, IconMode.Enabled).createImage();
+		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 //		createImage("icons/Pinned.gif");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -323,21 +323,11 @@ public class CargoEconsReport extends ViewPart {
 	@Override
 	public void dispose() {
 
-		if (pinImage != null) {
-			pinImage.dispose();
-			pinImage = null;
-		}
-
 		if (scenarioComparisonService != null) {
 			scenarioComparisonService.removeListener(listener);
 		}
 	}
-
-	private Image createImage(final String path) {
-		final ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor(path);
-		return imageDescriptor.createImage();
-	}
-
+ 
 	private CellLabelProvider createRowHeaderLabelProvider() {
 		return new CellLabelProvider() {
 

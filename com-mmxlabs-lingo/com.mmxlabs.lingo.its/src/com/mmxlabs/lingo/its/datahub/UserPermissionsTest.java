@@ -46,7 +46,7 @@ public class UserPermissionsTest {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -75,7 +75,7 @@ public class UserPermissionsTest {
 	}
 
 	public void asAlternativeBaseCaseUser() {
-		BasicAuthenticationManager.getInstance().withCredentials("simon", "simon");
+		BasicAuthenticationManager.getInstance().withCredentials("test", "test");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 

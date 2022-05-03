@@ -87,7 +87,7 @@ public class BreakEvenOptimiser {
 		final ISequences fullSequences = manipulator.createManipulatedSequences(rawSequences);
 
 		final int minPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(0.0);
-		final int maxPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(30.0);
+		final int maxPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(50.0);
 
 		final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, maxPricePerMMBTu, targetProfitAndLoss, fullSequences, isPurchase, calculators);
 		calculators.forEach(c -> c.setPrice(breakEvenPricePerMMBtu));

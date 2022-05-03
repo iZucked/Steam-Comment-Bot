@@ -289,7 +289,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		}
 	}
 
-	private GridTableViewer tableViewer;
+	protected GridTableViewer tableViewer;
 	private final Builder builder;
 
 	private IStatus lastStatus = null;
@@ -380,9 +380,10 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 		if (!builder.buttonDefs.isEmpty()) {
 			final Composite buttonParent = new Composite(controlParent, SWT.NONE);
+			toolkit.adapt(buttonParent);
 			buttonParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(builder.buttonDefs.size()).equalWidth(false).create());
 			for (final ButtonDef d : builder.buttonDefs) {
-				final Button b = new Button(buttonParent, SWT.PUSH);
+				final Button b = toolkit.createButton(buttonParent, null, SWT.PUSH);
 				if (d.imageDescriptor != null) {
 					Image img = d.imageDescriptor.createImage();
 					b.setImage(img);
@@ -420,7 +421,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 	}
 
-	final SafeEContentAdapter adapter = new SafeEContentAdapter() {
+	protected final SafeEContentAdapter adapter = new SafeEContentAdapter() {
 
 		@Override
 		protected void safeNotifyChanged(final Notification msg) {

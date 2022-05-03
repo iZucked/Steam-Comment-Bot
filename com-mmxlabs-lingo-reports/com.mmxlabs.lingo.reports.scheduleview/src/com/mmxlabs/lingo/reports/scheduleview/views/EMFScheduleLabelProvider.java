@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -114,18 +113,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
 
-		final ImageDescriptor imageDescriptor = CommonImages.getImageDescriptor(IconPaths.PinnedRow, IconMode.Enabled);
-		pinImage = imageDescriptor.createImage();
-	}
-
-	@Override
-	public void dispose() {
-		if (pinImage != null) {
-			pinImage.dispose();
-			pinImage = null;
-
-		}
-		super.dispose();
+		pinImage = CommonImages.getImage(IconPaths.PinnedRow, IconMode.Enabled);
 	}
 
 	@Override
@@ -387,16 +375,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							// getVessel(journey), dateToString(journey.getCanalDateTime(), DATE_UNKNOWN),
 							// direction));
 						} else {
-//							if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
-//								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
-//							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null
-//									&& journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
-//								// May be infeasible. However we do not store hour of day, so checks are not fully accurate
-//								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
-//							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null) {
-//								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN),
-//										dateToString(journey.getLatestPossibleCanalDateTime(), DATE_UNKNOWN), direction));
-//							}
+							// if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
+							// eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
+							// } else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null
+							// && journey.getLatestPossibleCanalDateTime().isBefore(journey.getCanalDateTime())) {
+							// // May be infeasible. However we do not store hour of day, so checks are not fully accurate
+							// eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
+							// } else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null) {
+							// eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN),
+							// dateToString(journey.getLatestPossibleCanalDateTime(), DATE_UNKNOWN), direction));
+							// }
 							if (journey.getCanalJourneyEvent() != null) {
 								eventText.append(String.format("Panama wait %dd (of %dd)\n", journey.getCanalJourneyEvent().getPanamaWaitingTimeHours() / 24,
 										journey.getCanalJourneyEvent().getMaxAvailablePanamaWaitingTimeHours() / 24));
@@ -418,7 +406,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (canalBooking != null) {
 					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 				} else {
-//					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
+					// eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 				}
 			} else if (element instanceof SlotVisit slotVisit) {
 				final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
@@ -526,8 +514,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	/**
-	 * Split nOfHours into the number of days and/or hours as a user readable
-	 * String.
+	 * Split nOfHours into the number of days and/or hours as a user readable String.
 	 * 
 	 * @param nOfHours
 	 * @return a String
@@ -600,7 +587,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)");
 
 		} else if (element instanceof InventoryChangeEvent evt) {
-			if (evt.eContainer()instanceof InventoryEvents inventoryEvents) {
+			if (evt.eContainer() instanceof InventoryEvents inventoryEvents) {
 				final Inventory facility = inventoryEvents.getFacility();
 				if (facility != null) {
 					return "Inventory at " + facility.getName();

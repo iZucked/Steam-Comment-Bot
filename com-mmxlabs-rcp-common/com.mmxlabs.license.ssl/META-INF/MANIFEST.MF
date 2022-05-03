@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SSL License Manager
 Bundle-SymbolicName: com.mmxlabs.license.ssl;singleton:=true
 Automatic-Module-Name: com.mmxlabs.license.ssl
-Bundle-Version: 5.3.1.qualifier
+Bundle-Version: 5.4.3.qualifier
 Bundle-Activator: com.mmxlabs.license.ssl.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.7.0,4.0.0)",
  org.apache.httpcomponents.httpcore;bundle-version="4.3.3",
  org.eclipse.ecf;bundle-version="3.4.0",
  com.mmxlabs.common.common-util
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.license.ssl
 Eclipse-BundleShape: dir

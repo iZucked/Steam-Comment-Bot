@@ -112,7 +112,7 @@ class LicenseTests {
 		bot = new SWTWorkbenchBot();
 		HubTestHelper.setDatahubUrl(upstreamUrl);
 		// authenticate and force trigger refresh
-		basicAuthenticationManager.withCredentials("philippe", "philippe");
+		basicAuthenticationManager.withCredentials("test", "test");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		log.info(Boolean.toString(basicAuthenticationManager.isAuthenticated(upstreamUrl)));
 	}
@@ -196,7 +196,7 @@ class LicenseTests {
 			if (builder != null) {
 				final Request request = builder //
 						.post(requestBody) //
-						.header("Authorization", Credentials.basic("philippe", "philippe")) //
+						.header("Authorization", Credentials.basic("test", "test")) //
 						.build();
 
 				// Check the response

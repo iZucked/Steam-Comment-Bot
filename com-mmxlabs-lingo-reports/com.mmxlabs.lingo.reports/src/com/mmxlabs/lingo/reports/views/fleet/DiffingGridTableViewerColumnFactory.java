@@ -436,9 +436,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 		// But try and create an observable based label provider for better data
 		// linkage.
-		try
-
-		{
+		try {
 			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
 
 				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();

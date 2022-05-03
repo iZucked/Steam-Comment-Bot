@@ -23,20 +23,24 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class AnonymisationUtils {
-	
+
+	private AnonymisationUtils() {
+
+	}
+
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
 			final List<AnonymisationRecord> records, final boolean anonymise) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
 		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile);
 	}
-	
+
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
 			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
 		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, anonyMap);
 	}
-	
-	public static Command rename(AnonymisationEntry entry) {
+
+	public static Command rename(final AnonymisationEntry entry) {
 		String name = getNewName(entry.records, entry.name, entry.type);
 		if (name.isEmpty()) {
 			name = suggestNewName(entry);
@@ -45,8 +49,8 @@ public class AnonymisationUtils {
 		return SetCommand.create(entry.editingDomain, entry.renamee, entry.feature, name);
 	}
 
-	public static Command renameToOriginal(AnonymisationEntry entry) {
-		String name = getOldName(entry.records, entry.name, entry.type);
+	public static Command renameToOriginal(final AnonymisationEntry entry) {
+		final String name = getOldName(entry.records, entry.name, entry.type);
 		if (!name.isEmpty() || entry.type == AnonymisationRecordType.VesselShortID) {
 			return SetCommand.create(entry.editingDomain, entry.renamee, entry.feature, name);
 		}
@@ -93,10 +97,9 @@ public class AnonymisationUtils {
 			suggestedName = String.format("%s-%s-%s-%d", getSlotPrefix(slot), slot.getPort().getName(), slot.getWindowStart().format(dtf), slot.getWindowStartTime());
 			prefix = suggestedName;
 		}
-		if (entry.renamee instanceof Vessel) {
-			final Vessel v = (Vessel) entry.renamee;
-			String capacity = String.format("%dK", (int) (v.getCapacity() / 1_000.0));
-			String type = v.getType();
+		if (entry.renamee instanceof final Vessel v) {
+			final String capacity = String.format("%dK", (int) (v.getCapacity() / 1_000.0));
+			final String type = v.getType();
 			String vPrefix = "Vessel";
 			if (entry.type == AnonymisationRecordType.VesselShortID) {
 				vPrefix = "VSL";
@@ -112,13 +115,13 @@ public class AnonymisationUtils {
 	}
 
 	private static String getSlotPrefix(final Slot<?> slot) {
-		if (slot instanceof LoadSlot ls) {
+		if (slot instanceof final LoadSlot ls) {
 			if (ls.isDESPurchase()) {
 				return "DP";
 			} else {
 				return "FP";
 			}
-		} else if (slot instanceof DischargeSlot ds) {
+		} else if (slot instanceof final DischargeSlot ds) {
 			if (ds.isFOBSale()) {
 				return "FS";
 			} else {
