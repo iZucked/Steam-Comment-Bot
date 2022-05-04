@@ -56,13 +56,14 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png", "icons:/16/scenario");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif", "icons:/16/nominations");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.ui/icons/risk.png", "icons:/24/risk");
 		
 		
 		
 		mapIcons(application, iconMapping);
 		
 		// Replace a specific view icon. 
-		// setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/icons/16/econs");
+//		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/16/econs");
 		
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif

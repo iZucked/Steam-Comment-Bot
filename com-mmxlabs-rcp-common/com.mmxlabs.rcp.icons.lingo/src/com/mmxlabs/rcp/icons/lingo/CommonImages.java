@@ -66,6 +66,7 @@ public final class CommonImages {
 		Date(16, "icons/16x16/date.png"), //
 		Delete(16, "icons/16x16/delete.png"), //
 		Delta(16, "icons/16x16/delta.png"), //
+		Econs(16, "icons/16x16/econs.png"), //
 		Edit(16, "icons/16x16/edit.png"), //
 		ExpandAll(16, "icons/16x16/expand_all.png"), //
 		Filter(16, "icons/16x16/filter.png"), //
@@ -104,6 +105,7 @@ public final class CommonImages {
 		Fork(24, "icons/24x24/fork.png"), //
 		Pin_24(24, "icons/24x24/pin.png"), //
 		Play(24, "icons/24x24/optimise.png"), //
+		Risk(24, "icons/24x24/risk.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
 		Today(24, "icons/24x24/today.png"), //
