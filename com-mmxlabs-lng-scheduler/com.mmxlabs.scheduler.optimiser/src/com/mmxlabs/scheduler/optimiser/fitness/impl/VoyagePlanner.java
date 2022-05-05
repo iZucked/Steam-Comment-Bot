@@ -36,11 +36,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
-import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -334,76 +332,72 @@ public class VoyagePlanner implements IVoyagePlanner {
 			}
 		}
 
-		final List<@NonNull DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(prevPort, thisPort, vessel);
-		if (distances.isEmpty()) {
-			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
-		}
-		assert !distances.isEmpty();
-
-		final AvailableRouteChoices slotNextVoyageOptions = portTimesRecord.getSlotNextVoyageOptions(prevPortSlot);
-		{
-			Predicate<DistanceMatrixEntry> filter = null;
-
-			switch (slotNextVoyageOptions) {
-
-			case DIRECT_ONLY:
-				filter = entry -> entry.getRoute() != ERouteOption.DIRECT;
-				break;
-			case EXCLUDE_PANAMA:
-				filter = entry -> entry.getRoute() == ERouteOption.PANAMA;
-				break;
-			case OPTIMAL:
-				filter = entry -> false;
-				break;
-			case PANAMA_ONLY:
-				filter = entry -> entry.getRoute() != ERouteOption.PANAMA;
-				break;
-			case SUEZ_ONLY:
-				filter = entry -> entry.getRoute() != ERouteOption.SUEZ;
-				break;
-			case UNDEFINED:
-			default:
-				assert false;
-				// Assume optimal if assertions off.
-				filter = entry -> false;
-				break;
+		final List<@NonNull DistanceMatrixEntry> distances;
+		// Check direct distance. If zero only keep direct route in distances
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, prevPort, thisPort, vessel);
+		if (distance == 0) {
+			// Note: this includes sandbox route option overrides where we actively set the
+			// direct route if necessary.
+			distances = distanceProvider.getDistanceValues(prevPort, thisPort, vessel, AvailableRouteChoices.DIRECT_ONLY);
+		} else {
+			distances = distanceProvider.getDistanceValues(prevPort, thisPort, vessel);
+			if (distances.isEmpty()) {
+				throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
 			}
-			// Remove forbidden route options.
-			distances.removeIf(filter);
-		}
+			assert !distances.isEmpty();
 
-		{
+			final AvailableRouteChoices slotNextVoyageOptions = portTimesRecord.getSlotNextVoyageOptions(prevPortSlot);
+			{
+				Predicate<DistanceMatrixEntry> filter = null;
 
-			// If there is an override, then we set the other travel times to MAX_VALUE
-			if (voyageSpecProvider != null) {
-				ERouteOption routeOverride = voyageSpecProvider.getVoyageRouteOption(prevPortSlot, thisPortSlot);
+				switch (slotNextVoyageOptions) {
 
-				if (routeOverride != null) {
-					// There is a case were there is no distance between elements. I.e. same port or
-					// one of them is the ANYWHERE port. In this case, we always need to use the
-					// DIRECT distance otherwise canal transit times etc will be applied.
-					if (routeOverride != ERouteOption.DIRECT) {
-						final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, prevPort, thisPort, vessel);
-						if (distance == 0) {
-							routeOverride = ERouteOption.DIRECT;
-						}
+				case DIRECT_ONLY:
+					filter = entry -> entry.getRoute() != ERouteOption.DIRECT;
+					break;
+				case EXCLUDE_PANAMA:
+					filter = entry -> entry.getRoute() == ERouteOption.PANAMA;
+					break;
+				case OPTIMAL:
+					filter = entry -> false;
+					break;
+				case PANAMA_ONLY:
+					filter = entry -> entry.getRoute() != ERouteOption.PANAMA;
+					break;
+				case SUEZ_ONLY:
+					filter = entry -> entry.getRoute() != ERouteOption.SUEZ;
+					break;
+				case UNDEFINED:
+				default:
+					assert false;
+					// Assume optimal if assertions off.
+					filter = entry -> false;
+					break;
+				}
+				// Remove forbidden route options.
+				distances.removeIf(filter);
+			}
+
+			{
+				// If there is an override, then we set the other travel times to MAX_VALUE
+				if (voyageSpecProvider != null) {
+					final ERouteOption routeOverride = voyageSpecProvider.getVoyageRouteOption(prevPortSlot, thisPortSlot);
+
+					if (routeOverride != null) {
+						// Can assume direct distance is non-zero here.
+						final Predicate<DistanceMatrixEntry> filter = entry -> entry.getRoute() != routeOverride;
+						// Remove forbidden route options.
+						distances.removeIf(filter);
 					}
-
-					final ERouteOption pRouteOverride = routeOverride;
-					final Predicate<DistanceMatrixEntry> filter = entry -> entry.getRoute() != pRouteOverride;
-					// Remove forbidden route options.
-					distances.removeIf(filter);
 				}
 			}
 		}
-
 		if (distances.isEmpty()) {
 			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
 		}
 		assert !distances.isEmpty();
 
 		// Only add route choice if there is one
-
 		if (distances.size() == 1) {
 			// TODO: Make part of if instead?
 			final DistanceMatrixEntry d = distances.get(0);
