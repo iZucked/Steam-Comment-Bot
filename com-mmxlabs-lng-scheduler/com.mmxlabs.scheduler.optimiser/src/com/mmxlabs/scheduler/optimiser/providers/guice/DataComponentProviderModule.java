@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.providers.*;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyVolumeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyWindowProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
@@ -86,7 +87,9 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEdi
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
 
 /**
- * {@link Module} implementation providing shared {@link IDataComponentProvider} instances. This Module will return the same instance for the {@link IDataComponentProvider} and any editor subclasses.
+ * {@link Module} implementation providing shared {@link IDataComponentProvider}
+ * instances. This Module will return the same instance for the
+ * {@link IDataComponentProvider} and any editor subclasses.
  * 
  * @author Simon Goodall
  * 
@@ -324,11 +327,11 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultMaxSlotConstraintDataProviderEditor.class).in(Singleton.class);
 		bind(IMaxSlotCountConstraintDataProvider.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
 		bind(IMaxSlotConstraintDataProviderEditor.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
-		
+
 		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
 		bind(IVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
 		bind(IVesselSlotCountFitnessProviderEditor.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);
-		
+
 		bind(DefaultLockedCargoProviderEditor.class).in(Singleton.class);
 		bind(ILockedCargoProvider.class).to(DefaultLockedCargoProviderEditor.class);
 		bind(ILockedCargoProviderEditor.class).to(DefaultLockedCargoProviderEditor.class);
@@ -341,27 +344,32 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultLazyExpressionManager.class).in(Singleton.class);
 		bind(ILazyExpressionManagerContainer.class).to(DefaultLazyExpressionManager.class);
 		bind(ILazyExpressionManagerEditor.class).to(DefaultLazyExpressionManager.class);
-		
+
 		bind(HashMapFullCargoLotProvider.class).in(Singleton.class);
 		bind(IFullCargoLotProvider.class).to(HashMapFullCargoLotProvider.class);
 		bind(IFullCargoLotProviderEditor.class).to(HashMapFullCargoLotProvider.class);
-		
+
 		bind(DefaultExposureDataProvider.class).in(Singleton.class);
 		bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
 		bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
-		
+
 		bind(DefaultPaperDealDataProvider.class).in(Singleton.class);
 		bind(IPaperDealDataProvider.class).to(DefaultPaperDealDataProvider.class);
 		bind(IPaperDealDataProviderEditor.class).to(DefaultPaperDealDataProvider.class);
-		
+
 		bind(DefaultScheduledPurgeProvider.class).in(Singleton.class);
 		bind(IScheduledPurgeProvider.class).to(DefaultScheduledPurgeProvider.class);
 		bind(IScheduledPurgeProviderEditor.class).to(DefaultScheduledPurgeProvider.class);
-		
-		//Counterparty volume provider
+
+		// Counterparty volume provider
 		bind(DefaultCounterPartyVolumeProvider.class).in(Singleton.class);
 		bind(ICounterPartyVolumeProvider.class).to(DefaultCounterPartyVolumeProvider.class);
 		bind(ICounterPartyVolumeProviderEditor.class).to(DefaultCounterPartyVolumeProvider.class);
+
+		// Counterparty window provider
+		bind(DefaultCounterPartyWindowProvider.class).in(Singleton.class);
+		bind(ICounterPartyWindowProvider.class).to(DefaultCounterPartyWindowProvider.class);
+		bind(ICounterPartyWindowProviderEditor.class).to(DefaultCounterPartyWindowProvider.class);
 
 		// Grouped slots constraints provider
 		bind(DefaultGroupedSlotsConstraintDataProviderEditor.class).in(Singleton.class);
