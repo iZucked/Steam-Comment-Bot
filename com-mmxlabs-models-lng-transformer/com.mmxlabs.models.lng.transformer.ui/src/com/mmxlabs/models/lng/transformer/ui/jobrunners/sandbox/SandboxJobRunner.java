@@ -302,6 +302,12 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					return runner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
 			};
+		}, solution -> {
+			// Aborted, clear reference to inserted elements as they may not really exist (e.g. sandbox)
+			if (solution instanceof SlotInsertionOptions res) {
+				res.getSlotsInserted().clear();
+				res.getEventsInserted().clear();
+			}
 		});
 	}
 
@@ -336,6 +342,12 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
 			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
+		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, jobAction, null);
+	}
+
+	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
+			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction,
+			@Nullable Consumer<AbstractSolutionSet> abortedHandler) {
 
 		return monitor -> {
 
@@ -349,10 +361,15 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 			final IMultiStateResult results = sandboxJob.run(monitor);
 
-			if (results == null) {
+			if (results == null || monitor.isCanceled()) {
 				sandboxResult.setName("SandboxResult");
 				sandboxResult.setHasDualModeSolutions(dualPNLMode);
 				sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+
+				if (abortedHandler != null) {
+					abortedHandler.accept(sandboxResult);
+				}
+
 				return sandboxResult;
 			}
 
