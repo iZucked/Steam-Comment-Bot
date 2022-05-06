@@ -377,8 +377,12 @@ public class OptimisationTestRunner {
 		runner.withScenario(sdp);
 
 		// Run the optimisation
-		final AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
-
+		final AbstractSolutionSet solutionSet = runner.run(new NullProgressMonitor());
+		Assertions.assertNotNull(solutionSet);
+		
+		// Always force base in the solution rather than scenario state
+		solutionSet.setUseScenarioBase(false);
+		
 		if (preCompareAction != null) {
 			preCompareAction.accept(solutionSet);
 		}
