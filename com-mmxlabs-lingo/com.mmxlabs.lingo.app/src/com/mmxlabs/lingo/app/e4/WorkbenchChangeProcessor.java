@@ -64,7 +64,7 @@ public class WorkbenchChangeProcessor {
 		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView", p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));
 		
 		// Make sure the new name is picked up
-		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", p -> p.setLabel("Task Manager"));
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", p -> p.setLabel("Run Manager"));
 
 		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
 		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif

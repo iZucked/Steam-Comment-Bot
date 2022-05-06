@@ -42,7 +42,7 @@
             class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
             icon="icons:/16/cloud"
             id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"
-            name="Task Manager"
+            name="Run Manager"
             restorable="true">
       </view>
    </extension>
