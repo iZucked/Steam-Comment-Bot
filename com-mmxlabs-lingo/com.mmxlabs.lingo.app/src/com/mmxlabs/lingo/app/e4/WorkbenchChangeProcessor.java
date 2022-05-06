@@ -5,20 +5,18 @@
 package com.mmxlabs.lingo.app.e4;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.MAddon;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainerElement;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
-import org.eclipse.e4.ui.model.application.ui.basic.MWindowElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -93,16 +91,22 @@ public class WorkbenchChangeProcessor {
 
 		CustomReportsRegistry.getInstance().removeDeletedViews(application, modelService);
 
-		// TODO: Handle this message;
-		// !MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon
-
+		// This is lost from IDE plugin
+		Iterator<MAddon> itr = application.getAddons().iterator();
+		while (itr.hasNext()) {
+			var addon = itr.next();
+			if (Objects.equals(addon.getContributionURI(), "bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon")) {
+				itr.remove();
+			}
+		}
+		
 		// Remove views from the IDE plugin
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ResourceNavigator", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.BookmarkView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.AllMarkersView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.minimap.MinimapView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProblemView", application, modelService);
-		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.TaskList", application, modelService);
 
 	}
