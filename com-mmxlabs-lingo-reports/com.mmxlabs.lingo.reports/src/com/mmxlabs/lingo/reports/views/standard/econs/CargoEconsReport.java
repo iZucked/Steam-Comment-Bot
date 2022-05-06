@@ -136,6 +136,7 @@ public class CargoEconsReport extends ViewPart {
 
 	private Image pinImage = null;
 	private Image deltaImage = null;
+	private Image sigmaImage = null;
 
 	private boolean onlyDiffMode = false;
 
@@ -161,9 +162,10 @@ public class CargoEconsReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 
-		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 //		createImage("icons/Pinned.gif");
+		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 		deltaImage = CommonImages.getImage(IconPaths.Delta, IconMode.Enabled);
+		sigmaImage = CommonImages.getImage(IconPaths.Sigma, IconMode.Enabled);
 		
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -1004,8 +1006,9 @@ public class CargoEconsReport extends ViewPart {
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 
-				gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
-				gvc.getColumn().setText("Σ");
+				gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+				gvc.getColumn().setImage(sigmaImage);
+				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 			} else if (selectedObject instanceof VesselEventVisit) {

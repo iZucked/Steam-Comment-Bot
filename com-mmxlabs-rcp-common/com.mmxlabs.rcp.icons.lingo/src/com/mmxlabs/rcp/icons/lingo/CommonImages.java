@@ -89,6 +89,7 @@ public final class CommonImages {
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
+		Sigma(16, "icons/16x16/sigma.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
 		ZoomIn(16, "icons/16x16/zoom_in.png"), //
 		ZoomOut(16, "icons/16x16/zoom_out.png"), //

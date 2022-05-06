@@ -128,6 +128,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 	private Image pinImage = null;
 	private Image deltaImage = null;
+	private Image sigmaImage = null;
 
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
@@ -163,6 +164,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 		deltaImage = CommonImages.getImage(IconPaths.Delta, IconMode.Enabled);
+		sigmaImage = CommonImages.getImage(IconPaths.Sigma, IconMode.Enabled);
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -791,8 +793,9 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 
-				gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
-				gvc.getColumn().setText("Σ");
+				gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+				gvc.getColumn().setImage(sigmaImage);
+				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 			} else if (selectedObject instanceof VesselEventVisit) {
