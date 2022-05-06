@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app.headless;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
@@ -20,8 +21,12 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
@@ -100,8 +105,22 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 
 				runner.withScenario(scenarioDataProvider);
 
+				// Hack to get metadata
+				List<HeadlessApplicationOptions> hOptionsList = getHeadlessOptions();
+				
+				final Meta meta = writeMetaFields(scenarioFile, hOptionsList.get(0));
+				meta.setScenario(scenarioFile.getName());
+				
+				runner.withLogging(meta);
+				
+//				final ScenarioMeta scenarioMeta =  writeOptimisationMetrics(scenarioDataProvider);
+//				runner.withLogging(scenarioMeta);
+				// end hack
+								
 				AbstractSolutionSet result = runner.run(numThreads, monitor);
-
+				if (result == null) {
+					throw new NullPointerException("Result is null");
+				}
 				// final File resultOutput = new File(outputScenarioFileName + ".xmi");
 				HeadlessUtils.saveResult(result, scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
 				//
@@ -127,6 +146,7 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 		}
 
 		if (loggingFolder != null) {
+			
 			try {
 				runner.saveLogs(new File(loggingFolder, UUID.randomUUID().toString() + ".json"));
 			} catch (final Exception e) {

@@ -15,7 +15,6 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogPostChangeCommandProvider;
 import com.mmxlabs.models.ui.editors.dialogs.commandext.DialogPostChangeCommandProviderExtensionProxy;
@@ -59,7 +58,6 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	private ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
-	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerTracker;
 	private ServiceTracker<IValidationService, IValidationService> validationServiceTracker;
 
 	/**
@@ -82,9 +80,6 @@ public class Activator extends AbstractUIPlugin {
 		commandProviderTracker = new ServiceTracker<IModelCommandProvider, IModelCommandProvider>(context, IModelCommandProvider.class, null);
 		commandProviderTracker.open();
 
-		jobManagerTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
-		jobManagerTracker.open();
-
 		validationServiceTracker = new ServiceTracker<IValidationService, IValidationService>(context, IValidationService.class.getName(), null);
 		validationServiceTracker.open();
 
@@ -106,13 +101,7 @@ public class Activator extends AbstractUIPlugin {
 		validationServiceTracker.close();
 		validationServiceTracker = null;
 
-		jobManagerTracker.close();
-		jobManagerTracker = null;
 		super.stop(context);
-	}
-
-	public IEclipseJobManager getJobManager() {
-		return jobManagerTracker.getService();
 	}
 
 	/**

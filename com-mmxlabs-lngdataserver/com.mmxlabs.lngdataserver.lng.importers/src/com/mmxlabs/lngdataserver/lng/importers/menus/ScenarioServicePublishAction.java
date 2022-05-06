@@ -218,7 +218,7 @@ public class ScenarioServicePublishAction {
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
 
 				// Evaluate scenario
-				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
+				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, false, false, null);
 				assert optimisationPlan != null;
 
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.

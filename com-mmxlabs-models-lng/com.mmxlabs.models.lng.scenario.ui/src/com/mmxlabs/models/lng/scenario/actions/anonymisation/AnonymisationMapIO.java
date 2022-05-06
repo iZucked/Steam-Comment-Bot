@@ -32,11 +32,15 @@ import com.mmxlabs.scenario.service.model.util.encryption.EncryptionUtils;
 
 public class AnonymisationMapIO {
 
+	private AnonymisationMapIO() {
+
+	}
+
 	private static final String KEY_OLD_NAME = "oldname";
 	private static final String KEY_NEW_NAME = "newname";
 	private static final String KEY_AR_TYPE = "type";
-	
-	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
+
+	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	public static final File anonyMapFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + "anonyMap.data");
 
 	public static @NonNull ObjectMapper createObjectMapper() {
@@ -56,25 +60,26 @@ public class AnonymisationMapIO {
 		}
 		return message;
 	}
-	
+
 	public static List<AnonymisationRecord> read(final File file) {
-		
-		try (InputStream inputStream = new FileInputStream(file)){
+
+		try (InputStream inputStream = new FileInputStream(file)) {
 			return EncryptionUtils.decrypt(inputStream, AnonymisationMapIO::readRecords);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ArrayList<AnonymisationRecord>();
+			return new ArrayList<>();
 		}
 	}
-	
+
 	private static List<AnonymisationRecord> readRecords(final InputStream is) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
-		return mapper.readValue(is, new TypeReference<List<AnonymisationRecord>>() {});
+		return mapper.readValue(is, new TypeReference<List<AnonymisationRecord>>() {
+		});
 	}
 
-	public static List<AnonymisationRecord> readCSV(final String fileName) throws Exception{
+	public static List<AnonymisationRecord> readCSV(final String fileName) throws Exception {
 		final List<AnonymisationRecord> records = new ArrayList<>();
-		try(FileCSVReader reader = new FileCSVReader(new File(fileName))){
+		try (FileCSVReader reader = new FileCSVReader(new File(fileName))) {
 			Map<String, String> row;
 			while ((row = reader.readRow(true)) != null) {
 				final String oldName = row.get(KEY_OLD_NAME);
@@ -90,7 +95,7 @@ public class AnonymisationMapIO {
 	public static String writeCSV(final List<AnonymisationRecord> records, final String fileName) {
 		String message = "Anonymisation map export successful";
 		try (final FileOutputStream outputStream = new FileOutputStream(fileName)) {
-			try(final Writer writer = new OutputStreamWriter(outputStream)){
+			try (final Writer writer = new OutputStreamWriter(outputStream)) {
 				final CSVWriter cw = new CSVWriter(writer, ',');
 
 				for (final Field f : AnonymisationRecord.class.getFields()) {
@@ -98,9 +103,9 @@ public class AnonymisationMapIO {
 				}
 				cw.endRow();
 
-				for (final AnonymisationRecord record : records) {
+				for (final AnonymisationRecord anonRecord : records) {
 					for (final Field f : AnonymisationRecord.class.getFields()) {
-						final Object value = f.get(record);
+						final Object value = f.get(anonRecord);
 						String strValue = "";
 						if (value != null)
 							strValue = value.toString();
@@ -114,21 +119,21 @@ public class AnonymisationMapIO {
 		}
 		return message;
 	}
-	
+
 	public static String getFile(final Shell shell) {
 
-        FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-        String [] filterNames = new String [] {"CSV files", "All Files (*)"};
-    	String [] filterExtensions = new String [] {"*.csv", "*"};
-        dialog.setFilterNames(filterNames);
-        dialog.setFilterExtensions(filterExtensions);
-        String file = dialog.open();
-        if (file != null) {
-            file = file.trim();
-            if (file.length() > 0) {
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		String[] filterNames = new String[] { "CSV files", "All Files (*)" };
+		String[] filterExtensions = new String[] { "*.csv", "*" };
+		dialog.setFilterNames(filterNames);
+		dialog.setFilterExtensions(filterExtensions);
+		String file = dialog.open();
+		if (file != null) {
+			file = file.trim();
+			if (file.length() > 0) {
 				return file;
 			}
-        }
-        return "";
-    }
+		}
+		return "";
+	}
 }

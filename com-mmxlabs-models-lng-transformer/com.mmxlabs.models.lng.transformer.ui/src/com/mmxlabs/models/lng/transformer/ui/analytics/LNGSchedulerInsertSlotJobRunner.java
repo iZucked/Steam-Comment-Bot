@@ -34,6 +34,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.util.TriFunction;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
@@ -198,7 +199,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 					}
 				} catch (final IllegalArgumentException e) {
 					// Slot not found - probably outside of period.
-					throw new RuntimeException(String.format("Slot %s not included within period", original.getName()));
+					throw new UserFeedbackException(String.format("Slot %s not included within period", original.getName()));
 				}
 			}
 			for (final VesselEvent original : targetEvents) {
@@ -362,7 +363,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		final OptionalLong portfolioBreakEvenTarget = performBreakEven ? OptionalLong.of(targetPNL) : OptionalLong.empty();
 		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, dualModeInsertions,
-				portfolioBreakEvenTarget);
+				portfolioBreakEvenTarget, true);
 
 		LNGDataTransformer dt = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer();
 		final SequencesContainer initialSequencesContainer = new SequencesContainer(dt.getInitialResult().getBestSolution());

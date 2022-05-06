@@ -58,6 +58,34 @@ public class CargoModelFinder {
 		throw new IllegalArgumentException("Unknown load slot: " + name);
 	}
 
+	public @NonNull LoadSlot findLoadSlotByUUID(@NonNull final String uuid) {
+		for (final LoadSlot slot : getCargoModel().getLoadSlots()) {
+			if (uuid.equals(slot.getUuid())) {
+				return slot;
+			}
+		}
+		for (final LoadSlot slot : extraLoads) {
+			if (uuid.equals(slot.getUuid())) {
+				return slot;
+			}
+		}
+		throw new IllegalArgumentException("Unknown load slot: " + uuid);
+	}
+
+	public @NonNull DischargeSlot findDischargeSlotByUUID(@NonNull final String uuid) {
+		for (final DischargeSlot slot : getCargoModel().getDischargeSlots()) {
+			if (uuid.equals(slot.getUuid())) {
+				return slot;
+			}
+		}
+		for (final DischargeSlot slot : extraDischarges) {
+			if (uuid.equals(slot.getUuid())) {
+				return slot;
+			}
+		}
+		throw new IllegalArgumentException("Unknown discharge slot: " + uuid);
+	}
+
 	@NonNull
 	public DischargeSlot findDischargeSlot(@NonNull final String name) {
 		for (final DischargeSlot cargo : getCargoModel().getDischargeSlots()) {
@@ -92,6 +120,15 @@ public class CargoModelFinder {
 	public VesselEvent findVesselEvent(@NonNull final String name) {
 		for (final VesselEvent vesselEvent : getCargoModel().getVesselEvents()) {
 			if (name.equals(vesselEvent.getName())) {
+				return vesselEvent;
+			}
+		}
+		throw new IllegalArgumentException("Unknown vessel event");
+	}
+
+	public @NonNull VesselEvent findVesselEventByUUID(@NonNull final String uuid) {
+		for (final VesselEvent vesselEvent : getCargoModel().getVesselEvents()) {
+			if (uuid.equals(vesselEvent.getUuid())) {
 				return vesselEvent;
 			}
 		}

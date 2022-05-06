@@ -5,19 +5,18 @@
 package com.mmxlabs.lingo.app.e4;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.MAddon;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.MApplicationElement;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MUILabel;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainerElement;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
-import org.eclipse.e4.ui.model.application.ui.basic.MWindowElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -64,64 +63,56 @@ public class WorkbenchChangeProcessor {
 		
 		// Replace a specific view icon. 
 //		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/16/econs");
+
+		// Change to new part ID
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView", p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));
 		
-//		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
-//		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif
-//		platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif
-//		platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif
-//		platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/full/obj16/NominationsModelFile.gif
-//		platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
-//		platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
+		// Make sure the new name is picked up
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", p -> p.setLabel("Run Manager"));
 
-		// Remove ADP view part
-		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.adp.presentation.views.ADPEditorView", application, modelService);
+		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif
+		// platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/ihigh_obj.gif
+		// platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif
+		// platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif
+		// platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/full/obj16/NominationsModelFile.gif
+		// platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
+		// platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
 
-		// Removed from *.port.editor/plugin.xml
-		// <view
-		// category="com.mmxlabs.models.lng.views.physical"
-		// class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-		// id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-		// name="Port Groups">
-		// </view>
-		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.port.editor.views.PortGroupView", application, modelService);
+	 
 
 		if (!LicenseFeatures.isPermitted("features:fitness-view")) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView", application, modelService);
 		}
 
-		// Added for 3.8.x to 3.9.0 changes
-		// Rename Diff Tools Perspective to Compare
-		for (final MWindow window : application.getChildren()) {
-			for (final MWindowElement mWindowElement : window.getChildren()) {
-				if (mWindowElement instanceof MPartSashContainer) {
-					final MPartSashContainer mPartSashContainer = (MPartSashContainer) mWindowElement;
-					for (final MPartSashContainerElement mPartSashContainerElement : mPartSashContainer.getChildren()) {
-						if (mPartSashContainerElement instanceof MPerspectiveStack) {
-							final MPerspectiveStack mPerspectiveStack = (MPerspectiveStack) mPartSashContainerElement;
-							for (final MPerspective perspective : mPerspectiveStack.getChildren()) {
-								if (perspective.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective") && perspective.getLabel().equals("Diff Tools")) {
-									perspective.setLabel("Compare");
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.diff.DiffGroupView", application, modelService);
-
+		 
 		// Only remove if not permitted.
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
 		}
-		// View no longer present
-		E4ModelHelper.removeViewPart("com.mmxlabs.lngdataserver.integration.ui.WebNavigatorView", application, modelService);
-
+		 
 		// Remove Job Manager.
 		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
 
 		CustomReportsRegistry.getInstance().removeDeletedViews(application, modelService);
+
+		// This is lost from IDE plugin
+		Iterator<MAddon> itr = application.getAddons().iterator();
+		while (itr.hasNext()) {
+			var addon = itr.next();
+			if (Objects.equals(addon.getContributionURI(), "bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon")) {
+				itr.remove();
+			}
+		}
+		
+		// Remove views from the IDE plugin
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ResourceNavigator", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.BookmarkView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.AllMarkersView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.minimap.MinimapView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProblemView", application, modelService);
+		E4ModelHelper.removeViewPart("org.eclipse.ui.views.TaskList", application, modelService);
+
 	}
 
 	private void applyMapping(Object child, Map<String, String> iconMapping) {
@@ -147,7 +138,7 @@ public class WorkbenchChangeProcessor {
 				if (existing.startsWith("platform:/plugin/com.mmxlabs.rcp.common")) {
 					label.setIconURI("icons:" + existing.substring("platform:/plugin/com.mmxlabs.rcp.common".length()));
 				}
-				
+
 				String replacement = iconMapping.get(existing);
 				if (replacement != null) {
 					label.setIconURI(replacement);
@@ -190,6 +181,35 @@ public class WorkbenchChangeProcessor {
 					if (existing != null) {
 						label.setIconURI(iconURI);
 					}
+				}
+			}
+		}
+	}
+
+	private <T extends MApplicationElement & MUILabel> void forEach(MElementContainer parent, String elementID, Consumer<T> action) {
+		for (var child : parent.getChildren()) {
+			doForEach(child, elementID, action);
+		}
+		if (parent instanceof MWindow window) {
+			for (var child : window.getSharedElements()) {
+				doForEach(child, elementID, action);
+			}
+		}
+	}
+
+	private <T extends MApplicationElement & MUILabel> void doForEach(Object child, String elementID, Consumer<T> action) {
+		if (child instanceof MElementContainer ec) {
+			forEach(ec, elementID, action);
+		}
+
+		if (child instanceof MUILabel label) {
+			if (label instanceof MApplicationElement element) {
+				if (elementID.equals(element.getElementId())) {
+					action.accept((T) element);
+					// String existing = label.getIconURI();
+					// if (existing != null) {
+					// label.setIconURI(iconURI);
+					// }
 				}
 			}
 		}

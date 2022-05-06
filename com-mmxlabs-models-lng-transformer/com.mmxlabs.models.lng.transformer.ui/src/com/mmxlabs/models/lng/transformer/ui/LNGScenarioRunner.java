@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;

@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+
 
 /**
  * This class represents a wrapper for JSON output logs from a headless algorithm run.
@@ -18,6 +20,7 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 
 	private String type;
 	private Meta meta;
+	private ScenarioMeta scenarioMeta;
 	@SuppressWarnings("null")
 	private T params;
 	@SuppressWarnings("null")
@@ -68,7 +71,7 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 		private String client;		
 		private Map<String, String> customInfo;
 		private long maxHeapSize;
-
+		
 		public LocalDateTime getDate() {
 			return date;
 		}
@@ -161,6 +164,163 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 		}
 
 	}
+	
+	public static class ScenarioMeta {
+		private int numCargoes;				//number of cargoes total
+		private int numVessels;				//number of available vessels
+		private int numLoads;				//number of loads
+		private int numDischarges;			//number of discharges
+		private int numSalesContracts;		//number of sales contracts
+		private int numPurchaseContracts;	//number of purchase contracts
+		private int shippedCargoes;  		//number of shipped cargos: number of FOB-DES cargos
+		private int charterInSpotsCount;					//charter in markets description
+		private int charterOutSpotsCount;					//charter out markets description
+		private List<Integer> minTimeWindows;				//minimum time windows for each vessel availability
+		private List<Integer> maxTimeWindows;				//maximum time windows for each vessel availability
+		private Map<String, Integer> spotMarketOptions;		//spot market description
+		private Map<String, Integer> vesselEvents;  		//vessel events description
+		private Map<String, Integer> loadTimeWindow;		//time window of each load slot in hours
+		private Map<String, Integer> dischargeTimeWindow;	//time window of each discharge slot in hours
+		private Map<Integer, Integer> loadSlotDuration;		//duration of each load slot in hours
+		private Map<Integer, Integer> dischargeSlotDuration;	//duration of each discharge slot in hours
+		
+		public int getNumCargoes() {
+			return numCargoes;
+		}
+
+		public void setNumCargoes(int numCargoes) {
+			this.numCargoes = numCargoes;
+		}
+
+		public int getNumVessels() {
+			return numVessels;
+		}
+
+		public void setNumVessels(int numVessels) {
+			this.numVessels = numVessels;
+		}
+		
+		public int getNumLoads() {
+			return numLoads;
+		}
+
+		public void setNumLoads(int numLoads) {
+			this.numLoads = numLoads;
+		}
+
+		public int getNumDischarges() {
+			return numDischarges;
+		}
+
+		public void setNumDischarges(int numDischarges) {
+			this.numDischarges = numDischarges;
+		}
+
+		public int getNumSalesContracts() {
+			return numSalesContracts;
+		}
+
+		public void setNumSalesContracts(int numSalesContracts) {
+			this.numSalesContracts = numSalesContracts;
+		}
+
+		public int getNumPurchaseContracts() {
+			return numPurchaseContracts;
+		}
+
+		public void setNumPurchaseContracts(int numPurchaseContracts) {
+			this.numPurchaseContracts = numPurchaseContracts;
+		}
+
+		public int getShippedCargoes() {
+			return shippedCargoes;
+		}
+
+		public void setShippedCargoes(int shippedCargoes) {
+			this.shippedCargoes = shippedCargoes;
+		}
+
+		public int getCharterInSpotsCount() {
+			return charterInSpotsCount;
+		}
+
+		public void setCharterInSpotsCount(int charterInSpotsCount) {
+			this.charterInSpotsCount = charterInSpotsCount;
+		}
+
+		public int getCharterOutSpotsCount() {
+			return charterOutSpotsCount;
+		}
+
+		public void setCharterOutSpotsCount(int charterOutSpotsCount) {
+			this.charterOutSpotsCount = charterOutSpotsCount;
+		}
+
+		public List<Integer> getMinTimeWindows() {
+			return minTimeWindows;
+		}
+
+		public void setMinTimeWindows(List<Integer> minTimeWindows) {
+			this.minTimeWindows = minTimeWindows;
+		}
+
+		public List<Integer> getMaxTimeWindows() {
+			return maxTimeWindows;
+		}
+
+		public void setMaxTimeWindows(List<Integer> maxTimeWindows) {
+			this.maxTimeWindows = maxTimeWindows;
+		}
+
+		public Map<String, Integer> getSpotMarketOptions() {
+			return spotMarketOptions;
+		}
+
+		public void setSpotMarketOptions(Map<String, Integer> spotMarketOptions) {
+			this.spotMarketOptions = spotMarketOptions;
+		}
+
+		public Map<String, Integer> getVesselEvents() {
+			return vesselEvents;
+		}
+
+		public void setVesselEvents(Map<String, Integer> vesselEvents) {
+			this.vesselEvents = vesselEvents;
+		}
+
+		public Map<String, Integer> getLoadTimeWindow() {
+			return loadTimeWindow;
+		}
+
+		public void setLoadTimeWindow(Map<String, Integer> loadTimeWindow) {
+			this.loadTimeWindow = loadTimeWindow;
+		}
+
+		public Map<String, Integer> getDischargeTimeWindow() {
+			return dischargeTimeWindow;
+		}
+
+		public void setDischargeTimeWindow(Map<String, Integer> dischargeTimeWindow) {
+			this.dischargeTimeWindow = dischargeTimeWindow;
+		}
+
+		public Map<Integer, Integer> getLoadSlotDuration() {
+			return loadSlotDuration;
+		}
+
+		public void setLoadSlotDuration(Map<Integer, Integer> loadSlotDuration) {
+			this.loadSlotDuration = loadSlotDuration;
+		}
+
+		public Map<Integer, Integer> getDischargeSlotDuration() {
+			return dischargeSlotDuration;
+		}
+
+		public void setDischargeSlotDuration(Map<Integer, Integer> dischargeSlotDuration) {
+			this.dischargeSlotDuration = dischargeSlotDuration;
+		}
+
+	}
 
 	public String getType() {
 		return type;
@@ -192,5 +352,13 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 
 	public void setMetrics(U metrics) {
 		this.metrics = metrics;
+	}
+
+	public ScenarioMeta getScenarioMeta() {
+		return scenarioMeta;
+	}
+
+	public void setScenarioMeta(ScenarioMeta scenarioMeta) {
+		this.scenarioMeta = scenarioMeta;
 	}
 }

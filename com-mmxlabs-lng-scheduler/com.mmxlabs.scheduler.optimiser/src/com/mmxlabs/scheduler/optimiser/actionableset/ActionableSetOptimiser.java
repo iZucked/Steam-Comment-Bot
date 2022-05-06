@@ -23,7 +23,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.common.concurrent.JobExecutor;
-import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -97,7 +96,7 @@ public class ActionableSetOptimiser {
 			// jobStates.clear();
 			results.addAll(jobStates);
 			// TODO: Implement equals on ActionSetJobState!
-			jobStates = results.parallelStream().distinct().collect(Collectors.toList());
+			jobStates = results.stream().distinct().collect(Collectors.toList());
 			Collections.sort(jobStates, (a, b) -> {
 				final long fa = a.getFitness();
 				final long fb = b.getFitness();
@@ -117,7 +116,7 @@ public class ActionableSetOptimiser {
 
 		progressReporter.done();
 
-		final List<ActionableSetJobState> jobStates2 = new LinkedList<ActionableSetJobState>();
+		final List<ActionableSetJobState> jobStates2 = new LinkedList<>();
 		for (final ActionableSetJobState state : jobStates) {
 			final List<ActionableSetJobState> states = new LinkedList<>();
 			{

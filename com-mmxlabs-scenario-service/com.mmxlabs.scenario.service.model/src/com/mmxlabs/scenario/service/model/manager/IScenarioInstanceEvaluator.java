@@ -2,11 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.liveeval;
+package com.mmxlabs.scenario.service.model.manager;
 
 import org.eclipse.jdt.annotation.NonNull;
-
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * This is a bodge to make the evaluation handler from the platform available here.
@@ -15,5 +13,5 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
  *
  */
 public interface IScenarioInstanceEvaluator {
-	public void evaluate(final @NonNull ScenarioModelRecord modelRecord);
+	void evaluate(final @NonNull ScenarioModelRecord modelRecord);
 }

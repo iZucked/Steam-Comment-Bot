@@ -57,13 +57,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -162,8 +155,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker = new ServiceTracker<>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 
-		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
-
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = CommonImages.getImage(IconPaths.Console, IconMode.Enabled);
 		statusColumnImage = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
@@ -173,7 +164,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
-		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		linkHelper.dispose();
 
@@ -255,8 +245,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.
-			 * MouseEvent)
+			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events. MouseEvent)
 			 */
 			@Override
 			public void mouseDown(final MouseEvent e) {
@@ -347,9 +336,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		 * 
 		 * selectionModeTrackEditor = !selectionModeTrackEditor;
 		 * 
-		 * if (selectionModeTrackEditor) {
-		 * partListener.partActivated(getSite().getPage().getActiveEditor()); } } };
-		 * a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+		 * if (selectionModeTrackEditor) { partListener.partActivated(getSite().getPage().getActiveEditor()); } } }; a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
 		 * "/icons/synced.gif")); a.setChecked(selectionModeTrackEditor);
 		 * 
 		 * getViewSite().getActionBars().getToolBarManager().add(a);
@@ -397,8 +384,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	/**
-	 * This accesses a cached version of the property sheet. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -427,11 +413,11 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	@Override
 	protected void handleDoubleClick(final DoubleClickEvent anEvent) {
-		final ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
+		final ICommandService commandService = getSite().getService(ICommandService.class);
 
 		final Command command = commandService.getCommand("com.mmxlabs.scenario.service.ui.open");
 		if (command.isEnabled()) {
-			final IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
+			final IHandlerService handlerService = getSite().getService(IHandlerService.class);
 			try {
 				handlerService.executeCommand("com.mmxlabs.scenario.service.ui.open", null);
 			} catch (final Exception e) {
@@ -443,9 +429,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	/**
-	 * Super hacky attempt to set the collapse all icon from it's default icon.
-	 * Pretend to be an action bar and check the instanceof the action passed to one
-	 * of the add method.
+	 * Super hacky attempt to set the collapse all icon from it's default icon. Pretend to be an action bar and check the instanceof the action passed to one of the add method.
 	 * 
 	 * @param actionGroup
 	 */
@@ -816,53 +800,4 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		});
 	}
-
-	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
-
-		private final IJobControlListener jobControlListener = new IJobControlListener() {
-			@Override
-			public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
-				if (job.getJobDescriptor().getJobContext() instanceof ScenarioInstance instance) {
-					ViewerHelper.refresh(viewer, instance, false);
-				}
-				return true;
-			}
-
-			@Override
-			public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
-				if (job.getJobDescriptor().getJobContext() instanceof ScenarioInstance instance) {
-					ViewerHelper.refresh(viewer, instance, false);
-				}
-				return true;
-			}
-		};
-
-		@Override
-		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			if (control != null) {
-				control.removeListener(jobControlListener);
-			}
-			if (job.getJobContext() instanceof ScenarioInstance instance) {
-				ViewerHelper.refresh(viewer, instance, false);
-			}
-		}
-
-		@Override
-		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
-		}
-
-		@Override
-		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
-		}
-
-		@Override
-		public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			control.addListener(jobControlListener);
-			if (job.getJobContext() instanceof ScenarioInstance instance) {
-				ViewerHelper.refresh(viewer, instance, false);
-			}
-		}
-	};
 }

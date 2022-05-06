@@ -283,7 +283,7 @@ public class PairingOptimisationData<P, C> implements ProfitAndLossRecorder {
 
 	public void setSortedLoads(List<ILoadOption> sortedLoads) {
 		this.sortedLoads = sortedLoads;
-		this.sortedLoads.sort((a, b) -> a.getId().compareTo(b.getId()));
+		// this.sortedLoads.sort((a, b) -> a.getId().compareTo(b.getId()));
 	}
 
 	public List<IDischargeOption> getSortedDischarges() {
@@ -292,7 +292,7 @@ public class PairingOptimisationData<P, C> implements ProfitAndLossRecorder {
 
 	public void setSortedDischarges(List<IDischargeOption> sortedDischarges) {
 		this.sortedDischarges = sortedDischarges;
-		this.sortedDischarges.sort((a, b) -> a.getId().compareTo(b.getId()));
+		// this.sortedDischarges.sort((a, b) -> a.getId().compareTo(b.getId()));
 	}
 
 }
