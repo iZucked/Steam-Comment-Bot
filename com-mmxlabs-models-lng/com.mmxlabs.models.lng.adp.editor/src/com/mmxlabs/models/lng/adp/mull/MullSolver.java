@@ -86,6 +86,7 @@ import com.mmxlabs.models.lng.adp.mull.profile.MullProfile;
 import com.mmxlabs.models.lng.adp.mull.profile.MullSubprofile;
 import com.mmxlabs.models.lng.adp.mull.profile.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.presentation.views.ADPEditorData;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -109,7 +110,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -120,8 +120,8 @@ public class MullSolver {
 	}
 
 	public static Command populateVanillaModel(final ADPEditorData editorData, final com.mmxlabs.models.lng.adp.MullProfile eMullProfile) {
-		final LNGScenarioModel sm = getNullCheckedScenarioModel(editorData);
-		final ADPModel adpModel = getNullCheckedAdpModel(editorData);
+		final LNGScenarioModel sm = ADPModelUtil.getNullCheckedScenarioModel(editorData);
+		final ADPModel adpModel = ADPModelUtil.getNullCheckedAdpModel(editorData);
 
 		final GlobalStatesContainer globalStates = buildVanillaGlobalStates(eMullProfile, adpModel, sm);
 		final IMullProfile mullProfile = createInternalMullProfile(eMullProfile);
@@ -139,8 +139,8 @@ public class MullSolver {
 	}
 
 	public static Command populateModelFromMultipleInventories(final ADPEditorData editorData, final com.mmxlabs.models.lng.adp.MullProfile eMullProfile) {
-		final LNGScenarioModel sm = getNullCheckedScenarioModel(editorData);
-		final ADPModel adpModel = getNullCheckedAdpModel(editorData);
+		final LNGScenarioModel sm = ADPModelUtil.getNullCheckedScenarioModel(editorData);
+		final ADPModel adpModel = ADPModelUtil.getNullCheckedAdpModel(editorData);
 
 		final GlobalStatesContainer globalStates = buildGlobalStates(eMullProfile, adpModel, sm);
 		final IMullProfile mullProfile = createInternalMullProfile(eMullProfile);
@@ -262,15 +262,15 @@ public class MullSolver {
 	private static Command createModelPopulationCommands(final GlobalStatesContainer globalStates, final IMullAlgorithm finalAlgorithm, final ADPEditorData editorData) {
 
 		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
-		final EditingDomain editingDomain = getNullCheckedEditingDomain(editorData);
-		final LNGScenarioModel sm = getNullCheckedScenarioModel(editorData);
+		final EditingDomain editingDomain = ADPModelUtil.getNullCheckedEditingDomain(editorData);
+		final LNGScenarioModel sm = ADPModelUtil.getNullCheckedScenarioModel(editorData);
 		@Nullable
 		final Command deleteModelsCommand = ScheduleModelInvalidateCommandProvider.createClearModelsCommand(editingDomain, sm, ScenarioModelUtil.getAnalyticsModel(sm));
 
 		final CompoundCommand cmd = new CompoundCommand("Generate ADP slots");
 		addDeleteCommands(globalStates, cmd, sdp, editingDomain);
 
-		final IModelFactoryRegistry modelFactoryRegistry = getNullCheckedModelFactoryRegistry();
+		final IModelFactoryRegistry modelFactoryRegistry = ADPModelUtil.getNullCheckedModelFactoryRegistry();
 		final CargoEditingCommands cec = new CargoEditingCommands(editingDomain, sm, ScenarioModelUtil.getCargoModel(sm), ScenarioModelUtil.getCommercialModel(sm), modelFactoryRegistry);
 		addCargoCreationCommands(globalStates, finalAlgorithm, cec, sdp, editingDomain, cmd);
 
@@ -486,38 +486,6 @@ public class MullSolver {
 			objectsToDelete.addAll(dischargeSlotsToDelete);
 			cmd.append(DeleteCommand.create(editingDomain, objectsToDelete));
 		}
-	}
-
-	private static EditingDomain getNullCheckedEditingDomain(final ADPEditorData editorData) {
-		final EditingDomain ed = editorData.getEditingDomain();
-		if (ed != null) {
-			return ed;
-		}
-		throw new IllegalStateException("Editing domain not instantiated");
-	}
-
-	private static LNGScenarioModel getNullCheckedScenarioModel(final ADPEditorData editorData) {
-		final LNGScenarioModel sm = editorData.getScenarioModel();
-		if (sm != null) {
-			return sm;
-		}
-		throw new IllegalStateException("LNG Scenario not instantiated");
-	}
-
-	private static ADPModel getNullCheckedAdpModel(final ADPEditorData editorData) {
-		final ADPModel adpModel = editorData.getAdpModel();
-		if (adpModel != null) {
-			return adpModel;
-		}
-		throw new IllegalStateException("LNG Scenario not instantiated");
-	}
-
-	private static IModelFactoryRegistry getNullCheckedModelFactoryRegistry() {
-		final IModelFactoryRegistry modelFactoryRegistry = Activator.getDefault().getModelFactoryRegistry();
-		if (modelFactoryRegistry != null) {
-			return modelFactoryRegistry;
-		}
-		throw new IllegalStateException("Factory registry must not be null");
 	}
 
 	private static GlobalStatesContainer buildGlobalStates(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final ADPModel adpModel, final LNGScenarioModel sm) {

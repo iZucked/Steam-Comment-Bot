@@ -76,6 +76,9 @@ import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.mull.FilterToVesselsAction;
 import com.mmxlabs.models.lng.adp.mull.MullSolver;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpContractPageToolbarCustomiser;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
+import com.mmxlabs.models.lng.adp.presentation.customisation.NullAdpContractPageToolbarCustomiser;
 import com.mmxlabs.models.lng.adp.rateability.export.FeasibleSolverResult;
 import com.mmxlabs.models.lng.adp.rateability.export.Infeasible;
 import com.mmxlabs.models.lng.adp.rateability.export.SpacingRateabilitySolverResult;
@@ -115,6 +118,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulato
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -122,8 +126,6 @@ import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-
 
 public class ContractPage extends ADPComposite {
 
@@ -149,12 +151,19 @@ public class ContractPage extends ADPComposite {
 
 	private Adapter mullSummaryAdapter;
 
+	final IAdpContractPageToolbarCustomiser toolbarCustomiser;
+
 	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
 		this.editorData = editorData;
 		this.actionBars = actionBars;
 		this.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(0, 0).create());
 
+		{
+			IAdpContractPageToolbarCustomiser[] customiserContainer = new IAdpContractPageToolbarCustomiser[1];
+			ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class, v -> customiserContainer[0] = v);
+			this.toolbarCustomiser = customiserContainer[0] != null ? customiserContainer[0] : new NullAdpContractPageToolbarCustomiser();
+		}
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(this, SWT.NONE);
@@ -168,12 +177,18 @@ public class ContractPage extends ADPComposite {
 				objectSelector = new ComboViewer(toolbarComposite, SWT.DROP_DOWN);
 				objectSelector.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).create());
 				objectSelector.setContentProvider(new ArrayContentProvider());
+				final IInventoryBasedGenerationPresentationCustomiser customiser;
+				{
+					final IInventoryBasedGenerationPresentationCustomiser[] customiserContainer = new IInventoryBasedGenerationPresentationCustomiser[1];
+					ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, v -> customiserContainer[0] = v);
+					customiser = customiserContainer[0];
+				}
 				objectSelector.setLabelProvider(new LabelProvider() {
 
 					@Override
 					public String getText(final Object element) {
 						if (element instanceof MullProfile) {
-							return "MULL Generation";
+							return customiser != null ? customiser.getDropDownMenuLabel() : "Inventory-based generation";
 						} else if (element instanceof SpacingProfile) {
 							return "Spacing Rateability";
 						} else if (element instanceof final PurchaseContract profile) {
@@ -189,18 +204,17 @@ public class ContractPage extends ADPComposite {
 					final ISelection selection = event.getSelection();
 					EObject target = null;
 					generateButton.setEnabled(false);
-					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-						vanillaBuildButton.setEnabled(false);
-					}
+					toolbarCustomiser.runSelectionChangePreHandleTasks();
+//					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+//						vanillaBuildButton.setEnabled(false);
+//					}
 					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 						cpSolveButton.setEnabled(false);
 					}
 					if (selection instanceof final IStructuredSelection iStructuredSelection) {
 						target = (EObject) iStructuredSelection.getFirstElement();
 						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MullProfile);
-						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-							vanillaBuildButton.setEnabled(target instanceof MullProfile);
-						}
+						toolbarCustomiser.runSelectionChangeHandlingTasks(target);
 						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 							cpSolveButton.setEnabled(target instanceof SpacingProfile);
 						}
@@ -249,27 +263,7 @@ public class ContractPage extends ADPComposite {
 				});
 			}
 			{
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					vanillaBuildButton = new Button(toolbarComposite, SWT.PUSH);
-					vanillaBuildButton.setText("Generate vanilla");
-					vanillaBuildButton.setEnabled(true);
-					vanillaBuildButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-
-							EObject input = detailComposite.getInput();
-							if (input instanceof final MullProfile profile) {
-								final CompoundCommand cmd = new CompoundCommand("Generate vanilla ADP Slots");
-								if (editorData != null) {
-									final Command populateModelCommand = MullSolver.populateVanillaModel(editorData, profile);
-									cmd.append(populateModelCommand);
-								}
-
-							}
-							updateDetailPaneInput(input);
-						}
-					});
-				}
+				toolbarCustomiser.customiseToolbar(toolbarComposite, editorData, () -> detailComposite.getInput(), this::updateDetailPaneInput);
 			}
 			{
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
@@ -610,7 +604,8 @@ public class ContractPage extends ADPComposite {
 
 	private GridTreeViewer constructMullSummaryViewer(final ADPEditorData editorData, final Group group) {
 		final GridTreeViewer localMullSummaryViewer = new GridTreeViewer(group, SWT.V_SCROLL | SWT.MULTI);
-		// localMullSummaryViewer.init(editorData.getAdapterFactory(), editorData.getModelReference());
+		// localMullSummaryViewer.init(editorData.getAdapterFactory(),
+		// editorData.getModelReference());
 
 		final IContentProvider contentProvider = getMullSummaryContentProvider(filterAction.isShowingVessels());
 		localMullSummaryViewer.setContentProvider(contentProvider);
@@ -881,7 +876,8 @@ public class ContractPage extends ADPComposite {
 						rhsScrolledComposite.setContent(mullComposite);
 					}
 					mullSummaryGroup.layout();
-					// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+					// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT,
+					// SWT.DEFAULT));
 					// rhsScrolledComposite.layout();
 					rhsScrolledComposite.requestLayout();
 				} else {
@@ -969,8 +965,6 @@ public class ContractPage extends ADPComposite {
 	private Button generateButton;
 
 	private Button cpSolveButton;
-
-	private Button vanillaBuildButton;
 
 	private Group previewGroup;
 

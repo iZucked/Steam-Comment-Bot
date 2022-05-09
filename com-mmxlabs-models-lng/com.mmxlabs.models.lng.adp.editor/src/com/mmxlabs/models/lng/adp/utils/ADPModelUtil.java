@@ -57,7 +57,7 @@ import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.adp.ext.IADPProfileProvider;
 import com.mmxlabs.models.lng.adp.ext.IProfileGenerator;
 import com.mmxlabs.models.lng.adp.ext.impl.DistributionModelGeneratorUtil;
-import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.adp.presentation.views.ADPEditorData;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -71,6 +71,8 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 
 public class ADPModelUtil {
 
@@ -649,5 +651,41 @@ public class ADPModelUtil {
 			obj = obj.eContainer();
 		}
 		return (ADPModel) obj;
+	}
+
+	@NonNull
+	public static LNGScenarioModel getNullCheckedScenarioModel(final ADPEditorData editorData) {
+		final LNGScenarioModel sm = editorData.getScenarioModel();
+		if (sm != null) {
+			return sm;
+		}
+		throw new IllegalStateException("LNG Scenario not instantiated");
+	}
+
+	@NonNull
+	public static ADPModel getNullCheckedAdpModel(final ADPEditorData editorData) {
+		final ADPModel adpModel = editorData.getAdpModel();
+		if (adpModel != null) {
+			return adpModel;
+		}
+		throw new IllegalStateException("LNG Scenario not instantiated");
+	}
+
+	@NonNull
+	public static EditingDomain getNullCheckedEditingDomain(final ADPEditorData editorData) {
+		final EditingDomain ed = editorData.getEditingDomain();
+		if (ed != null) {
+			return ed;
+		}
+		throw new IllegalStateException("Editing domain not instantiated");
+	}
+
+	@NonNull
+	public static IModelFactoryRegistry getNullCheckedModelFactoryRegistry() {
+		final IModelFactoryRegistry modelFactoryRegistry = Activator.getDefault().getModelFactoryRegistry();
+		if (modelFactoryRegistry != null) {
+			return modelFactoryRegistry;
+		}
+		throw new IllegalStateException("Factory registry must not be null");
 	}
 }
