@@ -668,7 +668,8 @@ public class InventoryReport extends ViewPart {
 												totalInventoryVolume += event.netVolumeIn;
 											}
 											if (!insAndOuts.isEmpty()) {
-												// Do not need to add inventory volume pre ADP year since they should be associated with pre ADP cargoes and initial tank volume (which should be
+												// Do not need to add inventory volume pre ADP year since they should be
+												// associated with pre ADP cargoes and initial tank volume (which should be
 												// covered by initial allocation)
 												// insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 												final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(inventory, adpStart);
@@ -1062,15 +1063,19 @@ public class InventoryReport extends ViewPart {
 												// final double[] values = new double[2];
 												// values[0] = mullProfile.getFullCargoLotValue();
 												// values[1] = mullProfile.getFullCargoLotValue();
-												// final ILineSeries series = (ILineSeries) mullMonthlyOverliftChart.getSeriesSet().createSeries(SeriesType.LINE, "FCL Max");
-												// final DoubleArraySeriesModel seriesModel = new DoubleArraySeriesModel(dates, values);
+												// final ILineSeries series = (ILineSeries)
+												// mullMonthlyOverliftChart.getSeriesSet().createSeries(SeriesType.LINE, "FCL
+												// Max");
+												// final DoubleArraySeriesModel seriesModel = new DoubleArraySeriesModel(dates,
+												// values);
 												// series.setDataModel(seriesModel);
 												// series.setSymbolType(PlotSymbolType.NONE);
 												// series.setXAxisId(axisId);
 
 												// mullMonthlyOverliftChart.
 
-												// final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "FCL Min");
+												// final ILineSeries series = (ILineSeries)
+												// seriesSet.createSeries(SeriesType.LINE, "FCL Min");
 
 												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount);
 											}
@@ -1440,7 +1445,9 @@ public class InventoryReport extends ViewPart {
 			total += lvl.changeInM3;
 			lvl.runningTotal = total;
 			/*
-			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
+			 * In the case, when the low/high forecast value is zero , we assume that's a
+			 * wrong data! Hence we use the feedIn (actual volume) if it's also not zero.
+			 * Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
 
@@ -1795,12 +1802,47 @@ public class InventoryReport extends ViewPart {
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
 		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null && !YearMonth.from(event.getStartDate()).isBefore(adpStart)).forEach(row -> {
-			final YearMonth currYM = YearMonth.from(row.getStartDate());
-			final Integer currVal = monthlyProduction.get(currYM);
-			if (currVal == null) {
-				monthlyProduction.put(currYM, row.getVolume());
+
+			if (row.getPeriod() == InventoryFrequency.DAILY) {
+				if (row.getStartDate().equals(row.getEndDate())) {
+					final YearMonth currYM = YearMonth.from(row.getStartDate());
+					monthlyProduction.compute(currYM, (ym, v) -> v == null ? row.getVolume() : v + row.getVolume());
+				} else {
+					final LocalDate inclusiveEnd = row.getEndDate().minusDays(1L);
+					final YearMonth endYm = YearMonth.from(inclusiveEnd);
+					LocalDate currentStartDate = row.getStartDate();
+					YearMonth currentYm = YearMonth.from(currentStartDate);
+					if (!currentYm.isBefore(endYm)) {
+						final int productionDays = currentYm.lengthOfMonth() - currentStartDate.getDayOfMonth() + 1;
+						final int productionAmount = productionDays * row.getVolume();
+						monthlyProduction.compute(currentYm, (ym, v) -> v == null ? productionAmount : v + productionAmount);
+					} else {
+						if (currentStartDate.getDayOfMonth() != 1) {
+							final int productionDays = currentYm.lengthOfMonth() - currentStartDate.getDayOfMonth() + 1;
+							final int productionAmount = productionDays * row.getVolume();
+							monthlyProduction.compute(currentYm, (ym, v) -> v == null ? productionAmount : v + productionAmount);
+							currentYm = currentYm.plusMonths(1L);
+							currentStartDate = currentYm.atDay(1);
+						}
+						while (currentYm.isBefore(endYm)) {
+							final int productionAmount = currentYm.lengthOfMonth() * row.getVolume();
+							monthlyProduction.compute(currentYm, (ym, v) -> v == null ? productionAmount : v + productionAmount);
+							currentYm = currentYm.plusMonths(1L);
+							currentStartDate = currentYm.atDay(1);
+						}
+						final int productionDays = inclusiveEnd.getDayOfMonth() - currentStartDate.getDayOfMonth() + 1;
+						final int productionAmount = productionDays * row.getVolume();
+						monthlyProduction.compute(currentYm, (ym, v) -> v == null ? productionAmount : v + productionAmount);
+					}
+				}
 			} else {
-				monthlyProduction.put(currYM, currVal + row.getVolume());
+				final YearMonth currYM = YearMonth.from(row.getStartDate());
+				final Integer currVal = monthlyProduction.get(currYM);
+				if (currVal == null) {
+					monthlyProduction.put(currYM, row.getVolume());
+				} else {
+					monthlyProduction.put(currYM, currVal + row.getVolume());
+				}
 			}
 		});
 		inventory.getOfftakes().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
@@ -2015,15 +2057,16 @@ public class InventoryReport extends ViewPart {
 
 	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
 		for (InventoryEventRow inventoryEventRow : events) {
-			if (inventoryEventRow.getStartDate() != null) {
-				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
-				if (inventoryDailyEvent == null) {
-					inventoryDailyEvent = new InventoryDailyEvent();
-					inventoryDailyEvent.date = inventoryEventRow.getStartDate();
-
-					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
+			if (inventoryEventRow.getStartDate() != null && inventoryEventRow.getEndDate() != null) {
+				final LocalDate exclusiveEnd = inventoryEventRow.getStartDate().equals(inventoryEventRow.getEndDate()) ? inventoryEventRow.getStartDate().plusDays(1L) : inventoryEventRow.getEndDate();
+				for (LocalDate currentDate = inventoryEventRow.getStartDate(); currentDate.isBefore(exclusiveEnd); currentDate = currentDate.plusDays(1L)) {
+					final InventoryDailyEvent inventoryDailyEvent = insAndOuts.computeIfAbsent(currentDate, d -> {
+						final InventoryDailyEvent newEvent = new InventoryDailyEvent();
+						newEvent.date = d;
+						return newEvent;
+					});
+					inventoryDailyEvent.addVolume(volumeFunction.applyAsInt(inventoryEventRow.getReliableVolume()));
 				}
-				inventoryDailyEvent.addVolume(volumeFunction.applyAsInt(inventoryEventRow.getReliableVolume()));
 			}
 		}
 	}

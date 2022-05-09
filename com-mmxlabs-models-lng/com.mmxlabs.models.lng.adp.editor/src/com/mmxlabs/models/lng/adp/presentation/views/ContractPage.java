@@ -75,7 +75,7 @@ import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.mull.FilterToVesselsAction;
-import com.mmxlabs.models.lng.adp.mull.MullSolver;
+import com.mmxlabs.models.lng.adp.mull.IInventoryBasedGenerationSolver;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpContractPageToolbarCustomiser;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.adp.presentation.customisation.NullAdpContractPageToolbarCustomiser;
@@ -152,6 +152,8 @@ public class ContractPage extends ADPComposite {
 	private Adapter mullSummaryAdapter;
 
 	final IAdpContractPageToolbarCustomiser toolbarCustomiser;
+	@Nullable
+	final IInventoryBasedGenerationSolver inventoryBasedGenerationSolver;
 
 	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
@@ -164,6 +166,14 @@ public class ContractPage extends ADPComposite {
 			ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class, v -> customiserContainer[0] = v);
 			this.toolbarCustomiser = customiserContainer[0] != null ? customiserContainer[0] : new NullAdpContractPageToolbarCustomiser();
 		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			final IInventoryBasedGenerationSolver[] inventoryBasedGenerationSolverArr = new IInventoryBasedGenerationSolver[1];
+			ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationSolver.class, v -> inventoryBasedGenerationSolverArr[0] = v);
+			inventoryBasedGenerationSolver = inventoryBasedGenerationSolverArr[0];
+		} else {
+			inventoryBasedGenerationSolver = null;
+		}
+
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(this, SWT.NONE);
@@ -252,9 +262,12 @@ public class ContractPage extends ADPComposite {
 								input = profile.getContract();
 							}
 						} else if (input instanceof final MullProfile profile) {
+							if (inventoryBasedGenerationSolver == null) {
+								throw new IllegalStateException("Could not find inventory-based generation solver");
+							}
 							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
 							if (editorData != null) {
-								final Command populateModelCommand = MullSolver.populateModelFromMultipleInventories(editorData, profile);
+								final Command populateModelCommand = inventoryBasedGenerationSolver.runInventoryBasedGeneration(editorData, profile);
 								cmd.append(populateModelCommand);
 							}
 						}
