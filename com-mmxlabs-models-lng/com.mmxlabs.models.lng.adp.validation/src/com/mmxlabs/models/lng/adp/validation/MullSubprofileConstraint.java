@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
@@ -33,11 +34,20 @@ import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 
 	private static final double EPSILON_DOUBLE = 0.001;
 	private static final String REGEXP_INTEGER = "-?\\d+";
+	
+	private final String typedName;
+
+	public MullSubprofileConstraint() {
+		final IInventoryBasedGenerationPresentationCustomiser[] customiserArr = new IInventoryBasedGenerationPresentationCustomiser[1];
+		ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, v -> customiserArr[0] = v);
+		typedName = customiserArr[0] != null ? customiserArr[0].getDropDownMenuLabel() : "Inventory-based generation";
+	}
 
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
@@ -47,7 +57,7 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 			final MullSubprofile mullSubprofile = (MullSubprofile) target;
 
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withTypedName("ADP profile", "MULL Generation") //
+					.withTypedName("ADP profile", typedName) //
 					.withTag(ValidationConstants.TAG_ADP);
 			if (mullSubprofile.getInventory() == null) {
 				factory.copyName() //

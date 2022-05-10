@@ -120,6 +120,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.models.ui.tabular.IFilterProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -188,6 +189,18 @@ public class InventoryReport extends ViewPart {
 	private EventHandler todayHandler;
 
 	private IBarSeries cargoSeries;
+
+	private final IOverliftReportCustomiser overliftCustomiser;
+
+	public InventoryReport() {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			final IOverliftReportCustomiser[] overliftCustomiserArr = new IOverliftReportCustomiser[1];
+			ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, v -> overliftCustomiserArr[0] = v);
+			overliftCustomiser = overliftCustomiserArr[0];
+		} else {
+			overliftCustomiser = null;
+		}
+	}
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -374,7 +387,7 @@ public class InventoryReport extends ViewPart {
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
-			mullItem.setText("MULL Monthly");
+			mullItem.setText(overliftCustomiser.getMonthlyOverliftLabel());
 			{
 				mullMonthlyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -419,7 +432,7 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 
 			final CTabItem mullMonthlyCumulativeItem = new CTabItem(folder, SWT.NONE);
-			mullMonthlyCumulativeItem.setText("MULL Monthly Cumulative");
+			mullMonthlyCumulativeItem.setText(overliftCustomiser.getMonthlyCumulativeOverliftLabel());
 			{
 				mullMonthlyCumulativeTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -472,7 +485,7 @@ public class InventoryReport extends ViewPart {
 
 			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
-			mullDailyItem.setText("MULL Daily");
+			mullDailyItem.setText(overliftCustomiser.getDailyOverliftTableLabel());
 			{
 				mullDailyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -518,7 +531,7 @@ public class InventoryReport extends ViewPart {
 			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 5);
 
 			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
-			chartItem2.setText("MULL Chart");
+			chartItem2.setText(overliftCustomiser.getOverliftChartLabel());
 			{
 				mullMonthlyOverliftChart = new Chart(folder, SWT.NONE);
 				mullMonthlyOverliftChart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
@@ -1657,7 +1670,7 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colourLightGrey);
 				}
-				if (!title.equals("Month") && !title.equals("Entity") && !title.equals("Lifting")) {
+				if (overliftCustomiser.hightlightFclViolations() && !title.equals("Month") && !title.equals("Entity") && !title.equals("Lifting")) {
 					if (element.getSecond() == null) {
 						if ((element.getFirst().deltaViolatesFCL && title.equals("Delta")) || (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Cumulative Delta"))) {
 							cell.setForeground(colourRed);
@@ -1712,7 +1725,7 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colourLightGrey);
 				}
-				if (!title.equals("Period") && !title.equals("Entity")) {
+				if (overliftCustomiser.hightlightFclViolations() && !title.equals("Period") && !title.equals("Entity")) {
 					if (element.getSecond() == null) {
 						if (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Delta")) {
 							cell.setForeground(colourRed);

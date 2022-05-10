@@ -154,6 +154,8 @@ public class ContractPage extends ADPComposite {
 	final IAdpContractPageToolbarCustomiser toolbarCustomiser;
 	@Nullable
 	final IInventoryBasedGenerationSolver inventoryBasedGenerationSolver;
+	@Nullable
+	final IInventoryBasedGenerationPresentationCustomiser inventoryBasedGenerationPresentationCustomiser;
 
 	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
@@ -187,18 +189,17 @@ public class ContractPage extends ADPComposite {
 				objectSelector = new ComboViewer(toolbarComposite, SWT.DROP_DOWN);
 				objectSelector.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(150, SWT.DEFAULT).create());
 				objectSelector.setContentProvider(new ArrayContentProvider());
-				final IInventoryBasedGenerationPresentationCustomiser customiser;
 				{
 					final IInventoryBasedGenerationPresentationCustomiser[] customiserContainer = new IInventoryBasedGenerationPresentationCustomiser[1];
 					ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, v -> customiserContainer[0] = v);
-					customiser = customiserContainer[0];
+					inventoryBasedGenerationPresentationCustomiser = customiserContainer[0];
 				}
 				objectSelector.setLabelProvider(new LabelProvider() {
 
 					@Override
 					public String getText(final Object element) {
 						if (element instanceof MullProfile) {
-							return customiser != null ? customiser.getDropDownMenuLabel() : "Inventory-based generation";
+							return inventoryBasedGenerationPresentationCustomiser != null ? inventoryBasedGenerationPresentationCustomiser.getDropDownMenuLabel() : "Inventory-based generation";
 						} else if (element instanceof SpacingProfile) {
 							return "Spacing Rateability";
 						} else if (element instanceof final PurchaseContract profile) {
@@ -428,7 +429,8 @@ public class ContractPage extends ADPComposite {
 					removeButtonManager.getToolbarManager().update(true);
 				}
 				{
-					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION) && inventoryBasedGenerationPresentationCustomiser != null
+							&& inventoryBasedGenerationPresentationCustomiser.showSummaryPane()) {
 						mullComposite = new Composite(rhsScrolledComposite, SWT.NONE);
 						mullComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).create());
 						mullSummaryGroup = new Group(mullComposite, SWT.NONE);
@@ -744,12 +746,19 @@ public class ContractPage extends ADPComposite {
 					profile = ADPFactory.eINSTANCE.createMullProfile();
 				}
 				objects.add(profile);
-				mullSummaryAdapter.setTarget(adpModel);
-				releaseAdaptersRunnable = () -> {
-					commercialModel.eAdapters().remove(commercialModelAdapter);
-					cargoModel.eAdapters().remove(cargoModelAdapter);
-					adpModel.eAdapters().remove(mullSummaryAdapter);
-				};
+				if (inventoryBasedGenerationPresentationCustomiser != null && inventoryBasedGenerationPresentationCustomiser.showSummaryPane()) {
+					mullSummaryAdapter.setTarget(adpModel);
+					releaseAdaptersRunnable = () -> {
+						commercialModel.eAdapters().remove(commercialModelAdapter);
+						cargoModel.eAdapters().remove(cargoModelAdapter);
+						adpModel.eAdapters().remove(mullSummaryAdapter);
+					};
+				} else {
+					releaseAdaptersRunnable = () -> {
+						commercialModel.eAdapters().remove(commercialModelAdapter);
+						cargoModel.eAdapters().remove(cargoModelAdapter);
+					};
+				}
 			} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 				SpacingProfile profile = adpModel.getSpacingProfile();
 				if (profile == null) {
@@ -884,15 +893,22 @@ public class ContractPage extends ADPComposite {
 					// rhsScrolledComposite.layout();
 				} else if (target instanceof MullProfile) {
 					// previewGroup.setVisible(false);
-					mullSummaryViewer.setInput(target);
-					if (rhsScrolledComposite.getContent() != mullComposite) {
-						rhsScrolledComposite.setContent(mullComposite);
+					if (inventoryBasedGenerationPresentationCustomiser != null && inventoryBasedGenerationPresentationCustomiser.showSummaryPane()) {
+						mullSummaryViewer.setInput(target);
+						if (rhsScrolledComposite.getContent() != mullComposite) {
+							rhsScrolledComposite.setContent(mullComposite);
+						}
+						mullSummaryGroup.layout();
+						// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT,
+						// SWT.DEFAULT));
+						// rhsScrolledComposite.layout();
+						rhsScrolledComposite.requestLayout();
+					} else {
+						if (rhsScrolledComposite.getContent() != mullComposite) {
+							rhsScrolledComposite.setContent(mullComposite);
+						}
+						rhsScrolledComposite.requestLayout();
 					}
-					mullSummaryGroup.layout();
-					// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT,
-					// SWT.DEFAULT));
-					// rhsScrolledComposite.layout();
-					rhsScrolledComposite.requestLayout();
 				} else {
 					rhsScrolledComposite.setContent(null);
 					// rhsScrolledComposite.requestLayout();

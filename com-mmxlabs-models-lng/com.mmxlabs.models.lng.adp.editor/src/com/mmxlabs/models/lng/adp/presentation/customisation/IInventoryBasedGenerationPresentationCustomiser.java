@@ -5,4 +5,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public interface IInventoryBasedGenerationPresentationCustomiser {
 	String getDropDownMenuLabel();
+
+	boolean showSummaryPane();
 }
