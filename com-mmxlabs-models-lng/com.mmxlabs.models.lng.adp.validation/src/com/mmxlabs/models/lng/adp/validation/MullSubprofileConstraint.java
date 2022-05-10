@@ -86,7 +86,7 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 						if (inventory.getFeeds().stream().noneMatch(row -> {
 							final LocalDate rowStart = row.getStartDate();
 							final LocalDate rowEnd = row.getEndDate();
-							return (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate)) || (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
+							return rowStart != null && rowEnd != null && (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate)) || (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
 						})) {
 							factory.copyName() //
 									.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
