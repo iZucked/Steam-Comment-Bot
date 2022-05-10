@@ -1813,7 +1813,7 @@ public class InventoryReport extends ViewPart {
 					LocalDate currentStartDate = row.getStartDate();
 					YearMonth currentYm = YearMonth.from(currentStartDate);
 					if (!currentYm.isBefore(endYm)) {
-						final int productionDays = currentYm.lengthOfMonth() - currentStartDate.getDayOfMonth() + 1;
+						final int productionDays = inclusiveEnd.getDayOfMonth() - currentStartDate.getDayOfMonth() + 1;
 						final int productionAmount = productionDays * row.getVolume();
 						monthlyProduction.compute(currentYm, (ym, v) -> v == null ? productionAmount : v + productionAmount);
 					} else {
