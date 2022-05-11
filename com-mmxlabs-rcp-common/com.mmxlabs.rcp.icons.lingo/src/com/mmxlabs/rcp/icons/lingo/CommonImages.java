@@ -75,6 +75,7 @@ public final class CommonImages {
 		Highlighter(16, "icons/16x16/highlighter.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
 		Label(16, "icons/16x16/label.png"), //
+		lateness(16, "icons/16x16/lateness.png"), //
 		Local(16, "icons/16x16/local.png"), //
 		Nominations(16, "icons/16x16/nominations.png"), //
 		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
@@ -102,13 +103,17 @@ public final class CommonImages {
 		// 24x24
 		Cloud_24(24, "icons/24x24/cloud.png"), //
 		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
+		Compare_24(24, "icons/24x24/compare.png"), //
 		Evaluate(24, "icons/24x24/evaluate_schedule.png"), //
 		Fork(24, "icons/24x24/fork.png"), //
+		Hub_24(24, "icons/24x24/hub.png"), //
 		Pin_24(24, "icons/24x24/pin.png"), //
 		Play(24, "icons/24x24/optimise.png"), //
 		Risk(24, "icons/24x24/risk.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
+		Scenario_24(24, "icons/24x24/scenario.png"), //
+		Table_24(24, "icons/24x24/table.png"), //
 		Today(24, "icons/24x24/today.png"), //
 		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
