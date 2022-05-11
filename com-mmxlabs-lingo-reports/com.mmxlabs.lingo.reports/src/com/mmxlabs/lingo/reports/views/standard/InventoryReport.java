@@ -1487,8 +1487,9 @@ public class InventoryReport extends ViewPart {
 		for (Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
 			int vol = e.getValue().netVolumeIn;
 			Map<BaseLegalEntity, Integer> currentAllocation = new HashMap<>();
+			final double totalRE = relativeEntitlements.stream().mapToDouble(Pair::getSecond).sum();
 			for (Pair<BaseLegalEntity, Double> entitlement : relativeEntitlements) {
-				currentAllocation.put(entityEntityMap.get(entitlement.getFirst()), ((Double) (vol * entitlement.getSecond())).intValue());
+				currentAllocation.put(entityEntityMap.get(entitlement.getFirst()), ((Double) (vol * entitlement.getSecond()/totalRE)).intValue());
 			}
 			ret.put(e.getKey(), currentAllocation);
 		}
