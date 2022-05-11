@@ -123,10 +123,10 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No Entity entitlement data present.").make(ctx, statuses);
 			} else {
 				final double sumReferenceEntitlement = mullSubprofile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
-				if (Math.abs(sumReferenceEntitlement - 1.0) > EPSILON_DOUBLE) {
+				if (Math.abs(sumReferenceEntitlement - 1.0) > EPSILON_DOUBLE && Math.abs(sumReferenceEntitlement - 100.0) > EPSILON_DOUBLE) {
 					factory.copyName() //
 							.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE) //
-							.withMessage("Sum of reference entitlements should equal 1.") //
+							.withMessage("Sum of reference entitlements should equal 1 or 100.") //
 							.make(ctx, statuses);
 				}
 				validateDuplicateEntities(factory, mullSubprofile, ctx, statuses);

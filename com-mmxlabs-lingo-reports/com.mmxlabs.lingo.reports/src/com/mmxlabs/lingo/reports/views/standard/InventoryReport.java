@@ -1890,11 +1890,12 @@ public class InventoryReport extends ViewPart {
 			final Map<BaseLegalEntity, Integer> currMap = new HashMap<>();
 			monthlyRE.put(ym, currMap);
 			final YearMonth ymm = ym;
+			final double totalRE = sProfile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
 			sProfile.getEntityTable().stream().forEach(row -> {
 				if (ymm.equals(adpStart)) {
-					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() * thisTotalProd));
+					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement()/totalRE * thisTotalProd));
 				} else {
-					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() * thisTotalProd));
+					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement()/totalRE * thisTotalProd));
 				}
 			});
 		}
