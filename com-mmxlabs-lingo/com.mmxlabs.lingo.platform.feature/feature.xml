@@ -626,7 +626,7 @@
          id="org.eclipse.equinox.p2.touchpoint.natives"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.4.250.202205091329"
          unpack="false"/>
 
    <plugin

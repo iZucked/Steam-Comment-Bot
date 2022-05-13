@@ -1,0 +1,6 @@
+autoEnabled=true
+eclipse.preferences.version=1
+idePrefixKey=src/com/mmxlabs/models/lng/adp
+projectKey=com.mmxlabs.lingo.master\:com.mmxlabs.lingo.master.parent
+serverId=sonar.mmxlabs.com
+sqPrefixKey=com-mmxlabs-models-lng/com.mmxlabs.models.lng.adp.editor/src/com/mmxlabs/models/lng/adp/mull/profile
