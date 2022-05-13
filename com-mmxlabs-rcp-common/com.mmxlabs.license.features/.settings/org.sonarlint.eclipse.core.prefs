@@ -1,7 +1,6 @@
 autoEnabled=true
 eclipse.preferences.version=1
-fileExclusions=GLOB\:src/com/mmxlabs/models/lng/cargo/provider/*.java
 idePrefixKey=
 projectKey=com.mmxlabs.lingo.master\:com.mmxlabs.lingo.master.parent
 serverId=sonar.mmxlabs.com
-sqPrefixKey=com-mmxlabs-models-lng/com.mmxlabs.models.lng.cargo.edit
+sqPrefixKey=com-mmxlabs-rcp-common/com.mmxlabs.license.features
