@@ -162,7 +162,6 @@ public class CargoEconsReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 
-//		createImage("icons/Pinned.gif");
 		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
 		deltaImage = CommonImages.getImage(IconPaths.Delta, IconMode.Enabled);
 		sigmaImage = CommonImages.getImage(IconPaths.Sigma, IconMode.Enabled);
