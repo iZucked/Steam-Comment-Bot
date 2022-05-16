@@ -45,9 +45,7 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof MullEntityRow) {
-			final MullEntityRow mullEntityRow = (MullEntityRow) target;
-
+		if (target instanceof final MullEntityRow mullEntityRow) {
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withTypedName("ADP profile", typedName) //
 					.withTag(ValidationConstants.TAG_ADP);
