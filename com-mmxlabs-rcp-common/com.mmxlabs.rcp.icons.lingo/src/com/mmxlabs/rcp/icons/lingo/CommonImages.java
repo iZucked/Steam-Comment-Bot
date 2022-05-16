@@ -85,6 +85,7 @@ public final class CommonImages {
 		Play_16(16, "icons/16x16/optimise.png"), //
 		Plus(16, "icons/16x16/plus.png"), //
 		Plusplus(16, "icons/16x16/plusplus.png"), //
+		PNLDetails(16, "icons/16x16/pnl_details.png"), //
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
 		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
