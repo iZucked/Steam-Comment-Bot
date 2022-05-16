@@ -65,6 +65,7 @@ public class WorkbenchChangeProcessor {
 		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/16/econs");
 		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView", "icons:/16/lateness");
 		setElementIcon(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", "icons:/16/cloudplay");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "icons:/16/PNLDetails");
 
 		// Change to new part ID
 		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView",
