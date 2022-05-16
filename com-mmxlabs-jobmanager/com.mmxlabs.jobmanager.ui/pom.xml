@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
 		<groupId>com.mmxlabs.jobmanager</groupId>
-		<version>5.4.3-SNAPSHOT</version>
+		<version>5.5.1.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.jobmanager.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
