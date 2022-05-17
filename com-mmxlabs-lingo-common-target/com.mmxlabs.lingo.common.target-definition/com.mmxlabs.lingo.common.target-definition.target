@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="80">
+<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="81">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-p2-patched/1.0.0/mmxlabs-p2-patched-1.0.0-p2-repo.zip-unzip/"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
@@ -15,7 +11,7 @@
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.22-202111241800/org.eclipse.updates-R-4.22-202111241800.zip-unzip/"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.22-202111241800/org.eclipse.updates-R-4.22-202111241800.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
@@ -40,7 +36,7 @@
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
 <unit id="javax.activation" version="1.1.0.v201211130549"/>
 <unit id="javax.servlet" version="3.0.0.v201112011016"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
@@ -85,30 +81,30 @@
 	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20211213173813/orbit-buildrepo-R20211213173813.zip-unzip/"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20211213173813/orbit-buildrepo-R20211213173813.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/nebula/widgets/2.5.0/widgets-2.5.0.zip-unzip/"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/nebula/widgets/2.5.0/widgets-2.5.0.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.7.RELEASE/com.mmxlabs.models.datetime.p2-2.1.7.RELEASE.zip-unzip"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.7.RELEASE/com.mmxlabs.models.datetime.p2-2.1.7.RELEASE.zip-unzip"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.google.ortools.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v3/com.google.ortools.p2-7.5.7466.jdk11v3.zip-unzip"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v3/com.google.ortools.p2-7.5.7466.jdk11v3.zip-unzip"/>
 </location>
 	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 		<repository location="https://download.eclipse.org/swtchart/releases/0.12.0/repository/"/>
 		<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/swtbot/swtbot/3.1.0/swtbot-3.1.0.zip-unzip/"/>
+		<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/swtbot/swtbot/3.1.0/swtbot-3.1.0.zip-unzip/"/>
 		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.1.0.202106041005"/>
 		<unit id="org.eclipse.swtbot.feature.group" version="3.1.0.202106041005"/>
 		<unit id="org.eclipse.swtbot.junit5.feature.group" version="3.1.0.202106041005"/>
@@ -124,27 +120,27 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>30.1.1-jre</version>
-				<type>jar</type>
-			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>failureaccess</artifactId>
 				<version>1.0.1</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>30.1.1-jre</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
+				<artifactId>jackson-annotations</artifactId>
 				<version>2.12.5</version>
 				<type>jar</type>
 			</dependency>
@@ -156,13 +152,13 @@
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
+				<artifactId>jackson-databind</artifactId>
 				<version>2.12.5</version>
 				<type>jar</type>
 			</dependency>
 			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-jsr310</artifactId>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-csv</artifactId>
 				<version>2.12.5</version>
 				<type>jar</type>
 			</dependency>
@@ -173,14 +169,14 @@
 				<type>jar</type>
 			</dependency>
 			<dependency>
-				<groupId>com.fasterxml.jackson.dataformat</groupId>
-				<artifactId>jackson-dataformat-csv</artifactId>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
 				<version>2.12.5</version>
 				<type>jar</type>
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>com.googlecode.json-simple</groupId>
@@ -190,8 +186,20 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy-agent</artifactId>
+				<version>1.9.9</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>1.9.9</version>
+				<type>jar</type>
+			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
@@ -204,28 +212,10 @@
 				<version>3.2</version>
 				<type>jar</type>
 			</dependency>
-			<dependency>
-				<groupId>net.bytebuddy</groupId>
-				<artifactId>byte-buddy</artifactId>
-				<version>1.9.9</version>
-				<type>jar</type>
-			</dependency>
-			<dependency>
-				<groupId>net.bytebuddy</groupId>
-				<artifactId>byte-buddy-agent</artifactId>
-				<version>1.9.9</version>
-				<type>jar</type>
-			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
-			<dependency>
-				<groupId>org.ops4j</groupId>
-				<artifactId>peaberry</artifactId>
-				<version>1.3</version>
-				<type>jar</type>
-			</dependency>
 			<dependency>
 				<groupId>org.ops4j.peaberry.extensions</groupId>
 				<artifactId>peaberry.activation</artifactId>
@@ -238,9 +228,15 @@
 				<version>1.3</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>org.ops4j</groupId>
+				<artifactId>peaberry</artifactId>
+				<version>1.3</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -250,7 +246,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>commons-io</groupId>
@@ -260,7 +256,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -270,7 +266,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -280,7 +276,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>com.sun.mail</groupId>
@@ -296,7 +292,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
@@ -375,4 +371,8 @@
 		</dependencies>
 	</location>
 </locations>
+	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JDK 17.0.2 2022a"/>
+	<environment>
+		<arch>x86_64</arch>
+	</environment>
 </target>
