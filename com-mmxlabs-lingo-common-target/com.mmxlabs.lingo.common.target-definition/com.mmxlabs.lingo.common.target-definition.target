@@ -3,6 +3,10 @@
 <target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="81">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
+<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-p2-patched/1.0.0/mmxlabs-p2-patched-1.0.0-p2-repo.zip-unzip/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
