@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +15,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -40,19 +38,22 @@ import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudJobManager;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService.IUpdateListener;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.ResultStatus;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.SandboxScenario;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.JobRegistry;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.PieChartRenderer;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -63,23 +64,19 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.ui.IProgressProvider.IProgressChanged;
+import com.mmxlabs.scenario.service.ui.IProgressProvider.RunType;
 
 public class CloudManagerView extends ViewPart {
 
 	private static final Logger log = LoggerFactory.getLogger(CloudManagerView.class);
 
-	//
-	// /**
-	// * The ID of the view as specified by the extension.
-	// */
-	// public static final String ID = "com.mmxlabs.jobcontroller.views.JobManager";
-	//
 	private GridTableViewer viewer;
 	private Action packAction;
 	// private Action stopAction;
 	private Action removeAction;
 
-	private IUpdateListener listener;
+	private IProgressChanged listener;
 
 	private Image imgError;
 
@@ -99,18 +96,26 @@ public class CloudManagerView extends ViewPart {
 			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
 			tvc0.getColumn().setText("Name");
 			tvc0.getColumn().setWidth(200);
-			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getOriginalName));
+			tvc0.setLabelProvider(createTaskLP(t -> t.job.getScenarioName(), t -> {
+				IconMode mode = t.taskStatus.isRunning() ? IconMode.Enabled : IconMode.Disabled;
+				if (t.runType == RunType.Local) {
+					return CommonImages.getImage(IconPaths.Play_16, mode);
+				} else if (t.runType == RunType.Cloud) {
+					return CommonImages.getImage(IconPaths.Cloud_16, mode);
+				}
+				return null;
+			}));
 			GridViewerHelper.configureLookAndFeel(tvc0);
 		}
 		{
 			final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
 			tvc3.getColumn().setText("Status");
 			tvc3.getColumn().setWidth(60);
-			tvc3.setLabelProvider(createLP(rec -> {
-				final ResultStatus status = rec.getStatus();
+			tvc3.setLabelProvider(createTaskLP(t -> {
+				final TaskStatus status = t.taskStatus;
 				if (status != null) {
 					if (status.isRunning()) {
-						return String.format("%.0f%%", rec.getStatus().getProgress());
+						return String.format("%.0f%%", status.getProgress() * 100.0);
 					}
 					if (status.isFailed()) {
 						return status.getReason();
@@ -118,7 +123,7 @@ public class CloudManagerView extends ViewPart {
 					String msg = status.getStatus();
 					// Mapping to a more user friendly string
 					if ("complete".equals(msg)) {
-						if (rec.isComplete()) {
+						if (status.isComplete()) {
 							return "Done";
 						} else {
 							return "Importing result";
@@ -128,13 +133,13 @@ public class CloudManagerView extends ViewPart {
 				}
 				return null;
 			}, rec -> {
-				final ResultStatus status = rec.getStatus();
+				final TaskStatus status = rec.taskStatus;
 				if (status != null) {
 					if (status.isSubmitted()) {
 						return PieChartRenderer.renderPie(0.0);
 					}
 					if (status.isRunning()) {
-						return PieChartRenderer.renderPie(rec.getStatus().getProgress() / 100.0);
+						return PieChartRenderer.renderPie(status.getProgress());
 					}
 					if (status.isFailed()) {
 						return imgError;
@@ -148,93 +153,100 @@ public class CloudManagerView extends ViewPart {
 			final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
 			tvc1.getColumn().setText("Started");
 			tvc1.getColumn().setWidth(60);
-			tvc1.setLabelProvider(createLP(rec -> {
-				if (LocalDate.now().equals(LocalDate.ofInstant(rec.getCreationDate(), ZoneId.systemDefault()))) {
-					return rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+			tvc1.setLabelProvider(createTaskLP(rec -> {
+				if (LocalDate.now().equals(LocalDate.ofInstant(rec.job.getCreationDate(), ZoneId.systemDefault()))) {
+					return rec.job.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
 				}
 
-				return rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MMM"));
+				return rec.job.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MMM"));
 			}));
 			GridViewerHelper.configureLookAndFeel(tvc1);
 		}
-		// {
-		// final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
-		// tvc0.getColumn().setText("Job ID");
-		// tvc0.getColumn().setWidth(200);
-		// tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getJobid));
-		// GridViewerHelper.configureLookAndFeel(tvc0);
-		// }
+
 		{
 			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
 			tvc0.getColumn().setText("Type");
 			tvc0.getColumn().setWidth(200);
-			tvc0.setLabelProvider(createLP(r -> {
-				String lbl = r.getType();
+			tvc0.setLabelProvider(createTaskLP(r -> {
+				String lbl = r.job.getType();
 				if (lbl != null) {
-					switch (lbl) {
-					case "OPTIMISATION" -> lbl = "Optimisation";
-					case "OPTIONISER" -> lbl = "Optioniser";
-					case "SANDBOX" -> lbl = "Sandbox";
-					}
+					lbl = JobRegistry.INSTANCE.getDisplayName(lbl);
 				}
-				if (r.getSubType() != null) {
-					lbl = lbl + ": " + r.getSubType();
+				if (r.job.getSubType() != null) {
+					lbl = lbl + ": " + r.job.getSubType();
 				}
 				return lbl;
 			}));
 			GridViewerHelper.configureLookAndFeel(tvc0);
 		}
 
-		if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
-			{
-				final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
-				tvc3.getColumn().setText("Local Runtime");
-				tvc3.getColumn().setHeaderTooltip("Runtime in seconds");
-				tvc3.getColumn().setWidth(60);
-				tvc3.setLabelProvider(createLP(rec -> {
-					final ResultStatus status = rec.getStatus();
-					if (status != null) {
-						return String.format("%,d", rec.getLocalRuntime() / 1000);
-					}
-					return null;
-				}));
-				GridViewerHelper.configureLookAndFeel(tvc3);
-			}
-			{
-				final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
-				tvc3.getColumn().setText("Cloud Runtime");
-				tvc3.getColumn().setHeaderTooltip("Runtime in seconds from time submitted to reported complete");
-				tvc3.getColumn().setWidth(60);
-				tvc3.setLabelProvider(createLP(rec -> {
-					final ResultStatus status = rec.getStatus();
-					if (status != null) {
-						return String.format("%,d", rec.getCloudRuntime() / 1000);
-					}
-					return null;
-				}));
-				GridViewerHelper.configureLookAndFeel(tvc3);
-			}
-		}
+		// if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
+		// {
+		// final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
+		// tvc3.getColumn().setText("Local Runtime");
+		// tvc3.getColumn().setHeaderTooltip("Runtime in seconds");
+		// tvc3.getColumn().setWidth(60);
+		// tvc3.setLabelProvider(createLP(rec -> {
+		// final ResultStatus status = rec.getStatus();
+		// if (status != null) {
+		// return String.format("%,d", rec.getLocalRuntime() / 1000);
+		// }
+		// return null;
+		// }));
+		// GridViewerHelper.configureLookAndFeel(tvc3);
+		// }
+		// {
+		// final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
+		// tvc3.getColumn().setText("Cloud Runtime");
+		// tvc3.getColumn().setHeaderTooltip("Runtime in seconds from time submitted to reported complete");
+		// tvc3.getColumn().setWidth(60);
+		// tvc3.setLabelProvider(createLP(rec -> {
+		// final ResultStatus status = rec.getStatus();
+		// if (status != null) {
+		// return String.format("%,d", rec.getCloudRuntime() / 1000);
+		// }
+		// return null;
+		// }));
+		// GridViewerHelper.configureLookAndFeel(tvc3);
+		// }
+		// }
 
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
 
-		viewer.setContentProvider(new ArrayContentProvider());
+		viewer.setContentProvider(new ArrayContentProvider() {
 
-		listener = (cRecord) -> {
-			if (cRecord != null) {
-				ViewerHelper.refresh(viewer, cRecord, false);
-			} else {
-				final List<CloudOptimisationDataResultRecord> content = new LinkedList<>(CloudOptimisationDataService.INSTANCE.getRecords());
-				// Sort newest first
-				Collections.sort(content, (a, b) -> b.getCreationDate().compareTo(a.getCreationDate()));
-				ViewerHelper.setInputThen(viewer, false, content, () -> updateActionEnablement(viewer.getSelection()));
+			public Object[] getElements(Object inputElement) {
+				List<Task> tasks = new LinkedList<>();
+				tasks.addAll(LocalJobManager.INSTANCE.getTasks());
+				tasks.addAll(CloudJobManager.INSTANCE.getTasks());
+
+				Collections.sort(tasks, (a, b) -> b.job.getCreationDate().compareTo(a.job.getCreationDate()));
+
+				return tasks.toArray();
+			};
+		});
+
+		listener = new IProgressChanged() {
+			@Override
+			public void changed(Object element) {
+				ViewerHelper.refresh(viewer, element, false);
+			}
+
+			@Override
+			public void listChanged() {
+				ViewerHelper.setInput(viewer, false, new Object());
 			}
 		};
-		CloudOptimisationDataService.INSTANCE.addListener(listener);
-		//
 
-		// viewer.setLabelProvider(new ITableLabelProviderImplementation());
+		// Trigger class loading
+		LocalJobManager.INSTANCE.getClass();
+		CloudJobManager.INSTANCE.getClass();
+		ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+			mgr.addChangedListener(listener);
+			return true;
+		});
+
 		// Create the help context id for the viewer's control
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
 
@@ -242,46 +254,43 @@ public class CloudManagerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 		//
-		viewer.addSelectionChangedListener(event -> {
+		viewer.addSelectionChangedListener(event -> updateActionEnablement(viewer.getStructuredSelection()));
 
-			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-
-			updateActionEnablement(selection);
-		});
-
-		listener.updated(null);
+		listener.listChanged();
 
 		viewer.addOpenListener(event -> {
 			if (event.getSelection() instanceof IStructuredSelection sel) {
 				if (sel.size() == 1) {
-					CloudOptimisationDataResultRecord cRecord = (CloudOptimisationDataResultRecord) sel.getFirstElement();
+					Task task = (Task) sel.getFirstElement();
+					if (task.taskStatus.isComplete()) {
+						// Look up the original scenario.
+						final ScenarioInstance instanceRef = task.job.getScenarioInstance();
 
-					// Look up the original scenario.
-					final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
+						if (instanceRef != null) {
 
-					if (instanceRef != null) {
-
-						final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef);
-						try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("DownloadTask:patchScenario")) {
-							final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(sdp);
-							if (cRecord.getComponentUUID() != null) {
-								for (OptionAnalysisModel sandbox : am.getOptionModels()) {
-									if (Objects.equals(cRecord.getComponentUUID(), sandbox.getUuid())) {
-										new SandboxScenario(instanceRef, sandbox).openAndShowResult();
-										break;
+							final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef);
+							if (mr != null) { // Null if scenario was deleted
+								try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("CloudManagerView:open")) {
+									final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(sdp);
+									if (task.job.getComponentUUID() != null) {
+										for (OptionAnalysisModel sandbox : am.getOptionModels()) {
+											if (Objects.equals(task.job.getComponentUUID(), sandbox.getUuid())) {
+												new SandboxScenario(instanceRef, sandbox).openAndShowResult();
+												break;
+											}
+										}
+									} else {
+										for (AbstractSolutionSet solution : am.getOptimisations()) {
+											if (Objects.equals(task.job.getResultUUID(), solution.getUuid())) {
+												new AnalyticsSolution(instanceRef, solution, solution.getName()).open();
+												break;
+											}
+										}
 									}
-								}
-							} else {
-								for (AbstractSolutionSet solution : am.getOptimisations()) {
-									if (Objects.equals(cRecord.getResultUUID(), solution.getUuid())) {
-										new AnalyticsSolution(instanceRef, solution, solution.getName()).open();
-										break;
-									}
+
 								}
 							}
-
 						}
-
 					}
 				}
 			}
@@ -291,12 +300,7 @@ public class CloudManagerView extends ViewPart {
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				CloudManagerView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(CloudManagerView.this::fillContextMenu);
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -323,24 +327,28 @@ public class CloudManagerView extends ViewPart {
 			if (viewer.getSelection() instanceof IStructuredSelection ss) {
 				StringBuilder sb = new StringBuilder();
 				for (var obj : ss) {
-					if (obj instanceof CloudOptimisationDataResultRecord r) {
-						sb.append(r.getJobid());
-						if (ss.size() > 1) {
-							sb.append("\n");
+					if (obj instanceof Task r) {
+						if (r.remoteJobID != null) {
+
+							sb.append(r.remoteJobID);
+							if (ss.size() > 1) {
+								sb.append("\n");
+							}
 						}
 					}
 				}
-
-				// Create a new clipboard instance
-				final Display display = Display.getDefault();
-				final Clipboard cb = new Clipboard(display);
-				try {
-					// Create the text transfer and set the contents
-					final TextTransfer textTransfer = TextTransfer.getInstance();
-					cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
-				} finally {
-					// Clean up our local resources - system clipboard now has the data
-					cb.dispose();
+				if (!sb.isEmpty()) {
+					// Create a new clipboard instance
+					final Display display = Display.getDefault();
+					final Clipboard cb = new Clipboard(display);
+					try {
+						// Create the text transfer and set the contents
+						final TextTransfer textTransfer = TextTransfer.getInstance();
+						cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
+					} finally {
+						// Clean up our local resources - system clipboard now has the data
+						cb.dispose();
+					}
 				}
 			}
 		}));
@@ -374,17 +382,21 @@ public class CloudManagerView extends ViewPart {
 			public void run() {
 				final ISelection selection = viewer.getSelection();
 				if (selection instanceof final IStructuredSelection ss) {
-					final List<String> jobs = new LinkedList<>();
 					for (final Object obj : ss) {
-						if (obj instanceof final CloudOptimisationDataResultRecord cRecord) {
-							jobs.add(cRecord.getJobid());
-						}
-					}
-					if (!jobs.isEmpty()) {
-						try {
-							CloudOptimisationDataService.INSTANCE.delete(jobs);
-						} catch (IOException e) {
-							log.info("failed to cancel remote job");
+						if (obj instanceof final Task task) {
+							if (task.runType == RunType.Local) {
+								if (task.taskStatus.isComplete() || task.taskStatus.isFailed()) {
+									LocalJobManager.INSTANCE.remove(task);
+								} else {
+									LocalJobManager.INSTANCE.cancel(task);
+								}
+							} else {
+								if (task.taskStatus.isComplete() || task.taskStatus.isFailed()) {
+									CloudJobManager.INSTANCE.remove(task);
+								} else {
+									CloudJobManager.INSTANCE.cancel(task);
+								}
+							}
 						}
 					}
 				}
@@ -392,7 +404,7 @@ public class CloudManagerView extends ViewPart {
 			}
 		};
 		removeAction.setText("Remove");
-		removeAction.setToolTipText("Abort and remove Job from view");
+		removeAction.setToolTipText("Cancel or remove task from view");
 		CommonImages.setImageDescriptors(removeAction, IconPaths.Delete);
 	}
 
@@ -427,17 +439,19 @@ public class CloudManagerView extends ViewPart {
 
 	@Override
 	public void dispose() {
-
-		CloudOptimisationDataService.INSTANCE.removeListener(listener);
+		ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+			mgr.removeChangedListener(listener);
+			return true;
+		});
 		super.dispose();
 	}
 
-	private CellLabelProvider createLP(final Function<CloudOptimisationDataResultRecord, String> func) {
+	private CellLabelProvider createTaskLP(final Function<Task, String> func) {
 		return new CellLabelProvider() {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
-				if (element instanceof final CloudOptimisationDataResultRecord rec) {
+				if (element instanceof final Task rec) {
 					cell.setText(func.apply(rec));
 				} else {
 					cell.setText(null);
@@ -447,12 +461,12 @@ public class CloudManagerView extends ViewPart {
 		};
 	}
 
-	private CellLabelProvider createLP(final Function<CloudOptimisationDataResultRecord, String> func, final Function<CloudOptimisationDataResultRecord, Image> imgFunc) {
+	private CellLabelProvider createTaskLP(final Function<Task, String> func, final Function<Task, Image> imgFunc) {
 		return new CellLabelProvider() {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
-				if (element instanceof final CloudOptimisationDataResultRecord rec) {
+				if (element instanceof final Task rec) {
 					cell.setText(func.apply(rec));
 					cell.setImage(imgFunc.apply(rec));
 				} else {

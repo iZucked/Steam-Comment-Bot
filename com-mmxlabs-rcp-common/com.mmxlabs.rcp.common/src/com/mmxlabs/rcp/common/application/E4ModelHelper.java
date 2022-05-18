@@ -44,16 +44,20 @@ public class E4ModelHelper {
 				}
 			}
 			for (final MUIElement element : elementsToRemove) {
-				MPlaceholder placeholder = modelService.findPlaceholderFor(window, element);
-				while (placeholder != null) {
-					final MElementContainer<MUIElement> parent = placeholder.getParent();
-					parent.getChildren().remove(placeholder);
-					if (parent.getSelectedElement() == placeholder) {
-						parent.setSelectedElement(null);
-					}
 
-					placeholder = modelService.findPlaceholderFor(window, element);
+				final List<MPlaceholder> placeholders = modelService.findElements(application, null, MPlaceholder.class, null);
+				for (var placeholder : placeholders) {
+
+					if (placeholder.getRef() == element) {
+						final MElementContainer<MUIElement> parent = placeholder.getParent();
+						parent.getChildren().remove(placeholder);
+						if (parent.getSelectedElement() == placeholder) {
+							parent.setSelectedElement(null);
+						}
+						placeholder.setRef(null);
+					}
 				}
+
 				// See http://www.eclipse.org/forums/index.php/t/757211/
 
 				// API not yet defined

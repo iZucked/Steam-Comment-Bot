@@ -9,5 +9,4 @@
    <implementation class="com.mmxlabs.models.lng.transformer.ui.deleteservice.DeletedScenarioServiceListener"/>
   
    <reference bind="bind" cardinality="1..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbind"/>
-   <reference bind="bind" cardinality="1..1" interface="com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager" name="IEclipseJobManager" policy="static" unbind="unbind"/>
 </scr:component>

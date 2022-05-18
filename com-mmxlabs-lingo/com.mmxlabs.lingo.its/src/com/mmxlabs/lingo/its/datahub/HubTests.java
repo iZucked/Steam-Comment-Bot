@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -173,6 +174,9 @@ public class HubTests {
 
 	@Test
 	public void changingUrlWithoutApplyingDisablesLoginButton() throws InterruptedException {
+		
+		logger.info("Test executing on display thread? " + (Thread.currentThread() == Display.getDefault().getThread()));
+		
 		openDatahubPreferencePage();
 		// type backspace character to trigger change
 		Matcher<Widget> urlTextField = withText("&URL");

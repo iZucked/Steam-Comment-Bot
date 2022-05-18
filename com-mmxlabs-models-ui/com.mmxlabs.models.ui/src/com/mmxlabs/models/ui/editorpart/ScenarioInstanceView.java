@@ -72,23 +72,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	private boolean locked;
 
 	private final IScenarioLockListener lockListener = (pModelRecord, writeLocked) -> RunnerHelper
-			.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && (scenarioInstance.isReadonly() || scenarioInstance.isCloudLocked()))));
+			.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && (scenarioInstance.isReadonly()))));
 
 	private IPartListener partListener;
 
-	private final SafeAdapterImpl cloudLockedAdapter = new SafeAdapterImpl() {
-
-		@Override
-		protected void safeNotifyChanged(final Notification msg) {
-			if (msg.isTouch()) {
-				return;
-			}
-			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
-				RunnerHelper.runNowOrAsync(() -> setLocked(locked));
-			}
-
-		}
-	};
 
 	protected void listenToScenarioSelection() {
 		partListener = new IPartListener() {
@@ -196,8 +183,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			this.scenarioDataProvider = new ModelRecordScenarioDataProvider(this.modelRecord);
 			this.scenarioDataProvider.getModelReference().getLock().addLockListener(lockListener);
 
-			scenarioInstance.eAdapters().add(cloudLockedAdapter);
-
 			scenarioInstanceStatusProvider = createScenarioValidationProvider(instance);
 			setLocked(this.scenarioDataProvider.getModelReference().isLocked() || instance.isReadonly() );
 
@@ -240,10 +225,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			scenarioDataProvider = null;
 		}
 
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(cloudLockedAdapter);
-		}
-
 		scenarioInstance = null;
 		modelRecord = null;
 	}
@@ -254,7 +235,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public boolean isLocked() {
-		return locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
+		return locked;
 	}
 
 	public void setLocked(final boolean locked) {

@@ -191,8 +191,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			}
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				updateLocked();
-			} else if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
-				updateLocked();
 			} else if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 				RunnerHelper.asyncExec(() -> setPartName(msg.getNewStringValue()));
 			}
@@ -238,7 +236,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 				String title = getEditorInput().getName();
 
-				final boolean newLock = scenarioInstance2.isReadonly() || scenarioInstance2.isCloudLocked() || modelReference.isLocked();
+				final boolean newLock = scenarioInstance2.isReadonly() || modelReference.isLocked();
 				if (scenarioInstance2.isReadonly()) {
 					title += " (read-only)";
 				} else {

@@ -31,7 +31,7 @@
     </view>
     <view
           category="com.mmxlabs.lngdataserver.views.dataserver"
-          icon="icons/cview16/ihigh_obj.gif"
+          icon="icons:/icons/16x16/nominations.png"
           class="com.mmxlabs.models.lng.nominations.ui.views.NominationsView"
           id="com.mmxlabs.models.lng.nominations.editor.NominationsView"
           name="Nominations"

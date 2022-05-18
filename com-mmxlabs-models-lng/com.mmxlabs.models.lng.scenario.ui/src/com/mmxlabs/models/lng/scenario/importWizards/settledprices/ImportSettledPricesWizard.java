@@ -13,11 +13,11 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,9 +77,9 @@ public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+			final IRunnableWithProgress operation = new IRunnableWithProgress() {
 				@Override
-				protected void execute(final IProgressMonitor progressMonitor) {
+				public void run(final IProgressMonitor progressMonitor) {
 					doImport(scenarios, importFilename, csvSeparator, decimalSeparator, progressMonitor);
 				}
 			};
@@ -123,7 +123,7 @@ public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly() || instance.isCloudLocked()) {
+				if (instance.isReadonly()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}

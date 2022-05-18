@@ -45,12 +45,14 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+
 
 public class OptimisationTestRunner {
 	private OptimisationTestRunner() {
@@ -90,7 +92,11 @@ public class OptimisationTestRunner {
 					OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver);
 				};
 
-				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+				if (scenarioFile.toString().endsWith(".lingo")) {
+					ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+				} else if (scenarioFile.toString().endsWith(".zip")) {
+					CSVImporter.runFromCSVZipFile(scenarioFile, action);
+				}
 			}));
 
 			// Extra repeatability based test cases
@@ -126,14 +132,7 @@ public class OptimisationTestRunner {
 							final ScenarioFitnessState existingState = fitnessesFile.exists() ? objectMapper.readValue(fitnessesFile, ScenarioFitnessState.class) : null;
 							final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
 							final BiConsumer<ScenarioFitnessState, String> saver = (fitnesses, comparison) -> {
-								try {
-									new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(fitnessesFile, fitnesses);
 
-									Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
-
-								} catch (final Exception e) {
-									Assertions.fail(e.getMessage(), e);
-								}
 							};
 
 							OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver);
@@ -152,7 +151,7 @@ public class OptimisationTestRunner {
 					}));
 				}
 
-				// Anonymisation, optimisation and de-anonymisation should yield the same result.
+				// Test the anonymised, re-optimised, de-anonymised solution is also the same
 				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final ObjectMapper objectMapper = new ObjectMapper();
@@ -166,17 +165,9 @@ public class OptimisationTestRunner {
 						final ScenarioFitnessState existingState = fitnessesFile.exists() ? objectMapper.readValue(fitnessesFile, ScenarioFitnessState.class) : null;
 						final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
 						final BiConsumer<ScenarioFitnessState, String> saver = (fitnesses, comparison) -> {
-							try {
-								new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(fitnessesFile, fitnesses);
 
-								Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
-
-							} catch (final Exception e) {
-								Assertions.fail(e.getMessage(), e);
-							}
 						};
 
-						// Test the anonymised, re-optimised, de-anonymised solution is also the same
 						final File anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "test", ".amap").toFile();
 
 						try {
@@ -187,7 +178,7 @@ public class OptimisationTestRunner {
 							RunnerHelper.syncExecDisplayOptional(
 									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap).execute());
 
-							// Pre-pare de-anonymisation cmd
+							// Prepare de-anonymisation cmd
 							final Consumer<AbstractSolutionSet> preCompareAction = result -> RunnerHelper.syncExecDisplayOptional(
 									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap).execute());
 
@@ -213,8 +204,18 @@ public class OptimisationTestRunner {
 			for (final File f : listFiles) {
 				if (f.isDirectory()) {
 					final String name = f.getName();
-					final File scenario = new File(f, "scenario.lingo");
-					if (scenario.exists()) {
+					File scenario = null;
+
+					final File scenarioLingo = new File(f, "scenario.lingo");
+					if (scenarioLingo.exists()) {
+						scenario = scenarioLingo;
+					} else {
+						final File scenarioZip = new File(f, "scenario.zip");
+						if (scenarioZip.exists()) {
+							scenario = scenarioZip;
+						}
+					}
+					if (scenario != null) {
 						final List<DynamicNode> cases = new LinkedList<>();
 
 						for (final File params : f.listFiles()) {
@@ -276,12 +277,7 @@ public class OptimisationTestRunner {
 
 						final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
 						final Consumer<String> saver = comparison -> {
-							try {
-								Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
 
-							} catch (final Exception e) {
-								Assertions.fail(e.getMessage(), e);
-							}
 						};
 
 						final File anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "test", ".amap").toFile();
@@ -294,7 +290,7 @@ public class OptimisationTestRunner {
 							RunnerHelper.syncExecDisplayOptional(
 									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap).execute());
 
-							// Pre-pare de-anonymisation cmd
+							// Prepare de-anonymisation cmd
 							final Consumer<AbstractSolutionSet> preCompareAction = result -> RunnerHelper.syncExecDisplayOptional(
 									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap).execute());
 
@@ -361,8 +357,12 @@ public class OptimisationTestRunner {
 		runner.withScenario(sdp);
 
 		// Run the optimisation
-		final AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
-
+		final AbstractSolutionSet solutionSet = runner.run(new NullProgressMonitor());
+		Assertions.assertNotNull(solutionSet);
+		
+		// Always force base in the solution rather than scenario state
+		solutionSet.setUseScenarioBase(false);
+		
 		if (preCompareAction != null) {
 			preCompareAction.accept(solutionSet);
 		}
@@ -457,3 +457,5 @@ public class OptimisationTestRunner {
 		return ss;
 	}
 }
+
+	
