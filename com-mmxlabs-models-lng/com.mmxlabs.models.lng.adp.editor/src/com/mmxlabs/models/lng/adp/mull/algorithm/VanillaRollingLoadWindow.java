@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.mull.algorithm;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,17 +15,24 @@ import java.util.Map.Entry;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
-
+import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.ILoadSequence;
+import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.SequentialLoadSequence;
+import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.SimpleLoadSequence;
 
 @NonNullByDefault
 public class VanillaRollingLoadWindow extends RollingLoadWindow {
 
-	protected final LocalTime loadTime;
-	protected final List<LoadSequence> loadSequences = new LinkedList<>();
+	protected final LocalTime ratTime;
+	protected final int preLoadSetupTime;
+	// protected final LocalTime loadTime;
+	protected final List<ILoadSequence> loadSequences = new LinkedList<>();
 
-	public VanillaRollingLoadWindow(InventoryGlobalState inventoryGlobalState, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries, int maxExistingLoadDuration, int initialTankVolume, final LocalTime loadTime) {
-		super(inventoryGlobalState, entries, maxExistingLoadDuration, initialTankVolume);
-		this.loadTime = loadTime;
+	public VanillaRollingLoadWindow(InventoryGlobalState inventoryGlobalState, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries, int maxExistingLoadDuration, int initialTankVolume,
+			final LocalTime ratTime, final int preLoadSetupTime) {
+		super(inventoryGlobalState, entries, maxExistingLoadDuration + preLoadSetupTime, initialTankVolume);
+		// this.loadTime = loadTime;
+		this.ratTime = ratTime;
+		this.preLoadSetupTime = preLoadSetupTime;
 	}
 
 	@Override
@@ -47,9 +55,9 @@ public class VanillaRollingLoadWindow extends RollingLoadWindow {
 		endWindowTankMin = transferredEvent.minVolume;
 		this.startDateTime = frontWindow.getFirst().getDateTime();
 
-		final Iterator<LoadSequence> loadSequenceIter = loadSequences.iterator();
+		final Iterator<ILoadSequence> loadSequenceIter = loadSequences.iterator();
 		while (loadSequenceIter.hasNext()) {
-			final LoadSequence loadSequence = loadSequenceIter.next();
+			final ILoadSequence loadSequence = loadSequenceIter.next();
 			final int volumeDrop = loadSequence.stepForward();
 			beforeWindowTankVolume -= volumeDrop;
 			endWindowVolume -= volumeDrop;
@@ -63,74 +71,84 @@ public class VanillaRollingLoadWindow extends RollingLoadWindow {
 	public boolean isLoading() {
 		// vanilla can consider simultaneous loads
 		return false;
-//		return !loadSequences.stream().allMatch(LoadSequence::isComplete);
+		// return !loadSequences.stream().allMatch(LoadSequence::isComplete);
 	}
+
 	@Override
 	public boolean canLift(int allocationDrop) {
 		final LocalTime localLoadTime = LocalTime.of(this.startDateTime.getHour(), 0);
-		if (!localLoadTime.equals(this.loadTime)) {
+		if (!localLoadTime.equals(this.ratTime)) {
 			return false;
 		}
 		if (this.endWindowVolume >= allocationDrop + this.endWindowTankMin) {
 			int localTankVolume = this.beforeWindowTankVolume;
 			final int localTailLoad = allocationDrop / this.loadDuration;
 			final int localHeadLoad = localTailLoad + (allocationDrop % this.loadDuration);
-			final Iterator<InventoryDateTimeEvent> iter = this.frontWindow.iterator();
-			final List<Iterator<Integer>> remainingLoadSequenceIters = new LinkedList<>();
-			loadSequences.stream().map(LoadSequence::createRemainingLoadIterator).forEach(remainingLoadSequenceIters::add);
 
-			InventoryDateTimeEvent currentEvent = iter.next();
-			int currentVolumeChange = currentEvent.getNetVolumeIn() - localHeadLoad;
+			// Create grouped sequence since it's convenient
+			final ILoadSequence localLoadSequence;
 			{
-				final Iterator<Iterator<Integer>> iterIter = remainingLoadSequenceIters.iterator();
-				while (iterIter.hasNext()) {
-					final Iterator<Integer> nextIter = iterIter.next();
-					if (nextIter.hasNext()) {
-						final int nextVol = nextIter.next();
-						currentVolumeChange -= nextVol;
-						if (!nextIter.hasNext()) {
-							iterIter.remove();
-						}
-					} else {
-						iterIter.remove();
+				final List<ILoadSequence> localSequences = new ArrayList<>();
+				localSequences.add(new SimpleLoadSequence(0, preLoadSetupTime));
+				localSequences.add(new SimpleLoadSequence(localHeadLoad, 1));
+				localSequences.add(new SimpleLoadSequence(localTailLoad, this.loadDuration - 1));
+
+				localLoadSequence = new SequentialLoadSequence(localSequences);
+			}
+			boolean usingBackIter = false;
+			Iterator<InventoryDateTimeEvent> iter = this.frontWindow.iterator();
+			final List<Iterator<Integer>> remainingLoadSequenceIters = new LinkedList<>();
+			loadSequences.stream().map(ILoadSequence::createRemainingLoadIterator).forEach(remainingLoadSequenceIters::add);
+			remainingLoadSequenceIters.add(localLoadSequence.createRemainingLoadIterator());
+
+			InventoryDateTimeEvent currentEvent;
+			for (int i = 0; i < preLoadSetupTime + loadDuration; ++i) {
+				if (!iter.hasNext()) {
+					if (!usingBackIter) {
+						iter = this.backWindow.iterator();
+						usingBackIter = true;
+					}
+					if (!iter.hasNext()) {
+						throw new IllegalStateException("Ran out of events");
 					}
 				}
-			}
-
-			localTankVolume += currentVolumeChange;
-			if (localTankVolume < currentEvent.minVolume) {
-				return false;
-			}
-			for (int i = 1; i < this.loadDuration; ++i) {
 				currentEvent = iter.next();
-				currentVolumeChange = currentEvent.getNetVolumeIn() - localTailLoad;
 
-				{
-					final Iterator<Iterator<Integer>> iterIter = remainingLoadSequenceIters.iterator();
-					while (iterIter.hasNext()) {
-						final Iterator<Integer> nextIter = iterIter.next();
-						final int nextVol = nextIter.next();
-						currentVolumeChange -= nextVol;
-						if (!nextIter.hasNext()) {
-							iterIter.remove();
-						}
-
-					}
-				}
+				int volumeLifted = remainingLoadSequenceIters.stream() //
+						.mapToInt(Iterator::next) //
+						.sum();
+				int currentVolumeChange = currentEvent.getNetVolumeIn() - volumeLifted;
 
 				localTankVolume += currentVolumeChange;
-
 				if (localTankVolume < currentEvent.minVolume) {
 					return false;
+				}
+				// Clear any empty iterators
+				final Iterator<Iterator<Integer>> iterRemainingLoadSequenceIters = remainingLoadSequenceIters.iterator();
+				while (iterRemainingLoadSequenceIters.hasNext()) {
+					if (!iterRemainingLoadSequenceIters.next().hasNext()) {
+						iterRemainingLoadSequenceIters.remove();
+					}
 				}
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void startLoad(final int allocationDrop, final int duration) {
-		this.loadSequences.add(new LoadSequence(allocationDrop, duration));
+		final ILoadSequence newLoadSequence;
+		{
+			final int localTailLoad = allocationDrop / this.loadDuration;
+			final int localHeadLoad = localTailLoad + (allocationDrop % this.loadDuration);
+			final List<ILoadSequence> localSequences = new ArrayList<>();
+			localSequences.add(new SimpleLoadSequence(0, preLoadSetupTime));
+			localSequences.add(new SimpleLoadSequence(localHeadLoad, 1));
+			localSequences.add(new SimpleLoadSequence(localTailLoad, this.loadDuration - 1));
+			
+			newLoadSequence = new SequentialLoadSequence(localSequences);
+		}
+		this.loadSequences.add(newLoadSequence);
 	}
 }

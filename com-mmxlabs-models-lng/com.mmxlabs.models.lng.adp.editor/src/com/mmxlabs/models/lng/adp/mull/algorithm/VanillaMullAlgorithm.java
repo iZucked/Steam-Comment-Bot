@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.adp.mull.algorithm;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -18,6 +20,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 @NonNullByDefault
 public class VanillaMullAlgorithm extends MullAlgorithm {
 
+	private final Map<InventoryLocalState, IMudContainer> mullCache = new HashMap<>();
+
 	public VanillaMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates) {
 		super(globalStatesContainer, algorithmState, inventoryLocalStates);
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
@@ -26,7 +30,22 @@ public class VanillaMullAlgorithm extends MullAlgorithm {
 					allocationTracker.setVesselSharing(false);
 				}
 			}
+			mullCache.put(inventoryLocalState, inventoryLocalState.getMullContainer().calculateMull(globalStatesContainer.getAdpGlobalState().getStartDateTime()));
 		}
+	}
+
+	@Override
+	protected void runFixedCargoHandlingTasks(LocalDateTime currentDateTime, InventoryLocalState inventoryLocalState) {
+		// Hacky override of this method
+		if (currentDateTime.getHour() == 0) {
+			final IMudContainer mudContainer = inventoryLocalState.getMullContainer().calculateMull(currentDateTime);
+			mullCache.put(inventoryLocalState, mudContainer);
+		}
+	}
+
+	@Override
+	protected IMudContainer calculateMull(InventoryLocalState inventoryLocalState, LocalDateTime currentDateTime) {
+		return mullCache.get(inventoryLocalState);
 	}
 
 	@Override

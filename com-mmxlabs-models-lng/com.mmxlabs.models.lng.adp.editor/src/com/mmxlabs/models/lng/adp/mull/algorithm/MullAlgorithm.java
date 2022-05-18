@@ -56,7 +56,7 @@ public abstract class MullAlgorithm implements IMullAlgorithm {
 				runFixedCargoHandlingTasks(currentDateTime, inventoryLocalState);
 
 				if (!inventoryLocalState.getRollingLoadWindow().isLoading()) {
-					final IMudContainer mudContainer = inventoryLocalState.getMullContainer().calculateMull(currentDateTime);
+					final IMudContainer mudContainer = calculateMull(inventoryLocalState, currentDateTime);
 					final IAllocationTracker mudAllocationTracker = mudContainer.calculateMudAllocationTracker();
 					final Pair<@Nullable Vessel, Integer> pair = getVesselAndAllocationDrop(currentDateTime, mudAllocationTracker, inventoryLocalState);
 					final int allocationDrop = pair.getSecond();
@@ -118,6 +118,10 @@ public abstract class MullAlgorithm implements IMullAlgorithm {
 			currentAllocationDrop = globalStatesContainer.mullGlobalState.getCargoVolume();
 		}
 		return Pair.of(assignedVessel, currentAllocationDrop);
+	}
+
+	protected IMudContainer calculateMull(final InventoryLocalState inventoryLocalState, final LocalDateTime currentDateTime) {
+		return inventoryLocalState.getMullContainer().calculateMull(currentDateTime);
 	}
 
 	protected void runPostAllocationDropTasks(final IMullContainer mullContainer, final IMudContainer mudContainer, final IAllocationTracker allocationTracker) {
