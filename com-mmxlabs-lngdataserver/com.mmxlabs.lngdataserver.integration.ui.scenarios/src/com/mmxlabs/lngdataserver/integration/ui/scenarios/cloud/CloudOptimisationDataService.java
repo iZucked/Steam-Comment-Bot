@@ -12,16 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -30,28 +26,13 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.IProgressListener;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobDescriptor;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
 import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
-import com.mmxlabs.scenario.service.model.ScenarioFragment;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.IProgressProvider;
 
-public class CloudOptimisationDataService implements IProgressProvider {
+public class CloudOptimisationDataService {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
 
@@ -61,33 +42,10 @@ public class CloudOptimisationDataService implements IProgressProvider {
 	private CloudOptimisationDataServiceClient client;
 	private CloudOptimisationDataUpdater updater;
 
-	private final ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
-
 	private CloudOptimisationDataService() {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION)) {
 			start();
 		}
-	}
-
-	public Collection<CloudOptimisationDataResultRecord> getRecords() {
-		return updater == null ? Collections.emptyList() : updater.getRecords();
-	}
-
-	private void update(final CloudOptimisationDataResultRecord cRecord) {
-		fireListeners(cRecord);
-	}
-
-	private void fireListeners(@Nullable final CloudOptimisationDataResultRecord cRecord) {
-		try {
-			listeners.forEach(l -> l.updated(cRecord));
-
-			final ScenarioInstance instanceRef = cRecord == null ? null : cRecord.getScenarioInstance();
-
-			RunnerHelper.asyncExec(() -> progressListeners.forEach(p -> p.changed(instanceRef)));
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
 	}
 
 	public String uploadData(final File dataFile, //
@@ -113,13 +71,11 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		return response;
 	}
 
-	public synchronized boolean addRecord(final CloudOptimisationDataResultRecord cRecord) {
+	public synchronized boolean addRecord(Task task, final CloudOptimisationDataResultRecord cRecord) {
 		updater.pause();
 		try {
 			// Mark as available upstream
 			cRecord.setStatus(ResultStatus.submitted());
-			cRecord.setRemote(true);
-
 			updater.addNewlySubmittedOptimisationRecord(cRecord);
 			return true;
 		} finally {
@@ -156,7 +112,7 @@ public class CloudOptimisationDataService implements IProgressProvider {
 						// Initial model load
 						new Thread(() -> {
 
-							updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudOptimisationDataService.this::update);
+							updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudJobManager.INSTANCE);
 							updater.start();
 						}).start();
 					});
@@ -174,26 +130,11 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		}
 	}
 
-	public interface IUpdateListener {
-		void updated(@Nullable CloudOptimisationDataResultRecord cRecord);
-	}
-
-	public void addListener(final IUpdateListener l) {
-		if (!listeners.contains(l)) {
-			listeners.add(l);
-		}
-	}
-
-	public void removeListener(final IUpdateListener l) {
-		listeners.remove(l);
-	}
-
-	public void delete(final Collection<String> jobIdsToDelete) {
+	public void delete(final Collection<String> jobIdsToDelete) throws IOException {
 		updater.deleteDownloaded(jobIdsToDelete);
-	}
-
-	public void setLocalRuntime(final String jobId, final long runtime) {
-		updater.setLocalRuntime(jobId, runtime);
+		for (String jobid : jobIdsToDelete) {
+			client.abort(jobid);
+		}
 	}
 
 	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -212,77 +153,7 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		}
 	}
 
-
-	@Override
-	public @Nullable Pair<Double, RunType> getProgress(final ScenarioInstance scenarioInstance, final ScenarioFragment fragment) {
-
-		for (final var cRecord : getRecords()) {
-			if (Objects.equals(cRecord.getUuid(), scenarioInstance.getUuid())) {
-				if (cRecord.isActive()) {
-					if (fragment == null) {
-						return Pair.of(cRecord.getStatus().getProgress() / 100.0, RunType.Cloud);
-					} else if (fragment.getFragment() instanceof final OptionAnalysisModel sandbox) {
-						if (Objects.equals(sandbox.getUuid(), cRecord.getComponentUUID())) {
-							return Pair.of(cRecord.getStatus().getProgress() / 100.0, RunType.Cloud);
-						}
-					}
-				}
-			}
-		}
-		// TODO; move into separate service and iterate over all services rather than
-		// expecting one.
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		if (modelRecord != null) {
-			return ServiceHelper.withService(IEclipseJobManager.class, jobManager -> {
-
-				try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("CloudOptimisationDataService")) {
-					if (modelReference != null) {
-						final Object object = modelReference.getInstance();
-						if (object instanceof MMXRootObject) {
-							final String uuid = scenarioInstance.getUuid();
-
-							final IJobDescriptor job = jobManager.findJobForResource(uuid);
-							if (job != null) {
-								boolean returnProgress = false;
-								if (fragment == null) {
-									returnProgress = true;
-								} else if (fragment.getFragment() instanceof final OptionAnalysisModel sandbox) {
-									if (job instanceof final LNGSandboxJobDescriptor desc) {
-										if (sandbox == desc.getExtraValidationTarget()) {
-											returnProgress = true;
-										}
-									}
-								}
-								if (returnProgress) {
-									final IJobControl control = jobManager.getControlForJob(job);
-									if (control != null) {
-										if (control.getJobState() == EJobState.RUNNING) {
-											final double p = control.getProgress();
-											return Pair.of(p / 100.0, RunType.Local);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				return null;
-			});
-		}
-		return null;
-
+	public void delete(Task task) {
+		updater.deleteDownloaded(task);
 	}
-
-	private final ConcurrentLinkedQueue<IProgressChanged> progressListeners = new ConcurrentLinkedQueue<IProgressProvider.IProgressChanged>();
-
-	@Override
-	public void removeChangedListener(final IProgressChanged listener) {
-		progressListeners.remove(listener);
-	}
-
-	@Override
-	public void addChangedListener(final IProgressChanged listener) {
-		progressListeners.add(listener);
-	}
-
 }

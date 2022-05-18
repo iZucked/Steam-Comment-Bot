@@ -170,54 +170,6 @@
                tooltip="Save selected optimisation">
          </command>
       </menuContribution>
-      
-      
-   </extension>
-   
-         <extension
-            point="org.eclipse.core.runtime.adapters">
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.LNGRunAllSimilarityJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.AbstractLNGJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.analytics.LNGSlotInsertionJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.actionablesets.CreateActionableSetPlanJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>         
-         <factory
-               adaptableType="com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobDescriptor"
-               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
-            </adapter>
-         </factory>         
       </extension>
    
       <extension

@@ -84,7 +84,7 @@
       </view>
       <view
             name="Lateness"
-            icon="icons:/icons/legacy/16x16/exec_flow_view.gif"
+            icon="icons:/icons/16x16/lateness.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.LatenessReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView">
@@ -136,7 +136,7 @@
       </view>
       <view
             name="PnL Details"
-            icon="icons:/icons/legacy/16x16/exec_flow_view.gif"
+            icon="icons:/icons/16x16/pnl_details.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport">
@@ -144,7 +144,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReport"
-            icon="icons:/icons/legacy/16x16/exec_statistic_view.gif"
+            icon="icons:/icons/16x16/econs.png"
             id="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"
             name="Econs"
             restorable="true">
@@ -902,6 +902,10 @@
       <PluginXMLEnablement
             feature="fitness-view"
             plugin.xml="fitness.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="price-sensitivity"
+            plugin.xml="pricesensitivity.plugin.xml">
       </PluginXMLEnablement>
    </extension>
    <extension

@@ -15,9 +15,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
@@ -26,6 +26,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer;
 
 public class LNGScenarioRunner {
 
@@ -84,7 +86,14 @@ public class LNGScenarioRunner {
 		final Map<String, Object> extraAnnotations = result.getBestSolution().getSecond();
 		final Schedule[] v = new Schedule[1];
 		RunnerHelper.syncExecDisplayOptional(() -> {
-			v[0] = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
+			final Injector injector = scenarioToOptimiserBridge.getInjector();
+			final ILazyExpressionManagerContainer container = injector.getInstance(ILazyExpressionManagerContainer.class);
+			try (ILazyExpressionManager manager = container.getExpressionManager()) {
+				manager.initialiseAllPricingData();
+				v[0] = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
+			} catch (Exception e) {
+				
+			}
 		});
 		schedule = v[0];
 		// need to undo this.chainRunner..

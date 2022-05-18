@@ -100,6 +100,9 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String USE_CASE = "useCase";
 	protected static final String PARAMS_FILE = "params";
 
+	protected static final String JOB_TYPE = "jobtype";
+
+	
 	protected String clientCode;
 	protected String machineInfo;
 	protected String buildVersion;
@@ -477,6 +480,9 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
 		options.addOption(JSON, true, "JSON file containing parameters for algorithm being run");
+		
+		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
+
 
 		// create the command line parser
 

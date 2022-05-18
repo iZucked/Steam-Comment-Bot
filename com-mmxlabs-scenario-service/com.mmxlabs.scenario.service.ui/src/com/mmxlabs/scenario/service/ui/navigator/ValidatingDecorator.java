@@ -103,13 +103,6 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			if (modelRecord != null) {
 
-				if (scenarioInstance.isCloudLocked()) {
-
-					// This trumps the other icons
-//					decoration.addOverlay(CommonImages.getImageDescriptor(IconPaths.CloudPlay_16, IconMode.Enabled), IDecoration.TOP_LEFT);
-//					return;
-				}
-
 				if (modelRecord.getValidationStatusSeverity() == IStatus.ERROR) {
 					decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/error.gif"), IDecoration.BOTTOM_RIGHT);
 				} else if (modelRecord.getValidationStatusSeverity() == IStatus.WARNING) {

@@ -1,19 +1,22 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -36,9 +39,8 @@ import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class OptioniserJobRunner extends AbstractJobRunner {
 
+	public static final String JOB_TYPE = "optioniser";
 	private OptioniserSettings optioniserSettings;
-	private IScenarioDataProvider sdp;
-
 	private HeadlessOptioniserJSON loggingData;
 
 	@Override
@@ -48,31 +50,12 @@ public class OptioniserJobRunner extends AbstractJobRunner {
 	}
 
 	@Override
-	public void withParams(final File file) throws IOException {
-
-		try (FileInputStream is = new FileInputStream(file)) {
-			final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-			withParams(text);
-		}
-	}
-
-	@Override
-	public void withParams(final InputStream is) throws IOException {
-		final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-		withParams(text);
-	}
-
-	@Override
-	public void withScenario(final IScenarioDataProvider sdp) {
-		this.sdp = sdp;
-	}
-
-	@Override
-	public SlotInsertionOptions run(final int threadsAvailable, final IProgressMonitor monitor) {
+	public @Nullable SlotInsertionOptions run(final int threadsAvailable, final IProgressMonitor monitor) {
 		if (optioniserSettings == null) {
 			throw new IllegalStateException("Optioniser parameters have not been set");
 		}
-		if (sdp == null) {
+		IScenarioDataProvider pSDP = sdp;
+		if (pSDP == null) {
 			throw new IllegalStateException("Scenario has not been set");
 		}
 
@@ -87,7 +70,7 @@ public class OptioniserJobRunner extends AbstractJobRunner {
 			loggingData = json;
 
 		}
-		return doJobRun(sdp, optioniserSettings, threadsAvailable, SubMonitor.convert(monitor));
+		return doJobRun(pSDP, optioniserSettings, threadsAvailable, SubMonitor.convert(monitor));
 	}
 
 	@Override
@@ -132,13 +115,17 @@ public class OptioniserJobRunner extends AbstractJobRunner {
 
 		final UserSettings userSettings = optioniserSettings.userSettings;
 
-		final List<Slot<?>> targetSlots = new LinkedList<>();
-		final List<VesselEvent> targetEvents = new LinkedList<>();
+		final Collection<Slot<?>> targetSlots = new LinkedHashSet<>();
+		final Collection<VesselEvent> targetEvents = new LinkedHashSet<>();
 
 		final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(sdp));
 		optioniserSettings.loadIds.forEach(id -> targetSlots.add(cargoFinder.findLoadSlot(id)));
 		optioniserSettings.dischargeIds.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlot(id)));
 		optioniserSettings.eventsIds.forEach(id -> targetEvents.add(cargoFinder.findVesselEvent(id)));
+
+		optioniserSettings.loadUUIDs.forEach(id -> targetSlots.add(cargoFinder.findLoadSlotByUUID(id)));
+		optioniserSettings.dischargeUUIDs.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlotByUUID(id)));
+		optioniserSettings.eventsUUIDs.forEach(id -> targetEvents.add(cargoFinder.findVesselEventByUUID(id)));
 
 		int threadCount = threadsAvailable;
 
@@ -154,7 +141,7 @@ public class OptioniserJobRunner extends AbstractJobRunner {
 
 		final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
 				sdp, sdp.getEditingDomain(), userSettings, //
-				targetSlots, targetEvents, //
+				new LinkedList<>(targetSlots), new LinkedList<>(targetEvents), //
 				null, // Optional extra data provider.
 				null, // Alternative initial solution provider
 				builder -> {

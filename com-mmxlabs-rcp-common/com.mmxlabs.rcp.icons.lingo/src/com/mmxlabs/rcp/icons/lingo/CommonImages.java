@@ -65,6 +65,8 @@ public final class CommonImages {
 		Cut(16, "icons/16x16/cut.png"), //
 		Date(16, "icons/16x16/date.png"), //
 		Delete(16, "icons/16x16/delete.png"), //
+		Delta(16, "icons/16x16/delta.png"), //
+		Econs(16, "icons/16x16/econs.png"), //
 		Edit(16, "icons/16x16/edit.png"), //
 		ExpandAll(16, "icons/16x16/expand_all.png"), //
 		Filter(16, "icons/16x16/filter.png"), //
@@ -73,7 +75,9 @@ public final class CommonImages {
 		Highlighter(16, "icons/16x16/highlighter.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
 		Label(16, "icons/16x16/label.png"), //
+		Lateness(16, "icons/16x16/lateness.png"), //
 		Local(16, "icons/16x16/local.png"), //
+		Nominations(16, "icons/16x16/nominations.png"), //
 		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
 		Pack(16, "icons/16x16/pack.png"), //
 		Paste(16, "icons/16x16/paste.png"), //
@@ -81,10 +85,13 @@ public final class CommonImages {
 		Play_16(16, "icons/16x16/optimise.png"), //
 		Plus(16, "icons/16x16/plus.png"), //
 		Plusplus(16, "icons/16x16/plusplus.png"), //
+		PNLDetails(16, "icons/16x16/pnl_details.png"), //
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
+		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
+		Sigma(16, "icons/16x16/sigma.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
 		ZoomIn(16, "icons/16x16/zoom_in.png"), //
 		ZoomOut(16, "icons/16x16/zoom_out.png"), //
@@ -97,11 +104,18 @@ public final class CommonImages {
 		// 24x24
 		Cloud_24(24, "icons/24x24/cloud.png"), //
 		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
+		Compare_24(24, "icons/24x24/compare.png"), //
 		Evaluate(24, "icons/24x24/evaluate_schedule.png"), //
 		Fork(24, "icons/24x24/fork.png"), //
+		Hub_24(24, "icons/24x24/hub.png"), //
+		Pin_24(24, "icons/24x24/pin.png"), //
 		Play(24, "icons/24x24/optimise.png"), //
+		Risk(24, "icons/24x24/risk.png"), //
 		Save(24, "icons/24x24/save.png"), //
 		Saveall(24, "icons/24x24/save_all.png"), //
+		Scenario_24(24, "icons/24x24/scenario.png"), //
+		Table_24(24, "icons/24x24/table.png"), //
+		Today(24, "icons/24x24/today.png"), //
 		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
 //		Resume(24,"icons/24x24/terminate.png", true), //

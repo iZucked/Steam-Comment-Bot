@@ -142,9 +142,6 @@ public final class ScenarioModelRecord extends ModelRecord {
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				setReadOnly(msg.getNewBooleanValue());
 			}
-			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
-				setExternalLock(msg.getNewBooleanValue());
-			}
 		};
 	};
 
@@ -159,7 +156,6 @@ public final class ScenarioModelRecord extends ModelRecord {
 			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
 			scenarioInstance.eAdapters().add(readOnlyAdapter);
 			setReadOnly(scenarioInstance.isReadonly());
-			setExternalLock(scenarioInstance.isCloudLocked());
 		}
 	}
 

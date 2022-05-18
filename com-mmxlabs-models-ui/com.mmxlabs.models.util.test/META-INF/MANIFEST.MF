@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Fragment-Host: com.mmxlabs.models.util
 Bundle-SymbolicName: com.mmxlabs.models.util.test;singleton:=true
-Bundle-Version: 5.3.9.qualifier
+Bundle-Version: 5.5.2.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.8.1",
  org.mockito.mockito-core;bundle-version="1.9.5",

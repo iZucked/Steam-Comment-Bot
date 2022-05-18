@@ -1141,13 +1141,22 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_ROW__OPTIONS = 4;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curve Options</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = 5;
+
+	/**
 	 * The number of structural features of the '<em>Partial Case Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_FEATURE_COUNT = 5;
+	int PARTIAL_CASE_ROW_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
@@ -1810,13 +1819,22 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Analysis Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -1890,6 +1908,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference.
@@ -3510,6 +3537,15 @@ s	 * <!-- end-user-doc -->
 	int VIABILITY_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3801,6 +3837,15 @@ s	 * <!-- end-user-doc -->
 	int MTM_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4083,6 +4128,15 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4321,6 +4375,526 @@ s	 * <!-- end-user-doc -->
 	int LOCAL_DATE_TIME_HOLDER_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl <em>Commodity Curve Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
+	 * @generated
+	 */
+	int COMMODITY_CURVE_OPTION = 65;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OPTION_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl <em>Commodity Curve Overlay</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
+	 * @generated
+	 */
+	int COMMODITY_CURVE_OVERLAY = 66;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Reference Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Alternative Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Curve Overlay</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl <em>Sensitivity Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
+	 * @generated
+	 */
+	int SENSITIVITY_MODEL = 67;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Sensitivity Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__SENSITIVITY_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Sensitivity Solution</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL__SENSITIVITY_SOLUTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Sensitivity Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivitySolutionSetImpl <em>Sensitivity Solution Set</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SensitivitySolutionSetImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
+	 * @generated
+	 */
+	int SENSITIVITY_SOLUTION_SET = 68;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__EXTENSIONS = ABSTRACT_SOLUTION_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__UUID = ABSTRACT_SOLUTION_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__NAME = ABSTRACT_SOLUTION_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Has Dual Mode Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS = ABSTRACT_SOLUTION_SET__HAS_DUAL_MODE_SOLUTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Portfolio Break Even Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE = ABSTRACT_SOLUTION_SET__PORTFOLIO_BREAK_EVEN_MODE;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__USER_SETTINGS = ABSTRACT_SOLUTION_SET__USER_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__EXTRA_SLOTS = ABSTRACT_SOLUTION_SET__EXTRA_SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Base Option</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__BASE_OPTION = ABSTRACT_SOLUTION_SET__BASE_OPTION;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__OPTIONS = ABSTRACT_SOLUTION_SET__OPTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES = ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES;
+
+	/**
+	 * The feature id for the '<em><b>Extra Charter In Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS = ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS;
+
+	/**
+	 * The feature id for the '<em><b>Use Scenario Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__USE_SCENARIO_BASE = ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE;
+
+	/**
+	 * The feature id for the '<em><b>Porfolio Pn LResult</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Pn LResults</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Sensitivity Solution Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SENSITIVITY_SOLUTION_SET_FEATURE_COUNT = ABSTRACT_SOLUTION_SET_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSensitivityResultImpl <em>Abstract Sensitivity Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.AbstractSensitivityResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
+	 * @generated
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT = 69;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Min Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__MIN_PN_L = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Max Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__MAX_PN_L = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Average Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__AVERAGE_PN_L = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Variance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT__VARIANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Sensitivity Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SENSITIVITY_RESULT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PortfolioSensitivityResultImpl <em>Portfolio Sensitivity Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.PortfolioSensitivityResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
+	 * @generated
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT = 70;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__EXTENSIONS = ABSTRACT_SENSITIVITY_RESULT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__UUID = ABSTRACT_SENSITIVITY_RESULT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Min Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__MIN_PN_L = ABSTRACT_SENSITIVITY_RESULT__MIN_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Max Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__MAX_PN_L = ABSTRACT_SENSITIVITY_RESULT__MAX_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Average Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__AVERAGE_PN_L = ABSTRACT_SENSITIVITY_RESULT__AVERAGE_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Variance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT__VARIANCE = ABSTRACT_SENSITIVITY_RESULT__VARIANCE;
+
+	/**
+	 * The number of structural features of the '<em>Portfolio Sensitivity Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTFOLIO_SENSITIVITY_RESULT_FEATURE_COUNT = ABSTRACT_SENSITIVITY_RESULT_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoPnLResultImpl <em>Cargo Pn LResult</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CargoPnLResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
+	 * @generated
+	 */
+	int CARGO_PN_LRESULT = 71;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__EXTENSIONS = ABSTRACT_SENSITIVITY_RESULT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__UUID = ABSTRACT_SENSITIVITY_RESULT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Min Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__MIN_PN_L = ABSTRACT_SENSITIVITY_RESULT__MIN_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Max Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__MAX_PN_L = ABSTRACT_SENSITIVITY_RESULT__MAX_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Average Pn L</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__AVERAGE_PN_L = ABSTRACT_SENSITIVITY_RESULT__AVERAGE_PN_L;
+
+	/**
+	 * The feature id for the '<em><b>Variance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__VARIANCE = ABSTRACT_SENSITIVITY_RESULT__VARIANCE;
+
+	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT__CARGO = ABSTRACT_SENSITIVITY_RESULT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Cargo Pn LResult</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_PN_LRESULT_FEATURE_COUNT = ABSTRACT_SENSITIVITY_RESULT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4328,7 +4902,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 65;
+	int VOLUME_MODE = 72;
 
 
 	/**
@@ -4339,7 +4913,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 66;
+	int SLOT_TYPE = 73;
 
 
 	/**
@@ -5206,6 +5780,17 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCaseRow_Options();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions <em>Commodity Curve Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Commodity Curve Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions()
+	 * @see #getPartialCaseRow()
+	 * @generated
+	 */
+	EReference getPartialCaseRow_CommodityCurveOptions();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions <em>Partial Case Row Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5654,6 +6239,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAbstractAnalysisModel_ShippingTemplates();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getCommodityCurves <em>Commodity Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Commodity Curves</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getCommodityCurves()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_CommodityCurves();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
@@ -7011,6 +7607,197 @@ s	 * <!-- end-user-doc -->
 	EAttribute getLocalDateTimeHolder_DateTime();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOption <em>Commodity Curve Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Commodity Curve Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOption
+	 * @generated
+	 */
+	EClass getCommodityCurveOption();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay <em>Commodity Curve Overlay</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Commodity Curve Overlay</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay
+	 * @generated
+	 */
+	EClass getCommodityCurveOverlay();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getReferenceCurve <em>Reference Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference Curve</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getReferenceCurve()
+	 * @see #getCommodityCurveOverlay()
+	 * @generated
+	 */
+	EReference getCommodityCurveOverlay_ReferenceCurve();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getAlternativeCurves <em>Alternative Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Alternative Curves</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getAlternativeCurves()
+	 * @see #getCommodityCurveOverlay()
+	 * @generated
+	 */
+	EReference getCommodityCurveOverlay_AlternativeCurves();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sensitivity Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel
+	 * @generated
+	 */
+	EClass getSensitivityModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivityModel <em>Sensitivity Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Sensitivity Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivityModel()
+	 * @see #getSensitivityModel()
+	 * @generated
+	 */
+	EReference getSensitivityModel_SensitivityModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivitySolution <em>Sensitivity Solution</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Sensitivity Solution</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivityModel#getSensitivitySolution()
+	 * @see #getSensitivityModel()
+	 * @generated
+	 */
+	EReference getSensitivityModel_SensitivitySolution();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet <em>Sensitivity Solution Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sensitivity Solution Set</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivitySolutionSet
+	 * @generated
+	 */
+	EClass getSensitivitySolutionSet();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet#getPorfolioPnLResult <em>Porfolio Pn LResult</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Porfolio Pn LResult</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivitySolutionSet#getPorfolioPnLResult()
+	 * @see #getSensitivitySolutionSet()
+	 * @generated
+	 */
+	EReference getSensitivitySolutionSet_PorfolioPnLResult();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SensitivitySolutionSet#getCargoPnLResults <em>Cargo Pn LResults</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cargo Pn LResults</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SensitivitySolutionSet#getCargoPnLResults()
+	 * @see #getSensitivitySolutionSet()
+	 * @generated
+	 */
+	EReference getSensitivitySolutionSet_CargoPnLResults();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult <em>Abstract Sensitivity Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Sensitivity Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult
+	 * @generated
+	 */
+	EClass getAbstractSensitivityResult();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getMinPnL <em>Min Pn L</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Pn L</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getMinPnL()
+	 * @see #getAbstractSensitivityResult()
+	 * @generated
+	 */
+	EAttribute getAbstractSensitivityResult_MinPnL();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getMaxPnL <em>Max Pn L</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Pn L</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getMaxPnL()
+	 * @see #getAbstractSensitivityResult()
+	 * @generated
+	 */
+	EAttribute getAbstractSensitivityResult_MaxPnL();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getAveragePnL <em>Average Pn L</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Average Pn L</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getAveragePnL()
+	 * @see #getAbstractSensitivityResult()
+	 * @generated
+	 */
+	EAttribute getAbstractSensitivityResult_AveragePnL();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getVariance <em>Variance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Variance</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSensitivityResult#getVariance()
+	 * @see #getAbstractSensitivityResult()
+	 * @generated
+	 */
+	EAttribute getAbstractSensitivityResult_Variance();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult <em>Portfolio Sensitivity Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Portfolio Sensitivity Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult
+	 * @generated
+	 */
+	EClass getPortfolioSensitivityResult();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CargoPnLResult <em>Cargo Pn LResult</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Cargo Pn LResult</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CargoPnLResult
+	 * @generated
+	 */
+	EClass getCargoPnLResult();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.CargoPnLResult#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CargoPnLResult#getCargo()
+	 * @see #getCargoPnLResult()
+	 * @generated
+	 */
+	EReference getCargoPnLResult_Cargo();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7921,6 +8708,14 @@ s	 * <!-- end-user-doc -->
 		EReference PARTIAL_CASE_ROW__OPTIONS = eINSTANCE.getPartialCaseRow_Options();
 
 		/**
+		 * The meta object literal for the '<em><b>Commodity Curve Options</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = eINSTANCE.getPartialCaseRow_CommodityCurveOptions();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8279,6 +9074,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = eINSTANCE.getAbstractAnalysisModel_ShippingTemplates();
+
+		/**
+		 * The meta object literal for the '<em><b>Commodity Curves</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES = eINSTANCE.getAbstractAnalysisModel_CommodityCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -9349,6 +10152,164 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute LOCAL_DATE_TIME_HOLDER__DATE_TIME = eINSTANCE.getLocalDateTimeHolder_DateTime();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl <em>Commodity Curve Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
+		 * @generated
+		 */
+		EClass COMMODITY_CURVE_OPTION = eINSTANCE.getCommodityCurveOption();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl <em>Commodity Curve Overlay</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
+		 * @generated
+		 */
+		EClass COMMODITY_CURVE_OVERLAY = eINSTANCE.getCommodityCurveOverlay();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE = eINSTANCE.getCommodityCurveOverlay_ReferenceCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Alternative Curves</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES = eINSTANCE.getCommodityCurveOverlay_AlternativeCurves();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl <em>Sensitivity Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SensitivityModelImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
+		 * @generated
+		 */
+		EClass SENSITIVITY_MODEL = eINSTANCE.getSensitivityModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Sensitivity Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SENSITIVITY_MODEL__SENSITIVITY_MODEL = eINSTANCE.getSensitivityModel_SensitivityModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Sensitivity Solution</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SENSITIVITY_MODEL__SENSITIVITY_SOLUTION = eINSTANCE.getSensitivityModel_SensitivitySolution();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SensitivitySolutionSetImpl <em>Sensitivity Solution Set</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SensitivitySolutionSetImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
+		 * @generated
+		 */
+		EClass SENSITIVITY_SOLUTION_SET = eINSTANCE.getSensitivitySolutionSet();
+
+		/**
+		 * The meta object literal for the '<em><b>Porfolio Pn LResult</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SENSITIVITY_SOLUTION_SET__PORFOLIO_PN_LRESULT = eINSTANCE.getSensitivitySolutionSet_PorfolioPnLResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Pn LResults</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SENSITIVITY_SOLUTION_SET__CARGO_PN_LRESULTS = eINSTANCE.getSensitivitySolutionSet_CargoPnLResults();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSensitivityResultImpl <em>Abstract Sensitivity Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.AbstractSensitivityResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
+		 * @generated
+		 */
+		EClass ABSTRACT_SENSITIVITY_RESULT = eINSTANCE.getAbstractSensitivityResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Pn L</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SENSITIVITY_RESULT__MIN_PN_L = eINSTANCE.getAbstractSensitivityResult_MinPnL();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Pn L</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SENSITIVITY_RESULT__MAX_PN_L = eINSTANCE.getAbstractSensitivityResult_MaxPnL();
+
+		/**
+		 * The meta object literal for the '<em><b>Average Pn L</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SENSITIVITY_RESULT__AVERAGE_PN_L = eINSTANCE.getAbstractSensitivityResult_AveragePnL();
+
+		/**
+		 * The meta object literal for the '<em><b>Variance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ABSTRACT_SENSITIVITY_RESULT__VARIANCE = eINSTANCE.getAbstractSensitivityResult_Variance();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PortfolioSensitivityResultImpl <em>Portfolio Sensitivity Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.PortfolioSensitivityResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
+		 * @generated
+		 */
+		EClass PORTFOLIO_SENSITIVITY_RESULT = eINSTANCE.getPortfolioSensitivityResult();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoPnLResultImpl <em>Cargo Pn LResult</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CargoPnLResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
+		 * @generated
+		 */
+		EClass CARGO_PN_LRESULT = eINSTANCE.getCargoPnLResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_PN_LRESULT__CARGO = eINSTANCE.getCargoPnLResult_Cargo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

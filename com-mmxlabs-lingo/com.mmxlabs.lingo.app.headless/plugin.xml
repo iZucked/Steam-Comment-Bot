@@ -7,7 +7,19 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
-
+  <extension
+         id="com.mmxlabs.lingo.app.headless.HeadlessCloudApplication"
+         name="Headless Cloud Runner"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="com.mmxlabs.lingo.app.headless.HeadlessCloudOptimiserApplication">
+         </run>
+      </application>
+   </extension>
    <extension
          id="com.mmxlabs.lingo.app.headless.HeadlessOptimiserApplication"
          name="Headless Scenario Runner"

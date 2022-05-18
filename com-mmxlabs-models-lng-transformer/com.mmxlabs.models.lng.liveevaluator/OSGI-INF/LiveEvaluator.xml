@@ -8,7 +8,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.models.lng.analytics.ui.liveeval.LiveEvaluatorServiceListener">
    <implementation class="com.mmxlabs.models.lng.analytics.ui.liveeval.internal.LiveEvaluatorServiceListener"/>
    <service>
-      <provide interface="com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaluatorService"/>
+      <provide interface="com.mmxlabs.scenario.service.model.manager.ILiveEvaluatorService"/>
    </service>
-   <reference bind="setScenarioInstanceEvaluator" cardinality="1..1" interface="com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator" name="IScenarioInstanceEvaluator" policy="static"/>
+   <reference bind="setScenarioInstanceEvaluator" cardinality="1..1" interface="com.mmxlabs.scenario.service.model.manager.IScenarioInstanceEvaluator" name="IScenarioInstanceEvaluator" policy="static"/>
 </scr:component>

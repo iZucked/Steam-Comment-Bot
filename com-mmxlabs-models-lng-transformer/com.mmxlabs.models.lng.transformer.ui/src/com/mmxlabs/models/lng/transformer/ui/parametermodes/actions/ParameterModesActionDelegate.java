@@ -43,17 +43,7 @@ public abstract class ParameterModesActionDelegate extends ActionDelegate implem
 	}
 
 	@Override
-	public void run(final IAction action) {
-		editAndRunCustomMode();
-	}
-
-	protected abstract void runLastMode();
-
-	protected abstract void runWithMode(String mode);
-
-	protected abstract void runCustomMode();
-
-	protected abstract void editAndRunCustomMode();
+	public abstract void run(final IAction action);
 
 	protected IParameterModesRegistry getParameterModesRegistry() {
 		final Bundle bundle = FrameworkUtil.getBundle(ParameterModesActionDelegate.class);

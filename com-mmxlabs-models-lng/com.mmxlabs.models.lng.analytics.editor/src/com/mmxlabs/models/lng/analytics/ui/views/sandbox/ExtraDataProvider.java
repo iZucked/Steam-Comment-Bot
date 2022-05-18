@@ -13,6 +13,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -30,6 +31,7 @@ public class ExtraDataProvider {
 	public final List<DischargeSlot> extraDischarges;
 	public final List<VesselEvent> extraVesselEvents;
 	public final List<SpotMarket> extraSpotCargoMarkets;
+	public final List<CommodityCurveOverlay> extraPriceCurves;
 
 	// TODO: These are coped from LNGScenarioTransformer.
 	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
@@ -39,6 +41,7 @@ public class ExtraDataProvider {
 	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
 	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
 	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
+	public static final String EXTRA_PRICE_CURVES = "extra_price_curves";
 
 	public ExtraDataProvider() {
 		this.extraVesselAvailabilities = new LinkedList<>();
@@ -48,10 +51,11 @@ public class ExtraDataProvider {
 		this.extraDischarges = new LinkedList<>();
 		this.extraVesselEvents = new LinkedList<>();
 		this.extraSpotCargoMarkets = new LinkedList<>();
+		this.extraPriceCurves = new LinkedList<>();
 	}
 
 	public ExtraDataProvider(List<VesselAvailability> newAvailabilities, List<CharterInMarket> newCharterInMarkets, List<CharterInMarketOverride> newCharterInMarketOverrides,
-			List<LoadSlot> extraLoads, List<DischargeSlot> extraDischarges, List<VesselEvent> extraVesselEvents, List<SpotMarket> extraSpotCargoMarkets) {
+			List<LoadSlot> extraLoads, List<DischargeSlot> extraDischarges, List<VesselEvent> extraVesselEvents, List<SpotMarket> extraSpotCargoMarkets, List<CommodityCurveOverlay> extraCommodityCurves) {
 		this.extraVesselAvailabilities = newAvailabilities;
 		this.extraCharterInMarkets = newCharterInMarkets;
 		this.extraCharterInMarketOverrides = newCharterInMarketOverrides;
@@ -59,7 +63,7 @@ public class ExtraDataProvider {
 		this.extraDischarges = extraDischarges;
 		this.extraVesselEvents = extraVesselEvents;
 		this.extraSpotCargoMarkets = extraSpotCargoMarkets;
-
+		this.extraPriceCurves = extraCommodityCurves;
 	}
 
 	public synchronized void merge(@Nullable AbstractSolutionSet solutionSet) {
@@ -98,6 +102,9 @@ public class ExtraDataProvider {
 		}
 		if (extraDataProvider.extraSpotCargoMarkets != null) {
 			extraSpotCargoMarkets.addAll(extraDataProvider.extraSpotCargoMarkets);
+		}
+		if (extraDataProvider.extraPriceCurves != null) {
+			extraPriceCurves.addAll(extraDataProvider.extraPriceCurves);
 		}
 	}
 
@@ -149,7 +156,13 @@ public class ExtraDataProvider {
 			private List<SpotMarket> provideSpotCargoMarkets() {
 				return extraSpotCargoMarkets;
 			}
-		};
+
+			@Provides
+			@Named(EXTRA_PRICE_CURVES)
+			private List<CommodityCurveOverlay> providePriceCurves() {
+				return extraPriceCurves;
+			}
+ 		};
 	}
 
 	public static com.google.inject.Module createDefaultModule() {

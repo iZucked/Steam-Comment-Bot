@@ -136,7 +136,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// Perform a binary search on sales price
 			// First find a valid interval
 			final int minPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(0.0);// Integer.MAX_VALUE;
-			final int maxPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(40.0);// Integer.MAX_VALUE;
+			final int maxPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(50.0);// Integer.MAX_VALUE;
 
 			boolean isPurchase = false;
 			Setter priceSetter = null;

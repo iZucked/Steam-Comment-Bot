@@ -36,7 +36,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -44,7 +43,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -816,7 +814,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void setLocked(final boolean locked) {
 
-		final boolean thisLocked = locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
+		final boolean thisLocked = locked;
 
 		// Disable while locked.
 		if (thisLocked) {
@@ -853,7 +851,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> superHandler.handleCommand(command, target, feature));
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> {
+						superHandler.handleCommand(command, target, feature);
+					});
 				}
 
 				@Override

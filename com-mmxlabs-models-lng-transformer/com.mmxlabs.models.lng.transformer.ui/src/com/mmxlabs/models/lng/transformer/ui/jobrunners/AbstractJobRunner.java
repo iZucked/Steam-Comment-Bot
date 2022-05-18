@@ -1,4 +1,14 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -10,12 +20,15 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.transformer.jobs.IJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @NonNullByDefault
 public abstract class AbstractJobRunner implements IJobRunner {
 
 	protected boolean enableLogging = false;
 	protected @Nullable Meta meta;
+
+	protected @Nullable IScenarioDataProvider sdp;
 
 	public static ObjectMapper createObjectMapper() {
 
@@ -34,4 +47,25 @@ public abstract class AbstractJobRunner implements IJobRunner {
 			this.meta = m;
 		}
 	}
+
+	@Override
+	public void withParams(final File file) throws IOException {
+
+		try (FileInputStream is = new FileInputStream(file)) {
+			final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+			withParams(text);
+		}
+	}
+
+	@Override
+	public void withParams(final InputStream is) throws IOException {
+		final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+		withParams(text);
+	}
+
+	@Override
+	public void withScenario(final IScenarioDataProvider sdp) {
+		this.sdp = sdp;
+	}
+
 }

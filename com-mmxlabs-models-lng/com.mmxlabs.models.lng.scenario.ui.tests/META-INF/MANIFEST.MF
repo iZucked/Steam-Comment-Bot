@@ -4,7 +4,7 @@ Bundle-Name: Scenario UI Tests
 Fragment-Host: com.mmxlabs.models.lng.scenario.ui
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.ui.tests
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.ui.tests
-Bundle-Version: 5.3.9.qualifier
+Bundle-Version: 5.5.2.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.mockito.mockito-core;bundle-version="2.24.0",
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.objenesis;bundle-version="2.6.0",
  org.aopalliance;bundle-version="1.0.0",
  com.google.guava.failureaccess;bundle-version="1.0.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: org.junit.jupiter.api;version="5.1.0",
  org.junit.jupiter.api.function;version="5.1.0"

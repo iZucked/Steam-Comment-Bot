@@ -1,4 +1,7 @@
 autoEnabled=true
 eclipse.preferences.version=1
-extraProperties=
 fileExclusions=GLOB\:src/com/mmxlabs/models/lng/cargo/impl/*.java\r\nGLOB\:src/com/mmxlabs/models/lng/cargo/*.java
+idePrefixKey=
+projectKey=com.mmxlabs.lingo.master\:com.mmxlabs.lingo.master.parent
+serverId=sonar.mmxlabs.com
+sqPrefixKey=com-mmxlabs-models-lng/com.mmxlabs.models.lng.cargo

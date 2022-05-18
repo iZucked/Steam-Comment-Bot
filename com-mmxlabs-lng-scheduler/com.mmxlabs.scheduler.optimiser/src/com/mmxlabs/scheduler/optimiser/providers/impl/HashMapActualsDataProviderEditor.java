@@ -145,7 +145,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.actualsPresent.put(slot, true);
 
 		this.arrivalTime.put(slot, arrivalTime);
-		this.arrivalTimeWindow.put(slot, new TimeWindow(arrivalTime, arrivalTime));
+		this.arrivalTimeWindow.put(slot, new TimeWindow(arrivalTime, arrivalTime + 1));
 		this.visitDuration.put(slot, visitDuration);
 		this.portCosts.put(slot, portCosts);
 		this.cargoCVValue.put(slot, cargoCV);
@@ -171,7 +171,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.actualsPresent.put(slot, true);
 
 		this.arrivalTime.put(slot, arrivalTime);
-		this.arrivalTimeWindow.put(slot, new TimeWindow(arrivalTime, arrivalTime));
+		this.arrivalTimeWindow.put(slot, new TimeWindow(arrivalTime, arrivalTime + 1));
 		this.visitDuration.put(slot, visitDuration);
 		this.portCosts.put(slot, portCosts);
 		this.cargoCVValue.put(slot, cargoCV);
@@ -223,7 +223,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 		this.returnPort.put(slot, returnPort);
 		this.returnTime.put(slot, returnTime);
-		this.returnTimeWindow.put(slot, new TimeWindow(returnTime, returnTime));
+		this.returnTimeWindow.put(slot, new TimeWindow(returnTime, returnTime + 1));
 		this.returnHeelInM3.put(slot, endHeelInM3);
 	}
 

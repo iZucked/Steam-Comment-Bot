@@ -79,4 +79,9 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		public static final IOp MUL = (a, b) -> a.doubleValue() * b.doubleValue();
 		public static final IOp PERCENT = (a, b) -> a.doubleValue() * b.doubleValue() / 100.0;
 	}
+
+	@Override
+	public boolean canEvaluate() {
+		return lhs.canEvaluate() && rhs.canEvaluate();
+	}
 }

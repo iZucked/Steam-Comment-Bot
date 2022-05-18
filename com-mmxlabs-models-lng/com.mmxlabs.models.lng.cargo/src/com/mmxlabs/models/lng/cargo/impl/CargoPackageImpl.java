@@ -4345,6 +4345,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			   "exportFormatString", "##0.###"
 		   });
 		addAnnotation
+		  (getPaperDeal_Quantity(),
+		   source,
+		   new String[] {
+			   "formatString", "###,###,###"
+		   });
+		addAnnotation
 		  (getPaperDeal_Year(),
 		   source,
 		   new String[] {

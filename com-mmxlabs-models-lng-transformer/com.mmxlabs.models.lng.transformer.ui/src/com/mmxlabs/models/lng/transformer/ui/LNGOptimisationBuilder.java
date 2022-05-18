@@ -346,7 +346,7 @@ public class LNGOptimisationBuilder {
 	public static void quickEvaluationWithUpdateSettings(final IScenarioDataProvider scenarioDataProvider) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(lngScenarioModel, true, null, false, false, null);
+		final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(lngScenarioModel, true, false, false, null);
 
 		if (p == null) {
 			return;
