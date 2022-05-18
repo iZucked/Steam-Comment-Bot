@@ -89,6 +89,9 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -124,6 +127,8 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	private Map<String, GridColumnGroup> gridColumnGroupsMap = new HashMap<>();
 
 	private Image pinImage = null;
+	private Image deltaImage = null;
+	private Image sigmaImage = null;
 
 	private boolean compareMode = true;
 	private boolean onlyDiffMode = false;
@@ -157,7 +162,9 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
-		pinImage = createImage("icons/Pinned.gif");
+		pinImage = CommonImages.getImage(IconPaths.Pin, IconMode.Enabled);
+		deltaImage = CommonImages.getImage(IconPaths.Delta, IconMode.Enabled);
+		sigmaImage = CommonImages.getImage(IconPaths.Sigma, IconMode.Enabled);
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -203,11 +210,6 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 
 	@PreDestroy
 	public void dispose() {
-		if (pinImage != null) {
-			pinImage.dispose();
-			pinImage = null;
-		}
-
 		if (selectedObjects != null) {
 			selectedObjects.clear();
 		}
@@ -778,8 +780,9 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
 
-					gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
-					gvc.getColumn().setText("𝚫");
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(deltaImage);
+					gvc.getColumn().setText("");
 					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 					gvc.getColumn().setWidth(100);
 				}
@@ -790,8 +793,9 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
 
-				gvc.getColumn().setHeaderRenderer(columnHeaderCenteredRenderer);
-				gvc.getColumn().setText("Σ");
+				gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+				gvc.getColumn().setImage(sigmaImage);
+				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 			} else if (selectedObject instanceof VesselEventVisit) {

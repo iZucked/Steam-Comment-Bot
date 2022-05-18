@@ -306,7 +306,7 @@ public final class LicenseChecker {
 					return instance;
 				} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
 					// Maybe better to catch some of these exception types and feedback to user?
-					log.error("failed to get license from user's mmxlabs folder: " + e.getMessage());
+//					log.debug("failed to get license from user's mmxlabs folder: " + e.getMessage());
 				}
 			}
 		}
@@ -335,7 +335,7 @@ public final class LicenseChecker {
 				}
 			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
 				// Maybe better to catch some of these exception types and feedback to user?
-				log.error("failed to get license from system property home: " + e.getMessage());
+//				log.debug("failed to get license from system property home: " + e.getMessage());
 			}
 		}
 		return null;
@@ -360,7 +360,7 @@ public final class LicenseChecker {
 					return instance;
 				}
 			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
-				log.error("failed to get license from eclipse home: " + e.getMessage());
+//				log.debug("failed to get license from eclipse home: " + e.getMessage());
 			}
 		}
 		return null;

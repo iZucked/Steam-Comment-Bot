@@ -54,15 +54,23 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/sandbox.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/scenario.png", "icons:/16/scenario");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
-
+		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif", "icons:/16/nominations");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.ui/icons/risk.png", "icons:/24/risk");
+		
+		
+		
 		mapIcons(application, iconMapping);
-
-		// Replace a specific view icon.
-		// setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/icons/16/econs");
+		
+		// Replace a specific view icon. 
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "icons:/16/econs");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView", "icons:/16/lateness");
+		setElementIcon(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", "icons:/16/cloudplay");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "icons:/16/PNLDetails");
 
 		// Change to new part ID
-		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView", p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));
-		
+		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView",
+				p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));
+
 		// Make sure the new name is picked up
 		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", p -> p.setLabel("Run Manager"));
 
@@ -74,18 +82,15 @@ public class WorkbenchChangeProcessor {
 		// platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
 		// platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
 
-	 
-
 		if (!LicenseFeatures.isPermitted("features:fitness-view")) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView", application, modelService);
 		}
 
-		 
 		// Only remove if not permitted.
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
 		}
-		 
+
 		// Remove Job Manager.
 		E4ModelHelper.removeViewPart("com.mmxlabs.jobcontroller.views.JobManager", application, modelService);
 
@@ -99,7 +104,7 @@ public class WorkbenchChangeProcessor {
 				itr.remove();
 			}
 		}
-		
+
 		// Remove views from the IDE plugin
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ResourceNavigator", application, modelService);

@@ -1,4 +1,7 @@
 autoEnabled=true
 eclipse.preferences.version=1
-extraProperties=
 fileExclusions=DIRECTORY\:src/com/mmxlabs/models/lng/schedule/impl\r\nDIRECTORY\:src/com/mmxlabs/models/lng/schedule
+idePrefixKey=src/com/mmxlabs/models/lng/schedule
+projectKey=com.mmxlabs.lingo.master\:com.mmxlabs.lingo.master.parent
+serverId=sonar.mmxlabs.com
+sqPrefixKey=com-mmxlabs-lng-scheduler/com.mmxlabs.scheduler.optimiser/src/com/mmxlabs/scheduler/optimiser/voyage

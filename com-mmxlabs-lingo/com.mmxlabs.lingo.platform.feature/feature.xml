@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="LiNGO Eclipse Platform Feature"
-      version="5.4.3.qualifier"
+      version="5.5.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
 
@@ -626,7 +626,7 @@
          id="org.eclipse.equinox.p2.touchpoint.natives"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.4.250.202205091329"
          unpack="false"/>
 
    <plugin

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.evaluate;
 
 import java.util.Collections;

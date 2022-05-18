@@ -21,13 +21,12 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.transformer.jobs.IJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.JobRegistry;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
@@ -40,7 +39,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV
  * 
  */
 
-public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericApplication {
+public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplication {
 
 	protected static final String INPUT_SCENARIO = "scenario";
 	protected static final String OUTPUT_SCENARIO = "outputScenario";
@@ -50,21 +49,35 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 	@Override
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
-			return dostart(createRunner());
-		} catch (Throwable t) {
+			return dostart();
+		} catch (final Throwable t) {
 			t.printStackTrace();
 			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 	}
 
-	protected abstract AbstractJobRunner createRunner();
+	protected AbstractJobRunner createRunner() {
+		return null;
+	}
 
-	public Object dostart(AbstractJobRunner runner) throws Exception {
+	public Object dostart() throws Exception {
 		// get the command line
 		readCommandLine();
 		setupBasicFields();
 		// check the license
 		doCheckLicense();
+
+		IJobRunner runner;
+
+		final String jobType = commandLine.getOptionValue(JOB_TYPE);
+		if (jobType == null) {
+			runner = createRunner();
+		} else {
+			runner = JobRegistry.INSTANCE.newRunner(jobType);
+		}
+		if (runner == null) {
+			throw new IllegalStateException("Unable to create job runner");
+		}
 
 		// log the user in and initialise related features
 		HeadlessUtils.initAccessControl();
@@ -93,41 +106,41 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 		//
 		final String outputLoggingFolder = commandLine.getOptionValue(OUTPUT_FOLDER);
 
-		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+		final ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
 		final String outputScenarioFileName = commandLine.getOptionValue(OUTPUT_SCENARIO);
 
 		// Get the root object
 		try {
-			KeyFileV2 keyfile = KeyFileLoader.getCloudOptimisationKeyFileV2();
-			CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
+			final KeyFileV2 keyfile = KeyFileLoader.getCloudOptimisationKeyFileV2();
+			final CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
 
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
 				runner.withScenario(scenarioDataProvider);
 
 				// Hack to get metadata
-				List<HeadlessApplicationOptions> hOptionsList = getHeadlessOptions();
-				
+				final List<HeadlessApplicationOptions> hOptionsList = getHeadlessOptions();
+
 				final Meta meta = writeMetaFields(scenarioFile, hOptionsList.get(0));
 				meta.setScenario(scenarioFile.getName());
-				
+
 				runner.withLogging(meta);
-				
-//				final ScenarioMeta scenarioMeta =  writeOptimisationMetrics(scenarioDataProvider);
-//				runner.withLogging(scenarioMeta);
+
+				// final ScenarioMeta scenarioMeta = writeOptimisationMetrics(scenarioDataProvider);
+				// runner.withLogging(scenarioMeta);
 				// end hack
-								
-				AbstractSolutionSet result = runner.run(numThreads, monitor);
+
+				final AbstractSolutionSet result = runner.run(numThreads, monitor);
 				if (result == null) {
 					throw new NullPointerException("Result is null");
 				}
 				// final File resultOutput = new File(outputScenarioFileName + ".xmi");
 				HeadlessUtils.saveResult(result, scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
 				//
-//				 ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
+				// ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
 
 			}, scenarioCipherProvider);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new IOException("Error running job", e);
 		}
 
@@ -146,7 +159,7 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 		}
 
 		if (loggingFolder != null) {
-			
+
 			try {
 				runner.saveLogs(new File(loggingFolder, UUID.randomUUID().toString() + ".json"));
 			} catch (final Exception e) {
@@ -180,7 +193,7 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
 		//
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
-		
+
 		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
 		//
 		//
@@ -202,5 +215,10 @@ public abstract class HeadlessCloudOptimiserApplication extends HeadlessGenericA
 
 	protected void runAndWriteResults(final int run, final HeadlessApplicationOptions hOptions, final File scenarioFile, final File outputFile, final int threads) throws Exception {
 		throw new IllegalStateException("Unexpected code path");
+	}
+
+	@Override
+	protected String getAlgorithmName() {
+		throw new UnsupportedOperationException("Unexpected call to getAlgorithm");
 	}
 }
