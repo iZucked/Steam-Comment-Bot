@@ -444,7 +444,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
          <command
                commandId="com.mmxlabs.scenario.service.ui.newfolder"
-               icon="icons/newfolder_wiz.gif"
+               icon="icons:/icons/16x16/folder.png"
                label="New Folder"
                style="push"
                tooltip="Create a new folder">
@@ -724,7 +724,8 @@
          <action
                class="com.mmxlabs.scenario.service.ui.editor.actions.PinStateEditorActionDelegate"
                definitionId="com.mmxlabs.scenario.service.ui.pin"
-               icon="icons/pin_scenario_UNUSED.png"
+               icon="icons:/icons/24x24/pin.png"
+               disabledIcon="icons:/icons/24x24/pin_disabled.png"
                id="com.mmxlabs.scenario.service.ui.togglePin"
                label="Toggle pin for this scenario"
                style="toggle"

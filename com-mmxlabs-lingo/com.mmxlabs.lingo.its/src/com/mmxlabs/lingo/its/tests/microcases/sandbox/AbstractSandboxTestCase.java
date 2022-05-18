@@ -4,18 +4,17 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 
-import java.util.function.Consumer;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.Assertions;
 
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 
 public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 
@@ -23,10 +22,20 @@ public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 		final LNGScenarioModel root = ScenarioModelUtil.findScenarioModel(model);
 		assert root != null;
 
-		Consumer<IAnalyticsScenarioEvaluator> func = evaluator -> evaluator.runSandbox(scenarioDataProvider, null, model, model::setResults, false, new NullProgressMonitor());
+		final SandboxJobRunner runner = new SandboxJobRunner();
+		runner.withScenario(scenarioDataProvider);
 
-		Assertions.assertNotNull(func);
-		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, func);
+		final SandboxSettings settings = new SandboxSettings();
+		settings.setSandboxUUID(model.getUuid());
+
+		settings.setUserSettings(root.getUserSettings());
+		if (settings.getUserSettings() == null) {
+			settings.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
+		}
+		runner.withParams(settings);
+
+		AbstractSolutionSet result = runner.run(new NullProgressMonitor());
+		model.setResults(result);
 	}
 
 }

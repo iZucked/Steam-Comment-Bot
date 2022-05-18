@@ -814,7 +814,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void setLocked(final boolean locked) {
 
-		final boolean thisLocked = locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
+		final boolean thisLocked = locked;
 
 		// Disable while locked.
 		if (thisLocked) {

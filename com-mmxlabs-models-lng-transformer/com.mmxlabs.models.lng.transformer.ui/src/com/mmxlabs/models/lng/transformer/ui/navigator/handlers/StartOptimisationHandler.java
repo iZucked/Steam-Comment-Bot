@@ -4,46 +4,23 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimiserTask;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * 
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
-public class StartOptimisationHandler extends AbstractOptimisationHandler {
-
-	private static final Logger log = LoggerFactory.getLogger(StartOptimisationHandler.class);
-
-	final boolean optimising;
-
-	/**
-	 * The constructor.
-	 */
-	public StartOptimisationHandler(final boolean optimising) {
-		this.optimising = optimising;
-	}
-
-	public StartOptimisationHandler() {
-		this(true);
-	}
+public class StartOptimisationHandler extends AbstractHandler {
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
@@ -51,26 +28,29 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-
 		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 
-		if ((selection != null) && (selection instanceof IStructuredSelection)) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
+		if (selection != null && selection instanceof IStructuredSelection strucSelection) {
+			BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> {
+				final Iterator<?> itr = strucSelection.iterator();
+				while (itr.hasNext()) {
+					final Object obj = itr.next();
+					if (obj instanceof ScenarioInstance instance) {
 
-				@Override
-				public void run() {
-					final Iterator<?> itr = strucSelection.iterator();
-					while (itr.hasNext()) {
-						final Object obj = itr.next();
-						if (obj instanceof ScenarioInstance) {
-							ScenarioInstance instance = (ScenarioInstance) obj;
-							Set<String> existingNames = new HashSet<>();
-							instance.getFragments().forEach(f -> existingNames.add(f.getName()));
-							instance.getElements().forEach(f -> existingNames.add(f.getName()));
-							OptimisationHelper.evaluateScenarioInstance(jobManager, instance, null, /* prompt if optimising */ optimising, optimising, !optimising, "Optimisation", existingNames);
+						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+						if (modelRecord == null) {
+							return;
 						}
+
+						if (instance.isReadonly()) {
+							return;
+						}
+
+						if (modelRecord.isLoadFailure()) {
+							return;
+						}
+
+						OptimiserTask.submit(instance, LocalJobManager.INSTANCE);
 					}
 				}
 			});

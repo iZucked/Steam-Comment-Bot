@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model.manager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -43,7 +45,7 @@ public final class ScenarioLock {
 		return r;
 	}
 
-	public boolean tryLock(int timeOutInMillis) {
+	public boolean tryLock(final int timeOutInMillis) {
 		boolean r;
 		try {
 			r = readWriteLock.writeLock().tryLock(timeOutInMillis, TimeUnit.MILLISECONDS);
@@ -51,8 +53,18 @@ public final class ScenarioLock {
 				fireLockStateChanged(true);
 			}
 			return r;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			return false;
+		}
+	}
+
+	public void withTryLock(final int timeOutInMillis, @NonNull final Runnable r) {
+		if (tryLock(timeOutInMillis)) {
+			try {
+				r.run();
+			} finally {
+				unlock();
+			}
 		}
 	}
 
@@ -72,11 +84,13 @@ public final class ScenarioLock {
 
 	private void fireLockStateChanged(final boolean lockState) {
 		this.lockState = lockState;
-		for (final IScenarioLockListener l : listeners) {
+		// Take a copy incase firing a listener causes new listeners to be added
+		final List<IScenarioLockListener> copiedListeners = new ArrayList<>(listeners);
+		for (final IScenarioLockListener l : copiedListeners) {
 			// Safe loop
 			try {
 				l.lockStateChanged(modelRecord, lockState);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				LOG.error("Error in lock listener", e);
 			}
 		}
@@ -90,7 +104,7 @@ public final class ScenarioLock {
 		listeners.remove(lockListener);
 	}
 
-	public void withLock(@NonNull Runnable r) {
+	public void withLock(@NonNull final Runnable r) {
 		lock();
 		try {
 			r.run();

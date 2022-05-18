@@ -19,6 +19,10 @@ public class OptioniserSettings {
 	public List<String> loadIds = new LinkedList<>();
 	public List<String> dischargeIds = new LinkedList<>();
 	public List<String> eventsIds = new LinkedList<>();
+	
+	public List<String> loadUUIDs = new LinkedList<>();
+	public List<String> dischargeUUIDs = new LinkedList<>();
+	public List<String> eventsUUIDs = new LinkedList<>();
 
 	@JsonDeserialize(as = UserSettingsImpl.class)
 	public UserSettings userSettings;

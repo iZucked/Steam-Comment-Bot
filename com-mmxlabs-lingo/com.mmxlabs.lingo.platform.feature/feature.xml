@@ -8,15 +8,9 @@
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="LiNGO Eclipse Platform Feature"
-      version="5.4.3.qualifier"
+      version="5.5.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
-   <plugin
-         id="org.eclipse.compare"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.eclipse.compare.core"
@@ -125,7 +119,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ui.ide"
+         id="org.eclipse.ui.navigator"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -133,13 +127,6 @@
 
    <plugin
          id="org.eclipse.ui.intro"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.navigator"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -161,13 +148,6 @@
 
    <plugin
          id="org.eclipse.ui.views.properties.tabbed"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.workbench.texteditor"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -418,13 +398,6 @@
          fragment="true"/>
 
    <plugin
-         id="org.eclipse.ui.editors"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.equinox.event"
          download-size="0"
          install-size="0"
@@ -653,7 +626,7 @@
          id="org.eclipse.equinox.p2.touchpoint.natives"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.4.250.202205091329"
          unpack="false"/>
 
    <plugin
@@ -714,13 +687,6 @@
 
    <plugin
          id="com.google.inject"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.ecore.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"

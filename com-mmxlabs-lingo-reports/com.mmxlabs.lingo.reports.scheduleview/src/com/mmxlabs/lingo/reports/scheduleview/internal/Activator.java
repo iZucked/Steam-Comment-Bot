@@ -16,7 +16,6 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -28,8 +27,6 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-
-	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 
 	private Injector injector;
 
@@ -49,9 +46,6 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
-		jobManagerServiceTracker.open();
-
 		injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new ActivatorModule());
 	}
 
@@ -62,10 +56,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-
-		// close the service tracker
-		jobManagerServiceTracker.close();
-		jobManagerServiceTracker = null;
 
 		plugin = null;
 		super.stop(context);
@@ -89,10 +79,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
-	public IEclipseJobManager getJobManager() {
-		return jobManagerServiceTracker.getService();
 	}
 
 	public static void warning(final String message) {

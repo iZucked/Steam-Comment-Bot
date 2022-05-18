@@ -173,7 +173,4 @@ public class HeadlessOptioniserRunner {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
 	}
-
-	
-
 }
