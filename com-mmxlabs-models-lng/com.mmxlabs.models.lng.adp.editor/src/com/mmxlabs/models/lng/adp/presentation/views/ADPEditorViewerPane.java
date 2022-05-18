@@ -29,7 +29,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -45,20 +44,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
-import com.mmxlabs.models.lng.adp.mull.scenariocombine.BlueSkyPADPWizard;
-import com.mmxlabs.models.lng.adp.mull.scenariocombine.CombinePADPWizard;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpToolbarCustomiser;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
@@ -99,7 +94,9 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(parent, SWT.NONE);
-			final int additionalColumns = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION) ? 2 : 0;
+			final IAdpToolbarCustomiser toolbarCustomiser = part.getSite().getService(IAdpToolbarCustomiser.class);
+
+			final int additionalColumns = toolbarCustomiser != null ? toolbarCustomiser.columnsRequired() : 0;
 			final int numColumns = additionalColumns + 7;
 			toolbarComposite.setLayout(GridLayoutFactory.fillDefaults() //
 					.numColumns(numColumns) //
@@ -182,44 +179,8 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 					}
 				});
 
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					final Button buildBlueSkyButton = new Button(toolbarComposite, SWT.PUSH);
-					buildBlueSkyButton.setText("Build blue sky");
-					buildBlueSkyButton.setToolTipText("Builds blue sky model where current scenario is the demand side");
-					buildBlueSkyButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
-					buildBlueSkyButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							ScenarioInstance demandSideScenarioInstance = editorData.getScenarioInstance();
-							if (demandSideScenarioInstance != null) {
-								final BlueSkyPADPWizard wizard = new BlueSkyPADPWizard(demandSideScenarioInstance);
-								wizard.init(page.getWorkbenchWindow().getWorkbench(), null);
-								Shell parent = page.getWorkbenchWindow().getShell();
-								WizardDialog dialog = new WizardDialog(parent, wizard);
-								dialog.create();
-								dialog.open();
-							}
-						}
-					});
-
-					final Button buildCombinedModelButton = new Button(toolbarComposite, SWT.PUSH);
-					buildCombinedModelButton.setText("Build combined");
-					buildCombinedModelButton.setToolTipText("Builds combined model where current scenario is the demand side");
-					buildCombinedModelButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
-					buildCombinedModelButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							ScenarioInstance demandSideScenarioInstance = editorData.getScenarioInstance();
-							if (demandSideScenarioInstance != null) {
-								final CombinePADPWizard wizard = new CombinePADPWizard(demandSideScenarioInstance);
-								wizard.init(page.getWorkbenchWindow().getWorkbench(), null);
-								Shell parent = page.getWorkbenchWindow().getShell();
-								WizardDialog dialog = new WizardDialog(parent, wizard);
-								dialog.create();
-								dialog.open();
-							}
-						}
-					});
+				if (toolbarCustomiser != null) {
+					toolbarCustomiser.customiseToolbar(toolbarComposite, editorData, page);
 				}
 			}
 		}

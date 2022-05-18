@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.adp.mull.container.IMudContainer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 
 @NonNullByDefault
-public class VanillaManipulationStrategy implements IMudContainerManipulationStrategy {
+public class DefaultManipulationStrategy implements IMudContainerManipulationStrategy {
 
 	@Override
 	public void undo(ICargoBlueprint cargoBlueprint, IMudContainer mudContainer) {

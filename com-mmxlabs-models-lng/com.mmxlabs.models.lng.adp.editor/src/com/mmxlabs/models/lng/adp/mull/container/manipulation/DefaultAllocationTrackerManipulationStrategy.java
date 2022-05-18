@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 @NonNullByDefault
-public class VanillaAllocationTrackerManipulationStrategy implements IAllocationTrackerManipulationStrategy {
+public class DefaultAllocationTrackerManipulationStrategy implements IAllocationTrackerManipulationStrategy {
 
 	@Override
 	public void dropAllocation(long allocationDrop, IAllocationTracker allocationTracker) {

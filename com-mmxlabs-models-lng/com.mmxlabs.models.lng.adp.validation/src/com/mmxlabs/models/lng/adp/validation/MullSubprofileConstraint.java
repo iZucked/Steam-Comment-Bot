@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
@@ -33,21 +34,28 @@ import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 
 	private static final double EPSILON_DOUBLE = 0.001;
 	private static final String REGEXP_INTEGER = "-?\\d+";
 
+	private final String typedName;
+
+	public MullSubprofileConstraint() {
+		final IInventoryBasedGenerationPresentationCustomiser[] customiserArr = new IInventoryBasedGenerationPresentationCustomiser[1];
+		ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, v -> customiserArr[0] = v);
+		typedName = customiserArr[0] != null ? customiserArr[0].getDropDownMenuLabel() : "Inventory-based generation";
+	}
+
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof MullSubprofile) {
-			final MullSubprofile mullSubprofile = (MullSubprofile) target;
-
+		if (target instanceof final MullSubprofile mullSubprofile) {
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withTypedName("ADP profile", "MULL Generation") //
+					.withTypedName("ADP profile", typedName) //
 					.withTag(ValidationConstants.TAG_ADP);
 			if (mullSubprofile.getInventory() == null) {
 				factory.copyName() //
@@ -86,7 +94,8 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 						if (inventory.getFeeds().stream().noneMatch(row -> {
 							final LocalDate rowStart = row.getStartDate();
 							final LocalDate rowEnd = row.getEndDate();
-							return (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate)) || (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
+							return rowStart != null && rowEnd != null && (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate))
+									|| (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
 						})) {
 							factory.copyName() //
 									.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
@@ -97,12 +106,13 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 
 					final LocalDate adpStartDate = adpStart.atDay(1);
 					final int levelBeforeAdpStart = getLevelPriorToAdpStart(inventory.getFeeds(), adpStartDate);
-					final int sumInitialAllocations = mullSubprofile.getEntityTable().stream().map(MullEntityRow::getInitialAllocation).filter(Objects::nonNull).filter(s -> s.matches(REGEXP_INTEGER)).mapToInt(Integer::parseInt).sum();
+					final int sumInitialAllocations = mullSubprofile.getEntityTable().stream().map(MullEntityRow::getInitialAllocation).filter(Objects::nonNull).filter(s -> s.matches(REGEXP_INTEGER))
+							.mapToInt(Integer::parseInt).sum();
 					if (levelBeforeAdpStart != sumInitialAllocations) {
 						factory.copyName() //
-						.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
-						.withMessage(String.format("%s level prior to ADP start do not equal sum of entity initial allocations", inventory.getName())) //
-						.make(ctx, statuses);
+								.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
+								.withMessage(String.format("%s level prior to ADP start do not equal sum of entity initial allocations", inventory.getName())) //
+								.make(ctx, statuses);
 					}
 				}
 			}
@@ -113,10 +123,10 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No Entity entitlement data present.").make(ctx, statuses);
 			} else {
 				final double sumReferenceEntitlement = mullSubprofile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
-				if (Math.abs(sumReferenceEntitlement - 1.0) > EPSILON_DOUBLE) {
+				if (Math.abs(sumReferenceEntitlement - 1.0) > EPSILON_DOUBLE && Math.abs(sumReferenceEntitlement - 100.0) > EPSILON_DOUBLE) {
 					factory.copyName() //
 							.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE) //
-							.withMessage("Sum of reference entitlements should equal 1.") //
+							.withMessage("Sum of reference entitlements should equal 1 or 100.") //
 							.make(ctx, statuses);
 				}
 				validateDuplicateEntities(factory, mullSubprofile, ctx, statuses);
