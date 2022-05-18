@@ -62,7 +62,7 @@ public class VanillaMullAlgorithm extends MullAlgorithm {
 	@Override
 	protected Pair<@Nullable Vessel, Integer> getVesselAndAllocationDrop(LocalDateTime currentDateTime, IAllocationTracker allocationTracker, InventoryLocalState inventoryLocalState) {
 		final Vessel assignedVessel = calculateAssignedVessel(currentDateTime, allocationTracker.getVessels());
-		final int currentAllocationDrop =  (int) (assignedVessel.getVesselOrDelegateCapacity()*assignedVessel.getVesselOrDelegateFillCapacity()) - assignedVessel.getSafetyHeel();
+		final int currentAllocationDrop =  (int) (assignedVessel.getVesselOrDelegateCapacity()*assignedVessel.getVesselOrDelegateFillCapacity()) - assignedVessel.getVesselOrDelegateSafetyHeel();
 		return Pair.of(assignedVessel, currentAllocationDrop);
 	}
 }

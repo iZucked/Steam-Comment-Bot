@@ -12,28 +12,37 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 public class DESSalesMarketAllocationRowConstraint extends AbstractModelMultiConstraint {
+
+	private final String typedName;
+
+	public DESSalesMarketAllocationRowConstraint() {
+		final IInventoryBasedGenerationPresentationCustomiser[] customiserArr = new IInventoryBasedGenerationPresentationCustomiser[1];
+		ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, v -> customiserArr[0] = v);
+		typedName = customiserArr[0] != null ? customiserArr[0].getDropDownMenuLabel() : "Inventory-based generation";
+	}
+
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof DESSalesMarketAllocationRow) {
-			final DESSalesMarketAllocationRow desSalesMarketAllocationRow = (DESSalesMarketAllocationRow) target;
-			
+		if (target instanceof final DESSalesMarketAllocationRow desSalesMarketAllocationRow) {
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
-					.withTypedName("ADP profile", "MULL Generation") //
+					.withTypedName("ADP profile", typedName) //
 					.withTag(ValidationConstants.TAG_ADP);
-			
+
 			if (desSalesMarketAllocationRow.getDesSalesMarket() == null) {
 				factory.copyName() //
-				.withObjectAndFeature(desSalesMarketAllocationRow, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET) //
-				.withMessage("No DES sales Market selected") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(desSalesMarketAllocationRow, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET) //
+						.withMessage("No DES sales Market selected") //
+						.make(ctx, statuses);
 			}
 		}
 	}
