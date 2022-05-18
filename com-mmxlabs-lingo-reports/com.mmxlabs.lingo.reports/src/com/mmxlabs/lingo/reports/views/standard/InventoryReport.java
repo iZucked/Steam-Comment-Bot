@@ -190,18 +190,6 @@ public class InventoryReport extends ViewPart {
 
 	private IBarSeries cargoSeries;
 
-	private final IOverliftReportCustomiser overliftCustomiser;
-
-	public InventoryReport() {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-			final IOverliftReportCustomiser[] overliftCustomiserArr = new IOverliftReportCustomiser[1];
-			ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, v -> overliftCustomiserArr[0] = v);
-			overliftCustomiser = overliftCustomiserArr[0];
-		} else {
-			overliftCustomiser = null;
-		}
-	}
-
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
@@ -387,7 +375,10 @@ public class InventoryReport extends ViewPart {
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
-			mullItem.setText(overliftCustomiser.getMonthlyOverliftLabel());
+			ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+				final String labelText = customiser != null ? customiser.getMonthlyOverliftLabel() : "Overlift Monthly";
+				mullItem.setText(labelText);
+			});
 			{
 				mullMonthlyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -432,7 +423,10 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 
 			final CTabItem mullMonthlyCumulativeItem = new CTabItem(folder, SWT.NONE);
-			mullMonthlyCumulativeItem.setText(overliftCustomiser.getMonthlyCumulativeOverliftLabel());
+			ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+				final String labelText = customiser != null ? customiser.getMonthlyCumulativeOverliftLabel() : "Overlift Monthly Cumulative";
+				mullMonthlyCumulativeItem.setText(labelText);
+			});
 			{
 				mullMonthlyCumulativeTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -485,7 +479,10 @@ public class InventoryReport extends ViewPart {
 
 			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
-			mullDailyItem.setText(overliftCustomiser.getDailyOverliftTableLabel());
+			ServiceHelper.withCheckedOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+				final String labelText = customiser != null ? customiser.getDailyOverliftTableLabel() : "Overlift Daily";
+				mullDailyItem.setText(labelText);
+			});
 			{
 				mullDailyTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -531,7 +528,10 @@ public class InventoryReport extends ViewPart {
 			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 5);
 
 			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
-			chartItem2.setText(overliftCustomiser.getOverliftChartLabel());
+			ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+				final String labelText = customiser != null ? customiser.getOverliftChartLabel() : "Overlift Chart";
+				chartItem2.setText(labelText);
+			});
 			{
 				mullMonthlyOverliftChart = new Chart(folder, SWT.NONE);
 				mullMonthlyOverliftChart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
@@ -1489,7 +1489,7 @@ public class InventoryReport extends ViewPart {
 			Map<BaseLegalEntity, Integer> currentAllocation = new HashMap<>();
 			final double totalRE = relativeEntitlements.stream().mapToDouble(Pair::getSecond).sum();
 			for (Pair<BaseLegalEntity, Double> entitlement : relativeEntitlements) {
-				currentAllocation.put(entityEntityMap.get(entitlement.getFirst()), ((Double) (vol * entitlement.getSecond()/totalRE)).intValue());
+				currentAllocation.put(entityEntityMap.get(entitlement.getFirst()), ((Double) (vol * entitlement.getSecond() / totalRE)).intValue());
 			}
 			ret.put(e.getKey(), currentAllocation);
 		}
@@ -1671,17 +1671,19 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colourLightGrey);
 				}
-				if (overliftCustomiser.hightlightFclViolations() && !title.equals("Month") && !title.equals("Entity") && !title.equals("Lifting")) {
-					if (element.getSecond() == null) {
-						if ((element.getFirst().deltaViolatesFCL && title.equals("Delta")) || (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Cumulative Delta"))) {
-							cell.setForeground(colourRed);
-						}
-					} else {
-						if (cellText.length() > 0 && !cellText.equals("0")) {
-							cell.setForeground(colourRed);
+				ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+					if (customiser != null && customiser.hightlightFclViolations() && !title.equals("Month") && !title.equals("Entity") && !title.equals("Lifting")) {
+						if (element.getSecond() == null) {
+							if ((element.getFirst().deltaViolatesFCL && title.equals("Delta")) || (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Cumulative Delta"))) {
+								cell.setForeground(colourRed);
+							}
+						} else {
+							if (cellText.length() > 0 && !cellText.equals("0")) {
+								cell.setForeground(colourRed);
+							}
 						}
 					}
-				}
+				});
 			}
 		});
 
@@ -1726,17 +1728,19 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colourLightGrey);
 				}
-				if (overliftCustomiser.hightlightFclViolations() && !title.equals("Period") && !title.equals("Entity")) {
-					if (element.getSecond() == null) {
-						if (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Delta")) {
-							cell.setForeground(colourRed);
-						}
-					} else {
-						if (cellText.length() > 0 && !cellText.equals("0")) {
-							cell.setForeground(colourRed);
+				ServiceHelper.withOptionalServiceConsumer(IOverliftReportCustomiser.class, customiser -> {
+					if (customiser != null && customiser.hightlightFclViolations() && !title.equals("Period") && !title.equals("Entity")) {
+						if (element.getSecond() == null) {
+							if (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Delta")) {
+								cell.setForeground(colourRed);
+							}
+						} else {
+							if (cellText.length() > 0 && !cellText.equals("0")) {
+								cell.setForeground(colourRed);
+							}
 						}
 					}
-				}
+				});
 			}
 		});
 
@@ -1894,9 +1898,9 @@ public class InventoryReport extends ViewPart {
 			final double totalRE = sProfile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
 			sProfile.getEntityTable().stream().forEach(row -> {
 				if (ymm.equals(adpStart)) {
-					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement()/totalRE * thisTotalProd));
+					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
 				} else {
-					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement()/totalRE * thisTotalProd));
+					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
 				}
 			});
 		}
