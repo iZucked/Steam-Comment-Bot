@@ -45,6 +45,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CargoType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHeelSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHeelSink" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketAllocation" eSuperTypes="#//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>

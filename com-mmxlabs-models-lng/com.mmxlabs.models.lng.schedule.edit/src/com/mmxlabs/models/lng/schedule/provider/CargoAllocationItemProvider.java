@@ -58,6 +58,8 @@ public class CargoAllocationItemProvider
 			addCargoTypePropertyDescriptor(object);
 			addBallastBonusFeePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
+			addIsHeelSourcePropertyDescriptor(object);
+			addIsHeelSinkPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -217,6 +219,50 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Is Heel Source feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIsHeelSourcePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_isHeelSource_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_isHeelSource_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__IS_HEEL_SOURCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Is Heel Sink feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIsHeelSinkPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_isHeelSink_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_isHeelSink_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__IS_HEEL_SINK,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -287,6 +333,8 @@ public class CargoAllocationItemProvider
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
 			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE:
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:

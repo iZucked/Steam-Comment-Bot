@@ -28,6 +28,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 public final class AllocationAnnotation extends AbstractWriteLockable implements IAllocationAnnotation {
 
 	private final IPortTimesRecord portTimesRecord;
+	
+	private boolean isHeelCarrySource = false;
+	private boolean isHeelCarrySink = false;
 
 	public static class SlotAllocationAnnotation {
 		public long commercialVolumeInM3;
@@ -269,6 +272,8 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 			return this.startHeelVolumeInM3 == other.startHeelVolumeInM3 //
 					&& this.fuelVolumeInM3 == other.fuelVolumeInM3 //
 					&& this.remainingHeelVolumeInM3 == other.remainingHeelVolumeInM3 //
+					&& this.isHeelCarrySource == other.isHeelCarrySource//
+					&& this.isHeelCarrySink == other.isHeelCarrySink//
 					&& Objects.equal(this.slotAllocations, other.slotAllocations)//
 					&& Objects.equal(this.portTimesRecord, other.portTimesRecord);
 		}
@@ -318,5 +323,23 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 
 	private void throwNotChangableException() {
 		throw new IllegalArgumentException("Should not be changing by this stage.");
+	}
+	
+	@Override
+	public boolean isHeelCarrySource() {
+		return isHeelCarrySource;
+	}
+
+	public void setHeelCarrySource(boolean isHeelCarrySource) {
+		this.isHeelCarrySource = isHeelCarrySource;
+	}
+
+	@Override
+	public boolean isHeelCarrySink() {
+		return isHeelCarrySink;
+	}
+
+	public void setHeelCarrySink(boolean isHeelCarrySink) {
+		this.isHeelCarrySink = isHeelCarrySink;
 	}
 }

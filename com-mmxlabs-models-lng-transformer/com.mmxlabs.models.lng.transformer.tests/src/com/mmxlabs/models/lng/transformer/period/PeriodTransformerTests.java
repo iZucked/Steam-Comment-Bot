@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability1, c1);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		// records.put(c1, null)
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
@@ -249,7 +250,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability2, c1, c2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -314,7 +315,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability3, c1, c2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -392,7 +393,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability4, c1, c2, c3, c4, c5, c6);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -465,7 +466,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability5, c1, c2, c3, c4, c5, c6);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -525,7 +526,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability6, c1, c2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -579,7 +580,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability7);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -636,7 +637,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -692,7 +693,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -748,7 +749,7 @@ public class PeriodTransformerTests {
 
 		final CollectedAssignment collectedAssignment = PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		final EndEvent endEvent = (EndEvent) schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		transformer.updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
 
@@ -819,7 +820,7 @@ public class PeriodTransformerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 30);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		final List<CollectedAssignment> collectedAssignments = new LinkedList<>();
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability1, event1, event2, event3));
@@ -891,7 +892,7 @@ public class PeriodTransformerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JUNE, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JUNE, 30);
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		final List<CollectedAssignment> collectedAssignments = new LinkedList<>();
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability1, event1, event2, event3));
@@ -938,7 +939,7 @@ public class PeriodTransformerTests {
 				.make() // Sequence
 				.make(); // Schedule
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToLockdown, records.get(copyCargo).status);
 	}
 
@@ -981,7 +982,7 @@ public class PeriodTransformerTests {
 				.make() // Sequence
 				.make(); // Schedule
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToLockdown, records.get(copyCargo).status);
 	}
 
@@ -1020,7 +1021,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToKeep, records.get(copyCargo).status);
 	}
 
@@ -1060,7 +1061,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToRemove, records.get(copyCargo).status);
 	}
 
@@ -1103,7 +1104,7 @@ public class PeriodTransformerTests {
 				.make() // Sequence
 				.make(); // Schedule
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		Assertions.assertEquals(Status.ToLockdown, records.get(copyCargo).status);
 	}
@@ -1129,7 +1130,7 @@ public class PeriodTransformerTests {
 		final Schedule schedule = new SimpleScheduleBuilder() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		Assertions.assertEquals(Status.ToRemove, records.get(copyLoadSlot).status);
 	}
@@ -1155,7 +1156,7 @@ public class PeriodTransformerTests {
 		final Schedule schedule = new SimpleScheduleBuilder() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		Assertions.assertEquals(Status.ToRemove, records.get(copyLoadSlot).status);
 	}
@@ -1181,7 +1182,7 @@ public class PeriodTransformerTests {
 		final Schedule schedule = new SimpleScheduleBuilder() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToKeep, records.get(copyLoadSlot).status);
 	}
 
@@ -1211,7 +1212,7 @@ public class PeriodTransformerTests {
 		final Schedule schedule = new SimpleScheduleBuilder() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToRemove, records.get(copyLoadSlot).status);
 	}
 
@@ -1236,7 +1237,7 @@ public class PeriodTransformerTests {
 		final Schedule schedule = new SimpleScheduleBuilder() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 
 		Assertions.assertEquals(Status.ToRemove, records.get(loadSlot).status);
 	}
@@ -1274,7 +1275,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToRemove, records.get(copyEvent).status);
 	}
 
@@ -1311,7 +1312,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToLockdown, records.get(copyEvent).status);
 	}
 
@@ -1348,7 +1349,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToLockdown, records.get(copyEvent).status);
 	}
 
@@ -1385,7 +1386,7 @@ public class PeriodTransformerTests {
 				.make() //
 				.make();
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, copyScenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToRemove, records.get(copyEvent).status);
 
 	}
@@ -1840,7 +1841,7 @@ public class PeriodTransformerTests {
 				.make() // Sequence
 				.make(); // Schedule
 
-		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord);
+		final Map<EObject, InclusionRecord> records = transformer.generateInclusionRecords(schedule, scenarioModel.getCargoModel(), periodRecord, new LinkedHashMap<>(), new LinkedList<>());
 		Assertions.assertEquals(Status.ToLockdown, records.get(cargo1).status);
 
 		transformer.lockDownRecords(periodRecord, records);

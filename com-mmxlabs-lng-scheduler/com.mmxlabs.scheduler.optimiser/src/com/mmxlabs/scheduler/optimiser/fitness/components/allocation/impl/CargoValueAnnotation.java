@@ -361,4 +361,20 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 	public IAllocationAnnotation getAllocationAnnotation() {
 		return allocationAnnotation;
 	}
+
+	public boolean isHeelCarrySource() {
+		return allocationAnnotation.isHeelCarrySource();
+	}
+
+	public void setHeelCarrySource(boolean isHeelCarrySource) {
+		throwNotChangableException();
+	}
+
+	public boolean isHeelCarrySink() {
+		return allocationAnnotation.isHeelCarrySink();
+	}
+
+	public void setHeelCarrySink(boolean isHeelCarrySink) {
+		throwNotChangableException();
+	}
 }

@@ -231,6 +231,7 @@ public class ScheduleCalculator {
 	}
 	
 	private class RetentionPair {
+		private static final long ScaleFactor = 1000L;
 		private static final long MinVolumeCutOff = 500L;
 		public final VoyagePlanRecord first;
 		public final VoyagePlanRecord second;
@@ -316,8 +317,8 @@ public class ScheduleCalculator {
 				
 				//use calculator
 				Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv);
-				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (MinVolumeCutOff * fCargo.cv / 1000L)) //
-						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (MinVolumeCutOff * sCargo.cv / 1000L))) {
+				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (MinVolumeCutOff * fCargo.cv / ScaleFactor)) //
+						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (MinVolumeCutOff * sCargo.cv / ScaleFactor))) {
 					return value > 0;
 				}
 				
@@ -326,12 +327,12 @@ public class ScheduleCalculator {
 			return false;
 		}
 		
-		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeelM3FullDelta) {
+		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeelMMBTuFullDelta) {
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine extra volume which can be bought on first cargo (valued with load price)
 			long fExtraLoadVolumeMMBTu = Math.min(s2fSpareCapacityMMBTu, //
-					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelM3FullDelta);
+					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelMMBTuFullDelta);
 			long fExtraLoadValue = 0;
 			if (fExtraLoadVolumeMMBTu > 0) {
 				
@@ -354,12 +355,12 @@ public class ScheduleCalculator {
 			return 0L;
 		}
 		
-		private long extraLoadFirstExtraDischargeSecond(HeelRetentionExtraData hrr, long startHeel) {
+		private long extraLoadFirstExtraDischargeSecond(HeelRetentionExtraData hrr, long startHeelMMBTu) {
 			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine extra volume which can be bought on first cargo (valued with load price)
 			long fExtraLoadVolumeMMBTu = Math.min(s2fSpareCapacityMMBTu, //
-					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeel);
+					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelMMBTu);
 			long fExtraLoadValue = 0;
 			if (fExtraLoadVolumeMMBTu > 0) {
 				
@@ -655,6 +656,8 @@ public class ScheduleCalculator {
 		long phDischargeM3 = Calculator.convertMMBTuToM3WithOverflowProtection(tcr.scheduledDischargeVolumeMMBTu - tcr.dischargeBOGMMBTu + 5L, tcr.cv);
 		temp.setCommercialSlotVolumeInM3(tcr.discharge, dischargeM3);
 		temp.setPhysicalSlotVolumeInM3(tcr.discharge, phDischargeM3);
+		temp.setHeelCarrySource(isFirst);
+		temp.setHeelCarrySink(!isFirst);
 		
 		if (isFirst) {
 			long endHeelM3 = Calculator.convertMMBTuToM3WithOverflowProtection(tcr.endHeelMMBTu * 10L + 5L, tcr.cv)/10L;

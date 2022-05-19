@@ -45,6 +45,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastBonusFee <em>Ballast Bonus Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#isIsHeelSource <em>Is Heel Source</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#isIsHeelSink <em>Is Heel Sink</em>}</li>
  * </ul>
  *
  * @generated
@@ -167,6 +169,46 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected long repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isIsHeelSource() <em>Is Heel Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsHeelSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_HEEL_SOURCE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isIsHeelSource() <em>Is Heel Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsHeelSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isHeelSource = IS_HEEL_SOURCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isIsHeelSink() <em>Is Heel Sink</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsHeelSink()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_HEEL_SINK_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isIsHeelSink() <em>Is Heel Sink</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsHeelSink()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isHeelSink = IS_HEEL_SINK_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -400,6 +442,52 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated
 	 */
 	@Override
+	public boolean isIsHeelSource() {
+		return isHeelSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsHeelSource(boolean newIsHeelSource) {
+		boolean oldIsHeelSource = isHeelSource;
+		isHeelSource = newIsHeelSource;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE, oldIsHeelSource, isHeelSource));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isIsHeelSink() {
+		return isHeelSink;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsHeelSink(boolean newIsHeelSink) {
+		boolean oldIsHeelSink = isHeelSink;
+		isHeelSink = newIsHeelSink;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK, oldIsHeelSink, isHeelSink));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<SlotAllocation> getSlotAllocations() {
 		if (slotAllocations == null) {
 			slotAllocations = new EObjectWithInverseResolvingEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION);
@@ -482,6 +570,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getBallastBonusFee();
 			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
 				return getRepositioningFee();
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE:
+				return isIsHeelSource();
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK:
+				return isIsHeelSink();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -522,6 +614,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
 				setRepositioningFee((Long)newValue);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE:
+				setIsHeelSource((Boolean)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK:
+				setIsHeelSink((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -558,6 +656,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
 				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE:
+				setIsHeelSource(IS_HEEL_SOURCE_EDEFAULT);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK:
+				setIsHeelSink(IS_HEEL_SINK_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -586,6 +690,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return ballastBonusFee != BALLAST_BONUS_FEE_EDEFAULT;
 			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
 				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SOURCE:
+				return isHeelSource != IS_HEEL_SOURCE_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__IS_HEEL_SINK:
+				return isHeelSink != IS_HEEL_SINK_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -667,6 +775,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		result.append(ballastBonusFee);
 		result.append(", repositioningFee: ");
 		result.append(repositioningFee);
+		result.append(", isHeelSource: ");
+		result.append(isHeelSource);
+		result.append(", isHeelSink: ");
+		result.append(isHeelSink);
 		result.append(')');
 		return result.toString();
 	}

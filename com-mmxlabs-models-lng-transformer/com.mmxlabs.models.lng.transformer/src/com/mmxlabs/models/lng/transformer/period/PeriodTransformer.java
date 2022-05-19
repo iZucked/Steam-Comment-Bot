@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -235,6 +237,8 @@ public class PeriodTransformer {
 
 		Sequence sequence;
 		VesselAvailability vesselAvailability; // Current VA. This is not expected to be updated if status is Readded (to review)
+		boolean isHeelSource = false;
+		boolean isHeelSink = false;
 	}
 
 	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final Schedule wholeScenarioSchedule,
@@ -268,9 +272,13 @@ public class PeriodTransformer {
 				extension.init(cargoModel, schedule);
 			}
 		}
+		
+		// Set-up for the heel carry
+		final Map<Cargo, CargoAllocation> sortedCargoes = new LinkedHashMap<>();
+		final List<HeelCarryCargoPair> heelCarryCargoPairs = new LinkedList<>();
 
 		// Create the basic records based on scheduled dates etc. No modifications are performed yet as following stages can update the records
-		final Map<EObject, InclusionRecord> records = generateInclusionRecords(schedule, cargoModel, periodRecord);
+		final Map<EObject, InclusionRecord> records = generateInclusionRecords(schedule, cargoModel, periodRecord, sortedCargoes, heelCarryCargoPairs);
 
 		// Step two, some vessel events require the preceeding events to still be included. If they are marked to be removed, the upgrade to locked.
 		// Note this implicitly upgrades events marked as ToRemove and already skipped over if they are before an event to be included.
@@ -327,6 +335,20 @@ public class PeriodTransformer {
 			}
 		}
 
+		for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
+			if (pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink) {
+				Status first = pair.firstRecord.status;
+				Status second = pair.secondRecord.status;
+				if ((first == Status.ToKeep || first == Status.ToLockdown) && second != Status.ToKeep && second != Status.ToLockdown) {
+					pair.secondRecord.status = first;
+					pair.secondRecord.inclusionType = pair.firstRecord.inclusionType;
+				} else if ((second == Status.ToKeep || second == Status.ToLockdown) && first != Status.ToKeep && first != Status.ToLockdown) {
+					pair.firstRecord.status = second;
+					pair.firstRecord.inclusionType = pair.secondRecord.inclusionType;
+				}
+			}
+		}
+		
 		// Step 3 lockdown vessels and dates if needed.
 		// ToLockdown may be a partial lock if a cargo is partially In the period.
 		// ReAdded is always a full lockdown.
@@ -335,6 +357,10 @@ public class PeriodTransformer {
 		// Update vessel availabilities based on cargoes/events being removed.
 		updateVesselAvailabilities(cargoModel, spotMarketsModel, portModel, schedule, modelDistanceProvider, records, periodRecord, mapping);
 
+		// Sanity check that heel sink and sink sources number is equal
+		for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
+			assert pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink;
+		}
 		// Sanity check - all records should have a valid status
 		for (final InclusionRecord r : records.values()) {
 			assert r.status != Status.NotChecked;
@@ -1242,7 +1268,8 @@ public class PeriodTransformer {
 	 * @param periodRecord
 	 * @return
 	 */
-	public Map<EObject, InclusionRecord> generateInclusionRecords(@NonNull final Schedule schedule, @NonNull final CargoModel cargoModel, final PeriodRecord periodRecord) {
+	public Map<EObject, InclusionRecord> generateInclusionRecords(@NonNull final Schedule schedule, @NonNull final CargoModel cargoModel, //
+			final PeriodRecord periodRecord, final Map<Cargo, CargoAllocation> sortedCargoes, final List<HeelCarryCargoPair> heelCarryCargoPairs) {
 
 		final Map<EObject, InclusionRecord> records = new HashMap<>();
 
@@ -1252,11 +1279,16 @@ public class PeriodTransformer {
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
-				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) event;
-					final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
+				if (event instanceof SlotVisit slotVisit) {
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					final Slot<?> slot = slotAllocation.getSlot();
+					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+					
 					final Cargo cargo = slot.getCargo();
 					assert cargo != null;
+					assert cargoAllocation != null;
+					
+					sortedCargoes.putIfAbsent(cargo, cargoAllocation);
 
 					final InclusionRecord inclusionRecord = records.computeIfAbsent(cargo, c -> {
 						final InclusionRecord r = new InclusionRecord();
@@ -1267,8 +1299,7 @@ public class PeriodTransformer {
 					});
 
 					inclusionRecord.event.put(slot, slotVisit);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+				} else if (event instanceof VesselEventVisit vesselEventVisit) {
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 					final InclusionRecord inclusionRecord = new InclusionRecord();
 					inclusionRecord.object = vesselEvent;
@@ -1277,6 +1308,21 @@ public class PeriodTransformer {
 					inclusionRecord.vesselAvailability = sequence.getVesselAvailability();
 					records.put(vesselEvent, inclusionRecord);
 				}
+			}
+		}
+		
+		Map.Entry<Cargo, CargoAllocation> previousEntry = null;
+		for(final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
+			if (entry.getValue().isIsHeelSource()) {
+				previousEntry = entry;
+			} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {
+				HeelCarryCargoPair pair = new HeelCarryCargoPair();
+				pair.firstCargo = previousEntry.getKey();
+				pair.firstCargoAllocation = previousEntry.getValue();
+				pair.secondCargo = entry.getKey();
+				pair.secondCargoAllocation = entry.getValue();
+				heelCarryCargoPairs.add(pair);
+				previousEntry = null;
 			}
 		}
 
@@ -1323,11 +1369,40 @@ public class PeriodTransformer {
 			} else {
 				r.status = Status.ToKeep;
 			}
-
+			
+			if (r.object instanceof Cargo c) {
+				final CargoAllocation cargoAllocation = sortedCargoes.get(c);
+				if (cargoAllocation.isIsHeelSource()) {
+					r.isHeelSource = true;
+					findPair(heelCarryCargoPairs, c).firstRecord = r;
+				}
+				if (cargoAllocation.isIsHeelSink()) {
+					r.isHeelSink = true;
+					findPair(heelCarryCargoPairs, c).secondRecord = r;
+				}
+			}
 		});
-
+		
 		return records;
 
+	}
+	
+	class HeelCarryCargoPair{
+		Cargo firstCargo;
+		CargoAllocation firstCargoAllocation;
+		InclusionRecord firstRecord;
+		Cargo secondCargo;
+		CargoAllocation secondCargoAllocation;
+		InclusionRecord secondRecord;
+	}
+	
+	private static HeelCarryCargoPair findPair(final List<HeelCarryCargoPair> heelCarryCargoes, final Cargo cargo) {
+		for (final HeelCarryCargoPair pair : heelCarryCargoes) {
+			if (pair.firstCargo.equals(cargo) || pair.secondCargo.equals(cargo)) {
+				return pair;
+			}
+		}
+		throw new IllegalStateException(String.format("Cargo %s is in heel carry pair list, but has no pair. Please contact Minimax.", cargo.getLoadName()));
 	}
 
 	/**
