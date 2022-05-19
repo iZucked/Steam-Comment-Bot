@@ -214,19 +214,19 @@ public class UpstreamUrlProvider {
 			this.exception = exception;
 		}
 
-		public static OnlineState emptyURL() {
+		public static @NonNull OnlineState emptyURL() {
 			return new OnlineState(StateReason.EMPTY_URL, null, null);
 		}
 
-		public static OnlineState invalidURL() {
+		public static @NonNull OnlineState invalidURL() {
 			return new OnlineState(StateReason.INVALID_URL, null, null);
 		}
 
-		public static OnlineState online() {
+		public static @NonNull OnlineState online() {
 			return new OnlineState(StateReason.HUB_ONLINE, null, null);
 		}
 
-		public static OnlineState error(final String msg, final Exception e) {
+		public static @NonNull OnlineState error(final String msg, final Exception e) {
 			return new OnlineState(StateReason.UNKNOWN_ERROR, msg, e);
 		}
 

@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -73,8 +74,9 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class OptimisationJobRunner extends AbstractJobRunner {
 
+	public static final String JOB_TYPE = "optimisation";
+
 	private OptimisationSettings optimiserSettings;
-	private IScenarioDataProvider sdp;
 	private OptimiserConfigurationOptions benchmarkSettings;
 
 	private HeadlessOptimiserJSON loggingData;
@@ -96,31 +98,12 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 	}
 
 	@Override
-	public void withParams(final File file) throws IOException {
-
-		try (FileInputStream is = new FileInputStream(file)) {
-			final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-			withParams(text);
-		}
-	}
-
-	@Override
-	public void withParams(final InputStream is) throws IOException {
-		final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-		withParams(text);
-	}
-
-	@Override
-	public void withScenario(final IScenarioDataProvider sdp) {
-		this.sdp = sdp;
-	}
-
-	@Override
-	public AbstractSolutionSet run(final int threadsAvailable, final IProgressMonitor monitor) {
+	public @Nullable AbstractSolutionSet run(final int threadsAvailable, final IProgressMonitor monitor) {
 		if (optimiserSettings == null && benchmarkSettings == null) {
 			throw new IllegalStateException("Optimiser parameters have not been set");
 		}
-		if (sdp == null) {
+		final IScenarioDataProvider pSDP = sdp;
+		if (pSDP == null) {
 			throw new IllegalStateException("Scenario has not been set");
 		}
 
@@ -135,9 +118,9 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			loggingData = json;
 		}
 		if (benchmarkSettings != null) {
-			return doJobRun(sdp, benchmarkSettings, threadsAvailable, SubMonitor.convert(monitor));
+			return doJobRun(pSDP, benchmarkSettings, threadsAvailable, SubMonitor.convert(monitor));
 		} else {
-			return doJobRun(sdp, optimiserSettings, threadsAvailable, SubMonitor.convert(monitor));
+			return doJobRun(pSDP, optimiserSettings, threadsAvailable, SubMonitor.convert(monitor));
 		}
 	}
 
@@ -202,7 +185,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 		};
 	}
 
-	private AbstractSolutionSet doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull Object settings, final int numThreads, @NonNull final IProgressMonitor monitor) {
+	private @Nullable AbstractSolutionSet doJobRun(final @NonNull IScenarioDataProvider sdp, final @NonNull Object settings, final int numThreads, @NonNull final IProgressMonitor monitor) {
 
 		int threadsToUse = numThreads;
 		boolean doInjections = false;
@@ -211,6 +194,8 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 		OptimisationPlan optimisationPlan = null;
 		UserSettings userSettings = null;
 
+		// Temp non-final resultName string
+		String lResultName = null;
 		if (settings instanceof final OptimiserConfigurationOptions optimisationSettings) {
 			doInjections = OptimiserConfigurationOptions.requiresInjections(optimisationSettings);
 			injections = optimisationSettings.injections;
@@ -222,9 +207,16 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			if (optimisationSettings.getNumThreads() > 0) {
 				threadsToUse = optimisationSettings.getNumThreads();
 			}
+			if (optimisationPlan.getResultName() != null) {
+				lResultName = optimisationPlan.getResultName();
+			}
 		} else if (settings instanceof final OptimisationSettings optimisationSettings) {
 			userSettings = optimisationSettings.getUserSettings();
+			if (optimisationSettings.getResultName() != null) {
+				lResultName = optimisationSettings.getResultName();
+			}
 		}
+		final String resultName = lResultName;
 
 		if (threadsToUse < 1) {
 			threadsToUse = LNGScenarioChainBuilder.getNumberOfAvailableCores();
@@ -264,7 +256,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 					.withIncludeDefaultExportStage(false) // Disable default export so we do not create it twice
 					.withOptimisationPlanCustomiser(plan -> {
 						// Set a default name is there is none
-						if (plan.getResultName() == null || plan.getResultName().isBlank()) {
+						if (resultName == null || resultName.isBlank()) {
 							plan.setResultName("Optimisation");
 						}
 						if (loggingOutput != null) {
@@ -275,9 +267,12 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 			if (optimisationPlan != null) {
 				runnerBuilder.withOptimisationPlan(optimisationPlan);
+				userSettings = optimisationPlan.getUserSettings();
 			} else if (userSettings != null) {
 				runnerBuilder.withUserSettings(userSettings);
 			}
+
+			assert userSettings != null;
 
 			if (localOverrides != null) {
 				runnerBuilder.withOptimiserInjectorService(localOverrides);
@@ -305,10 +300,10 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 			final OptionalLong portfolioBreakEvenTarget = OptionalLong.empty();
 			final OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
-			options.setName("Optimisation");
+
 			options.setUserSettings(EcoreUtil.copy(userSettings));
 
-			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget);
+			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget, false);
 
 			final LNGDataTransformer dataTransformer = runner.getScenarioToOptimiserBridge().getDataTransformer();
 			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
@@ -321,9 +316,16 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 				loggingOutput.setScenarioMeta(scenarioMeta);
 			}
+			
+			if (resultName == null || resultName.isBlank()) {
+				options.setName("Optimisation");
+			} else {
+				options.setName(resultName);
+			}
 
 			return options;
-
+		} catch (final OperationCanceledException e) {
+			return null;
 		} catch (final Exception e) {
 			throw new RuntimeException("Error during optimisation", e);
 		}

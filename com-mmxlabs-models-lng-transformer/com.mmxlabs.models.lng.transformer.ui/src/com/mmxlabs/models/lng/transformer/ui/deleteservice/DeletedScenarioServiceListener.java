@@ -7,9 +7,8 @@ package com.mmxlabs.models.lng.transformer.ui.deleteservice;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -25,7 +24,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class DeletedScenarioServiceListener extends ScenarioServiceListener {
 
 	private final Set<IScenarioService> scenarioServices = new HashSet<>();
-	private IEclipseJobManager eclipseJobManager;
 
 	@Override
 	public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
@@ -36,19 +34,12 @@ public class DeletedScenarioServiceListener extends ScenarioServiceListener {
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
 		final String uuid = scenarioInstance.getUuid();
+		ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+			mgr.cancelAll(uuid);
+			mgr.removeAll(uuid);
+			return true;
+		});
 
-		final IJobDescriptor job = eclipseJobManager.findJobForResource(uuid);
-		if (job == null) {
-			return;
-		}
-
-		final IJobControl control = eclipseJobManager.getControlForJob(job);
-		if (control != null) {
-
-			control.cancel();
-			control.dispose();
-			eclipseJobManager.removeJob(job);
-		}
 	}
 
 	public void dispose() {
@@ -69,11 +60,4 @@ public class DeletedScenarioServiceListener extends ScenarioServiceListener {
 		scenarioService.removeScenarioServiceListener(this);
 	}
 
-	public void bind(final IEclipseJobManager eclipseJobManager) {
-		this.eclipseJobManager = eclipseJobManager;
-	}
-
-	public void unbind(final IEclipseJobManager eclipseJobManager) {
-		this.eclipseJobManager = null;
-	}
 }

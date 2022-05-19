@@ -374,7 +374,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		progressMonitor.worked(100);
 		progressMonitor.subTask("Evaluating the scenario");
 
-		final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false, null);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(scenarioModel, true, false, false, null);
 		assert optimisationPlan != null;
 
 		// Hack: Add on shipping only hint to avoid generating spot markets during eval.

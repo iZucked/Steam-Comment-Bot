@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.analytics.util.SandboxModelBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -37,6 +39,9 @@ import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.analytics.AnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
@@ -44,7 +49,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 	static {
-		AnalyticsPackage einstance = AnalyticsPackage.eINSTANCE;
+		final AnalyticsPackage einstance = AnalyticsPackage.eINSTANCE;
 	}
 
 	/**
@@ -80,7 +85,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 				.withHireCosts("50000") //
 				.build();
 
-		DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
+		final DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
 
 		sandboxBuilder.createSellReference(slot);
 
@@ -88,7 +93,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.createPartialCaseRow(buy2, sell1, null);
 		sandboxBuilder.createPartialCaseRow(event1, shipping1);
 
-		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
+		final OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
 
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
@@ -96,7 +101,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 			// Make equivalent data in new SDP
 			new CargoModelBuilder(ScenarioModelUtil.getCargoModel(targetSDP)).makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
 
-			OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
+			final OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
 			Assertions.assertNotNull(targetModel);
 
 			Assertions.assertEquals(sourceModel.getBuys().size(), targetModel.getBuys().size());
@@ -109,23 +114,22 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 			for (int i = 0; i < sourceModel.getBaseCase().getBaseCase().size(); ++i) {
 
-				BaseCaseRow sourceRow = sourceModel.getBaseCase().getBaseCase().get(i);
-				BaseCaseRow targetRow = targetModel.getBaseCase().getBaseCase().get(i);
+				final BaseCaseRow sourceRow = sourceModel.getBaseCase().getBaseCase().get(i);
+				final BaseCaseRow targetRow = targetModel.getBaseCase().getBaseCase().get(i);
 
 			}
 
 			for (int i = 0; i < sourceModel.getPartialCase().getPartialCase().size(); ++i) {
 
-				PartialCaseRow sourceRow = sourceModel.getPartialCase().getPartialCase().get(i);
-				PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
+				final PartialCaseRow sourceRow = sourceModel.getPartialCase().getPartialCase().get(i);
+				final PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
 
 			}
 		}
 	}
 
 	/**
-	 * Test case to ensure generated solution with a round-trip shipping option
-	 * works correctly.
+	 * Test case to ensure generated solution with a round-trip shipping option works correctly.
 	 * 
 	 * @throws Exception
 	 */
@@ -156,25 +160,31 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		final ShippingOption shipping1 = sandboxBuilder.createRoundtripOption(vessel, entity, "50000");
 
-		DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), portFuttsu, null, entity, "7").build();
+		final DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), portFuttsu, null, entity, "7").build();
 
 		sandboxBuilder.createSellReference(slot);
 
 		sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping1);
 		sandboxBuilder.createPartialCaseRow(buy2, sell1, null);
-//		sandboxBuilder.createPartialCaseRow(event1, shipping1);
+		// sandboxBuilder.createPartialCaseRow(event1, shipping1);
 
-		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
+		final OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
 
 		// Evaluate initial case
-		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
-		evaluator.runSandbox(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false, new NullProgressMonitor());
-
+		final SandboxJobRunner runner = new SandboxJobRunner();
+		runner.withScenario(scenarioDataProvider);
+		
+		final SandboxSettings settings = new SandboxSettings();
+		settings.setSandboxUUID(sourceModel.getUuid());
+		settings.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
+		runner.withParams(settings);
+		
 		{
-			AbstractSolutionSet results = sourceModel.getResults();
+			final AbstractSolutionSet results = runner.run(new NullProgressMonitor());
 			Assertions.assertNotNull(results);
 			Assertions.assertNotNull(results.getBaseOption());
 			Assertions.assertEquals(1, results.getOptions().size());
+			sourceModel.setResults(results);
 		}
 
 		// Create a second copy!
@@ -183,7 +193,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 			// Make equivalent data in new SDP
 			new CargoModelBuilder(ScenarioModelUtil.getCargoModel(targetSDP)).makeDESSale("DES", LocalDate.of(2019, 7, 1), portFuttsu, null, entity, "7").build();
 
-			OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
+			final OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
 
 			Assertions.assertEquals(sourceModel.getBuys().size(), targetModel.getBuys().size());
 			Assertions.assertEquals(sourceModel.getSells().size(), targetModel.getSells().size());
@@ -195,19 +205,19 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 			for (int i = 0; i < sourceModel.getBaseCase().getBaseCase().size(); ++i) {
 
-				BaseCaseRow sourceRow = sourceModel.getBaseCase().getBaseCase().get(i);
-				BaseCaseRow targetRow = targetModel.getBaseCase().getBaseCase().get(i);
+				final BaseCaseRow sourceRow = sourceModel.getBaseCase().getBaseCase().get(i);
+				final BaseCaseRow targetRow = targetModel.getBaseCase().getBaseCase().get(i);
 
 			}
 
 			for (int i = 0; i < sourceModel.getPartialCase().getPartialCase().size(); ++i) {
 
-				PartialCaseRow sourceRow = sourceModel.getPartialCase().getPartialCase().get(i);
-				PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
+				final PartialCaseRow sourceRow = sourceModel.getPartialCase().getPartialCase().get(i);
+				final PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
 
 			}
 
-			AbstractSolutionSet results = targetModel.getResults();
+			final AbstractSolutionSet results = targetModel.getResults();
 			Assertions.assertNotNull(results);
 			Assertions.assertNotNull(results.getBaseOption());
 			Assertions.assertEquals(1, results.getOptions().size());
@@ -225,11 +235,11 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 
-		DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
+		final DischargeSlot slot = cargoModelBuilder.makeDESSale("DES", LocalDate.of(2019, 7, 1), port, null, entity, "7").build();
 
 		final SellOption sell1 = sandboxBuilder.createSellReference(slot);
 
-		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
+		final OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
 
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
@@ -267,7 +277,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
 
-			OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
+			final OptionAnalysisModel targetModel = FragmentCopyHandler.copySandboxModelWithJSON(scenarioDataProvider, sandboxBuilder.getOptionAnalysisModel(), targetSDP);
 
 			Assertions.assertEquals(2, targetModel.getBuys().size());
 			Assertions.assertEquals(1, targetModel.getSells().size());
@@ -278,7 +288,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 			final AbstractSolutionSet result = targetModel.getResults();
 
-			Consumer<Boolean> checkResult = expectSchedule -> {
+			final Consumer<Boolean> checkResult = expectSchedule -> {
 				//
 				Assertions.assertNotNull(result);
 				//

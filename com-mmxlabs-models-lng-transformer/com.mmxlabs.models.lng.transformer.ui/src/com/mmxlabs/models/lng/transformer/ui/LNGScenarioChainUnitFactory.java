@@ -75,7 +75,7 @@ public class LNGScenarioChainUnitFactory {
 						options.setName(name);
 						options.setUserSettings(EcoreUtil.copy(userSettings));
 						return options;
-					}, false, OptionalLong.empty());
+					}, false, OptionalLong.empty(), true);
 				};
 			}
 		} else if (template instanceof LocalSearchOptimisationStage stage) {

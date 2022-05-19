@@ -15,12 +15,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +36,10 @@ import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  */
@@ -90,9 +90,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 			final char separator = getCsvSeparator();
 
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+			final IRunnableWithProgress operation = new IRunnableWithProgress() {
 				@Override
-				protected void execute(final IProgressMonitor progressMonitor) {
+				public void run(final IProgressMonitor progressMonitor) {
 					bulkImport(importTarget, scenarios, importFilename, separator, decimalSeparator, progressMonitor);
 				}
 			};
@@ -141,7 +141,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly() || instance.isCloudLocked()) {
+				if (instance.isReadonly()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}

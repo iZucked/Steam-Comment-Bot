@@ -29,6 +29,9 @@ import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * The {@link PNLCalcsReport} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
@@ -61,12 +64,13 @@ public class PNLCalcsReport extends ViewPart {
 		final GridTableViewer viewer = component.getViewer();
 
 		{
-			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
+			final Action showOnlyDiff = new RunnableAction("", () -> {
 				if (component != null) {
 					component.toggleShowDiffOnly();
 					component.rebuild();
 				}
 			});
+			showOnlyDiff.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delta, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
 		}

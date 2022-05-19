@@ -5,12 +5,12 @@
 package com.mmxlabs.models.lng.transformer.ui.propertytesters;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.google.common.base.Objects;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
+import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class JobStatePropertyTester extends PropertyTester {
@@ -22,65 +22,48 @@ public class JobStatePropertyTester extends PropertyTester {
 
 	private boolean reallyTest(final Object receiver, final String property, final Object expectedValue) {
 
-		final EJobState state = getJobState(receiver);
+		final TaskStatus state = getJobState(receiver);
 
-		if ("jobState".equals(property)) {
+		switch (property) {
+		case "jobState": {
 			if (expectedValue != null && state != null) {
-				return expectedValue.toString().equalsIgnoreCase(state.name());
+				return expectedValue.toString().equalsIgnoreCase(state.getStatus());
 			}
-		} else if ("canPlay".equals(property)) {
-			if (state == null) {
-				return true;
-			}
-			switch (state) {
-			case CANCELLED:
-			case COMPLETED:
-			case INITIALISED:
-			case CREATED:
-				return true;
-			default:
-				return false;
-			}
-		} else if ("canTerminate".equals(property)) {
-			if (state == null) {
-				return false;
-			}
-			switch (state) {
-			case RUNNING:
-			default:
-				return false;
-			}
-		} else if ("hasActiveJob".equals(property)) {
-			if (state == null)
-				return false;
-			switch (state) {
-			case RUNNING:
-			case INITIALISED:
-			case INITIALISING:
-			case CANCELLING:
-				return true;
-			default:
-				return false;
-			}
+			return false;
+		}
+		case "canPlay":
+			return state == null || !(state.isSubmitted() || state.isRunning());
+		case "canTerminate":
+			return state != null && (state.isSubmitted() || state.isRunning());
+		case "hasActiveJob":
+			return state != null && (state.isSubmitted() || state.isRunning());
+		default:
+			return false;
 		}
 
-		return false;
 	}
 
-	private EJobState getJobState(final Object receiver) {
-		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-		if (jobManager != null) {
-			if (receiver instanceof ScenarioInstance) {
-				final ScenarioInstance instance = (ScenarioInstance) receiver;
-				final IJobDescriptor descriptor = jobManager.findJobForResource(instance.getUuid());
-				if (descriptor != null) {
-					final IJobControl control = jobManager.getControlForJob(descriptor);
-					if (control != null) {
-						return control.getJobState();
+	private @Nullable TaskStatus getJobState(final Object receiver) {
+		final TaskStatus[] status = new TaskStatus[1];
+		if (receiver instanceof final ScenarioInstance instance) {
+			final String scenarioUUID = instance.getUuid();
+			ServiceHelper.withAllServices(IJobManager.class, null, mgr -> {
+				for (final var t : mgr.getTasks()) {
+					if (Objects.equal(scenarioUUID, t.job.getScenarioUUID())) {
+						// Running job takes priority
+						if (t.taskStatus.isSubmitted() || t.taskStatus.isRunning()) {
+							status[0] = t.taskStatus;
+							return false;
+						} else if (status[0] == null) {
+							// Record any valid status found if we don't have another one.
+							status[0] = t.taskStatus;
+						}
 					}
 				}
-			}
+				return true;
+			});
 		}
-		return null;
+
+		return status[0];
 	}
 }

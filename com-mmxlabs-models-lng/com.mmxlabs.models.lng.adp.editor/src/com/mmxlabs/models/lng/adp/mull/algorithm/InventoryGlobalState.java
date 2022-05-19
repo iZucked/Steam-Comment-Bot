@@ -170,18 +170,22 @@ public class InventoryGlobalState {
 			final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			final LocalDate eventStart = inventoryEventRow.getStartDate();
-			if (eventStart != null) {
+			final LocalDate eventEnd = inventoryEventRow.getEndDate();
+			if (eventStart != null && eventEnd != null) {
 				if (inventoryEventRow.getPeriod() == InventoryFrequency.LEVEL) {
 					final LocalDateTime expectedDateTime = LocalDateTime.of(eventStart, LocalTime.of(0, 0));
 					addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, expectedDateTime, inventoryEventRow.getReliableVolume());
 				} else if (inventoryEventRow.getPeriod() == InventoryFrequency.DAILY) {
 					final int delta = inventoryEventRow.getReliableVolume() / 24;
 					final int firstAmount = delta + inventoryEventRow.getReliableVolume() % 24;
-					final LocalDateTime firstDateTime = LocalDateTime.of(eventStart, LocalTime.of(0, 0));
-					addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, firstDateTime, firstAmount);
-					for (int hour = 1; hour < 24; ++hour) {
-						final LocalDateTime expectedDateTime = LocalDateTime.of(eventStart, LocalTime.of(hour, 0));
-						addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, expectedDateTime, delta);
+					final LocalDate exclusiveEnd = eventStart.equals(eventEnd) ? eventStart.plusDays(1L) : eventEnd;
+					for (LocalDate currentDate = eventStart; currentDate.isBefore(exclusiveEnd); currentDate = currentDate.plusDays(1)) {
+						final LocalDateTime currentDateTime = LocalDateTime.of(currentDate, LocalTime.of(0, 0));
+						addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, currentDateTime, firstAmount);
+						for (int hour = 1; hour < 24; ++hour) {
+							final LocalDateTime expectedDateTime = LocalDateTime.of(currentDate, LocalTime.of(hour, 0));
+							addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, expectedDateTime, delta);
+						}
 					}
 				} else if (inventoryEventRow.getPeriod() == InventoryFrequency.HOURLY) {
 					final LocalDate eventStop = inventoryEventRow.getEndDate();

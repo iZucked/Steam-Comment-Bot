@@ -7,18 +7,7 @@
 -->
 <?eclipse version="3.0"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
-            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/16x16/cloud.png"
-            id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
-            name="Cloud Manager"
-            restorable="true">
-      </view>
-   </extension>
-   
-   
+  
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

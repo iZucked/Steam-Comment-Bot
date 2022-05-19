@@ -29,5 +29,4 @@ public class VanillaManipulationStrategy implements IMudContainerManipulationStr
 		return mudContainer.getDesMarketTracker();
 	}
 
-
 }

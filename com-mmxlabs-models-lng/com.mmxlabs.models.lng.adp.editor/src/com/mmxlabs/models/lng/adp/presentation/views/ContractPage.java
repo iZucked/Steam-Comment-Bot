@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -75,7 +76,9 @@ import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.mull.FilterToVesselsAction;
-import com.mmxlabs.models.lng.adp.mull.MullSolver;
+import com.mmxlabs.models.lng.adp.mull.IInventoryBasedGenerationSolver;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpContractPageToolbarCustomiser;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.adp.rateability.export.FeasibleSolverResult;
 import com.mmxlabs.models.lng.adp.rateability.export.Infeasible;
 import com.mmxlabs.models.lng.adp.rateability.export.SpacingRateabilitySolverResult;
@@ -115,6 +118,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulato
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -122,8 +126,6 @@ import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-
 
 public class ContractPage extends ADPComposite {
 
@@ -173,7 +175,16 @@ public class ContractPage extends ADPComposite {
 					@Override
 					public String getText(final Object element) {
 						if (element instanceof MullProfile) {
-							return "MULL Generation";
+							final String[] labelArr = new String[1];
+							final Consumer<IInventoryBasedGenerationPresentationCustomiser> labelFetchingFuction = presentationCustomiser -> {
+								if (presentationCustomiser != null) {
+									labelArr[0] = presentationCustomiser.getDropDownMenuLabel();
+								} else {
+									labelArr[0] = "Inventory-based generation";
+								}
+							};
+							ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, labelFetchingFuction);
+							return labelArr[0];
 						} else if (element instanceof SpacingProfile) {
 							return "Spacing Rateability";
 						} else if (element instanceof final PurchaseContract profile) {
@@ -189,18 +200,23 @@ public class ContractPage extends ADPComposite {
 					final ISelection selection = event.getSelection();
 					EObject target = null;
 					generateButton.setEnabled(false);
-					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-						vanillaBuildButton.setEnabled(false);
-					}
+					ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class, customiser -> {
+						if (customiser != null) {
+							customiser.runSelectionChangePreHandleTasks();
+						}
+					});
 					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 						cpSolveButton.setEnabled(false);
 					}
 					if (selection instanceof final IStructuredSelection iStructuredSelection) {
 						target = (EObject) iStructuredSelection.getFirstElement();
 						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MullProfile);
-						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-							vanillaBuildButton.setEnabled(target instanceof MullProfile);
-						}
+						final EObject pTarget = target;
+						ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class, customiser -> {
+							if (customiser != null) {
+								customiser.runSelectionChangeHandlingTasks(pTarget);
+							}
+						});
 						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 							cpSolveButton.setEnabled(target instanceof SpacingProfile);
 						}
@@ -238,38 +254,26 @@ public class ContractPage extends ADPComposite {
 								input = profile.getContract();
 							}
 						} else if (input instanceof final MullProfile profile) {
-							final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
-							if (editorData != null) {
-								final Command populateModelCommand = MullSolver.populateModelFromMultipleInventories(editorData, profile);
-								cmd.append(populateModelCommand);
-							}
+							ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationSolver.class, inventoryBasedGenerationSolver -> {
+								if (inventoryBasedGenerationSolver == null) {
+									throw new IllegalStateException("Could not find inventory-based generation solver");
+								}
+								final CompoundCommand cmd = new CompoundCommand("Re-generate ADP Slots");
+								final Command populateCommand = inventoryBasedGenerationSolver.runInventoryBasedGeneration(editorData, profile);
+								cmd.append(populateCommand);
+							});
 						}
 						updateDetailPaneInput(input);
 					}
 				});
 			}
 			{
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					vanillaBuildButton = new Button(toolbarComposite, SWT.PUSH);
-					vanillaBuildButton.setText("Generate vanilla");
-					vanillaBuildButton.setEnabled(true);
-					vanillaBuildButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-
-							EObject input = detailComposite.getInput();
-							if (input instanceof final MullProfile profile) {
-								final CompoundCommand cmd = new CompoundCommand("Generate vanilla ADP Slots");
-								if (editorData != null) {
-									final Command populateModelCommand = MullSolver.populateVanillaModel(editorData, profile);
-									cmd.append(populateModelCommand);
-								}
-
+				ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class,
+						customiser -> {
+							if (customiser != null) {
+								customiser.customiseToolbar(toolbarComposite, editorData, () -> detailComposite.getInput(), this::updateDetailPaneInput);
 							}
-							updateDetailPaneInput(input);
-						}
-					});
-				}
+						});
 			}
 			{
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
@@ -422,126 +426,132 @@ public class ContractPage extends ADPComposite {
 				}
 				{
 					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-						mullComposite = new Composite(rhsScrolledComposite, SWT.NONE);
-						mullComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).create());
-						mullSummaryGroup = new Group(mullComposite, SWT.NONE);
-						mullSummaryGroup.setLayout(new GridLayout(1, false));
-						mullSummaryGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+						ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, presentationCustomiser -> {
+							if (presentationCustomiser != null && presentationCustomiser.showSummaryPane()) {
+								mullComposite = new Composite(rhsScrolledComposite, SWT.NONE);
+								mullComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).create());
+								mullSummaryGroup = new Group(mullComposite, SWT.NONE);
+								mullSummaryGroup.setLayout(new GridLayout(1, false));
+								mullSummaryGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-						mullSummaryGroup.setText("Mull Summary");
-						final DetailToolbarManager toolbarManager = new DetailToolbarManager(mullSummaryGroup, SWT.TOP);
+								mullSummaryGroup.setText("Mull Summary");
+								final DetailToolbarManager toolbarManager = new DetailToolbarManager(mullSummaryGroup, SWT.TOP);
 
-						filterAction = new FilterToVesselsAction(filterToVessels -> {
-							if (mullSummaryViewer != null) {
-								final IContentProvider contentProvider = getMullSummaryContentProvider(filterToVessels);
-								mullSummaryViewer.setContentProvider(contentProvider);
-								mullSummaryViewer.refresh();
+								filterAction = new FilterToVesselsAction(filterToVessels -> {
+									if (mullSummaryViewer != null) {
+										final IContentProvider contentProvider = getMullSummaryContentProvider(filterToVessels);
+										mullSummaryViewer.setContentProvider(contentProvider);
+										mullSummaryViewer.refresh();
+									}
+								});
+								toolbarManager.getToolbarManager().add(filterAction);
+
+								mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
+
+								Action packAction = new Action("Pack") {
+									@Override
+									public void run() {
+
+										if (mullSummaryViewer != null && !mullSummaryViewer.getControl().isDisposed()) {
+											final GridColumn[] columns = mullSummaryViewer.getGrid().getColumns();
+											for (final GridColumn c : columns) {
+												if (c.getResizeable()) {
+													c.pack();
+												}
+											}
+										}
+									}
+								};
+
+								packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
+
+								toolbarManager.getToolbarManager().add(packAction);
+
+								final CopyGridToClipboardAction mullSummaryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullSummaryViewer);
+								toolbarManager.getToolbarManager().add(mullSummaryTableCopyAction);
+
+								mullSummaryExpandLevel = 1;
+								final Action collapseOneLevel = new Action("Collapse All") {
+									@Override
+									public void run() {
+										mullSummaryViewer.collapseAll();
+										mullSummaryExpandLevel = 1;
+									}
+								};
+								final Action expandOneLevel = new Action("Expand one Level") {
+									@Override
+									public void run() {
+										mullSummaryViewer.expandToLevel(++mullSummaryExpandLevel);
+									}
+								};
+
+								CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
+								CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
+
+								toolbarManager.getToolbarManager().add(collapseOneLevel);
+								toolbarManager.getToolbarManager().add(expandOneLevel);
+								toolbarManager.getToolbarManager().update(true);
+
+								mullSummaryAdapter = new EContentAdapter() {
+									@Override
+									public void notifyChanged(final Notification notification) {
+										super.notifyChanged(notification);
+										ViewerHelper.refresh(mullSummaryViewer, false);
+									}
+
+									@Override
+									protected void setTarget(final EObject target) {
+										basicSetTarget(target);
+										if (target instanceof @NonNull final ADPModel adpModel) {
+											basicSetTarget(target);
+											addAdapter(target);
+											final MullProfile mullProfile = adpModel.getMullProfile();
+											if (mullProfile != null) {
+												addAdapter(mullProfile);
+												for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
+													addAdapter(mullSubprofile);
+													for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+														addAdapter(mullEntityRow);
+														for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+															addAdapter(salesContractAllocationRow);
+														}
+														for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+															addAdapter(desSalesMarketAllocationRow);
+														}
+													}
+												}
+											}
+										}
+									}
+
+									@Override
+									protected void unsetTarget(final EObject target) {
+										basicUnsetTarget(target);
+										if (target instanceof @NonNull final ADPModel adpModel) {
+											removeAdapter(target, false, true);
+											final MullProfile mullProfile = adpModel.getMullProfile();
+											if (mullProfile != null) {
+												removeAdapter(mullProfile, false, true);
+												for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
+													removeAdapter(mullSubprofile, false, true);
+													for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+														removeAdapter(mullEntityRow, false, true);
+														for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+															removeAdapter(salesContractAllocationRow, false, true);
+														}
+														for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+															removeAdapter(desSalesMarketAllocationRow, false, true);
+														}
+													}
+												}
+											}
+										}
+									}
+								};
 							}
 						});
-						toolbarManager.getToolbarManager().add(filterAction);
-
-						mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
-
-						Action packAction = new Action("Pack") {
-							@Override
-							public void run() {
-
-								if (mullSummaryViewer != null && !mullSummaryViewer.getControl().isDisposed()) {
-									final GridColumn[] columns = mullSummaryViewer.getGrid().getColumns();
-									for (final GridColumn c : columns) {
-										if (c.getResizeable()) {
-											c.pack();
-										}
-									}
-								}
-							}
-						};
-
-						packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
-
-						toolbarManager.getToolbarManager().add(packAction);
-
-						final CopyGridToClipboardAction mullSummaryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullSummaryViewer);
-						toolbarManager.getToolbarManager().add(mullSummaryTableCopyAction);
-
-						mullSummaryExpandLevel = 1;
-						final Action collapseOneLevel = new Action("Collapse All") {
-							@Override
-							public void run() {
-								mullSummaryViewer.collapseAll();
-								mullSummaryExpandLevel = 1;
-							}
-						};
-						final Action expandOneLevel = new Action("Expand one Level") {
-							@Override
-							public void run() {
-								mullSummaryViewer.expandToLevel(++mullSummaryExpandLevel);
-							}
-						};
-
-						CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
-						CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
-
-						toolbarManager.getToolbarManager().add(collapseOneLevel);
-						toolbarManager.getToolbarManager().add(expandOneLevel);
-						toolbarManager.getToolbarManager().update(true);
-
-						mullSummaryAdapter = new EContentAdapter() {
-							@Override
-							public void notifyChanged(final Notification notification) {
-								super.notifyChanged(notification);
-								ViewerHelper.refresh(mullSummaryViewer, false);
-							}
-
-							@Override
-							protected void setTarget(final EObject target) {
-								basicSetTarget(target);
-								if (target instanceof @NonNull final ADPModel adpModel) {
-									basicSetTarget(target);
-									addAdapter(target);
-									final MullProfile mullProfile = adpModel.getMullProfile();
-									if (mullProfile != null) {
-										addAdapter(mullProfile);
-										for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
-											addAdapter(mullSubprofile);
-											for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
-												addAdapter(mullEntityRow);
-												for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
-													addAdapter(salesContractAllocationRow);
-												}
-												for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
-													addAdapter(desSalesMarketAllocationRow);
-												}
-											}
-										}
-									}
-								}
-							}
-
-							@Override
-							protected void unsetTarget(final EObject target) {
-								basicUnsetTarget(target);
-								if (target instanceof @NonNull final ADPModel adpModel) {
-									removeAdapter(target, false, true);
-									final MullProfile mullProfile = adpModel.getMullProfile();
-									if (mullProfile != null) {
-										removeAdapter(mullProfile, false, true);
-										for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
-											removeAdapter(mullSubprofile, false, true);
-											for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
-												removeAdapter(mullEntityRow, false, true);
-												for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
-													removeAdapter(salesContractAllocationRow, false, true);
-												}
-												for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
-													removeAdapter(desSalesMarketAllocationRow, false, true);
-												}
-											}
-										}
-									}
-								}
-							}
-						};
+						
+						
 					}
 				}
 			}
@@ -610,7 +620,8 @@ public class ContractPage extends ADPComposite {
 
 	private GridTreeViewer constructMullSummaryViewer(final ADPEditorData editorData, final Group group) {
 		final GridTreeViewer localMullSummaryViewer = new GridTreeViewer(group, SWT.V_SCROLL | SWT.MULTI);
-		// localMullSummaryViewer.init(editorData.getAdapterFactory(), editorData.getModelReference());
+		// localMullSummaryViewer.init(editorData.getAdapterFactory(),
+		// editorData.getModelReference());
 
 		final IContentProvider contentProvider = getMullSummaryContentProvider(filterAction.isShowingVessels());
 		localMullSummaryViewer.setContentProvider(contentProvider);
@@ -736,12 +747,22 @@ public class ContractPage extends ADPComposite {
 					profile = ADPFactory.eINSTANCE.createMullProfile();
 				}
 				objects.add(profile);
-				mullSummaryAdapter.setTarget(adpModel);
-				releaseAdaptersRunnable = () -> {
-					commercialModel.eAdapters().remove(commercialModelAdapter);
-					cargoModel.eAdapters().remove(cargoModelAdapter);
-					adpModel.eAdapters().remove(mullSummaryAdapter);
-				};
+				ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, presentationCustomiser -> {
+					if (presentationCustomiser != null && presentationCustomiser.showSummaryPane()) {
+						mullSummaryAdapter.setTarget(adpModel);
+						releaseAdaptersRunnable = () -> {
+							commercialModel.eAdapters().remove(commercialModelAdapter);
+							cargoModel.eAdapters().remove(cargoModelAdapter);
+							adpModel.eAdapters().remove(mullSummaryAdapter);
+						};
+					} else {
+						releaseAdaptersRunnable = () -> {
+							commercialModel.eAdapters().remove(commercialModelAdapter);
+							cargoModel.eAdapters().remove(cargoModelAdapter);
+						};
+					}
+				});
+				
 			} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
 				SpacingProfile profile = adpModel.getSpacingProfile();
 				if (profile == null) {
@@ -876,14 +897,24 @@ public class ContractPage extends ADPComposite {
 					// rhsScrolledComposite.layout();
 				} else if (target instanceof MullProfile) {
 					// previewGroup.setVisible(false);
-					mullSummaryViewer.setInput(target);
-					if (rhsScrolledComposite.getContent() != mullComposite) {
-						rhsScrolledComposite.setContent(mullComposite);
-					}
-					mullSummaryGroup.layout();
-					// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-					// rhsScrolledComposite.layout();
-					rhsScrolledComposite.requestLayout();
+					ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, presentationCustomiser -> {
+						if (presentationCustomiser != null && presentationCustomiser.showSummaryPane()) {
+							mullSummaryViewer.setInput(target);
+							if (rhsScrolledComposite.getContent() != mullComposite) {
+								rhsScrolledComposite.setContent(mullComposite);
+							}
+							mullSummaryGroup.layout();
+							// rhsScrolledComposite.setMinSize(mullComposite.computeSize(SWT.DEFAULT,
+							// SWT.DEFAULT));
+							// rhsScrolledComposite.layout();
+							rhsScrolledComposite.requestLayout();
+						} else {
+							if (rhsScrolledComposite.getContent() != mullComposite) {
+								rhsScrolledComposite.setContent(mullComposite);
+							}
+							rhsScrolledComposite.requestLayout();
+						}
+					});
 				} else {
 					rhsScrolledComposite.setContent(null);
 					// rhsScrolledComposite.requestLayout();
@@ -969,8 +1000,6 @@ public class ContractPage extends ADPComposite {
 	private Button generateButton;
 
 	private Button cpSolveButton;
-
-	private Button vanillaBuildButton;
 
 	private Group previewGroup;
 

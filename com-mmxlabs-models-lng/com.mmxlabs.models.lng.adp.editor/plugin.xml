@@ -55,14 +55,6 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.PreDefinedDistributionModel">
    </componentHelper>
-     
-    
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MullProfile">
-   </componentHelper>
    <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractAllocationRowComponentHelper"
          id="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractAllocationRowComponentHelper"
@@ -84,12 +76,14 @@
          id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
+   <!--
    <displayCompositeFactory
          eClass="com.mmxlabs.models.lng.adp.MullProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
          id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileDetailCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
+   -->
    <displayCompositeFactory
          eClass="com.mmxlabs.models.lng.adp.SpacingProfile"
          factory="com.mmxlabs.models.lng.adp.presentation.composites.SpacingProfileDetailCompositeFactory"

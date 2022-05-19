@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import com.mmxlabs.models.lng.adp.mull.container.IAllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.container.ICargoBlueprint;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.Vessel;
 
 @NonNullByDefault
 public class PhaseTwoAllocationTrackerManipulationStrategy implements IAllocationTrackerManipulationStrategy {
@@ -43,5 +44,10 @@ public class PhaseTwoAllocationTrackerManipulationStrategy implements IAllocatio
 	@Override
 	public boolean bucketSatisfiesAacq(final IAllocationTracker allocationTracker) {
 		return this.satisfiesAacq(allocationTracker);
+	}
+
+	@Override
+	public int calculateExpectedBoiloff(Vessel vessel, int loadDuration, IAllocationTracker allocationTracker) {
+		return (int) (loadDuration * (vessel.getLadenAttributes().getVesselOrDelegateInPortNBORate() / 24.0));
 	}
 }

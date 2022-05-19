@@ -8,13 +8,9 @@
 <feature
       id="com.mmxlabs.lingo.feature"
       label="LiNGO"
-      version="5.4.3.qualifier"
+      version="5.5.2.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
-
-   <includes
-         id="com.mmxlabs.jobmanager.feature"
-         version="0.0.0"/>
 
    <includes
          id="com.mmxlabs.lingo.platform.feature"

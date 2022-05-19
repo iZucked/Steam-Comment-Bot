@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.navigator;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -33,6 +34,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.rcp.common.DualImageProgressRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
@@ -45,8 +47,7 @@ import com.mmxlabs.scenario.service.ui.IProgressProvider.RunType;
 import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 /**
- * Fork of the {@link NavigatorDecoratingLabelProvider} to override
- * {@link #getColumnImage(Object, int)};
+ * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
  */
 @SuppressWarnings("restriction")
 public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider
@@ -65,8 +66,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.
-		 * IStyledLabelProvider#getImage(java.lang.Object)
+		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider. IStyledLabelProvider#getImage(java.lang.Object)
 		 */
 		@Override
 		public Image getImage(final Object element) {
@@ -76,8 +76,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.
-		 * IStyledLabelProvider#getStyledText(java.lang.Object)
+		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider. IStyledLabelProvider#getStyledText(java.lang.Object)
 		 */
 		@Override
 		public StyledString getStyledText(final Object element) {
@@ -93,9 +92,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.
-		 * viewers.ILabelProviderListener)
+		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface. viewers.ILabelProviderListener)
 		 */
 		@Override
 		public void addListener(final ILabelProviderListener listener) {
@@ -115,8 +112,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.
-		 * Object, java.lang.String)
+		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang. Object, java.lang.String)
 		 */
 		@Override
 		public boolean isLabelProperty(final Object element, final String property) {
@@ -126,9 +122,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface
-		 * .viewers.ILabelProviderListener)
+		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface .viewers.ILabelProviderListener)
 		 */
 		@Override
 		public void removeListener(final ILabelProviderListener listener) {
@@ -168,8 +162,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 */
 		@Override
 		public Font getFont(final Object element) {
-			if (provider instanceof IFontProvider) {
-				return ((IFontProvider) provider).getFont(element);
+			if (provider instanceof IFontProvider fontProvider) {
+				return fontProvider.getFont(element);
 			}
 			return null;
 		}
@@ -185,8 +179,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
-		 * Object, int)
+		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang. Object, int)
 		 */
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
@@ -199,9 +192,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
-		 * int)
+		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 		 */
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
@@ -219,7 +210,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	/**
 	 * Creates a {@link ScenarioServiceNavigatorDecoratingLabelProvider}
 	 * 
-	 * @param commonLabelProvider the label provider to use
+	 * @param commonLabelProvider
+	 *            the label provider to use
 	 */
 	public ScenarioServiceNavigatorDecoratingLabelProvider(final ILabelProvider commonLabelProvider) {
 		super(new StyledLabelProviderAdapter(commonLabelProvider), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator(), null);
@@ -228,9 +220,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.StyledCellLabelProvider#initialize(org.eclipse.
-	 * jface.viewers.ColumnViewer, org.eclipse.jface.viewers.ViewerColumn)
+	 * @see org.eclipse.jface.viewers.StyledCellLabelProvider#initialize(org.eclipse. jface.viewers.ColumnViewer, org.eclipse.jface.viewers.ViewerColumn)
 	 */
 	@Override
 	public void initialize(final ColumnViewer viewer, final ViewerColumn column) {
@@ -351,9 +341,15 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 				}
 			};
 			progressProviderTracker.open();
-			final IProgressProvider s2 = progressProviderTracker.getService();
-			if (s2 != null) {
-				s2.addChangedListener(changeListenerProgress);
+
+			@Nullable
+			Object[] existing = progressProviderTracker.getServices();
+			if (existing != null) {
+				for (var s2 : existing) {
+					if (s2 instanceof IProgressProvider pp) {
+						pp.addChangedListener(changeListenerProgress);
+					}
+				}
 			}
 		}
 	}
@@ -379,9 +375,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.
-	 * jface.util.PropertyChangeEvent)
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse. jface.util.PropertyChangeEvent)
 	 */
 	@Override
 	public void propertyChange(final PropertyChangeEvent event) {
@@ -406,37 +400,50 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.
-	 * Object, int)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang. Object, int)
 	 */
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
 
 		if (columnIndex == ScenarioServiceNavigator.COLUMN_NAME_IDX) {
 
-			IProgressProvider service = progressProviderTracker.getService();
-			if (service != null) {
-				ScenarioFragment fragment = null;
-				ScenarioInstance instance = null;
-				if (element instanceof ScenarioFragment) {
-					fragment = (ScenarioFragment) element;
-					instance = fragment.getScenarioInstance();
-				}
-				if (element instanceof ScenarioInstance) {
-					instance = (ScenarioInstance) element;
-				}
-				if (instance != null) {
-					Pair<Double, RunType> progress = service.getProgress(instance, fragment);
-					if (progress != null) {
-						if (progress.getSecond() == RunType.Local) {
-							return DualImageProgressRenderer.renderProgress(CommonImages.IconPaths.Play_16, progress.getFirst());
-						} else {
-							return DualImageProgressRenderer.renderProgress(CommonImages.IconPaths.CloudPlay_16, progress.getFirst());
+			Image[] img = new Image[1];
+
+			ServiceHelper.withAllServices(IProgressProvider.class, null, service -> {
+				// IProgressProvider service = progressProviderTracker.getService();
+				if (service != null) {
+					ScenarioFragment fragment = null;
+					ScenarioInstance instance = null;
+					if (element instanceof ScenarioFragment) {
+						fragment = (ScenarioFragment) element;
+						instance = fragment.getScenarioInstance();
+					}
+					if (element instanceof ScenarioInstance) {
+						instance = (ScenarioInstance) element;
+					}
+					if (instance != null) {
+
+						Pair<Double, RunType> progress = service.getProgress(instance, fragment);
+						// System.out.println("looking up " + progress);
+						if (progress != null) {
+							if (progress.getSecond() == RunType.Local) {
+								img[0] = DualImageProgressRenderer.renderProgress(CommonImages.IconPaths.Play_16, progress.getFirst());
+								return false;
+
+							} else {
+								img[0] = DualImageProgressRenderer.renderProgress(CommonImages.IconPaths.CloudPlay_16, progress.getFirst());
+								return false;
+							}
 						}
 					}
 				}
+				return true;
+			});
+			if (img[0] != null) {
+				return img[0];
 			}
 		}
+
 		final Image image = ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnImage(element, columnIndex);
 
 		if (columnIndex == ScenarioServiceNavigator.COLUMN_NAME_IDX) {
@@ -467,9 +474,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object,
-	 * int)
+	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
