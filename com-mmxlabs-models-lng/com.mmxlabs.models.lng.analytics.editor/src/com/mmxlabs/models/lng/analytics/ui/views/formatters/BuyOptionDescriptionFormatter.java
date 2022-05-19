@@ -5,8 +5,11 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Collection;
+import java.util.Locale;
 
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
@@ -20,6 +23,7 @@ import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
@@ -32,24 +36,24 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof MTMRow row) {
+		if (object instanceof final MTMRow row) {
 			final BuyOption buy = row.getBuyOption();
-			if (buy instanceof BuyReference ref) {
+			if (buy instanceof final BuyReference ref) {
 				final LoadSlot slot = ref.getSlot();
 				return slot.getName();
 			}
 			return render(buy);
-		} else if (object instanceof ViabilityRow row) {
+		} else if (object instanceof final ViabilityRow row) {
 			final BuyOption buy = row.getBuyOption();
 			return render(buy);
-		} else if (object instanceof BreakEvenAnalysisRow row) {
+		} else if (object instanceof final BreakEvenAnalysisRow row) {
 			final BuyOption buy = row.getBuyOption();
 			return render(buy);
-		} else if (object instanceof PartialCaseRow row) {
+		} else if (object instanceof final PartialCaseRow row) {
 			final Collection<?> buys = row.getBuyOptions();
 			return render(buys);
 
-		} else if (object instanceof Collection<?> collection) {
+		} else if (object instanceof final Collection<?> collection) {
 
 			if (collection.isEmpty()) {
 				return "<open>";
@@ -66,7 +70,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
-		} else if (object instanceof Object[] arr) {
+		} else if (object instanceof final Object[] arr) {
 			final Object[] objects = arr;
 
 			if (objects.length == 0) {
@@ -84,12 +88,42 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof OpenBuy) {
 			return "<open>";
-		} else if (object instanceof BuyOpportunity buyOpportunity) {
+		} else if (object instanceof final BuyOpportunity buyOpportunity) {
+			final String name = buyOpportunity.isSetName() ? buyOpportunity.getName() : null;
+			if (name != null && !name.isBlank()) {
+				return name.trim();
+			}
+
 			final LocalDate date = buyOpportunity.getDate();
 			String dateStr = "<not set>";
 			if (date != null) {
 				final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 				dateStr = date.format(sdf);
+
+				if (buyOpportunity.isSpecifyWindow()) {
+					buyOpportunity.getWindowSize();
+					buyOpportunity.getWindowSizeUnits();
+
+					final int size = buyOpportunity.getWindowSize();
+					final TimePeriod units = buyOpportunity.getWindowSizeUnits();
+					String suffix;
+					switch (units) {
+					case DAYS:
+						suffix = "d";
+						break;
+					case HOURS:
+						suffix = "h";
+						break;
+					case MONTHS:
+						suffix = "m";
+						break;
+					default:
+						return "";
+					}
+					if (size > 0) {
+						dateStr = String.format("%s +%d%s", dateStr, size, suffix);
+					}
+				}
 			}
 			String priceExpression = buyOpportunity.getPriceExpression();
 			if (priceExpression != null && priceExpression.length() > 5) {
@@ -120,7 +154,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				return String.format("%s (%s) %s", portName, dateStr, priceExpression).trim();
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof BuyReference buyReference) {
+		} else if (object instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
@@ -130,10 +164,16 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID <not set>");
-		} else if (object instanceof BuyMarket buyMarket) {
+		} else if (object instanceof final BuyMarket buyMarket) {
 			final SpotMarket market = buyMarket.getMarket();
 			if (market != null) {
-				return String.format("Market %s", market.getName());
+				String dateSuffix = "";
+				if (buyMarket.isSetMonth() && buyMarket.getMonth() != null) {
+					YearMonth m = buyMarket.getMonth();
+					dateSuffix = String.format(" (%s/%02d)", m.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), m.getYear() - 2000);
+				}
+
+				return String.format("Market %s%s", market.getName(), dateSuffix);
 			}
 			return String.format("Market <not set>");
 		}

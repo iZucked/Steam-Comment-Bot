@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.time.YearMonth;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl#getMarket <em>Market</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl#getMonth <em>Month</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,6 +44,33 @@ public class BuyMarketImpl extends UUIDObjectImpl implements BuyMarket {
 	 * @ordered
 	 */
 	protected SpotMarket market;
+
+	/**
+	 * The default value of the '{@link #getMonth() <em>Month</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMonth()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final YearMonth MONTH_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getMonth() <em>Month</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMonth()
+	 * @generated
+	 * @ordered
+	 */
+	protected YearMonth month = MONTH_EDEFAULT;
+	/**
+	 * This is true if the Month attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean monthESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -108,11 +137,63 @@ public class BuyMarketImpl extends UUIDObjectImpl implements BuyMarket {
 	 * @generated
 	 */
 	@Override
+	public YearMonth getMonth() {
+		return month;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMonth(YearMonth newMonth) {
+		YearMonth oldMonth = month;
+		month = newMonth;
+		boolean oldMonthESet = monthESet;
+		monthESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_MARKET__MONTH, oldMonth, month, !oldMonthESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMonth() {
+		YearMonth oldMonth = month;
+		boolean oldMonthESet = monthESet;
+		month = MONTH_EDEFAULT;
+		monthESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.BUY_MARKET__MONTH, oldMonth, MONTH_EDEFAULT, oldMonthESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMonth() {
+		return monthESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.BUY_MARKET__MARKET:
 				if (resolve) return getMarket();
 				return basicGetMarket();
+			case AnalyticsPackage.BUY_MARKET__MONTH:
+				return getMonth();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -129,6 +210,9 @@ public class BuyMarketImpl extends UUIDObjectImpl implements BuyMarket {
 			case AnalyticsPackage.BUY_MARKET__MARKET:
 				setMarket((SpotMarket)newValue);
 				return;
+			case AnalyticsPackage.BUY_MARKET__MONTH:
+				setMonth((YearMonth)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -144,6 +228,9 @@ public class BuyMarketImpl extends UUIDObjectImpl implements BuyMarket {
 			case AnalyticsPackage.BUY_MARKET__MARKET:
 				setMarket((SpotMarket)null);
 				return;
+			case AnalyticsPackage.BUY_MARKET__MONTH:
+				unsetMonth();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -158,8 +245,26 @@ public class BuyMarketImpl extends UUIDObjectImpl implements BuyMarket {
 		switch (featureID) {
 			case AnalyticsPackage.BUY_MARKET__MARKET:
 				return market != null;
+			case AnalyticsPackage.BUY_MARKET__MONTH:
+				return isSetMonth();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (month: ");
+		if (monthESet) result.append(month); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } //BuyMarketImpl

@@ -29,6 +29,6 @@ public class MigrateToV157 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Do nothing
+		// No data change
 	}
 }

@@ -12,6 +12,7 @@ Export-Package: com.mmxlabs.models.lng.analytics.importer,
  com.mmxlabs.models.lng.analytics.ui.utils,
  com.mmxlabs.models.lng.analytics.ui.views,
  com.mmxlabs.models.lng.analytics.ui.views.evaluators,
+ com.mmxlabs.models.lng.analytics.ui.views.formatters,
  com.mmxlabs.models.lng.analytics.ui.views.mtm,
  com.mmxlabs.models.lng.analytics.ui.views.sandbox,
  com.mmxlabs.models.lng.analytics.ui.views.viability

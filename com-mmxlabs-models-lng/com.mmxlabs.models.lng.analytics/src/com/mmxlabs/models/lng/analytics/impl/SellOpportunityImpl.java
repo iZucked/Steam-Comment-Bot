@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#isFobSale <em>Fob Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getContract <em>Contract</em>}</li>
@@ -48,6 +49,35 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportunity {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * This is true if the Name attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean nameESet;
+
 	/**
 	 * The default value of the '{@link #isFobSale() <em>Fob Sale</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -739,8 +769,60 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	 * @generated
 	 */
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		boolean oldNameESet = nameESet;
+		nameESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__NAME, oldName, name, !oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetName() {
+		String oldName = name;
+		boolean oldNameESet = nameESet;
+		name = NAME_EDEFAULT;
+		nameESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.SELL_OPPORTUNITY__NAME, oldName, NAME_EDEFAULT, oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetName() {
+		return nameESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
+				return getName();
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				return isFobSale();
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
@@ -787,6 +869,9 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
+				setName((String)newValue);
+				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				setFobSale((Boolean)newValue);
 				return;
@@ -844,6 +929,9 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
+				unsetName();
+				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				setFobSale(FOB_SALE_EDEFAULT);
 				return;
@@ -901,6 +989,8 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
+				return isSetName();
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				return fobSale != FOB_SALE_EDEFAULT;
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
@@ -945,7 +1035,9 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (fobSale: ");
+		result.append(" (name: ");
+		if (nameESet) result.append(name); else result.append("<unset>");
+		result.append(", fobSale: ");
 		result.append(fobSale);
 		result.append(", date: ");
 		result.append(date);

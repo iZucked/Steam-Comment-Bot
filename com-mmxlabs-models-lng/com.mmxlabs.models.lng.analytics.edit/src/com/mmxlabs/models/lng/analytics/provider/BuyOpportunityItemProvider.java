@@ -48,6 +48,7 @@ public class BuyOpportunityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 			addDesPurchasePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
@@ -212,7 +213,7 @@ public class BuyOpportunityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_BuyOpportunity_cv_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_cv_feature", "_UI_BuyOpportunity_type"),
+				 getString("_UI_BuyOpportunity_cv_description"),
 				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV,
 				 true,
 				 false,
@@ -300,7 +301,7 @@ public class BuyOpportunityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_BuyOpportunity_volumeUnits_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_volumeUnits_feature", "_UI_BuyOpportunity_type"),
+				 getString("_UI_BuyOpportunity_volumeUnits_description"),
 				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_UNITS,
 				 true,
 				 false,
@@ -421,6 +422,28 @@ public class BuyOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_name_feature"),
+				 getString("_UI_BuyOpportunity_name_description"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BuyOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,7 +462,7 @@ public class BuyOpportunityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BuyOpportunity)object).getUuid();
+		String label = ((BuyOpportunity)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_BuyOpportunity_type") :
 			getString("_UI_BuyOpportunity_type") + " " + label;
@@ -457,6 +480,7 @@ public class BuyOpportunityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(BuyOpportunity.class)) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 			case AnalyticsPackage.BUY_OPPORTUNITY__DATE:
 			case AnalyticsPackage.BUY_OPPORTUNITY__PRICE_EXPRESSION:

@@ -48,6 +48,7 @@ public class SellOpportunityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 			addFobSalePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
@@ -255,7 +256,7 @@ public class SellOpportunityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SellOpportunity_volumeMode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_volumeMode_feature", "_UI_SellOpportunity_type"),
+				 getString("_UI_SellOpportunity_volumeMode_description"),
 				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_MODE,
 				 true,
 				 false,
@@ -398,6 +399,28 @@ public class SellOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_name_feature"),
+				 getString("_UI_SellOpportunity_name_description"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SellOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -416,7 +439,7 @@ public class SellOpportunityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SellOpportunity)object).getUuid();
+		String label = ((SellOpportunity)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_SellOpportunity_type") :
 			getString("_UI_SellOpportunity_type") + " " + label;
@@ -434,6 +457,7 @@ public class SellOpportunityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SellOpportunity.class)) {
+			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__DATE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__PRICE_EXPRESSION:

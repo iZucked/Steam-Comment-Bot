@@ -71,6 +71,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -453,34 +454,44 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 */
 	@Override
 	protected void doCreateFormContent() {
-		if (inputs.isEmpty()) {
-			if (displayComposite != null) {
-				displayComposite.getComposite().dispose();
-				displayComposite = null;
-			}
-			return;
-		}
-		final EObject selection = inputs.get(selectedObjectIndex);
-		final IScenarioEditingLocation sel = location;
-
-		String text = returnDuplicates ? "Duplicating " : "Editing ";
-		text += EditorUtils.unmangle(selection).toLowerCase() + " ";
-		if (selection instanceof NamedObject) {
-			final String name = ((NamedObject) selection).getName();
-			text += name != null ? "\"" + name + "\"" : "<unspecified>";
-		} else {
-			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
-			final String providedText = itemLabelProvider.getText(selection);
-			if (providedText != null && !"".equals(providedText)) {
-				text += "\"" + providedText + "\"";
-			}
-		}
-		getShell().setText(text);
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
+
+		if (inputs.isEmpty()) {
+			return;
+		}
+
+		final EObject selection = inputs.get(selectedObjectIndex);
+		final IScenarioEditingLocation sel = location;
+
+		String text = returnDuplicates ? "Duplicating " : "Editing ";
+		boolean foundOverride = false;
+		{
+
+			String lbl = displayCompositeFactory.getRenderingLabel(inputs);
+			if (lbl != null) {
+				text += lbl;
+				foundOverride = true;
+			}
+
+		}
+		if (!foundOverride) {
+			text += EditorUtils.unmangle(selection).toLowerCase() + " ";
+			if (selection instanceof NamedObject) {
+				final String name = ((NamedObject) selection).getName();
+				text += name != null ? "\"" + name + "\"" : "<unspecified>";
+			} else {
+				final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
+				final String providedText = itemLabelProvider.getText(selection);
+				if (providedText != null && !"".equals(providedText)) {
+					text += "\"" + providedText + "\"";
+				}
+			}
+		}
+		getShell().setText(text);
 
 		dialogContext = new DefaultDialogEditingContext(dialogController, location, false, true);
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), dialogContext, toolkit);

@@ -5,8 +5,11 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Collection;
+import java.util.Locale;
 
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.OpenSell;
@@ -19,10 +22,13 @@ import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class SellOptionDescriptionFormatter extends BaseFormatter {
+	private static final String STR_NOT_SET = "<not set>";
+
 	@Override
 	public String render(final Object object) {
 
@@ -30,18 +36,18 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof ViabilityRow row) {
+		if (object instanceof final ViabilityRow row) {
 			final SellOption sell = row.getSellOption();
 			return render(sell);
-		} else if (object instanceof BreakEvenAnalysisRow row) {
+		} else if (object instanceof final BreakEvenAnalysisRow row) {
 			final SellOption sell = row.getSellOption();
 			return render(sell);
-		} else if (object instanceof PartialCaseRow row) {
+		} else if (object instanceof final PartialCaseRow row) {
 			final Collection<?> sells = row.getSellOptions();
 
 			return render(sells);
 
-		} else if (object instanceof Collection<?> collection) {
+		} else if (object instanceof final Collection<?> collection) {
 
 			if (collection.isEmpty()) {
 				return "<open>";
@@ -57,7 +63,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
-		} else if (object instanceof Object[] arr) {
+		} else if (object instanceof final Object[] arr) {
 			final Object[] objects = arr;
 			if (objects.length == 0) {
 				return "<open>";
@@ -75,13 +81,43 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof OpenSell) {
 			return "<open>";
-		} else if (object instanceof SellOpportunity sellOpportunity) {
+		} else if (object instanceof final SellOpportunity sellOpportunity) {
+
+			final String name = sellOpportunity.isSetName() ? sellOpportunity.getName() : null;
+			if (name != null && !name.isBlank()) {
+				return name.trim();
+			}
 
 			final LocalDate date = sellOpportunity.getDate();
-			String dateStr = "<not set>";
+			String dateStr = STR_NOT_SET;
 			if (date != null) {
 				final DateTimeFormatter sdf = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 				dateStr = date.format(sdf);
+
+				if (sellOpportunity.isSpecifyWindow()) {
+					sellOpportunity.getWindowSize();
+					sellOpportunity.getWindowSizeUnits();
+
+					final int size = sellOpportunity.getWindowSize();
+					final TimePeriod units = sellOpportunity.getWindowSizeUnits();
+					String suffix;
+					switch (units) {
+					case DAYS:
+						suffix = "d";
+						break;
+					case HOURS:
+						suffix = "h";
+						break;
+					case MONTHS:
+						suffix = "m";
+						break;
+					default:
+						return "";
+					}
+					if (size > 0) {
+						dateStr = String.format("%s +%d%s", dateStr, size, suffix);
+					}
+				}
 			}
 			String priceExpression = sellOpportunity.getPriceExpression();
 			if (priceExpression != null && priceExpression.length() > 5) {
@@ -92,10 +128,10 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				if (sellOpportunity.getContract() != null) {
 					priceExpression = "";
 				} else {
-					priceExpression = "<not set>";
+					priceExpression = STR_NOT_SET;
 				}
 			}
-			String portName = "<not set>";
+			String portName = STR_NOT_SET;
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
 				final String n = port.getName();
@@ -112,7 +148,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				return String.format("%s (%s) %s", portName, dateStr, priceExpression).trim();
 			}
 			return String.format("Opp <not set>");
-		} else if (object instanceof SellReference sellReference) {
+		} else if (object instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				final LocalDate windowStart = slot.getWindowStart();
@@ -120,16 +156,26 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				final String str = windowStart.format(sdf);
 				return String.format("%s (%s)", slot.getName(), str);
 			}
-			return String.format("ID %s", "<not set>");
-		} else if (object instanceof SellMarket sellMarket) {
+			return String.format("ID %s", STR_NOT_SET);
+		} else if (object instanceof final SellMarket sellMarket) {
 			final SpotMarket market = sellMarket.getMarket();
 			if (market != null) {
-				return String.format("Market %s", market.getName());
+
+				String dateSuffix = "";
+				if (sellMarket.isSetMonth() && sellMarket.getMonth() != null) {
+					YearMonth m = sellMarket.getMonth();
+					dateSuffix = String.format(" (%s/%02d)", m.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), m.getYear() - 2000);
+				}
+
+				return String.format("Market %s%s", market.getName(), dateSuffix);
+
 			}
-			return String.format("Market %s", "<not set>");
+			return String.format("Market %s", STR_NOT_SET);
 		}
 
-		if (object == null) {
+		if (object == null)
+
+		{
 			return "";
 		} else {
 			return object.toString();

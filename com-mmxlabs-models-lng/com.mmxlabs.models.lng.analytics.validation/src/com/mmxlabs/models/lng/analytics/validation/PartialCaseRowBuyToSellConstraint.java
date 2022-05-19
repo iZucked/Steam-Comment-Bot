@@ -51,23 +51,19 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 	private void validateNonShipped(final IValidationContext ctx, final List<IStatus> statuses, final PartialCaseRow partialCaseRow, final Predicate<BuyOption> purchaseType,
 			final Predicate<SellOption> saleType) {
 		for (final BuyOption buyOption : partialCaseRow.getBuyOptions().stream().filter(purchaseType).collect(Collectors.toList())) {
-			if (!(buyOption instanceof BuyMarket)) {
-				for (final SellOption sellOption : partialCaseRow.getSellOptions().stream().filter(saleType).collect(Collectors.toList())) {
-					if (!(sellOption instanceof SellMarket)) {
-						final ZonedDateTime buyWindowStart = AnalyticsBuilder.getWindowStartDate(buyOption);
-						final ZonedDateTime buyWindowEnd = AnalyticsBuilder.getWindowEndDate(buyOption);
+			for (final SellOption sellOption : partialCaseRow.getSellOptions().stream().filter(saleType).collect(Collectors.toList())) {
+				final ZonedDateTime buyWindowStart = AnalyticsBuilder.getWindowStartDate(buyOption);
+				final ZonedDateTime buyWindowEnd = AnalyticsBuilder.getWindowEndDate(buyOption);
 
-						final ZonedDateTime sellWindowStart = AnalyticsBuilder.getWindowStartDate(sellOption);
-						final ZonedDateTime sellWindowEnd = AnalyticsBuilder.getWindowEndDate(sellOption);
+				final ZonedDateTime sellWindowStart = AnalyticsBuilder.getWindowStartDate(sellOption);
+				final ZonedDateTime sellWindowEnd = AnalyticsBuilder.getWindowEndDate(sellOption);
 
-						if (buyWindowStart != null && buyWindowEnd != null && sellWindowStart != null && sellWindowEnd != null) {
-							if (!(isDateWithinPeriod(sellWindowStart, buyWindowStart, buyWindowEnd) || isDateWithinPeriod(sellWindowEnd, buyWindowStart, buyWindowEnd))) {
-								final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-										String.format("%s - potential non-shipped cargo (%s - %s) has incompatible windows.", viewName, getOpportunityID(buyOption), getOpportunityID(sellOption))));
-								deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-								statuses.add(deco);
-							}
-						}
+				if (buyWindowStart != null && buyWindowEnd != null && sellWindowStart != null && sellWindowEnd != null) {
+					if (!(isDateWithinPeriod(sellWindowStart, buyWindowStart, buyWindowEnd) || isDateWithinPeriod(sellWindowEnd, buyWindowStart, buyWindowEnd))) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
+								String.format("%s - potential non-shipped cargo (%s - %s) has incompatible windows.", viewName, getOpportunityID(buyOption), getOpportunityID(sellOption))));
+						deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+						statuses.add(deco);
 					}
 				}
 			}

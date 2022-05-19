@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
+import com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -78,7 +80,7 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 			if (slot.isDesPurchase()) {
 				if (slot.getCv() == 0.0) {
-					final String message = String.format("Buy needs a non-zero CV");
+					final String message = "Buy needs a non-zero CV";
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV);
 					failures.add(dsd);
@@ -86,21 +88,21 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 			final Port port = slot.getPort();
 			if (port == null) {
-				final String message = String.format("Buy has no port");
+				final String message = "Buy has no port";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 				failures.add(dsd);
 			} else {
 				if (slot.isDesPurchase()) {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-						final String message = String.format("Buy port should be a discharge port");
+						final String message = "Buy port should be a discharge port";
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
 				} else {
 					if (!port.getCapabilities().contains(PortCapability.LOAD)) {
-						final String message = String.format("Buy port should be a load port");
+						final String message = "Buy port should be a load port";
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 						failures.add(dsd);
@@ -108,21 +110,21 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				}
 			}
 			if (slot.getDate() == null) {
-				final String message = String.format("Buy has no date");
+				final String message = "Buy has no date";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 				failures.add(dsd);
 			} else {
 				LocalDate date = slot.getDate();
 				if (date.getYear() < 1900) {
-					final String message = String.format("Buy has invalid year");
+					final String message = "Buy has invalid year";
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 					failures.add(dsd);
 				}
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
-				final String message = String.format("Buy has no entity");
+				final String message = "Buy has no entity";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
@@ -130,13 +132,37 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 			if (slot.getVolumeMode() == VolumeMode.RANGE) {
 				if (slot.getMaxVolume() < slot.getMinVolume()) {
-					final String message = String.format("Buy max volume is less than min volume");
+					final String message = "Buy max volume is less than min volume";
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME);
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME);
 					failures.add(dsd);
 				}
+				if (slot.getVolumeUnits() == VolumeUnits.M3) {
+					if (slot.getMinVolume() > SlotVolumeConstraint.SENSIBLE_M3) {
+						final String message = "Buy min volume is not sensible, note units are in M3";
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME);
+						failures.add(dsd);
+					}
+					if (slot.getMaxVolume() > SlotVolumeConstraint.SENSIBLE_M3) {
+						final String message = "Buy max volume is not sensible, note units are in M3";
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME);
+						failures.add(dsd);
+					}
+				}
 			}
+
+			if (slot.getVolumeMode() == VolumeMode.FIXED) {
+				if (slot.getMinVolume() > SlotVolumeConstraint.SENSIBLE_M3 && slot.getVolumeUnits() == VolumeUnits.M3) {
+					final String message = "Buy volume is not sensible, note units are in M3";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME);
+					failures.add(dsd);
+				}
+			}
+
 		}
 		if (target instanceof SellOpportunity) {
 			final SellOpportunity slot = (SellOpportunity) target;
@@ -184,21 +210,21 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 			final Port port = slot.getPort();
 			if (port == null) {
-				final String message = String.format("Sell has no port");
+				final String message = "Sell has no port";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 				failures.add(dsd);
 			} else {
 				if (slot.isFobSale()) {
 					if (!port.getCapabilities().contains(PortCapability.LOAD)) {
-						final String message = String.format("Sell port should be a load port");
+						final String message = "Sell port should be a load port";
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
 				} else {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-						final String message = String.format("Sell port should be a discharge port");
+						final String message = "Sell port should be a discharge port";
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 						failures.add(dsd);
@@ -206,21 +232,21 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				}
 			}
 			if (slot.getDate() == null) {
-				final String message = String.format("Sell has no date");
+				final String message = "Sell has no date";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 				failures.add(dsd);
 			} else {
 				LocalDate date = slot.getDate();
 				if (date.getYear() < 1900) {
-					final String message = String.format("Sell has invalid year");
+					final String message = "Sell has invalid year";
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 					failures.add(dsd);
 				}
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
-				final String message = String.format("Sell has no entity");
+				final String message = "Sell has no entity";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
@@ -228,10 +254,32 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 			if (slot.getVolumeMode() == VolumeMode.RANGE) {
 				if (slot.getMaxVolume() < slot.getMinVolume()) {
-					final String message = String.format("Sell max volume is less than min volume");
+					final String message = "Sell max volume is less than min volume";
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME);
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME);
+					failures.add(dsd);
+				}
+				if (slot.getVolumeUnits() == VolumeUnits.M3) {
+					if (slot.getMinVolume() > SlotVolumeConstraint.SENSIBLE_M3) {
+						final String message = "Sell min volume is not sensible, note units are in M3";
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME);
+						failures.add(dsd);
+					}
+					if (slot.getMaxVolume() > SlotVolumeConstraint.SENSIBLE_M3) {
+						final String message = "Sell max volume is not sensible, note units are in M3";
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME);
+						failures.add(dsd);
+					}
+				}
+			}
+			if (slot.getVolumeMode() == VolumeMode.FIXED) {
+				if (slot.getMinVolume() > SlotVolumeConstraint.SENSIBLE_M3 && slot.getVolumeUnits() == VolumeUnits.M3) {
+					final String message = "Sell volume is not sensible, note units are in M3";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME);
 					failures.add(dsd);
 				}
 			}

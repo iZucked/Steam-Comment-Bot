@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -399,6 +400,8 @@ public class SelectionToSandboxUtil {
 			// }
 			final BuyMarket marketOption = AnalyticsFactory.eINSTANCE.createBuyMarket();
 			marketOption.setMarket(market);
+			marketOption.setMonth(YearMonth.from(spotLoadSlot.getWindowStart()));
+
 			map.put(slot, marketOption);
 
 			return marketOption;
@@ -416,8 +419,8 @@ public class SelectionToSandboxUtil {
 		}
 
 		if (slot instanceof SpotDischargeSlot) {
-			final SpotDischargeSlot spotLoadSlot = (SpotDischargeSlot) slot;
-			final SpotMarket market = spotLoadSlot.getMarket();
+			final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) slot;
+			final SpotMarket market = spotDischargeSlot.getMarket();
 			// TODO: AnalyticsScenarioEvaluator Code currently assumes we use a market option once rather than multiple times. I.e. it will filter out combinations where the market option is used more
 			// than once.
 
@@ -426,6 +429,8 @@ public class SelectionToSandboxUtil {
 			// }
 			final SellMarket marketOption = AnalyticsFactory.eINSTANCE.createSellMarket();
 			marketOption.setMarket(market);
+			marketOption.setMonth(YearMonth.from(spotDischargeSlot.getWindowStart()));
+
 			map.put(slot, marketOption);
 
 			return marketOption;

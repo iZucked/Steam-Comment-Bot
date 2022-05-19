@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.actions;
 
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,6 +152,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 						final SpotMarket mkt = spotSlot.getMarket();
 						final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
 						m.setMarket(mkt);
+						m.setMonth(YearMonth.from(s.getWindowStart()));
 						cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__BUYS, m));
 						return m;
 						// });
@@ -175,6 +177,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 						final SpotMarket mkt = spotSlot.getMarket();
 						final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
 						m.setMarket(mkt);
+						m.setMonth(YearMonth.from(s.getWindowStart()));
 						cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS, m));
 						return m;
 						// });
