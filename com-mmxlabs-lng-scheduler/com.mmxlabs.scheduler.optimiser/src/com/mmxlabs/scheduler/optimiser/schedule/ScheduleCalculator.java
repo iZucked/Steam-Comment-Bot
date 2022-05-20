@@ -474,7 +474,7 @@ public class ScheduleCalculator {
 				minDischargeMMBTu = ds.getMinDischargeVolumeMMBTU(cv);
 				maxDischargeMMBTu = ds.getMaxDischargeVolumeMMBTU(cv);
 				// should be the same
-				assert cva.getCommercialSlotVolumeInMMBTu(discharge) == cva.getPhysicalSlotVolumeInMMBTu(discharge);
+				assert cva.getCommercialSlotVolumeInMMBTu(discharge) - cva.getPhysicalSlotVolumeInMMBTu(discharge) == 0;
 				scheduledDischargeVolumeMMBTu = cva.getCommercialSlotVolumeInMMBTu(discharge);
 				dischargeBOGMMBTu = cva.getCommercialSlotVolumeInMMBTu(discharge) - cva.getPhysicalSlotVolumeInMMBTu(discharge);
 			}
@@ -548,20 +548,24 @@ public class ScheduleCalculator {
 		final List<RetentionPair> allPairs = new LinkedList<>();
 		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
 		final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm = new HashMap<>();
+		// Creating a full set of retention pairs
 		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm);
 		
 		final IVessel vessel = vesselAvailability.getVessel();
 		
+		// Filter out the pairs which are not valid or can not retain any heel
 		final List<RetentionPair> nullablePairsToKeep = allPairs.stream().filter(r -> r.evaluate(vessel)).toList();
 		
 		if (nullablePairsToKeep != null) {
 			
+			// Remove the overlapping records
 			final List<RetentionPair> pairsToKeep = removeOverlappingValidPairs(nullablePairsToKeep);
 
 			if (!pairsToKeep.isEmpty()) {
 				PortTimesRecord tempRecord = new PortTimesRecord();
 				tempRecord.setSlotTime(records.get(0).getFirstSlot(), 0);
 
+				// Apply changes from retention pair records to VoyagePlanRecord
 				for (final RetentionPair rp: pairsToKeep) {
 					VoyagePlanRecord vpr1 = rp.first;
 					VoyagePlanRecord vpr2 = rp.second;
@@ -570,6 +574,7 @@ public class ScheduleCalculator {
 					setRecord(rp.sCargo, vpr2, mm.get(vpr2), false);
 				}
 
+				// Recompute the new voyage plan
 				final List<@NonNull ScheduledVoyagePlanResult> otherResults = new LinkedList<>();
 				voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
 						tempRecord, false, true, annotatedSolution, otherResults).accept(otherVoyagePlansAndPortTimeRecords);
