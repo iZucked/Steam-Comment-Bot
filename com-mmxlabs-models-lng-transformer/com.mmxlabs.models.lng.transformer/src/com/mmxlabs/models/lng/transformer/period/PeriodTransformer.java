@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.inject.Named;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
@@ -38,6 +40,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -102,6 +105,7 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 /***
  * The PeriodTransformer aims to take a slice of the full scenario for optimisation. Given the user supplied dates (the boundary) we will add +/- 1 month (the cutoff) and remove cargoes, events etc
@@ -126,6 +130,10 @@ public class PeriodTransformer {
 	private static final int NOMINAL_INDEX = -1;
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
+	
+	@Inject
+	@Named(SchedulerConstants.Key_UseHeelRetention)
+	private boolean retainHeel;
 
 	public PeriodTransformer() {
 		injectExtensions();
@@ -141,6 +149,8 @@ public class PeriodTransformer {
 				protected void configure() {
 					install(Peaberry.osgiModule(FrameworkUtil.getBundle(PeriodTransformer.class).getBundleContext()));
 					bind(TypeLiterals.iterable(IPeriodTransformerExtension.class)).toProvider(Peaberry.service(IPeriodTransformerExtension.class).multiple());
+					bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention))//
+					.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_HEEL_RETENTION));
 				}
 			};
 			injector = Guice.createInjector(m);
@@ -335,16 +345,18 @@ public class PeriodTransformer {
 			}
 		}
 
-		for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
-			if (pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink) {
-				Status first = pair.firstRecord.status;
-				Status second = pair.secondRecord.status;
-				if ((first == Status.ToKeep || first == Status.ToLockdown) && second != Status.ToKeep && second != Status.ToLockdown) {
-					pair.secondRecord.status = first;
-					pair.secondRecord.inclusionType = pair.firstRecord.inclusionType;
-				} else if ((second == Status.ToKeep || second == Status.ToLockdown) && first != Status.ToKeep && first != Status.ToLockdown) {
-					pair.firstRecord.status = second;
-					pair.firstRecord.inclusionType = pair.secondRecord.inclusionType;
+		if (retainHeel) {
+			for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
+				if (pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink) {
+					Status first = pair.firstRecord.status;
+					Status second = pair.secondRecord.status;
+					if (first != Status.ToRemove && second == Status.ToRemove) {
+						pair.secondRecord.status = Status.ToLockdown;
+						pair.secondRecord.inclusionType = pair.firstRecord.inclusionType;
+					} else if (second != Status.ToRemove && first == Status.ToRemove) {
+						pair.firstRecord.status = Status.ToLockdown;
+						pair.firstRecord.inclusionType = pair.secondRecord.inclusionType;
+					}
 				}
 			}
 		}
@@ -357,9 +369,13 @@ public class PeriodTransformer {
 		// Update vessel availabilities based on cargoes/events being removed.
 		updateVesselAvailabilities(cargoModel, spotMarketsModel, portModel, schedule, modelDistanceProvider, records, periodRecord, mapping);
 
-		// Sanity check that heel sink and sink sources number is equal
-		for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
-			assert pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink;
+		if (retainHeel) {
+			// Sanity check that heel sink and sink sources number is equal
+			for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
+				assert pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink//
+				&& (pair.firstRecord.status != Status.ToRemove && pair.secondRecord.status != Status.ToRemove//
+				|| pair.firstRecord.status == Status.ToRemove && pair.secondRecord.status == Status.ToRemove);
+			}
 		}
 		// Sanity check - all records should have a valid status
 		for (final InclusionRecord r : records.values()) {
@@ -1311,18 +1327,20 @@ public class PeriodTransformer {
 			}
 		}
 		
-		Map.Entry<Cargo, CargoAllocation> previousEntry = null;
-		for(final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
-			if (entry.getValue().isIsHeelSource()) {
-				previousEntry = entry;
-			} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {
-				HeelCarryCargoPair pair = new HeelCarryCargoPair();
-				pair.firstCargo = previousEntry.getKey();
-				pair.firstCargoAllocation = previousEntry.getValue();
-				pair.secondCargo = entry.getKey();
-				pair.secondCargoAllocation = entry.getValue();
-				heelCarryCargoPairs.add(pair);
-				previousEntry = null;
+		if (retainHeel) {
+			Map.Entry<Cargo, CargoAllocation> previousEntry = null;
+			for(final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
+				if (entry.getValue().isIsHeelSource()) {
+					previousEntry = entry;
+				} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {
+					HeelCarryCargoPair pair = new HeelCarryCargoPair();
+					pair.firstCargo = previousEntry.getKey();
+					pair.firstCargoAllocation = previousEntry.getValue();
+					pair.secondCargo = entry.getKey();
+					pair.secondCargoAllocation = entry.getValue();
+					heelCarryCargoPairs.add(pair);
+					previousEntry = null;
+				}
 			}
 		}
 
@@ -1369,19 +1387,24 @@ public class PeriodTransformer {
 			} else {
 				r.status = Status.ToKeep;
 			}
-			
-			if (r.object instanceof Cargo c) {
-				final CargoAllocation cargoAllocation = sortedCargoes.get(c);
-				if (cargoAllocation.isIsHeelSource()) {
-					r.isHeelSource = true;
-					findPair(heelCarryCargoPairs, c).firstRecord = r;
-				}
-				if (cargoAllocation.isIsHeelSink()) {
-					r.isHeelSink = true;
-					findPair(heelCarryCargoPairs, c).secondRecord = r;
-				}
-			}
 		});
+		
+		if (retainHeel) {
+			records.values().forEach(r -> {
+				
+				if (r.object instanceof Cargo c) {
+					final CargoAllocation cargoAllocation = sortedCargoes.get(c);
+					if (cargoAllocation.isIsHeelSource()) {
+						r.isHeelSource = true;
+						findPair(heelCarryCargoPairs, c).firstRecord = r;
+					}
+					if (cargoAllocation.isIsHeelSink()) {
+						r.isHeelSink = true;
+						findPair(heelCarryCargoPairs, c).secondRecord = r;
+					}
+				}
+			});
+		}
 		
 		return records;
 
@@ -1402,7 +1425,7 @@ public class PeriodTransformer {
 				return pair;
 			}
 		}
-		throw new IllegalStateException(String.format("Cargo %s is in heel carry pair list, but has no pair. Please contact Minimax.", cargo.getLoadName()));
+		throw new IllegalStateException(String.format("Cargo %s is in heel carry pair list, but has no pair. Please contact Minimax Labs.", cargo.getLoadName()));
 	}
 
 	/**
