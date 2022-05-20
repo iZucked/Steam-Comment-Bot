@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -18,7 +19,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyWindowProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
-public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker {
+public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker implements IResourceElementConstraintChecker {
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -40,17 +41,26 @@ public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (firstSlot instanceof @NonNull final ILoadOption loadOption && secondSlot instanceof @NonNull final IDischargeOption dischargeOption) {
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-				if (counterPartyWindowProvider.isCounterPartyWindow(dischargeOption)) {
-					return false;
-				}
+				return !counterPartyWindowProvider.isCounterPartyWindow(dischargeOption);
 			} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				if (counterPartyWindowProvider.isCounterPartyWindow(loadOption)) {
-					return false;
-				}
+				return !counterPartyWindowProvider.isCounterPartyWindow(loadOption);
 			}
 		}
 		return true;
 	}
 
-	
+	@Override
+	public boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource, @Nullable List<@NonNull String> messages) {
+		@NonNull
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		@NonNull
+		final IPortSlot slot = portSlotProvider.getPortSlot(element);
+		if ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE && slot instanceof IDischargeOption) //
+				|| (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE && slot instanceof ILoadOption)) {
+			return !counterPartyWindowProvider.isCounterPartyWindow(slot);
+		}
+		return true;
+
+	}
+
 }
