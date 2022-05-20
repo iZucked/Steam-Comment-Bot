@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nominations Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.nominations.editor;singleton:=true
-Bundle-Version: 5.5.2.qualifier
+Bundle-Version: 5.5.2.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LiNGO Reports Tests
 Bundle-SymbolicName: com.mmxlabs.lingo.reports.tests;singleton:=true
 Fragment-Host: com.mmxlabs.lingo.reports
-Bundle-Version: 5.5.2.qualifier
+Bundle-Version: 5.5.2.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[5.5.2,6.0.0)",
