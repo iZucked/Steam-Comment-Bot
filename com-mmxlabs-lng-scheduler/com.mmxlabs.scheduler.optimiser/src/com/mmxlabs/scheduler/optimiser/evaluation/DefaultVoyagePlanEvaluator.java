@@ -181,6 +181,43 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		// Only expect a single result here
 		final List<ScheduledVoyagePlanResult> results = new LinkedList<>();
 
+		final Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> hook = evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, previousHeelRecord,
+				initialPortTimesRecord, lastPlan, keepDetails, annotatedSolution, results);
+
+		final long[] heelVolumeRangeInM3 = new long[2];
+		final IPortSlot thisPortSlot = initialPortTimesRecord.getFirstSlot();
+
+		// Sanity check for round trip cargoes.
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			heelVolumeRangeInM3[0] = vesselAvailability.getVessel().getSafetyHeel();
+			heelVolumeRangeInM3[1] = vesselAvailability.getVessel().getSafetyHeel();
+		} else if (thisPortSlot instanceof IHeelOptionSupplierPortSlot) {
+			final IHeelOptionSupplierPortSlot supplier = (IHeelOptionSupplierPortSlot) thisPortSlot;
+			heelVolumeRangeInM3[0] = supplier.getHeelOptionsSupplier().getMinimumHeelAvailableInM3();
+			heelVolumeRangeInM3[1] = supplier.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
+			assert heelVolumeRangeInM3[0] >= 0;
+			assert heelVolumeRangeInM3[1] >= 0;
+		} else if (thisPortSlot.getPortType() == PortType.DryDock || thisPortSlot.getPortType() == PortType.Maintenance) {
+			// No heel coming out of these events.
+			heelVolumeRangeInM3[0] = 0;
+			heelVolumeRangeInM3[1] = 0;
+		} else {
+			heelVolumeRangeInM3[0] = previousHeelRecord.heelVolumeInM3;
+			heelVolumeRangeInM3[1] = previousHeelRecord.heelVolumeInM3;
+		}
+
+		
+		//re-do some of the code after choosing different volume
+		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, lastPlan, returnAll, true, hook,
+				sequencesAttributesProvider, annotatedSolution);
+		
+		return ImmutableList.copyOf(results);
+
+	}
+
+	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
+			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results) {
 		final Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> hook = vpList -> {
 
 			final long[] metrics = new long[MetricType.values().length];
@@ -324,34 +361,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 			results.add(result);
 		};
-
-		final long[] heelVolumeRangeInM3 = new long[2];
-		final IPortSlot thisPortSlot = initialPortTimesRecord.getFirstSlot();
-
-		// Sanity check for round trip cargoes.
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-			final IHeelOptionSupplier heelOptions = vesselAvailability.getStartRequirement().getHeelOptions();
-			heelVolumeRangeInM3[0] = heelOptions.getMinimumHeelAvailableInM3();
-			heelVolumeRangeInM3[1] = heelOptions.getMaximumHeelAvailableInM3();
-		} else if (thisPortSlot instanceof IHeelOptionSupplierPortSlot supplier) {
-			heelVolumeRangeInM3[0] = supplier.getHeelOptionsSupplier().getMinimumHeelAvailableInM3();
-			heelVolumeRangeInM3[1] = supplier.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
-			assert heelVolumeRangeInM3[0] >= 0;
-			assert heelVolumeRangeInM3[1] >= 0;
-		} else if (thisPortSlot.getPortType() == PortType.DryDock || thisPortSlot.getPortType() == PortType.Maintenance) {
-			// No heel coming out of these events.
-			heelVolumeRangeInM3[0] = 0;
-			heelVolumeRangeInM3[1] = 0;
-		} else {
-			heelVolumeRangeInM3[0] = previousHeelRecord.heelVolumeInM3;
-			heelVolumeRangeInM3[1] = previousHeelRecord.heelVolumeInM3;
-		}
-
-		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, lastPlan, returnAll, true, hook,
-				sequencesAttributesProvider, annotatedSolution);
-
-		return ImmutableList.copyOf(results);
-
+		return hook;
 	}
 
 	private boolean computeHeelVolumeRecords(final PreviousHeelRecord previousHeelRecord, final VoyagePlan vp, @Nullable final IAllocationAnnotation allocationAnnotation,
@@ -362,6 +372,9 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		boolean isForcedCooldown = previousHeelRecord.forcedCooldown;
 
 		long currentHeelInM3 = vp.getStartingHeelInM3();
+		if (allocationAnnotation != null) {
+			currentHeelInM3 = allocationAnnotation.getStartHeelVolumeInM3();
+		}
 
 		long totalVoyageBOGInM3 = 0;
 		for (int i = 0; i < vp.getSequence().length; ++i) {
@@ -429,7 +442,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 							assert allocationAnnotation.getFuelVolumeInM3() >= 0;
 							assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
 
-							assert allocationAnnotation.getStartHeelVolumeInM3() == vp.getStartingHeelInM3();
+//							assert allocationAnnotation.getStartHeelVolumeInM3() == vp.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == vp.getLNGFuelVolume();
 
 							// TODO: Probably should be physical here and then ignore the port BOG.
@@ -439,7 +452,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 							assert allocationAnnotation.getFuelVolumeInM3() >= 0;
 							assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
 
-							assert allocationAnnotation.getStartHeelVolumeInM3() == vp.getStartingHeelInM3();
+//							assert allocationAnnotation.getStartHeelVolumeInM3() == vp.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == vp.getLNGFuelVolume();
 
 							currentHeelInM3 -= allocationAnnotation.getPhysicalSlotVolumeInM3(portSlot);

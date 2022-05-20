@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -15,6 +17,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.Subscribe;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.events.OptimisationPhaseEndEvent;
 import com.mmxlabs.optimiser.common.events.OptimisationPhaseStartEvent;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -26,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
@@ -87,6 +91,12 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 		// Default implementation of this method wraps around #evaluateShipped
 		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
+	}
+	
+	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
+			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results){
+		return delegate.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, previousHeelRecord, initialPortTimesRecord, lastPlan, keepDetails, annotatedSolution, results);
 	}
 
 	@Override

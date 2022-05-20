@@ -86,6 +86,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/cargoType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/ballastBonusFee"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/repositioningFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/isHeelSource"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/isHeelSink"/>
       <genOperations ecoreOperation="schedule.ecore#//CargoAllocation/getName"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//MarketAllocation">
