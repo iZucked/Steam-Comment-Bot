@@ -64,7 +64,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage
  * @generated
  */
-public class ScheduleSwitch<T> extends Switch<T> {
+public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

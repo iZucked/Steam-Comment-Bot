@@ -22,6 +22,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastBonusFee <em>Ballast Bonus Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSource <em>Is Heel Source</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSink <em>Is Heel Sink</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation()
@@ -172,6 +174,50 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer, Even
 	 * @generated
 	 */
 	void setRepositioningFee(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Is Heel Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is Heel Source</em>' attribute.
+	 * @see #setIsHeelSource(boolean)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_IsHeelSource()
+	 * @model
+	 * @generated
+	 */
+	boolean isIsHeelSource();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSource <em>Is Heel Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is Heel Source</em>' attribute.
+	 * @see #isIsHeelSource()
+	 * @generated
+	 */
+	void setIsHeelSource(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Is Heel Sink</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is Heel Sink</em>' attribute.
+	 * @see #setIsHeelSink(boolean)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_IsHeelSink()
+	 * @model
+	 * @generated
+	 */
+	boolean isIsHeelSink();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSink <em>Is Heel Sink</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is Heel Sink</em>' attribute.
+	 * @see #isIsHeelSink()
+	 * @generated
+	 */
+	void setIsHeelSink(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -103,7 +103,27 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 			this.setReturnSlotTime(otherReturnSlot, other.getSlotTime(otherReturnSlot));
 		}
 
-		assert other.equals(this);
+		assert this.equals(other);
+	}
+	
+	public static IPortTimesRecord from(final IPortTimesRecord other) {
+		PortTimesRecord result = new PortTimesRecord();
+		for (final IPortSlot slot : other.getSlots()) {
+			result.setSlotTime(slot, other.getSlotTime(slot));
+			result.setSlotDuration(slot, other.getSlotDuration(slot));
+			result.setSlotAdditionalPanamaIdleHours(slot, other.getSlotAdditionaPanamaIdleHours(slot));
+			result.setSlotMaxAvailablePanamaIdleHours(slot, other.getSlotMaxAdditionaPanamaIdleHours(slot));
+			result.setRouteOptionBooking(slot, other.getRouteOptionBooking(slot));
+			result.setSlotNextVoyageOptions(slot, other.getSlotNextVoyageOptions(slot));
+			for (var type : ExplicitIdleTime.values()) {
+				result.setSlotExtraIdleTime(slot, type, other.getSlotExtraIdleTime(slot, type));
+			}
+		}
+		final IPortSlot otherReturnSlot = other.getReturnSlot();
+		if (otherReturnSlot != null) {
+			result.setReturnSlotTime(otherReturnSlot, other.getSlotTime(otherReturnSlot));
+		}
+		return result;
 	}
 
 	@Override
