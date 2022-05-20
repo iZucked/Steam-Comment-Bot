@@ -625,7 +625,8 @@ public class ScheduleCalculator {
 				final VoyagePlanRecord current = iter.next();
 				if (current != null) {
 					if (lastRecord != null) {
-						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
+						// TODO: Check the hotfix with Simon
+						if (current.isCargoRecord() && current.getPortTimesRecord().getReturnSlot() instanceof ILoadSlot && lastRecord.isCargoRecord()) {
 							allPairs.add(new RetentionPair(lastRecord, current));
 						}
 					}
