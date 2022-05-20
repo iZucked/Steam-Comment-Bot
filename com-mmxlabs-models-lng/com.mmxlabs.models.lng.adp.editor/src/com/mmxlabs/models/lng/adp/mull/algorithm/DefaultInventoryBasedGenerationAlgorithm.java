@@ -1,7 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.adp.mull.algorithm;
 
 import java.time.LocalDateTime;
@@ -16,9 +12,9 @@ import com.mmxlabs.models.lng.adp.mull.container.IMudContainer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 @NonNullByDefault
-public class VanillaMullAlgorithm extends MullAlgorithm {
+public class DefaultInventoryBasedGenerationAlgorithm extends MullAlgorithm {
 
-	public VanillaMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates) {
+	public DefaultInventoryBasedGenerationAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates) {
 		super(globalStatesContainer, algorithmState, inventoryLocalStates);
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {
@@ -35,15 +31,15 @@ public class VanillaMullAlgorithm extends MullAlgorithm {
 	}
 
 	@Override
-	protected Vessel calculateAssignedVessel(LocalDateTime currentDateTime, List<Vessel> vessels) {
-		// There should only be one vessel
+	protected Vessel calculateAssignedVessel(final LocalDateTime currentDateTime, final List<Vessel> vessels) {
 		return vessels.get(0);
 	}
 
 	@Override
 	protected Pair<@Nullable Vessel, Integer> getVesselAndAllocationDrop(LocalDateTime currentDateTime, IAllocationTracker allocationTracker, InventoryLocalState inventoryLocalState) {
 		final Vessel assignedVessel = calculateAssignedVessel(currentDateTime, allocationTracker.getVessels());
-		final int currentAllocationDrop =  (int) (assignedVessel.getVesselOrDelegateCapacity()*assignedVessel.getVesselOrDelegateFillCapacity()) - assignedVessel.getVesselOrDelegateSafetyHeel();
+		final int currentAllocationDrop = (int) (assignedVessel.getVesselOrDelegateCapacity()*assignedVessel.getVesselOrDelegateFillCapacity()) - assignedVessel.getVesselOrDelegateSafetyHeel();
 		return Pair.of(assignedVessel, currentAllocationDrop);
 	}
+
 }

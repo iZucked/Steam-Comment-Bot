@@ -114,7 +114,8 @@ public abstract class AbstractAllocationTracker implements IAllocationTracker {
 
 	@Override
 	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration, final boolean isSharedVessel) {
-		return (int) (loadDuration * (vessel.getLadenAttributes().getVesselOrDelegateInPortNBORate() / 24.0));
+		return manipulationStrategy.calculateExpectedBoiloff(vessel, loadDuration, this);
+//		return (int) (loadDuration * (vessel.getLadenAttributes().getVesselOrDelegateInPortNBORate() / 24.0));
 	}
 
 	@Override
