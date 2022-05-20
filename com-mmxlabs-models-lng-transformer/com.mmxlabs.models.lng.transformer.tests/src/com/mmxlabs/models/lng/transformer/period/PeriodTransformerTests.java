@@ -27,6 +27,9 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -58,6 +61,7 @@ import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.InclusionReco
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.Status;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 @SuppressWarnings({ "unused", "null" })
 public class PeriodTransformerTests {
@@ -1865,6 +1869,8 @@ public class PeriodTransformerTests {
 			@Override
 			protected void configure() {
 				bind(InclusionChecker.class).toInstance(inclusionChecker);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention))//
+				.toInstance(Boolean.FALSE);
 			}
 		});
 		return injector.getInstance(PeriodTransformer.class);
