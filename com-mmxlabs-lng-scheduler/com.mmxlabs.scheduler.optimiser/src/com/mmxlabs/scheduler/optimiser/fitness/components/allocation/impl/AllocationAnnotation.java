@@ -45,8 +45,7 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 			if (obj == this) {
 				return true;
 			}
-			if (obj instanceof SlotAllocationAnnotation) {
-				final SlotAllocationAnnotation other = (SlotAllocationAnnotation) obj;
+			if (obj instanceof SlotAllocationAnnotation other) {
 				return commercialVolumeInM3 == other.commercialVolumeInM3 //
 						&& commercialVolumeInMMBTu == other.commercialVolumeInMMBTu //
 						&& cargoCV == other.cargoCV //
@@ -267,8 +266,7 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 			return true;
 		}
 
-		if (obj instanceof AllocationAnnotation) {
-			final AllocationAnnotation other = (AllocationAnnotation) obj;
+		if (obj instanceof AllocationAnnotation other) {
 			return this.startHeelVolumeInM3 == other.startHeelVolumeInM3 //
 					&& this.fuelVolumeInM3 == other.fuelVolumeInM3 //
 					&& this.remainingHeelVolumeInM3 == other.remainingHeelVolumeInM3 //

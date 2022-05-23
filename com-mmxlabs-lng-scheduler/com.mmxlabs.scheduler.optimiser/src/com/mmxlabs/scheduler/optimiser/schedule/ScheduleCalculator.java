@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -223,23 +224,32 @@ public class ScheduleCalculator {
 
 		}
 		
-		if (retainHeel) {
+		if (retainHeel && vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			retainHeelPairwise(resource, vesselAvailability, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
 		}
 
 		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, voyagePlans);
 	}
 	
+	@FunctionalInterface
+	public interface HeelRetentionValueFunction {
+	    long applyAsLong(boolean apply);
+	}
+	
 	private class RetentionPair {
 		private static final long ScaleFactor = 1000L;
-		private static final long MinVolumeCutOff = 500L;
+		private static final long MinVolumeCutOff = 500L * ScaleFactor;
 		public final VoyagePlanRecord first;
 		public final VoyagePlanRecord second;
 		public final TempCargoRecord fCargo;
 		public final TempCargoRecord sCargo;
+		private final long fVesselCapacityMMBTu;
+		private final long sVesselCapacityMMBTu;
+		public long firstCargoTransferredVolumeMMBTu = 0;
+		public long secondCargoTransferredVolumeMMBTu = 0;
 		public long value = 0;
 		
-		public RetentionPair(VoyagePlanRecord first, VoyagePlanRecord second) {
+		public RetentionPair(VoyagePlanRecord first, VoyagePlanRecord second, IVessel vessel) {
 			this.first = first;
 			this.second = second;
 			
@@ -254,6 +264,14 @@ public class ScheduleCalculator {
 			assert secondCva != null;
 			
 			sCargo = new TempCargoRecord(secondCva);
+			
+			fVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), fCargo.cv);
+			sVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), sCargo.cv);
+			
+			heelRetentionFunctions.add(this::extraLoadFirstShortLoadSecond);
+			heelRetentionFunctions.add(this::shortDischargeFirstExtraDischargeSecond);
+			heelRetentionFunctions.add(this::extraLoadFirstExtraDischargeSecond);
+			heelRetentionFunctions.add(this::shortDischargeFirstShortLoadSecond);
 		}
 		
 		/**
@@ -277,48 +295,34 @@ public class ScheduleCalculator {
 			return firstCva.getRemainingHeelVolumeInM3() != 0;
 		}
 		
-		// TODO: check which one (or which combinations are better)
-		// TODO: accept the best combinations
-		public boolean evaluate(final IVessel vessel) {
+		List<HeelRetentionValueFunction> heelRetentionFunctions = new ArrayList<>(4);
+		
+		// check which one (or which combinations are better)
+		// accept the best combinations
+		public boolean evaluate() {
 			if (validate()) {
 				
-				long fVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), fCargo.cv);
-				long sVesselCapacityMMBTu = Calculator.convertM3ToMMBTuWithOverflowProtection(vessel.getCargoCapacity(), sCargo.cv);
-				// We can run out of the safety heel!
-				
-				value = 0;
-				
-				// phase 1 - check the spare capacity on the second cargo and extra volume that can be bought on the first cargo
-				// determine spare capacity on second cargo
-				long sSpareCapacityMMBTu = Math.min(fVesselCapacityMMBTu - sCargo.startHeelMMBTu - sCargo.scheduledLoadVolumeMMBTu, //
-						Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu) - sCargo.scheduledDischargeVolumeMMBTu);
-				
-				HeelRetentionExtraData hrr1 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sSpareCapacityMMBTu);
-				
-				{
-					value += extraLoadFirstShortLoadSecond(hrr1, 0L);
-					value += shortDischargeFirstExtraDischargeSecond(hrr1);
-				}
-				
-				fCargo.endHeelMMBTu += hrr1.firstCargoTransferredVolumeMMBTu;
-				sCargo.startHeelMMBTu += hrr1.secondCargoTransferredVolumeMMBTu;
-				
-				//===========PHASE 2=============
-				long sNewSpareCapacityMMBTu = sCargo.scheduledLoadVolumeMMBTu - sCargo.minLoadMMBTu;
-				
-				HeelRetentionExtraData hrr2 = new HeelRetentionExtraData(fVesselCapacityMMBTu, sVesselCapacityMMBTu, sNewSpareCapacityMMBTu);
-				{
-					value += extraLoadFirstShortLoadSecond(hrr2, fCargo.startHeelMMBTu);
-					value += shortDischargeFirstShortLoadSecond(hrr2);
+				while (!heelRetentionFunctions.isEmpty()) {
+					long bestValue = Long.MIN_VALUE;
+					HeelRetentionValueFunction bestFunc = null;
+					for (HeelRetentionValueFunction f : heelRetentionFunctions) {
+						long currentValue = f.applyAsLong(false);
+						if (bestFunc == null || currentValue > bestValue) {
+							bestFunc = f;
+							bestValue = currentValue;    
+						}
+					}
+					if (bestFunc == null || bestValue == 0) {
+						break;
+					}
+
+					bestFunc.applyAsLong(true);
+					heelRetentionFunctions.remove(bestFunc);
+					value += bestValue;
 				}
 
-				fCargo.endHeelMMBTu += hrr2.firstCargoTransferredVolumeMMBTu;
-				sCargo.startHeelMMBTu += hrr2.secondCargoTransferredVolumeMMBTu;
-				
-				//use calculator
-				Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv);
-				if ((hrr1.firstCargoTransferredVolumeMMBTu + hrr2.firstCargoTransferredVolumeMMBTu > (MinVolumeCutOff * fCargo.cv / ScaleFactor)) //
-						|| (hrr1.secondCargoTransferredVolumeMMBTu + hrr2.secondCargoTransferredVolumeMMBTu > (MinVolumeCutOff * sCargo.cv / ScaleFactor))) {
+				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
+						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
 					return value > 0;
 				}
 				
@@ -327,12 +331,16 @@ public class ScheduleCalculator {
 			return false;
 		}
 		
-		private long extraLoadFirstShortLoadSecond(HeelRetentionExtraData hrr, long startHeelMMBTuFullDelta) {
-			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
+		private long extraLoadFirstShortLoadSecond(boolean apply) {
+			long sSpareCapacityMMBTu = sCargo.scheduledLoadVolumeMMBTu - sCargo.minLoadMMBTu;
+			if (sSpareCapacityMMBTu <= 0) {
+				return 0L;
+			}
+			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(sSpareCapacityMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine extra volume which can be bought on first cargo (valued with load price)
 			long fExtraLoadVolumeMMBTu = Math.min(s2fSpareCapacityMMBTu, //
-					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelMMBTuFullDelta);
+					Math.min(fCargo.maxLoadMMBTu, fVesselCapacityMMBTu - fCargo.startHeelMMBTu ) - fCargo.scheduledLoadVolumeMMBTu);
 			long fExtraLoadValue = 0;
 			if (fExtraLoadVolumeMMBTu > 0) {
 				
@@ -342,25 +350,33 @@ public class ScheduleCalculator {
 				long sValue = Calculator.costFromVolume(f2sExtraLoadVolumeMMMBTu, sCargo.loadPriceMMBTu);
 				fExtraLoadValue = sValue - fValue;
 				
-				if (fExtraLoadValue > 0 && (sCargo.scheduledLoadVolumeMMBTu - f2sExtraLoadVolumeMMMBTu >= sCargo.minLoadMMBTu)//
-						&& (fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= hrr.firstCargoVesselCapacityMMBTu)) {
+				assert fCargo.startHeelMMBTu + fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= fVesselCapacityMMBTu;
+				assert fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= fCargo.maxLoadMMBTu;
+				assert sCargo.scheduledLoadVolumeMMBTu - f2sExtraLoadVolumeMMMBTu >= sCargo.minLoadMMBTu;
+				
+				if (fExtraLoadValue > 0) {
 					fCargo.scheduledLoadVolumeMMBTu += fExtraLoadVolumeMMBTu;
-					hrr.firstCargoTransferredVolumeMMBTu += fExtraLoadVolumeMMBTu;
+					fCargo.endHeelMMBTu += fExtraLoadVolumeMMBTu;
+					firstCargoTransferredVolumeMMBTu += fExtraLoadVolumeMMBTu;
 					sCargo.scheduledLoadVolumeMMBTu -= f2sExtraLoadVolumeMMMBTu;
-					hrr.secondCargoTransferredVolumeMMBTu += f2sExtraLoadVolumeMMMBTu;
-					hrr.spareCapacityRemainderMMBTu -= f2sExtraLoadVolumeMMMBTu;
-					return fExtraLoadValue;
+					secondCargoTransferredVolumeMMBTu += f2sExtraLoadVolumeMMMBTu;
+					sCargo.startHeelMMBTu += f2sExtraLoadVolumeMMMBTu;
 				}
 			}
-			return 0L;
+			return fExtraLoadValue;
 		}
 		
-		private long extraLoadFirstExtraDischargeSecond(HeelRetentionExtraData hrr, long startHeelMMBTu) {
-			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
+		private long extraLoadFirstExtraDischargeSecond(boolean apply) {
+			long sSpareCapacityMMBTu = Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu) - sCargo.scheduledDischargeVolumeMMBTu;
+			sSpareCapacityMMBTu = Math.min(sSpareCapacityMMBTu, sVesselCapacityMMBTu - sCargo.startHeelMMBTu - sCargo.scheduledLoadVolumeMMBTu);
+			if (sSpareCapacityMMBTu <= 0) {
+				return 0L;
+			}
+			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(sSpareCapacityMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine extra volume which can be bought on first cargo (valued with load price)
 			long fExtraLoadVolumeMMBTu = Math.min(s2fSpareCapacityMMBTu, //
-					Math.min(fCargo.maxLoadMMBTu, hrr.firstCargoVesselCapacityMMBTu) - fCargo.scheduledLoadVolumeMMBTu - startHeelMMBTu);
+					Math.min(fCargo.maxLoadMMBTu, fVesselCapacityMMBTu - fCargo.startHeelMMBTu) - fCargo.scheduledLoadVolumeMMBTu);
 			long fExtraLoadValue = 0;
 			if (fExtraLoadVolumeMMBTu > 0) {
 				
@@ -370,22 +386,30 @@ public class ScheduleCalculator {
 				long sValue = Calculator.costFromVolume(f2sExtraLoadVolumeMMMBTu, sCargo.loadPriceMMBTu);
 				fExtraLoadValue = sValue - fValue;
 				
-				if (fExtraLoadValue > 0 && (fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= hrr.firstCargoVesselCapacityMMBTu) //
-						&& (sCargo.scheduledDischargeVolumeMMBTu + f2sExtraLoadVolumeMMMBTu //
-								<= Math.min(sCargo.maxDischargeMMBTu, hrr.secondCargoVesselCapacityMMBTu))) {
+				assert fCargo.startHeelMMBTu + fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= fVesselCapacityMMBTu;
+				assert fCargo.scheduledLoadVolumeMMBTu + fExtraLoadVolumeMMBTu <= fCargo.maxLoadMMBTu;
+				assert sCargo.startHeelMMBTu + sCargo.scheduledLoadVolumeMMBTu + f2sExtraLoadVolumeMMMBTu <= sVesselCapacityMMBTu;
+				assert sCargo.scheduledDischargeVolumeMMBTu + f2sExtraLoadVolumeMMMBTu <= Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu);
+				
+				if (fExtraLoadValue > 0) {
 					fCargo.scheduledLoadVolumeMMBTu += fExtraLoadVolumeMMBTu;
-					hrr.firstCargoTransferredVolumeMMBTu += fExtraLoadVolumeMMBTu;
+					fCargo.endHeelMMBTu += fExtraLoadVolumeMMBTu;
+					firstCargoTransferredVolumeMMBTu += fExtraLoadVolumeMMBTu;
 					sCargo.scheduledDischargeVolumeMMBTu += f2sExtraLoadVolumeMMMBTu;
-					hrr.secondCargoTransferredVolumeMMBTu += f2sExtraLoadVolumeMMMBTu;
-					hrr.spareCapacityRemainderMMBTu -= f2sExtraLoadVolumeMMMBTu;
-					return fExtraLoadValue;
+					secondCargoTransferredVolumeMMBTu += f2sExtraLoadVolumeMMMBTu;
+					sCargo.startHeelMMBTu += f2sExtraLoadVolumeMMMBTu;
 				}
 			}
-			return 0L;
+			return fExtraLoadValue;
 		}
 		
-		private long shortDischargeFirstExtraDischargeSecond(HeelRetentionExtraData hrr) {
-			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
+		private long shortDischargeFirstExtraDischargeSecond(boolean apply) {
+			long sSpareCapacityMMBTu = Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu) - sCargo.scheduledDischargeVolumeMMBTu;
+			sSpareCapacityMMBTu = Math.min(sSpareCapacityMMBTu, sVesselCapacityMMBTu - sCargo.startHeelMMBTu - sCargo.scheduledLoadVolumeMMBTu);
+			if (sSpareCapacityMMBTu <= 0) {
+				return 0L;
+			}
+			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(sSpareCapacityMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine if short discharge is possible
 			// get the spare capacity with under discharge
@@ -401,21 +425,30 @@ public class ScheduleCalculator {
 				long sValue = Calculator.costFromVolume(f2sSpareDischargeVolumeMMMBTu, sCargo.dischargePriceMMBTu);
 
 				fSpareDischargeValue = sValue - fValue;
-				if (fSpareDischargeValue > 0 && (sCargo.scheduledDischargeVolumeMMBTu + f2sSpareDischargeVolumeMMMBTu //
-						<= Math.min(sCargo.maxDischargeMMBTu, hrr.secondCargoVesselCapacityMMBTu))) {
+				
+				assert fCargo.scheduledDischargeVolumeMMBTu - fSpareDischargeCapacityMMBTu >= fCargo.minDischargeMMBTu;
+				assert sCargo.startHeelMMBTu + sCargo.scheduledLoadVolumeMMBTu + f2sSpareDischargeVolumeMMMBTu <= sVesselCapacityMMBTu;
+				assert sCargo.scheduledDischargeVolumeMMBTu + f2sSpareDischargeVolumeMMMBTu <= Math.min(sCargo.maxDischargeMMBTu, sVesselCapacityMMBTu);
+				
+				if (fSpareDischargeValue > 0) {
 					fCargo.scheduledDischargeVolumeMMBTu -= fSpareDischargeCapacityMMBTu;
-					hrr.firstCargoTransferredVolumeMMBTu += fSpareDischargeCapacityMMBTu;
-					hrr.secondCargoTransferredVolumeMMBTu += f2sSpareDischargeVolumeMMMBTu;
+					fCargo.endHeelMMBTu += fSpareDischargeCapacityMMBTu;
+					sCargo.startHeelMMBTu += f2sSpareDischargeVolumeMMMBTu;
 					sCargo.scheduledDischargeVolumeMMBTu += f2sSpareDischargeVolumeMMMBTu;
-					hrr.spareCapacityRemainderMMBTu -= f2sSpareDischargeVolumeMMMBTu;
-					return fSpareDischargeValue;
+					firstCargoTransferredVolumeMMBTu += fSpareDischargeCapacityMMBTu;
+					secondCargoTransferredVolumeMMBTu += f2sSpareDischargeVolumeMMMBTu;
 				}
 			}
-			return 0L;
+			return fSpareDischargeValue;
 		}
 		
-		private long shortDischargeFirstShortLoadSecond(HeelRetentionExtraData hrr) {
-			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(hrr.spareCapacityRemainderMMBTu, sCargo.cv);
+		private long shortDischargeFirstShortLoadSecond(boolean apply) {
+			long sSpareCapacityMMBTu = sCargo.scheduledLoadVolumeMMBTu - sCargo.minLoadMMBTu;
+			if (sSpareCapacityMMBTu <= 0) {
+				return 0L;
+			}
+			
+			long sSpareCapacityM3t10 = convertMMBTUtoM3t10(sSpareCapacityMMBTu, sCargo.cv);
 			long s2fSpareCapacityMMBTu = convertM3t10toMMBTu(sSpareCapacityM3t10, fCargo.cv);
 			// determine if short discharge is possible
 			// get the spare capacity with under discharge
@@ -430,16 +463,19 @@ public class ScheduleCalculator {
 				long sValue = Calculator.costFromVolume(f2sSpareDischargeCapacityMMMBTu, sCargo.loadPriceMMBTu);
 				fSpareDischargeValue = sValue - fValue;
 
-				if (fSpareDischargeValue > 0 && (sCargo.scheduledLoadVolumeMMBTu - f2sSpareDischargeCapacityMMMBTu >= sCargo.minLoadMMBTu)) {
+				assert sCargo.scheduledLoadVolumeMMBTu - f2sSpareDischargeCapacityMMMBTu >= sCargo.minLoadMMBTu;
+				assert fCargo.scheduledDischargeVolumeMMBTu - fSpareDischargeCapacityMMBTu >= fCargo.minLoadMMBTu;
+				
+				if (fSpareDischargeValue > 0) {
 					fCargo.scheduledDischargeVolumeMMBTu -= fSpareDischargeCapacityMMBTu;
-					hrr.firstCargoTransferredVolumeMMBTu += fSpareDischargeCapacityMMBTu;
-					hrr.secondCargoTransferredVolumeMMBTu += f2sSpareDischargeCapacityMMMBTu;
+					fCargo.endHeelMMBTu += fSpareDischargeCapacityMMBTu;
+					sCargo.startHeelMMBTu += f2sSpareDischargeCapacityMMMBTu;
 					sCargo.scheduledLoadVolumeMMBTu -= f2sSpareDischargeCapacityMMMBTu;
-					hrr.spareCapacityRemainderMMBTu -= f2sSpareDischargeCapacityMMMBTu;
-					return fSpareDischargeValue;
+					firstCargoTransferredVolumeMMBTu += fSpareDischargeCapacityMMBTu;
+					secondCargoTransferredVolumeMMBTu += f2sSpareDischargeCapacityMMMBTu;
 				}
 			}
-			return 0L;
+			return fSpareDischargeValue;
 		}
 		
 		private long convertMMBTUtoM3t10(long volumeMMBTU, int cv) {
@@ -454,10 +490,8 @@ public class ScheduleCalculator {
 	private class TempCargoRecord{
 		public final IPortSlot load;
 		public final IPortSlot discharge;
-		public final ICargoValueAnnotation cargoValueAnnotation;
 		
 		public TempCargoRecord(ICargoValueAnnotation cva) {
-			this.cargoValueAnnotation = cva;
 			this.load = getLoadSlot(cva);
 			this.discharge = getDischargeSlot(cva);
 			
@@ -523,23 +557,6 @@ public class ScheduleCalculator {
 		}
 	}
 	
-	private class HeelRetentionExtraData{
-		public long firstCargoTransferredVolumeMMBTu;
-		public long secondCargoTransferredVolumeMMBTu;
-		public final long firstCargoVesselCapacityMMBTu;
-		public final long secondCargoVesselCapacityMMBTu;
-		public long spareCapacityRemainderMMBTu;
-		//TODO: add a flag to control if it's just a value computation or not
-		
-		public HeelRetentionExtraData(long firstCargoVesselCapacityMMBTu, long secondCargoVesselCapacityMMBTu, long secondSpareCapacityMMBTu) {
-			firstCargoTransferredVolumeMMBTu = 0;
-			secondCargoTransferredVolumeMMBTu = 0;
-			this.firstCargoVesselCapacityMMBTu = firstCargoVesselCapacityMMBTu;
-			this.secondCargoVesselCapacityMMBTu = secondCargoVesselCapacityMMBTu;
-			spareCapacityRemainderMMBTu = secondSpareCapacityMMBTu;
-		}
-	}
-	
 	// Create a list of pairwise VPRs and keep only the ones where heel can be retained
 	private void retainHeelPairwise(final IResource resource, final IVesselAvailability vesselAvailability, final List<IPortTimesRecord> records, 
 			final @Nullable IAnnotatedSolution annotatedSolution,
@@ -549,12 +566,10 @@ public class ScheduleCalculator {
 		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
 		final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm = new HashMap<>();
 		// Creating a full set of retention pairs
-		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm);
-		
-		final IVessel vessel = vesselAvailability.getVessel();
+		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm, vesselAvailability.getVessel());
 		
 		// Filter out the pairs which are not valid or can not retain any heel
-		final List<RetentionPair> nullablePairsToKeep = allPairs.stream().filter(r -> r.evaluate(vessel)).toList();
+		final List<RetentionPair> nullablePairsToKeep = allPairs.stream().filter(r -> r.evaluate()).toList();
 		
 		if (nullablePairsToKeep != null) {
 			
@@ -589,35 +604,41 @@ public class ScheduleCalculator {
 	private List<RetentionPair> removeOverlappingValidPairs(final List<RetentionPair> nullablePairsToKeep) {
 		final List<RetentionPair> pairsToKeep = new LinkedList<>();
 		pairsToKeep.addAll(nullablePairsToKeep);
-
+		
 		if (!pairsToKeep.isEmpty()) {
-			RetentionPair lastRecord = null;
-			List<RetentionPair> toDelete = new LinkedList<>();
-
-			for (final RetentionPair current : pairsToKeep) {
-				if (lastRecord != null) {
-					if (lastRecord.first != current.second) {
-						if (lastRecord.value >= current.value) {
-							toDelete.add(current);
-							lastRecord = null;
-						} else {
-							toDelete.add(lastRecord);
-							lastRecord = null;
-						}
-					}
-				} else {
-					lastRecord = current;
-				}
-			}
-			if (!toDelete.isEmpty()) {
-				pairsToKeep.removeAll(toDelete);
-			}
-		}
-		return pairsToKeep;
+            RetentionPair previousPair = null;
+            List<RetentionPair> toDelete = new LinkedList<>();
+            boolean usedLastPair = false;
+            for (final RetentionPair currentPair : pairsToKeep) {
+                if (previousPair == null) {
+                    // Nothing special
+                } else if (usedLastPair && previousPair.second == currentPair.first) {
+                    usedLastPair = false;
+                    toDelete.add(currentPair);
+                } else if (previousPair.second == currentPair.first) {
+                    if (previousPair.value >= currentPair.value) {
+                        usedLastPair = false;
+                        toDelete.add(currentPair);
+                    } else {
+                        usedLastPair = true;
+                        toDelete.add(previousPair);
+                    }
+                }
+                
+                previousPair = currentPair;
+               
+            }
+            if (!toDelete.isEmpty()) {
+                pairsToKeep.removeAll(toDelete);
+            }
+        }
+        return pairsToKeep;
 	}
 
-	private void createOverlappingPairs(final List<VoyagePlanRecord> voyagePlans, final List<RetentionPair> allPairs, final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords,
-			final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm) {
+	private void createOverlappingPairs(final List<VoyagePlanRecord> voyagePlans, final List<RetentionPair> allPairs, //
+			final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords,//
+			final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm,//
+			final IVessel vessel) {
 		{
 			VoyagePlanRecord lastRecord = null;
 			Iterator<VoyagePlanRecord> iter = voyagePlans.iterator();
@@ -625,9 +646,8 @@ public class ScheduleCalculator {
 				final VoyagePlanRecord current = iter.next();
 				if (current != null) {
 					if (lastRecord != null) {
-						// TODO: Check the hotfix with Simon
-						if (current.isCargoRecord() && current.getPortTimesRecord().getReturnSlot() instanceof ILoadSlot && lastRecord.isCargoRecord()) {
-							allPairs.add(new RetentionPair(lastRecord, current));
+						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
+							allPairs.add(new RetentionPair(lastRecord, current, vessel));
 						}
 					}
 					lastRecord = current;
