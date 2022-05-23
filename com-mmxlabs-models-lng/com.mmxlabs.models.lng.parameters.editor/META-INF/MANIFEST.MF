@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Parameters Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.parameters.editor;singleton:=true
-Bundle-Version: 5.5.3.qualifier
+Bundle-Version: 5.5.4.RELEASE
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: 
