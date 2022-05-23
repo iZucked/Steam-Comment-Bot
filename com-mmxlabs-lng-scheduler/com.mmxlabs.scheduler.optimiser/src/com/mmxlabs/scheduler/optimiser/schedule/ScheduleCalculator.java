@@ -464,7 +464,7 @@ public class ScheduleCalculator {
 				fSpareDischargeValue = sValue - fValue;
 
 				assert sCargo.scheduledLoadVolumeMMBTu - f2sSpareDischargeCapacityMMMBTu >= sCargo.minLoadMMBTu;
-				assert fCargo.scheduledDischargeVolumeMMBTu - fSpareDischargeCapacityMMBTu >= fCargo.minLoadMMBTu;
+				assert fCargo.scheduledDischargeVolumeMMBTu - fSpareDischargeCapacityMMBTu >= fCargo.minDischargeMMBTu;
 				
 				if (fSpareDischargeValue > 0) {
 					fCargo.scheduledDischargeVolumeMMBTu -= fSpareDischargeCapacityMMBTu;
