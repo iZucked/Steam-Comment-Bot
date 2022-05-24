@@ -119,6 +119,9 @@ public final class CommonImages {
 		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
 //		Resume(24,"icons/24x24/terminate.png", true), //
+		
+		
+		RollForward_24(24, "icons/24x24/roll_forward.png")
 		;
 
 		private int size;
