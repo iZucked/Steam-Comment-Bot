@@ -28,6 +28,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
@@ -77,6 +78,7 @@ import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -376,8 +378,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void evaluateBreakEvenSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			final BreakEvenAnalysisModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final CompoundCommand cmd) {
 
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
 		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
 
@@ -385,10 +385,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
-		final ExecutorService executorService = Executors.newFixedThreadPool(LNGScenarioChainBuilder.getNumberOfAvailableCores());
+		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+	
+	
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
-			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(lngScenarioModel, dataTransformer, "break-even-sandbox", userSettings, constraints, executorService,
+			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(scenarioDataProvider, dataTransformer, "break-even-sandbox", userSettings, constraints, jobExecutorFactory,
 					dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
 			unit.run(model, mapper, shippingMap, new NullProgressMonitor());

@@ -872,6 +872,8 @@ public class MainTableWiringDiagram implements PaintListener, MouseListener, Mou
 			}
 
 			{
+				
+				
 				// now find column
 				if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
 					// arrived in left column from right

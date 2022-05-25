@@ -299,8 +299,6 @@ public class BreakEvenSandboxEvaluator {
 		{
 
 			singleEval(scenarioEditingLocation, model, cmd);
-			System.out.println("ERROR: Model changed outside of EMF commands");
-			System.out.println("ERROR: New Model elements not stored in model");
 		}
 
 		final long b = System.currentTimeMillis();

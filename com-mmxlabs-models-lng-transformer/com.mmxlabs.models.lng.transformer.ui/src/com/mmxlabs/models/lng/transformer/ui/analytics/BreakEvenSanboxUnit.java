@@ -6,16 +6,20 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.time.YearMonth;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
@@ -24,7 +28,10 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet;
@@ -37,15 +44,12 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -62,6 +66,8 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
@@ -79,17 +85,16 @@ public class BreakEvenSanboxUnit {
 	@NonNull
 	private final Injector injector;
 
-	private @NonNull ExecutorService executorService;
+	private @NonNull JobExecutorFactory executorService;
 
-	private @NonNull LNGScenarioModel scenarioModel;
+	private IScenarioDataProvider sdp;
 
 	@SuppressWarnings("null")
-	public BreakEvenSanboxUnit(@NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
+	public BreakEvenSanboxUnit(@NonNull final IScenarioDataProvider sdp, @NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
+			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final JobExecutorFactory executorService, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
-		this.scenarioModel = scenarioModel;
+		this.sdp = sdp;
 		this.dataTransformer = dataTransformer;
-		this.executorService = executorService;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -128,32 +133,44 @@ public class BreakEvenSanboxUnit {
 		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
+
+		this.executorService = executorService.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
 	}
 
 	public void run(final BreakEvenAnalysisModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
-		try {
+		try (JobExecutor jobExecutor = executorService.begin()) {
 
-			@NonNull
-			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+			EditingDomain ed = sdp.getEditingDomain();
 
+			final @NonNull ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+
+			CompoundCommand cmd = new CompoundCommand("Run break-evens");
+
+			Map<BreakEvenAnalysisRow, BreakEvenAnalysisResultSet> rowToResultSetMap = new HashMap<>();
 			// Phase 1 : generate basic point-to-point break evens
 			{
 				final List<Future<Runnable>> futures = new LinkedList<>();
 
 				for (final BreakEvenAnalysisRow row : model.getRows()) {
 					final BreakEvenAnalysisResultSet resultSet = AnalyticsFactory.eINSTANCE.createBreakEvenAnalysisResultSet();
-					// TODO: Part of command!
-					row.setLhsBasedOn(null);
-					row.setRhsBasedOn(null);
-					row.getRhsResults().clear();
-					row.getLhsResults().clear();
+
+					rowToResultSetMap.put(row, resultSet);
+
+					cmd.append(SetCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__LHS_BASED_ON, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__RHS_BASED_ON, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS, SetCommand.UNSET_VALUE));
 
 					if (row.getBuyOption() != null) {
-						row.getRhsResults().add(resultSet);
+						cmd.append(AddCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS, resultSet));
 					} else if (row.getSellOption() != null) {
-						row.getLhsResults().add(resultSet);
+						cmd.append(AddCommand.create(ed, row, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS, resultSet));
 					}
 
 					final VesselAssignmentType vesselAssignment = shippingMap.get(row.getShipping());
@@ -264,7 +281,7 @@ public class BreakEvenSanboxUnit {
 								monitor.worked(1);
 							}
 						};
-						futures.add(executorService.submit(job));
+						futures.add(jobExecutor.submit(job));
 					}
 				}
 
@@ -316,12 +333,8 @@ public class BreakEvenSanboxUnit {
 							continue;
 						}
 
-						final BreakEvenAnalysisResultSet resultSetToBaseOn;
-						if (targetRow.getBuyOption() != null) {
-							resultSetToBaseOn = rowToBaseOn.getRhsResults().get(0);
-						} else {
-							resultSetToBaseOn = rowToBaseOn.getLhsResults().get(0);
-						}
+						final BreakEvenAnalysisResultSet resultSetToBaseOn = rowToResultSetMap.get(rowToBaseOn);
+						assert resultSetToBaseOn != null;
 						assert resultSetToBaseOn.getBasedOn() == null;
 
 						for (final BreakEvenAnalysisResult resultBasedOn : resultSetToBaseOn.getResults()) {
@@ -329,9 +342,9 @@ public class BreakEvenSanboxUnit {
 							resultSetB.setBasedOn(resultBasedOn);
 
 							if (targetRow.getBuyOption() != null) {
-								targetRow.getRhsResults().add(resultSetB);
+								cmd.append(AddCommand.create(ed, targetRow, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__RHS_RESULTS, resultSetB));
 							} else {
-								targetRow.getLhsResults().add(resultSetB);
+								cmd.append(AddCommand.create(ed, targetRow, AnalyticsPackage.Literals.BREAK_EVEN_ANALYSIS_ROW__LHS_RESULTS, resultSetB));
 							}
 
 							final Callable<Runnable> job = () -> {
@@ -522,7 +535,7 @@ public class BreakEvenSanboxUnit {
 									monitor.worked(1);
 								}
 							};
-							futures.add(executorService.submit(job));
+							futures.add(jobExecutor.submit(job));
 						}
 					}
 				}
@@ -548,6 +561,9 @@ public class BreakEvenSanboxUnit {
 					return;
 				}
 			}
+
+			ed.getCommandStack().execute(cmd);
+
 		} finally {
 			monitor.done();
 		}

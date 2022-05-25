@@ -61,13 +61,7 @@ public class MainTableDropTargetListener implements DropTargetListener {
 		this.viewer = viewer;
 		this.refreshColumnsCallback = refreshColumnsCallback;
 		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
-		viewer.getControl().addDisposeListener(new DisposeListener() {
-
-			@Override
-			public void widgetDisposed(final DisposeEvent e) {
-				menuHelper.dispose();
-			}
-		});
+		viewer.getControl().addDisposeListener(e -> menuHelper.dispose());
 	}
 
 	public MainTableDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final GridTreeViewer viewer, Runnable refreshColumnsCallback) {
@@ -76,17 +70,28 @@ public class MainTableDropTargetListener implements DropTargetListener {
 
 	@Override
 	public void dropAccept(final DropTargetEvent event) {
-
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
 	}
 
 	@Override
 	public void drop(final DropTargetEvent event) {
+		if (scenarioEditingLocation.isLocked()) {
+			event.detail = DND.DROP_NONE;
+			return;
+		}
+		
 		final BreakEvenAnalysisModel breakEvenAnalysisModel = this.breakEvenAnalysisModel;
 		if (breakEvenAnalysisModel == null) {
 			return;
 		}
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
+			
+			event.operations = DND.DROP_LINK;
+			
 			Object o = null;
 			Collection<EObject> collection = null;
 			if (selection.size() == 1) {
@@ -174,7 +179,8 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// else if (o instanceof PartialCaseRow) {
 				// if (o == existing) {
 				// event.operations = DND.DROP_LINK;
-				// if (existing.getBuyOptions().isEmpty() && existing.getSellOptions().size() == 1) {
+				// if (existing.getBuyOptions().isEmpty() && existing.getSellOptions().size() ==
+				// 1) {
 				//
 				// final SellOption option = existing.getSellOptions().get(0);
 				// final Port port = AnalyticsBuilder.getPort(option);
@@ -190,22 +196,28 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 				//
 				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), optionAnalysisModel,
+				// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS,
+				// row), optionAnalysisModel,
 				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 				//
 				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, Collections.singletonList(row)),
+				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS,
+				// Collections.singletonList(row)),
 				// existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
 				//
 				// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
-				// } else if (existing.getBuyOptions().size() == 1 && existing.getSellOptions().isEmpty()) {
+				// } else if (existing.getBuyOptions().size() == 1 &&
+				// existing.getSellOptions().isEmpty()) {
 				//
 				// final BuyOption option = existing.getBuyOptions().get(0);
 				// final Port port = AnalyticsBuilder.getPort(option);
 				// final LocalDate date = AnalyticsBuilder.getDate(option);
 				// final boolean isShipped = AnalyticsBuilder.isShipped(option);
 				//
-				// final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+				// final SellOpportunity row =
+				// AnalyticsFactory.eINSTANCE.createSellOpportunity();
 				// row.setFobSale(isShipped);
 				// row.setDate(date);
 				// row.setPort(port);
@@ -214,11 +226,15 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 				//
 				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row),
+				// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS,
+				// row),
 				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 				//
 				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, Collections.singletonList(row)),
+				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS,
+				// Collections.singletonList(row)),
 				// existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
 				//
 				// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
@@ -228,38 +244,53 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// final Vessel vessel = (Vessel) o;
 				//
 				// if (existing != null) {
-				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel, menuHelper);
+				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel,
+				// existing, vessel, menuHelper);
 				//
 				// // final ShippingType shippingType = AnalyticsBuilder.isNonShipped(existing);
 				// // if (shippingType == ShippingType.NonShipped) {
-				// // NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
+				// // NominatedShippingOption opt =
+				// AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel,
+				// vessel);
 				// // if (opt.eContainer() == null) {
 				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-				// // optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+				// // AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// optionAnalysisModel,
+				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+				// // optionAnalysisModel,
+				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 				// // }
 				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
+				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
 				// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 				// // } else if (shippingType == ShippingType.Shipped) {
 				// // // final PartialCaseRow pExisting = existing;
 				// // // menuHelper.clearActions();
 				// // // menuHelper.addAction(new RunnableAction("Create RT", () -> {
-				// // // final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+				// // // final RoundTripShippingOption opt =
+				// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 				// // // opt.setVesselClass(vessel.getVesselClass());
 				// // // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
+				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt),
+				// pExisting,
 				// // // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+				// StructuredSelection(opt));
 				// // // }));
 				// // // menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-				// // // final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+				// // // final FleetShippingOption opt =
+				// AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 				// // // AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 				// // // opt.setVessel(vessel);
 				// // // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
+				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt),
+				// pExisting,
 				// // // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+				// StructuredSelection(opt));
 				// // // }));
 				// // //
 				// // // menuHelper.open();
@@ -267,18 +298,23 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// }
 				// } else if (o instanceof VesselClass) {
 				// final VesselClass vesselClass = (VesselClass) o;
-				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vesselClass, menuHelper);
+				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel,
+				// existing, vesselClass, menuHelper);
 				//
 				// // final PartialCaseRow pExisting = existing;
-				// // final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+				// // final RoundTripShippingOption opt =
+				// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 				// // opt.setVesselClass((VesselClass) o);
 				// // if (pExisting != null) {
-				// // final ShippingType shippingType = AnalyticsBuilder.isNonShipped(pExisting);
+				// // final ShippingType shippingType =
+				// AnalyticsBuilder.isNonShipped(pExisting);
 				// // if (shippingType == ShippingType.Shipped) {
 				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
+				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting,
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
 				// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+				// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+				// StructuredSelection(opt));
 				// // }
 				// // }
 				// }
@@ -314,14 +350,18 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				}
 
 				// else if (o instanceof CargoModelRowTransformer.RowData) {
-				// final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+				// final CargoModelRowTransformer.RowData rowData =
+				// (CargoModelRowTransformer.RowData) o;
 				// final CompoundCommand cmd = new CompoundCommand();
 				//
 				// final LoadSlot loadSlot = rowData.getLoadSlot();
-				// final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+				// final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot,
+				// optionAnalysisModel, scenarioEditingLocation, cmd);
 				//
 				// final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
-				// final SellOption sellRef = AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+				// final SellOption sellRef =
+				// AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel,
+				// scenarioEditingLocation, cmd);
 				//
 				// final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 				// if (buyRef != null) {
@@ -331,11 +371,15 @@ public class MainTableDropTargetListener implements DropTargetListener {
 				// row.getSellOptions().add(sellRef);
 				// }
 				//
-				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, row, rowData.getCargo(), loadSlot, dischargeSlot, cmd);
+				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel,
+				// row, rowData.getCargo(), loadSlot, dischargeSlot, cmd);
 				//
-				// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row));
+				// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+				// optionAnalysisModel.getPartialCase(),
+				// AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row));
 				//
-				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null,
+				// null);
 				//
 				// return;
 				// }
@@ -352,23 +396,23 @@ public class MainTableDropTargetListener implements DropTargetListener {
 			if (selection.size() > 0) {
 				final Object o = selection.getFirstElement();
 				if (o instanceof BuyOption || o instanceof SellOption) {
-					event.operations = DND.DROP_MOVE;
+					event.detail = DND.DROP_LINK;
 					return;
 				}
 				if (o instanceof Vessel) {
-					event.operations = DND.DROP_MOVE;
+					event.detail = DND.DROP_LINK;
 					return;
 				}
 				if (o instanceof BreakEvenAnalysisResult) {
-					event.operations = DND.DROP_LINK;
+					event.detail = DND.DROP_LINK;
 					return;
 				}
 				if (o instanceof ShippingOption) {
-					event.operations = DND.DROP_MOVE;
+					event.detail = DND.DROP_LINK;
 					return;
 				}
 				if (o instanceof CargoModelRowTransformer.RowData) {
-					event.operations = DND.DROP_MOVE;
+					event.detail = DND.DROP_LINK;
 					return;
 				}
 			}
