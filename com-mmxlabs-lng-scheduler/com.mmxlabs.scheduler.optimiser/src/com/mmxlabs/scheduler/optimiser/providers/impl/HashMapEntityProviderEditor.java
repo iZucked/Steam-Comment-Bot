@@ -13,7 +13,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -29,7 +29,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 
 	private final LinkedHashSet<@NonNull IEntity> entities = new LinkedHashSet<>();
 	private final Map<IPortSlot, IEntity> entitiesBySlot = new HashMap<>();
-	private final Map<@NonNull IVesselAvailability, @NonNull IEntity> entitiesByVesselAvailability = new HashMap<>();
+	private final Map<@NonNull IVesselCharter, @NonNull IEntity> entitiesByVesselCharter = new HashMap<>();
 	private final Map<@NonNull IEntity, Map<@NonNull EntityBookType, @NonNull IEntityBook>> entitiesBooksMap = new HashMap<>();
 
 	@Override
@@ -47,14 +47,14 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 		entities.add(entity);
 	}
 
-	public void setEntityForVesselAvailability(final @NonNull IEntity entity, final @NonNull IVesselAvailability vesselAvailability) {
-		this.entitiesByVesselAvailability.put(vesselAvailability, entity);
+	public void setEntityForVesselCharter(final @NonNull IEntity entity, final @NonNull IVesselCharter vesselCharter) {
+		this.entitiesByVesselCharter.put(vesselCharter, entity);
 		entities.add(entity);
 	}
 
 	@Override
-	public IEntity getEntityForVesselAvailability(final @NonNull IVesselAvailability vesselAvailability) {
-		return entitiesByVesselAvailability.get(vesselAvailability);
+	public IEntity getEntityForVesselCharter(final @NonNull IVesselCharter vesselCharter) {
+		return entitiesByVesselCharter.get(vesselCharter);
 	}
 
 	@Override

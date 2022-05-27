@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -44,7 +44,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -69,7 +69,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -88,7 +88,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -114,7 +114,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -133,7 +133,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -158,7 +158,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -183,7 +183,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -222,7 +222,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -247,7 +247,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -266,7 +266,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -291,7 +291,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -312,7 +312,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -337,7 +337,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -636,7 +636,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -661,7 +661,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -679,7 +679,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -705,7 +705,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -723,7 +723,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -748,7 +748,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -769,7 +769,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C1", entity, "5");
 		contract.setRestrictedVesselsArePermissive(true);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -793,7 +793,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo
@@ -811,7 +811,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, entity, "50000", 1);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -836,7 +836,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, cargo1), null, new ArrayList<>()));
+			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, cargo1), null, new ArrayList<>()));
 			// Nominal vessel
 			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), charterInMarket_1, -1, cargo1), null, new ArrayList<>()));
 			// Spot cargo

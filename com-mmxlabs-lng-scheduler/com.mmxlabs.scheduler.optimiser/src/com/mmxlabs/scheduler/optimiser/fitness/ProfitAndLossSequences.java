@@ -15,7 +15,7 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 /**
  * @author hinton, modified by FM
@@ -40,11 +40,11 @@ public class ProfitAndLossSequences extends ArrayList<@NonNull VolumeAllocatedSe
 	// @Override
 	@Deprecated
 	public boolean add(@NonNull final VolumeAllocatedSequence scheduledSequence) {
-		// Call the other #add(IVesselAvailability,VolumeAllocatedSequence) method
+		// Call the other #add(IVesselCharter,VolumeAllocatedSequence) method
 		throw new UnsupportedOperationException("");
 	}
 
-	public boolean add(@NonNull IVesselAvailability vesselAvailability, @NonNull final VolumeAllocatedSequence scheduledSequence) {
+	public boolean add(@NonNull IVesselCharter vesselCharter, @NonNull final VolumeAllocatedSequence scheduledSequence) {
 		resourceToScheduledSequenceMap.put(scheduledSequence.getResource(), scheduledSequence);
 		return super.add(scheduledSequence);
 	}

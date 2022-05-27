@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
@@ -111,7 +111,7 @@ public class LoadDischargePairValueCalculator {
 		}
 	}
 
-	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vessel) {
+	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vessel) {
 
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
@@ -145,7 +145,7 @@ public class LoadDischargePairValueCalculator {
 	 * @param vessels
 	 * @return true, if compatible, false, otherwise.
 	 */
-	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vessel, Collection<IVesselAvailability> vessels) {
+	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vessel, Collection<IVesselCharter> vessels) {
 
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
@@ -157,7 +157,7 @@ public class LoadDischargePairValueCalculator {
 		} else {
 			messages = null;
 		}
-		for (final IVesselAvailability v : vessels) {
+		for (final IVesselCharter v : vessels) {
 			if (v == vessel) continue;
 			boolean isValid = true;
 			for (final IPairwiseConstraintChecker checker : constraintCheckers) {
@@ -177,10 +177,10 @@ public class LoadDischargePairValueCalculator {
 		return false;
 	}
 
-	private Pair<IAnnotatedSolution, EvaluationState> evaluate(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vesselAvailability) {
+	private Pair<IAnnotatedSolution, EvaluationState> evaluate(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vesselCharter) {
 
 		// Create the sequences object
-		final ISequences sequences = createSequences(load, discharge, vesselAvailability);
+		final ISequences sequences = createSequences(load, discharge, vesselCharter);
 
 		// Run through the sequences manipulator of things such as start/end port replacement
 
@@ -200,9 +200,9 @@ public class LoadDischargePairValueCalculator {
 
 	}
 
-	private ISequences createSequences(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vesselAvailability) {
+	private ISequences createSequences(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vesselCharter) {
 		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
-		final IResource target_resource = vesselProvider.getResource(vesselAvailability);
+		final IResource target_resource = vesselProvider.getResource(vesselCharter);
 
 		boolean foundTarget = false;
 		for (final IResource resource : optimisationData.getResources()) {
@@ -223,18 +223,18 @@ public class LoadDischargePairValueCalculator {
 		return sequences;
 	}
 
-	private IVesselAvailability getCorrectVesselAvailability(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vesselAvailability) {
+	private IVesselCharter getCorrectVesselCharter(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vesselCharter) {
 		if (!(load instanceof ILoadSlot)) {
-			// DES Purchase, return DES vessel availability
+			// DES Purchase, return DES vessel charter
 			final ISequenceElement element = portSlotProvider.getElement(load);
-			return virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
+			return virtualVesselSlotProvider.getVesselCharterForElement(element);
 		}
 		if (!(discharge instanceof IDischargeSlot)) {
-			// FOB Sale , return FOBvessel availability
+			// FOB Sale , return FOBvessel charter
 			final ISequenceElement element = portSlotProvider.getElement(discharge);
-			return virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
+			return virtualVesselSlotProvider.getVesselCharterForElement(element);
 		}
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
 	public static List<ILoadOption> findPurchases(final IPhaseOptimisationData optimisationData, final IPortSlotProvider portSlotProvider) {
@@ -255,23 +255,23 @@ public class LoadDischargePairValueCalculator {
 				.toList();
 	}
 	
-	public static List<IVesselAvailability> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
+	public static List<IVesselCharter> findVessels(final IPhaseOptimisationData optimisationData, final IVesselProvider vesselProvider) {
 
 		return optimisationData.getResources().stream()
-				.map(vesselProvider::getVesselAvailability)//
+				.map(vesselProvider::getVesselCharter)//
 				.toList();
 	}
 
 	public void generate(final ILoadOption loadOption, final IDischargeOption dischargeOption, //
-			final IVesselAvailability nominalVessel, final ResultRecorder recorder, //
-			final List<IVesselAvailability> vessels) {
+			final IVesselCharter nominalVessel, final ResultRecorder recorder, //
+			final List<IVesselCharter> vessels) {
 
-		final IVesselAvailability vesselAvailability = getCorrectVesselAvailability(loadOption, dischargeOption, nominalVessel);
-		if (isValidPair(loadOption, dischargeOption, vesselAvailability)) {
-			if ((nominalVessel != vesselAvailability) || (isValidPair(loadOption, dischargeOption, vesselAvailability, vessels))) {
-				final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselAvailability);
+		final IVesselCharter vesselCharter = getCorrectVesselCharter(loadOption, dischargeOption, nominalVessel);
+		if (isValidPair(loadOption, dischargeOption, vesselCharter)) {
+			if ((nominalVessel != vesselCharter) || (isValidPair(loadOption, dischargeOption, vesselCharter, vessels))) {
+				final Pair<IAnnotatedSolution, EvaluationState> result = evaluate(loadOption, dischargeOption, vesselCharter);
 				if (result != null) {
-					IResource resource = vesselProvider.getResource(vesselAvailability);
+					IResource resource = vesselProvider.getResource(vesselCharter);
 					recorder.record(loadOption, dischargeOption, resource, result);
 				} else {
 					// System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());

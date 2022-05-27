@@ -20,7 +20,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -53,7 +53,7 @@ public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 		// Make a shipped cargo to define the time range.
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -62,7 +62,7 @@ public class SpotDESPurchaseTimezoneTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2018, 07, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 

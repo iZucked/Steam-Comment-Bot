@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Menu;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
@@ -40,8 +40,8 @@ public class VesselsTradesBasedFilterHandler implements ITradesBasedFilterHandle
 				List<Vessel> vessels = new LinkedList<>();
 				for (final Cargo c : cargoModel.getCargoes()) {
 					VesselAssignmentType vesselAT = c.getVesselAssignmentType();
-					if(vesselAT instanceof VesselAvailability) {
-						final Vessel vessel = ((VesselAvailability) vesselAT).getVessel();
+					if(vesselAT instanceof VesselCharter) {
+						final Vessel vessel = ((VesselCharter) vesselAT).getVessel();
 						if (vessel != null && !vessels.contains(vessel)) {
 							vessels.add(vessel);
 						}
@@ -160,8 +160,8 @@ public class VesselsTradesBasedFilterHandler implements ITradesBasedFilterHandle
 			final Cargo cargo = row.getCargo();
 			if (cargo != null) {
 				final VesselAssignmentType vesselAT = cargo.getVesselAssignmentType();
-				if(vesselAT instanceof VesselAvailability) {
-					final Vessel vessel = ((VesselAvailability) vesselAT).getVessel();
+				if(vesselAT instanceof VesselCharter) {
+					final Vessel vessel = ((VesselCharter) vesselAT).getVessel();
 					if (vessel != null && vessel.equals(referenceVessel)) {
 						return true;
 					}

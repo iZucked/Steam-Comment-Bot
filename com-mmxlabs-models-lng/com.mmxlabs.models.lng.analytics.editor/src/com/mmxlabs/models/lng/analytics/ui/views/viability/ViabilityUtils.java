@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -36,7 +36,7 @@ public final class ViabilityUtils {
 			buy.setSlot(slot);
 			model.getBuys().add(buy);
 		}
-		for (final VesselAvailability vessel : cargoModel.getVesselAvailabilities()) {
+		for (final VesselCharter vessel : cargoModel.getVesselCharters()) {
 			if (vessel != null) {
 				final ExistingVesselCharterOption v = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 				v.setVesselCharter(vessel);

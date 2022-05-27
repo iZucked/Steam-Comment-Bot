@@ -8,7 +8,7 @@ package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleSpecification <em>Schedule Specification</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselCharters <em>Extra Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  * </ul>
  *
@@ -89,20 +89,16 @@ public interface SolutionOptionMicroCase extends EObject {
 	void setScheduleModel(ScheduleModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * Returns the value of the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselCharter}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Extra Vessel Availabilities</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Extra Vessel Availabilities</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSolutionOptionMicroCase_ExtraVesselAvailabilities()
+	 * @return the value of the '<em>Extra Vessel Charters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSolutionOptionMicroCase_ExtraVesselCharters()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<VesselAvailability> getExtraVesselAvailabilities();
+	EList<VesselCharter> getExtraVesselCharters();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Market Overrides</b></em>' containment reference list.

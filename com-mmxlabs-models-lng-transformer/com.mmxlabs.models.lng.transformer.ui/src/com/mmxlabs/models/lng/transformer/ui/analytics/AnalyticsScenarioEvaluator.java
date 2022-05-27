@@ -45,7 +45,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -106,7 +106,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public static BiConsumer<LNGScenarioModel, Schedule> createModelCustomiser() {
 		return (input_scenario, input_schedule) -> {
 
-			final Set<VesselAvailability> usedVesselAvailabilites = new LinkedHashSet<>();
+			final Set<VesselCharter> usedVesselAvailabilites = new LinkedHashSet<>();
 			final Set<CharterInMarketOverride> usedCharterInMarketOverrides = new LinkedHashSet<>();
 			final Set<CharterInMarket> usedCharterInMarkets = new LinkedHashSet<>();
 			final Set<LoadSlot> usedLoadSlots = new LinkedHashSet<>();
@@ -141,8 +141,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 			}
 			for (final Sequence sequence : input_schedule.getSequences()) {
-				if (sequence.getVesselAvailability() != null) {
-					usedVesselAvailabilites.add(sequence.getVesselAvailability());
+				if (sequence.getVesselCharter() != null) {
+					usedVesselAvailabilites.add(sequence.getVesselCharter());
 				}
 				if (sequence.getCharterInMarketOverride() != null) {
 					usedCharterInMarketOverrides.add(sequence.getCharterInMarketOverride());
@@ -225,17 +225,17 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 			}
 			{
-				final Iterator<VesselAvailability> l_itr = cargoModel.getVesselAvailabilities().iterator();
+				final Iterator<VesselCharter> l_itr = cargoModel.getVesselCharters().iterator();
 				while (l_itr.hasNext()) {
-					final VesselAvailability vesselAvailability = l_itr.next();
-					if (!usedVesselAvailabilites.contains(vesselAvailability)) {
-						objectsToDelete.add(vesselAvailability);
+					final VesselCharter vesselCharter = l_itr.next();
+					if (!usedVesselAvailabilites.contains(vesselCharter)) {
+						objectsToDelete.add(vesselCharter);
 						l_itr.remove();
 					}
 				}
-				for (final VesselAvailability vesselAvailability : usedVesselAvailabilites) {
-					if (!cargoModel.getVesselAvailabilities().contains(vesselAvailability)) {
-						cargoModel.getVesselAvailabilities().add(vesselAvailability);
+				for (final VesselCharter vesselCharter : usedVesselAvailabilites) {
+					if (!cargoModel.getVesselCharters().contains(vesselCharter)) {
+						cargoModel.getVesselCharters().add(vesselCharter);
 					}
 				}
 			}

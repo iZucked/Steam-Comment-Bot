@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -55,8 +55,8 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 			} else if (vesselAssignmentType instanceof CharterInMarketOverride charterInMarketOverride) {
 				final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 				vessel = charterInMarket.getVessel();
-			} else if (vesselAssignmentType instanceof VesselAvailability vesselAvailability) {
-				vessel = vesselAvailability.getVessel();
+			} else if (vesselAssignmentType instanceof VesselCharter vesselCharter) {
+				vessel = vesselCharter.getVessel();
 			} else {
 				return;
 			}

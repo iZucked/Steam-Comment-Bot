@@ -27,7 +27,7 @@
 //import com.mmxlabs.optimiser.common.components.ITimeWindow;
 //import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 //import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-//import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+//import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 //
 //public class SimpleLightweightSequenceOptimiser implements ILightWeightSequenceOptimiser {
 //
@@ -43,7 +43,7 @@
 //		
 //		// Data Transform
 //	     List<List<IPortSlot>> cargoes = lightWeightOptimisationData.getCargoes();
-//	     List<IVesselAvailability> vessels = lightWeightOptimisationData.getVessels();
+//	     List<IVesselCharter> vessels = lightWeightOptimisationData.getVessels();
 //	     long[] cargoPNL = lightWeightOptimisationData.getCargoPNL();
 //	     Long[][][] cargoToCargoCostsOnAvailability = lightWeightOptimisationData.getCargoToCargoCostsOnAvailability();
 //	     List<Set<Integer>> cargoVesselRestrictions = lightWeightOptimisationData.getCargoVesselRestrictions();
@@ -86,7 +86,7 @@
 //		return sequences;
 //	}
 //	
-//	private Long evaluate(List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
+//	private Long evaluate(List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels, long[] cargoPNL, Long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes) {
 //		long totalCost = 0;
 //		long totalPNL = 0;
 //		long totalLateness = 0;
@@ -123,7 +123,7 @@
 //		return true;
 //	}
 //
-//	private List<List<Integer>> createSequences(List<IVesselAvailability> vessels) {
+//	private List<List<Integer>> createSequences(List<IVesselCharter> vessels) {
 //		return vessels
 //				.stream()
 //				.map(v -> (List<Integer>) new LinkedList<Integer>())

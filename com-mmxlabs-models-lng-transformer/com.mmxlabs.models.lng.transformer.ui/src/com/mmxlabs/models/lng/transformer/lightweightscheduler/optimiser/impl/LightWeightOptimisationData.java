@@ -13,13 +13,13 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public class LightWeightOptimisationData implements ILightWeightOptimisationData {
 	private LightWeightCargoDetails[] cargoDetails;
 	private List<List<IPortSlot>> shippedCargoes;
 	private List<List<IPortSlot>> nonShippedCargoes;
-	private List<IVesselAvailability> vessels;
+	private List<IVesselCharter> vessels;
 	private long[] cargoPNL;
 	private long[] vesselCapacities;
 	private long[][][] cargoToCargoCostsOnAvailability;
@@ -40,7 +40,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private int[] cargoEndSlotDurations;
 	private CargoWindowData[] cargoWindows;
 
-	public LightWeightOptimisationData(List<List<IPortSlot>> shippedCargoes, List<List<IPortSlot>> nonShippedCargoes, List<IVesselAvailability> vessels, long[] vesselCapacities, long[] cargoPNL,
+	public LightWeightOptimisationData(List<List<IPortSlot>> shippedCargoes, List<List<IPortSlot>> nonShippedCargoes, List<IVesselCharter> vessels, long[] vesselCapacities, long[] cargoPNL,
 			long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
 			Map<ILoadOption, IDischargeOption> pairingsMap, int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
 			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes, ITimeWindow[] vesselStartWindows, ITimeWindow[] vesselEndWindows,
@@ -73,11 +73,11 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		return cargoWindows;
 	}
 
-	public List<IVesselAvailability> getVessels() {
+	public List<IVesselCharter> getVessels() {
 		return vessels;
 	}
 
-	public void setVessels(List<IVesselAvailability> vessels) {
+	public void setVessels(List<IVesselCharter> vessels) {
 		this.vessels = vessels;
 	}
 

@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -75,10 +75,10 @@ public class PortExclusionConstraintCheckerTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
-		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
+		Mockito.when(vesselCharter.getVessel()).thenReturn(vessel);
 
-		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
+		vesselProvider.setVesselCharterResource(resource, vesselCharter);
 
 		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
@@ -128,10 +128,10 @@ public class PortExclusionConstraintCheckerTest {
 		final IVessel nominatedVessel = Mockito.mock(IVessel.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
-		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
+		Mockito.when(vesselCharter.getVessel()).thenReturn(vessel);
 
-		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
+		vesselProvider.setVesselCharterResource(resource, vesselCharter);
 		nominatedVesselProviderEditor.setNominatedVessel(o2, resource, nominatedVessel);
 
 		Assertions.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource, new ArrayList<>()));

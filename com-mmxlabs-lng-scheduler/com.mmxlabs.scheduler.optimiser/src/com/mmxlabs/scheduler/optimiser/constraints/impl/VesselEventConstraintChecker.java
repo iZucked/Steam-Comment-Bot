@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -49,8 +49,8 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 	}
 
 	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 			return true;
 		}
 
@@ -91,8 +91,8 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 		if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.Maintenance
 				|| portTypeProvider.getPortType(element) == PortType.CharterOut) {
 
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			final boolean result = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			final boolean result = (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
 			if (!result && messages != null)
 				messages.add(String.format("%s : For element %s vessel availability is fleet or time charter!", this.name, element.getName()));
 			return result;

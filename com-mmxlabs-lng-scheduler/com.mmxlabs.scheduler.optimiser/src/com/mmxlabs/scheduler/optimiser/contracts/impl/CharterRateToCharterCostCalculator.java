@@ -6,23 +6,23 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 
 public class CharterRateToCharterCostCalculator implements ICharterCostCalculator {
 
-	IVesselAvailability vesselAvailability;
+	IVesselCharter vesselCharter;
 	ICharterRateCalculator charterRateCalculator;
 	
 	@Override
 	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
-		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, voyagePlanStartTime);
+		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselCharter, voyagePlanStartTime);
 		return (charterRatePerDay * duration) / 24L;
 	}
 
-	public void initialise(IVesselAvailability vesselAvailability, @NonNull ICharterRateCalculator charterRateCalculator) {
-		this.vesselAvailability = vesselAvailability;
+	public void initialise(IVesselCharter vesselCharter, @NonNull ICharterRateCalculator charterRateCalculator) {
+		this.vesselCharter = vesselCharter;
 		this.charterRateCalculator = charterRateCalculator;
 	}
 }

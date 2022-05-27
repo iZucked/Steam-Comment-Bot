@@ -28,7 +28,7 @@ public class TrainingCaseConstants {
 		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Commodity Curves.csv")) {
 			sb.importCommodityCurves(is);
 		}
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Vessel Availability.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Vessel Charters.csv")) {
 			sb.importVesselCharters(is);
 		}
 		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Cargoes.csv")) {

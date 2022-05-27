@@ -25,7 +25,7 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -48,7 +48,7 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class StrategicScenarioModuleHelper {
@@ -72,7 +72,7 @@ public class StrategicScenarioModuleHelper {
 				String rate = null;
 				BaseLegalEntity entity = null;
 				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
-				for (VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+				for (VesselCharter va : cargoModel.getVesselCharters()) {
 					vessel = va.getVessel();
 					rate = va.getTimeCharterRate();
 					entity = va.getEntity();
@@ -110,7 +110,7 @@ public class StrategicScenarioModuleHelper {
 
 			@Provides
 			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
-			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, //
+			private IVesselCharter provideDefaultVessel(final ModelEntityMap modelEntityMap, //
 					final IVesselProvider vesselProvider, //
 					final IOptimisationData optimisationData, // )
 					@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
@@ -118,17 +118,17 @@ public class StrategicScenarioModuleHelper {
 				ISpotCharterInMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotCharterInMarket.class);
 
 				for (final IResource o_resource : optimisationData.getResources()) {
-					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
+					final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
 
-					if (o_vesselAvailability.getSpotCharterInMarket() != o_market) {
+					if (o_vesselCharter.getSpotCharterInMarket() != o_market) {
 						continue;
 					}
 
-					if (o_vesselAvailability.getSpotIndex() == -1) {
-						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL, o_vesselAvailability);
-						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL, o_vesselAvailability);
+					if (o_vesselCharter.getSpotIndex() == -1) {
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL, o_vesselCharter);
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL, o_vesselCharter);
 
-						return o_vesselAvailability;
+						return o_vesselCharter;
 					}
 				}
 				throw new IllegalStateException();

@@ -18,7 +18,7 @@ import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselType;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -184,8 +184,8 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 				final SELECT select = new SELECT(new FROM(this.eResource().getContents()), new WHERE(new EObjectReferencerCondition(v)));
 				final IQueryResult execute = select.execute();
 				for (final EObject eObj : execute) {
-					if (eObj instanceof VesselAvailability) {
-						final VesselAvailability va = (VesselAvailability) eObj;
+					if (eObj instanceof VesselCharter) {
+						final VesselCharter va = (VesselCharter) eObj;
 						if ((!va.isOptional() && (getVesselType() == VesselType.OWNED)) //
 								|| (va.isOptional() && (getVesselType() == VesselType.TIME_CHARTERED))) {
 							result.addAll(va.getVessel().collect(marked));

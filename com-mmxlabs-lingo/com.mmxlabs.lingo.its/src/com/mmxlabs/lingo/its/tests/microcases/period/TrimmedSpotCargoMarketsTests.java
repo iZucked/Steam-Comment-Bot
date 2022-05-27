@@ -17,7 +17,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -47,7 +47,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// FIXME: Fix issue to avoid needing this.
 		{
 
-			final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselCharter vesselCharter_1 = cargoModelBuilder.makeVesselCharter(vessel_1, entity) //
 					.build();
 
 			// Create a single charter out event
@@ -55,7 +55,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
-					.withVesselAssignment(vesselAvailability_1, 0) //
+					.withVesselAssignment(vesselCharter_1, 0) //
 					.build(); //
 
 		}
@@ -140,7 +140,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// FIXME: Fix issue to avoid needing this.
 		{
 
-			final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+			final VesselCharter vesselCharter_1 = cargoModelBuilder.makeVesselCharter(vessel_1, entity) //
 					.build();
 
 			// Create a single charter out event
@@ -148,7 +148,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
-					.withVesselAssignment(vesselAvailability_1, 0) //
+					.withVesselAssignment(vesselCharter_1, 0) //
 					.build(); //
 
 		}

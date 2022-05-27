@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
 
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
@@ -41,7 +41,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl#getScheduleSpecification <em>Schedule Specification</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl#getExtraVesselCharters <em>Extra Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionMicroCaseImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  * </ul>
  *
@@ -69,14 +69,14 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	protected ScheduleModel scheduleModel;
 
 	/**
-	 * The cached value of the '{@link #getExtraVesselAvailabilities() <em>Extra Vessel Availabilities</em>}' containment reference list.
+	 * The cached value of the '{@link #getExtraVesselCharters() <em>Extra Vessel Charters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExtraVesselAvailabilities()
+	 * @see #getExtraVesselCharters()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VesselAvailability> extraVesselAvailabilities;
+	protected EList<VesselCharter> extraVesselCharters;
 
 	/**
 	 * The cached value of the '{@link #getCharterInMarketOverrides() <em>Charter In Market Overrides</em>}' containment reference list.
@@ -203,11 +203,11 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 	 * @generated
 	 */
 	@Override
-	public EList<VesselAvailability> getExtraVesselAvailabilities() {
-		if (extraVesselAvailabilities == null) {
-			extraVesselAvailabilities = new EObjectContainmentEList<VesselAvailability>(VesselAvailability.class, this, AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES);
+	public EList<VesselCharter> getExtraVesselCharters() {
+		if (extraVesselCharters == null) {
+			extraVesselCharters = new EObjectContainmentEList<VesselCharter>(VesselCharter.class, this, AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS);
 		}
-		return extraVesselAvailabilities;
+		return extraVesselCharters;
 	}
 
 	/**
@@ -235,8 +235,8 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 				return basicSetScheduleSpecification(null, msgs);
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
-				return ((InternalEList<?>)getExtraVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
+				return ((InternalEList<?>)getExtraVesselCharters()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				return ((InternalEList<?>)getCharterInMarketOverrides()).basicRemove(otherEnd, msgs);
 		}
@@ -255,8 +255,8 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 				return getScheduleSpecification();
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
 				return getScheduleModel();
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
-				return getExtraVesselAvailabilities();
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
+				return getExtraVesselCharters();
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				return getCharterInMarketOverrides();
 		}
@@ -278,9 +278,9 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
 				return;
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
-				getExtraVesselAvailabilities().clear();
-				getExtraVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
+				getExtraVesselCharters().clear();
+				getExtraVesselCharters().addAll((Collection<? extends VesselCharter>)newValue);
 				return;
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				getCharterInMarketOverrides().clear();
@@ -304,8 +304,8 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
-				getExtraVesselAvailabilities().clear();
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
+				getExtraVesselCharters().clear();
 				return;
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				getCharterInMarketOverrides().clear();
@@ -326,8 +326,8 @@ public class SolutionOptionMicroCaseImpl extends EObjectImpl implements Solution
 				return scheduleSpecification != null;
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
 				return scheduleModel != null;
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
-				return extraVesselAvailabilities != null && !extraVesselAvailabilities.isEmpty();
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
+				return extraVesselCharters != null && !extraVesselCharters.isEmpty();
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				return charterInMarketOverrides != null && !charterInMarketOverrides.isEmpty();
 		}

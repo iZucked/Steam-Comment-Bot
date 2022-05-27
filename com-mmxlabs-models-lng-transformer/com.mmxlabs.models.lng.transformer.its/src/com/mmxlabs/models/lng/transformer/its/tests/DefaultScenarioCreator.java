@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -312,10 +312,10 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public VesselAvailability createDefaultVessel(final @NonNull Vessel vessel, final @NonNull BaseLegalEntity shippingEntity) {
+		public VesselCharter createDefaultVessel(final @NonNull Vessel vessel, final @NonNull BaseLegalEntity shippingEntity) {
 
-			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder() //
-					.makeVesselAvailability(vessel, shippingEntity) //
+			final VesselCharter availability = scenarioModelBuilder.getCargoModelBuilder() //
+					.makeVesselCharter(vessel, shippingEntity) //
 					.withStartHeel(0.0, (double) startHeelVolume, portCreator.defaultCv, Double.toString(dischargePrice)) //
 					.build();
 
@@ -329,8 +329,8 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public VesselAvailability[] createMultipleDefaultVessels(final Vessel vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
-			final VesselAvailability[] result = new VesselAvailability[num];
+		public VesselCharter[] createMultipleDefaultVessels(final Vessel vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
+			final VesselCharter[] result = new VesselCharter[num];
 			for (int i = 0; i < num; i++) {
 				result[i] = createDefaultVessel(vc, shippingEntity);
 			}
@@ -346,15 +346,15 @@ public class DefaultScenarioCreator {
 		 * @param endPort
 		 * @param endDate
 		 */
-		public VesselAvailability setAvailability(final CargoModel cargoModel, final Vessel vessel, final Port startPort, final LocalDateTime startDate, final Port endPort,
+		public VesselCharter setAllVesselCharterWindows(final CargoModel cargoModel, final Vessel vessel, final Port startPort, final LocalDateTime startDate, final Port endPort,
 				final LocalDateTime endDate) {
-			for (final VesselAvailability availability : cargoModel.getVesselAvailabilities()) {
-				if (availability.getVessel() == vessel) {
-					availability.setStartAt(startPort);
-					availability.getEndAt().add(endPort);
-					availability.setStartAfter(startDate);
-					availability.setEndBy(endDate);
-					return availability;
+			for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
+				if (vesselCharter.getVessel() == vessel) {
+					vesselCharter.setStartAt(startPort);
+					vesselCharter.getEndAt().add(endPort);
+					vesselCharter.setStartAfter(startDate);
+					vesselCharter.setEndBy(endDate);
+					return vesselCharter;
 				}
 			}
 			return null;

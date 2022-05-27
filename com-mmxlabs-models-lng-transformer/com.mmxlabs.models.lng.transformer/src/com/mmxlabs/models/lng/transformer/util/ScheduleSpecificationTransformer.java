@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -45,7 +45,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -98,23 +98,23 @@ public class ScheduleSpecificationTransformer {
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
 			IResource resource = null;
-			if (vesselAllocation instanceof VesselAvailability e_vesselAvailability) {
-				final IVesselAvailability o_vesselAvailability = mem.getOptimiserObjectNullChecked(e_vesselAvailability, IVesselAvailability.class);
-				resource = vesselProvider.getResource(o_vesselAvailability);
+			if (vesselAllocation instanceof VesselCharter e_vesselCharter) {
+				final IVesselCharter o_vesselCharter = mem.getOptimiserObjectNullChecked(e_vesselCharter, IVesselCharter.class);
+				resource = vesselProvider.getResource(o_vesselCharter);
 			} else if (vesselAllocation instanceof CharterInMarketOverride e_charterInMarketOverride) {
-				final IVesselAvailability o_vesselAvailability = mem.getOptimiserObjectNullChecked(e_charterInMarketOverride, IVesselAvailability.class);
-				resource = vesselProvider.getResource(o_vesselAvailability);
+				final IVesselCharter o_vesselCharter = mem.getOptimiserObjectNullChecked(e_charterInMarketOverride, IVesselCharter.class);
+				resource = vesselProvider.getResource(o_vesselCharter);
 			} else if (vesselAllocation instanceof CharterInMarket e_charterInMarket) {
 				final int spotIndex = vesselSpecificiation.getSpotIndex();
 				final ISpotCharterInMarket o_market = mem.getOptimiserObjectNullChecked(e_charterInMarket, ISpotCharterInMarket.class);
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 				for (final IResource o_resource : optimisationData.getResources()) {
-					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-					final ISpotCharterInMarket spotCharterInMarket = o_vesselAvailability.getSpotCharterInMarket();
+					final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+					final ISpotCharterInMarket spotCharterInMarket = o_vesselCharter.getSpotCharterInMarket();
 					if (spotCharterInMarket != o_market) {
 						continue;
 					}
-					if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+					if (o_vesselCharter.getSpotIndex() != spotIndex) {
 						continue;
 					}
 
@@ -244,9 +244,9 @@ public class ScheduleSpecificationTransformer {
 				}
 
 				
-				final IVesselAvailability o_vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
-				if (o_vesselAvailability != null) {
-					resource = vesselProvider.getResource(o_vesselAvailability);
+				final IVesselCharter o_vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(e);
+				if (o_vesselCharter != null) {
+					resource = vesselProvider.getResource(o_vesselCharter);
 				}
 			}
 
@@ -276,7 +276,7 @@ public class ScheduleSpecificationTransformer {
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				unusedElements.add(e);
 
-				final IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+				final IVesselCharter va = virtualVesselSlotProvider.getVesselCharterForElement(e);
 				if (va != null) {
 					final IResource resource = vesselProvider.getResource(va);
 
@@ -311,7 +311,7 @@ public class ScheduleSpecificationTransformer {
 						continue;
 					}
 					unusedElements.add(e);
-					final IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+					final IVesselCharter va = virtualVesselSlotProvider.getVesselCharterForElement(e);
 					if (va != null) {
 						final IResource resource = vesselProvider.getResource(va);
 

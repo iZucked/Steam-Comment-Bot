@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -72,7 +72,7 @@ public class ScheduleToSequencesTransformer {
 					resources.add(optSeq.getFirst());
 				}
 			} else if (seq.isFleetVessel() || seq.isTimeCharterVessel()) {
-				final VesselAvailability vesselAvailability = seq.getVesselAvailability();
+				final VesselCharter vesselCharter = seq.getVesselCharter();
 				final List<EObject> events = new LinkedList<>();
 				for (final Event event : seq.getEvents()) {
 					if (event instanceof SlotVisit) {
@@ -83,7 +83,7 @@ public class ScheduleToSequencesTransformer {
 						events.add(vesselEventVisit.getVesselEvent());
 					}
 				}
-				final Pair<IResource, IModifiableSequence> optSeq = SequenceHelper.makeSequence(dataTransformer.getInjector(), vesselAvailability, events);
+				final Pair<IResource, IModifiableSequence> optSeq = SequenceHelper.makeSequence(dataTransformer.getInjector(), vesselCharter, events);
 				resourceMap.put(optSeq.getFirst(), optSeq.getSecond());
 				resources.add(optSeq.getFirst());
 			} else if (seq.isSpotVessel()) {

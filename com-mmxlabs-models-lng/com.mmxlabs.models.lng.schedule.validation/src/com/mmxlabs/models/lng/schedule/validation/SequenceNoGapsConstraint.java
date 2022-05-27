@@ -37,9 +37,9 @@ public class SequenceNoGapsConstraint extends AbstractModelConstraint {
 				if (eventStart == null || eventEnd == null)
 					continue;
 				if (eventStart.isBefore(lastEndDate)) {
-					return ctx.createFailureStatus(sequence.getVesselAvailability().getVessel().getName());
+					return ctx.createFailureStatus(sequence.getVesselCharter().getVessel().getName());
 				} else if (eventStart.isAfter(lastEndDate)) {
-					return ctx.createFailureStatus(sequence.getVesselAvailability().getVessel().getName());
+					return ctx.createFailureStatus(sequence.getVesselCharter().getVessel().getName());
 				}
 				lastEndDate = eventEnd;
 			}

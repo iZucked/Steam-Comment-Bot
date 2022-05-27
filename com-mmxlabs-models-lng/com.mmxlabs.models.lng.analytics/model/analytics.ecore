@@ -229,11 +229,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="nominatedVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FullVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselCharter"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExistingVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselCharter"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisResultDetail"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossResult" eSuperTypes="#//AnalysisResultDetail">
@@ -316,8 +316,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselEvents" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
-        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselCharters" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselCharter"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
         upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"
@@ -368,8 +368,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselAvailabilities"
-        upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraVesselCharters" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselCharter"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarketOverrides"
         upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CharterInMarketOverride"

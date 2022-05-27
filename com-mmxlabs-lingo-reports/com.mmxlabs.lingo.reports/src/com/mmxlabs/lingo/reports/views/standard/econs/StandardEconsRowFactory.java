@@ -108,8 +108,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof final StartEvent evt) {
 					containsStartEvent = true;
 					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselAvailability() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselAvailability().getGenericCharterContract();
+					if (sequence != null && sequence.getVesselCharter() != null) {
+						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
 						if (genericCharterContract != null) {
 							containsInCharterBallastBonus = true;
 							containsInCharterRepositioning = true;
@@ -126,8 +126,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof final EndEvent evt) {
 					containsEndEvent = true;
 					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselAvailability() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselAvailability().getGenericCharterContract();
+					if (sequence != null && sequence.getVesselCharter() != null) {
+						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
 						if (genericCharterContract != null) {
 							containsInCharterBallastBonus = true;
 							containsInCharterRepositioning = true;

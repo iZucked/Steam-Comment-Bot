@@ -38,7 +38,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -244,12 +244,12 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		portModelBuilder.setAllExistingPortsToUTC();
 	}
 	
-	private Cargo createFobDesCargo(int num, final VesselAvailability vesselAvailability) {	
+	private Cargo createFobDesCargo(int num, final VesselCharter vesselCharter) {	
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
-		return createFobDesCargo(num, vesselAvailability, loadDate);
+		return createFobDesCargo(num, vesselCharter, loadDate);
 	}
 
-	private Cargo createFobDesCargo(int num, final VesselAvailability vesselAvailability, final LocalDateTime loadDate) {
+	private Cargo createFobDesCargo(int num, final VesselCharter vesselCharter, final LocalDateTime loadDate) {
 		
 		@NonNull
 		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -272,7 +272,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 				.withWindowSize(5, TimePeriod.DAYS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		return cargo;
 	}
@@ -287,12 +287,12 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		return vessel;
 	}
 	
-	private VesselAvailability getVesselAvailability(String vesselName) {
+	private VesselCharter getVesselCharter(String vesselName) {
 		final Vessel vessel = getVessel(vesselName);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("100000") //Make expensive to make schedule longer.
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
 	/**
@@ -301,11 +301,11 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	 */
 	private void runTestVesselGroupWaitingDaysTest(boolean twsType) {
 
-		final VesselAvailability vesselAvailability = getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final VesselCharter vesselCharter = getVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
 		
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
+		final Cargo cargo = createFobDesCargo(1, vesselCharter);
 
-		testNoBookingWaitingDaysRespected(twsType, vesselAvailability, cargo, VG1_WAITING_DAYS);
+		testNoBookingWaitingDaysRespected(twsType, vesselCharter, cargo, VG1_WAITING_DAYS);
 	}
 	
 	/**
@@ -314,12 +314,12 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	 */
 	private void runTestBookedByVesselTest(boolean twsType) {
 
-		final VesselAvailability vesselAvailability = getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
+		final VesselCharter vesselCharter = getVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Cargo cargo = createFobDesCargo(1, vesselCharter);
 
-		CanalBookingSlot booking = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 8), vesselAvailability.getVessel());
+		CanalBookingSlot booking = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 8), vesselCharter.getVessel());
 
-		testSinglePanamaBookingVoyage(twsType, vesselAvailability, cargo, booking);
+		testSinglePanamaBookingVoyage(twsType, vesselCharter, cargo, booking);
 	}
 
 	/**
@@ -330,16 +330,16 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	 */
 	private void runTestMultiBookedByVesselTest(boolean twsType) {
 
-		final VesselAvailability vesselAvailability = getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final Cargo cargo1 = createFobDesCargo(1, vesselAvailability, LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		final Cargo cargo2 = createFobDesCargo(1, vesselAvailability, LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
-		final Cargo cargo3 = createFobDesCargo(1, vesselAvailability, LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Cargo cargo1 = createFobDesCargo(1, vesselCharter, LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final Cargo cargo2 = createFobDesCargo(1, vesselCharter, LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
+		final Cargo cargo3 = createFobDesCargo(1, vesselCharter, LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0));
 
-		CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 8), vesselAvailability.getVessel());
-		CanalBookingSlot booking2 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.SOUTHSIDE, LocalDate.of(2017, Month.JUNE, 24), vesselAvailability.getVessel());
-		CanalBookingSlot booking3 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JULY, 8), vesselAvailability.getVessel());
-		CanalBookingSlot booking4 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.SOUTHSIDE, LocalDate.of(2017, Month.JULY, 24), vesselAvailability.getVessel());
-		CanalBookingSlot booking5 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.AUGUST, 8), vesselAvailability.getVessel());
+		CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 8), vesselCharter.getVessel());
+		CanalBookingSlot booking2 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.SOUTHSIDE, LocalDate.of(2017, Month.JUNE, 24), vesselCharter.getVessel());
+		CanalBookingSlot booking3 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JULY, 8), vesselCharter.getVessel());
+		CanalBookingSlot booking4 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.SOUTHSIDE, LocalDate.of(2017, Month.JULY, 24), vesselCharter.getVessel());
+		CanalBookingSlot booking5 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.AUGUST, 8), vesselCharter.getVessel());
 
 		// All discharge window of final cargo should be respected, as bookings for each Panama leg.
 		assertTrue(cargo3.getSlots().size() == 2);
@@ -351,7 +351,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			// Run the scheduler and check the last discharge time is as expected.
-			List<IRouteOptionBooking> oBookingsUsed = testDischargeZDTStartTime(dsZdt, toleranceHours, twsType, vesselAvailability, scenarioRunner, cargo1, cargo2, cargo3);
+			List<IRouteOptionBooking> oBookingsUsed = testDischargeZDTStartTime(dsZdt, toleranceHours, twsType, vesselCharter, scenarioRunner, cargo1, cargo2, cargo3);
 
 			// All bookings should be utilised.
 			checkBookingsUsed(scenarioRunner, oBookingsUsed, booking1, booking2, booking3, booking4, booking5);
@@ -364,16 +364,16 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	 */
 	private void runTestBookedByVesselGroupTest(boolean twsType, String vesselName, String vesselGroup) {
 
-		final VesselAvailability vesselAvailability = getVesselAvailability(vesselName);
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
+		final VesselCharter vesselCharter = getVesselCharter(vesselName);
+		final Cargo cargo = createFobDesCargo(1, vesselCharter);
 		final VesselGroup vg = this.getVesselGroup(vesselGroup);
 		
 		CanalBookingSlot booking = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 8), vg);
 
-		testSinglePanamaBookingVoyage(twsType, vesselAvailability, cargo, booking);
+		testSinglePanamaBookingVoyage(twsType, vesselCharter, cargo, booking);
 	}
 
-	private void testSinglePanamaBookingVoyage(boolean twsType, final VesselAvailability vesselAvailability, final Cargo cargo, CanalBookingSlot booking) {
+	private void testSinglePanamaBookingVoyage(boolean twsType, final VesselCharter vesselCharter, final Cargo cargo, CanalBookingSlot booking) {
 		assertTrue(cargo.getSlots().size() == 2);
 		Slot<?> ds = cargo.getSlots().get(cargo.getSlots().size() - 1);
 		assertTrue(ds instanceof DischargeSlot);
@@ -382,7 +382,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	
 		evaluateWithLSOTest(scenarioRunner -> {
 			
-			List<IRouteOptionBooking> oBookingsUsed = testDischargeZDTStartTime(dsZdt, toleranceHours, twsType, vesselAvailability, scenarioRunner, cargo);
+			List<IRouteOptionBooking> oBookingsUsed = testDischargeZDTStartTime(dsZdt, toleranceHours, twsType, vesselCharter, scenarioRunner, cargo);
 			
 			checkBookingsUsed(scenarioRunner, oBookingsUsed, booking);
 		});
@@ -422,14 +422,14 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		//Start anywhere.
-		final VesselAvailability vesselAvailability = this.getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_150);
+		final VesselCharter vesselCharter = this.getVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_150);
 
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
+		final Cargo cargo = createFobDesCargo(1, vesselCharter);
 				
-		testNoBookingWaitingDaysRespected(twsType, vesselAvailability, cargo, DEFAULT_WAITING_DAYS);
+		testNoBookingWaitingDaysRespected(twsType, vesselCharter, cargo, DEFAULT_WAITING_DAYS);
 	}
 
-	private void testNoBookingWaitingDaysRespected(boolean twsType, final VesselAvailability vesselAvailability, final Cargo cargo, int waitingDays) {
+	private void testNoBookingWaitingDaysRespected(boolean twsType, final VesselCharter vesselCharter, final Cargo cargo, int waitingDays) {
 		// Compute time from start port to end port via Panama at max vessel speed.
 		assertTrue(cargo.getSlots().size() == 2);
 
@@ -441,7 +441,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		assertTrue(ds instanceof DischargeSlot);
 		Port discPort = ds.getPort();
 		
-		Vessel vessel = vesselAvailability.getVessel();
+		Vessel vessel = vesselCharter.getVessel();
 			
 		evaluateWithLSOTest(scenarioRunner -> {
 			
@@ -456,18 +456,18 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 			int slackInSchedule = Hours.between(expectedZdt, ds.getSchedulingTimeWindow().getEndWithFlex());
 			int toleranceHours = (slackInSchedule > 0 ? slackInSchedule : 24);
 
-			List<IRouteOptionBooking> bookingsUsed = testDischargeZDTStartTime(expectedZdt, toleranceHours, twsType, vesselAvailability, scenarioRunner, cargo);
+			List<IRouteOptionBooking> bookingsUsed = testDischargeZDTStartTime(expectedZdt, toleranceHours, twsType, vesselCharter, scenarioRunner, cargo);
 			assertTrue(bookingsUsed.size() == 0);
 		});
 	}
 
-	private List<IRouteOptionBooking> testDischargeZDTStartTime(ZonedDateTime dischargeTime, int toleranceHours, boolean twsType, final VesselAvailability vesselAvailability, LNGScenarioRunner scenarioRunner, final Cargo ...cargoes) {
+	private List<IRouteOptionBooking> testDischargeZDTStartTime(ZonedDateTime dischargeTime, int toleranceHours, boolean twsType, final VesselCharter vesselCharter, LNGScenarioRunner scenarioRunner, final Cargo ...cargoes) {
 		DateAndCurveHelper dtHelper = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer().getInjector().getInstance(DateAndCurveHelper.class);
 		int dischargeTimeOptimiserHours = dtHelper.convertTime(dischargeTime);
-		return testDischargeStartTime(dischargeTimeOptimiserHours, toleranceHours, twsType, vesselAvailability, scenarioRunner, cargoes);
+		return testDischargeStartTime(dischargeTimeOptimiserHours, toleranceHours, twsType, vesselCharter, scenarioRunner, cargoes);
 	}
 	
-	private List<IRouteOptionBooking> testDischargeStartTime(int expectedDischargeStartTime, int toleranceHours, boolean twsType, final VesselAvailability vesselAvailability, LNGScenarioRunner scenarioRunner, final Cargo ...cargoes) {
+	private List<IRouteOptionBooking> testDischargeStartTime(int expectedDischargeStartTime, int toleranceHours, boolean twsType, final VesselCharter vesselCharter, LNGScenarioRunner scenarioRunner, final Cargo ...cargoes) {
 		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		
 		scenarioRunner.evaluateInitialState();
@@ -482,7 +482,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			@NonNull
 			final IModifiableSequences manipulatedSequences = sequencesManipulator
-					.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargoes));
+					.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, cargoes));
 
 			final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 			scheduler.setUseCanalBasedWindowTrimming(true);

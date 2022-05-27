@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
@@ -88,12 +88,12 @@ public class LazyFollowersAndPrecedersProviderImpl implements IFollowersAndPrece
 				terminalElementMap.put(endElement, resource);
 			}
 
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability != null) {
-				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter != null) {
+				if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
 					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
-					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
+					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselCharter(vesselCharter);
 
 					spotElementMap.put(startElement, resource);
 					spotElementMap.put(virtualElement, resource);

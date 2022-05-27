@@ -300,7 +300,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 				Assertions.assertEquals(3, result.getExtraSlots().size());
 				Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 				Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-				Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+				Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 				Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 				//
 				{ // Base state (use price expression as pairing indicator)

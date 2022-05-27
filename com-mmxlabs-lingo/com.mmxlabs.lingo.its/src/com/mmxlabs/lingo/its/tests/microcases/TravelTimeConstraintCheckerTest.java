@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
@@ -41,7 +41,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -58,7 +58,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		final DryDockEvent event2 = cargoModelBuilder
@@ -66,7 +66,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), 
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100), port2) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -76,10 +76,10 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
 			Assertions.assertTrue(checker.checkConstraints(
-					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event1, event2),
 					null, new ArrayList<>()));
 			Assertions.assertFalse(checker.checkConstraints(
-					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event2, event1),
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event2, event1),
 					null, new ArrayList<>()));
 		});
 	}
@@ -92,7 +92,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -109,7 +109,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		// Will be 1 hour late
@@ -118,7 +118,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), 
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99), port2) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -128,11 +128,11 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
 			Assertions.assertFalse(checker.checkConstraints(
-					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event1, event2),
 					null, new ArrayList<>()));
 			checker.setMaxLateness(1);
 			Assertions.assertTrue(checker.checkConstraints(
-					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2),
+					SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event1, event2),
 					null, new ArrayList<>()));
 		});
 	}
@@ -145,7 +145,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -165,7 +165,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), 
 				LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		// Will be 1 hour late
@@ -174,7 +174,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), 
 						LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 36 + 99), port2) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -184,10 +184,10 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
 			Assertions.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(
-					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null, new ArrayList<>()));
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event1, event2), null, new ArrayList<>()));
 			checker.setMaxLateness(1);
 			Assertions.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(
-					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, event1, event2), null, new ArrayList<>()));
+					scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, event1, event2), null, new ArrayList<>()));
 		});
 	}
 }

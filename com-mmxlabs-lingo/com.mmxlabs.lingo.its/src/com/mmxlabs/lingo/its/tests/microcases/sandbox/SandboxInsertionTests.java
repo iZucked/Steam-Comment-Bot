@@ -59,7 +59,7 @@ public class SandboxInsertionTests extends AbstractSandboxTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertOptioniseFlag() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_DES1 = cargoModelBuilder
@@ -117,7 +117,7 @@ public class SandboxInsertionTests extends AbstractSandboxTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertOptioniseFlagNothingSelected() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_DES1 = cargoModelBuilder

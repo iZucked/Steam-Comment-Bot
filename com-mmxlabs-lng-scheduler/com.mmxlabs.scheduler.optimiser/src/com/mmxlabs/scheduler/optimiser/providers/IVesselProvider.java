@@ -6,22 +6,20 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
+@NonNullByDefault
 public interface IVesselProvider extends IDataComponentProvider {
 
-	@NonNull
-	IVesselAvailability getVesselAvailability(@NonNull IResource resource);
+	IVesselCharter getVesselCharter(IResource resource);
 
-	boolean isResourceOptional(@NonNull IResource resource);
+	boolean isResourceOptional(IResource resource);
 
-	@NonNull
-	IResource getResource(@NonNull IVesselAvailability vessel);
-	
-	@NonNull
+	IResource getResource(IVesselCharter vesselCharter);
+
 	List<IResource> getSortedResources();
 }

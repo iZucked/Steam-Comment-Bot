@@ -65,7 +65,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -145,7 +145,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
 
-		final Map<VesselAvailability, CollectedAssignment> vaMap = new HashMap<>();
+		final Map<VesselCharter, CollectedAssignment> vaMap = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, CollectedAssignment> mktMap = new HashMap<>();
 
 		// Mapping of cargo to vessel assignment (or null if non-shipped)
@@ -155,8 +155,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 		Map<EObject, BaseCaseRow> elementToRowMap = new HashMap<>();
 
 		for (final CollectedAssignment seq : assignments) {
-			if (seq.getVesselAvailability() != null) {
-				vaMap.put(seq.getVesselAvailability(), seq);
+			if (seq.getVesselCharter() != null) {
+				vaMap.put(seq.getVesselCharter(), seq);
 			} else {
 				mktMap.put(new Pair<>(seq.getCharterInMarket(), seq.getSpotIndex()), seq);
 			}
@@ -372,105 +372,105 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 					} else if (shipping instanceof OptionalSimpleVesselCharterOption) {
 						final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
-						VesselAvailability vesselAvailability = mapper.get(optionalAvailabilityShippingOption);
-						if (vesselAvailability == null) {
-							vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-							vesselAvailability.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
+						VesselCharter vesselCharter = mapper.get(optionalAvailabilityShippingOption);
+						if (vesselCharter == null) {
+							vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+							vesselCharter.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
 							final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
-							vesselAvailability.setVessel(vessel);
-							vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
+							vesselCharter.setVessel(vessel);
+							vesselCharter.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+							vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 							if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
-								vesselAvailability.getStartHeel().setCvValue(22.8);
-								// vesselAvailability.getStartHeel().setPriceExpression(PerMMBTU(0.1);
+								vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
+								vesselCharter.getStartHeel().setCvValue(22.8);
+								// vesselCharter.getStartHeel().setPriceExpression(PerMMBTU(0.1);
 
-								vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
-								vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
-								vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+								vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
+								vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
+								vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 							}
 
-							vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
-							vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-							vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-							vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-							vesselAvailability.setOptional(true);
-							vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
+							vesselCharter.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+							vesselCharter.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+							vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+							vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+							vesselCharter.setOptional(true);
+							vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 									optionalAvailabilityShippingOption.getBallastBonus()));
 							if (optionalAvailabilityShippingOption.getStartPort() != null) {
-								vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
+								vesselCharter.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 							}
 							if (optionalAvailabilityShippingOption.getEndPort() != null) {
-								final EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+								final EList<APortSet<Port>> endAt = vesselCharter.getEndAt();
 								endAt.clear();
 								endAt.add(optionalAvailabilityShippingOption.getEndPort());
 							}
 
-							mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
+							mapper.addMapping(optionalAvailabilityShippingOption, vesselCharter);
 
-							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
-							vaMap.put(vesselAvailability, ca);
+							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselCharter, portModel, modelDistanceProvider, null);
+							vaMap.put(vesselCharter, ca);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 
 						} else {
-							final CollectedAssignment ca = vaMap.get(vesselAvailability);
+							final CollectedAssignment ca = vaMap.get(vesselCharter);
 							ca.getAssignedObjects().add(assignableElement);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						}
 
 					} else if (shipping instanceof SimpleVesselCharterOption) {
 						final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
-						VesselAvailability vesselAvailability = mapper.get(fleetShippingOption);
-						if (vesselAvailability == null) {
-							vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-							vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
+						VesselCharter vesselCharter = mapper.get(fleetShippingOption);
+						if (vesselCharter == null) {
+							vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+							vesselCharter.setTimeCharterRate(fleetShippingOption.getHireCost());
 							final Vessel vessel = fleetShippingOption.getVessel();
-							vesselAvailability.setVessel(vessel);
-							vesselAvailability.setEntity(fleetShippingOption.getEntity());
+							vesselCharter.setVessel(vessel);
+							vesselCharter.setEntity(fleetShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+							vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 							if (fleetShippingOption.isUseSafetyHeel()) {
-								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
-								vesselAvailability.getStartHeel().setCvValue(22.8);
-								// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+								vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
+								vesselCharter.getStartHeel().setCvValue(22.8);
+								// vesselCharter.getStartHeel().setPricePerMMBTU(0.1);
 
-								vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
-								vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
-								vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+								vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
+								vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
+								vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 							}
-							vesselAvailability.setOptional(false);
+							vesselCharter.setOptional(false);
 
-							mapper.addMapping(fleetShippingOption, vesselAvailability);
+							mapper.addMapping(fleetShippingOption, vesselCharter);
 
-							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
-							vaMap.put(vesselAvailability, ca);
+							final CollectedAssignment ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselCharter, portModel, modelDistanceProvider, null);
+							vaMap.put(vesselCharter, ca);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						} else {
-							final CollectedAssignment ca = vaMap.get(vesselAvailability);
+							final CollectedAssignment ca = vaMap.get(vesselCharter);
 							ca.getAssignedObjects().add(assignableElement);
 							cargoToCollectedAssignmentMap.put(assignableElement, ca);
 						}
 
 					} else if (shipping instanceof ExistingVesselCharterOption) {
 						final ExistingVesselCharterOption fleetShippingOption = (ExistingVesselCharterOption) shipping;
-						final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
-						mapper.addMapping(fleetShippingOption, vesselAvailability);
-						final CollectedAssignment ca = vaMap.get(vesselAvailability);
+						final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
+						mapper.addMapping(fleetShippingOption, vesselCharter);
+						final CollectedAssignment ca = vaMap.get(vesselCharter);
 						ca.getAssignedObjects().add(assignableElement);
 						cargoToCollectedAssignmentMap.put(assignableElement, ca);
 					} else if (shipping instanceof FullVesselCharterOption) {
 						final FullVesselCharterOption fleetShippingOption = (FullVesselCharterOption) shipping;
-						final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
-						mapper.addMapping(fleetShippingOption, vesselAvailability);
+						final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
+						mapper.addMapping(fleetShippingOption, vesselCharter);
 
-						CollectedAssignment ca = vaMap.get(vesselAvailability);
+						CollectedAssignment ca = vaMap.get(vesselCharter);
 						if (ca == null) {
-							ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselAvailability, portModel, modelDistanceProvider, null);
-							vaMap.put(vesselAvailability, ca);
+							ca = new CollectedAssignment(Collections.singletonList(assignableElement), vesselCharter, portModel, modelDistanceProvider, null);
+							vaMap.put(vesselCharter, ca);
 						} else {
 							ca.getAssignedObjects().add(assignableElement);
 						}
@@ -608,9 +608,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 			for (final CollectedAssignment seq : mergedAssignments) {
 				final VesselScheduleSpecification vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
 
-				final VesselAvailability eVesselAvailability = seq.getVesselAvailability();
-				if (eVesselAvailability != null) {
-					vesselScheduleSpecification.setVesselAllocation(eVesselAvailability);
+				final VesselCharter eVesselCharter = seq.getVesselCharter();
+				if (eVesselCharter != null) {
+					vesselScheduleSpecification.setVesselAllocation(eVesselCharter);
 				} else {
 					vesselScheduleSpecification.setVesselAllocation(seq.getCharterInMarket());
 					vesselScheduleSpecification.setSpotIndex(seq.getSpotIndex());

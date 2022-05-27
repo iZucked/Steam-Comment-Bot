@@ -60,7 +60,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.importer.AssignmentImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -580,7 +580,7 @@ public class ScenarioBuilder {
 			try (CSVReader reader = new CSVReader(',', inputStream)) {
 
 				final DefaultClassImporter importer = new DefaultClassImporter();
-				cargoModel.getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>) importer.importObjects(CargoPackage.Literals.VESSEL_AVAILABILITY, reader, context));
+				cargoModel.getVesselCharters().addAll((Collection<? extends VesselCharter>) importer.importObjects(CargoPackage.Literals.VESSEL_CHARTER, reader, context));
 			}
 			context.run();
 

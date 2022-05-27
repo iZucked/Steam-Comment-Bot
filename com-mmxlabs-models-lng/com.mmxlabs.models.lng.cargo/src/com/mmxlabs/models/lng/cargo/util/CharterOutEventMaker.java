@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -44,8 +44,8 @@ public class CharterOutEventMaker {
 	}
 
 	@NonNull
-	public CharterOutEventMaker withVesselAssignment(@NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
-		event.setVesselAssignmentType(vesselAvailability);
+	public CharterOutEventMaker withVesselAssignment(@NonNull final VesselCharter vesselCharter, final int sequenceHint) {
+		event.setVesselAssignmentType(vesselCharter);
 		event.setSequenceHint(sequenceHint);
 
 		event.setSpotIndex(0);
@@ -53,7 +53,7 @@ public class CharterOutEventMaker {
 			throw new IllegalStateException("set vessel restrictions after setting vessel assignment");
 		}
 		event.getAllowedVessels().clear();
-		event.getAllowedVessels().add(vesselAvailability.getVessel());
+		event.getAllowedVessels().add(vesselCharter.getVessel());
 		return this;
 	}
 

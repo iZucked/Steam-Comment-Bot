@@ -46,7 +46,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -956,8 +956,8 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static String getShortName(@NonNull final Sequence sequence) {
-		if (sequence.isSetVesselAvailability()) {
-			return getShortName(sequence.getVesselAvailability());
+		if (sequence.isSetVesselCharter()) {
+			return getShortName(sequence.getVesselCharter());
 		} else {
 			return getName(sequence);
 		}
@@ -965,8 +965,8 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static String getShortName(@Nullable final VesselAssignmentType t) {
-		if (t instanceof VesselAvailability) {
-			final Vessel vessel = ((VesselAvailability) t).getVessel();
+		if (t instanceof VesselCharter) {
+			final Vessel vessel = ((VesselCharter) t).getVessel();
 			if (vessel != null) {
 				return vessel.getShortenedName();
 			} else {
@@ -978,16 +978,16 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static Integer getCharterNumber(@NonNull final Sequence sequence) {
-		if (sequence.isSetVesselAvailability()) {
-			return getCharterNumber(sequence.getVesselAvailability());
+		if (sequence.isSetVesselCharter()) {
+			return getCharterNumber(sequence.getVesselCharter());
 		}
 		return 0;
 	}
 
 	@NonNull
 	public static Integer getCharterNumber(@Nullable final VesselAssignmentType t) {
-		if (t instanceof VesselAvailability) {
-			return ((VesselAvailability) t).getCharterNumber();
+		if (t instanceof VesselCharter) {
+			return ((VesselCharter) t).getCharterNumber();
 		}
 		throw new NullPointerException();
 	}

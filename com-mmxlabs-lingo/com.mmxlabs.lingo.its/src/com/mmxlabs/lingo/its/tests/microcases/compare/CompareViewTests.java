@@ -37,7 +37,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -420,7 +420,7 @@ public class CompareViewTests {
 
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
@@ -445,7 +445,7 @@ public class CompareViewTests {
 
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
@@ -470,7 +470,7 @@ public class CompareViewTests {
 					.build() //
 
 					// Cargo
-					.withVesselAssignment(vesselAvailability, 1) //
+					.withVesselAssignment(vesselCharter, 1) //
 					.build();
 
 		}, changeSetRoot -> {
@@ -518,7 +518,7 @@ public class CompareViewTests {
 
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					// .withCharterRate("50000") //
 					.build();
 
@@ -534,7 +534,7 @@ public class CompareViewTests {
 					.build() //
 
 					// Cargo
-					.withVesselAssignment(vesselAvailability, 1) //
+					.withVesselAssignment(vesselCharter, 1) //
 					.build();
 
 			// Sale 2
@@ -547,7 +547,7 @@ public class CompareViewTests {
 
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.build();
 
 			maker.cargoModelBuilder.makeCargo() //
@@ -568,7 +568,7 @@ public class CompareViewTests {
 					.build() //
 
 					// Cargo
-					.withVesselAssignment(vesselAvailability, 1) //
+					.withVesselAssignment(vesselCharter, 1) //
 					.build();
 
 		}, changeSetRoot -> {

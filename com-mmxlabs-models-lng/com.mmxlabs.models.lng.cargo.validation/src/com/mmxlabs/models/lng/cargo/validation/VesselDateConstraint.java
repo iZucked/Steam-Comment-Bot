@@ -17,7 +17,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -36,15 +36,15 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof VesselAvailability) {
+		if (object instanceof VesselCharter) {
 //			final Vessel vessel = (Vessel) object;
 			// Gather start/end requirements
 			
-//			VesselAvailability availability = vessel.getAvailability();
+//			VesselCharter availability = vessel.getAvailability();
 			
 //			if (availability != null) {
 				// Gather dates
-				VesselAvailability availability = (VesselAvailability) object;
+				VesselCharter availability = (VesselCharter) object;
 				final LocalDateTime startStart = availability.getStartAfter();
 				final LocalDateTime startEnd = availability.getStartBy();
 
@@ -59,16 +59,16 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 						String msg = String.format("Charter|'%s': Invalid start/end dates (start occurs after end).", availability.getVessel().getName());
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));						
 						if (startStart != null) {
-							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
+							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselCharter_StartAfter());
 						}
 						if (startEnd != null) {
-							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartBy());
+							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselCharter_StartBy());
 						}
 						if (endStart != null) {
-							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
+							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselCharter_EndAfter());
 						}
 						if (endEnd != null) {
-							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
+							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselCharter_EndBy());
 						}
 						return status;
 					}

@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -40,7 +40,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
@@ -66,7 +66,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -116,9 +116,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -189,9 +189,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = virtualVesselSlotProvider.getVesselAvailabilityForElement(load_element);
+			final IVesselCharter o_vesselCharter1 = virtualVesselSlotProvider.getVesselCharterForElement(load_element);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -312,9 +312,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = virtualVesselSlotProvider.getVesselAvailabilityForElement(discharge_element);
+			final IVesselCharter o_vesselCharter1 = virtualVesselSlotProvider.getVesselCharterForElement(discharge_element);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -507,7 +507,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -523,7 +523,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 1, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
@@ -531,7 +531,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2016, 3, 15), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 2) //
+				.withVesselAssignment(vesselCharter1, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -578,9 +578,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 				final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 				movePair.getFirst().apply(result);
 
-				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+				final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+				final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 				// Check expectations
 				Assertions.assertEquals(8, result.getSequence(resource1).size());
@@ -611,7 +611,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// End date cannot accommodate the cargo
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 2, 15, 0, 0, 0), LocalDateTime.of(2016, 2, 15, 0, 0, 0)) //
 				.withCharterRate("10000") //
 				.build();
@@ -674,7 +674,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("10000") //
 				.build();
 

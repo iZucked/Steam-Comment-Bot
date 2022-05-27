@@ -24,7 +24,7 @@ import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
@@ -64,7 +64,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
@@ -185,7 +185,7 @@ public class AnnotatedSolutionExporter {
 
 		for (final IResource resource : resources) {
 			assert resource != null;
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 			final Sequence eSequence = factory.createSequence();
 
@@ -196,13 +196,13 @@ public class AnnotatedSolutionExporter {
 			final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
 			assert scheduledSequence != null;
 
-			switch (vesselAvailability.getVesselInstanceType()) {
+			switch (vesselCharter.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
-				eSequence.setVesselAvailability(modelEntityMap.getModelObjectNullChecked(vesselAvailability, VesselAvailability.class));
+				eSequence.setVesselCharter(modelEntityMap.getModelObjectNullChecked(vesselCharter, VesselCharter.class));
 				eSequence.unsetCharterInMarket();
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 					continue;
 				}
 				break;
@@ -210,7 +210,7 @@ public class AnnotatedSolutionExporter {
 				fobSequence.setSequenceType(SequenceType.FOB_SALE);
 				isFOBSequence = true;
 				// Skip and process differently
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 					continue;
 				}
 				break;
@@ -218,37 +218,37 @@ public class AnnotatedSolutionExporter {
 				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
 				isDESSequence = true;
 				// Skip and process differently
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 					continue;
 				}
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 					continue;
 				}
 
-				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
-				eSequence.setCharterInMarketOverride(modelEntityMap.getModelObject(vesselAvailability, CharterInMarketOverride.class));
-				eSequence.unsetVesselAvailability();
-				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
+				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselCharter.getSpotCharterInMarket(), CharterInMarket.class));
+				eSequence.setCharterInMarketOverride(modelEntityMap.getModelObject(vesselCharter, CharterInMarketOverride.class));
+				eSequence.unsetVesselCharter();
+				eSequence.setSpotIndex(vesselCharter.getSpotIndex());
 				break;
 			case ROUND_TRIP:
 				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
-				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 					continue;
 				}
 				isRoundTripSequence = true;
-				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
-				eSequence.unsetVesselAvailability();
-				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
+				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselCharter.getSpotCharterInMarket(), CharterInMarket.class));
+				eSequence.unsetVesselCharter();
+				eSequence.setSpotIndex(vesselCharter.getSpotIndex());
 				break;
 			default:
 				break;
 			}
 
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
-				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselAvailability() == null && eSequence.getCharterInMarket() == null)) {
+			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselCharter() == null && eSequence.getCharterInMarket() == null)) {
 					log.error("No vessel set on sequence!?");
 				}
 			}
@@ -282,7 +282,7 @@ public class AnnotatedSolutionExporter {
 						thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
 
 						thisSequence.setCharterInMarket(eSequence.getCharterInMarket());
-						thisSequence.unsetVesselAvailability();
+						thisSequence.unsetVesselCharter();
 						thisSequence.setSpotIndex(eSequence.getSpotIndex());
 						thisSequence.getEvents().addAll(events);
 
@@ -529,10 +529,10 @@ public class AnnotatedSolutionExporter {
 		final List<Event> events = new LinkedList<>();
 
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(scheduledSequence.getResource());
-		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
-		final boolean isNonShipped = vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE;
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(scheduledSequence.getResource());
+		final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final boolean isNonShipped = vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE;
 
 		boolean exportingRedirectedCharterOut = false;
 		PortDetails redirectedCharterOutStart = null;

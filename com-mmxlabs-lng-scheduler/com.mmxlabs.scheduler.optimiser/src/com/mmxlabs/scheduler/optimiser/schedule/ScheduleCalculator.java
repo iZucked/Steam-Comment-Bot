@@ -37,7 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -118,7 +118,7 @@ public class ScheduleCalculator {
 		for (int i = 0; i < resources.size(); ++i) {
 			final IResource resource = resources.get(i);
 			final ISequence sequence = sequences.getSequence(resource);
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 			final List<@NonNull IPortTimesRecord> portTimeRecords = allPortTimeRecords.get(resource);
 			// recompute the volumeAllocatedSequence and clump up the heel
@@ -132,7 +132,7 @@ public class ScheduleCalculator {
 				latenessChecker.calculateLateness(volumeAllocatedSequence, solution);
 			}
 
-			volumeAllocatedSequences.add(vesselAvailability, volumeAllocatedSequence);
+			volumeAllocatedSequences.add(vesselCharter, volumeAllocatedSequence);
 		}
 
 		if (solution != null) {
@@ -162,9 +162,9 @@ public class ScheduleCalculator {
 	private @Nullable VolumeAllocatedSequence doSchedule(final IResource resource, final ISequence sequence, final @Nullable List<IPortTimesRecord> records,
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 			@Nullable
 			IPortTimesRecord portTimesRecord = null;
@@ -177,13 +177,13 @@ public class ScheduleCalculator {
 			// Should we compute a schedule for them anyway? The arrival times don't mean
 			// much,
 			// but contracts need this kind of information to make up numbers with.
-			return desOrFobSchedule(resource, vesselAvailability, sequence, portTimesRecord, sequencesAttributesProvider, annotatedSolution);
+			return desOrFobSchedule(resource, vesselCharter, sequence, portTimesRecord, sequencesAttributesProvider, annotatedSolution);
 		}
 
-		return shippedSchedule(resource, vesselAvailability, sequence, records, sequencesAttributesProvider, annotatedSolution);
+		return shippedSchedule(resource, vesselCharter, sequence, records, sequencesAttributesProvider, annotatedSolution);
 	}
 
-	private VolumeAllocatedSequence shippedSchedule(final IResource resource, final IVesselAvailability vesselAvailability, final ISequence sequence, final @Nullable List<IPortTimesRecord> records,
+	private VolumeAllocatedSequence shippedSchedule(final IResource resource, final IVesselCharter vesselCharter, final ISequence sequence, final @Nullable List<IPortTimesRecord> records,
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 		if (records == null || records.isEmpty()) {
 			return VolumeAllocatedSequence.empty(resource, sequence);
@@ -205,8 +205,8 @@ public class ScheduleCalculator {
 
 			final PreviousHeelRecord previousHeelRecord = lastResult == null ? new PreviousHeelRecord() : lastResult.endHeelState;
 
-			final List<@NonNull ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
-					vesselAvailability.getCharterCostCalculator(), //
+			final List<@NonNull ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
+					vesselCharter.getCharterCostCalculator(), //
 					vesselStartTime, //
 					firstLoadPort, //
 					previousHeelRecord, //
@@ -224,8 +224,8 @@ public class ScheduleCalculator {
 
 		}
 		
-		if (retainHeel && vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
-			retainHeelPairwise(resource, vesselAvailability, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
+		if (retainHeel && vesselCharter.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
+			retainHeelPairwise(resource, vesselCharter, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
 		}
 
 		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, voyagePlans);
@@ -558,7 +558,7 @@ public class ScheduleCalculator {
 	}
 	
 	// Create a list of pairwise VPRs and keep only the ones where heel can be retained
-	private void retainHeelPairwise(final IResource resource, final IVesselAvailability vesselAvailability, final List<IPortTimesRecord> records, 
+	private void retainHeelPairwise(final IResource resource, final IVesselCharter vesselCharter, final List<IPortTimesRecord> records, 
 			final @Nullable IAnnotatedSolution annotatedSolution,
 			final int vesselStartTime, final List<VoyagePlanRecord> voyagePlans, @Nullable IPort firstLoadPort) {
 	
@@ -566,7 +566,7 @@ public class ScheduleCalculator {
 		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
 		final Map<VoyagePlanRecord, Pair<VoyagePlan, IPortTimesRecord>> mm = new HashMap<>();
 		// Creating a full set of retention pairs
-		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm, vesselAvailability.getVessel());
+		createOverlappingPairs(voyagePlans, allPairs, otherVoyagePlansAndPortTimeRecords, mm, vesselCharter.getVessel());
 		
 		// Filter out the pairs which are not valid or can not retain any heel
 		final List<RetentionPair> nullablePairsToKeep = allPairs.stream().filter(r -> r.evaluate()).toList();
@@ -591,7 +591,7 @@ public class ScheduleCalculator {
 
 				// Recompute the new voyage plan
 				final List<@NonNull ScheduledVoyagePlanResult> otherResults = new LinkedList<>();
-				voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
+				voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselCharter, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
 						tempRecord, false, true, annotatedSolution, otherResults).accept(otherVoyagePlansAndPortTimeRecords);
 
 				voyagePlans.clear();
@@ -717,14 +717,14 @@ public class ScheduleCalculator {
 	 * @return
 	 */
 
-	private VolumeAllocatedSequence desOrFobSchedule(final IResource resource, final IVesselAvailability vesselAvailability, final ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord,
+	private VolumeAllocatedSequence desOrFobSchedule(final IResource resource, final IVesselCharter vesselCharter, final ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord,
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (portTimesRecord == null) {
 			return VolumeAllocatedSequence.empty(resource, sequence);
 		}
 
-		final ScheduledVoyagePlanResult result = voyagePlanEvaluator.evaluateNonShipped(resource, vesselAvailability, //
+		final ScheduledVoyagePlanResult result = voyagePlanEvaluator.evaluateNonShipped(resource, vesselCharter, //
 				portTimesRecord, //
 				true, // annotatedSolution != null, // Keep solutions for export
 				sequencesAttributesProvider, annotatedSolution);

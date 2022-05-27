@@ -17,7 +17,7 @@ import com.google.inject.Provides;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -28,14 +28,14 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		final IShippingTypeRequirementProviderEditor shippingTypeRequirementProviderEditor = Mockito.mock(IShippingTypeRequirementProviderEditor.class);
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		if (cargoType == CargoDeliveryType.SHIPPED) {
-			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
+			Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 		}
 		else {
-			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
+			Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
 		}
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter);
 		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor, vesselProvider);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -63,14 +63,14 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 		final IShippingTypeRequirementProviderEditor shippingTypeRequirementProviderEditor = Mockito.mock(IShippingTypeRequirementProviderEditor.class);
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		if (cargoType == CargoDeliveryType.SHIPPED) {
-			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
+			Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 		}
 		else {
-			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
+			Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
 		}
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter);
 		final ShippingTypeRequirementConstraintChecker checker = createChecker(name, shippingTypeRequirementProviderEditor, vesselProvider);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);

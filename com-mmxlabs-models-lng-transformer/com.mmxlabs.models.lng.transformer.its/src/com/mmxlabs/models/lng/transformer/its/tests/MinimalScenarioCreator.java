@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public final Vessel vessel;
-	public VesselAvailability vesselAvailability;
+	public VesselCharter vesselCharter;
 
 	public final Port originPort;
 	public final Port loadPort;
@@ -76,7 +76,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		cargo = createDefaultCargo(loadPort, dischargePort);
 
-		VesselAvailability va = setDefaultAvailability(originPort, originPort);
+		VesselCharter va = setDefaultVesselCharterTerms(originPort, originPort);
 		cargo.setVesselAssignmentType(va);
 
 	}
@@ -110,7 +110,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		return 2 * getTravelTime(startPort, endPort, RouteOption.DIRECT, (int) vessel.getVesselOrDelegateMaxSpeed());
 	}
 
-	public VesselAvailability setDefaultAvailability(final Port startPort, final Port endPort) {
+	public VesselCharter setDefaultVesselCharterTerms(final Port startPort, final Port endPort) {
 
 		final Pair<Port, ZonedDateTime> firstAppointment = getFirstAppointment();
 		final Pair<Port, ZonedDateTime> lastAppointment = getLastAppointment();
@@ -122,10 +122,10 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(getMarginHours(lastAppointment.getFirst(), endPort));
 
 		final CargoModel cargoModel = scenario.getCargoModel();
-		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
+		this.vesselCharter = fleetCreator.setAllVesselCharterWindows(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
 				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
-		return this.vesselAvailability;
+		return this.vesselCharter;
 	}
 
 	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, LocalDateTime startDate) {

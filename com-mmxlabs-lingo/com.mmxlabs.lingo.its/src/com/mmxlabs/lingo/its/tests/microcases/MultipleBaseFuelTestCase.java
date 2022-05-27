@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -44,7 +44,7 @@ public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 
 	final int ROUNDING_EPSILON = 100;
 	private Vessel vessel;
-	private VesselAvailability vesselAvailability1;
+	private VesselCharter vesselCharter1;
 	private Cargo cargo1;
 	private Port portA;
 	private Port portB;
@@ -103,7 +103,7 @@ public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 		costModelBuilder.createOrUpdateBaseFuelCost(pilotLightBaseFuel, "70");
 		costModelBuilder.createOrUpdateBaseFuelCost(inPortBaseFuel, "20");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 05, 16, 0, 0, 0)).build();
 
@@ -116,7 +116,7 @@ public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 17), portB, null, entity, "90") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withVesselAssignment(vesselCharter1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -144,7 +144,7 @@ public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserDataProvider).getSchedule();
 			Assertions.assertNotNull(schedule);
 
-			final Vessel vessel = schedule.getSequences().get(0).getVesselAvailability().getVessel();
+			final Vessel vessel = schedule.getSequences().get(0).getVesselCharter().getVessel();
 
 			final BaseFuel scenarioBaseFuel = vessel.getBaseFuel();
 			final BaseFuel scenarioIdleBaseFuel = vessel.getIdleBaseFuel();

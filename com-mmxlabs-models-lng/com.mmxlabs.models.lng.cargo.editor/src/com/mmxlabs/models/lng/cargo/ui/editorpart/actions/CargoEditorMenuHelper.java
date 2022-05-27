@@ -52,7 +52,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
@@ -463,7 +463,7 @@ public class CargoEditorMenuHelper {
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
 					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
 
-			final List<Pair<String, EObject>> vesselAvailabilityOptions = new LinkedList<>();
+			final List<Pair<String, EObject>> vesselCharterOptions = new LinkedList<>();
 
 			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType())) {
 				final EObject assignmentOption = p.getSecond();
@@ -500,35 +500,35 @@ public class CargoEditorMenuHelper {
 							marketMenuUsed = true;
 						}
 					}
-				} else if (assignmentOption instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) assignmentOption;
+				} else if (assignmentOption instanceof VesselCharter) {
+					final VesselCharter vesselCharter = (VesselCharter) assignmentOption;
 
-					if (vesselAvailability != cargo.getVesselAssignmentType()) {
-						vesselAvailabilityOptions.add(p);
+					if (vesselCharter != cargo.getVesselAssignmentType()) {
+						vesselCharterOptions.add(p);
 
-						// reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo,
-						// vesselAvailability)));
+						// reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselCharter(String.format("Assign to %s", p.getFirst()), cargo,
+						// vesselCharter)));
 					}
 				} else {
 					assert false;
 				}
 			}
 			{
-				if (vesselAvailabilityOptions.size() > 15) {
+				if (vesselCharterOptions.size() > 15) {
 					int counter = 0;
 					MenuManager m = new MenuManager("", null);
 					String firstEntry = null;
 					String lastEntry = null;
-					for (final Pair<String, EObject> p : vesselAvailabilityOptions) {
+					for (final Pair<String, EObject> p : vesselCharterOptions) {
 						if (p.getSecond() == null) {
 							continue;
 						}
-						final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
-						final Vessel vessel = vesselAvailability.getVessel();
+						final VesselCharter vesselCharter = (VesselCharter) p.getSecond();
+						final Vessel vessel = vesselCharter.getVessel();
 						final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 
 						m.add(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000),
-								() -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
+								() -> helper.assignCargoToVesselCharter(String.format("Assign to %s", p.getFirst()), cargo, (VesselCharter) p.getSecond())));
 						counter++;
 						if (firstEntry == null) {
 							firstEntry = p.getFirst();
@@ -553,13 +553,13 @@ public class CargoEditorMenuHelper {
 
 					// Carve up menu
 				} else {
-					for (final Pair<String, EObject> p : vesselAvailabilityOptions) {
-						final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
-						final Vessel vessel = vesselAvailability.getVessel();
+					for (final Pair<String, EObject> p : vesselCharterOptions) {
+						final VesselCharter vesselCharter = (VesselCharter) p.getSecond();
+						final Vessel vessel = vesselCharter.getVessel();
 						final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 
 						reassignMenuManager.add(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000),
-								() -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
+								() -> helper.assignCargoToVesselCharter(String.format("Assign to %s", p.getFirst()), cargo, (VesselCharter) p.getSecond())));
 					}
 				}
 			}
@@ -1321,8 +1321,8 @@ public class CargoEditorMenuHelper {
 							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
 								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-								if (vesselAssignmentType instanceof VesselAvailability) {
-									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
+								if (vesselAssignmentType instanceof VesselCharter) {
+									assignedVessel = ((VesselCharter) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
 									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
@@ -1382,8 +1382,8 @@ public class CargoEditorMenuHelper {
 							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
 								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-								if (vesselAssignmentType instanceof VesselAvailability) {
-									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
+								if (vesselAssignmentType instanceof VesselCharter) {
+									assignedVessel = ((VesselCharter) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
 									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
@@ -1534,8 +1534,8 @@ public class CargoEditorMenuHelper {
 			Vessel assignedVessel = null;
 			if (loadSlot.getCargo() != null) {
 				final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-				if (vesselAssignmentType instanceof VesselAvailability) {
-					assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
+				if (vesselAssignmentType instanceof VesselCharter) {
+					assignedVessel = ((VesselCharter) vesselAssignmentType).getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
 					assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarketOverride) {

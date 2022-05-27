@@ -88,8 +88,8 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 					String vesselName = "";
 					if (target.eContainer() instanceof Sequence) {
 						final Sequence sequence = (Sequence) target.eContainer();
-						if (sequence.getVesselAvailability() != null && sequence.getVesselAvailability().getVessel() != null) {
-							vesselName = " for " + sequence.getVesselAvailability().getVessel().getName();
+						if (sequence.getVesselCharter() != null && sequence.getVesselCharter().getVessel() != null) {
+							vesselName = " for " + sequence.getVesselCharter().getVessel().getName();
 						}
 					}
 

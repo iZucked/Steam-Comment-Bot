@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
@@ -50,7 +50,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -79,7 +79,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -126,7 +126,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open2() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -198,7 +198,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	}
 
 	private Module createExtraDataModule(CharterInMarket defaultMarket) {
-		final List<VesselAvailability> extraAvailabilities = new LinkedList<>();
+		final List<VesselCharter> extraAvailabilities = new LinkedList<>();
 		final List<VesselEvent> extraVesselEvents = new LinkedList<>();
 		final List<CharterInMarketOverride> extraCharterInMarketOverrides = new LinkedList<>();
 		final List<CharterInMarket> extraCharterInMarkets = new LinkedList<>();
@@ -210,9 +210,9 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 
 			@Provides
 			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
-			private IVesselAvailability provideDefaultVessel(ModelEntityMap modelEntityMap, IVesselProvider vesselProvider, IOptimisationData optimisationData) {
+			private IVesselCharter provideDefaultVessel(ModelEntityMap modelEntityMap, IVesselProvider vesselProvider, IOptimisationData optimisationData) {
 
-				final IVesselAvailability va = (IVesselAvailability) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+				final IVesselCharter va = (IVesselCharter) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
 				if (va != null) {
 					return va;
 				}

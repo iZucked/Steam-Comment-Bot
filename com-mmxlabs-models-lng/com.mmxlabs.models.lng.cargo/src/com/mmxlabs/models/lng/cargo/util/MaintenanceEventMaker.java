@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.port.Port;
 
 public class MaintenanceEventMaker {
@@ -37,13 +37,13 @@ public class MaintenanceEventMaker {
 	}
 
 	@NonNull
-	public MaintenanceEventMaker withVesselAssignment(@NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
-		event.setVesselAssignmentType(vesselAvailability);
+	public MaintenanceEventMaker withVesselAssignment(@NonNull final VesselCharter vesselCharter, final int sequenceHint) {
+		event.setVesselAssignmentType(vesselCharter);
 		event.setSequenceHint(sequenceHint);
 
 		event.setSpotIndex(0);
 		event.getAllowedVessels().clear();
-		event.getAllowedVessels().add(vesselAvailability.getVessel());
+		event.getAllowedVessels().add(vesselCharter.getVessel());
 		return this;
 	}
 

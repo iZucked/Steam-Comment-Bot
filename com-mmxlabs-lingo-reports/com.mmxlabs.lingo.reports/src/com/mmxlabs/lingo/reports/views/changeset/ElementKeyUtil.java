@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -87,8 +87,8 @@ public class ElementKeyUtil {
 		} else if (element instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) element;
 			Sequence sequence = startEvent.getSequence();
-			VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			final String base = "start-" + sequence.getName() + "-" + (vesselAvailability == null ? "" : Integer.toString(vesselAvailability.getCharterNumber()));
+			VesselCharter vesselCharter = sequence.getVesselCharter();
+			final String base = "start-" + sequence.getName() + "-" + (vesselCharter == null ? "" : Integer.toString(vesselCharter.getCharterNumber()));
 			if (sequence.isSetSpotIndex()) {
 				return base + "-" + sequence.getSpotIndex();
 			}
@@ -96,8 +96,8 @@ public class ElementKeyUtil {
 		} else if (element instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) element;
 			Sequence sequence = endEvent.getSequence();
-			VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			final String base = "end-" + sequence.getName() + "-" + (vesselAvailability == null ? "" : Integer.toString(vesselAvailability.getCharterNumber()));
+			VesselCharter vesselCharter = sequence.getVesselCharter();
+			final String base = "end-" + sequence.getName() + "-" + (vesselCharter == null ? "" : Integer.toString(vesselCharter.getCharterNumber()));
 			if (sequence.isSetSpotIndex()) {
 				return base + "-" + sequence.getSpotIndex();
 			}

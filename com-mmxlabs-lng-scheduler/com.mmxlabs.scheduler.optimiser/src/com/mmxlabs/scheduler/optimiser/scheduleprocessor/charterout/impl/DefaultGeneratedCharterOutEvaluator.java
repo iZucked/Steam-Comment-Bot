@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -114,11 +114,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselCharter vesselCharter, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord, @Nullable final IAnnotatedSolution annotatedSolution) {
 
-		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
@@ -155,16 +155,16 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		{
 			// generate a split voyage plan
 			final GeneratedCharterOutOption gcoMarket = getCharterOutOption(ballastStartTime, availableTime, slotBeforeCharter, //
-					slotAfterCharter, vesselAvailability);
+					slotAfterCharter, vesselCharter);
 
 			// Have we found a market?
 			if (gcoMarket.getOption() == null) {
 				return null;
 			}
 
-			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
+			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselCharter, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, vesselAvailability.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselCharter.getVessel(), vp, vesselCharter.getCharterCostCalculator(), startHeelVolumeRangeInM3, bigSequence);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -187,12 +187,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			bigVoyageStartingHeelRangeInM3[1] = bigVoyagePlan.getStartingHeelInM3();
 
 			// calculate pre-charter plan
-			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), bigVoyageStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
+			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselCharter.getVessel(), vesselCharter.getCharterCostCalculator(), bigVoyageStartingHeelRangeInM3,
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselCharter.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
-			final IAllocationAnnotation preCharterAllocation = volumeAllocator.allocate(vesselAvailability, upToCharterPlan, preCharteringTimes, annotatedSolution);
+			final IAllocationAnnotation preCharterAllocation = volumeAllocator.allocate(vesselCharter, upToCharterPlan, preCharteringTimes, annotatedSolution);
 
 			// add on delta to starting heel and remaining heel
 			if (preCharterAllocation != null) {
@@ -217,8 +217,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			// calculate post-charter plan
-			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), charterToEndPlanStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
+			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselCharter.getVessel(), vesselCharter.getCharterCostCalculator(), charterToEndPlanStartingHeelRangeInM3,
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselCharter.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
@@ -248,12 +248,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param availableTime
 	 * @param discharge
 	 * @param nextLoad
-	 * @param vesselAvailability
+	 * @param vesselCharter
 	 * @return
 	 */
 
 	private GeneratedCharterOutOption getCharterOutOption(final int ballastStartTime, final int availableTime, final IPortSlot dischargeSlot, final IPortSlot nextLoadSlot,
-			final IVesselAvailability vesselAvailability) {
+			final IVesselCharter vesselCharter) {
 		final GeneratedCharterOutOption gcoo = new GeneratedCharterOutOption();
 		final IPort discharge = dischargeSlot.getPort();
 		final IPort nextLoad = nextLoadSlot.getPort();
@@ -262,12 +262,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// set end ports
 		boolean goingToEnd = false;
 		final Set<IPort> endPorts = new HashSet<>();
-		if (nextLoadSlot instanceof IEndPortSlot && charterMarketProvider.getCharteringPortsForVessel(vesselAvailability.getVessel()).contains(nextLoad)) {
+		if (nextLoadSlot instanceof IEndPortSlot && charterMarketProvider.getCharteringPortsForVessel(vesselCharter.getVessel()).contains(nextLoad)) {
 			goingToEnd = true;
 			endPorts.add(nextLoad);
 		}
 		// Scan all the markets for a match
-		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselAvailability.getVessel(), ballastStartTime)) {
+		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselCharter.getVessel(), ballastStartTime)) {
 			Set<IPort> ports = option.getAllowedPorts();
 			if (ports.isEmpty()) {
 				// If no ports, charter out at next load port (this is primarily for ITS cases)
@@ -287,13 +287,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 			for (final IPort charterOutPort : ports) {
 				final GeneratedCharterOutLeg toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, //
-						vesselAvailability.getVessel(), ballastStartTime, null, //
+						vesselCharter.getVessel(), ballastStartTime, null, //
 						0 /* this value is not used when we compute forward shortest time */, false);
 				if (toCharterPort == null) {
 					continue;
 				}
 				final GeneratedCharterOutLeg fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, //
-						vesselAvailability.getVessel(), //
+						vesselCharter.getVessel(), //
 						ballastStartTime + toCharterPort.getShortestTime(), //
 						option, availableTime - toCharterPort.getShortestTime(), true);
 				if (fromCharterPort == null) {
@@ -447,11 +447,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param ballastStartTime
 	 * @return
 	 */
-	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final IVesselAvailability vesselAvailability, final Object[] currentSequence,
+	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final IVesselCharter vesselCharter, final Object[] currentSequence,
 			final GeneratedCharterOutOption charterOutOption, final IPortTimesRecord portTimesRecord, final int ballastIdx, final int ballastStartTime) {
 		final List<IOptionsSequenceElement> newRawSequence = new ArrayList<>(currentSequence.length);
 		final ExtendedCharterOutSequence bigSequence = new ExtendedCharterOutSequence();
-		final IVessel vessel = vesselAvailability.getVessel();
+		final IVessel vessel = vesselCharter.getVessel();
 
 		// build new sequence up to and not including last ballast leg
 		ERouteOption ladenRoute = null;

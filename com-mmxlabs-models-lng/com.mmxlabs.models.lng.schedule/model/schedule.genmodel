@@ -123,7 +123,7 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Sequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/events"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/vesselAvailability"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/vesselCharter"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/charterInMarket"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/fitnesses"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Sequence/spotIndex"/>

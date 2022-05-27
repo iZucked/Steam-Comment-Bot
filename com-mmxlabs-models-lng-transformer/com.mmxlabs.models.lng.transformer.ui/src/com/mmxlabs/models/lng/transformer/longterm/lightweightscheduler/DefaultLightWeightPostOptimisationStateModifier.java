@@ -39,14 +39,14 @@ public class DefaultLightWeightPostOptimisationStateModifier implements ILightWe
 			LinkedList<Entry<@NonNull IResource, @NonNull ISequence>> entriesList = new LinkedList<>(outputSequences.getSequences().entrySet());
 			List<Entry<@NonNull IResource, @NonNull ISequence>> virtualSequences = entriesList.stream()
 			.filter(e -> vesselProvider
-					.getVesselAvailability(e.getKey())
+					.getVesselCharter(e.getKey())
 					.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP)
 			.collect(Collectors.toList());
 			for (Entry<@NonNull IResource, @NonNull ISequence> entry : virtualSequences) {
 				 for (ISequenceElement element : entry.getValue()) {
 					if (portTypeProvider.getPortType(element) == PortType.Load ||
 							portTypeProvider.getPortType(element) == PortType.Discharge) {
-						roundTripProvider.permitElementOnResource(element, portSlotProvider.getPortSlot(element), entry.getKey(), vesselProvider.getVesselAvailability(entry.getKey()));
+						roundTripProvider.permitElementOnResource(element, portSlotProvider.getPortSlot(element), entry.getKey(), vesselProvider.getVesselCharter(entry.getKey()));
 					}
 				}
 			}

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -68,13 +68,13 @@ public class CargoAllowedVesselConstraintCheckTest {
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
-		final List<VesselAvailability> vesselsClassFour = Lists.newArrayList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true));
+		final List<VesselCharter> vesselsClassFour = Lists.newArrayList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true));
 		// create some cargoes.
 		final List<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// add a constraint to one cargo - it can only be carried by the one vessel that is class four.
 		final Cargo constrainedCargo = cargoes.get(0);
-		csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour.stream().map(VesselAvailability::getVessel).collect(Collectors.toList()));
+		csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour.stream().map(VesselCharter::getVessel).collect(Collectors.toList()));
 
 		// build and run the scenario.
 		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
@@ -86,7 +86,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 			if (ScheduleModelUtils.matchingSlots(constrainedCargo, ca)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
-				final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
+				final Vessel av = ca.getSequence().getVesselCharter().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getVessel().getName());
 
@@ -125,7 +125,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		final int numOfClassFour = 8;
 
 		// this vessels that will be allowed to carry the cargo
-		final List<VesselAvailability> allowedVessels = new ArrayList<>();
+		final List<VesselCharter> allowedVessels = new ArrayList<>();
 
 		// createVessels creates and adds the vessels to the scenario.
 		allowedVessels.addAll(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
@@ -139,7 +139,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 
 		// constrain all cargoes so none of class four can carry any.
 		for (final Cargo c : cargoes) {
-			csc.addAllowedVesselsOnCargo(c, allowedVessels.stream().map(VesselAvailability::getVessel).collect(Collectors.toList()));
+			csc.addAllowedVesselsOnCargo(c, allowedVessels.stream().map(VesselCharter::getVessel).collect(Collectors.toList()));
 		}
 
 		// build and run the scenario
@@ -149,10 +149,10 @@ public class CargoAllowedVesselConstraintCheckTest {
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
+			final Vessel av = ca.getSequence().getVesselCharter().getVessel();
 
 			boolean inAllowedVessels = false;
-			for (final VesselAvailability v : allowedVessels) {
+			for (final VesselCharter v : allowedVessels) {
 
 				if (v.getVessel().getName().equals(av.getName())) {
 					inAllowedVessels = true;

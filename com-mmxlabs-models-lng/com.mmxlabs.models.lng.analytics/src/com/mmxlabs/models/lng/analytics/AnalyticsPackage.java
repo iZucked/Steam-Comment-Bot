@@ -2319,13 +2319,13 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2464,13 +2464,13 @@ s	 * <!-- end-user-doc -->
 	int SANDBOX_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SANDBOX_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SANDBOX_RESULT__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2707,13 +2707,13 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2842,13 +2842,13 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -3031,13 +3031,13 @@ s	 * <!-- end-user-doc -->
 	int OPTIMISATION_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int OPTIMISATION_RESULT__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -3158,13 +3158,13 @@ s	 * <!-- end-user-doc -->
 	int SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = 2;
+	int SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -4640,13 +4640,13 @@ s	 * <!-- end-user-doc -->
 	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -6525,15 +6525,15 @@ s	 * <!-- end-user-doc -->
 	EReference getAbstractSolutionSet_ExtraVesselEvents();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselCharters <em>Extra Vessel Charters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities()
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Charters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselCharters()
 	 * @see #getAbstractSolutionSet()
 	 * @generated
 	 */
-	EReference getAbstractSolutionSet_ExtraVesselAvailabilities();
+	EReference getAbstractSolutionSet_ExtraVesselCharters();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
@@ -7995,15 +7995,15 @@ s	 * <!-- end-user-doc -->
 	EReference getSolutionOptionMicroCase_ScheduleModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselCharters <em>Extra Vessel Charters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities()
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Charters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselCharters()
 	 * @see #getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+	EReference getSolutionOptionMicroCase_ExtraVesselCharters();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
@@ -9350,12 +9350,12 @@ s	 * <!-- end-user-doc -->
 		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = eINSTANCE.getAbstractSolutionSet_ExtraVesselEvents();
 
 		/**
-		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Extra Vessel Charters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getAbstractSolutionSet_ExtraVesselAvailabilities();
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = eINSTANCE.getAbstractSolutionSet_ExtraVesselCharters();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
@@ -10520,12 +10520,12 @@ s	 * <!-- end-user-doc -->
 		EReference SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = eINSTANCE.getSolutionOptionMicroCase_ScheduleModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Extra Vessel Charters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+		EReference SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS = eINSTANCE.getSolutionOptionMicroCase_ExtraVesselCharters();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.

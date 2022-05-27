@@ -9,11 +9,11 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -34,10 +34,10 @@ public class TimeWindowsTestsUtils {
 		return interestingPortTimeWindowsRecord;
 	}
 
-	public static IVesselAvailability getIVesselAvailabilityWithName(String name, EList<VesselAvailability> namedObjects, ModelEntityMap mem) {
-		for (VesselAvailability object : namedObjects) {
+	public static IVesselCharter getIVesselCharterWithName(String name, EList<VesselCharter> namedObjects, ModelEntityMap mem) {
+		for (VesselCharter object : namedObjects) {
 			if (object.getVessel().getName().contains(name))
-				return mem.getOptimiserObject(object, IVesselAvailability.class);
+				return mem.getOptimiserObject(object, IVesselCharter.class);
 		}
 		return null;
 	}

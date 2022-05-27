@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -122,7 +122,7 @@ public class TestPriceExpressionContract {
 		final int dischargePricePerMMBTu = 40;
 		final long dischargeVolumeInM3 = 100;
 		final long loadVolumeInM3 = 200;
-		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = mock(IVesselCharter.class);
 		final VoyagePlan plan = new VoyagePlan();
 
 		final IDetailTree annotations = mock(IDetailTree.class);
@@ -136,10 +136,10 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
 		when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
-		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, plan, null,
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselCharter, plan, null,
 				annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, plan, null,
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselCharter, plan, null,
 				annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);

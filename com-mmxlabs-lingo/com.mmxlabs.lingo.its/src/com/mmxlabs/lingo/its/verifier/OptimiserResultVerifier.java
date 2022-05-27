@@ -32,7 +32,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -351,7 +351,7 @@ public class OptimiserResultVerifier {
 				}
 				final IResource r = p.getSecond();
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
-				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
 				return va.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 			};
 
@@ -367,7 +367,7 @@ public class OptimiserResultVerifier {
 				}
 				final IResource r = p.getSecond();
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
-				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
 				return va.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
 			};
 
@@ -383,7 +383,7 @@ public class OptimiserResultVerifier {
 				}
 				final IResource r = p.getSecond();
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
-				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
 				return va.getVesselInstanceType() == VesselInstanceType.FLEET || va.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER;
 			};
 
@@ -399,7 +399,7 @@ public class OptimiserResultVerifier {
 				}
 				final IResource r = p.getSecond();
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
-				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
 				return (va.getVesselInstanceType() == VesselInstanceType.FLEET || va.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) //
 						&& (name.equalsIgnoreCase(va.getVessel().getName()));
 			};
@@ -417,7 +417,7 @@ public class OptimiserResultVerifier {
 				final IResource r = p.getSecond();
 				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
 				final ICharterMarketProvider charterMarketProvider = p.getFirst().getInjector().getInstance(ICharterMarketProvider.class);
-				final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
 				final ISpotCharterInMarket spotCharterInMarket = va.getSpotCharterInMarket();
 				return (va.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) //
 						&& (marketName.equalsIgnoreCase(spotCharterInMarket.getName()));

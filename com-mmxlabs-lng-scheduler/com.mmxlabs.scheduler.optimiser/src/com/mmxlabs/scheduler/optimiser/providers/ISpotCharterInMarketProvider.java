@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 /**
  * Provider for spot charter in markets.
@@ -23,5 +23,5 @@ public interface ISpotCharterInMarketProvider extends IDataComponentProvider {
 
 	int getSpotCharterInMarketCount(ISpotCharterInMarket market);
 
-	IVesselAvailability getSpotMarketAvailability(ISpotCharterInMarket market, int spotIndex);
+	IVesselCharter getSpotMarketAvailability(ISpotCharterInMarket market, int spotIndex);
 }

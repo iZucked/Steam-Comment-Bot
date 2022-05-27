@@ -52,7 +52,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VesselEventVesselsManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -95,15 +95,15 @@ public class FleetPage extends ADPComposite {
 	private EmbeddedDetailComposite detailComposite;
 	private Runnable releaseAdaptersRunnable = null;
 
-	private ScenarioTableViewer availabilityViewer;
+	private ScenarioTableViewer vesselChartersViewer;
 	private ScenarioTableViewer eventsViewer;
 
 	private Button updateFleetDatesButton;
 
-	private Group availabilityGroup;
+	private Group vesselChartersGroup;
 	private Group eventsGroup;
 
-	private Action deleteAvailabilityAction;
+	private Action deleteVesselCharterAction;
 	private Action deleteEventAction;
 
 	private final AdapterImpl spotMarketsModelAdapter = new EContentAdapter() {
@@ -156,29 +156,29 @@ public class FleetPage extends ADPComposite {
 						final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(editorData.scenarioModel);
 						final CompoundCommand cmd = new CompoundCommand("Re-generate ADP fleet");
 						{
-							for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
+							for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
 								final StartHeelOptions startOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 								startOptions.setMinVolumeAvailable(0);
-								startOptions.setMaxVolumeAvailable(vesselAvailability.getVessel().getSafetyHeel());
+								startOptions.setMaxVolumeAvailable(vesselCharter.getVessel().getSafetyHeel());
 								startOptions.setCvValue(22.8);
 								startOptions.setPriceExpression("0.0");
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL, startOptions));
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__START_HEEL, startOptions));
 
 								final EndHeelOptions endOptions = CommercialFactory.eINSTANCE.createEndHeelOptions();
-								endOptions.setMinimumEndHeel(vesselAvailability.getVessel().getSafetyHeel());
-								endOptions.setMaximumEndHeel(vesselAvailability.getVessel().getSafetyHeel());
+								endOptions.setMinimumEndHeel(vesselCharter.getVessel().getSafetyHeel());
+								endOptions.setMaximumEndHeel(vesselCharter.getVessel().getSafetyHeel());
 								endOptions.setTankState(EVesselTankState.EITHER);
 								endOptions.setPriceExpression("0.0");
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL, endOptions));
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__END_HEEL, endOptions));
 
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER,
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__START_AFTER,
 										adpModel.getYearStart().atDay(1).atStartOfDay()));
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY,
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__START_BY,
 										adpModel.getYearStart().atDay(1).atStartOfDay()));
 
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER,
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__END_AFTER,
 										adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay()));
-								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY,
+								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__END_BY,
 										adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay()));
 
 							}
@@ -235,51 +235,51 @@ public class FleetPage extends ADPComposite {
 				// Preview Table with generated options
 				{
 
-					availabilityGroup = new Group(rhsComposite, SWT.NONE);
-					availabilityGroup.setLayout(new GridLayout(1, false));
-					availabilityGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+					vesselChartersGroup = new Group(rhsComposite, SWT.NONE);
+					vesselChartersGroup.setLayout(new GridLayout(1, false));
+					vesselChartersGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 
-					availabilityGroup.setText("Fleet");
+					vesselChartersGroup.setText("Fleet");
 					// toolkit.adapt(previewGroup);
 
 					if (editorData.getEditingDomain() != null) {
 						// constructPreviewViewer(editorData, previewGroup);
 					}
 
-					final DetailToolbarManager buttonManager = new DetailToolbarManager(availabilityGroup, SWT.TOP);
+					final DetailToolbarManager buttonManager = new DetailToolbarManager(vesselChartersGroup, SWT.TOP);
 					{
 						final Action action = new Action("New") {
 
 							@Override
 							public void run() {
-								final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
+								final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 
 								final StartHeelOptions startOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 								startOptions.setMinVolumeAvailable(0);
 								startOptions.setCvValue(22.8);
 								startOptions.setPriceExpression("0.0");
-								availability.setStartHeel(startOptions);
+								vesselCharter.setStartHeel(startOptions);
 
 								final EndHeelOptions endOptions = CommercialFactory.eINSTANCE.createEndHeelOptions();
 								endOptions.setTankState(EVesselTankState.EITHER);
 								endOptions.setPriceExpression("0.0");
-								availability.setEndHeel(endOptions);
+								vesselCharter.setEndHeel(endOptions);
 
-								availability.setStartAfter(editorData.adpModel.getYearStart().atDay(1).atStartOfDay());
-								availability.setStartBy(editorData.adpModel.getYearStart().atDay(1).atStartOfDay());
-								availability.setEndAfter(editorData.adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay());
-								availability.setEndBy(editorData.adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay());
+								vesselCharter.setStartAfter(editorData.adpModel.getYearStart().atDay(1).atStartOfDay());
+								vesselCharter.setStartBy(editorData.adpModel.getYearStart().atDay(1).atStartOfDay());
+								vesselCharter.setEndAfter(editorData.adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay());
+								vesselCharter.setEndBy(editorData.adpModel.getYearEnd().plusMonths(1).atDay(1).atStartOfDay());
 
 								final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(editorData.getScenarioDataProvider());
 								if (commercialModel.getEntities().size() == 1) {
-									availability.setEntity(commercialModel.getEntities().get(0));
+									vesselCharter.setEntity(commercialModel.getEntities().get(0));
 								}
 								final Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getScenarioModel().getCargoModel(),
-										CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES, availability);
+										CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS, vesselCharter);
 								editorData.getEditingDomain().getCommandStack().execute(c);
-								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, availability, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
-								if (availabilityViewer != null) {
-									availabilityViewer.refresh();
+								DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(editorData, vesselCharter, editorData.getEditingDomain().getCommandStack().getMostRecentCommand());
+								if (vesselChartersViewer != null) {
+									vesselChartersViewer.refresh();
 								}
 							}
 						};
@@ -288,11 +288,11 @@ public class FleetPage extends ADPComposite {
 					}
 					{
 
-						deleteAvailabilityAction = new Action("Delete") {
+						deleteVesselCharterAction = new Action("Delete") {
 							@Override
 							public void run() {
-								if (availabilityViewer != null) {
-									final ISelection selection = availabilityViewer.getSelection();
+								if (vesselChartersViewer != null) {
+									final ISelection selection = vesselChartersViewer.getSelection();
 									if (selection instanceof IStructuredSelection) {
 										final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 										final CompoundCommand c = new CompoundCommand();
@@ -302,7 +302,7 @@ public class FleetPage extends ADPComposite {
 											c.append(RemoveCommand.create(editorData.getEditingDomain(), o));
 										}
 										editorData.getEditingDomain().getCommandStack().execute(c);
-										availabilityViewer.refresh();
+										vesselChartersViewer.refresh();
 									}
 								}
 								;
@@ -314,8 +314,8 @@ public class FleetPage extends ADPComposite {
 								@Override
 								public void run() {
 
-									if (availabilityViewer != null && !availabilityViewer.getControl().isDisposed()) {
-										final GridColumn[] columns = availabilityViewer.getGrid().getColumns();
+									if (vesselChartersViewer != null && !vesselChartersViewer.getControl().isDisposed()) {
+										final GridColumn[] columns = vesselChartersViewer.getGrid().getColumns();
 										for (final GridColumn c : columns) {
 											if (c.getResizeable()) {
 												c.pack();
@@ -327,8 +327,8 @@ public class FleetPage extends ADPComposite {
 							packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 							buttonManager.getToolbarManager().add(packAction);
 						}
-						CommonImages.setImageDescriptors(deleteAvailabilityAction, IconPaths.Delete);
-						buttonManager.getToolbarManager().add(deleteAvailabilityAction);
+						CommonImages.setImageDescriptors(deleteVesselCharterAction, IconPaths.Delete);
+						buttonManager.getToolbarManager().add(deleteVesselCharterAction);
 					}
 					buttonManager.getToolbarManager().update(true);
 					// toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
@@ -506,7 +506,7 @@ public class FleetPage extends ADPComposite {
 	private ScenarioTableViewer constructFleetViewer(final ADPEditorData editorData, final Group previewGroup) {
 
 		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI, editorData);
-		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
+		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS);
 		GridViewerHelper.configureLookAndFeel(previewViewer);
 
 		previewViewer.setStatusProvider(editorData.getStatusProvider());
@@ -521,17 +521,17 @@ public class FleetPage extends ADPComposite {
 		final ReadOnlyManipulatorWrapper<BasicAttributeManipulator> nameManipulator = new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
 				new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
+		previewViewer.addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getVesselCharter_Vessel());
 
-		previewViewer.addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_Optional(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate(), editorData.getDefaultCommandHandler()));
 
-		// addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), editorData.getEditingDomain()) {
+		// addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_RepositioningFee(), editorData.getEditingDomain()) {
 		// @Override
 		// public boolean canEdit(Object object) {
-		// if (object instanceof VesselAvailability) {
-		// if (!((VesselAvailability) object).isFleet()) {
+		// if (object instanceof VesselCharter) {
+		// if (!((VesselCharter) object).isFleet()) {
 		// return true;
 		// } else {
 		// return false;
@@ -543,18 +543,18 @@ public class FleetPage extends ADPComposite {
 		// });
 
 		previewViewer.addTypicalColumn("Start Port",
-				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), editorData.getReferenceValueProviderCache(), editorData.getDefaultCommandHandler()));
+				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAt(), editorData.getReferenceValueProviderCache(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAfter(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAfter(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartBy(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartBy(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("End Port", new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAt(), editorData.getReferenceValueProviderCache(),
+		previewViewer.addTypicalColumn("End Port", new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAt(), editorData.getReferenceValueProviderCache(),
 				editorData.getDefaultCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		previewViewer.addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAfter(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAfter(), editorData.getDefaultCommandHandler()));
 
-		previewViewer.addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), editorData.getDefaultCommandHandler()));
+		previewViewer.addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndBy(), editorData.getDefaultCommandHandler()));
 
 		previewViewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -574,10 +574,10 @@ public class FleetPage extends ADPComposite {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
-				deleteAvailabilityAction.setEnabled(!event.getSelection().isEmpty());
+				deleteVesselCharterAction.setEnabled(!event.getSelection().isEmpty());
 			}
 		});
-		deleteAvailabilityAction.setEnabled(false);
+		deleteVesselCharterAction.setEnabled(false);
 		return previewViewer;
 	}
 
@@ -650,8 +650,8 @@ public class FleetPage extends ADPComposite {
 
 	@Override
 	public void refresh() {
-		if (availabilityViewer != null) {
-			availabilityViewer.refresh();
+		if (vesselChartersViewer != null) {
+			vesselChartersViewer.refresh();
 		}
 		if (eventsViewer != null) {
 			eventsViewer.refresh();
@@ -665,10 +665,10 @@ public class FleetPage extends ADPComposite {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
-		if (availabilityViewer != null) {
-			availabilityViewer.getControl().dispose();
-			availabilityViewer.dispose();
-			availabilityViewer = null;
+		if (vesselChartersViewer != null) {
+			vesselChartersViewer.getControl().dispose();
+			vesselChartersViewer.dispose();
+			vesselChartersViewer = null;
 		}
 		if (eventsViewer != null) {
 			eventsViewer.getControl().dispose();
@@ -676,8 +676,8 @@ public class FleetPage extends ADPComposite {
 			eventsViewer = null;
 		}
 		if (scenarioModel != null) {
-			availabilityViewer = constructFleetViewer(editorData, availabilityGroup);
-			availabilityGroup.layout();
+			vesselChartersViewer = constructFleetViewer(editorData, vesselChartersGroup);
+			vesselChartersGroup.layout();
 
 			eventsViewer = constructEventsViewer(editorData, eventsGroup);
 			eventsGroup.layout();
@@ -724,7 +724,7 @@ public class FleetPage extends ADPComposite {
 		EObject target = null;
 		if (editorData.getAdpModel() != null) {
 			target = editorData.getAdpModel().getFleetProfile();
-			availabilityViewer.setInput(editorData.getScenarioModel().getCargoModel());
+			vesselChartersViewer.setInput(editorData.getScenarioModel().getCargoModel());
 			eventsViewer.setInput(editorData.getScenarioModel().getCargoModel());
 		}
 

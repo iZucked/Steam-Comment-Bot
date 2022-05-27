@@ -233,7 +233,7 @@
                      class="Slot">
                </target>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
                <target
                      class="VesselEvent">
@@ -685,8 +685,8 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.SensibleVesselCharterDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SensibleVesselCharterDateConstraint"
                   lang="Java"
                   mode="Batch"
                   name="Sensible Start / End Dates"
@@ -696,10 +696,10 @@
                   {0}
                </message>
                <description>
-                  Vessel availability dates must be within a sensible range.
+                  Vessel charter dates must be within a sensible range.
                </description>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
             </constraint>
             <constraint
@@ -721,11 +721,11 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselCharterConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselCharterVesselConstraint"
                   lang="Java"
                   mode="Batch"
-                  name="Vessel Availability Attached To Vessel"
+                  name="Vessel Charter Attached To Vessel"
                   severity="ERROR"
                   statusCode="1">
                <message>
@@ -735,25 +735,25 @@
                   Vessel availability information for a portfolio must be attached to a particular vessel.
                </description>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.MultipleVesselChartersConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
                   lang="Java"
                   mode="Batch"
-                  name="Multiple Vessel Availabilities"
+                  name="Multiple Vessel Charters"
                   severity="ERROR"
                   statusCode="1">
                <message>
                   {0}
                </message>
                <description>
-                  A vessel cannot be given more than one availability for the same portfolio.
+                  A vessel cannot be given more than one charter for the same portfolio.
                </description>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
             </constraint>
             <constraint
@@ -807,7 +807,7 @@
                   A time charter vessel should have a daily hire rate
                </description>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
             </constraint>
             <constraint
@@ -984,19 +984,19 @@
                   </target>
                </constraint>
                <constraint
-                     class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityCharterUniquenessConstraint"
-                     id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityCharterUniquenessConstraint"
+                     class="com.mmxlabs.models.lng.cargo.validation.VesselCharterUniquenessConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.VesselCharterUniquenessConstraint"
                      isEnabledByDefault="true"
                      lang="java"
                      mode="Batch"
-                     name="VesselAvailabilityCharterUniquenessConstraint"
+                     name="VesselCharterUniquenessConstraint"
                      severity="ERROR"
                      statusCode="1">
                   <message>
                      {0}
                   </message>
                   <target
-                        class="VesselAvailability">
+                        class="VesselCharter">
                   </target>
                </constraint>
                <constraint
@@ -1108,12 +1108,12 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselAvailabilityConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselAvailabilityConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselCharterConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselCharterConstraint"
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="NonShippedVesselAvailabilityConstraint"
+                  name="NonShippedVesselCharterConstraint"
                   severity="WARNING"
                   statusCode="1">
                <message>
@@ -1152,8 +1152,8 @@
          <constraints
                categories=" com.mmxlabs.models.lng.cargo.validation.base">
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint.port_access"
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselCharterPortConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselCharterPortConstraint.port_access"
                   lang="Java"
                   mode="Batch"
                   name="Start / End Port Accessibility"
@@ -1166,7 +1166,7 @@
                   The start or end port of a vessel must be compatible with that vessel's class
                </description>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
                <target
                      class="Vessel">

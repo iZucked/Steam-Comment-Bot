@@ -25,7 +25,7 @@ import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
@@ -71,19 +71,19 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			for (final Object o : collection) {
 				if (o instanceof Schedule schedule) {
 					final EList<Sequence> sequences = schedule.getSequences();
-					// find multiple availabilities
-					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
+					// find multiple charters
+					final Map<Vessel, List<Sequence>> chartersMap = new HashMap<>();
 					final List<Sequence> unassigned = sequences.stream() //
-							.filter(s -> s.getSequenceType() == SequenceType.VESSEL).filter(s -> s.getVesselAvailability() != null) //
-							.sorted((a, b) -> a.getVesselAvailability().getStartBy() == null ? -1
-									: b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy()))
+							.filter(s -> s.getSequenceType() == SequenceType.VESSEL).filter(s -> s.getVesselCharter() != null) //
+							.sorted((a, b) -> a.getVesselCharter().getStartBy() == null ? -1
+									: b.getVesselCharter().getStartBy() == null ? 1 : a.getVesselCharter().getStartBy().compareTo(b.getVesselCharter().getStartBy()))
 							.collect(Collectors.toList());
 					while (!unassigned.isEmpty()) {
 						@NonNull
 						final Sequence thisSequence = unassigned.get(0);
-						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel()))
+						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselCharter().getVessel().equals(thisSequence.getVesselCharter().getVessel()))
 								.collect(Collectors.toList());
-						availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
+						chartersMap.put(thisSequence.getVesselCharter().getVessel(), matches);
 						unassigned.removeAll(matches);
 					}
 					// find
@@ -96,8 +96,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						}
 						result.add(seq);
 					}
-					for (final Vessel vessel : availabilityMap.keySet()) {
-						final List<Sequence> combinedSequences = availabilityMap.get(vessel);
+					for (final Vessel vessel : chartersMap.keySet()) {
+						final List<Sequence> combinedSequences = chartersMap.get(vessel);
 						if (combinedSequences.size() == 1) {
 							result.add(combinedSequences.get(0));
 						} else {
@@ -131,7 +131,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 			final List<Event> newEvents = new LinkedList<>();
 
-			VesselAvailability va = sequence.getVesselAvailability();
+			VesselCharter va = sequence.getVesselCharter();
 			if (va != null) {
 				if (va.getStartAfter() != null) {
 					final CharterAvailableFromEvent evt = ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent();
@@ -176,7 +176,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			final List<Event> newEvents = new LinkedList<>();
 			for (final Sequence sequence : combinedSequence.getSequences()) {
 
-				VesselAvailability va = sequence.getVesselAvailability();
+				VesselCharter va = sequence.getVesselCharter();
 				if (va != null) {
 					if (va.getStartAfter() != null) {
 						final CharterAvailableFromEvent evt = ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent();

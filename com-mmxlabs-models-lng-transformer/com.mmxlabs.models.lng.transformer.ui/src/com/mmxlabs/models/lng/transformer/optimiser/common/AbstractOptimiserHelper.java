@@ -37,7 +37,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
@@ -79,8 +79,8 @@ public abstract class AbstractOptimiserHelper {
 	}
 
 	public static IResource getVirtualResource(IPortSlot portSlot, IPortSlotProvider portSlotProvider, IVirtualVesselSlotProvider virtualVesselSlotProvider, IVesselProvider vesselProvider) {
-		IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
-		IResource resource = vesselProvider.getResource(vesselAvailability);
+		IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(portSlotProvider.getElement(portSlot));
+		IResource resource = vesselProvider.getResource(vesselCharter);
 		return resource;
 	}
 
@@ -94,9 +94,9 @@ public abstract class AbstractOptimiserHelper {
 
 	public static IResource getNominal(ModifiableSequences rawSequences, CharterInMarket charterInMarket, IVesselProvider vesselProvider) {
 		for (IResource resource : rawSequences.getResources()) {
-			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && vesselAvailability.getSpotCharterInMarket() != null
-					&& vesselAvailability.getSpotCharterInMarket().getName().contains(charterInMarket.getName())) {
+			IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && vesselCharter.getSpotCharterInMarket() != null
+					&& vesselCharter.getSpotCharterInMarket().getName().contains(charterInMarket.getName())) {
 				return resource;
 			}
 		}
@@ -244,17 +244,17 @@ public abstract class AbstractOptimiserHelper {
 		return cargoes;
 	}
 
-	public static boolean isShippedVessel(@NonNull IVesselAvailability v) {
+	public static boolean isShippedVessel(@NonNull IVesselCharter v) {
 		return ALLOWED_VESSEL_TYPES.contains(v.getVesselInstanceType());
 	}
 
-	public static IVesselAvailability getPNLVessel(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket, IVesselProvider vesselProvider) {
-		IVesselAvailability nominalMarketAvailability = null;
+	public static IVesselCharter getPNLVessel(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket, IVesselProvider vesselProvider) {
+		IVesselCharter nominalMarketAvailability = null;
 		final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
 		for (final IResource resource : vesselProvider.getSortedResources()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getSpotCharterInMarket() == o_nominalMarket && vesselAvailability.getSpotIndex() == -1) {
-				nominalMarketAvailability = vesselAvailability;
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getSpotCharterInMarket() == o_nominalMarket && vesselCharter.getSpotIndex() == -1) {
+				nominalMarketAvailability = vesselCharter;
 				break;
 			}
 		}
@@ -262,7 +262,7 @@ public abstract class AbstractOptimiserHelper {
 		return nominalMarketAvailability;
 	}
 
-	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel) {
+	public static long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselCharter pnlVessel) {
 		long[] pnl = new long[cargoes.size()];
 		int idx = 0;
 		for (List<IPortSlot> cargo : cargoes) {

@@ -9,10 +9,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public interface IVesselCharterInRateProvider extends IDataComponentProvider {
 
 	@Nullable
-	ILongCurve getCharterInRatePerDay(@NonNull IVesselAvailability vesselAvailability);
+	ILongCurve getCharterInRatePerDay(@NonNull IVesselCharter vesselCharter);
 }

@@ -22,7 +22,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -595,7 +595,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("<TFDE_165>");
 
-		VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("35000") //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
 				.withStartWindow(LocalDateTime.of(2017, 4, 1, 0, 0, 0), LocalDateTime.of(2071, 4, 20, 0, 0, 0))//
@@ -608,8 +608,8 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		// Ballast bonus
 		GenericCharterContract gcc = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptySet(), 16.0, "35000", "200", false, false,
 				Collections.singleton(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)));
-		vesselAvailability.setCharterContractOverride(true);
-		vesselAvailability.setContainedCharterContract(gcc);
+		vesselCharter.setCharterContractOverride(true);
+		vesselCharter.setContainedCharterContract(gcc);
 
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("Load", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "3") //
@@ -622,7 +622,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 				.withWindowStartTime(0) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 0) //
+				.withVesselAssignment(vesselCharter, 0) //
 				.build();
 
 		evaluateTestWith(OptimiserInjectorServiceMaker.begin() //
@@ -639,9 +639,9 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		Event first = events.get(0);
 		Event last = events.get(events.size() - 1);
 		// This is the main check
-		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) >= vesselAvailability.getMinDuration());
+		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) >= vesselCharter.getMinDuration());
 		// Sanity check the max bound is still respected.
-		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) <= vesselAvailability.getMaxDuration());
+		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) <= vesselCharter.getMaxDuration());
 	}
 
 }

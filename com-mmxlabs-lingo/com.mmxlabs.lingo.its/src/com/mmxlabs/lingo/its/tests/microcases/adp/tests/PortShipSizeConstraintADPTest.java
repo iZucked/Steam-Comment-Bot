@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.util.ADPModelBuilder;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -56,7 +56,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 
 public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTests {
 
-	private VesselAvailability defaultVesselAvailability;
+	private VesselCharter defaultVesselCharter;
 
 	@Test
 	public void testADPOptimisationViolatesPortShipSizeConstraint() {
@@ -152,7 +152,7 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		boolean oneWithMore = false;
 		for (IResource res : sequences.getResources()) {
 			ISequence seq = sequences.getSequences().get(res);
-			IResource mediumShipRes = SequenceHelper.getResource(dataTransformer, defaultVesselAvailability);
+			IResource mediumShipRes = SequenceHelper.getResource(dataTransformer, defaultVesselCharter);
 			if (res == mediumShipRes) {
 				// Only start and end elements.
 				Assertions.assertEquals(2, seq.size());
@@ -221,7 +221,7 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		defaultCharterInMarket.setEnabled(true);
 		defaultCharterInMarket.setSpotCharterCount(0); // If set to 1, we get another small ship.
 
-		defaultVesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
+		defaultVesselCharter = cargoModelBuilder.makeVesselCharter(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0)) //

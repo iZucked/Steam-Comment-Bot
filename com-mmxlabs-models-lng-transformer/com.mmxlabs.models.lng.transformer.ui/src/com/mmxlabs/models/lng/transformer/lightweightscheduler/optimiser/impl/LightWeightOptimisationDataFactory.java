@@ -62,7 +62,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint.Row;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
@@ -102,7 +102,7 @@ public class LightWeightOptimisationDataFactory {
 	@Inject
 	private Injector injector;
 
-	public ILightWeightOptimisationData createLightWeightOptimisationData(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator,
+	public ILightWeightOptimisationData createLightWeightOptimisationData(final IVesselCharter pnlVessel, final LoadDischargePairValueCalculatorStep calculator,
 			final JobExecutorFactory jobExecutorFactory, final IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
 		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
@@ -146,7 +146,7 @@ public class LightWeightOptimisationDataFactory {
 		});
 
 		// add vessels
-		final List<@NonNull IVesselAvailability> vessels = getVessels();
+		final List<@NonNull IVesselCharter> vessels = getVessels();
 
 		// calculate shipping costs between two cargoes
 		final long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
@@ -194,7 +194,7 @@ public class LightWeightOptimisationDataFactory {
 		return lightWeightOptimisationData;
 	}
 
-	public ISequences createNominalADP(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
+	public ISequences createNominalADP(final IVesselCharter pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
 			final IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
 		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
@@ -229,7 +229,7 @@ public class LightWeightOptimisationDataFactory {
 		// Gather FOB/DES resources
 		for (final List<IPortSlot> cargo : shippedCargoes) {
 			for (final IPortSlot e : cargo) {
-				final IVesselAvailability va = virtualVesselProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+				final IVesselCharter va = virtualVesselProvider.getVesselCharterForElement(portSlotProvider.getElement(e));
 				if (va != null) {
 					resources.add(vesselProvider.getResource(va));
 				}
@@ -246,9 +246,9 @@ public class LightWeightOptimisationDataFactory {
 
 		for (final List<IPortSlot> cargo : shippedCargoes) {
 			// Grab FOB/DES vessel
-			IVesselAvailability va = null;
+			IVesselCharter va = null;
 			for (final IPortSlot e : cargo) {
-				va = virtualVesselProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+				va = virtualVesselProvider.getVesselCharterForElement(portSlotProvider.getElement(e));
 				if (va != null) {
 					break;
 				}
@@ -294,7 +294,7 @@ public class LightWeightOptimisationDataFactory {
 
 	}
 
-	private long[] getVesselCapacities(final List<@NonNull IVesselAvailability> vessels) {
+	private long[] getVesselCapacities(final List<@NonNull IVesselCharter> vessels) {
 		final long[] capacity = vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
 		return capacity;
 	}
@@ -311,24 +311,24 @@ public class LightWeightOptimisationDataFactory {
 		return cargoesVolumes;
 	}
 
-	private LightWeightCargoDetails[] getCargoDetails(final List<List<IPortSlot>> shippedCargoes, final List<@NonNull IVesselAvailability> vessels) {
+	private LightWeightCargoDetails[] getCargoDetails(final List<List<IPortSlot>> shippedCargoes, final List<@NonNull IVesselCharter> vessels) {
 		final LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
 			return new LightWeightCargoDetails(x.get(0).getPortType());
 		}).toArray(LightWeightCargoDetails[]::new);
 		return cargoDetails;
 	}
 
-	private List<@NonNull IVesselAvailability> getVessels() {
-		final List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
+	private List<@NonNull IVesselCharter> getVessels() {
+		final List<@NonNull IVesselCharter> vessels = initialSequences.getResources().stream() //
 				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
-				.map(v -> vesselProvider.getVesselAvailability(v)) //
+				.map(v -> vesselProvider.getVesselCharter(v)) //
 				.filter(v -> PairingOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
 		return vessels;
 	}
 
-	private List<@NonNull IVesselAvailability> getAllVessels() {
-		final List<@NonNull IVesselAvailability> vessels = initialSequences.getResources().stream() //
-				.map(v -> vesselProvider.getVesselAvailability(v)) //
+	private List<@NonNull IVesselCharter> getAllVessels() {
+		final List<@NonNull IVesselCharter> vessels = initialSequences.getResources().stream() //
+				.map(v -> vesselProvider.getVesselCharter(v)) //
 				.collect(Collectors.toList());
 		return vessels;
 	}
@@ -342,7 +342,7 @@ public class LightWeightOptimisationDataFactory {
 	 * @param monitor
 	 * @return
 	 */
-	public boolean[][] createSlotPairingMatrix(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
+	public boolean[][] createSlotPairingMatrix(final IVesselCharter pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
 			final IProgressMonitor monitor) {
 		// (1) Identify LT slots
 		@NonNull

@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
@@ -56,7 +56,7 @@ public class TargetedMoveGenerator implements IMoveGenerator {
 		final List<ISequenceElement> elements = new LinkedList<>();
 		// Find nominal cargoes
 		for (final IResource r : sequences.getResources()) {
-			final IVesselAvailability va = vesselProvider.getVesselAvailability(r);
+			final IVesselCharter va = vesselProvider.getVesselCharter(r);
 			if (va.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final ISequence s = sequences.getSequence(r);
 				// 1 -> len -1 to exclude start and end elements.

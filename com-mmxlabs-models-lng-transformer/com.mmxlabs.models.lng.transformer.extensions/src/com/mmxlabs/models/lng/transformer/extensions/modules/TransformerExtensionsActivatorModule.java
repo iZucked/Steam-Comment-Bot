@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
-import com.mmxlabs.models.lng.transformer.extensions.vesselavailabilities.VesselAvailabilityEntityTransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.vesselcharters.VesselCharterEntityTransformerExtensionFactory;
 
 /**
  * Module to register Transformer extension factories as a service
@@ -66,7 +66,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 
 		bindService(ActualsTransformerFactory.class).export();
 
-		bindService(VesselAvailabilityEntityTransformerExtensionFactory.class).export();
+		bindService(VesselCharterEntityTransformerExtensionFactory.class).export();
 
 		bindService(InventoryLevelsOutputScheduleProcessorFactory.class).export();
 	}

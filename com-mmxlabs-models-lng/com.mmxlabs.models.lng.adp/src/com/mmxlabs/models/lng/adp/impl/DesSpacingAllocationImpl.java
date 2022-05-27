@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DesSpacingAllocation;
 import com.mmxlabs.models.lng.adp.DesSpacingRow;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 
 import com.mmxlabs.models.lng.commercial.SalesContract;
 
@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getVesselCharter <em>Vessel Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getDesSpacingRows <em>Des Spacing Rows</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getPort <em>Port</em>}</li>
  * </ul>
@@ -48,14 +48,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements DesSpacingAllocation {
 	/**
-	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * The cached value of the '{@link #getVesselCharter() <em>Vessel Charter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVessel()
+	 * @see #getVesselCharter()
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailability vessel;
+	protected VesselCharter vesselCharter;
 
 	/**
 	 * The cached value of the '{@link #getDesSpacingRows() <em>Des Spacing Rows</em>}' containment reference list.
@@ -102,16 +102,16 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	 * @generated
 	 */
 	@Override
-	public VesselAvailability getVessel() {
-		if (vessel != null && vessel.eIsProxy()) {
-			InternalEObject oldVessel = (InternalEObject)vessel;
-			vessel = (VesselAvailability)eResolveProxy(oldVessel);
-			if (vessel != oldVessel) {
+	public VesselCharter getVesselCharter() {
+		if (vesselCharter != null && vesselCharter.eIsProxy()) {
+			InternalEObject oldVesselCharter = (InternalEObject)vesselCharter;
+			vesselCharter = (VesselCharter)eResolveProxy(oldVesselCharter);
+			if (vesselCharter != oldVesselCharter) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.DES_SPACING_ALLOCATION__VESSEL, oldVessel, vessel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER, oldVesselCharter, vesselCharter));
 			}
 		}
-		return vessel;
+		return vesselCharter;
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability basicGetVessel() {
-		return vessel;
+	public VesselCharter basicGetVesselCharter() {
+		return vesselCharter;
 	}
 
 	/**
@@ -129,11 +129,11 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	 * @generated
 	 */
 	@Override
-	public void setVessel(VesselAvailability newVessel) {
-		VesselAvailability oldVessel = vessel;
-		vessel = newVessel;
+	public void setVesselCharter(VesselCharter newVesselCharter) {
+		VesselCharter oldVesselCharter = vesselCharter;
+		vesselCharter = newVesselCharter;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.DES_SPACING_ALLOCATION__VESSEL, oldVessel, vessel));
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER, oldVesselCharter, vesselCharter));
 	}
 
 	/**
@@ -211,9 +211,9 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
-				if (resolve) return getVessel();
-				return basicGetVessel();
+			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER:
+				if (resolve) return getVesselCharter();
+				return basicGetVesselCharter();
 			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:
 				return getDesSpacingRows();
 			case ADPPackage.DES_SPACING_ALLOCATION__PORT:
@@ -232,8 +232,8 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
-				setVessel((VesselAvailability)newValue);
+			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER:
+				setVesselCharter((VesselCharter)newValue);
 				return;
 			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:
 				getDesSpacingRows().clear();
@@ -254,8 +254,8 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
-				setVessel((VesselAvailability)null);
+			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER:
+				setVesselCharter((VesselCharter)null);
 				return;
 			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:
 				getDesSpacingRows().clear();
@@ -275,8 +275,8 @@ public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements D
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
-				return vessel != null;
+			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL_CHARTER:
+				return vesselCharter != null;
 			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:
 				return desSpacingRows != null && !desSpacingRows.isEmpty();
 			case ADPPackage.DES_SPACING_ALLOCATION__PORT:

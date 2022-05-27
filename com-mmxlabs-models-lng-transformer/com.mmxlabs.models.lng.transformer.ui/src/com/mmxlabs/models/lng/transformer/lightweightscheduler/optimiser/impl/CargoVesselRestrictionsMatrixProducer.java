@@ -29,7 +29,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -76,14 +76,14 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	@Override
-	public Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
+	public Map<List<IPortSlot>, List<IVesselCharter>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels) {
 
 		List<IConstraintChecker> lightWeightConstraintCheckers = getLightWeightConstraintCheckers(constraintCheckers);
 
-		Map<List<IPortSlot>, List<IVesselAvailability>> cargoMap = new HashMap<>();
+		Map<List<IPortSlot>, List<IVesselCharter>> cargoMap = new HashMap<>();
 		for (List<IPortSlot> cargo : cargoes) {
-			List<IVesselAvailability> restrictedVessels = new LinkedList<>();
-			for (IVesselAvailability vessel : vessels) {
+			List<IVesselCharter> restrictedVessels = new LinkedList<>();
+			for (IVesselCharter vessel : vessels) {
 				if (!checkConstraints(lightWeightConstraintCheckers, cargo, vessel)) {
 					restrictedVessels.add(vessel);
 				}
@@ -94,7 +94,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 		return cargoMap;
 	}
 
-	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselAvailability vessel) {
+	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselCharter vessel) {
 		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
@@ -138,8 +138,8 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	@Override
-	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, Map<List<IPortSlot>, List<IVesselAvailability>> restrictions) {
-		Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
+	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels, Map<List<IPortSlot>, List<IVesselCharter>> restrictions) {
+		Map<IVesselCharter, Integer> vesselMap = new HashMap<>();
 		for (int i = 0; i < vessels.size(); i++) {
 			vesselMap.put(vessels.get(i), i);
 		}
@@ -154,7 +154,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	@Override
-	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
+	public ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels) {
 		return getIntegerCargoVesselRestrictions(cargoes, vessels, getCargoVesselRestrictions(cargoes, vessels));
 	}
 }

@@ -33,7 +33,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -79,7 +79,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 	private static List<String> addedFeatures = new LinkedList<>();
 
 	private Vessel vessel;
-	private VesselAvailability vesselAvailability1;
+	private VesselCharter vesselCharter1;
 	private Cargo cargo1;
 
 	public class boilOffOverride implements IOptimiserInjectorService {
@@ -143,7 +143,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0))
 
@@ -155,7 +155,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withVesselAssignment(vesselCharter1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 	}
@@ -172,7 +172,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 6, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
 				.withStartHeel(0, 50.0, 22.8, "1") //
@@ -189,14 +189,14 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
@@ -224,14 +224,14 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
@@ -266,14 +266,14 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is a singular constraint checker
@@ -304,7 +304,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(0, 8000.0, 22.5, "5.0") //
@@ -390,7 +390,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(0, 8000.0, 22.5, "5.0") //
@@ -476,7 +476,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				// Start heel large enough to cover BOG (~6100m3) and some (or alternatively use
@@ -547,7 +547,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 			scenarioModelBuilder.getCostModelBuilder().createOrUpdateBaseFuelCost(bf, "100");
 		}
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				// Must end cold, not enough heel to cover BOG. Violate both start and end
@@ -643,7 +643,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				// Must end warm, but more gas than covered by BOG (~6100m3).
@@ -709,7 +709,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				// Must end warm, but more gas than covered by BOG (~6100m3).
@@ -720,7 +720,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -780,7 +780,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				// Must end warm, but more gas than covered by BOG (~6100m3).
@@ -791,7 +791,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 		cargoModelBuilder.makeDryDockEvent("DD", LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -855,7 +855,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
@@ -868,7 +868,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 7000, 22.4, "7.5") //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1007,7 +1007,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setSafetyHeel(500);
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -1027,7 +1027,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1141,7 +1141,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setSafetyHeel(500);
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 4, 4, 0, 0, 0), LocalDateTime.of(2017, 4, 6, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -1161,7 +1161,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1277,7 +1277,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setSafetyHeel(500);
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 4, 4, 0, 0, 0), LocalDateTime.of(2017, 4, 6, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -1297,7 +1297,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1412,7 +1412,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
@@ -1425,7 +1425,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 1000, 22.4, "7.5") //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1560,7 +1560,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 600, 22.8, "5.0") //
@@ -1573,7 +1573,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)).withDurationInDays(10) //
 				.withRequiredHeelOptions(500, 500, EVesselTankState.MUST_BE_COLD, "6") //
 				.withAvailableHeelOptions(1000, 7000, 22.4, "7.5") //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -1723,7 +1723,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 7, 1, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -1743,7 +1743,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		cargoModelBuilder.initCanalBookings();
@@ -1886,7 +1886,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 7, 1, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -1906,7 +1906,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		cargoModelBuilder.initCanalBookings();
@@ -2045,7 +2045,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		// charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_SAKAI));
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -2149,7 +2149,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		final CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		charterOutMarket.getAvailablePorts().add(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN));
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -2266,7 +2266,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setSafetyHeel(500);
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
 				.withStartHeel(500, 5_000, 22.5, "5.0") //
@@ -2286,7 +2286,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
@@ -2300,7 +2300,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 2) //
+				.withVesselAssignment(vesselCharter1, 2) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {

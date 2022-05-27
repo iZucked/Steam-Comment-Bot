@@ -25,7 +25,7 @@ public class SensibleEventDateConstraint extends AbstractModelMultiConstraint {
 	private final EStructuralFeature[] eventDateFields = { CargoPackage.Literals.VESSEL_EVENT__START_AFTER, CargoPackage.Literals.VESSEL_EVENT__START_BY, };
 
 	/**
-	 * Impose sensible date cutoffs for vessel availabilities and events
+	 * Impose sensible date cutoffs for vessel charters and events
 	 */
 	@Override
 	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {

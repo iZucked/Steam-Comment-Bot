@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -49,29 +49,29 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
-	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselCharter vesselCharter,
 			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails,
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 
-		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
+		return delegate.evaluateRoundTrip(resource, vesselCharter, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 	}
 	
-	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselCharter vesselCharter, final int vesselStartTime,
 			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
 			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results){
-		return delegate.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, previousHeelRecord, initialPortTimesRecord, lastPlan, keepDetails, annotatedSolution, results);
+		return delegate.evaluateVoyagePlan(resource, vesselCharter, vesselStartTime, firstLoadPort, previousHeelRecord, initialPortTimesRecord, lastPlan, keepDetails, annotatedSolution, results);
 	}
 
 	@Override
-	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselCharter vesselCharter,
 			ICharterCostCalculator charterCostCalculator, int vesselStartTime, IPort firstLoadPort, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord,
 			boolean lastPlan, boolean returnAll, boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final ImmutableList<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
+		final ImmutableList<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselCharter, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
 				portTimesRecord, lastPlan, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final ImmutableList<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
+		final ImmutableList<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselCharter, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
 				portTimesRecord, lastPlan, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long c = System.currentTimeMillis();
 
@@ -105,12 +105,12 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
-	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, @NonNull IPortTimesRecord portTimesRecord,
+	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull IResource resource, @NonNull IVesselCharter vesselCharter, @NonNull IPortTimesRecord portTimesRecord,
 			boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 		long a = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
+		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselCharter, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
+		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselCharter, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);

@@ -39,7 +39,7 @@ import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
@@ -305,21 +305,21 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					{
 						final IVessel iVessel = modelEntityMap.getOptimiserObjectNullChecked(((TargetCargoesOnVesselConstraint) fleetConstraint).getVessel(), IVessel.class);
 
-						final List<IVesselAvailability> availabilities = scheduleCalculationUtils.getAllVesselAvailabilities().stream() //
+						final List<IVesselCharter> charters = scheduleCalculationUtils.getAllVesselCharters().stream() //
 								.filter(v -> (v.getVessel() == iVessel)) //
 								.collect(Collectors.toList());
 
-						for (final IVesselAvailability availability : availabilities) {
-							longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(availability, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+						for (final IVesselCharter vesselCharter : charters) {
+							longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselCharter, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
 									(long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
 						}
 					}
 					final IVessel iDefaultVessel = modelEntityMap.getOptimiserObjectNullChecked(fleetProfile.getDefaultNominalMarket().getVessel(), IVessel.class);
-					for (final IVesselAvailability vesselAvailability : scheduleCalculationUtils.getAllVesselAvailabilities()) {
-						if (vesselAvailability.getVessel() == iDefaultVessel) {
-							if (vesselAvailability.getSpotIndex() == -1) {
+					for (final IVesselCharter vesselCharter : scheduleCalculationUtils.getAllVesselCharters()) {
+						if (vesselCharter.getVessel() == iDefaultVessel) {
+							if (vesselCharter.getSpotIndex() == -1) {
 								// Not strictly correct yet!
-								// longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselAvailability, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+								// longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselCharter, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
 								// (long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
 							}
 						}

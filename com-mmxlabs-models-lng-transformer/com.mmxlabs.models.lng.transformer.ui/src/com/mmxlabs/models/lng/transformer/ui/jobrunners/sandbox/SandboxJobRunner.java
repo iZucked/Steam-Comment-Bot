@@ -53,7 +53,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -416,9 +416,9 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
 			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
 
-			for (final VesselAvailability va : extraDataProvider.extraVesselAvailabilities) {
+			for (final VesselCharter va : extraDataProvider.extraVesselCharters) {
 				if (va != null && va.eContainer() == null) {
-					sandboxResult.getExtraVesselAvailabilities().add(va);
+					sandboxResult.getExtraVesselCharters().add(va);
 				}
 			}
 			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
@@ -508,11 +508,11 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					});
 			scheduleSpecification.getVesselScheduleSpecifications().stream() //
 					.map(VesselScheduleSpecification::getVesselAllocation) //
-					.filter(VesselAvailability.class::isInstance) //
-					.map(VesselAvailability.class::cast) //
+					.filter(VesselCharter.class::isInstance) //
+					.map(VesselCharter.class::cast) //
 					.forEach(s -> {
 						if (s.eContainer() == null) {
-							solutionSet.getExtraVesselAvailabilities().add(s);
+							solutionSet.getExtraVesselCharters().add(s);
 						}
 					});
 		}

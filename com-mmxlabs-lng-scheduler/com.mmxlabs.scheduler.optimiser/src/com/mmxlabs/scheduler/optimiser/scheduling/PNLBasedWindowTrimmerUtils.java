@@ -39,7 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
@@ -283,7 +283,7 @@ public class PNLBasedWindowTrimmerUtils {
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	public void computeIntervalsForSlot(final IPortSlot toPortSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record,
+	public void computeIntervalsForSlot(final IPortSlot toPortSlot, final IVesselCharter vesselCharter, final int vesselStartTime, final PortTimesRecord _record,
 			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int toSlotIdxInRecordArray, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime,
 			final Set<TimeChoice> times) {
 		// This index in the index in the record slots array
@@ -300,7 +300,7 @@ public class PNLBasedWindowTrimmerUtils {
 		int twEnd = slotFeasibleTimeWindow.getExclusiveEnd() - 1;
 
 		{
-			final IVessel vessel = vesselAvailability.getVessel();
+			final IVessel vessel = vesselCharter.getVessel();
 			int calculationCV;
 			AvailableRouteChoices lastRouteChoices = null;
 			lastRouteChoices = AvailableRouteChoices.OPTIMAL;
@@ -361,7 +361,7 @@ public class PNLBasedWindowTrimmerUtils {
 										lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot), CostType.Ballast);
 
 								// Add charter cost
-								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(lastSlotArrivalTime, lastSlotArrivalTime, t - lastSlotArrivalTime);
+								rr.cost += vesselCharter.getCharterCostCalculator().getCharterCost(lastSlotArrivalTime, lastSlotArrivalTime, t - lastSlotArrivalTime);
 								// Assume NBO + FBO
 								{
 									// estimate speed and rate
@@ -385,7 +385,7 @@ public class PNLBasedWindowTrimmerUtils {
 										lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot), CostType.Ballast);
 
 								// Add charter cost
-								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(copy.getFirstSlotTime(), lastSlotArrivalTime, t - lastSlotArrivalTime);
+								rr.cost += vesselCharter.getCharterCostCalculator().getCharterCost(copy.getFirstSlotTime(), lastSlotArrivalTime, t - lastSlotArrivalTime);
 								// Assume NBO + FBO
 								{
 									// estimate speed and rate
@@ -466,7 +466,7 @@ public class PNLBasedWindowTrimmerUtils {
 		alignTimeChoicesToMidnightLocalTime(times, 24, toPortSlot);
 		if (toPortSlot instanceof IEndPortSlot) {
 
-			final IResource resource = vesselProvider.getResource(vesselAvailability);
+			final IResource resource = vesselProvider.getResource(vesselCharter);
 			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 			if (endRequirement != null) {
 				// Flag this sequence up as a min / max duration case
@@ -519,10 +519,10 @@ public class PNLBasedWindowTrimmerUtils {
 	}
 
 	public ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> computeDefaultIntervals(final List<IPortTimeWindowsRecord> records, final IResource resource, final MinTravelTimeData travelTimeData) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
-		final IVessel vessel = vesselAvailability.getVessel();
-		final boolean roundTripCargo = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final IVessel vessel = vesselCharter.getVessel();
+		final boolean roundTripCargo = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		IPortSlot lastSlot = null;
 		Collection<TimeChoice> lastIntervals = null;

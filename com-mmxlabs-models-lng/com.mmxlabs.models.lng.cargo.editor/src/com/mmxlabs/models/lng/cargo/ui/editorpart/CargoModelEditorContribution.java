@@ -52,7 +52,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.IAlternativeEditorProvider;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorExtension;
@@ -349,7 +349,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		vesselViewerPane = new VesselCharterViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
-		vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+		vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselCharters()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
 		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		eventViewerPane.createControl(sash);
@@ -437,7 +437,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		}
 	}
 
-	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
+	private static final Class<?>[] handledClasses = { Vessel.class, VesselCharter.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
 			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class, PaperDeal.class };
 	private RunnableAction toggleAction;
 	private ComboViewer inventorySelectionViewer;
@@ -516,7 +516,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				target = ((VesselEventVisit) target).getVesselEvent();
 			}
 			if (target instanceof EndEvent) {
-				final VesselAvailability availability = ((EndEvent) target).getSequence().getVesselAvailability();
+				final VesselCharter availability = ((EndEvent) target).getSequence().getVesselCharter();
 				if (availability != null) {
 					target = availability;
 				}
@@ -561,15 +561,15 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			// extract viewable target from a faulty HeelOptions object
 			if (target instanceof StartHeelOptions) {
 				final EObject container = target.eContainer();
-				if (container instanceof VesselAvailability) {
-					target = (VesselAvailability) container;
+				if (container instanceof VesselCharter) {
+					target = (VesselCharter) container;
 				} else if (container instanceof CharterOutEvent) {
 					target = container;
 				}
 			} else if (target instanceof EndHeelOptions) {
 				final EObject container = target.eContainer();
-				if (container instanceof VesselAvailability) {
-					target = (VesselAvailability) container;
+				if (container instanceof VesselCharter) {
+					target = (VesselCharter) container;
 				} else if (container instanceof CharterOutEvent) {
 					target = container;
 				}
@@ -578,9 +578,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			if (target instanceof Vessel) {
 				final Vessel vessel = (Vessel) target;
 				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
-			} else if (target instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) target;
-				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselAvailability), true);
+			} else if (target instanceof VesselCharter) {
+				final VesselCharter vesselCharter = (VesselCharter) target;
+				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselCharter), true);
 			} else if (target instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) target;
 				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);

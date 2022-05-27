@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -317,11 +317,11 @@ public class CargoModelBuilder {
 		return cargo;
 	}
 
-	public void configureCargoVesselAssignment(@NonNull final Cargo cargo, @NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
+	public void configureCargoVesselAssignment(@NonNull final Cargo cargo, @NonNull final VesselCharter vesselCharter, final int sequenceHint) {
 		if (cargo.getCargoType() != CargoType.FLEET) {
-			throw new IllegalArgumentException("VesselAvailability can only be set of Fleet/Shipped Cargoes");
+			throw new IllegalArgumentException("VesselCharter can only be set of Fleet/Shipped Cargoes");
 		}
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 		cargo.setSequenceHint(sequenceHint);
 		cargo.setSpotIndex(0);
 	}
@@ -342,8 +342,8 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
-	public VesselAvailabilityMaker makeVesselAvailability(final @NonNull Vessel vessel, @NonNull final BaseLegalEntity entity) {
-		return new VesselAvailabilityMaker(this, vessel, entity);
+	public VesselCharterMaker makeVesselCharter(final @NonNull Vessel vessel, @NonNull final BaseLegalEntity entity) {
+		return new VesselCharterMaker(this, vessel, entity);
 	}
 
 	@NonNull

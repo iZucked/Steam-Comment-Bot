@@ -26,8 +26,8 @@ import com.mmxlabs.lingo.its.util.ScheduleSequenceTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.VesselAvailabilityMaker;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.cargo.util.VesselCharterMaker;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -80,16 +80,16 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	}
 
 	@SuppressWarnings("null")
-	private @NonNull VesselAvailabilityMaker populateDefaultVesselAvailablityDetails(final Vessel vessel) {
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+	private @NonNull VesselCharterMaker populateDefaultVesselAvailablityDetails(final Vessel vessel) {
+		return cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0), LocalDateTime.of(2017, 8, 1, 0, 0)) //
 				.withCharterRate("70000");
 	}
 
-	private MaintenanceEvent makeDefaultMaintenanceEvent(final @NonNull Port maintenancePort, final @NonNull VesselAvailability vesselAvailability) {
+	private MaintenanceEvent makeDefaultMaintenanceEvent(final @NonNull Port maintenancePort, final @NonNull VesselCharter vesselCharter) {
 		return cargoModelBuilder.makeMaintenanceEvent("Maintenance-145", LocalDateTime.of(2017, 3, 4, 3, 0), LocalDateTime.of(2017, 3, 14, 0, 0), maintenancePort) //
-				.withDurationInDays(5).withVesselAssignment(vesselAvailability, 0) //
+				.withDurationInDays(5).withVesselAssignment(vesselCharter, 0) //
 				.build();
 	}
 
@@ -196,11 +196,11 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(15_000, 150_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -247,12 +247,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(0, 0, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -299,12 +299,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -360,12 +360,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -415,12 +415,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -478,12 +478,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -541,12 +541,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
 			final int minAllowedEndHeel = 500;
 			final int maxAllowedEndHeel = 1_000;
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(50_000, 150_000, 22.67, "0.01") //
 					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -600,12 +600,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
 			final int minAllowedEndHeel = 500;
 			final int maxAllowedEndHeel = 1_000;
-			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+			final VesselCharter vesselCharter = populateDefaultVesselAvailablityDetails(vessel) //
 					.withStartHeel(20_000, 45_000, 22.67, "0.01") //
 					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -659,7 +659,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
 					.withCharterRate("70000") //
@@ -669,7 +669,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withEndPort(endPort) //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -734,7 +734,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
 					.withCharterRate("70000") //
@@ -744,7 +744,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withEndPort(endPort) //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -824,7 +824,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 2, 01, 0, 0), LocalDateTime.of(2017, 2, 01, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
 					.withCharterRate("70000") //
@@ -834,7 +834,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withEndPort(endPort) //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -915,7 +915,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_DAHEJ);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 4, 3, 0, 0), LocalDateTime.of(2017, 4, 3, 0, 0)) //
 					.withCharterRate("70000") //
@@ -925,7 +925,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withEndPort(endPort) //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			evaluateTest();
 
@@ -1039,7 +1039,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0), LocalDateTime.of(2017, 8, 1, 0, 0)) //
 					.withCharterRate("70000") //
@@ -1047,7 +1047,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
 
-			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselCharter);
 
 			final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
 			final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
@@ -1062,7 +1062,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withVolumeLimits(100_000, 150_000, VolumeUnits.M3) //
 					.withWindowSize(1, TimePeriod.MONTHS) //
 					.build() //
-					.withVesselAssignment(vesselAvailability, 1) //
+					.withVesselAssignment(vesselCharter, 1) //
 					.build();
 
 			evaluateTest();
@@ -1127,7 +1127,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+			final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 					.withStartWindow(LocalDateTime.of(2017, 3, 2, 0, 0)) //
 					.withEndWindow(LocalDateTime.of(2017, 3, 29, 0, 0)) //
 					.withStartHeel(0, 150_000, 22.67, "0.01") //
@@ -1136,7 +1136,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final LocalDateTime maintenanceDateTime = LocalDateTime.of(2017, 3, 4, 3, 0);
 			final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("Maintenance", maintenanceDateTime, maintenanceDateTime, maintenancePort) //
 					.withDurationInDays(5) //
-					.withVesselAssignment(vesselAvailability, 0) //
+					.withVesselAssignment(vesselCharter, 0) //
 					.build();
 
 			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();

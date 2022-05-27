@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -52,7 +52,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
+			@NonNull IVesselCharter vesselCharter, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
 			@Nullable IDetailTree annotations);
 
 	/**
@@ -101,7 +101,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final long @NonNull [] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
 	default long @NonNull [] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, int @NonNull [] slotPricesPerMMBTu,
-			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
+			@NonNull IVesselCharter vesselCharter, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences volumeAllocatedSequences,
 			@Nullable IDetailTree annotations) {
 		return EMPTY_ADDITIONAL_PNL_RESULT;
 	}

@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -119,8 +119,8 @@ public class CargoEditingHelper {
 			unassignCargoAssignment(description, cargo);
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			assignCargoToSpotCharterIn(description, cargo, (CharterInMarket) vesselAssignmentType, spotIndex);
-		} else if (vesselAssignmentType instanceof VesselAvailability) {
-			assignCargoToVesselAvailability(description, cargo, (VesselAvailability) vesselAssignmentType);
+		} else if (vesselAssignmentType instanceof VesselCharter) {
+			assignCargoToVesselCharter(description, cargo, (VesselCharter) vesselAssignmentType);
 		} else {
 			assert false;
 		}
@@ -131,7 +131,7 @@ public class CargoEditingHelper {
 		}
 	}
 
-	public void assignCargoToVesselAvailability(@NonNull final String description, @NonNull final Cargo cargo, @NonNull final VesselAvailability vesselAvailability) {
+	public void assignCargoToVesselCharter(@NonNull final String description, @NonNull final Cargo cargo, @NonNull final VesselCharter vesselCharter) {
 
 		// Validate shipped cargo
 		for (final Slot<?> slot : cargo.getSlots()) {
@@ -145,7 +145,7 @@ public class CargoEditingHelper {
 		}
 
 		final CompoundCommand cc = new CompoundCommand(description);
-		cc.append(SetCommand.create(editingDomain, cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability));
+		cc.append(SetCommand.create(editingDomain, cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselCharter));
 		cc.append(SetCommand.create(editingDomain, cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, -1));
 
 		assert cc.canExecute();
@@ -153,7 +153,7 @@ public class CargoEditingHelper {
 		editingDomain.getCommandStack().execute(cc);
 
 		if (VERIFY_CHANGES) {
-			assert cargo.getVesselAssignmentType() == vesselAvailability;
+			assert cargo.getVesselAssignmentType() == vesselCharter;
 			assert cargo.getSpotIndex() == -1;
 		}
 
@@ -188,17 +188,17 @@ public class CargoEditingHelper {
 		verifyModel();
 	}
 
-	public void assignVesselEventToVesselAvailability(@NonNull final String description, @NonNull final VesselEvent vesselEvent, @NonNull final VesselAvailability vesselAvailability) {
+	public void assignVesselEventToVesselCharter(@NonNull final String description, @NonNull final VesselEvent vesselEvent, @NonNull final VesselCharter vesselCharter) {
 
 		final CompoundCommand cc = new CompoundCommand(description);
-		cc.append(SetCommand.create(editingDomain, vesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability));
+		cc.append(SetCommand.create(editingDomain, vesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselCharter));
 		cc.append(SetCommand.create(editingDomain, vesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, -1));
 
 		assert cc.canExecute();
 
 		editingDomain.getCommandStack().execute(cc);
 		if (VERIFY_CHANGES) {
-			assert vesselEvent.getVesselAssignmentType() == vesselAvailability;
+			assert vesselEvent.getVesselAssignmentType() == vesselCharter;
 			assert vesselEvent.getSpotIndex() == -1;
 		}
 		verifyModel();

@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -262,7 +262,7 @@ public class CargoTravelTimeUtils {
 			final CharterInMarketOverride cim = (CharterInMarketOverride) vesselAssignmentType;
 			vessel = cim.getCharterInMarket().getVessel();
 		} else {
-			final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
+			final VesselCharter va = (VesselCharter) vesselAssignmentType;
 			vessel = va.getVessel();
 		}
 		if (vessel == null) {

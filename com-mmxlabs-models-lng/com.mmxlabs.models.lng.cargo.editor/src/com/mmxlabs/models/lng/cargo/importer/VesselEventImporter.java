@@ -18,7 +18,7 @@ import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -109,8 +109,8 @@ public class VesselEventImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), null);
+									final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
+											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), null);
 									assignableElement.setVesselAssignmentType(availability);
 								}
 							}
@@ -131,9 +131,9 @@ public class VesselEventImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), null);
-									assignableElement.setVesselAssignmentType(availability);
+									final VesselCharter charter = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
+											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), null);
+									assignableElement.setVesselAssignmentType(charter);
 								}
 							}
 						}

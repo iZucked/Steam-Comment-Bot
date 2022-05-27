@@ -27,7 +27,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
@@ -47,7 +47,7 @@ public abstract class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 	// Need largish epsilon as summed LNG fuel use has rounding applied to each component.
 	final int ROUNDING_EPSILON = 5;
 	Vessel vessel;
-	VesselAvailability vesselAvailability1;
+	VesselCharter vesselCharter1;
 	Cargo cargo1;
 	Port portA;
 	Port portB;
@@ -106,7 +106,7 @@ public abstract class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 		// Create the required basic elements
 		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
 

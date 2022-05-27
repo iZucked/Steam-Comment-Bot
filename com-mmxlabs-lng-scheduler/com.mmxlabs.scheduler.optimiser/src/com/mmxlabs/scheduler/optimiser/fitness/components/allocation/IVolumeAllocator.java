@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICustomVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -37,7 +37,7 @@ public interface IVolumeAllocator {
 	 * @return
 	 */
 	@Nullable
-	IAllocationAnnotation allocate(IVesselAvailability vesselAvailability, VoyagePlan plan, IPortTimesRecord portTimesRecord, final @Nullable IAnnotatedSolution annotatedSolution);
+	IAllocationAnnotation allocate(IVesselCharter vesselCharter, VoyagePlan plan, IPortTimesRecord portTimesRecord, final @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Creates and returns the initial {@link AllocationRecord} instance based on input data. This can be modified before passing to {@link #allocate(AllocationRecord)}. This method should be called
@@ -50,7 +50,7 @@ public interface IVolumeAllocator {
 	 * @return
 	 */
 	@Nullable
-	AllocationRecord createAllocationRecord(IVesselAvailability vesselAvailability, VoyagePlan plan, IPortTimesRecord portTimesRecord);
+	AllocationRecord createAllocationRecord(IVesselCharter vesselCharter, VoyagePlan plan, IPortTimesRecord portTimesRecord);
 
 	/**
 	 * Given the {@link AllocationRecord}, perform the volume allocation to create an {@link IAllocationAnnotation}. This method should be called in cases where the {@link ICustomVolumeAllocator} is

@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -211,7 +211,7 @@ public class ADPSlotPeriodConstraintTests extends AbstractADPAndLightWeightTests
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselRogers, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vesselRogers, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2020, 1, 1, 0, 0)) //

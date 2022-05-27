@@ -54,11 +54,11 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withVesselAssignment(vesselCharter1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartHeel((double) expectedStartHeelInM3, (double) expectedStartHeelInM3, 22.8, "9")//
 				.withEndHeel(expectedEndHeelInM3, expectedEndHeelInM3, expectedEndHeelInM3 > 0 ? EVesselTankState.MUST_BE_COLD : EVesselTankState.MUST_BE_WARM, null)//
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //

@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -54,7 +54,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 				|| deletedObject instanceof Slot //
 				|| deletedObject instanceof SpotMarket //
 				|| deletedObject instanceof Port //
-				|| deletedObject instanceof VesselAvailability //
+				|| deletedObject instanceof VesselCharter //
 				|| deletedObject instanceof CanalBookingSlot) {
 			setContext(Boolean.FALSE);
 			return true;

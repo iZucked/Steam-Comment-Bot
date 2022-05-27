@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -117,7 +117,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	public void init(final IPhaseOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				setEndLocationRule(resource, EndLocationRule.NONE);
 			} else if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
@@ -168,8 +168,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	private @NonNull IVessel getVessel(final @NonNull IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		return vesselAvailability.getVessel();
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		return vesselCharter.getVessel();
 	}
 
 	@Override
@@ -277,7 +277,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, vesselProvider.getVesselAvailability(resource).getVessel());
+			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, vesselProvider.getVesselCharter(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
 			for (final DistanceMatrixEntry distanceOption : distanceValues) {
 				final int routeDistance = distanceOption.getDistance();

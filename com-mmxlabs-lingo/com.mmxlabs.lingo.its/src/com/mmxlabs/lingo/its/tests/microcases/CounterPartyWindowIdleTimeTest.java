@@ -16,7 +16,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -94,7 +94,7 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability charter1 = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
+		final VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel, entity).build();
 
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2020, 7, 14), portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, entity, "5") //

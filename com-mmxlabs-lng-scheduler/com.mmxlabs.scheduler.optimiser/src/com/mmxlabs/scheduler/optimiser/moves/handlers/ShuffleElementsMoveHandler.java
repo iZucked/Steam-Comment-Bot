@@ -37,7 +37,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.moves.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
@@ -178,10 +178,10 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 					// FOB sale to the purchase and remove the original
 					// discharge
 					// TODO: Add similar case for FOB Sale
-					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(follower);
-					if (vesselAvailabilityForElement != null) {
+					final IVesselCharter vesselCharterForElement = virtualVesselSlotProvider.getVesselCharterForElement(follower);
+					if (vesselCharterForElement != null) {
 						// Should be an unused FOB Sale route
-						final IResource precederResource = vesselProvider.getResource(vesselAvailabilityForElement);
+						final IResource precederResource = vesselProvider.getResource(vesselCharterForElement);
 						assert precederResource != null;
 						if (!checkResource(element, precederResource)) {
 							continue;
@@ -279,10 +279,10 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 					// If this is an unused DES Purchase, we can try to link the
 					// DES purchase to the sale and remove the original load
-					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(preceder);
-					if (vesselAvailabilityForElement != null) {
+					final IVesselCharter vesselCharterForElement = virtualVesselSlotProvider.getVesselCharterForElement(preceder);
+					if (vesselCharterForElement != null) {
 						// Should be an unused DES route
-						final IResource precederResource = vesselProvider.getResource(vesselAvailabilityForElement);
+						final IResource precederResource = vesselProvider.getResource(vesselCharterForElement);
 						assert precederResource != null;
 						if (!checkResource(element, precederResource)) {
 							continue;
@@ -564,8 +564,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	private boolean checkResource(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
 
 		// Disable re-wiring on round trips.
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && !moveHelper.allowRoundTripChanges()) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && !moveHelper.allowRoundTripChanges()) {
 			return false;
 		}
 

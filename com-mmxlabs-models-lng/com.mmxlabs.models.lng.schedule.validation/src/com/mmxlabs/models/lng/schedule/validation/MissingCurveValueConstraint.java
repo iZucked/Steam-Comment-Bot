@@ -16,7 +16,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
@@ -45,13 +45,13 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 
 			final YearMonth startDate = YearMonth.from(startEvent.getStart());
 
-			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+			final VesselCharter vesselCharter = sequence.getVesselCharter();
 
-			if (vesselAvailability != null) {
-				final String charterInRate = vesselAvailability.getTimeCharterRate();
+			if (vesselCharter != null) {
+				final String charterInRate = vesselCharter.getTimeCharterRate();
 				if (charterInRate != null && !charterInRate.trim().isEmpty()) {
 
-					final Vessel vessel = vesselAvailability.getVessel();
+					final Vessel vessel = vesselCharter.getVessel();
 
 					final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
 
@@ -63,7 +63,7 @@ public class MissingCurveValueConstraint extends AbstractModelMultiConstraint {
 									(IConstraintStatus) ctx.createFailureStatus(String.format("Charter |'%s': There is no charter cost pricing data before %s %04d for curve %s", vesselName,
 											date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
 
-							dcsd.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE);
+							dcsd.addEObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__TIME_CHARTER_RATE);
 							dcsd.setTag(ValidationConstants.TAG_EVALUATED_SCHEDULE);
 
 							statuses.add(dcsd);

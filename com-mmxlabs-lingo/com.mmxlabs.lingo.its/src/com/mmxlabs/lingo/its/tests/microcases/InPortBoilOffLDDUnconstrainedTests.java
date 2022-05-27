@@ -86,7 +86,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 				.makeDESSale("D2", LocalDate.of(2015, 12, 20), portC, null, entity, "9") //
 				.withVolumeLimits(portDischargeRanges[2], portDischargeRanges[3], VolumeUnits.M3) //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withVesselAssignment(vesselCharter1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 

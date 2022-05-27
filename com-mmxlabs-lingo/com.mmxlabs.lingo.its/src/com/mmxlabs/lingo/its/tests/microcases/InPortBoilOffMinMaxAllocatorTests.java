@@ -55,7 +55,7 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, priceExpression) //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withVesselAssignment(vesselCharter1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
 

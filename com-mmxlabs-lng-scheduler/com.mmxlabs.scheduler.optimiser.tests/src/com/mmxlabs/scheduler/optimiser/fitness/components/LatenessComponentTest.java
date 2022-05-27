@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
@@ -146,9 +146,9 @@ public class LatenessComponentTest {
 		injector.injectMembers(c);
 
 		final IResource resource = Mockito.mock(IResource.class);
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
 		final IEndRequirement endRequirement = Mockito.mock(IEndRequirement.class, "End");
@@ -197,7 +197,7 @@ public class LatenessComponentTest {
 		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime, new LinkedList<>(Arrays.asList(voyagePlanRecord)));
 
 		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences();
-		profitAndLossSequences.add(vesselAvailability, scheduledSequence);
+		profitAndLossSequences.add(vesselCharter, scheduledSequence);
 
 		checker.calculateLateness(resource, voyagePlanRecord, null);
 		checker.calculateLateness(scheduledSequence, null);

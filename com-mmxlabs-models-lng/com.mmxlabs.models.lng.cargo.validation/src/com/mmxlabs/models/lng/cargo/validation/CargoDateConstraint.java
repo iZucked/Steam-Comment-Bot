@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -125,7 +125,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				final Set<Vessel> usedVessels = new HashSet<>();
 
-				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+				for (final VesselCharter va : cargoModel.getVesselCharters()) {
 					final Vessel vessel = va.getVessel();
 					if (vessel != null) {
 						usedVessels.add(vessel);

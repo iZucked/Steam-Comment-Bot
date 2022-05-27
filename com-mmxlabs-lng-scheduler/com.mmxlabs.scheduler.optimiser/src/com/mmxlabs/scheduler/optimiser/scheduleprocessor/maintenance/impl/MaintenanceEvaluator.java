@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
@@ -59,20 +59,20 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(long[] startHeelVolumeRangeInM3, IVesselAvailability vesselAvailability, VoyagePlan vp,
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(long[] startHeelVolumeRangeInM3, IVesselCharter vesselCharter, VoyagePlan vp,
 			@NonNull IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		// Only apply to "real" vessels. Exclude nominal/round-trip vessels.
-		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
 		// First step, find a maintenance event
 		final IDetailsSequenceElement[] currentSequence = vp.getSequence();
 
-		final List<Pair<VoyagePlan, IPortTimesRecord>> newVoyagePlans = generateNewVoyagePlansWithMaintenance(vesselAvailability, vp, portTimesRecord, startHeelVolumeRangeInM3, currentSequence,
+		final List<Pair<VoyagePlan, IPortTimesRecord>> newVoyagePlans = generateNewVoyagePlansWithMaintenance(vesselCharter, vp, portTimesRecord, startHeelVolumeRangeInM3, currentSequence,
 				annotatedSolution);
 		if (newVoyagePlans == null) {
 			return null;
@@ -84,11 +84,11 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		return newVoyagePlans;
 	}
 
-	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlansWithMaintenance(final IVesselAvailability vesselAvailability, final VoyagePlan originalPlan,
+	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlansWithMaintenance(final IVesselCharter vesselCharter, final VoyagePlan originalPlan,
 			@NonNull final IPortTimesRecord originalPortTimesRecord, final long[] originalStartHeelVolumeRangeInM3, final IDetailsSequenceElement[] currentSequence,
 			@Nullable IAnnotatedSolution annotatedSolution) {
 
-		final IVessel vessel = vesselAvailability.getVessel();
+		final IVessel vessel = vesselCharter.getVessel();
 		final int[] baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, originalPortTimesRecord);
 
 		final LinkedList<Integer> maintenanceIndices = new LinkedList<>();
@@ -145,7 +145,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
 			final VoyagePlan currentPlan = new VoyagePlan();
 
-			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					firstPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
 			currentPlan.setIgnoreEnd(true);
 
@@ -154,7 +154,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
 			currentPlan.setRemainingHeelInM3(beforeMaintenanceHeels[0]);
 
-			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselAvailability, currentPlan, firstPortTimesRecord, annotatedSolution);
+			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselCharter, currentPlan, firstPortTimesRecord, annotatedSolution);
 			if (allocation != null) {
 				maintenancePlans.add(Pair.of(currentPlan, allocation));
 				assert allocation.getRemainingHeelVolumeInM3() == beforeMaintenanceHeels[0];
@@ -184,7 +184,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final VoyagePlan currentPlan = new VoyagePlan();
 			currentPlan.setIgnoreEnd(true);
 
-			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					currentPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
 			assert violationMetrics != null;
 
@@ -220,7 +220,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final VoyagePlan currentPlan = new VoyagePlan();
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
-			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					finalPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
 			assert violationMetrics != null;
 

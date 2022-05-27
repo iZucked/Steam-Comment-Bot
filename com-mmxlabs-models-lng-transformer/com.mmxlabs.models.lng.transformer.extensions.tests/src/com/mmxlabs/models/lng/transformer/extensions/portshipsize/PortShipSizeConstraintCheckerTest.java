@@ -30,7 +30,7 @@ import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -48,15 +48,15 @@ public class PortShipSizeConstraintCheckerTest {
 		//Check compatible cases.
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class);
 
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		Mockito.when(vesselCharter1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 	
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
-		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
+		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 		
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);
@@ -80,15 +80,15 @@ public class PortShipSizeConstraintCheckerTest {
 		//Check compatible cases.
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class);
 
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		Mockito.when(vesselCharter1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
-		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
+		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 		
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(false);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(false);
@@ -107,16 +107,16 @@ public class PortShipSizeConstraintCheckerTest {
 		//Check compatible cases.
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class);
 
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		Mockito.when(vesselCharter1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element3 = Mockito.mock(ISequenceElement.class);
 		
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
-		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
+		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 		
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);
@@ -139,16 +139,16 @@ public class PortShipSizeConstraintCheckerTest {
 		//Check compatible cases.
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class);
 
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		Mockito.when(vesselCharter1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element3 = Mockito.mock(ISequenceElement.class);
 		
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
-		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
+		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 		
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element1)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);

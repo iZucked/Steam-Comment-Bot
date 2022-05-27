@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -48,7 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoes <em>Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoGroups <em>Cargo Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselCharters <em>Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getInventoryModels <em>Inventory Models</em>}</li>
@@ -105,14 +105,14 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	protected EList<CargoGroup> cargoGroups;
 
 	/**
-	 * The cached value of the '{@link #getVesselAvailabilities() <em>Vessel Availabilities</em>}' containment reference list.
+	 * The cached value of the '{@link #getVesselCharters() <em>Vessel Charters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVesselAvailabilities()
+	 * @see #getVesselCharters()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VesselAvailability> vesselAvailabilities;
+	protected EList<VesselCharter> vesselCharters;
 
 	/**
 	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
@@ -311,11 +311,11 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @generated
 	 */
 	@Override
-	public EList<VesselAvailability> getVesselAvailabilities() {
-		if (vesselAvailabilities == null) {
-			vesselAvailabilities = new EObjectContainmentEList.Resolving<VesselAvailability>(VesselAvailability.class, this, CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES);
+	public EList<VesselCharter> getVesselCharters() {
+		if (vesselCharters == null) {
+			vesselCharters = new EObjectContainmentEList.Resolving<VesselCharter>(VesselCharter.class, this, CargoPackage.CARGO_MODEL__VESSEL_CHARTERS);
 		}
-		return vesselAvailabilities;
+		return vesselCharters;
 	}
 
 	/**
@@ -563,8 +563,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getCargoes()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return ((InternalEList<?>)getCargoGroups()).basicRemove(otherEnd, msgs);
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
-				return ((InternalEList<?>)getVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
+				return ((InternalEList<?>)getVesselCharters()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
@@ -601,8 +601,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getCargoes();
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return getCargoGroups();
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
-				return getVesselAvailabilities();
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
+				return getVesselCharters();
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 				return getVesselEvents();
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
@@ -653,9 +653,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getCargoGroups().clear();
 				getCargoGroups().addAll((Collection<? extends CargoGroup>)newValue);
 				return;
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
-				getVesselAvailabilities().clear();
-				getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
+				getVesselCharters().clear();
+				getVesselCharters().addAll((Collection<? extends VesselCharter>)newValue);
 				return;
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 				getVesselEvents().clear();
@@ -720,8 +720,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				getCargoGroups().clear();
 				return;
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
-				getVesselAvailabilities().clear();
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
+				getVesselCharters().clear();
 				return;
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 				getVesselEvents().clear();
@@ -773,8 +773,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return cargoes != null && !cargoes.isEmpty();
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return cargoGroups != null && !cargoGroups.isEmpty();
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
-				return vesselAvailabilities != null && !vesselAvailabilities.isEmpty();
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
+				return vesselCharters != null && !vesselCharters.isEmpty();
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 				return vesselEvents != null && !vesselEvents.isEmpty();
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:

@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
@@ -33,7 +33,7 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  * 
  */
 public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposite implements IDisplayComposite {
-	private VesselAvailability oldVesselAvailability = null;
+	private VesselCharter oldVesselCharter = null;
 	private Composite owner = this;
 
 	protected Composite startHeelComposite;
@@ -84,11 +84,11 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	@Override
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc) {
 		this.dialogContext = dialogContext;
-		oldVesselAvailability = (VesselAvailability) value;
-		final GenericCharterContract gcc = oldVesselAvailability.getContainedCharterContract();
+		oldVesselCharter = (VesselCharter) value;
+		final GenericCharterContract gcc = oldVesselCharter.getContainedCharterContract();
 		
-		if (oldVesselAvailability != null) {
-			createDefaultChildCompositeSection(dialogContext, root, oldVesselAvailability, range, dbc, oldVesselAvailability.eClass(), startHeelComposite);
+		if (oldVesselCharter != null) {
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), startHeelComposite);
 		}
 		
 		doDisplay(gcc);
@@ -102,8 +102,8 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	}
 
 	protected void removeAdapter() {
-		if (oldVesselAvailability != null) {
-			oldVesselAvailability = null;
+		if (oldVesselCharter != null) {
+			oldVesselCharter = null;
 		}
 	}
 
@@ -116,8 +116,8 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract()
-				&& ref != CargoPackage.eINSTANCE.getVesselAvailability_EndHeel();
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_EndHeel();
 	}
 
 }

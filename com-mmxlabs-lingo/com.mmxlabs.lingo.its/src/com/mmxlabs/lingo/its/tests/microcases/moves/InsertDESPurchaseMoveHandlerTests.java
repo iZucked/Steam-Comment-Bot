@@ -36,7 +36,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
@@ -109,9 +109,9 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = virtualVesselSlotProvider.getVesselAvailabilityForElement(load_element);
+			final IVesselCharter o_vesselCharter1 = virtualVesselSlotProvider.getVesselCharterForElement(load_element);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());

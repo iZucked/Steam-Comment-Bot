@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -35,7 +35,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getEvents <em>Events</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselAvailability <em>Vessel Availability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselCharter <em>Vessel Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getCharterInMarket <em>Charter In Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSpotIndex <em>Spot Index</em>}</li>
@@ -57,23 +57,23 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	protected EList<Event> events;
 
 	/**
-	 * The cached value of the '{@link #getVesselAvailability() <em>Vessel Availability</em>}' reference.
+	 * The cached value of the '{@link #getVesselCharter() <em>Vessel Charter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVesselAvailability()
+	 * @see #getVesselCharter()
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailability vesselAvailability;
+	protected VesselCharter vesselCharter;
 
 	/**
-	 * This is true if the Vessel Availability reference has been set.
+	 * This is true if the Vessel Charter reference has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean vesselAvailabilityESet;
+	protected boolean vesselCharterESet;
 
 	/**
 	 * The cached value of the '{@link #getCharterInMarket() <em>Charter In Market</em>}' reference.
@@ -210,16 +210,16 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 */
 	@Override
-	public VesselAvailability getVesselAvailability() {
-		if (vesselAvailability != null && vesselAvailability.eIsProxy()) {
-			InternalEObject oldVesselAvailability = (InternalEObject)vesselAvailability;
-			vesselAvailability = (VesselAvailability)eResolveProxy(oldVesselAvailability);
-			if (vesselAvailability != oldVesselAvailability) {
+	public VesselCharter getVesselCharter() {
+		if (vesselCharter != null && vesselCharter.eIsProxy()) {
+			InternalEObject oldVesselCharter = (InternalEObject)vesselCharter;
+			vesselCharter = (VesselCharter)eResolveProxy(oldVesselCharter);
+			if (vesselCharter != oldVesselCharter) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY, oldVesselAvailability, vesselAvailability));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SEQUENCE__VESSEL_CHARTER, oldVesselCharter, vesselCharter));
 			}
 		}
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
 	/**
@@ -227,8 +227,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability basicGetVesselAvailability() {
-		return vesselAvailability;
+	public VesselCharter basicGetVesselCharter() {
+		return vesselCharter;
 	}
 
 	/**
@@ -237,13 +237,13 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 */
 	@Override
-	public void setVesselAvailability(VesselAvailability newVesselAvailability) {
-		VesselAvailability oldVesselAvailability = vesselAvailability;
-		vesselAvailability = newVesselAvailability;
-		boolean oldVesselAvailabilityESet = vesselAvailabilityESet;
-		vesselAvailabilityESet = true;
+	public void setVesselCharter(VesselCharter newVesselCharter) {
+		VesselCharter oldVesselCharter = vesselCharter;
+		vesselCharter = newVesselCharter;
+		boolean oldVesselCharterESet = vesselCharterESet;
+		vesselCharterESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY, oldVesselAvailability, vesselAvailability, !oldVesselAvailabilityESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__VESSEL_CHARTER, oldVesselCharter, vesselCharter, !oldVesselCharterESet));
 	}
 
 	/**
@@ -252,13 +252,13 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 */
 	@Override
-	public void unsetVesselAvailability() {
-		VesselAvailability oldVesselAvailability = vesselAvailability;
-		boolean oldVesselAvailabilityESet = vesselAvailabilityESet;
-		vesselAvailability = null;
-		vesselAvailabilityESet = false;
+	public void unsetVesselCharter() {
+		VesselCharter oldVesselCharter = vesselCharter;
+		boolean oldVesselCharterESet = vesselCharterESet;
+		vesselCharter = null;
+		vesselCharterESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY, oldVesselAvailability, null, oldVesselAvailabilityESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.SEQUENCE__VESSEL_CHARTER, oldVesselCharter, null, oldVesselCharterESet));
 	}
 
 	/**
@@ -267,8 +267,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 */
 	@Override
-	public boolean isSetVesselAvailability() {
-		return vesselAvailabilityESet;
+	public boolean isSetVesselCharter() {
+		return vesselCharterESet;
 	}
 
 	/**
@@ -504,8 +504,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			return "FOB Sale";
 		} else if (getSequenceType() == SequenceType.ROUND_TRIP) {
 			return "Nominal Cargoes";
-		} else if (isSetVesselAvailability() && getVesselAvailability() != null) {
-			return getVesselAvailability().getVessel().getName();
+		} else if (isSetVesselCharter() && getVesselCharter() != null) {
+			return getVesselCharter().getVessel().getName();
 		} else if (isSetCharterInMarket()) {
 			return getCharterInMarket().getName();
 		}
@@ -528,7 +528,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated NOT
 	 */
 	public boolean isFleetVessel() {
-		return isSetVesselAvailability() && !getVesselAvailability().isSetTimeCharterRate();
+		return isSetVesselCharter() && !getVesselCharter().isSetTimeCharterRate();
 	}
 
 	/**
@@ -537,7 +537,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated NOT
 	 */
 	public boolean isTimeCharterVessel() {
-		return isSetVesselAvailability() && getVesselAvailability().isSetTimeCharterRate();
+		return isSetVesselCharter() && getVesselCharter().isSetTimeCharterRate();
 	}
 
 	/**
@@ -581,9 +581,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
 				return getEvents();
-			case SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY:
-				if (resolve) return getVesselAvailability();
-				return basicGetVesselAvailability();
+			case SchedulePackage.SEQUENCE__VESSEL_CHARTER:
+				if (resolve) return getVesselCharter();
+				return basicGetVesselCharter();
 			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET:
 				if (resolve) return getCharterInMarket();
 				return basicGetCharterInMarket();
@@ -613,8 +613,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				getEvents().clear();
 				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
-			case SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY:
-				setVesselAvailability((VesselAvailability)newValue);
+			case SchedulePackage.SEQUENCE__VESSEL_CHARTER:
+				setVesselCharter((VesselCharter)newValue);
 				return;
 			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET:
 				setCharterInMarket((CharterInMarket)newValue);
@@ -647,8 +647,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__EVENTS:
 				getEvents().clear();
 				return;
-			case SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY:
-				unsetVesselAvailability();
+			case SchedulePackage.SEQUENCE__VESSEL_CHARTER:
+				unsetVesselCharter();
 				return;
 			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET:
 				unsetCharterInMarket();
@@ -679,8 +679,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 		switch (featureID) {
 			case SchedulePackage.SEQUENCE__EVENTS:
 				return events != null && !events.isEmpty();
-			case SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY:
-				return isSetVesselAvailability();
+			case SchedulePackage.SEQUENCE__VESSEL_CHARTER:
+				return isSetVesselCharter();
 			case SchedulePackage.SEQUENCE__CHARTER_IN_MARKET:
 				return isSetCharterInMarket();
 			case SchedulePackage.SEQUENCE__FITNESSES:

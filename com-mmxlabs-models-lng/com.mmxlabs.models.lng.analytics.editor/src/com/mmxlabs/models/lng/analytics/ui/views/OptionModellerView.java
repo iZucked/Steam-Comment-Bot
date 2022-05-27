@@ -89,7 +89,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SellOptionsC
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.ShippingOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.VesselEventOptionsComponent;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -545,7 +545,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return new Pair<>(true, EnumSet.of(SectionType.EVENTS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
-			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselAvailability) {
+			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselCharter) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));

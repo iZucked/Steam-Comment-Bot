@@ -25,7 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
@@ -94,7 +94,7 @@ public class CharterContractValidationUtils {
 		LocalDate scheduleStartDate = LocalDate.MAX;
 
 		// Check the fleet start dates.
-		for (VesselAvailability va : scenario.getCargoModel().getVesselAvailabilities()) {
+		for (VesselCharter va : scenario.getCargoModel().getVesselCharters()) {
 			if (va.getStartBy() != null && va.getStartBy().toLocalDate().isBefore(scheduleStartDate)) {
 				scheduleStartDate = va.getStartBy().toLocalDate();
 			}
@@ -334,7 +334,7 @@ public class CharterContractValidationUtils {
 	}
 	
 	public static void ballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
-			final List<IStatus> failures, final VesselAvailability va, final SimpleBallastBonusContainer ballastBonusContainer) {
+			final List<IStatus> failures, final VesselCharter va, final SimpleBallastBonusContainer ballastBonusContainer) {
 		final Set<APortSet<Port>> coveredPorts = new HashSet<>();
 		final List<APortSet<Port>> endAtPorts = new LinkedList<>();
 		boolean anywhere = false;
@@ -362,7 +362,7 @@ public class CharterContractValidationUtils {
 					} else {
 						f.withMessage(String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)));
 					}
-					f.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+					f.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__VESSEL);
 					failures.add(f.make(ctx));
 					return;
 				}

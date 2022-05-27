@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public interface ILightWeightOptimisationData {
 
@@ -37,7 +37,7 @@ public interface ILightWeightOptimisationData {
 
 	List<List<IPortSlot>> getNonShippedCargoes();
 
-	List<IVesselAvailability> getVessels();
+	List<IVesselCharter> getVessels();
 
 	Map<ILoadOption, IDischargeOption> getPairingsMap();
 

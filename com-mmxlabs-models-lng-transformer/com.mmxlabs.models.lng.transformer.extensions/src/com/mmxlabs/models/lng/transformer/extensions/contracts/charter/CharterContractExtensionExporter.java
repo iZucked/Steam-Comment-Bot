@@ -87,7 +87,7 @@ public class CharterContractExtensionExporter implements IExporterExtension {
 		final CharterContractAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, CharterContractConstants.BALLAST_BONUS_KEY, CharterContractAnnotation.class);
 		if (annotation != null) {
 			final ProfitAndLossContainer profitAndLossContainer;
-			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			if (vesselProvider.getVesselCharter(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final Slot<?> modelSlot = modelEntityMap.getModelObject(slotProvider.getPortSlot(endElement), Slot.class);
 
 				CargoAllocation cargoAllocation = null;
@@ -153,7 +153,7 @@ public class CharterContractExtensionExporter implements IExporterExtension {
 		final CharterContractAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, CharterContractConstants.REPOSITIONING_FEE_KEY, CharterContractAnnotation.class);
 		if (annotation != null) {
 			final ProfitAndLossContainer profitAndLossContainer;
-			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			if (vesselProvider.getVesselCharter(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final Slot modelSlot = modelEntityMap.getModelObject(slotProvider.getPortSlot(startElement), Slot.class);
 				CargoAllocation cargoAllocation = null;
 				for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {

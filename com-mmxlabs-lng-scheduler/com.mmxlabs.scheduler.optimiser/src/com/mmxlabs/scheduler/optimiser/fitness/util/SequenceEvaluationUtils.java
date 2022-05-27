@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.util;
 
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public class SequenceEvaluationUtils {
 
@@ -15,12 +15,12 @@ public class SequenceEvaluationUtils {
 	 * @param sequence
 	 * @return
 	 */
-	public static final boolean shouldIgnoreSequence(ISequence sequence, IVesselAvailability vesselAvailability) {
-		switch (vesselAvailability.getVesselInstanceType()) {
+	public static final boolean shouldIgnoreSequence(ISequence sequence, IVesselCharter vesselCharter) {
+		switch (vesselCharter.getVesselInstanceType()) {
 		case TIME_CHARTER:
 		case FLEET:
 		case SPOT_CHARTER:	
-			return sequence.size() < 3 && vesselAvailability.isOptional();
+			return sequence.size() < 3 && vesselCharter.isOptional();
 		case FOB_SALE:
 		case DES_PURCHASE:
 		case ROUND_TRIP:

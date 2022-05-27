@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
@@ -235,14 +235,14 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// We need to pull out all the chunks and sort out their rules
 		final List<@NonNull IResource> resources = new ArrayList<>(data.getResources());
 		Collections.sort(resources, (o1, o2) -> {
-			final IVesselAvailability vesselAvailability1 = vesselProvider.getVesselAvailability(o1);
-			final IVesselAvailability vesselAvailability2 = vesselProvider.getVesselAvailability(o2);
-			final VesselInstanceType vit1 = vesselAvailability1.getVesselInstanceType();
-			final VesselInstanceType vit2 = vesselAvailability2.getVesselInstanceType();
+			final IVesselCharter vesselCharter1 = vesselProvider.getVesselCharter(o1);
+			final IVesselCharter vesselCharter2 = vesselProvider.getVesselCharter(o2);
+			final VesselInstanceType vit1 = vesselCharter1.getVesselInstanceType();
+			final VesselInstanceType vit2 = vesselCharter2.getVesselInstanceType();
 
 			int x = vit1.compareTo(vit2);
 			if (x == 0) {
-				x = ((Integer) vesselAvailability1.getVessel().getMaxSpeed()).compareTo(vesselAvailability2.getVessel().getMaxSpeed());
+				x = ((Integer) vesselCharter1.getVessel().getMaxSpeed()).compareTo(vesselCharter2.getVessel().getMaxSpeed());
 			}
 			return x;
 		});
@@ -509,7 +509,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							}
 							here = there;
 							iterator.remove();
-							if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+							if (vesselProvider.getVesselCharter(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 								// only schedule one thing on each spot vessel
 								break;
 							}

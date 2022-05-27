@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractTermAnnotation;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.OriginPortRepositioningFeeTermAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -55,32 +55,32 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 	}
 
 	@Override
-	public long calculateCost(final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability) {
+	public long calculateCost(final IPortTimesRecord portTimesRecord, final IVesselCharter vesselCharter) {
 		final int voyageStartTime = portTimesRecord.getFirstSlotTime();
 
-		final long lumpSum = super.calculateCost(portTimesRecord, vesselAvailability);
+		final long lumpSum = super.calculateCost(portTimesRecord, vesselCharter);
 
-		final IPort startPort = getFirstPort(vesselAvailability, portTimesRecord);
+		final IPort startPort = getFirstPort(vesselCharter, portTimesRecord);
 		assert startPort != null;
 
-		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), originPort, startPort, speedInKnots,
+		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots,
 				AvailableRouteChoices.OPTIMAL);
 
 		final ERouteOption route = quickestTravelTime.getFirst();
-		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
+		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 		final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
-		final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
+		final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
 
 		final int hireTime;
 		final long fuelUsedCanal;
 		if (this.includeCanalTime) {
-			fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
+			fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
 			hireTime = quickestTravelTime.getSecond();
 		} else { // canal time not included.
 			hireTime = journeyTravelTime;
 			fuelUsedCanal = 0L;
 		}
-		final long canalCost = routeCostProvider.getRouteCost(route, originPort, startPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+		final long canalCost = routeCostProvider.getRouteCost(route, originPort, startPort, vesselCharter.getVessel(), voyageStartTime, CostType.Ballast);
 		final long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L;
 		final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
 		final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
@@ -89,26 +89,26 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability) {
+	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, final IVesselCharter vesselCharter) {
 
 		final int voyageStartTime = portTimesRecord.getFirstSlotTime();
 
-		final long lumpSum = super.calculateCost(portTimesRecord, vesselAvailability);
+		final long lumpSum = super.calculateCost(portTimesRecord, vesselCharter);
 
-		final IPort startPort = getFirstPort(vesselAvailability, portTimesRecord);
+		final IPort startPort = getFirstPort(vesselCharter, portTimesRecord);
 		assert startPort != null;
 
-		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), originPort, startPort, speedInKnots,
+		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots,
 				AvailableRouteChoices.OPTIMAL);
 		final ERouteOption route = quickestTravelTime.getFirst();
-		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
+		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 		final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
-		final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
+		final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
 
 		final long fuelUsedCanal;
 		final int hireTime;
 		if (this.includeCanalTime) {
-			fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
+			fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
 			// Journey + canal time
 			hireTime = quickestTravelTime.getSecond();
 		} else {
@@ -116,7 +116,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 			hireTime = journeyTravelTime;
 			fuelUsedCanal = 0L;
 		}
-		final long canalCost = routeCostProvider.getRouteCost(route, originPort, startPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+		final long canalCost = routeCostProvider.getRouteCost(route, originPort, startPort, vesselCharter.getVessel(), voyageStartTime, CostType.Ballast);
 		final long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L;
 		final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
 
@@ -132,7 +132,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 		final OriginPortRepositioningFeeTermAnnotation termAnnotation = new OriginPortRepositioningFeeTermAnnotation();
 		termAnnotation.lumpSum = lumpSum;
 		termAnnotation.originPort = originPort;
-		termAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), originPort, startPort, vesselAvailability.getVessel());
+		termAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), originPort, startPort, vesselCharter.getVessel());
 		termAnnotation.totalTimeInHours = minTravel.getSecond();
 		termAnnotation.totalFuelUsed = fuelUsed;
 		termAnnotation.fuelPrice = fuelPriceCurve.getValueAtPoint(voyageStartTime);

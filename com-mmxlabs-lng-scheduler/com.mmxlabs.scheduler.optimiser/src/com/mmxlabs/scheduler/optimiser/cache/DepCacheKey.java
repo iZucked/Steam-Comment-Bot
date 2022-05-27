@@ -9,7 +9,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -21,19 +21,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  */
 public final class DepCacheKey {
 
-	private final @NonNull IVesselAvailability vesselAvailability;
+	private final @NonNull IVesselCharter vesselCharter;
 	private final @NonNull IPortTimesRecord portTimesRecord;
 	private final long startHeelInM3;
 	private final int hash;
 
-	public DepCacheKey(final @NonNull IVesselAvailability vesselAvailability, final long startHeelInM3, @NonNull final IPortTimesRecord portTimesRecord) {
+	public DepCacheKey(final @NonNull IVesselCharter vesselCharter, final long startHeelInM3, @NonNull final IPortTimesRecord portTimesRecord) {
 
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 		this.startHeelInM3 = startHeelInM3;
 		this.portTimesRecord = portTimesRecord;
 
 		// Pre-compute the hash
-		this.hash = Objects.hash(vesselAvailability, startHeelInM3, portTimesRecord);
+		this.hash = Objects.hash(vesselCharter, startHeelInM3, portTimesRecord);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public final class DepCacheKey {
 			final IPortSlot otherReturnSlot = other.portTimesRecord.getReturnSlot();
 			// Do some quicker comparisons first
 			final boolean partA = (this.startHeelInM3 == other.startHeelInM3) //
-					&& Objects.equals(this.vesselAvailability, other.vesselAvailability) //
+					&& Objects.equals(this.vesselCharter, other.vesselCharter) //
 					&& Objects.equals(thisReturnSlot, otherReturnSlot) //
 					&& Objects.equals(this.portTimesRecord.getSlots(), other.portTimesRecord.getSlots());
 
@@ -82,8 +82,8 @@ public final class DepCacheKey {
 		return false;
 	}
 
-	public IVesselAvailability getVesselAvailability() {
-		return vesselAvailability;
+	public IVesselCharter getVesselCharter() {
+		return vesselCharter;
 	}
 
 	public IPortTimesRecord getPortTimesRecord() {

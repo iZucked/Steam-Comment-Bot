@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -38,8 +38,8 @@ public class SimpleScheduleBuilder {
 
 	private Schedule schedule = ScheduleFactory.eINSTANCE.createSchedule();
 
-	public SequenceBuilder withSequence(VesselAvailability vesselAvailability) {
-		return new SequenceBuilder(vesselAvailability);
+	public SequenceBuilder withSequence(VesselCharter vesselCharter) {
+		return new SequenceBuilder(vesselCharter);
 	}
 
 	public SequenceBuilder withSequence(CharterInMarket charterInMarket, int spotIndex) {
@@ -89,8 +89,8 @@ public class SimpleScheduleBuilder {
 	class SequenceBuilder {
 		Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
 
-		private SequenceBuilder(VesselAvailability vesselAvailability) {
-			sequence.setVesselAvailability(vesselAvailability);
+		private SequenceBuilder(VesselCharter vesselCharter) {
+			sequence.setVesselCharter(vesselCharter);
 			sequence.setSequenceType(SequenceType.VESSEL);
 			schedule.getSequences().add(sequence);
 		}

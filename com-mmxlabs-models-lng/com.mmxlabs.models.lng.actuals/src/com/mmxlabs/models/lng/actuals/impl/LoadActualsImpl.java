@@ -260,7 +260,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (contractType: ");
 		result.append(contractType);
 		result.append(", startingHeelM3: ");

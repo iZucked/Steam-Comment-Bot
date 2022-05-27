@@ -48,7 +48,7 @@ import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -164,8 +164,8 @@ public class ChangeModelToScheduleSpecification {
 		for (final CollectedAssignment seq : assignments) {
 
 			final VesselScheduleSpecification vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
-			if (seq.getVesselAvailability() != null) {
-				vesselScheduleSpecification.setVesselAllocation(seq.getVesselAvailability());
+			if (seq.getVesselCharter() != null) {
+				vesselScheduleSpecification.setVesselAllocation(seq.getVesselCharter());
 			} else if (seq.getCharterInMarket() != null) {
 				vesselScheduleSpecification.setVesselAllocation(seq.getCharterInMarket());
 				vesselScheduleSpecification.setSpotIndex(seq.getSpotIndex());
@@ -421,11 +421,11 @@ public class ChangeModelToScheduleSpecification {
 					final String vesselName = fleetVesselAllocationDescriptor.getName();
 					assert vesselName != null;
 					for (final VesselScheduleSpecification vesselScheduleSpecification : scheduleSpecification.getVesselScheduleSpecifications()) {
-						if (vesselScheduleSpecification.getVesselAllocation() instanceof VesselAvailability) {
-							final VesselAvailability vesselAvailability = (VesselAvailability) vesselScheduleSpecification.getVesselAllocation();
-							final Vessel vessel = vesselAvailability.getVessel();
+						if (vesselScheduleSpecification.getVesselAllocation() instanceof VesselCharter) {
+							final VesselCharter vesselCharter = (VesselCharter) vesselScheduleSpecification.getVesselAllocation();
+							final Vessel vessel = vesselCharter.getVessel();
 							if (vessel != null && vesselName.equals(vessel.getName())) {
-								if (vesselAvailability.getCharterNumber() == fleetVesselAllocationDescriptor.getCharterIndex()) {
+								if (vesselCharter.getCharterNumber() == fleetVesselAllocationDescriptor.getCharterIndex()) {
 									targetVessel = vesselScheduleSpecification;
 									break;
 								}

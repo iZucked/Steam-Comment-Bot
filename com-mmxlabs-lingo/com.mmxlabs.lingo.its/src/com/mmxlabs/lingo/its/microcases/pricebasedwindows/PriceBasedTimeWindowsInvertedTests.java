@@ -20,7 +20,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -54,7 +54,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	public void testTimeWindows_higher_price_worthwhile_48hours() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -67,7 +67,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
@@ -94,7 +94,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	public void testTimeWindows_higher_price_48_hours_too_costly() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -107,7 +107,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
@@ -134,7 +134,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	public void testTimeWindows_higher_price_800hrs_too_costly() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -147,7 +147,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
@@ -174,7 +174,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	public void testTimeWindows_higher_price_800hrs_worthwhile() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -187,7 +187,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), salesPrice) //
@@ -213,7 +213,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	@Tag(TestCategories.MICRO_TEST)
 	public void testTimeWindows_DL_higher_price_800hrs_worthwhile() throws Exception {
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -227,7 +227,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), 6.5) //
@@ -254,7 +254,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 	public void testTimeWindows_DL_higher_price_800hrs_too_costly() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -268,7 +268,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(48, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 6), 6.5) //
@@ -311,12 +311,12 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractLegacyMicroTestC
 				MicroCaseUtils.getInjectorServiceWithPriceBasedScheduler());
 	}
 
-	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
+	private VesselCharter createTestVesselCharter(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		return cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(startStart, startEnd) //
 				.withEndWindow(endStart) //

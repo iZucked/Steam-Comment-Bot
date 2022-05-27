@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -169,7 +169,7 @@ public class SandboxModelBuilder {
 		return maker.create(vessel, entity);
 	}
 
-	public ExistingVesselCharterOption createExistingCharter(final VesselAvailability vesselCharter) {
+	public ExistingVesselCharterOption createExistingCharter(final VesselCharter vesselCharter) {
 		final ExistingVesselCharterOption option = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 
 		option.setVesselCharter(vesselCharter);

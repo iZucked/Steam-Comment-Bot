@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -73,8 +73,8 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 			loopResources = changedResources;
 		}
 		for (final IResource resource : loopResources) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				if (isInvalid(resource, sequences.getSequence(resource), messages)) {
 					return false;
 				}
@@ -117,14 +117,14 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
-			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(first) != null) {
+			if (virtualVesselSlotProvider.getVesselCharterForElement(first) != null) {
 				addMessage(messages, "%s: Sequence element %s has no vessel availability!", first);
 				return false;
 			}
-			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(second) != null) {
+			if (virtualVesselSlotProvider.getVesselCharterForElement(second) != null) {
 				addMessage(messages, "%s: Sequence element %s has no vessel availability!", second);
 				return false;
 			}
@@ -142,7 +142,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 			return true;
 		}
 
-		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
+		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVesselCharter(vesselCharter);
 
 		final PortType elementForVesselType = portTypeProvider.getPortType(elementForVessel);
 		final String message = "%s: Sequence element %s has wrong event order!";

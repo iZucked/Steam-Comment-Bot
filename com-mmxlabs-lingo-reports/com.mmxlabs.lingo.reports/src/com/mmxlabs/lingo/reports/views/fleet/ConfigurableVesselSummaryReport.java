@@ -57,7 +57,7 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
@@ -675,11 +675,11 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 	private Pair<String, Integer> getVesselNameAndCharterNumber(final Sequence sequence) {
 		if (sequence != null) {
-			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			if (vesselAvailability != null) {
-				final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselAvailability.getVessel();
+			final VesselCharter vesselCharter = sequence.getVesselCharter();
+			if (vesselCharter != null) {
+				final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselCharter.getVessel();
 				if (vessel != null) {
-					return Pair.of(vessel.getName(), vesselAvailability.getCharterNumber());
+					return Pair.of(vessel.getName(), vesselCharter.getCharterNumber());
 				}
 			} else {
 				final CharterInMarket charterInMarket = sequence.getCharterInMarket();

@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public interface ICargoVesselRestrictionsMatrixProducer {
-	Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
-	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, Map<List<IPortSlot>, List<IVesselAvailability>> restrictions);
-	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
+	Map<List<IPortSlot>, List<IVesselCharter>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
+	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels, Map<List<IPortSlot>, List<IVesselCharter>> restrictions);
+	ArrayList<Set<Integer>> getIntegerCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
 }

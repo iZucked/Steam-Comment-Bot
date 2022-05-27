@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -53,7 +53,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getBaseOption <em>Base Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraVesselEvents <em>Extra Vessel Events</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraVesselCharters <em>Extra Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#getExtraCharterInMarkets <em>Extra Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl#isUseScenarioBase <em>Use Scenario Base</em>}</li>
@@ -173,14 +173,14 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	protected EList<VesselEvent> extraVesselEvents;
 
 	/**
-	 * The cached value of the '{@link #getExtraVesselAvailabilities() <em>Extra Vessel Availabilities</em>}' containment reference list.
+	 * The cached value of the '{@link #getExtraVesselCharters() <em>Extra Vessel Charters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExtraVesselAvailabilities()
+	 * @see #getExtraVesselCharters()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VesselAvailability> extraVesselAvailabilities;
+	protected EList<VesselCharter> extraVesselCharters;
 
 	/**
 	 * The cached value of the '{@link #getCharterInMarketOverrides() <em>Charter In Market Overrides</em>}' containment reference list.
@@ -387,11 +387,11 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public EList<VesselAvailability> getExtraVesselAvailabilities() {
-		if (extraVesselAvailabilities == null) {
-			extraVesselAvailabilities = new EObjectContainmentEList<VesselAvailability>(VesselAvailability.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+	public EList<VesselCharter> getExtraVesselCharters() {
+		if (extraVesselCharters == null) {
+			extraVesselCharters = new EObjectContainmentEList<VesselCharter>(VesselCharter.class, this, AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS);
 		}
-		return extraVesselAvailabilities;
+		return extraVesselCharters;
 	}
 
 	/**
@@ -519,8 +519,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return ((InternalEList<?>)getOptions()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
 				return ((InternalEList<?>)getExtraVesselEvents()).basicRemove(otherEnd, msgs);
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
-				return ((InternalEList<?>)getExtraVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
+				return ((InternalEList<?>)getExtraVesselCharters()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 				return ((InternalEList<?>)getCharterInMarketOverrides()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
@@ -553,8 +553,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return getOptions();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
 				return getExtraVesselEvents();
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
-				return getExtraVesselAvailabilities();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
+				return getExtraVesselCharters();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 				return getCharterInMarketOverrides();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
@@ -601,9 +601,9 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				getExtraVesselEvents().clear();
 				getExtraVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
-				getExtraVesselAvailabilities().clear();
-				getExtraVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
+				getExtraVesselCharters().clear();
+				getExtraVesselCharters().addAll((Collection<? extends VesselCharter>)newValue);
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 				getCharterInMarketOverrides().clear();
@@ -652,8 +652,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
 				getExtraVesselEvents().clear();
 				return;
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
-				getExtraVesselAvailabilities().clear();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
+				getExtraVesselCharters().clear();
 				return;
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 				getCharterInMarketOverrides().clear();
@@ -692,8 +692,8 @@ public abstract class AbstractSolutionSetImpl extends UUIDObjectImpl implements 
 				return options != null && !options.isEmpty();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
 				return extraVesselEvents != null && !extraVesselEvents.isEmpty();
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
-				return extraVesselAvailabilities != null && !extraVesselAvailabilities.isEmpty();
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
+				return extraVesselCharters != null && !extraVesselCharters.isEmpty();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 				return charterInMarketOverrides != null && !charterInMarketOverrides.isEmpty();
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:

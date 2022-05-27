@@ -55,7 +55,7 @@ import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -254,7 +254,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 					final ShippingOption so = row.getShipping();
 					if (so instanceof ExistingVesselCharterOption) {
-						final VesselAvailability va = ((ExistingVesselCharterOption) so).getVesselCharter();
+						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
 						vesselName += va.getVessel().getName();
 					}
 
@@ -289,7 +289,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 					final ShippingOption so = row.getShipping();
 					if (so instanceof ExistingVesselCharterOption) {
-						final VesselAvailability va = ((ExistingVesselCharterOption) so).getVesselCharter();
+						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
 						vesselName += va.getVessel().getName();
 					}
 					if (so instanceof RoundTripShippingOption) {

@@ -20,7 +20,7 @@ import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -50,25 +50,25 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 			final Vessel vessel_2 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability_1_1 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_1 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(1)//
 					.withStartWindow(LocalDateTime.of(2020, 1, 1, 0, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 2, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_1_2 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_2 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(2)//
 					.withStartWindow(LocalDateTime.of(2020, 2, 1, 1, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 3, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_1_3 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_3 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(3)//
 					.withStartWindow(LocalDateTime.of(2020, 3, 1, 1, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 4, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_2_1 = maker.cargoModelBuilder.makeVesselAvailability(vessel_2, maker.entity) //
+			final VesselCharter vesselCharter_2_1 = maker.cargoModelBuilder.makeVesselCharter(vessel_2, maker.entity) //
 					.withCharterRate("40000") //
 					.withCharterNumber(1)//
 					.withStartWindow(LocalDateTime.of(2020, 3, 1, 1, 0))//
@@ -83,7 +83,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_1, 0).build();
+					.withVesselAssignment(vesselCharter_1_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
@@ -92,7 +92,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_2, 0).build();
+					.withVesselAssignment(vesselCharter_1_2, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
@@ -101,7 +101,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_3, 0).build();
+					.withVesselAssignment(vesselCharter_1_3, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
@@ -110,7 +110,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_2_1, 0).build();
+					.withVesselAssignment(vesselCharter_2_1, 0).build();
 
 		}, maker -> {
 
@@ -119,25 +119,25 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 			final Vessel vessel_2 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-			final VesselAvailability vesselAvailability_1_1 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_1 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(1)//
 					.withStartWindow(LocalDateTime.of(2020, 1, 1, 0, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 2, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_1_2 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_2 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(2)//
 					.withStartWindow(LocalDateTime.of(2020, 2, 1, 1, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 3, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_1_3 = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, maker.entity) //
+			final VesselCharter vesselCharter_1_3 = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
 					.withCharterRate("50000") //
 					.withCharterNumber(3)//
 					.withStartWindow(LocalDateTime.of(2020, 3, 1, 1, 0))//
 					.withEndWindow(LocalDateTime.of(2020, 4, 1, 0, 0))//
 					.build();
-			final VesselAvailability vesselAvailability_2_1 = maker.cargoModelBuilder.makeVesselAvailability(vessel_2, maker.entity) //
+			final VesselCharter vesselCharter_2_1 = maker.cargoModelBuilder.makeVesselCharter(vessel_2, maker.entity) //
 					.withCharterRate("40000") //
 					.withCharterNumber(1)//
 					.withStartWindow(LocalDateTime.of(2020, 3, 1, 1, 0))//
@@ -152,7 +152,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_1, 0).build();
+					.withVesselAssignment(vesselCharter_1_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
@@ -161,7 +161,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_2, 0).build();
+					.withVesselAssignment(vesselCharter_1_2, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
@@ -170,7 +170,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_2_1, 0).build();
+					.withVesselAssignment(vesselCharter_2_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
 					// Purchase
 					.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
@@ -179,7 +179,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
 					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
 					// Cargo
-					.withVesselAssignment(vesselAvailability_1_3, 0).build();
+					.withVesselAssignment(vesselCharter_1_3, 0).build();
 		});
 	}
 

@@ -6,11 +6,9 @@ package com.mmxlabs.models.lng.cargo.importer;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -34,7 +32,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.VesselType;
@@ -48,8 +46,6 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
-/**
- */
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
 	public static final String CARGO_GROUP_KEY = "CARGO-GROUP";
@@ -60,17 +56,16 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cargoGroupImporter;
 
-	private IClassImporter vesselAvailabilityImporter;
+	private IClassImporter vesselCharterImporter;
 	private IClassImporter vesselEventImporter;
 	private IClassImporter paperDealsImporter;
+	
 	private final CanalBookingImporter canalBookingsImporter = new CanalBookingImporter();
 	public static final @NonNull String EVENTS_KEY = "EVENTS";
 	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
-	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
+	public static final @NonNull String VESSEL_CHARTERS_KEY = "VESSELSCHARTERS";
 	public static final @NonNull String PAPER_DEALS_KEY = "PAPER_DEALS";
 
-	/**
-	 */
 	public CargoModelImporter() {
 		final Activator activator = Activator.getDefault();
 		if (activator != null) {
@@ -86,7 +81,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoGroupImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
 			cargoImporter = new CargoImporter();
 			cargoImporter.setImporterRegistry(importerRegistry);
-			vesselAvailabilityImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselAvailability());
+			vesselCharterImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselCharter());
+			// Migration v158 -> v160 renamed VesselAvailability to VesselCharter
+			vesselCharterImporter.setReplacementKind("VesselAvailability", "VesselCharter");
+			
 			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
 			paperDealsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getPaperDeal());
 		}
@@ -98,7 +96,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
-		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
+		inputs.put(VESSEL_CHARTERS_KEY, "Vessel Charters");
 		inputs.put(EVENTS_KEY, "Events");
 		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
 		if (LicenseFeatures.isPermitted("features:paperdeals")) {
@@ -139,10 +137,9 @@ public class CargoModelImporter implements ISubmodelImporter {
 			}
 			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 			for (final EObject object : values) {
-				if (object instanceof Cargo) {
-					cargoModel.getCargoes().add((Cargo) object);
-				} else if (object instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) object;
+				if (object instanceof Cargo cargo) {
+					cargoModel.getCargoes().add(cargo);
+				} else if (object instanceof LoadSlot loadSlot) {
 					cargoModel.getLoadSlots().add(loadSlot);
 					// Set default pricing event if no delegate or previously set value
 					context.doLater(new IDeferment() {
@@ -158,12 +155,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 						@Override
 						public int getStage() {
-							// TODO Auto-generated method stub
 							return 0;
 						}
 					});
-				} else if (object instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) object;
+				} else if (object instanceof DischargeSlot dischargeSlot) {
 					cargoModel.getDischargeSlots().add(dischargeSlot);
 					// Set default pricing event if no delegate or previously set value
 					context.doLater(new IDeferment() {
@@ -192,9 +187,9 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
 		}
 
-		if (inputs.containsKey(VESSEL_AVAILABILITY_KEY)) {
-			cargoModel.getVesselAvailabilities().addAll(
-					(Collection<? extends VesselAvailability>) vesselAvailabilityImporter.importObjects(CargoPackage.eINSTANCE.getVesselAvailability(), inputs.get(VESSEL_AVAILABILITY_KEY), context));
+		if (inputs.containsKey(VESSEL_CHARTERS_KEY)) {
+			cargoModel.getVesselCharters().addAll(
+					(Collection<? extends VesselCharter>) vesselCharterImporter.importObjects(CargoPackage.eINSTANCE.getVesselCharter(), inputs.get(VESSEL_CHARTERS_KEY), context));
 		}
 		if (inputs.containsKey(EVENTS_KEY)) {
 			cargoModel.getVesselEvents().addAll((Collection<? extends VesselEvent>) vesselEventImporter.importObjects(CargoPackage.eINSTANCE.getVesselEvent(), inputs.get(EVENTS_KEY), context));
@@ -239,7 +234,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		final CargoModel cargoModel = (CargoModel) model;
 		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), context));
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
-		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(cargoModel.getVesselAvailabilities(), context));
+		output.put(VESSEL_CHARTERS_KEY, vesselCharterImporter.exportObjects(cargoModel.getVesselCharters(), context));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
 		output.put(PAPER_DEALS_KEY, paperDealsImporter.exportObjects(cargoModel.getPaperDeals(), context));
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();

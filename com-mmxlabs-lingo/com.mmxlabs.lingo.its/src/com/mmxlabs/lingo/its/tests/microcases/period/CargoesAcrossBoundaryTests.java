@@ -15,7 +15,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -36,7 +36,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final DESSalesMarket sellMarket = spotMarketsModelBuilder.makeDESSaleMarket("m1", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7").build();
@@ -48,7 +48,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(1, TimePeriod.DAYS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -58,7 +58,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 				.build() //
 				.makeMarketDESSale("D2", sellMarket, YearMonth.of(2022, 2)) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -95,7 +95,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 			final Slot<?> dischargeSlot = periodCargo2.getSortedSlots().get(1);
 			// Vessel locked
 			Assertions.assertTrue(dischargeSlot.isLocked());
-			Assertions.assertEquals(((VesselAvailability) periodCargo2.getVesselAssignmentType()).getVessel(), dischargeSlot.getRestrictedVessels().get(0));
+			Assertions.assertEquals(((VesselCharter) periodCargo2.getVesselAssignmentType()).getVessel(), dischargeSlot.getRestrictedVessels().get(0));
 			// No window change as in the AFTER
 			Assertions.assertEquals(1, dischargeSlot.getWindowSize());
 
@@ -110,7 +110,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final DESSalesMarket sellMarket = spotMarketsModelBuilder.makeDESSaleMarket("m1", portFinder.findPortById(InternalDataConstants.PORT_SAKAI), entity, "7").build();
@@ -122,7 +122,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2021, 10, 31), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -131,7 +131,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 				.build() //
 				.makeMarketDESSale("D2", sellMarket, YearMonth.of(2022, 1)) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -161,7 +161,7 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 			final Slot<?> loadSlot = periodCargo1.getSortedSlots().get(0);
 			// Locked to vessel
 			Assertions.assertTrue(loadSlot.isLocked());
-			Assertions.assertEquals(((VesselAvailability) periodCargo1.getVesselAssignmentType()).getVessel(), loadSlot.getRestrictedVessels().get(0));
+			Assertions.assertEquals(((VesselCharter) periodCargo1.getVesselAssignmentType()).getVessel(), loadSlot.getRestrictedVessels().get(0));
 			// Window should be "locked"
 			Assertions.assertEquals(0, loadSlot.getWindowSize());
 

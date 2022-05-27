@@ -106,8 +106,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleSwitch<@Nullable Adapter> modelSwitch =
-		new ScheduleSwitch<@Nullable Adapter>() {
+	protected ScheduleSwitch<Adapter> modelSwitch =
+		new ScheduleSwitch<Adapter>() {
 			@Override
 			public Adapter caseScheduleModel(ScheduleModel object) {
 				return createScheduleModelAdapter();

@@ -103,7 +103,7 @@ public class LatenessChecker {
 
 	public void calculateLateness(final @NonNull VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IResource resource = volumeAllocatedSequence.getResource();
-		final VesselInstanceType type = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		final VesselInstanceType type = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 		if (type == VesselInstanceType.FLEET //
 				|| type == VesselInstanceType.TIME_CHARTER //
 				|| type == VesselInstanceType.SPOT_CHARTER) {

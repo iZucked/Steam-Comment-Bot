@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -47,7 +47,7 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 		if (delegate == null)
 			return null;
 		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
-		if (reference == CargoPackage.eINSTANCE.getVesselAvailability_StartAt() || reference == CargoPackage.eINSTANCE.getVesselAvailability_EndAt()) {
+		if (reference == CargoPackage.eINSTANCE.getVesselCharter_StartAt() || reference == CargoPackage.eINSTANCE.getVesselCharter_EndAt()) {
 			return new IReferenceValueProvider() {
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
@@ -78,8 +78,8 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 
 					// I assume delegateValue is list of all ports??
 
-					if (target instanceof VesselAvailability) {
-						final VesselAvailability va = (VesselAvailability) target;
+					if (target instanceof VesselCharter) {
+						final VesselCharter va = (VesselCharter) target;
 						final Vessel vessel = va.getVessel();
 						if (vessel != null) {
 							final EList<APortSet<Port>> ips = vessel.getVesselOrDelegateInaccessiblePorts();

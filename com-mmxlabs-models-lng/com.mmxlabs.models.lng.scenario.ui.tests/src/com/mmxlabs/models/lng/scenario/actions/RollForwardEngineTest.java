@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
@@ -781,7 +781,7 @@ public class RollForwardEngineTest {
 	 * 
 	 * final VesselEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 	 * 
-	 * final VesselAvailability vessel = CargoFactory.eINSTANCE.createVesselAvailability();
+	 * final VesselCharter vessel = CargoFactory.eINSTANCE.createVesselCharter();
 	 * 
 	 * event.setVesselAssignmentType(vessel);
 	 * 
@@ -814,7 +814,7 @@ public class RollForwardEngineTest {
 
 		final VesselEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 
-		final VesselAvailability vessel = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vessel = CargoFactory.eINSTANCE.createVesselCharter();
 
 		event.setVesselAssignmentType(vessel);
 
@@ -877,7 +877,7 @@ public class RollForwardEngineTest {
 	 * 
 	 * cargo.getSlots().add(loadSlot); cargo.getSlots().add(dischargeSlot);
 	 * 
-	 * final VesselAvailability vessel = CargoFactory.eINSTANCE.createVesselAvailability(); cargo.setVesselAssignmentType(vessel);
+	 * final VesselCharter vessel = CargoFactory.eINSTANCE.createVesselCharter(); cargo.setVesselAssignmentType(vessel);
 	 * 
 	 * final Schedule schedule = ScheduleFactory.eINSTANCE.createSchedule(); final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence(); schedule.getSequences().add(sequence);
 	 * 
@@ -936,7 +936,7 @@ public class RollForwardEngineTest {
 		cargo.getSlots().add(loadSlot);
 		cargo.getSlots().add(dischargeSlot);
 
-		final VesselAvailability vessel = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vessel = CargoFactory.eINSTANCE.createVesselCharter();
 		cargo.setVesselAssignmentType(vessel);
 
 		final Schedule schedule = ScheduleFactory.eINSTANCE.createSchedule();
@@ -1028,7 +1028,7 @@ public class RollForwardEngineTest {
 	 * 
 	 * cargo.getSlots().add(loadSlot); cargo.getSlots().add(dischargeSlot);
 	 * 
-	 * final VesselAvailability vessel = CargoFactory.eINSTANCE.createVesselAvailability();
+	 * final VesselCharter vessel = CargoFactory.eINSTANCE.createVesselCharter();
 	 * 
 	 * cargo.setVesselAssignmentType(vessel);
 	 * 

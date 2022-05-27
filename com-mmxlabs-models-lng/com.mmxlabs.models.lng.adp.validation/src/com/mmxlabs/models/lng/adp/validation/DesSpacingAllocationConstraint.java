@@ -41,9 +41,9 @@ public class DesSpacingAllocationConstraint extends AbstractModelMultiConstraint
 							.make(ctx, statuses);
 				}
 			}
-			if (desSpacingAllocation.getVessel() == null) {
+			if (desSpacingAllocation.getVesselCharter() == null) {
 				factory.copyName() //
-						.withObjectAndFeature(desSpacingAllocation, ADPPackage.Literals.DES_SPACING_ALLOCATION__VESSEL) //
+						.withObjectAndFeature(desSpacingAllocation, ADPPackage.Literals.DES_SPACING_ALLOCATION__VESSEL_CHARTER) //
 						.withMessage("Vessel must be provided") //
 						.make(ctx, statuses);
 			}

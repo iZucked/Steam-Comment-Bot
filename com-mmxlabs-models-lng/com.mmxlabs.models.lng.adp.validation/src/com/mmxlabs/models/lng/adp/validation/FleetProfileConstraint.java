@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -106,10 +106,10 @@ public class FleetProfileConstraint extends AbstractModelMultiConstraint {
 
 					}
 
-					for (final VesselAvailability vesselCharter : cargoModel.getVesselAvailabilities()) {
+					for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
 						if (vesselCharter.getVessel() == vessel) {
 							factory.copyName() //
-									.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+									.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
 									.withMessage("ADP vessel cannot be used for a charter") //
 									.make(ctx, statuses);
 						}

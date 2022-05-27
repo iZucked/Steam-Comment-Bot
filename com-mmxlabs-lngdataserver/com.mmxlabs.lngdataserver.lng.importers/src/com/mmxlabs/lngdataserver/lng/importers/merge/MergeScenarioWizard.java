@@ -114,7 +114,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		//TODO Port groups etc
 		
 		//Vessel charter page.
-		vesselCharterMapperPage = new MergeScenarioWizardVesselAvailabilityMapperPage("Map fleet charters to target");
+		vesselCharterMapperPage = new MergeScenarioWizardVesselChartersMapperPage("Map fleet charters to target");
 		
 		//Spot markets.
 		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 

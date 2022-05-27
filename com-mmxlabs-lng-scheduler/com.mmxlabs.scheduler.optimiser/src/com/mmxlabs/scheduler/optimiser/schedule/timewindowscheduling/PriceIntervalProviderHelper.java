@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -429,7 +429,7 @@ public class PriceIntervalProviderHelper {
 
 	@Nullable
 	IVessel getVessel(@NonNull final IResource resource) {
-		final IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter availability = vesselProvider.getVesselCharter(resource);
 		if (availability == null) {
 			return null;
 		}
@@ -951,10 +951,10 @@ public class PriceIntervalProviderHelper {
 
 	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart,
 			@NonNull final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			if (portTimeWindowRecord == portTimeWindowRecordStart) {
-				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselCharter, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
 			}
 		}
 		return 0L;

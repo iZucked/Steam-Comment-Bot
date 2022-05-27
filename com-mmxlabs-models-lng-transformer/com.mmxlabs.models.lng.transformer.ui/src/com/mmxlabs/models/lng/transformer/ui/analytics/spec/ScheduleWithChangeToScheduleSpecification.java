@@ -44,7 +44,7 @@ import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -80,8 +80,8 @@ public class ScheduleWithChangeToScheduleSpecification {
 		newAvailability.setSpotIndex(oldAvailability.getSecond());
 		return newAvailability;
 	};
-	private final UnaryOperator<VesselAvailability> buildVesselAvailability = (oldAvailability) -> {
-		final VesselAvailability newAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+	private final UnaryOperator<VesselCharter> buildVesselCharter = (oldAvailability) -> {
+		final VesselCharter newAvailability = CargoFactory.eINSTANCE.createVesselCharter();
 
 		newAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
 		newAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
@@ -106,7 +106,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 		newAvailability.getStartHeel().setPriceExpression("");
 		newAvailability.getStartHeel().setCvValue(22.6); // Does not matter...
 	};
-	private final BiConsumer<VesselAvailability, PortVisit> processFirstEvent_VesselAvailability = (newAvailability, visit) -> {
+	private final BiConsumer<VesselCharter, PortVisit> processFirstEvent_VesselCharter = (newAvailability, visit) -> {
 		newAvailability.setStartAfter(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		newAvailability.setStartBy(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		newAvailability.setStartAt(visit.getPort());
@@ -158,7 +158,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 		newAvailability.setIncludeBallastBonus(true);
 
 	};
-	private final BiConsumer<VesselAvailability, PortVisit> processLastSegmentEvent_VesselAvailability = (newAvailability, visit) -> {
+	private final BiConsumer<VesselCharter, PortVisit> processLastSegmentEvent_VesselCharter = (newAvailability, visit) -> {
 		newAvailability.setEndAfter(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		newAvailability.setEndBy(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		newAvailability.getEndAt().add(visit.getPort());
@@ -233,7 +233,7 @@ public class ScheduleWithChangeToScheduleSpecification {
 
 		}
 	};
-	private final TriConsumer<VesselAvailability, VesselAvailability, PortVisit> processLastSequenceEvent_VesselAvailability = (oldAvailability, newAvailability, segmentStart) -> {
+	private final TriConsumer<VesselCharter, VesselCharter, PortVisit> processLastSequenceEvent_VesselCharter = (oldAvailability, newAvailability, segmentStart) -> {
 		if (oldAvailability.isSetEndAfter()) {
 			newAvailability.setEndAfter(oldAvailability.getEndAfter());
 		}
@@ -411,10 +411,10 @@ public class ScheduleWithChangeToScheduleSpecification {
 			final Set<OpenSlotAllocation> targetOpenSlotAllocations) {
 
 		final ScheduleSpecification scheduleSpecification = CargoFactory.eINSTANCE.createScheduleSpecification();
-		final List<VesselAvailability> newAvailabilities = new LinkedList<>();
+		final List<VesselCharter> newAvailabilities = new LinkedList<>();
 		final List<CharterInMarketOverride> newCharterInMarketOverrides = new LinkedList<>();
 
-		final Map<VesselAvailability, List<Pair<EventGrouping, Integer>>> oldAvailabilityToList = new LinkedHashMap<>();
+		final Map<VesselCharter, List<Pair<EventGrouping, Integer>>> oldAvailabilityToList = new LinkedHashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, List<Pair<EventGrouping, Integer>>> oldMarketToList = new LinkedHashMap<>();
 
 		for (final CargoAllocation cargoAllocation : targetCargoAllocations) {
@@ -450,9 +450,9 @@ public class ScheduleWithChangeToScheduleSpecification {
 					scheduleSpecification.getVesselScheduleSpecifications().add(vesselSpec);
 					continue;
 
-				} else if (sequence.getVesselAvailability() != null) {
+				} else if (sequence.getVesselCharter() != null) {
 					// TODO: Share with vessel event code
-					final VesselAvailability oldAvailability = sequence.getVesselAvailability();
+					final VesselCharter oldAvailability = sequence.getVesselCharter();
 
 					final int seqHint = 1 + cargoAllocation.getSequence().getEvents().indexOf(cargoAllocation.getSlotAllocations().get(0).getSlotVisit());
 					oldAvailabilityToList.computeIfAbsent(oldAvailability, k -> new LinkedList<>()).add(new Pair<>(cargoAllocation, seqHint));
@@ -472,9 +472,9 @@ public class ScheduleWithChangeToScheduleSpecification {
 					oldMarketToList.computeIfAbsent(new Pair<>(sequence.getCharterInMarket(), sequence.getSpotIndex()), k -> new LinkedList<>()).add(new Pair<>(vesselEventVisit, seqHint));
 					continue;
 				}
-			} else if (sequence.getVesselAvailability() != null) {
+			} else if (sequence.getVesselCharter() != null) {
 				// TODO: Share with vessel event code
-				final VesselAvailability oldAvailability = sequence.getVesselAvailability();
+				final VesselCharter oldAvailability = sequence.getVesselCharter();
 
 				final int seqHint = 1 + vesselEventVisit.getSequence().getEvents().indexOf(vesselEventVisit);
 				oldAvailabilityToList.computeIfAbsent(oldAvailability, k -> new LinkedList<>()).add(new Pair<>(vesselEventVisit, seqHint));
@@ -484,8 +484,8 @@ public class ScheduleWithChangeToScheduleSpecification {
 		}
 
 		// Break up into consecutive chunks
-		final Map<VesselAvailability, List<List<Pair<EventGrouping, Integer>>>> oldAvailabilityToSplitList = new LinkedHashMap<>();
-		for (final Map.Entry<VesselAvailability, List<Pair<EventGrouping, Integer>>> e : oldAvailabilityToList.entrySet()) {
+		final Map<VesselCharter, List<List<Pair<EventGrouping, Integer>>>> oldAvailabilityToSplitList = new LinkedHashMap<>();
+		for (final Map.Entry<VesselCharter, List<Pair<EventGrouping, Integer>>> e : oldAvailabilityToList.entrySet()) {
 
 			final List<Pair<EventGrouping, Integer>> sortedEvents = new ArrayList<>(e.getValue());
 			Collections.sort(sortedEvents, (a, b) -> Integer.compare(a.getSecond(), b.getSecond()));
@@ -529,8 +529,8 @@ public class ScheduleWithChangeToScheduleSpecification {
 			}
 		}
 
-		buildAvailabilities(scheduleSpecification, newAvailabilities, oldAvailabilityToSplitList, buildVesselAvailability, processFirstEvent_VesselAvailability,
-				processLastSegmentEvent_VesselAvailability, processLastSequenceEvent_VesselAvailability);
+		buildAvailabilities(scheduleSpecification, newAvailabilities, oldAvailabilityToSplitList, buildVesselCharter, processFirstEvent_VesselCharter,
+				processLastSegmentEvent_VesselCharter, processLastSequenceEvent_VesselCharter);
 		buildAvailabilities(scheduleSpecification, newCharterInMarketOverrides, oldMarketToSplitList, buildMarketAvailability, processFirstEvent_MarketAvailability,
 				processLastSegmentEvent_MarketAvailability, processLastSequenceEvent_MarketAvailability);
 

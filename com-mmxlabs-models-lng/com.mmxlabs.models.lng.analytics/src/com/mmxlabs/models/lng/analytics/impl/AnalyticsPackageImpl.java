@@ -2164,7 +2164,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getAbstractSolutionSet_ExtraVesselAvailabilities() {
+	public EReference getAbstractSolutionSet_ExtraVesselCharters() {
 		return (EReference)abstractSolutionSetEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -3534,7 +3534,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities() {
+	public EReference getSolutionOptionMicroCase_ExtraVesselCharters() {
 		return (EReference)solutionOptionMicroCaseEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -3834,7 +3834,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__BASE_OPTION);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__OPTIONS);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS);
-		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES);
 		createEReference(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS);
 		createEAttribute(abstractSolutionSetEClass, ABSTRACT_SOLUTION_SET__USE_SCENARIO_BASE);
@@ -3859,7 +3859,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		solutionOptionMicroCaseEClass = createEClass(SOLUTION_OPTION_MICRO_CASE);
 		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION);
 		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL);
-		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES);
+		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS);
 		createEReference(solutionOptionMicroCaseEClass, SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES);
 
 		changeDescriptionEClass = createEClass(CHANGE_DESCRIPTION);
@@ -4255,10 +4255,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getNominatedShippingOption_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, NominatedShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fullVesselCharterOptionEClass, FullVesselCharterOption.class, "FullVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFullVesselCharterOption_VesselCharter(), theCargoPackage.getVesselAvailability(), null, "vesselCharter", null, 0, 1, FullVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFullVesselCharterOption_VesselCharter(), theCargoPackage.getVesselCharter(), null, "vesselCharter", null, 0, 1, FullVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(existingVesselCharterOptionEClass, ExistingVesselCharterOption.class, "ExistingVesselCharterOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getExistingVesselCharterOption_VesselCharter(), theCargoPackage.getVesselAvailability(), null, "vesselCharter", null, 0, 1, ExistingVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExistingVesselCharterOption_VesselCharter(), theCargoPackage.getVesselCharter(), null, "vesselCharter", null, 0, 1, ExistingVesselCharterOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(analysisResultDetailEClass, AnalysisResultDetail.class, "AnalysisResultDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -4307,7 +4307,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAbstractSolutionSet_BaseOption(), this.getSolutionOption(), null, "baseOption", null, 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_Options(), this.getSolutionOption(), null, "options", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_ExtraVesselEvents(), theCargoPackage.getVesselEvent(), null, "extraVesselEvents", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAbstractSolutionSet_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractSolutionSet_ExtraVesselCharters(), theCargoPackage.getVesselCharter(), null, "extraVesselCharters", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractSolutionSet_ExtraCharterInMarkets(), theSpotMarketsPackage.getCharterInMarket(), null, "extraCharterInMarkets", null, 0, -1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAbstractSolutionSet_UseScenarioBase(), ecorePackage.getEBoolean(), "useScenarioBase", "true", 0, 1, AbstractSolutionSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4332,7 +4332,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(solutionOptionMicroCaseEClass, SolutionOptionMicroCase.class, "SolutionOptionMicroCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSolutionOptionMicroCase_ScheduleSpecification(), theCargoPackage.getScheduleSpecification(), null, "scheduleSpecification", null, 0, 1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSolutionOptionMicroCase_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSolutionOptionMicroCase_ExtraVesselAvailabilities(), theCargoPackage.getVesselAvailability(), null, "extraVesselAvailabilities", null, 0, -1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSolutionOptionMicroCase_ExtraVesselCharters(), theCargoPackage.getVesselCharter(), null, "extraVesselCharters", null, 0, -1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSolutionOptionMicroCase_CharterInMarketOverrides(), theCargoPackage.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, SolutionOptionMicroCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeDescriptionEClass, ChangeDescription.class, "ChangeDescription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

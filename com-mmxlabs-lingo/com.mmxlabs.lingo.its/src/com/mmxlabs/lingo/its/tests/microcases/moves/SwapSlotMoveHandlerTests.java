@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -38,7 +38,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
@@ -59,7 +59,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -69,7 +69,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -119,9 +119,9 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -139,7 +139,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -149,7 +149,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.makeDESSale("D1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -159,7 +159,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.makeDESSale("D2", LocalDate.of(2017, 2, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withWindowSize(3, TimePeriod.MONTHS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 2) //
+				.withVesselAssignment(vesselCharter1, 2) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -196,9 +196,9 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(6, result.getSequence(resource1).size());
@@ -216,7 +216,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -273,7 +273,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -283,7 +283,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -333,9 +333,9 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -353,7 +353,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -363,7 +363,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.withOptional(true) //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -413,9 +413,9 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -433,10 +433,10 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -445,7 +445,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -457,7 +457,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability2, 1) //
+				.withVesselAssignment(vesselCharter2, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -502,11 +502,11 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
-			final IVesselAvailability o_vesselAvailability2 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability2, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
+			final IVesselCharter o_vesselCharter2 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter2, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
-			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
+			final IResource resource2 = vesselProvider.getResource(o_vesselCharter2);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -526,10 +526,10 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -538,7 +538,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -550,7 +550,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability2, 1) //
+				.withVesselAssignment(vesselCharter2, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -595,11 +595,11 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			movePair.getFirst().apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
-			final IVesselAvailability o_vesselAvailability2 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability2, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter1, IVesselCharter.class);
+			final IVesselCharter o_vesselCharter2 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter2, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
-			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
+			final IResource resource2 = vesselProvider.getResource(o_vesselCharter2);
 
 			// Check expectations
 			Assertions.assertEquals(4, result.getSequence(resource1).size());
@@ -619,7 +619,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("100000") //
 				.build();
 
@@ -629,7 +629,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 

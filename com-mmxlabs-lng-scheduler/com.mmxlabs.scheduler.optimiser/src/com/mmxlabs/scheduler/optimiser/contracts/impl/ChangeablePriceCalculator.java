@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -103,7 +103,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	@Override
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
+			@NonNull IVesselCharter vesselCharter, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
 		return getPrice();
 	}
 

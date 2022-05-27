@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoUtils;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -39,9 +39,9 @@ import com.mmxlabs.models.lng.scenario.actions.impl.FreezeSlotChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FreezeVesselEventChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.RemoveCargoChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.RemoveSlotChange;
-import com.mmxlabs.models.lng.scenario.actions.impl.RemoveVesselAvailabilityChange;
+import com.mmxlabs.models.lng.scenario.actions.impl.RemoveVesselCharterChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.RemoveVesselEventChange;
-import com.mmxlabs.models.lng.scenario.actions.impl.UpdateVesselAvailabilityChange;
+import com.mmxlabs.models.lng.scenario.actions.impl.UpdateVesselCharterChange;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -110,9 +110,9 @@ public class RollForwardEngine {
 
 		if (updateVessels != null && updateVessels) {
 			// Update vessel start states
-			Map<VesselAvailability, EObject> firstCommitment = findFirstCommitments(scheduleModel, slotsToFreeze, eventsToFreeze);
+			Map<VesselCharter, EObject> firstCommitment = findFirstCommitments(scheduleModel, slotsToFreeze, eventsToFreeze);
 
-			changes = generateVesselAvailabilityChanges(domain, firstCommitment, changes); 
+			changes = generateVesselCharterChanges(domain, firstCommitment, changes); 
 		}
 		*/
 
@@ -123,20 +123,20 @@ public class RollForwardEngine {
 
 
 	/**
-	 * Returns a list of IRollForwardChange objects that update the start date on VesselAvailability objects, or appends these objects to a specified list.
+	 * Returns a list of IRollForwardChange objects that update the start date on VesselCharter objects, or appends these objects to a specified list.
 	 * 
 	 * @param domain The editing domain.
-	 * @param firstCommitments A map from VesselAvailability objects to their first commitments.
+	 * @param firstCommitments A map from VesselCharter objects to their first commitments.
 	 * @param listToAppendTo An optional list to append the results to.
-	 * @return The list to which the UpdateVesselAvailabilityChange objects has been appended.
+	 * @return The list to which the UpdateVesselCharterChange objects has been appended.
 	 */
-	protected List<IRollForwardChange> generateVesselAvailabilityChanges(@NonNull final EditingDomain domain, 
-			@NonNull final Map<VesselAvailability, EObject> firstCommitments, final List<IRollForwardChange> listToAppendTo) {
+	protected List<IRollForwardChange> generateVesselCharterChanges(@NonNull final EditingDomain domain, 
+			@NonNull final Map<VesselCharter, EObject> firstCommitments, final List<IRollForwardChange> listToAppendTo) {
 		// create an empty list if there wasn't one specified to append to
 		List<IRollForwardChange> result = (listToAppendTo == null ? new LinkedList<IRollForwardChange>() : listToAppendTo); 
 		
-		for (final Map.Entry<VesselAvailability, EObject> e : firstCommitments.entrySet()) {
-			final VesselAvailability vesselAvailability = e.getKey();
+		for (final Map.Entry<VesselCharter, EObject> e : firstCommitments.entrySet()) {
+			final VesselCharter vesselCharter = e.getKey();
 			final EObject eObject = e.getValue();
 			// Dummy heel options. Should be derived from left over heel etc..
 			// Enough to generally avoid arriving warm.
@@ -146,19 +146,19 @@ public class RollForwardEngine {
 			heelOptions.setMinVolumeAvailable(0);
 			heelOptions.setPriceExpression("1");
 
-			if (vesselAvailability != null) {
+			if (vesselCharter != null) {
 				if (eObject instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) eObject;
-					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, slotVisit, heelOptions, domain));
+					result.add(new UpdateVesselCharterChange(vesselCharter, slotVisit, heelOptions, domain));
 				} else if (eObject instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) eObject;
-					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEventVisit, heelOptions, domain));
+					result.add(new UpdateVesselCharterChange(vesselCharter, vesselEventVisit, heelOptions, domain));
 				} else if (eObject instanceof Slot) {
 					final Slot<?> slot = (Slot<?>) eObject;
-					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, slot, heelOptions, domain));
+					result.add(new UpdateVesselCharterChange(vesselCharter, slot, heelOptions, domain));
 				} else if (eObject instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) eObject;
-					result.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEvent, heelOptions, domain));
+					result.add(new UpdateVesselCharterChange(vesselCharter, vesselEvent, heelOptions, domain));
 				} else {
 					// Error!
 				}			
@@ -233,23 +233,23 @@ public class RollForwardEngine {
 	}
 	
 	/**
-	 * Return a map from VesselAvailability objects to Commitment objects, representing the first commitment in each availability. 
+	 * Return a map from VesselCharter objects to Commitment objects, representing the first commitment in each availability. 
 	 * 
 	 * @param scheduleModel
 	 * @param slotsToFreeze
 	 * @param eventsToFreeze
 	 */
-	protected @NonNull Map<VesselAvailability, EObject> findFirstCommitments(@NonNull final ScheduleModel scheduleModel, @NonNull final List<Slot<?>> slotsToFreeze,
+	protected @NonNull Map<VesselCharter, EObject> findFirstCommitments(@NonNull final ScheduleModel scheduleModel, @NonNull final List<Slot<?>> slotsToFreeze,
 			final List<VesselEvent> eventsToFreeze) {
-		final HashMap<VesselAvailability, EObject> result = new HashMap<>();
+		final HashMap<VesselCharter, EObject> result = new HashMap<>();
 		// Find first remaining event/cargoes on each vessel
 		final Schedule schedule = scheduleModel.getSchedule();
 		if (schedule != null) {
 			// traverse every vessel schedule Sequence in the model
 			for (final Sequence sequence : schedule.getSequences()) {
 
-				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-				if (vesselAvailability == null) {
+				final VesselCharter vesselCharter = sequence.getVesselCharter();
+				if (vesselCharter == null) {
 					continue;
 				}				
 					
@@ -266,7 +266,7 @@ public class RollForwardEngine {
 
 				// if there is a first commitment, store it in the method return result
 				if (firstCommitment != null) {
-					result.put(vesselAvailability, firstCommitment.object);
+					result.put(vesselCharter, firstCommitment.object);
 				}
 			}
 		}
@@ -562,15 +562,15 @@ public class RollForwardEngine {
 
 		if (updateVessels != null && updateVessels) {
 			// Update vessel start states
-			final Map<VesselAvailability, EObject> firstCommitment = new HashMap<>();
-			final Set<VesselAvailability> vesselsToRemove = new HashSet<>();
+			final Map<VesselCharter, EObject> firstCommitment = new HashMap<>();
+			final Set<VesselCharter> vesselsToRemove = new HashSet<>();
 			{
 				examineVesselAvailabilitiesObsolete(scheduleModel, removeDate, slotsToFreeze, cargoesToRemove, eventsToRemove, eventsToFreeze, removeVessels, firstCommitment, vesselsToRemove);
 			}
 
 			// Generate vessel changes
 			{
-				generateVesselAvailabilityChangesObsolete(domain, changes, firstCommitment, vesselsToRemove);
+				generateVesselCharterChangesObsolete(domain, changes, firstCommitment, vesselsToRemove);
 			}
 		}
 
@@ -579,10 +579,10 @@ public class RollForwardEngine {
 	}
 
 	// obsolete code in pre-refactored form, using removals logic
-	protected void generateVesselAvailabilityChangesObsolete(@NonNull final EditingDomain domain, @NonNull final List<IRollForwardChange> changes,
-			@NonNull final Map<VesselAvailability, EObject> firstCommitment, @NonNull final Set<VesselAvailability> vesselsToRemove) {
-		for (final Map.Entry<VesselAvailability, EObject> e : firstCommitment.entrySet()) {
-			final VesselAvailability vesselAvailability = e.getKey();
+	protected void generateVesselCharterChangesObsolete(@NonNull final EditingDomain domain, @NonNull final List<IRollForwardChange> changes,
+			@NonNull final Map<VesselCharter, EObject> firstCommitment, @NonNull final Set<VesselCharter> vesselsToRemove) {
+		for (final Map.Entry<VesselCharter, EObject> e : firstCommitment.entrySet()) {
+			final VesselCharter vesselCharter = e.getKey();
 			final EObject eObject = e.getValue();
 			// Dummy heel options. Should be derived from left over heel etc..
 			// Enough to generally avoid arriving warm.
@@ -594,44 +594,44 @@ public class RollForwardEngine {
 
 			if (eObject instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) eObject;
-				changes.add(new UpdateVesselAvailabilityChange(vesselAvailability, slotVisit, heelOptions, domain));
+				changes.add(new UpdateVesselCharterChange(vesselCharter, slotVisit, heelOptions, domain));
 			} else if (eObject instanceof VesselEventVisit) {
 				final VesselEventVisit vesselEventVisit = (VesselEventVisit) eObject;
-				changes.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEventVisit, heelOptions, domain));
+				changes.add(new UpdateVesselCharterChange(vesselCharter, vesselEventVisit, heelOptions, domain));
 			} else if (eObject instanceof Slot) {
 				final Slot<?> slot = (Slot<?>) eObject;
-				changes.add(new UpdateVesselAvailabilityChange(vesselAvailability, slot, heelOptions, domain));
+				changes.add(new UpdateVesselCharterChange(vesselCharter, slot, heelOptions, domain));
 			} else if (eObject instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) eObject;
-				changes.add(new UpdateVesselAvailabilityChange(vesselAvailability, vesselEvent, heelOptions, domain));
+				changes.add(new UpdateVesselCharterChange(vesselCharter, vesselEvent, heelOptions, domain));
 			} else {
 				// Error!
 			}
 		}
 
-		for (final VesselAvailability vesselAvailability : vesselsToRemove) {
-			changes.add(new RemoveVesselAvailabilityChange(vesselAvailability, domain));
+		for (final VesselCharter vesselCharter : vesselsToRemove) {
+			changes.add(new RemoveVesselCharterChange(vesselCharter, domain));
 		}
 	}
 
 	// obsolete code in pre-refactored form, using removals logic
 	protected void examineVesselAvailabilitiesObsolete(@NonNull final ScheduleModel scheduleModel, @Nullable final LocalDate removeDate, @NonNull final List<Slot<?>> slotsToFreeze,
 			@NonNull final List<Cargo> cargoesToRemove, @NonNull final List<VesselEvent> eventsToRemove, final List<VesselEvent> eventsToFreeze, @Nullable final Boolean removeVessels,
-			@NonNull final Map<VesselAvailability, EObject> firstCommitment, @NonNull final Set<VesselAvailability> vesselsToRemove) {
+			@NonNull final Map<VesselCharter, EObject> firstCommitment, @NonNull final Set<VesselCharter> vesselsToRemove) {
 		// Find first remaining event/cargoes on each vessel
 		final Schedule schedule = scheduleModel.getSchedule();
 		if (schedule != null) {
 			for (final Sequence sequence : schedule.getSequences()) {
 
-				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-				if (vesselAvailability == null) {
+				final VesselCharter vesselCharter = sequence.getVesselCharter();
+				if (vesselCharter == null) {
 					continue;
 				}
 
 				if (removeVessels != null && removeDate != null && removeVessels) {
-					if (vesselAvailability.isSetEndBy()) {
-						if (removeDate.atStartOfDay().isAfter(vesselAvailability.getEndBy())) {
-							vesselsToRemove.add(vesselAvailability);
+					if (vesselCharter.isSetEndBy()) {
+						if (removeDate.atStartOfDay().isAfter(vesselCharter.getEndBy())) {
+							vesselsToRemove.add(vesselCharter);
 							continue;
 						}
 					}
@@ -683,7 +683,7 @@ public class RollForwardEngine {
 				}
 
 				if (firstObject != null) {
-					firstCommitment.put(vesselAvailability, firstObject);
+					firstCommitment.put(vesselCharter, firstObject);
 				}
 			}
 		}

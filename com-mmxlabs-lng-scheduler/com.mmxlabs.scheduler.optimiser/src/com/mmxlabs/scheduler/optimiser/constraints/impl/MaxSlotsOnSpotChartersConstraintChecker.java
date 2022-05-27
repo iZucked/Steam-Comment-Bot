@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -50,8 +50,8 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintCheck
 	@Override
 	public boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, List<String> messages) {
 		for (IResource resource : sequences.getResources()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER && vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER && vesselCharter.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
 				continue;
 			}
 			int spots = 0;
@@ -62,7 +62,7 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintCheck
 			}
 			if (spots > MAX_SPOT_COUNT) {
 				if (messages != null)
-					messages.add(String.format("%s: More than one cargo on the round trip charter vessel %s.", this.name, vesselAvailability.getVessel().getName()));
+					messages.add(String.format("%s: More than one cargo on the round trip charter vessel %s.", this.name, vesselCharter.getVessel().getName()));
 				return false;
 			}
 		}

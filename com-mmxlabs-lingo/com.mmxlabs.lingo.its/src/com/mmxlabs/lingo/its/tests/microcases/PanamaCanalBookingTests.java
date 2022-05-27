@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -77,7 +77,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		Cargo cargo;
 		DESSalesMarket market;
-		VesselAvailability vesselAvailability;
+		VesselCharter vesselCharter;
 
 		int cameronToColonDistance;
 
@@ -116,7 +116,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		distanceModelBuilder.setPortToPortDistance(port1, record.colon, RouteOption.DIRECT, record.cameronToColonDistance, false);
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final LocalDateTime loadDate = LocalDateTime.of(2021, Month.MARCH, 7, 5, 0, 0);
@@ -134,10 +134,10 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.makeMarketDESSale("D1", market, dischargeDate) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
-		record.vesselAvailability = vesselAvailability;
+		record.vesselCharter = vesselCharter;
 		record.cargo = cargo;
 		record.market = market;
 		return record;
@@ -156,7 +156,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 		evaluateTestWith(makeCanalBookingService());
 
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 
 		final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(schedule);
@@ -296,7 +296,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final SlotAllocation dischargeAllocation = ca.getDischargeAllocation();
 		Assertions.assertNotNull(dischargeAllocation.getSlotVisit().getLateness());
 
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final int timeToColon = (int) Math.round((double) record.cameronToColonDistance / vessel.getMaxSpeed());
 
 		final int loadDuration = ca.getLoadAllocation().getSlot().getSchedulingTimeWindow().getDuration();
@@ -348,7 +348,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final SlotAllocation dischargeAllocation = ca.getDischargeAllocation();
 		Assertions.assertNotNull(dischargeAllocation.getSlotVisit().getLateness());
 
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final int timeToColon = (int) Math.round((double) record.cameronToColonDistance / vessel.getMaxSpeed());
 
 		final int loadDuration = ca.getLoadAllocation().getSlot().getSchedulingTimeWindow().getDuration();
@@ -402,7 +402,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final SlotAllocation dischargeAllocation = ca.getDischargeAllocation();
 		Assertions.assertNotNull(dischargeAllocation.getSlotVisit().getLateness());
 
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final int timeToColon = (int) Math.round((double) record.cameronToColonDistance / vessel.getMaxSpeed());
 
 		final int loadDuration = ca.getLoadAllocation().getSlot().getSchedulingTimeWindow().getDuration();
@@ -429,7 +429,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		psr.setVesselGroupCanalParameter(p);
 		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), vessel);
 
 		evaluateTestWith(makeCanalBookingService());
@@ -481,7 +481,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		psr.setVesselGroupCanalParameter(p);
 		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 
 		// Flexible booking first
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), null);
@@ -533,7 +533,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		psr.setVesselGroupCanalParameter(p);
 		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), vessel);
 
 		evaluateTestWith(makeCanalBookingService());
@@ -587,7 +587,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		canalBookings.setArrivalMarginHours(24);
 
-		final Vessel vessel = record.vesselAvailability.getVessel();
+		final Vessel vessel = record.vesselCharter.getVessel();
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 13), vessel);
 
 		evaluateTestWith(makeCanalBookingService());
@@ -632,7 +632,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_BORYEONG);
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("COMarket", vessel, "80000", 10);
@@ -659,7 +659,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
@@ -673,7 +673,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
@@ -757,7 +757,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final Port colon = portFinder.findPortById(InternalDataConstants.PORT_COLON);
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("COMarket", vessel, "80000", 10);
@@ -783,7 +783,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
@@ -797,7 +797,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
@@ -889,7 +889,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		vesselGroup.getVessels().add(dummyVessel);
 		fleetModelFinder.getFleetModel().getVesselGroups().add(vesselGroup);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2020, 12, 14, 18, 00)) //
 				.withEndWindow(LocalDateTime.of(2021, 03, 31, 19, 00)) //
 				.withCharterRate("80000") //
@@ -908,7 +908,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(5, TimePeriod.DAYS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 0) //
+				.withVesselAssignment(vesselCharter, 0) //
 				.build();
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
@@ -1005,14 +1005,14 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		vesselGroup.getVessels().add(vessel2);
 		fleetModelFinder.getFleetModel().getVesselGroups().add(vesselGroup);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withStartWindow(LocalDateTime.of(2020, 12, 15, 00, 00)) //
 				.withCharterRate("80000") //
 				.withStartHeel(6000, 6000, 22.67, "0.01") //
 				.withEndHeel(100, 100, EVesselTankState.MUST_BE_COLD, false) //
 				.build();
 
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withStartWindow(LocalDateTime.of(2020, 12, 26, 00, 00)) //
 				.withCharterRate("80000") //
 				.withStartHeel(6000, 6000, 22.67, "0.01") //
@@ -1030,7 +1030,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(1, TimePeriod.DAYS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability1, 0) //
+				.withVesselAssignment(vesselCharter1, 0) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
@@ -1044,7 +1044,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 				.withWindowSize(1, TimePeriod.DAYS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability2, 0) //
+				.withVesselAssignment(vesselCharter2, 0) //
 				.build();
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
@@ -1074,7 +1074,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 			final Sequence sequence1;
 			final Sequence sequence2;
 			final Sequence firstSequence = schedule.getSequences().get(0);
-			if (firstSequence.getVesselAvailability() == vesselAvailability1) {
+			if (firstSequence.getVesselCharter() == vesselCharter1) {
 				sequence1 = firstSequence;
 				sequence2 = schedule.getSequences().get(1);
 			} else {
@@ -1131,7 +1131,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 			final Sequence sequence1;
 			final Sequence sequence2;
 			final Sequence firstSequence = schedule.getSequences().get(0);
-			if (firstSequence.getVesselAvailability() == vesselAvailability1) {
+			if (firstSequence.getVesselCharter() == vesselCharter1) {
 				sequence1 = firstSequence;
 				sequence2 = schedule.getSequences().get(1);
 			} else {

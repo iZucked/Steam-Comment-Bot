@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
@@ -108,8 +108,8 @@ public class AssignmentImporter {
 										} else {
 											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
 											if (v != null) {
-												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), charterIndex);
+												final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
+														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), charterIndex);
 
 												assignableElement.setVesselAssignmentType(availability);
 											}
@@ -137,10 +137,10 @@ public class AssignmentImporter {
 		final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		for (final CollectedAssignment collectAssignment : collectAssignments) {
 			final Map<String, String> row = new HashMap<>();
-			if (collectAssignment.getVesselAvailability() != null) {
+			if (collectAssignment.getVesselCharter() != null) {
 				result.add(row);
-				row.put("vesselassignment", collectAssignment.getVesselAvailability().getVessel().getName());
-				row.put("charterindex", Integer.toString(collectAssignment.getVesselAvailability().getCharterNumber()));
+				row.put("vesselassignment", collectAssignment.getVesselCharter().getVessel().getName());
+				row.put("charterindex", Integer.toString(collectAssignment.getVesselCharter().getCharterNumber()));
 			} else if (collectAssignment.getCharterInMarket() != null) {
 				result.add(row);
 

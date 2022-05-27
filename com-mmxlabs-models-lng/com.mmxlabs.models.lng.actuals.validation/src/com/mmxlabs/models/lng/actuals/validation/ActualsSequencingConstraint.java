@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
@@ -106,7 +106,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 			if (collectAssignments != null) {
 				// Check sequencing for each grouping
 				for (final CollectedAssignment collectedAssignment : collectAssignments) {
-					VesselAvailability va = collectedAssignment.getVesselAvailability();
+					VesselCharter va = collectedAssignment.getVesselCharter();
 
 					// Assume vessel start is Actualised, but check state!
 					boolean previousElementHasActuals = true;
@@ -146,7 +146,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 											getPortName(actualPort), getPortName(startPort));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__START_AT);
 									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
 
 									statuses.add(failure);
@@ -163,7 +163,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 												getDateString(va.getStartAfter()));
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__START_AFTER);
 										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
 
 										statuses.add(failure);
@@ -176,7 +176,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 												getDateString(va.getStartBy()));
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__START_BY);
 										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
 										statuses.add(failure);
 
@@ -190,7 +190,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 												getVesselName(va.getVessel()), loadActuals.getCV(), startHeel.getCvValue());
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__START_HEEL);
 										failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
 										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
 
@@ -205,7 +205,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 											(double) startHeel.getMaxVolumeAvailable());
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_CHARTER__START_HEEL);
 									failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
 									failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);

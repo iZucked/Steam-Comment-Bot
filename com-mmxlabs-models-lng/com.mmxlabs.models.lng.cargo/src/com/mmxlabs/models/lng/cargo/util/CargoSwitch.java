@@ -38,7 +38,7 @@ import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -66,7 +66,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.cargo.CargoPackage
  * @generated
  */
-public class CargoSwitch<@Nullable T1> extends Switch<T1> {
+public class CargoSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -200,12 +200,12 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CargoPackage.VESSEL_AVAILABILITY: {
-				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
-				T1 result = caseVesselAvailability(vesselAvailability);
-				if (result == null) result = caseUUIDObject(vesselAvailability);
-				if (result == null) result = caseVesselAssignmentType(vesselAvailability);
-				if (result == null) result = caseMMXObject(vesselAvailability);
+			case CargoPackage.VESSEL_CHARTER: {
+				VesselCharter vesselCharter = (VesselCharter)theEObject;
+				T1 result = caseVesselCharter(vesselCharter);
+				if (result == null) result = caseUUIDObject(vesselCharter);
+				if (result == null) result = caseVesselAssignmentType(vesselCharter);
+				if (result == null) result = caseMMXObject(vesselCharter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -561,17 +561,17 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Charter</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Charter</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseVesselAvailability(VesselAvailability object) {
+	public T1 caseVesselCharter(VesselCharter object) {
 		return null;
 	}
 

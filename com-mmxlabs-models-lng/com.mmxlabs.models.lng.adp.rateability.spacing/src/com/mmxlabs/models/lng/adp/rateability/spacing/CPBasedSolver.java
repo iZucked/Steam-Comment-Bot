@@ -67,7 +67,7 @@ import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
@@ -137,7 +137,7 @@ public class CPBasedSolver {
 				cargoes[i] = cargo;
 				++i;
 			}
-			final Vessel vessel = new Vessel(desSpacingAllocation.getVessel().getVessel().getName(), "0", cargoes);
+			final Vessel vessel = new Vessel(desSpacingAllocation.getVesselCharter().getVessel().getName(), "0", cargoes);
 			inputVessels.add(vessel);
 		}
 
@@ -239,7 +239,7 @@ public class CPBasedSolver {
 				continue;
 			}
 			final VesselAssignmentType cargoVA = cargo.getVesselAssignmentType();
-			if (cargoVA instanceof VesselAvailability va) {
+			if (cargoVA instanceof VesselCharter va) {
 				final com.mmxlabs.models.lng.fleet.Vessel eVessel = va.getVessel();
 				final Vessel vessel = eVesselToVesselMap.get(eVessel);
 				if (vessel != null) {
@@ -293,7 +293,7 @@ public class CPBasedSolver {
 		final Map<com.mmxlabs.models.lng.fleet.Vessel, List<DryDockEvent>> dryDockEvents = new HashMap<>();
 		for (final VesselEvent event : sm.getCargoModel().getVesselEvents()) {
 			if (event instanceof final DryDockEvent dryDockEvent) {
-				if (dryDockEvent.getVesselAssignmentType() instanceof final VesselAvailability va) {
+				if (dryDockEvent.getVesselAssignmentType() instanceof final VesselCharter va) {
 					final com.mmxlabs.models.lng.fleet.Vessel vessel = va.getVessel();
 					if (eVessels.contains(vessel)) {
 						dryDockEvents.computeIfAbsent(vessel, v -> new LinkedList<>()).add(dryDockEvent);
@@ -406,7 +406,7 @@ public class CPBasedSolver {
 				continue;
 			}
 			final com.mmxlabs.models.lng.fleet.Vessel eVessel = vesselToEVesselMap.get(cargo.vessel);
-			final Optional<VesselAvailability> optVa = ScenarioModelUtil.getCargoModel(sm).getVesselAvailabilities().stream().filter(va -> va.getVessel() == eVessel).findAny();
+			final Optional<VesselCharter> optVa = ScenarioModelUtil.getCargoModel(sm).getVesselCharters().stream().filter(va -> va.getVessel() == eVessel).findAny();
 			if (optVa.isPresent()) {
 				vesselToVatMap.put(cargo.vessel, optVa.get());
 			} else {
@@ -415,7 +415,7 @@ public class CPBasedSolver {
 				if (optCim.isPresent()) {
 					vesselToVatMap.put(cargo.vessel, optCim.get());
 				} else {
-					throw new IllegalStateException(String.format("Could not find vessel availability or charter in market: %s", cargo.vessel));
+					throw new IllegalStateException(String.format("Could not find vessel charter or charter in market: %s", cargo.vessel));
 				}
 			}
 		}
@@ -553,7 +553,7 @@ public class CPBasedSolver {
 				final IntVar dryDockStart = model.newIntVar(startAfterInt, startByInt, String.format("DD-%s-start", event.getName()));
 				final IntVar dryDockEnd = model.newIntVar(startAfterInt + durationInHours, startByInt + durationInHours, String.format("DD-%s-end", event.getName()));
 				final IntervalVar interval = model.newIntervalVar(dryDockStart, durationInHours, dryDockEnd, String.format("DD-%s-interval", event.getName()));
-				final com.mmxlabs.models.lng.fleet.Vessel vessel = ((VesselAvailability) event.getVesselAssignmentType()).getVessel();
+				final com.mmxlabs.models.lng.fleet.Vessel vessel = ((VesselCharter) event.getVesselAssignmentType()).getVessel();
 				final Triple<IntVar, IntervalVar, IntVar> triple = Triple.of(dryDockStart, interval, dryDockEnd);
 				dryDockIntervalVars.computeIfAbsent(vessel.getName(), v -> new LinkedList<>()).add(triple);
 				dryDockIntervalVarsMap.put(event, triple);
@@ -883,7 +883,7 @@ public class CPBasedSolver {
 							ShippedCargoModellingContainer fixedCargoModellingVariables = shippedFixedCargoDetails.get(fixedCargo);
 							if (fixedCargoModellingVariables == null) {
 								final int fastestFixedCargoLadenTime = CargoTravelTimeUtils.getFobMinTimeInHours(fixedLoadSlot, fixedDischargeSlot, FIRST_DATE, vat,
-										sm.getReferenceModel().getPortModel(), ((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
+										sm.getReferenceModel().getPortModel(), ((VesselCharter) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
 								final int[] minMaxLadenTravel = new int[] { fastestFixedCargoLadenTime, fastestFixedCargoLadenTime };
 								fixedCargoModellingVariables = buildFixedCargoShippedCargoModellingVariables(model, earliestLoadTimeInt, latestLoadTimeInt, v, fixedLoadSlot.getName(),
 										fixedDischargeSlot.getName(), fixedLoadSlot.getSchedulingTimeWindow().getDuration(), fixedLoadSlot.getSchedulingTimeWindow().getDuration(), minMaxLadenTravel,
@@ -908,14 +908,14 @@ public class CPBasedSolver {
 							final DischargeSlot ghostDischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 							ghostDischargeSlot.setPort(dischargeEPort);
 							final int fastestBallastTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(ghostDischargeSlot, fixedLoadSlot, FIRST_DATE, vat, sm.getReferenceModel().getPortModel(),
-									((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
+									((VesselCharter) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
 							final LinearExpr linearExpr = LinearExpr.scalProd(
 									new IntVar[] { cargoModelVariables.getDischargePortVariables().getEnd(), fixedCargoModellingVariables.getLoadPortVariables().getStart() }, new int[] { 1, -1 });
 							model.addLessOrEqual(linearExpr, -fastestBallastTravelTime).onlyEnforceIf(fixedCargoIsAfterSelection);
 
 							for (final LoadSlot potentialLoadSlot : sortedLoadSlots) {
 								final int fastestBallastToReachTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(fixedDischargeSlot, potentialLoadSlot, FIRST_DATE, vat,
-										sm.getReferenceModel().getPortModel(), ((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
+										sm.getReferenceModel().getPortModel(), ((VesselCharter) vat).getVessel().getVesselOrDelegateMaxSpeed(), panamaWaitingDays, modelDistanceProvider);
 
 								final IntVar cargoLoadSlotSelection = cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndices.get(potentialLoadSlot)];
 								final LinearExpr linearExpr2 = LinearExpr.scalProd(
@@ -1388,7 +1388,7 @@ public class CPBasedSolver {
 					final DischargeSlot dischargeSlot = (DischargeSlot) eCargo.getSlots().get(1);
 					final VesselAssignmentType vat = eCargo.getVesselAssignmentType();
 					final Pair<@NonNull Integer, @NonNull Integer> panamaWaitingDays;
-					if (vat instanceof final VesselAvailability va) {
+					if (vat instanceof final VesselCharter va) {
 						final Vessel vess = eVesselToVesselMap.get(va.getVessel());
 						if (vess != null) {
 							panamaWaitingDays = minimumPanamaWaitingDays.get(vess);
@@ -1567,8 +1567,8 @@ public class CPBasedSolver {
 					if (!t.contract.fob) {
 						// VesselAssignmentType
 						final com.mmxlabs.models.lng.fleet.Vessel expectedVessel = vesselNameMap.get(vessels[vv].name.toLowerCase());
-						Optional<@NonNull VesselAvailability> optVa = sm.getCargoModel().getVesselAvailabilities().stream().filter(VesselAvailability.class::isInstance)
-								.map(VesselAvailability.class::cast).filter(va -> va.getVessel() == expectedVessel).findAny();
+						Optional<@NonNull VesselCharter> optVa = sm.getCargoModel().getVesselCharters().stream().filter(VesselCharter.class::isInstance)
+								.map(VesselCharter.class::cast).filter(va -> va.getVessel() == expectedVessel).findAny();
 						final VesselAssignmentType va;
 						if (optVa.isPresent()) {
 							va = optVa.get();
@@ -1612,13 +1612,13 @@ public class CPBasedSolver {
 
 	public static int getMinimumTravelTime(@NonNull final Slot<?> startSlot, @NonNull final Slot<?> endSlot, final com.mmxlabs.models.lng.fleet.Vessel vessel,
 			final Map<com.mmxlabs.models.lng.fleet.Vessel, Pair<@NonNull Integer, @NonNull Integer>> minimumPanamaWaitingDays, @NonNull final IScenarioDataProvider sdp, final LNGScenarioModel sm) {
-		final List<VesselAvailability> vaList = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> va.getVessel() == vessel).collect(Collectors.toList());
+		final List<VesselCharter> vaList = sm.getCargoModel().getVesselCharters().stream().filter(va -> va.getVessel() == vessel).collect(Collectors.toList());
 		if (vaList.isEmpty()) {
 			throw new IllegalStateException(String.format("No fleet data provided for %s", ScenarioElementNameHelper.getName(vessel, "<Unknown>")));
 		}
 		@NonNull
 		final ModelDistanceProvider modelDistanceProvider = sdp.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-		final VesselAvailability va = vaList.get(0);
+		final VesselCharter va = vaList.get(0);
 		final Pair<@NonNull Integer, @NonNull Integer> panamaWaitingDays = minimumPanamaWaitingDays.get(vessel);
 		final int minTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(startSlot, endSlot, FIRST_DATE, va, sm.getReferenceModel().getPortModel(), vessel.getVesselOrDelegateMaxSpeed(),
 				panamaWaitingDays, modelDistanceProvider);

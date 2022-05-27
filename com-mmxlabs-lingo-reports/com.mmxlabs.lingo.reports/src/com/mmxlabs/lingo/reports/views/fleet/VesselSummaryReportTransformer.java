@@ -19,7 +19,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -56,9 +56,9 @@ public class VesselSummaryReportTransformer {
 
 						final Pair<Object, Integer> key;
 
-						final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-						if (vesselAvailability != null) {
-							key = Pair.of(vesselAvailability.getVessel().getName(), vesselAvailability.getCharterNumber());
+						final VesselCharter vesselCharter = sequence.getVesselCharter();
+						if (vesselCharter != null) {
+							key = Pair.of(vesselCharter.getVessel().getName(), vesselCharter.getCharterNumber());
 						} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
 							key = Pair.of(sequence.getCharterInMarket().getName(), sequence.getSpotIndex());
 						} else {
@@ -85,9 +85,9 @@ public class VesselSummaryReportTransformer {
 
 						final Pair<Object, Integer> key;
 
-						final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-						if (vesselAvailability != null) {
-							key = Pair.of(vesselAvailability.getVessel().getName(), vesselAvailability.getCharterNumber());
+						final VesselCharter vesselCharter = sequence.getVesselCharter();
+						if (vesselCharter != null) {
+							key = Pair.of(vesselCharter.getVessel().getName(), vesselCharter.getCharterNumber());
 						} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
 							key = Pair.of(sequence.getCharterInMarket().getName(), sequence.getSpotIndex());
 						} else {
@@ -226,9 +226,9 @@ public class VesselSummaryReportTransformer {
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
 			row.getInputEquivalents().addAll(startEvent.getEvents());
-			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
-			if (vesselAvailability != null) {
-				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
+			final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
+			if (vesselCharter != null) {
+				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselCharter.getVessel()));
 			}
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;

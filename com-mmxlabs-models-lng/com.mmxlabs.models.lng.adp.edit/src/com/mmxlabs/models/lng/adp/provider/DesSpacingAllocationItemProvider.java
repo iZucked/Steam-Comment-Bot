@@ -61,26 +61,26 @@ public class DesSpacingAllocationItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselPropertyDescriptor(object);
+			addVesselCharterPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel feature.
+	 * This adds a property descriptor for the Vessel Charter feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselPropertyDescriptor(Object object) {
+	protected void addVesselCharterPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_DesSpacingAllocation_vessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DesSpacingAllocation_vessel_feature", "_UI_DesSpacingAllocation_type"),
-				 ADPPackage.Literals.DES_SPACING_ALLOCATION__VESSEL,
+				 getString("_UI_DesSpacingAllocation_vesselCharter_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DesSpacingAllocation_vesselCharter_feature", "_UI_DesSpacingAllocation_type"),
+				 ADPPackage.Literals.DES_SPACING_ALLOCATION__VESSEL_CHARTER,
 				 true,
 				 false,
 				 true,

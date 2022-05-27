@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.contracts;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 /**
 * @deprecated Use ICharterCostCalculator instead.
@@ -14,9 +14,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 public interface ICharterRateCalculator extends ICalculator {
 	/**
 	 * 
-	 * @param vesselAvailability
+	 * @param vesselCharter
 	 * @param voyagePlanStartTime, time loading starts.
 	 * @return
 	 */
-	long getCharterRatePerDay(@NonNull IVesselAvailability vesselAvailability, int voyagePlanStartTime);
+	long getCharterRatePerDay(@NonNull IVesselCharter vesselCharter, int voyagePlanStartTime);
 }

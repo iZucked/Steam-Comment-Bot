@@ -42,7 +42,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -86,7 +86,7 @@ public class LightWeightSchedulerOptimiser {
 
 	@Inject
 	@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
-	private IVesselAvailability pnlVesselAvailability;
+	private IVesselCharter pnlVesselCharter;
 
 	/**
 	 * Perform a long term (nominal) trading optimisation
@@ -98,7 +98,7 @@ public class LightWeightSchedulerOptimiser {
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final IVesselAvailability pnlVessel, @NonNull final IProgressMonitor monitor, JobExecutor jobExecutor) {
+	public Pair<ISequences, Long> optimise(final IVesselCharter pnlVessel, @NonNull final IProgressMonitor monitor, JobExecutor jobExecutor) {
 		// Get optimised sequences from our injected sequences optimiser
 		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, jobExecutor, monitor);
 
@@ -125,13 +125,13 @@ public class LightWeightSchedulerOptimiser {
 	 * @param pairingsMap
 	 * @param nominal
 	 */
-	private void updateSequences(@NonNull final IModifiableSequences rawSequences, final List<List<Integer>> sequences, final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	private void updateSequences(@NonNull final IModifiableSequences rawSequences, final List<List<Integer>> sequences, final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
 		final List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
 
 		final Set<ISequenceElement> usedElements = new LinkedHashSet<>();
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
-			final IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
-			final IResource o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = vessels.get(vesselIndex);
+			final IResource o_resource = vesselProvider.getResource(vesselCharter);
 
 			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
 			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
@@ -150,9 +150,9 @@ public class LightWeightSchedulerOptimiser {
 		{
 			for (final List<IPortSlot> cargo : lightWeightOptimisationData.getNonShippedCargoes()) {
 				// Grab FOB/DES vessel
-				IVesselAvailability va = null;
+				IVesselCharter va = null;
 				for (final IPortSlot e : cargo) {
-					va = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(e));
+					va = virtualVesselSlotProvider.getVesselCharterForElement(portSlotProvider.getElement(e));
 					if (va != null) {
 						break;
 					}
@@ -175,7 +175,7 @@ public class LightWeightSchedulerOptimiser {
 		// Add paired, but unscheduled and put on nominal
 		final Map<ILoadOption, IDischargeOption> unscheduledMap = lightWeightOptimisationData.getPairingsMap();
 		{
-			final IResource o_resource = vesselProvider.getResource(pnlVesselAvailability);
+			final IResource o_resource = vesselProvider.getResource(pnlVesselCharter);
 			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(o_resource);
 
 			if (modifiableSequence.size() == 0) {

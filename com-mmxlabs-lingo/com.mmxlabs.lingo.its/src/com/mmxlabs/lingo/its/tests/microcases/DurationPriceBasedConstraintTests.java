@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
@@ -77,7 +77,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		return scenarioDataProvider;
 	}
 
-	private Cargo createFobDesCargo(final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
+	private Cargo createFobDesCargo(final VesselCharter vesselCharter, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5") //
 				.withWindowStartTime(0) //
@@ -91,55 +91,55 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		return cargo;
 	}
 
-	private VesselAvailability getDefaultVesselAvailability() {
+	private VesselCharter getDefaultVesselCharter() {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getDefaultVesselAvailabilityWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
+	private VesselCharter getDefaultVesselCharterWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getVesselAvailabilityWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
+	private VesselCharter getVesselCharterWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getVesselAvailabilityWithoutTW(String vesselName) {
+	private VesselCharter getVesselCharterWithoutTW(String vesselName) {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationPriceBasedTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -176,12 +176,12 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationPriceBasedTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(4);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMinDuration(4);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -219,13 +219,13 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationPriceBasedTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(20);
-		vesselAvailability.setMinDuration(3);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(20);
+		vesselCharter.setMinDuration(3);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -265,13 +265,13 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(20);
-		vesselAvailability.setMinDuration(3);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(20);
+		vesselCharter.setMinDuration(3);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -285,7 +285,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -330,16 +330,16 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		// Create first vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMaxDuration(55);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMaxDuration(55);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Create second vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability2 = getVesselAvailabilityWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		final VesselCharter vesselCharter2 = getVesselCharterWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		vesselCharter2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -353,7 +353,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -368,8 +368,8 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check the identity of the vessel
-			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselCharter, schedule.getSequences().get(0).getVesselCharter());
+			Assertions.assertEquals(vesselCharter2, schedule.getSequences().get(1).getVesselCharter());
 
 			// Check On which vessel the cargo is
 			Assertions.assertTrue(schedule.getSequences().get(1).getEvents().size() > 3);
@@ -383,18 +383,18 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		// Create first vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMinDuration(76);
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.AUGUST, 26, 0, 0, 0));
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.AUGUST, 27, 0, 0, 0));
-		vesselAvailability.setTimeCharterRate("500000");
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMinDuration(76);
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.AUGUST, 26, 0, 0, 0));
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.AUGUST, 27, 0, 0, 0));
+		vesselCharter.setTimeCharterRate("500000");
 
 		// Create second vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability2 = getVesselAvailabilityWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
-		vesselAvailability2.setTimeCharterRate("5000");
+		final VesselCharter vesselCharter2 = getVesselCharterWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		vesselCharter2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		vesselCharter2.setTimeCharterRate("5000");
 
 		// Construct the cargo
 		@NonNull
@@ -408,7 +408,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability2, 1) //
+				.withVesselAssignment(vesselCharter2, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -423,8 +423,8 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the cargo moved from ship 1 to ship 2
-			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselCharter, schedule.getSequences().get(0).getVesselCharter());
+			Assertions.assertEquals(vesselCharter2, schedule.getSequences().get(1).getVesselCharter());
 
 			Assertions.assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
 			Assertions.assertEquals(3, schedule.getSequences().get(1).getEvents().size());
@@ -435,12 +435,12 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationPriceBasedTrimmingCargoVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Construct the cargo
 		@NonNull
@@ -454,7 +454,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 20), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -495,21 +495,21 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationPriceBasedTrimmingCargoOptionalVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setOptional(true);
-		vesselAvailability.setMinDuration(100);
-		vesselAvailability.setTimeCharterRate("10");
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.SEPTEMBER, 1, 0, 0, 0));
+		vesselCharter.setOptional(true);
+		vesselCharter.setMinDuration(100);
+		vesselCharter.setTimeCharterRate("10");
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.SEPTEMBER, 1, 0, 0, 0));
 
-		final VesselAvailability vesselAvailability2 = getVesselAvailabilityWithoutTW("STEAM-145.8");
-		// vesselAvailability.setOptional(true);
-		vesselAvailability2.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setTimeCharterRate("50000");
-		// vesselAvailability2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		// vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		final VesselCharter vesselCharter2 = getVesselCharterWithoutTW("STEAM-145.8");
+		// vesselCharter.setOptional(true);
+		vesselCharter2.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setTimeCharterRate("50000");
+		// vesselCharter2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		// vesselCharter2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 
 		// Construct the cargo
 		@NonNull
@@ -523,7 +523,7 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 27), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability2, 1) //
+				.withVesselAssignment(vesselCharter2, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -538,8 +538,8 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the cargo moved from ship 1 to ship 2
-			// assertEquals(vesselAvailability, schedule.getSequences().get(1).getVesselAvailability());
-			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(0).getVesselAvailability());
+			// assertEquals(vesselCharter, schedule.getSequences().get(1).getVesselCharter());
+			Assertions.assertEquals(vesselCharter2, schedule.getSequences().get(0).getVesselCharter());
 
 			Assertions.assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
 		});
@@ -551,18 +551,18 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMaxDuration(35);
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharter();
+		vesselCharter.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMaxDuration(35);
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -593,12 +593,12 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		optimiseWithLSOTest(scenarioRunner -> {
 

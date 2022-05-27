@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.cache.CacheVerificationFailedException;
 import com.mmxlabs.scheduler.optimiser.cache.GeneralCacheSettings;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -234,11 +234,11 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		for (int seqIndex = 0; seqIndex < fullSequences.getResources().size(); seqIndex++) {
 			final IResource resource = fullSequences.getResources().get(seqIndex);
 			final ISequence sequence = fullSequences.getSequence(resource);
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 			final MinTravelTimeData travelTimeData = scheduledTimeWindows.getTravelTimeData().get(resource);
 
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 				final IPortTimesRecord record = portTimesRecordMaker.makeDESOrFOBPortTimesRecord(resource, sequence, fullSequences.getProviders());
 				if (record != null) {

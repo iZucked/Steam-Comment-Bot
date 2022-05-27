@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -105,10 +105,10 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Mockito.when(divertibleDESShippingTimesCalculator.getDivertibleDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),
 				Matchers.any(IResource.class))).thenReturn(desTimes);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
-		Mockito.when(vp.getVesselAvailability(ArgumentMatchers.any(IResource.class))).thenReturn(vesselAvailability);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
+		Mockito.when(vp.getVesselCharter(ArgumentMatchers.any(IResource.class))).thenReturn(vesselCharter);
 		Mockito.when(nvp.getNominatedVessel(ArgumentMatchers.any(IResource.class))).thenReturn(vessel);
 		Mockito.when(nvp.getNominatedVessel(ArgumentMatchers.any(ISequenceElement.class))).thenReturn(vessel);
 

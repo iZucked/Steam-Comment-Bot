@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
-import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT;
-import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT;
+import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_CHARTER__END_AT;
+import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_CHARTER__START_AT;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
@@ -76,19 +76,19 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 
 				Port startPort = null;
 				Set<Port> endPorts = null;
-				VesselAvailability vesselAvailability = null;
-				if (collectedAssignment.getVesselAvailability() != null) {
+				VesselCharter vesselCharter = null;
+				if (collectedAssignment.getVesselCharter() != null) {
 					// Find start port
-					vesselAvailability = collectedAssignment.getVesselAvailability();
-					if (vesselAvailability != null) {
-						final Set<Port> startPorts = SetUtils.getObjects(vesselAvailability.getStartAt());
+					vesselCharter = collectedAssignment.getVesselCharter();
+					if (vesselCharter != null) {
+						final Set<Port> startPorts = SetUtils.getObjects(vesselCharter.getStartAt());
 						if (startPorts.size() == 1) {
 							startPort = startPorts.iterator().next();
 							prevPort = startPort;
-							prevObject = vesselAvailability;
-							prevFeature = CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT;
+							prevObject = vesselCharter;
+							prevFeature = CargoPackage.Literals.VESSEL_CHARTER__START_AT;
 						}
-						endPorts = SetUtils.getObjects(vesselAvailability.getEndAt());
+						endPorts = SetUtils.getObjects(vesselCharter.getEndAt());
 					}
 				}
 
@@ -155,11 +155,11 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 					}
 					if (!foundDistance) {
 
-						final String msg = String.format("Missing distance between port (%s) and vessel (%s) end port(s) and (%s to %s).", getPortName(prevPort), getVesselName(vesselAvailability),
-								getID(prevObject, prevFeature), getID(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT));
+						final String msg = String.format("Missing distance between port (%s) and vessel (%s) end port(s) and (%s to %s).", getPortName(prevPort), getVesselName(vesselCharter),
+								getID(prevObject, prevFeature), getID(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__END_AT));
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 						failure.addEObjectAndFeature(prevPort, prevFeature);
-						failure.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT);
+						failure.addEObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__END_AT);
 
 						statuses.add(failure);
 					}
@@ -186,12 +186,12 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		return port.getName();
 	}
 
-	private String getVesselName(final VesselAvailability vesselAvailability) {
-		if (vesselAvailability == null) {
+	private String getVesselName(final VesselCharter vesselCharter) {
+		if (vesselCharter == null) {
 			return "<Unspecified vessel>";
 		}
 
-		final Vessel vessel = vesselAvailability.getVessel();
+		final Vessel vessel = vesselCharter.getVessel();
 		if (vessel == null) {
 			return "<Unspecified vessel>";
 		}
@@ -203,13 +203,13 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			return "slot \"" + slot.getName() + "\"";
 		} else if (target instanceof VesselEvent vesselEvent) {
 			return "event \"" + vesselEvent.getName() + "\"";
-		} else if (target instanceof VesselAvailability vesselAvailability) {
-			final Vessel vessel = vesselAvailability.getVessel();
+		} else if (target instanceof VesselCharter vesselCharter) {
+			final Vessel vessel = vesselCharter.getVessel();
 			final String vesselName = vessel == null ? "Vessel <unnamed>" : "\"" + vessel.getName() + "\"";
 			String featureString = "";
-			if (feature == VESSEL_AVAILABILITY__START_AT) {
+			if (feature == VESSEL_CHARTER__START_AT) {
 				featureString = " start ";
-			} else if (feature == VESSEL_AVAILABILITY__END_AT) {
+			} else if (feature == VESSEL_CHARTER__END_AT) {
 				featureString = " end ";
 			}
 			return ("".equals(featureString) ? "Vessel " + vesselName : vesselName + featureString);

@@ -116,8 +116,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// boolean hasNominalCargoes = false;
 		// for (final IResource r : inputRawSequences.getResources()) {
 		// @NonNull
-		// final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(r);
-		// if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		// final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(r);
+		// if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 		// final ISequence s = inputRawSequences.getSequence(r);
 		// if (s.size() > 2) {
 		// hasNominalCargoes = true;

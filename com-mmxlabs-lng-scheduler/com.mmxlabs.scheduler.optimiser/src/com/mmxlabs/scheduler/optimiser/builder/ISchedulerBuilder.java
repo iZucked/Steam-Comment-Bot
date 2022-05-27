@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -219,7 +219,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
+	IVesselCharter createVesselCharter(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
 			@NonNull IEndRequirement end, ICharterContract charterContract, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
@@ -403,7 +403,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	List<IVesselAvailability> createSpotVessels(@NonNull String namePrefix, @NonNull ISpotCharterInMarket spotCharterInMarket);
+	List<IVesselCharter> createSpotVessels(@NonNull String namePrefix, @NonNull ISpotCharterInMarket spotCharterInMarket);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is
@@ -415,7 +415,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselAvailability createSpotVessel(@NonNull String name, int spotIndex, @NonNull ISpotCharterInMarket spotCharterInMarket);
+	IVesselCharter createSpotVessel(@NonNull String name, int spotIndex, @NonNull ISpotCharterInMarket spotCharterInMarket);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.
@@ -602,15 +602,15 @@ public interface ISchedulerBuilder {
 	void setShippingDaysRestrictionReferenceSpeed(@NonNull IPortSlot slot, @NonNull IVessel vessel, @NonNull VesselState vesselState, int referenceSpeed);
 
 	/**
-	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike
-	 * {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still
+	 * Freeze a {@link IPortSlot} to a single {@link IVesselCharter}. Unlike
+	 * {@link #constrainSlotToVesselCharters(IPortSlot, Set)} which still
 	 * permits allocations to special vessels, this method restricts purely to the
 	 * specified {@link IVessel}
 	 * 
 	 * @param portSlot
-	 * @param vesselAvailability
+	 * @param vesselCharter
 	 */
-	void freezeSlotToVesselAvailability(@NonNull IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability);
+	void freezeSlotToVesselCharter(@NonNull IPortSlot portSlot, @NonNull IVesselCharter vesselCharter);
 
 	/**
 	 * Set the earliest time we can start generating charter outs.
@@ -644,9 +644,9 @@ public interface ISchedulerBuilder {
 	void setDivertibleFOBAllowedRoute(@NonNull IDischargeOption fobSale, @NonNull List<ERouteOption> allowedRoutes);
 
 	@NonNull
-	IVesselAvailability createRoundTripCargoVessel(@NonNull String name, @NonNull ISpotCharterInMarket market);
+	IVesselCharter createRoundTripCargoVessel(@NonNull String name, @NonNull ISpotCharterInMarket market);
 
-	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
+	void bindSlotsToRoundTripVessel(@NonNull IVesselCharter roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
 
 	void setVesselPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, boolean isPermitted);
 

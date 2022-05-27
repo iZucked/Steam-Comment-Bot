@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
-import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
@@ -151,10 +151,10 @@ public final class VoyagePlannerTest {
 		vessel.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vessel.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
+		final DefaultVesselCharter vesselCharter = new DefaultVesselCharter(vessel, VesselInstanceType.FLEET);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
+		vesselProvider.setVesselCharterResource(resource, vesselCharter);
 
 		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
 		final ISequence sequence = new ListSequence(elements);
@@ -384,10 +384,10 @@ public final class VoyagePlannerTest {
 	// vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 	// vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 	//
-	// final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
+	// final DefaultVesselCharter vesselCharter = new DefaultVesselCharter(vessel, VesselInstanceType.FLEET);
 	//
 	// final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-	// vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
+	// vesselProvider.setVesselCharterResource(resource, vesselCharter);
 	//
 	// final List elements = CollectionsUtil.makeArrayList(element1, element2, element3);
 	// final ISequence sequence = new ListSequence(elements);

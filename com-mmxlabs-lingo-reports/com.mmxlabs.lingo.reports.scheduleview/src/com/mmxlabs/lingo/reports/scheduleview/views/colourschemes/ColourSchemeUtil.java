@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -55,7 +55,7 @@ public class ColourSchemeUtil {
 		}
 		// otherwise get it from the vessel allocation
 		if (vessel == null) {
-			final VesselAvailability avail = sequence.getVesselAvailability();
+			final VesselCharter avail = sequence.getVesselCharter();
 			if (avail == null) {
 				return false;
 			}

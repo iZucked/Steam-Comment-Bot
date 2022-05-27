@@ -6,12 +6,12 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Existing Vessel Availability</b></em>'.
+ * A representation of the model object '<em><b>Existing Vessel Charter</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -30,17 +30,17 @@ public interface ExistingVesselCharterOption extends UUIDObject, ShippingOption 
 	 * Returns the value of the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Availability</em>' reference isn't clear,
+	 * If the meaning of the '<em>Vessel Charter</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Charter</em>' reference.
-	 * @see #setVesselCharter(VesselAvailability)
+	 * @see #setVesselCharter(VesselCharter)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getExistingVesselCharterOption_VesselCharter()
 	 * @model
 	 * @generated
 	 */
-	VesselAvailability getVesselCharter();
+	VesselCharter getVesselCharter();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption#getVesselCharter <em>Vessel Charter</em>}' reference.
@@ -50,6 +50,6 @@ public interface ExistingVesselCharterOption extends UUIDObject, ShippingOption 
 	 * @see #getVesselCharter()
 	 * @generated
 	 */
-	void setVesselCharter(VesselAvailability value);
+	void setVesselCharter(VesselCharter value);
 
-} // ExistingVesselAvailability
+} // ExistingVesselCharter

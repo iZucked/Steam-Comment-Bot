@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -35,7 +35,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -59,13 +59,13 @@ public class SequenceHelper {
 		return sequences;
 	}
 
-	public static @NonNull IModifiableSequences createSequences(final @NonNull Injector injector, final VesselAvailability vesselAvailability, final EObject... cargoes) {
+	public static @NonNull IModifiableSequences createSequences(final @NonNull Injector injector, final VesselCharter vesselCharter, final EObject... cargoes) {
 		final IModifiableSequences sequences = createSequences(injector);
-		addSequence(sequences, injector, vesselAvailability, cargoes);
+		addSequence(sequences, injector, vesselCharter, cargoes);
 		return sequences;
 	}
 
-	public static @NonNull IModifiableSequence addSequence(final @NonNull IModifiableSequences sequences, final @NonNull Injector injector, final VesselAvailability vesselAvailability,
+	public static @NonNull IModifiableSequence addSequence(final @NonNull IModifiableSequences sequences, final @NonNull Injector injector, final VesselCharter vesselCharter,
 			final EObject... cargoes) {
 
 		@NonNull
@@ -73,23 +73,23 @@ public class SequenceHelper {
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
-		return addSequence(sequences, injector, resource, o_vesselAvailability, cargoes);
+		return addSequence(sequences, injector, resource, o_vesselCharter, cargoes);
 	}
 
-	public static @NonNull IModifiableSequence makeSequence(final @NonNull Injector injector, final VesselAvailability vesselAvailability, final EObject... cargoes) {
+	public static @NonNull IModifiableSequence makeSequence(final @NonNull Injector injector, final VesselCharter vesselCharter, final EObject... cargoes) {
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
-		return makeSequence(injector, resource, o_vesselAvailability, cargoes);
+		return makeSequence(injector, resource, o_vesselCharter, cargoes);
 	}
 
 	public static @NonNull IModifiableSequence makeSequence(final @NonNull Injector injector, final CharterInMarketOverride charterInMarketOverride, final EObject... cargoes) {
@@ -99,13 +99,13 @@ public class SequenceHelper {
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
-		return makeSequence(injector, resource, o_vesselAvailability, cargoes);
+		return makeSequence(injector, resource, o_vesselCharter, cargoes);
 	}
 
-	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull Injector injector, final VesselAvailability vesselAvailability,
+	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull Injector injector, final VesselCharter vesselCharter,
 			final Collection<? extends EObject> cargoes) {
 
 		@NonNull
@@ -113,10 +113,10 @@ public class SequenceHelper {
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
-		return makeSequence(injector, resource, o_vesselAvailability, cargoes);
+		return makeSequence(injector, resource, o_vesselCharter, cargoes);
 	}
 
 	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull Injector injector, final CharterInMarketOverride charterInMarketOverride,
@@ -127,10 +127,10 @@ public class SequenceHelper {
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(charterInMarketOverride, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
-		return makeSequence(injector, resource, o_vesselAvailability, cargoes);
+		return makeSequence(injector, resource, o_vesselCharter, cargoes);
 	}
 
 	public static @NonNull IModifiableSequences createSequences(final @NonNull Injector injector, final CharterInMarket charterInMarket, final int spotIndex, final EObject... cargoes) {
@@ -151,14 +151,14 @@ public class SequenceHelper {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 
 		for (final IResource o_resource : optimisationData.getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+			if (o_vesselCharter.getSpotIndex() != spotIndex) {
 				continue;
 			}
-			return addSequence(sequences, injector, o_resource, o_vesselAvailability, cargoes);
+			return addSequence(sequences, injector, o_resource, o_vesselCharter, cargoes);
 		}
 		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
@@ -174,11 +174,11 @@ public class SequenceHelper {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 
 		for (final IResource o_resource : dataTransformer.getOptimisationData().getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+			if (o_vesselCharter.getSpotIndex() != spotIndex) {
 				continue;
 			}
 			return o_resource;
@@ -187,7 +187,7 @@ public class SequenceHelper {
 		throw new IllegalStateException();
 	}
 
-	public static @NonNull IVesselAvailability findVesselAvailability(final @NonNull Injector injector, final CharterInMarket charterInMarket, final int spotIndex) {
+	public static @NonNull IVesselCharter findVesselCharter(final @NonNull Injector injector, final CharterInMarket charterInMarket, final int spotIndex) {
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
@@ -198,14 +198,14 @@ public class SequenceHelper {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 
 		for (final IResource o_resource : optimisationData.getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+			if (o_vesselCharter.getSpotIndex() != spotIndex) {
 				continue;
 			}
-			return o_vesselAvailability;
+			return o_vesselCharter;
 		}
 		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
@@ -222,14 +222,14 @@ public class SequenceHelper {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 
 		for (final IResource o_resource : optimisationData.getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+			if (o_vesselCharter.getSpotIndex() != spotIndex) {
 				continue;
 			}
-			return makeSequence(injector, o_resource, o_vesselAvailability, cargoes);
+			return makeSequence(injector, o_resource, o_vesselCharter, cargoes);
 		}
 		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
@@ -247,28 +247,28 @@ public class SequenceHelper {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 
 		for (final IResource o_resource : optimisationData.getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() != spotIndex) {
+			if (o_vesselCharter.getSpotIndex() != spotIndex) {
 				continue;
 			}
-			return makeSequence(injector, o_resource, o_vesselAvailability, cargoes);
+			return makeSequence(injector, o_resource, o_vesselCharter, cargoes);
 		}
 		assert false : MSG_UNABLE_TO_FIND_SPOT_MARKET_VESSEL;
 		throw new IllegalStateException();
 	}
 
-	public static @NonNull IModifiableSequences createSequences(final @NonNull Injector injector, final @NonNull IResource o_resource, @NonNull final IVesselAvailability o_vesselAvailability,
+	public static @NonNull IModifiableSequences createSequences(final @NonNull Injector injector, final @NonNull IResource o_resource, @NonNull final IVesselCharter o_vesselCharter,
 			final EObject... cargoes) {
 		final IModifiableSequences sequences = createSequences(injector);
-		addSequence(sequences, injector, o_resource, o_vesselAvailability, cargoes);
+		addSequence(sequences, injector, o_resource, o_vesselCharter, cargoes);
 		return sequences;
 	}
 
 	public static @NonNull IModifiableSequence addSequence(final @NonNull IModifiableSequences sequences, final @NonNull Injector injector, final @NonNull IResource o_resource,
-			@NonNull final IVesselAvailability o_vesselAvailability, final EObject... cargoes) {
+			@NonNull final IVesselCharter o_vesselCharter, final EObject... cargoes) {
 
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
@@ -285,7 +285,7 @@ public class SequenceHelper {
 		return modifiableSequence;
 	}
 
-	public static @NonNull IModifiableSequence makeSequence(final @NonNull Injector injector, final @NonNull IResource o_resource, @NonNull final IVesselAvailability o_vesselAvailability,
+	public static @NonNull IModifiableSequence makeSequence(final @NonNull Injector injector, final @NonNull IResource o_resource, @NonNull final IVesselCharter o_vesselCharter,
 			final EObject... cargoes) {
 
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
@@ -304,7 +304,7 @@ public class SequenceHelper {
 	}
 
 	public static @NonNull Pair<IResource, IModifiableSequence> makeSequence(final @NonNull Injector injector, final @NonNull IResource o_resource,
-			@NonNull final IVesselAvailability o_vesselAvailability, final Collection<? extends EObject> cargoes) {
+			@NonNull final IVesselCharter o_vesselCharter, final Collection<? extends EObject> cargoes) {
 
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
@@ -414,13 +414,13 @@ public class SequenceHelper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;
@@ -461,13 +461,13 @@ public class SequenceHelper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;
@@ -508,13 +508,13 @@ public class SequenceHelper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;
@@ -555,13 +555,13 @@ public class SequenceHelper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;
@@ -602,22 +602,22 @@ public class SequenceHelper {
 		IResource o_resource = null;
 		final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(fobDesSlot, IPortSlot.class);
 		final ISequenceElement element = portSlotProvider.getElement(o_slot);
-		final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-		o_resource = vesselProvider.getResource(vesselAvailability);
+		final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+		o_resource = vesselProvider.getResource(vesselCharter);
 
 		assert o_resource != null;
 
 		return o_resource;
 	}
 
-	public static IResource getResource(final @NonNull LNGDataTransformer dataTransformer, VesselAvailability vesselAvailability) {
+	public static IResource getResource(final @NonNull LNGDataTransformer dataTransformer, VesselCharter vesselCharter) {
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
-		final IResource resource = vesselProvider.getResource(o_vesselAvailability);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
+		final IResource resource = vesselProvider.getResource(o_vesselCharter);
 
 		return resource;
 	}

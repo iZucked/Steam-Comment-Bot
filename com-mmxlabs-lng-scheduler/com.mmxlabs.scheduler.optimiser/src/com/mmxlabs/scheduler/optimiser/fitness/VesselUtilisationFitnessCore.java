@@ -23,7 +23,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -66,10 +66,10 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	public void init(@NonNull final IPhaseOptimisationData data) {
 		List<IResource> resources = data.getResources();
 		for (int i = 0; i < resources.size(); i++) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resources.get(i));
-			final int countForVessel = vesselInformationProvider.getCountForVessel(vesselAvailability);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resources.get(i));
+			final int countForVessel = vesselInformationProvider.getCountForVessel(vesselCharter);
 			if (countForVessel > 0) {
-				perVesselWeight.put(resources.get(i), vesselInformationProvider.getWeightForVessel(vesselAvailability) * -1L); // -1 for minimise
+				perVesselWeight.put(resources.get(i), vesselInformationProvider.getWeightForVessel(vesselCharter) * -1L); // -1 for minimise
 				fitnessVessels.put(resources.get(i), countForVessel);
 			}
 		}

@@ -1793,7 +1793,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getDesSpacingAllocation_Vessel() {
+	public EReference getDesSpacingAllocation_VesselCharter() {
 		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -2117,7 +2117,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(fobSpacingAllocationEClass, FOB_SPACING_ALLOCATION__CARGO_COUNT);
 
 		desSpacingAllocationEClass = createEClass(DES_SPACING_ALLOCATION);
-		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__VESSEL);
+		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__VESSEL_CHARTER);
 		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__DES_SPACING_ROWS);
 		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__PORT);
 
@@ -2418,7 +2418,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getFobSpacingAllocation_CargoCount(), ecorePackage.getEInt(), "cargoCount", null, 0, 1, FobSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desSpacingAllocationEClass, DesSpacingAllocation.class, "DesSpacingAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDesSpacingAllocation_Vessel(), theCargoPackage.getVesselAvailability(), null, "vessel", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDesSpacingAllocation_VesselCharter(), theCargoPackage.getVesselCharter(), null, "vesselCharter", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDesSpacingAllocation_DesSpacingRows(), this.getDesSpacingRow(), null, "desSpacingRows", null, 0, -1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDesSpacingAllocation_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

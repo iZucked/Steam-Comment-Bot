@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -110,7 +110,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(3, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // Base state (use price expression as pairing indicator)
@@ -165,7 +165,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(3, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // Base state (use price expression as pairing indicator)
@@ -223,7 +223,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(3, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		long pnl;
@@ -294,7 +294,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
 
 		boolean foundCargoSolution = false;
@@ -339,7 +339,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		// Create the portfolio data
 
 		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
-		VesselAvailability vesselCharter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		LoadSlot existingLoad = cargoModelBuilder.createFOBPurchase("l-1", LocalDate.of(2020, 3, 19), portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, entity, "5", 22.8);
@@ -434,7 +434,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(0, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // Only valid solution is dp1 to ds1.
@@ -495,7 +495,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(0, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // Only valid solution is fp1 to fs1.
@@ -560,7 +560,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(0, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		boolean ds1Solution = false;
@@ -631,7 +631,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(0, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 	}
 
@@ -647,8 +647,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		final Vessel vessel1 = fleetModelBuilder.createVessel("Vessel1", referenceVessel);
 		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", referenceVessel);
 
-		VesselAvailability charter1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity).build();
-		VesselAvailability charter2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity).build();
+		VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity).build();
+		VesselCharter charter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity).build();
 
 		DESSalesMarket desJKTC = spotMarketsModelBuilder.makeDESSaleMarket("JKTC", portFinder.findPortById(InternalDataConstants.PORT_INCHEON), entity, "7").build();
 		DESSalesMarket desUK = spotMarketsModelBuilder.makeDESSaleMarket("UK", portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), entity, "7").build();
@@ -779,7 +779,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size()); // buy option plus 2x market slots
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // Target state (use price expression as pairing indicator)
@@ -859,7 +859,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(3, result.getExtraSlots().size()); // buy option plus 2x market slots
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		{ // B/E case - B/E should not have run

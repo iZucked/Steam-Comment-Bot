@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
@@ -242,26 +242,26 @@ public class FeasibleTimeWindowTrimmer {
 	protected final void trimBasedOnMaxSpeed(final @NonNull IResource resource, final @NonNull ISequence sequence, final List<IPortTimeWindowsRecord> portTimeWindowRecords,
 			final MinTravelTimeData travelTimeData, ISequencesAttributesProvider sequencesAttributesProvider) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// TODO: Implement something here rather than rely on VoyagePlanner
 			return;
 		}
 
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 			return;
 		}
 
 		resizeAll(size);
 
-		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		findSequenceBreaks(sequence, isRoundTripSequence, records);
 
-		final int vesselMaxSpeed = vesselAvailability.getVessel().getMaxSpeed();
-		final int vesselPurgeTime = vesselAvailability.getVessel().getPurgeTime();
+		final int vesselMaxSpeed = vesselCharter.getVessel().getMaxSpeed();
+		final int vesselPurgeTime = vesselCharter.getVessel().getPurgeTime();
 
 		int index = 0;
 		ISequenceElement prevElement = null;
@@ -395,9 +395,9 @@ public class FeasibleTimeWindowTrimmer {
 
 				final int prevVisitDuration = records[index - 1].visitDuration;
 
-				directTravelTime = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
-				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
-				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
+				directTravelTime = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
+				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
+				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
 
 				// Can we build this into the distance provider api?
 				// If there is an override, then we set the other travel times to MAX_VALUE
@@ -586,26 +586,26 @@ public class FeasibleTimeWindowTrimmer {
 	protected final void trimBasedOnPanamaCanal(final @NonNull IResource resource, final @NonNull ISequence sequence, final MinTravelTimeData travelTimeData,
 			final CurrentBookingData currentBookings) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// No shipping
 			return;
 		}
 
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
+		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselCharter)) {
 			return;
 		}
 
-		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 		// if (isRoundTripSequence) {
 		// // No Panama bookings.
 		// return;
 		// }
 
 		// Make sure we can schedule stuff on Panama
-		final IVessel vessel = vesselAvailability.getVessel();
+		final IVessel vessel = vesselCharter.getVessel();
 		if (!distanceProvider.isRouteAvailable(ERouteOption.PANAMA, vessel)) {
 			return;
 		}
@@ -1225,8 +1225,8 @@ public class FeasibleTimeWindowTrimmer {
 	}
 
 	private boolean isSequentialVessel(final @NonNull IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			return false;
 		}
 		return true;
@@ -1240,8 +1240,8 @@ public class FeasibleTimeWindowTrimmer {
 		final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 		if (requirement != null) {
 			if (requirement.isMinDurationSet()) {
-				IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-				final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+				IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+				final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 				if (isRoundTripSequence) {
 					int lastLoadIdx = -1;
 					for (int index = 0; index < records.length; ++index) {
@@ -1277,8 +1277,8 @@ public class FeasibleTimeWindowTrimmer {
 		if (requirement != null) {
 			if (requirement.isMaxDurationSet()) {
 
-				IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-				final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+				IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+				final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 				if (isRoundTripSequence) {
 					int lastLoadIdx = -1;
 					for (int index = 0; index < records.length; ++index) {

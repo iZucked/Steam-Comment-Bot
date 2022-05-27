@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -44,9 +44,9 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(cargo, true);
 	}
@@ -65,9 +65,9 @@ public class InaccessiblePortsConstraintTest {
 
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(cargo, false);
 	}
@@ -88,9 +88,9 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(cargo, false);
 	}
@@ -127,9 +127,9 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, true);
 	}
@@ -146,9 +146,9 @@ public class InaccessiblePortsConstraintTest {
 
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, false);
 	}
@@ -167,9 +167,9 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, false);
 	}
@@ -205,9 +205,9 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, true);
 	}
@@ -224,9 +224,9 @@ public class InaccessiblePortsConstraintTest {
 
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, false);
 	}
@@ -245,9 +245,9 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		event.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselCharter);
 
 		checkConstraint(event, false);
 	}

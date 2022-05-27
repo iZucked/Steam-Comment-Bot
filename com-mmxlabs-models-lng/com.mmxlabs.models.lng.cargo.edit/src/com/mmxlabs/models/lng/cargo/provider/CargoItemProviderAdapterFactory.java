@@ -249,26 +249,26 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselAvailability} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselCharter} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VesselAvailabilityItemProvider vesselAvailabilityItemProvider;
+	protected VesselCharterItemProvider vesselCharterItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselCharter}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createVesselAvailabilityAdapter() {
-		if (vesselAvailabilityItemProvider == null) {
-			vesselAvailabilityItemProvider = new VesselAvailabilityItemProvider(this);
+	public Adapter createVesselCharterAdapter() {
+		if (vesselCharterItemProvider == null) {
+			vesselCharterItemProvider = new VesselCharterItemProvider(this);
 		}
 
-		return vesselAvailabilityItemProvider;
+		return vesselCharterItemProvider;
 	}
 
 	/**
@@ -962,7 +962,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (spotLoadSlotItemProvider != null) spotLoadSlotItemProvider.dispose();
 		if (spotDischargeSlotItemProvider != null) spotDischargeSlotItemProvider.dispose();
 		if (cargoGroupItemProvider != null) cargoGroupItemProvider.dispose();
-		if (vesselAvailabilityItemProvider != null) vesselAvailabilityItemProvider.dispose();
+		if (vesselCharterItemProvider != null) vesselCharterItemProvider.dispose();
 		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();

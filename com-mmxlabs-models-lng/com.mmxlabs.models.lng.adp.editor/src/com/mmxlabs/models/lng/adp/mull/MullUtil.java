@@ -68,7 +68,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -294,8 +294,8 @@ public class MullUtil {
 
 	private static void addCargoCreationCommands(final GlobalStatesContainer globalStates, final IMullAlgorithm finalAlgorithm, final CargoEditingCommands cec, final IScenarioDataProvider sdp,
 			final EditingDomain editingDomain, final CompoundCommand cmd) {
-		final Map<Vessel, VesselAvailability> vesselToVa = ScenarioModelUtil.getCargoModel(sdp).getVesselAvailabilities().stream() //
-				.collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
+		final Map<Vessel, VesselCharter> vesselToVa = ScenarioModelUtil.getCargoModel(sdp).getVesselCharters().stream() //
+				.collect(Collectors.toMap(VesselCharter::getVessel, Function.identity()));
 
 		final List<Command> commands = new ArrayList<>();
 		for (final InventoryLocalState inventoryLocalState : finalAlgorithm.getInventoryLocalStates()) {
@@ -309,7 +309,7 @@ public class MullUtil {
 				cargo.setAllowRewiring(!cargoBlueprint.getMudContainer().getEntity().isThirdParty());
 				final Vessel vessel = cargoBlueprint.getVessel();
 				if (!dischargeSlot.isFOBSale() && vessel != null) {
-					final VesselAvailability va = vesselToVa.get(vessel);
+					final VesselCharter va = vesselToVa.get(vessel);
 					if (va != null) {
 						cargo.setVesselAssignmentType(va);
 					}
@@ -330,7 +330,7 @@ public class MullUtil {
 	}
 
 	private static DischargeSlot createDischargeSlot(final ICargoBlueprint cargoBlueprint, final CargoEditingCommands cec, final List<Command> commands, final GlobalStatesContainer globalStates,
-			final int loadIndex, final LoadSlot loadSlot, IScenarioDataProvider sdp, final Map<Vessel, @Nullable VesselAvailability> vesselToVa) {
+			final int loadIndex, final LoadSlot loadSlot, IScenarioDataProvider sdp, final Map<Vessel, @Nullable VesselCharter> vesselToVa) {
 		final IAllocationTracker allocationTracker = cargoBlueprint.getAllocationTracker();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		if (allocationTracker instanceof final SalesContractTracker salesContractTracker) {

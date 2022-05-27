@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyWindowProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -42,11 +42,11 @@ public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker
 	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, @Nullable List<@NonNull String> messages) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		if (firstSlot instanceof @NonNull final ILoadOption loadOption && secondSlot instanceof @NonNull final IDischargeOption dischargeOption) {
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				return !counterPartyWindowProvider.isCounterPartyWindow(dischargeOption);
-			} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 				return !counterPartyWindowProvider.isCounterPartyWindow(loadOption);
 			}
 		}
@@ -56,11 +56,11 @@ public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker
 	@Override
 	public boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource, @Nullable List<@NonNull String> messages) {
 		@NonNull
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		@NonNull
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
-		if ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE && slot instanceof IDischargeOption) //
-				|| (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE && slot instanceof ILoadOption)) {
+		if ((vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE && slot instanceof IDischargeOption) //
+				|| (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE && slot instanceof ILoadOption)) {
 			return !counterPartyWindowProvider.isCounterPartyWindow(slot);
 		}
 		return true;

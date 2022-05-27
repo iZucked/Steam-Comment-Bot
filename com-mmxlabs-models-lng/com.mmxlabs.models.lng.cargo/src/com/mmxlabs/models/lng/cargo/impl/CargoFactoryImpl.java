@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.VesselType;
@@ -101,7 +101,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.SPOT_LOAD_SLOT: return createSpotLoadSlot();
 			case CargoPackage.SPOT_DISCHARGE_SLOT: return createSpotDischargeSlot();
 			case CargoPackage.CARGO_GROUP: return createCargoGroup();
-			case CargoPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
+			case CargoPackage.VESSEL_CHARTER: return createVesselCharter();
 			case CargoPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
@@ -268,9 +268,9 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	@Override
-	public VesselAvailability createVesselAvailability() {
-		VesselAvailabilityImpl vesselAvailability = new VesselAvailabilityImpl();
-		return vesselAvailability;
+	public VesselCharter createVesselCharter() {
+		VesselCharterImpl vesselCharter = new VesselCharterImpl();
+		return vesselCharter;
 	}
 
 	/**

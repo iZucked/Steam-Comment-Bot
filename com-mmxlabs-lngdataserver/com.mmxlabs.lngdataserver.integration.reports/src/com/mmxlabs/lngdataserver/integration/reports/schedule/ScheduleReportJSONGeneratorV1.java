@@ -85,8 +85,8 @@ public class ScheduleReportJSONGeneratorV1 {
 					continue;
 				}
 			} else {
-				if (sequence.getVesselAvailability() != null) {
-					vesselName = AssignmentLabelProvider.getLabelFor(sequence.getVesselAvailability());
+				if (sequence.getVesselCharter() != null) {
+					vesselName = AssignmentLabelProvider.getLabelFor(sequence.getVesselCharter());
 				} else {
 					continue;
 				}

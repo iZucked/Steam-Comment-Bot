@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -35,7 +35,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public class DefaultScheduleSpecificationBuilder {
 
@@ -63,11 +63,11 @@ public class DefaultScheduleSpecificationBuilder {
 
 		for (final CollectedAssignment seq : assignments) {
 			final VesselScheduleSpecification vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
-			final IVesselAvailability vesselAvailability = null;
-			if (seq.getVesselAvailability() != null) {
-				final VesselAvailability eVesselAvailability = seq.getVesselAvailability();
-				assert eVesselAvailability != null;
-				vesselScheduleSpecification.setVesselAllocation(eVesselAvailability);
+			final IVesselCharter vesselCharter = null;
+			if (seq.getVesselCharter() != null) {
+				final VesselCharter eVesselCharter = seq.getVesselCharter();
+				assert eVesselCharter != null;
+				vesselScheduleSpecification.setVesselAllocation(eVesselCharter);
 			} else if (seq.getCharterInMarket() != null) {
 				vesselScheduleSpecification.setVesselAllocation(seq.getCharterInMarket());
 				vesselScheduleSpecification.setSpotIndex(seq.getSpotIndex());

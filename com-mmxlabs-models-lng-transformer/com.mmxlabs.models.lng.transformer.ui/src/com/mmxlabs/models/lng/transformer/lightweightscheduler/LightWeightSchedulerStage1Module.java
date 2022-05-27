@@ -37,7 +37,7 @@ import com.mmxlabs.models.lng.transformer.optimiser.pairing.PairingOptimisationD
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -62,14 +62,14 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_VESSELS)
-	private List<@NonNull IVesselAvailability> getVessels(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences, IVesselProvider vesselProvider) {
+	private List<@NonNull IVesselCharter> getVessels(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences, IVesselProvider vesselProvider) {
 		return initialSequences.getResources().stream().sorted((a, b) -> a.getName().compareTo(b.getName())) //
-				.map(vesselProvider::getVesselAvailability).filter(AbstractOptimiserHelper::isShippedVessel).collect(Collectors.toList());
+				.map(vesselProvider::getVesselCharter).filter(AbstractOptimiserHelper::isShippedVessel).collect(Collectors.toList());
 	}
 
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT)
-	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private int[] getDesiredNumberSlotsPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselCharter> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		int[] desiredVesselCargoCount = new int[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {
@@ -81,7 +81,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 
 	@Provides
 	@Named(LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT)
-	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselAvailability> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
+	private long[] getDesiredNumberSlotsWeightingPerVessel(@Named(LIGHTWEIGHT_VESSELS) List<@NonNull IVesselCharter> vessels, IVesselSlotCountFitnessProvider vesselSlotCountFitnessProvider) {
 		long[] vesselReward = new long[vessels.size()];
 		if (vesselSlotCountFitnessProvider != null) {
 			for (int i = 0; i < vessels.size(); i++) {

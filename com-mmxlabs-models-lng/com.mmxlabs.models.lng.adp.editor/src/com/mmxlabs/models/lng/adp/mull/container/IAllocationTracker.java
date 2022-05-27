@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -66,9 +66,9 @@ public interface IAllocationTracker {
 	public void undo(final ICargoBlueprint cargoBlueprint);
 
 	public static LocalDate calculateDischargeDate(final LoadSlot loadSlot, DischargeSlot dischargeSlot, final Vessel vessel, final IScenarioDataProvider sdp,
-			final Map<Vessel, @Nullable VesselAvailability> vesselToVA) {
-		final VesselAvailability vesselAvailability = vesselToVA.get(vessel);
-		if (vesselAvailability == null) {
+			final Map<Vessel, @Nullable VesselCharter> vesselToVA) {
+		final VesselCharter vesselCharter = vesselToVA.get(vessel);
+		if (vesselCharter == null) {
 			final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlot, dischargeSlot, vessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
 				final String message = String.format("Cannot determine travel time between %s and %s.%n Travel time cannot be %d hours.", loadSlot.getPort().getName(),
@@ -81,7 +81,7 @@ public interface IAllocationTracker {
 			final double vesselMaxSpeedKnots = Math.max(vessel.getVesselOrDelegateMaxSpeed(), 0.0);
 			@NonNull
 			final ModelDistanceProvider modelDistanceProvider = sdp.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselAvailability, ScenarioModelUtil.getPortModel(sdp),
+			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselCharter, ScenarioModelUtil.getPortModel(sdp),
 					vesselMaxSpeedKnots, modelDistanceProvider);
 			final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
 			final ZonedDateTime loadTimeZoneDischargeArrival = loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration());

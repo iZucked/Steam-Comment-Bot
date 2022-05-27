@@ -138,7 +138,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGO_GROUPS);
-			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS);
@@ -207,7 +207,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 			case CargoPackage.CARGO_MODEL__CARGOES:
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
-			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+			case CargoPackage.CARGO_MODEL__VESSEL_CHARTERS:
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
@@ -267,8 +267,8 @@ public class CargoModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES,
-				 CargoFactory.eINSTANCE.createVesselAvailability()));
+				(CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS,
+				 CargoFactory.eINSTANCE.createVesselCharter()));
 
 		newChildDescriptors.add
 			(createChildParameter

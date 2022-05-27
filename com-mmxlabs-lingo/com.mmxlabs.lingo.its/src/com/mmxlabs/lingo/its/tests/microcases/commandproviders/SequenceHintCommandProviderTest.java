@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -77,7 +77,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		final EditingDomain domain = createEditingDomain(lngScenarioModel);
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
@@ -90,7 +90,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		cargo1.setSequenceHint(10);
 
-		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability)));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselCharter)));
 
 		Assertions.assertEquals(0, cargo1.getSequenceHint());
 	}

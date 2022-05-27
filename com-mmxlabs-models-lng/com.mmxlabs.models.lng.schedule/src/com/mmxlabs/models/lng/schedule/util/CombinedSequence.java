@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -45,25 +46,24 @@ public class CombinedSequence {
 	}
 
 	public static List<CombinedSequence> createCombinedSequences(Collection<Sequence> sequences) {
-		// find multiple availabilities
-		Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
+		// find multiple charters
+		Map<Vessel, List<Sequence>> vesselChartersMap = new HashMap<>();
 		List<CombinedSequence> combinedSequences = new LinkedList<>();
 		List<Sequence> unassigned = sequences.stream() //
 				.filter(s -> s.getSequenceType() == SequenceType.VESSEL) //
-				.filter(s -> s.getVesselAvailability() != null) //
-				.sorted((a, b) -> a.getVesselAvailability().getStartBy() == null ? -1
-						: b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy()))
+				.filter(s -> s.getVesselCharter() != null) //
+				.sorted((a, b) -> a.getVesselCharter().getStartBy() == null ? -1
+						: b.getVesselCharter().getStartBy() == null ? 1 : a.getVesselCharter().getStartBy().compareTo(b.getVesselCharter().getStartBy()))
 				.collect(Collectors.toList());
-		while (unassigned.size() > 0) {
+		while (!unassigned.isEmpty()) {
 			@NonNull
 			Sequence thisSequence = unassigned.get(0);
-			List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel())).collect(Collectors.toList());
-			availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
+			List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselCharter().getVessel().equals(thisSequence.getVesselCharter().getVessel())).collect(Collectors.toList());
+			vesselChartersMap.put(thisSequence.getVesselCharter().getVessel(), matches);
 			unassigned.removeAll(matches);
 		}
-		for (Vessel vessel : sequences.stream().map(s -> s.getVesselAvailability() == null ? null : s.getVesselAvailability().getVessel()).filter(v -> v != null).distinct()
-				.collect(Collectors.toList())) {
-			List<Sequence> linkedSequences = availabilityMap.get(vessel);
+		for (Vessel vessel : sequences.stream().map(s -> s.getVesselCharter() == null ? null : s.getVesselCharter().getVessel()).filter(Objects::nonNull).distinct().collect(Collectors.toList())) {
+			List<Sequence> linkedSequences = vesselChartersMap.get(vessel);
 			CombinedSequence cs = new CombinedSequence(vessel);
 			cs.setSequences(linkedSequences);
 			combinedSequences.add(cs);

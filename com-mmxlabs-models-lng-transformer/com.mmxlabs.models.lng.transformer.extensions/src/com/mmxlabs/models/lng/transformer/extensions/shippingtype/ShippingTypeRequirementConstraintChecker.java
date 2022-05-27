@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -62,9 +62,9 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 	}
 
 	private CargoDeliveryType getCargoDeliveryType(final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		boolean notShipped = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || 
-				vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		boolean notShipped = vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || 
+				vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 		if (notShipped) {
 			return CargoDeliveryType.NOT_SHIPPED;
 		}

@@ -22,7 +22,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -50,7 +50,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertDESPurchase_OpenDESSale() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES_Purchase", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null).build();
@@ -78,7 +78,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_SwapDESSale() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES_Purchase", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null).build();
@@ -114,7 +114,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDESPurchase_SwapDESPurchase() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES_Purchase1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null)//
@@ -170,7 +170,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertFOBSale_OpenFOBPurchase() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
@@ -199,7 +199,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSwaptFOBSale_FOBPurchase() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
@@ -237,7 +237,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSwaptFOBSale_FOBSale() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
@@ -279,11 +279,11 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertShippedPair_Open() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -314,11 +314,11 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapShippedPair_FOBPurchase() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -333,7 +333,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
-		cargo1.setVesselAssignmentType(vesselAvailability);
+		cargo1.setVesselAssignmentType(vesselCharter);
 
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
 				.withOptional(true) //
@@ -360,11 +360,11 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSwapShippedPair_DESSale() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -379,7 +379,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
-		cargo1.setVesselAssignmentType(vesselAvailability);
+		cargo1.setVesselAssignmentType(vesselCharter);
 
 		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.withOptional(true) //
@@ -406,19 +406,19 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testInsertExtraShippedPair() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -431,7 +431,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
-		cargo1.setVesselAssignmentType(vesselAvailability1);
+		cargo1.setVesselAssignmentType(vesselCharter1);
 
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
 				.withOptional(true)//
@@ -470,11 +470,11 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDivertBackfill() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -487,7 +487,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
-		cargo1.setVesselAssignmentType(vesselAvailability);
+		cargo1.setVesselAssignmentType(vesselCharter);
 		cargo1.setSequenceHint(1);
 
 		final LoadSlot load_DES = cargoModelBuilder.makeDESPurchase("DES_Purchase_1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", 22.8, null) //
@@ -525,17 +525,17 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		// Model the case Alex found.
 		// Insert new DES Sale(?). Could swap with optional DES Sale, but dates clash with next load. Cannot do this.
 		// Need to remove existing cargo and then re-insert on market vessel.
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.build();
 
-		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter vesselCharter2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.build();
 
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
@@ -546,7 +546,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(false);
-		cargo1.setVesselAssignmentType(vesselAvailability1);
+		cargo1.setVesselAssignmentType(vesselCharter1);
 		cargo1.setSequenceHint(1);
 
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
@@ -560,7 +560,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo2 = cargoModelBuilder.createCargo(load_FOB2, discharge_DES2);
 		cargo2.setAllowRewiring(true);
-		cargo2.setVesselAssignmentType(vesselAvailability1);
+		cargo2.setVesselAssignmentType(vesselCharter1);
 		cargo2.setSequenceHint(2);
 
 		final LoadSlot load_FOB3 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase3", LocalDate.of(2016, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
@@ -571,7 +571,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		@NonNull
 		final Cargo cargo3 = cargoModelBuilder.createCargo(load_FOB3, discharge_DES3);
 		cargo3.setAllowRewiring(false);
-		cargo3.setVesselAssignmentType(vesselAvailability1);
+		cargo3.setVesselAssignmentType(vesselCharter1);
 		cargo3.setSequenceHint(3);
 
 		final DischargeSlot discharge_DES4 = cargoModelBuilder.makeDESSale("DES_Sale4", LocalDate.of(2016, 4, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //

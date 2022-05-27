@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 
 /**
@@ -19,11 +19,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
  */
 public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVesselSlotProviderEditor {
 
-	private final Map<ISequenceElement, IVesselAvailability> elementVesselMap = new HashMap<>();
-	private final Map<IVesselAvailability, ISequenceElement> vesselElementMap = new HashMap<>();
+	private final Map<ISequenceElement, IVesselCharter> elementVesselMap = new HashMap<>();
+	private final Map<IVesselCharter, ISequenceElement> vesselElementMap = new HashMap<>();
 
 	@Override
-	public IVesselAvailability getVesselAvailabilityForElement(final ISequenceElement element) {
+	public IVesselCharter getVesselCharterForElement(final ISequenceElement element) {
 		if (elementVesselMap.containsKey(element)) {
 			return elementVesselMap.get(element);
 		}
@@ -33,9 +33,9 @@ public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVes
 	}
 
 	@Override
-	public ISequenceElement getElementForVesselAvailability(final IVesselAvailability vesselAvailability) {
-		if (vesselElementMap.containsKey(vesselAvailability)) {
-			return vesselElementMap.get(vesselAvailability);
+	public ISequenceElement getElementForVesselCharter(final IVesselCharter vesselCharter) {
+		if (vesselElementMap.containsKey(vesselCharter)) {
+			return vesselElementMap.get(vesselCharter);
 		}
 
 		// TODO: Error?
@@ -43,8 +43,8 @@ public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVes
 	}
 
 	@Override
-	public void setVesselAvailabilityForElement(final IVesselAvailability vesselAvailability, final ISequenceElement element) {
-		vesselElementMap.put(vesselAvailability, element);
-		elementVesselMap.put(element, vesselAvailability);
+	public void setVesselCharterForElement(final IVesselCharter vesselCharter, final ISequenceElement element) {
+		vesselElementMap.put(vesselCharter, element);
+		elementVesselMap.put(element, vesselCharter);
 	}
 }

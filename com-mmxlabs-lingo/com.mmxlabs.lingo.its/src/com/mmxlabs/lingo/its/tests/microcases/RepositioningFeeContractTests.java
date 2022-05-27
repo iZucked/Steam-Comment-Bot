@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -49,7 +49,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(15.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.build();
 
@@ -78,7 +78,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -96,7 +96,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 			assert cargoAllocation != null;
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -110,7 +110,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withRepositioning("1000000") //
 				.build();
@@ -141,7 +141,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -160,7 +160,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(-1_000_000, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - 1_000_000, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -174,7 +174,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI))
 				.withStartWindow(LocalDateTime.of(2015, 11, 1, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 15, 0, 0, 0, 0))//
 				.build();
@@ -205,13 +205,13 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		
 		final GenericCharterContract repositioningContract = commercialModelBuilder
 				.createSimpleLumpSumRepositioningContract(portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI),
 				"100000");
-		vesselAvailability.setGenericCharterContract(repositioningContract);
+		vesselCharter.setGenericCharterContract(repositioningContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -229,7 +229,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(-1_535_733, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - 1_535_733, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 			
@@ -247,7 +247,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI))
 				.withStartWindow(LocalDateTime.of(2015, 11, 1, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 15, 0, 0, 0, 0))//
 				.build();
@@ -278,7 +278,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		
 		final GenericCharterContract repositioningContract = commercialModelBuilder
@@ -286,7 +286,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI), //
 				portFinder.findPortById(InternalDataConstants.PORT_BONNY))),
 				"100000");
-		vesselAvailability.setGenericCharterContract(repositioningContract);
+		vesselCharter.setGenericCharterContract(repositioningContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -304,7 +304,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(-1_535_733, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - 1_535_733, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 			
@@ -322,7 +322,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI))
 				.withStartWindow(LocalDateTime.of(2015, 11, 1, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 15, 0, 0, 0, 0))//
 				.build();
@@ -353,12 +353,12 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		
 		final GenericCharterContract repositioningContract = commercialModelBuilder
 				.createSimpleLumpSumRepositioningContract("100000");
-		vesselAvailability.setGenericCharterContract(repositioningContract);
+		vesselCharter.setGenericCharterContract(repositioningContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -376,7 +376,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(-1_535_733, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - 1_535_733, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 			
@@ -394,7 +394,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_CORPUS_CHRISTI))
 				.withStartWindow(LocalDateTime.of(2015, 11, 1, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 15, 0, 0, 0, 0))//
 				.build();
@@ -425,7 +425,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 		
 		final GenericCharterContract repositioningContract = commercialModelBuilder
@@ -434,7 +434,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 				portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))), portFinder.findPortById(InternalDataConstants.PORT_BONNY), //
 				15.0, "100000", "500", false, false, "0");
 				
-		vesselAvailability.setGenericCharterContract(repositioningContract);
+		vesselCharter.setGenericCharterContract(repositioningContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -452,7 +452,7 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(-1_435_733 - 2_762_812, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - (1_435_733 + 2_762_812), ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 			
@@ -462,8 +462,8 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 		});
 	}
 
-	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
-		return ScheduleModelUtils.getStartEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
+	private StartEvent getStartEvent(final VesselCharter vesselCharter) {
+		return ScheduleModelUtils.getStartEvent(vesselCharter, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
 }

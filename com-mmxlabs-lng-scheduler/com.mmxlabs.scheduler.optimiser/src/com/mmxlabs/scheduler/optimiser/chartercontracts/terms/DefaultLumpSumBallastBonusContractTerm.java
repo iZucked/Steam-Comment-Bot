@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.BallastBonusContrac
 import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumBallastBonusTermAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -30,10 +30,10 @@ public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContract
 	}
 
 	@Override
-	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 
 		final IPort port;
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			IPortSlot slot = portTimesRecord.getReturnSlot();
 			port = slot.getPort();
 		} else {
@@ -49,7 +49,7 @@ public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContract
 	}
 
 	@Override
-	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 
 		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
@@ -58,9 +58,9 @@ public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContract
 	}
 
 	@Override
-	public @Nullable ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+	public @Nullable ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 		final LumpSumBallastBonusTermAnnotation lumpSumBallastBonusRuleAnnotation = new LumpSumBallastBonusTermAnnotation();
-		lumpSumBallastBonusRuleAnnotation.lumpSum = calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, vesselStartPort);
+		lumpSumBallastBonusRuleAnnotation.lumpSum = calculateCost(portTimesRecord, vesselCharter, vesselStartTime, vesselStartPort);
 		return lumpSumBallastBonusRuleAnnotation;
 	}
 }

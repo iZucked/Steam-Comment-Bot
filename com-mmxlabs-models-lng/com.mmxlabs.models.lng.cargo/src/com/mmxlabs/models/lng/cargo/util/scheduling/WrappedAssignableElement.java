@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
@@ -294,9 +294,9 @@ public class WrappedAssignableElement {
 		Vessel vessel = null;
 		
 		final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-		if (vesselAssignmentType instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-			vessel = vesselAvailability.getVessel();
+		if (vesselAssignmentType instanceof VesselCharter) {
+			final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
+			vessel = vesselCharter.getVessel();
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 			vessel = charterInMarket.getVessel();

@@ -18,7 +18,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper.OrderingHint;
 import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
@@ -37,23 +37,23 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 public class CollectedAssignment {
 	private final VesselAssignmentType vesselAssignmentType;
 
-	private final VesselAvailability vesselAvailability;
+	private final VesselCharter vesselCharter;
 	private final CharterInMarket charterInMarket;
 	private @NonNull List<@NonNull AssignableElement> assignments;
 	private final Integer spotIndex;
 
-	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull VesselAvailability vesselAvailability, final @Nullable PortModel portModel,
+	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull VesselCharter vesselCharter, final @Nullable PortModel portModel,
 			@Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 		this.charterInMarket = null;
 		this.spotIndex = null;
-		this.vesselAssignmentType = vesselAvailability;
+		this.vesselAssignmentType = vesselCharter;
 		this.assignments = sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 
 	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull CharterInMarket charterInMarket, final int spotIndex, final @Nullable PortModel portModel,
 			@Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
-		this.vesselAvailability = null;
+		this.vesselCharter = null;
 		this.charterInMarket = charterInMarket;
 		this.spotIndex = spotIndex;
 		this.vesselAssignmentType = charterInMarket;
@@ -66,7 +66,7 @@ public class CollectedAssignment {
 	}
 
 	public boolean isSpotVessel() {
-		return vesselAvailability == null;
+		return vesselCharter == null;
 	}
 
 	public VesselAssignmentType getVesselAssignmentType() {
@@ -77,8 +77,8 @@ public class CollectedAssignment {
 		return charterInMarket;
 	}
 
-	public VesselAvailability getVesselAvailability() {
-		return vesselAvailability;
+	public VesselCharter getVesselCharter() {
+		return vesselCharter;
 	}
 
 	public boolean isSetSpotIndex() {

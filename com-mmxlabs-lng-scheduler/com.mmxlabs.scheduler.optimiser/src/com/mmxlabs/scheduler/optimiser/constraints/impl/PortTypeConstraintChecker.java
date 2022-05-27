@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -76,8 +76,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			@NonNull
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (!checkSequence(sequence, messages, vesselAvailability.getVesselInstanceType(), vesselAvailability.isOptional())) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (!checkSequence(sequence, messages, vesselCharter.getVesselInstanceType(), vesselCharter.isOptional())) {
 				return false;
 			}
 		}
@@ -92,12 +92,12 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * 
 	 * @param sequence
 	 * @param messages
-	 * @param isOptionalVesselAvailability
+	 * @param isOptionalVesselCharter
 	 *            TODO
 	 * @return
 	 */
 	public final boolean checkSequence(@NonNull final ISequence sequence, final List<String> messages, @NonNull final VesselInstanceType instanceType,
-			final boolean isOptionalVesselAvailability) {
+			final boolean isOptionalVesselCharter) {
 
 		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
 			final int size = sequence.size();
@@ -238,7 +238,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
-		final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vessel = vesselProvider.getVesselCharter(resource);
 
 		// don't enforce any constraints here if the ordered sequence provider specifies a previous element
 		if (orderedSequenceProvider.getPreviousElement(second) != null) {
@@ -288,7 +288,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				messages.add(explain(first, second, resource));
 			return false;
 		}
-		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		final VesselInstanceType instanceType = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// No Discharge followed by a load permitted here....
 			if (firstType == PortType.Discharge && secondType == PortType.Load) {
@@ -305,8 +305,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final IVessel vessel = vesselAvailability.getVessel();
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		final IVessel vessel = vesselCharter.getVessel();
 
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
@@ -334,7 +334,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		// Check Virtual Routes
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			if (firstType.equals(PortType.Discharge)) {
 				return this.name + ": Vessel " + vessel.getName() + ": Nothing can come after a discharge on a virtual vessel";
 			}

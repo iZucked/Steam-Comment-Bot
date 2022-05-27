@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -112,7 +112,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 3, 1, 0, 0, 0)) //
 				.build();
@@ -176,7 +176,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -256,7 +256,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 5, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -344,7 +344,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		vessel.setSafetyHeel(500);
 		vessel.setPurgeTime(24);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -464,7 +464,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 3, 1, 0, 0, 0)) //
 				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
@@ -523,11 +523,11 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		vessel2.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("80000") //
 				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
 				.build();
-		final VesselAvailability charter_2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter charter_2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
 				.build();
@@ -664,14 +664,14 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 			final Schedule schedule = optimise(false, null, YearMonth.of(2020, 1));
 			Assertions.assertNotNull(schedule);
 			final CargoAllocation ca = findCargoAllocation(load2, schedule);
-			Assertions.assertSame(charter_1, ca.getSequence().getVesselAvailability());
+			Assertions.assertSame(charter_1, ca.getSequence().getVesselCharter());
 		}
 		// With charter length, cannot move
 		{
 			final Schedule schedule = optimise(true, null, YearMonth.of(2020, 1));
 			Assertions.assertNotNull(schedule);
 			final CargoAllocation ca = findCargoAllocation(load2, schedule);
-			Assertions.assertSame(charter_2, ca.getSequence().getVesselAvailability());
+			Assertions.assertSame(charter_2, ca.getSequence().getVesselCharter());
 
 		}
 
@@ -687,7 +687,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLoneCharterLengthEndCold() {
 		final Vessel mediumShip = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
-		final VesselAvailability mediumShipVa = cargoModelBuilder.makeVesselAvailability(mediumShip, entity) //
+		final VesselCharter mediumShipVa = cargoModelBuilder.makeVesselCharter(mediumShip, entity) //
 				.withCharterRate("70000") //
 				.withStartHeel(0, 2000, 23, "3") //
 				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
@@ -704,7 +704,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		Assertions.assertEquals(1, sequences.size());
 
 		final Sequence sequence = sequences.get(0);
-		Assertions.assertEquals(mediumShipVa, sequence.getVesselAvailability());
+		Assertions.assertEquals(mediumShipVa, sequence.getVesselCharter());
 
 		@NonNull
 		final List<@NonNull Class<? extends Event>> expectedEventSequence = new ArrayList<>();
@@ -891,7 +891,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(safetyHeel);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2020, 1, 23, 0, 0, 0), LocalDateTime.of(2020, 2, 9, 0, 0, 0)) //
 				.withStartHeel(4_450, 5_000, 23, "") //

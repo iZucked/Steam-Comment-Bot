@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -50,7 +50,7 @@ public class ScenarioElementNameHelper {
 	private static final @NonNull String TYPE_PORT = "Port";
 	private static final @NonNull String TYPE_VESSEL = "Vessel";
 	private static final @NonNull String TYPE_VESSEL_EVENT = "Event";
-	private static final @NonNull String TYPE_VESSEL_AVAILABILITY = "Charter";
+	private static final @NonNull String TYPE_VESSEL_CHARTER = "Charter";
 
 	public static @NonNull String getName(final @Nullable EObject target) {
 		return getName(target, "(unknown)");
@@ -72,8 +72,8 @@ public class ScenarioElementNameHelper {
 		if (target instanceof Vessel) {
 			return TYPE_VESSEL;
 		}
-		if (target instanceof VesselAvailability) {
-			return TYPE_VESSEL_AVAILABILITY;
+		if (target instanceof VesselCharter) {
+			return TYPE_VESSEL_CHARTER;
 		}
 		return "<Unknown>";
 	}

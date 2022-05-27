@@ -5,19 +5,19 @@
 package com.mmxlabs.models.lng.cargo.ui.util;
 
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class AssignmentLabelProvider {
 
-	public static String getLabelFor(final VesselAvailability vesselAvailability) {
-		return getLabelFor(vesselAvailability, true);
+	public static String getLabelFor(final VesselCharter vesselCharter) {
+		return getLabelFor(vesselCharter, true);
 	}
 	
-	public static String getLabelFor(final VesselAvailability vesselAvailability, final boolean showVolume) {
+	public static String getLabelFor(final VesselCharter vesselCharter, final boolean showVolume) {
 
-		final Vessel vessel = vesselAvailability.getVessel();
+		final Vessel vessel = vesselCharter.getVessel();
 		if (vessel != null) {
 			return getLabelFor(vessel, showVolume);
 		}

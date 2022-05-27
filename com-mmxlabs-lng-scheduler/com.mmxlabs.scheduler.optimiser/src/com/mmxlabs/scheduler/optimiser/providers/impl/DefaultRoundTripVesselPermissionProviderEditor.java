@@ -15,22 +15,22 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 
 public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTripVesselPermissionProviderEditor {
 
-	private final Map<IPortSlot, Collection<@NonNull IVesselAvailability>> portSlotMap = new HashMap<>();
+	private final Map<IPortSlot, Collection<@NonNull IVesselCharter>> portSlotMap = new HashMap<>();
 	private final Map<ISequenceElement, Collection<@NonNull IResource>> elementMap = new HashMap<>();
 	private final Map<ISequenceElement, ISequenceElement> elementSequencePair = new HashMap<>();
 	private final Map<ISequenceElement, ISequenceElement> elementSequenceReversePair = new HashMap<>();
 
 	@Override
-	public boolean isPermittedOnResource(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
+	public boolean isPermittedOnResource(@NonNull final IPortSlot portSlot, @NonNull final IVesselCharter vesselCharter) {
 
-		final Collection<@NonNull IVesselAvailability> c = portSlotMap.get(portSlot);
+		final Collection<@NonNull IVesselCharter> c = portSlotMap.get(portSlot);
 		if (c != null) {
-			return c.contains(vesselAvailability);
+			return c.contains(vesselCharter);
 		}
 		return false;
 	}
@@ -46,13 +46,13 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 
 	@Override
 	public void permitElementOnResource(@NonNull final ISequenceElement element, @NonNull final IPortSlot portSlot, @NonNull final IResource resource,
-			@NonNull final IVesselAvailability vesselAvailability) {
+			@NonNull final IVesselCharter vesselCharter) {
 
 		elementMap.merge(element, Sets.newHashSet(resource), (c, r) -> {
 			c.addAll(r);
 			return new HashSet<>(c);
 		});
-		portSlotMap.merge(portSlot, Sets.newHashSet(vesselAvailability), (c, r) -> {
+		portSlotMap.merge(portSlot, Sets.newHashSet(vesselCharter), (c, r) -> {
 			c.addAll(r);
 			return new HashSet<>(c);
 		});

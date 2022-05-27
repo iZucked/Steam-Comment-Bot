@@ -74,7 +74,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		for (final IResource resource : loopResources) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				continue;
 			}
@@ -134,7 +134,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final @Nullable List<String> messages) {
-		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		final VesselInstanceType instanceType = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public class HashMapVesselEditorTest {
 
@@ -18,20 +18,20 @@ public class HashMapVesselEditorTest {
 		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class, "vessel-1");
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class, "vessel-1");
 
-		editor.setVesselAvailabilityResource(resource1, vesselAvailability1);
+		editor.setVesselCharterResource(resource1, vesselCharter1);
 
-		Assertions.assertSame(vesselAvailability1, editor.getVesselAvailability(resource1));
-		Assertions.assertSame(resource1, editor.getResource(vesselAvailability1));
+		Assertions.assertSame(vesselCharter1, editor.getVesselCharter(resource1));
+		Assertions.assertSame(resource1, editor.getResource(vesselCharter1));
 	}
 
 	@Test
-	public void testGetUnknownVesselAvailability() {
+	public void testGetUnknownVesselCharter() {
 		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class, "vessel-1");
-		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getResource(vesselAvailability));
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class, "vessel-1");
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getResource(vesselCharter));
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class HashMapVesselEditorTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 
-		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getVesselAvailability(resource1));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> editor.getVesselCharter(resource1));
 
 	}
 }

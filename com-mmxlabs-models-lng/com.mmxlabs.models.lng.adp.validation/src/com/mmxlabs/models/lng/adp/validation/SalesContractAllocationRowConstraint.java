@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -54,7 +54,7 @@ public class SalesContractAllocationRowConstraint extends AbstractModelMultiCons
 
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) extraContext.getRootObject();
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
-			final Set<Vessel> fleetVessels = cargoModel.getVesselAvailabilities().stream().map(VesselAvailability::getVessel).collect(Collectors.toSet());
+			final Set<Vessel> fleetVessels = cargoModel.getVesselCharters().stream().map(VesselCharter::getVessel).collect(Collectors.toSet());
 			final List<Vessel> vessels = salesContractAllocationRow.getVessels();
 			for (final Vessel vessel : vessels) {
 				if (!fleetVessels.contains(vessel)) {

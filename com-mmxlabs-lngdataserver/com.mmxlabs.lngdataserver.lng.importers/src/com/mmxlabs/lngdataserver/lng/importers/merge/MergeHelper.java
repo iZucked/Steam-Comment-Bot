@@ -50,7 +50,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -162,7 +162,7 @@ public class MergeHelper implements Closeable {
 		ctx.ignoreFeature(CargoPackage.Literals.SLOT__CARGO);
 
 		final CargoModel cam = ScenarioModelUtil.getCargoModel(targetScenarioDataProvider);
-		cam.getVesselAvailabilities().forEach(ctx::registerType);
+		cam.getVesselCharters().forEach(ctx::registerType);
 
 		final PortModel pm = ScenarioModelUtil.getPortModel(targetScenarioDataProvider);
 		pm.getPorts().forEach(ctx::registerType);
@@ -288,8 +288,8 @@ public class MergeHelper implements Closeable {
 		for (EObject eo : eObjects) {
 			String name = ng.getName(eo); // name = "LNG Jupiter-1" => is target name, after vessel replaced in va earlier.
 			MergeAction ma = mergeActions.get(name); // returns null, since mapping is from old name "Lng Jupiter-1" prior to replacement.
-			if (ma != null) { // MergeMapping.sourcObject vessel availability, not updated with new vessel object
-				switch (ma.getMergeType()) { // eObjects contains eObject with vessel availability, with different vessel.
+			if (ma != null) { // MergeMapping.sourcObject vessel charter, not updated with new vessel object
+				switch (ma.getMergeType()) { // eObjects contains eObject with vessel charter, with different vessel.
 				case Add:
 					final EObject clonedEObject = cloneEObject(eo);
 					toAdd.add(clonedEObject);
@@ -368,12 +368,12 @@ public class MergeHelper implements Closeable {
 		}
 	}
 
-	void updateVesselAvailabilityStartEndDates(CompoundCommand cmd) {
-		List<VesselAvailability> sourceVas = this.sourceLNGScenario.getCargoModel().getVesselAvailabilities();
-		List<VesselAvailability> targetVas = this.targetLNGScenario.getCargoModel().getVesselAvailabilities();
+	void updateVesselCharterStartEndDates(CompoundCommand cmd) {
+		List<VesselCharter> sourceVas = this.sourceLNGScenario.getCargoModel().getVesselCharters();
+		List<VesselCharter> targetVas = this.targetLNGScenario.getCargoModel().getVesselCharters();
 
-		for (VesselAvailability v : sourceVas) {
-			Optional<VesselAvailability> tva = targetVas.stream().filter(va -> va.getVessel().getName().equals(v.getVessel().getName())).findFirst();
+		for (VesselCharter v : sourceVas) {
+			Optional<VesselCharter> tva = targetVas.stream().filter(va -> va.getVessel().getName().equals(v.getVessel().getName())).findFirst();
 
 			LocalDateTime endBy, endAfter, startBy, startAfter;
 
@@ -381,26 +381,26 @@ public class MergeHelper implements Closeable {
 				// Check end by is latest one.
 				if (tva.get().isSetEndBy() && v.isSetEndBy() && tva.get().getEndBy().isBefore(v.getEndBy())) {
 					if (v.isSetEndBy()) {
-						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY, v.getEndBy()));
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_CHARTER__END_BY, v.getEndBy()));
 						endBy = v.getEndBy();
 					}
 				}
 				if (tva.get().isSetEndAfter() && v.isSetEndAfter() && tva.get().getEndAfter().isBefore(v.getEndAfter())) {
 					if (v.isSetEndAfter()) {
-						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER, v.getEndAfter()));
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, v.getEndAfter()));
 						endAfter = v.getEndAfter();
 					}
 				}
 				// Check start after
 				if (tva.get().isSetStartBy() && v.isSetStartBy() && tva.get().getStartBy().isAfter(v.getStartBy())) {
 					if (v.isSetStartBy()) {
-						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY, v.getStartBy()));
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_CHARTER__START_BY, v.getStartBy()));
 						startBy = v.getStartBy();
 					}
 				}
 				if (tva.get().isSetStartAfter() && v.isSetStartAfter() && tva.get().getStartAfter().isAfter(v.getStartAfter())) {
 					if (v.isSetStartAfter()) {
-						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER, v.getStartAfter()));
+						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, v.getStartAfter()));
 						startAfter = v.getStartAfter();
 					}
 				}
@@ -678,7 +678,7 @@ public class MergeHelper implements Closeable {
 				for (final EStructuralFeature.Setting setting : usages) {
 
 					// We don't want to add twice in the owner collection (Ignore cargoes also as dealt with separately)
-					if (setting.getEStructuralFeature() != ownerFeature && (!(setting.getEObject() instanceof Cargo) || ownerFeature == CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES)) {
+					if (setting.getEStructuralFeature() != ownerFeature && (!(setting.getEObject() instanceof Cargo) || ownerFeature == CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS)) {
 						if (setting.getEStructuralFeature().isMany()) {
 							Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
 							if (collection.contains(newObject)) {

@@ -71,7 +71,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.util.SpotSlotUtils;
@@ -134,7 +134,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.contracts.ICharterContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
-import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.IVesselCharterTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
@@ -176,7 +176,7 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -185,7 +185,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotCharterOutMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
-import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
@@ -258,7 +258,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	@Named(EXTRA_VESSEL_AVAILABILITIES)
-	private List<VesselAvailability> extraVesselAvailabilities;
+	private List<VesselCharter> extraVesselAvailabilities;
 
 	@Inject
 	@Named(EXTRA_VESSEL_EVENTS)
@@ -376,7 +376,7 @@ public class LNGScenarioTransformer {
 	 * A set of all vessel availability transformers being used;
 	 */
 	@NonNull
-	private final Set<IVesselAvailabilityTransformer> vesselAvailabilityTransformers = new LinkedHashSet<>();
+	private final Set<IVesselCharterTransformer> vesselCharterTransformers = new LinkedHashSet<>();
 
 	/**
 	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
@@ -385,11 +385,11 @@ public class LNGScenarioTransformer {
 	private final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<>();
 
 	@NonNull
-	private final Map<NonNullPair<CharterInMarket, Integer>, IVesselAvailability> spotCharterInToAvailability = new HashMap<>();
-	private final Map<CharterInMarket, IVesselAvailability> spotCharterInToShortCargoAvailability = new HashMap<>();
+	private final Map<NonNullPair<CharterInMarket, Integer>, IVesselCharter> spotCharterInToAvailability = new HashMap<>();
+	private final Map<CharterInMarket, IVesselCharter> spotCharterInToShortCargoAvailability = new HashMap<>();
 
 	@NonNull
-	private final List<IVesselAvailability> allVesselAvailabilities = new ArrayList<>();
+	private final List<IVesselCharter> allVesselAvailabilities = new ArrayList<>();
 
 	@NonNull
 	private final Map<Vessel, IVessel> allVessels = new HashMap<>();
@@ -491,8 +491,8 @@ public class LNGScenarioTransformer {
 			if (transformer instanceof final ISlotTransformer slotTransformer) {
 				addSlotTransformer(slotTransformer);
 			}
-			if (transformer instanceof final IVesselAvailabilityTransformer vesselAvailabilityTransformer) {
-				addVesselAvailabilityTransformer(vesselAvailabilityTransformer);
+			if (transformer instanceof final IVesselCharterTransformer vesselCharterTransformer) {
+				addVesselCharterTransformer(vesselCharterTransformer);
 			}
 			if (transformer instanceof final IVesselEventTransformer vesselEventTransformer) {
 				addVesselEventTransformer(vesselEventTransformer);
@@ -524,8 +524,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	public void addVesselAvailabilityTransformer(@NonNull final IVesselAvailabilityTransformer transformer) {
-		vesselAvailabilityTransformers.add(transformer);
+	public void addVesselCharterTransformer(@NonNull final IVesselCharterTransformer transformer) {
+		vesselCharterTransformers.add(transformer);
 	}
 
 	public void addBallastBonusContractTransformer(@NonNull final ICharterContractTransformer transformer) {
@@ -799,16 +799,16 @@ public class LNGScenarioTransformer {
 
 		final Association<Vessel, IVessel> vesselAssociation = buildFleet(builder, portAssociation, modelEntityMap);
 
-		for (final IVesselAvailability oVesselAvailability : allVesselAvailabilities) {
-			assert oVesselAvailability != null;
-			final VesselAssignmentType eVesselAvailability = modelEntityMap.getModelObject(oVesselAvailability, VesselAssignmentType.class);
+		for (final IVesselCharter oVesselCharter : allVesselAvailabilities) {
+			assert oVesselCharter != null;
+			final VesselAssignmentType eVesselCharter = modelEntityMap.getModelObject(oVesselCharter, VesselAssignmentType.class);
 
-			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
-				assert vesselAvailabilityTransformer != null;
+			for (final IVesselCharterTransformer vesselCharterTransformer : vesselCharterTransformers) {
+				assert vesselCharterTransformer != null;
 
 				// This can be null if the availability is generated from a Spot option
-				if (eVesselAvailability instanceof final VesselAvailability vesselAvailability) {
-					vesselAvailabilityTransformer.vesselAvailabilityTransformed(vesselAvailability, oVesselAvailability);
+				if (eVesselCharter instanceof final VesselCharter vesselCharter) {
+					vesselCharterTransformer.vesselCharterTransformed(vesselCharter, oVesselCharter);
 				}
 			}
 		}
@@ -1048,22 +1048,22 @@ public class LNGScenarioTransformer {
 			}
 
 			boolean isNominalVessel = false;
-			IVesselAvailability vesselAvailability = null;
-			if (vesselAssignmentType instanceof final VesselAvailability va) {
-				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
+			IVesselCharter vesselCharter = null;
+			if (vesselAssignmentType instanceof final VesselCharter va) {
+				vesselCharter = modelEntityMap.getOptimiserObject(va, IVesselCharter.class);
 			} else if (vesselAssignmentType instanceof final CharterInMarketOverride charterInMarketOverride) {
-				vesselAvailability = modelEntityMap.getOptimiserObject(charterInMarketOverride, IVesselAvailability.class);
+				vesselCharter = modelEntityMap.getOptimiserObject(charterInMarketOverride, IVesselCharter.class);
 			} else if (vesselAssignmentType instanceof final CharterInMarket charterInMarket) {
 				final int spotIndex = assignableElement.getSpotIndex();
 				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, spotIndex);
-				vesselAvailability = spotCharterInToAvailability.get(key);
-				if (vesselAvailability == null) {
-					vesselAvailability = spotCharterInToShortCargoAvailability.get(charterInMarket);
+				vesselCharter = spotCharterInToAvailability.get(key);
+				if (vesselCharter == null) {
+					vesselCharter = spotCharterInToShortCargoAvailability.get(charterInMarket);
 				}
 				isNominalVessel = spotIndex == NOMINAL_CARGO_INDEX;
 			}
 
-			if (vesselAvailability == null) {
+			if (vesselCharter == null) {
 				if (assignableElement instanceof Cargo) {
 					// Keep going to constrain slot pairing if needed.
 				} else {
@@ -1084,9 +1084,9 @@ public class LNGScenarioTransformer {
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 					allOptimiserSlots.add(portSlot);
 
-					if (vesselAvailability != null && (freeze || lockedSlots.contains(slot))) {
+					if (vesselCharter != null && (freeze || lockedSlots.contains(slot))) {
 						// bind slots to vessel
-						builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
+						builder.freezeSlotToVesselCharter(portSlot, vesselCharter);
 					}
 
 					if ((prevSlot != null) && (freeze || (lockedSlots.contains(slot) && lockedSlots.contains(prevSlot)))) {
@@ -1099,8 +1099,8 @@ public class LNGScenarioTransformer {
 					prevPortSlot = portSlot;
 				}
 
-				if (isNominalVessel && vesselAvailability != null) {
-					builder.bindSlotsToRoundTripVessel(vesselAvailability, allOptimiserSlots.toArray(new IPortSlot[allOptimiserSlots.size()]));
+				if (isNominalVessel && vesselCharter != null) {
+					builder.bindSlotsToRoundTripVessel(vesselCharter, allOptimiserSlots.toArray(new IPortSlot[allOptimiserSlots.size()]));
 				}
 				if (cargo.isLocked()) {
 					lockedCargoProviderEditor.addLockedCargo(allOptimiserSlots);
@@ -1108,8 +1108,8 @@ public class LNGScenarioTransformer {
 			} else if (assignableElement instanceof VesselEvent) {
 				if (freezeElements) {
 					final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
-					if (slot != null && vesselAvailability != null) {
-						builder.freezeSlotToVesselAvailability(slot, vesselAvailability);
+					if (slot != null && vesselCharter != null) {
+						builder.freezeSlotToVesselCharter(slot, vesselCharter);
 					}
 				}
 			}
@@ -2851,8 +2851,8 @@ public class LNGScenarioTransformer {
 
 		final Set<IVessel> optimiserVessels = new HashSet<>();
 		optimiserVessels.addAll(allVessels.values());
-		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-			final IVessel vessel = vesselAvailability.getVessel();
+		for (final IVesselCharter vesselCharter : allVesselAvailabilities) {
+			final IVessel vessel = vesselCharter.getVessel();
 			if (vessel != null) {
 				optimiserVessels.add(vessel);
 			}
@@ -3124,7 +3124,7 @@ public class LNGScenarioTransformer {
 		 * Build the fleet model - first we must create the vessels from the model
 		 */
 		final Association<Vessel, IVessel> vesselAssociation = new Association<>();
-		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<>();
+		final Association<VesselCharter, IVesselCharter> vesselCharterAssociation = new Association<>();
 
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 
@@ -3184,13 +3184,13 @@ public class LNGScenarioTransformer {
 
 		final CargoModel cargoModel = rootObject.getCargoModel();
 		// Sorted by fleet model vessel order
-		final List<VesselAvailability> sortedAvailabilities = new ArrayList<>();
+		final List<VesselCharter> sortedAvailabilities = new ArrayList<>();
 		{
 			for (final Vessel vessel : fleetModel.getVessels()) {
 
-				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-					if (vesselAvailability.getVessel() == vessel) {
-						sortedAvailabilities.add(vesselAvailability);
+				for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
+					if (vesselCharter.getVessel() == vessel) {
+						sortedAvailabilities.add(vesselCharter);
 					}
 				}
 			}
@@ -3202,20 +3202,20 @@ public class LNGScenarioTransformer {
 		}
 
 		// Now register the availabilities.
-		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
-			final Vessel eVessel = eVesselAvailability.getVessel();
+		for (final VesselCharter eVesselCharter : sortedAvailabilities) {
+			final Vessel eVessel = eVesselCharter.getVessel();
 			assert eVessel != null;
 
-			final Port startingPort = eVesselAvailability.getStartAt();
+			final Port startingPort = eVesselCharter.getStartAt();
 
-			final StartHeelOptions startHeel = eVesselAvailability.getStartHeel();
+			final StartHeelOptions startHeel = eVesselCharter.getStartHeel();
 			assert startHeel != null;
 			final IHeelOptionSupplier heelSupplier = createHeelSupplier(startHeel, null);
-			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,
-					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartByAsDateTime() : null, startingPort, heelSupplier);
+			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselCharter.isSetStartAfter() ? eVesselCharter.getStartAfterAsDateTime() : null,
+					eVesselCharter.isSetStartBy() ? eVesselCharter.getStartByAsDateTime() : null, startingPort, heelSupplier);
 
-			final ZonedDateTime endBy = eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null;
-			ZonedDateTime endAfter = eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null;
+			final ZonedDateTime endBy = eVesselCharter.isSetEndBy() ? eVesselCharter.getEndByAsDateTime() : null;
+			ZonedDateTime endAfter = eVesselCharter.isSetEndAfter() ? eVesselCharter.getEndAfterAsDateTime() : null;
 
 			if (rootObject.isSetSchedulingEndDate()) {
 				final ZonedDateTime schedulingEndDate = rootObject.getSchedulingEndDate().atStartOfDay(ZoneId.of("Etc/UTC"));
@@ -3224,28 +3224,28 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
+			final EndHeelOptions endHeel = eVesselCharter.getEndHeel();
 			assert endHeel != null;
 			final IHeelOptionConsumer heelConsumer = createHeelConsumer(endHeel);
-			final Set<Port> endPorts = SetUtils.getObjects(eVesselAvailability.getEndAt());
+			final Set<Port> endPorts = SetUtils.getObjects(eVesselCharter.getEndAt());
 			// Assume validation ensures at least one valid port will remain if initial set
 			// has ports present.
 			endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, endPorts, heelConsumer);
 
-			final int minDuration = eVesselAvailability.getCharterOrDelegateMinDuration();
+			final int minDuration = eVesselCharter.getCharterOrDelegateMinDuration();
 			if (minDuration != 0) {
 				endRequirement.setMinDurationInHours(minDuration * 24);
 			}
 
-			final int maxDuration = eVesselAvailability.getCharterOrDelegateMaxDuration();
+			final int maxDuration = eVesselCharter.getCharterOrDelegateMaxDuration();
 			if (maxDuration != 0) {
 				endRequirement.setMaxDurationInHours(maxDuration * 24);
 			}
 
 			final ILongCurve dailyCharterInCurve;
-			if (eVesselAvailability.isSetTimeCharterRate()) {
-				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
+			if (eVesselCharter.isSetTimeCharterRate()) {
+				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselCharter.getTimeCharterRate(), charterIndices);
 			} else {
 				dailyCharterInCurve = new ConstantValueLongCurve(0);
 			}
@@ -3253,20 +3253,20 @@ public class LNGScenarioTransformer {
 
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
-			final GenericCharterContract eBallastBonusContract = eVesselAvailability.getCharterOrDelegateCharterContract();
+			final GenericCharterContract eBallastBonusContract = eVesselCharter.getCharterOrDelegateCharterContract();
 			final ICharterContract ballastBonusContract = createAndGetCharterContract(eBallastBonusContract);
 
-			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, ballastBonusContract,
-					new ConstantValueLongCurve(0), eVesselAvailability.isOptional());
-			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
+			final IVesselCharter vesselCharter = builder.createVesselCharter(vessel, dailyCharterInCurve,
+					eVesselCharter.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, ballastBonusContract,
+					new ConstantValueLongCurve(0), eVesselCharter.isOptional());
+			vesselCharterAssociation.add(eVesselCharter, vesselCharter);
 
-			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
+			modelEntityMap.addModelObject(eVesselCharter, vesselCharter);
 
-			allVesselAvailabilities.add(vesselAvailability);
+			allVesselAvailabilities.add(vesselCharter);
 
-			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
-				vesselAvailabilityTransformer.vesselAvailabilityTransformed(eVesselAvailability, vesselAvailability);
+			for (final IVesselCharterTransformer vesselCharterTransformer : vesselCharterTransformers) {
+				vesselCharterTransformer.vesselCharterTransformed(eVesselCharter, vesselCharter);
 			}
 		}
 
@@ -3397,7 +3397,7 @@ public class LNGScenarioTransformer {
 				// spot charter in market nominal
 				// Only create a nominal vessel if enabled
 				if (charterInMarket.isNominal()) {
-					final IVesselAvailability roundTripOption = builder.createRoundTripCargoVessel("RoundTrip-" + charterInMarket.getName(), spotCharterInMarket);
+					final IVesselCharter roundTripOption = builder.createRoundTripCargoVessel("RoundTrip-" + charterInMarket.getName(), spotCharterInMarket);
 					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, NOMINAL_CARGO_INDEX);
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
@@ -3418,14 +3418,14 @@ public class LNGScenarioTransformer {
 				// spot charter in market vessel availability
 				if (charterCount > 0 && charterInMarket.isEnabled()) {
 
-					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterInMarket.getName(), spotCharterInMarket);
+					final List<IVesselCharter> spots = builder.createSpotVessels("SPOT-" + charterInMarket.getName(), spotCharterInMarket);
 					for (int i = 0; i < spots.size(); ++i) {
 						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, i);
-						final IVesselAvailability spotAvailability = spots.get(i);
+						final IVesselCharter spotAvailability = spots.get(i);
 						spotCharterInToAvailability.put(key, spotAvailability);
 
-						for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
-							vesselAvailabilityTransformer.charterInVesselAvailabilityTransformed(charterInMarket, spotAvailability);
+						for (final IVesselCharterTransformer vesselCharterTransformer : vesselCharterTransformers) {
+							vesselCharterTransformer.charterInVesselCharterTransformed(charterInMarket, spotAvailability);
 						}
 
 						allVesselAvailabilities.add(spotAvailability);
@@ -3518,21 +3518,21 @@ public class LNGScenarioTransformer {
 					final IVessel spotVessel = spotCharterInMarket.getVessel();
 
 					// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
-					final IVesselAvailability spotAvailability = builder.createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, charterContract,
+					final IVesselCharter spotAvailability = builder.createVesselCharter(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, charterContract,
 							new ConstantValueLongCurve(0L), true);
 
 					// FIX API!
-					if (spotAvailability instanceof final DefaultVesselAvailability defaultVesselAvailability) {
+					if (spotAvailability instanceof final DefaultVesselCharter defaultVesselCharter) {
 						if (spotCharterInMarket != null) {
-							defaultVesselAvailability.setSpotCharterInMarket(spotCharterInMarket);
-							defaultVesselAvailability.setSpotIndex(charterInMarketOverride.getSpotIndex());
+							defaultVesselCharter.setSpotCharterInMarket(spotCharterInMarket);
+							defaultVesselCharter.setSpotIndex(charterInMarketOverride.getSpotIndex());
 						}
 					}
 
 					modelEntityMap.addModelObject(charterInMarketOverride, spotAvailability);
 
-					for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
-						vesselAvailabilityTransformer.charterInVesselAvailabilityTransformed(charterInMarket, spotAvailability);
+					for (final IVesselCharterTransformer vesselCharterTransformer : vesselCharterTransformers) {
+						vesselCharterTransformer.charterInVesselCharterTransformed(charterInMarket, spotAvailability);
 					}
 					allVesselAvailabilities.add(spotAvailability);
 				}

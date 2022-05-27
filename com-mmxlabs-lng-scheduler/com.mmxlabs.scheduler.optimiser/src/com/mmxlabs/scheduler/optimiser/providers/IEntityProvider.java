@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -35,7 +35,7 @@ public interface IEntityProvider extends IDataComponentProvider {
 	IEntity getEntityForSlot(@NonNull IPortSlot slot);
 
 	@NonNull
-	IEntity getEntityForVesselAvailability(@NonNull IVesselAvailability vesselAvailability);
+	IEntity getEntityForVesselCharter(@NonNull IVesselCharter vesselCharter);
 
 	@NonNull
 	IEntityBook getEntityBook(@NonNull IEntity entity, @NonNull EntityBookType bookType);

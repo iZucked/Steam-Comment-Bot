@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -120,12 +120,12 @@ public class ScenarioMetaUtils {
 		return bucketByHours(times);
 	}
 	
-	private static List<Integer> calculateMinTimeWindows(List<VesselAvailability> availabilities) {
-		return availabilities.stream().map(VesselAvailability::getCharterOrDelegateMinDuration).toList();
+	private static List<Integer> calculateMinTimeWindows(List<VesselCharter> availabilities) {
+		return availabilities.stream().map(VesselCharter::getCharterOrDelegateMinDuration).toList();
 	}
 	
-	private static List<Integer> calculateMaxTimeWindows(List<VesselAvailability> availabilities) {
-		return availabilities.stream().map(VesselAvailability::getCharterOrDelegateMaxDuration).toList();
+	private static List<Integer> calculateMaxTimeWindows(List<VesselCharter> availabilities) {
+		return availabilities.stream().map(VesselCharter::getCharterOrDelegateMaxDuration).toList();
 	}
 	
 	public static ScenarioMeta writeOptimisationMetrics(IScenarioDataProvider scenarioDataProvider, 
@@ -137,7 +137,7 @@ public class ScenarioMetaUtils {
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioDataProvider);
 
 		List<Cargo> cargoes = cargoModel.getCargoes();
-		List<VesselAvailability> availabilities = cargoModel.getVesselAvailabilities();
+		List<VesselCharter> availabilities = cargoModel.getVesselCharters();
 		List<Slot<?>> loadSlots = new ArrayList<>(cargoModel.getLoadSlots());
 		List<Slot<?>> dischargeSlots = new ArrayList<>(cargoModel.getDischargeSlots());
 		

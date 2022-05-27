@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
@@ -146,11 +146,11 @@ public class MoveHelper implements IMoveHelper {
 		final Iterator<@NonNull IResource> itr = allowedResources.iterator();
 		while (itr.hasNext()) {
 			final @NonNull IResource resource = itr.next();
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			final @NonNull PortType portType = portSlot.getPortType();
-			final @NonNull VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+			final @NonNull VesselInstanceType vesselInstanceType = vesselCharter.getVesselInstanceType();
 			if (portType == PortType.DryDock || portType == PortType.Maintenance || portType == PortType.CharterOut) {
 				if (!(vesselInstanceType == VesselInstanceType.FLEET || vesselInstanceType == VesselInstanceType.TIME_CHARTER)) {
 					itr.remove();
@@ -184,11 +184,11 @@ public class MoveHelper implements IMoveHelper {
 			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP || allowRoundTripChanges()) {
 				IVessel vessel = null;
 
-				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
-					vessel = vesselAvailability.getVessel();
-				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-					vessel = vesselAvailability.getVessel();
-				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
+					vessel = vesselCharter.getVessel();
+				} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+					vessel = vesselCharter.getVessel();
+				} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 					vessel = nominatedVesselProvider.getNominatedVessel(resource);
 				}
 
@@ -201,7 +201,7 @@ public class MoveHelper implements IMoveHelper {
 			if (!portExclusionProvider.hasNoExclusions()) {
 				IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 				if (vessel == null) {
-					vessel = vesselAvailability.getVessel();
+					vessel = vesselCharter.getVessel();
 				}
 				final Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
 				if (!excludedPorts.isEmpty() && excludedPorts.contains(portSlot.getPort())) {
@@ -249,8 +249,8 @@ public class MoveHelper implements IMoveHelper {
 	@Inject
 	private void processInformation(final IPhaseOptimisationData optimisationData) {
 		for (final IResource resource : optimisationData.getResources()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			final VesselInstanceType vesselInstanceType = vesselCharter.getVesselInstanceType();
 			switch (vesselInstanceType) {
 			case ROUND_TRIP:
 				vesselResourcesIncludingRoundTrip.add(resource);
@@ -419,9 +419,9 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	public boolean isShippedResource(@NonNull final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		@NonNull
-		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+		final VesselInstanceType vesselInstanceType = vesselCharter.getVesselInstanceType();
 
 		switch (vesselInstanceType) {
 		case TIME_CHARTER:
@@ -439,9 +439,9 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	public boolean isRoundTripResource(@NonNull final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		@NonNull
-		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+		final VesselInstanceType vesselInstanceType = vesselCharter.getVesselInstanceType();
 		return (vesselInstanceType == VesselInstanceType.ROUND_TRIP);
 	}
 

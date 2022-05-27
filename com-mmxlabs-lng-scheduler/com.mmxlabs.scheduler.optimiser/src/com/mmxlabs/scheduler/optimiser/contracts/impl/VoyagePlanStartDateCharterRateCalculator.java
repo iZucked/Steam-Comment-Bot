@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 
@@ -30,8 +30,8 @@ public class VoyagePlanStartDateCharterRateCalculator implements ICharterRateCal
 	 * @param voyagePlanStartTime
 	 */
 	@Override
-	public long getCharterRatePerDay(final @NonNull IVesselAvailability vesselAvailability, final int voyagePlanStartTime) {
-		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
+	public long getCharterRatePerDay(final @NonNull IVesselCharter vesselCharter, final int voyagePlanStartTime) {
+		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselCharter);
 		if (rate != null) {
 			return rate.getValueAtPoint(voyagePlanStartTime);
 		}

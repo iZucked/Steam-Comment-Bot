@@ -20,7 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.edit.utils.AssignableElementCommandHelper;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -37,9 +37,9 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 	protected List<Pair<String, EObject>> getValues() {
 		List<Pair<String, EObject>> values = super.getValues();
 		values.forEach(p -> {
-			if (p.getSecond() instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
-				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselAvailability));
+			if (p.getSecond() instanceof VesselCharter) {
+				final VesselCharter vesselCharter = (VesselCharter) p.getSecond();
+				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselCharter));
 			} else if (p.getSecond() instanceof CharterInMarketOverride) {
 				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) p.getSecond();
 				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarketOverride));
@@ -85,7 +85,7 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 											elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 									return;
 								}
-							} else if (vessel instanceof VesselAvailability) {
+							} else if (vessel instanceof VesselCharter) {
 								commandHandler.handleCommand(
 										SetCommand.create(commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vessel),
 										elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);

@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -126,9 +126,9 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 
 				Vessel vesselAssignment = null;
-				if (vesselAssignmentType instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-					vesselAssignment = vesselAvailability.getVessel();
+				if (vesselAssignmentType instanceof VesselCharter) {
+					final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
+					vesselAssignment = vesselCharter.getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 					vesselAssignment = charterInMarket.getVessel();
@@ -137,7 +137,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 					vesselAssignment = charterInMarket.getVessel();
 				} else {
-					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
+					log.error("Assignment is not a VesselCharter or CharterInMarket - unable to validate");
 					return;
 				}
 

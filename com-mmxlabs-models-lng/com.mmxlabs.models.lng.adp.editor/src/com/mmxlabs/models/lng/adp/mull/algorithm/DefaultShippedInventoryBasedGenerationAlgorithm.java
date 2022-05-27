@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.adp.mull.container.IAllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.container.IMudContainer;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
@@ -21,7 +21,7 @@ public class DefaultShippedInventoryBasedGenerationAlgorithm extends MullAlgorit
 
 	public DefaultShippedInventoryBasedGenerationAlgorithm(final LNGScenarioModel sm, GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<@NonNull InventoryLocalState> inventoryLocalStates) {
 		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
-		final Set<Vessel> vesselsInFleet = sm.getCargoModel().getVesselAvailabilities().stream().map(VesselAvailability::getVessel).collect(Collectors.toSet());
+		final Set<Vessel> vesselsInFleet = sm.getCargoModel().getVesselCharters().stream().map(VesselCharter::getVessel).collect(Collectors.toSet());
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {
 				for (final IAllocationTracker allocationTracker : mudContainer.getAllocationTrackers()) {

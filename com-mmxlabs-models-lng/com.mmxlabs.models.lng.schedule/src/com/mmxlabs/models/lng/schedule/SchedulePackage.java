@@ -1256,13 +1256,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL_AVAILABILITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SEQUENCE__VESSEL_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
@@ -8263,15 +8263,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Events();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability()
+	 * @return the meta object for the reference '<em>Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_VesselAvailability();
+	EReference getSequence_VesselCharter();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}'.
@@ -11185,12 +11185,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__EVENTS = eINSTANCE.getSequence_Events();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Charter</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__VESSEL_AVAILABILITY = eINSTANCE.getSequence_VesselAvailability();
+		EReference SEQUENCE__VESSEL_CHARTER = eINSTANCE.getSequence_VesselCharter();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market</b></em>' reference feature.

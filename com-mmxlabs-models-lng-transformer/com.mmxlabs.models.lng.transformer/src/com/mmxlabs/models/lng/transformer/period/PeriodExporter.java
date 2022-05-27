@@ -19,7 +19,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -34,7 +34,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
@@ -143,8 +143,8 @@ public class PeriodExporter {
 
 				{
 
-					final IVesselAvailability period_vesselAvailability = period_vesselProvider.getVesselAvailability(period_resource);
-					if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+					final IVesselCharter period_vesselCharter = period_vesselProvider.getVesselCharter(period_resource);
+					if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 						if (size > 0) {
 							final ISequenceElement e = s.get(1);
 							assert e != null;
@@ -156,16 +156,16 @@ public class PeriodExporter {
 							assert !periodToCompleteResourceLength.containsKey(period_resource);
 							periodToCompleteResourceLength.put(period_resource, new OffsetRecord(pair.getFirst(), pair.getSecond(), size));
 						} else {
-							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselAvailability(period_vesselAvailability);
+							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselCharter(period_vesselCharter);
 							final ISequenceElement completeE = completeElementMap.get(periodE.getName());
 
-							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselAvailabilityForElement(completeE));
+							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselCharterForElement(completeE));
 							assert complete_resource != null;
 
 							assert !periodToCompleteResourceLength.containsKey(period_resource);
 							periodToCompleteResourceLength.put(period_resource, new OffsetRecord(complete_resource, 1, 0));
 						}
-					} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+					} else if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 						if (size > 0) {
 							final ISequenceElement e = s.get(1);
 							assert e != null;
@@ -177,43 +177,43 @@ public class PeriodExporter {
 							assert !periodToCompleteResourceLength.containsKey(period_resource);
 							periodToCompleteResourceLength.put(period_resource, new OffsetRecord(pair.getFirst(), pair.getSecond(), size));
 						} else {
-							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselAvailability(period_vesselAvailability);
+							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselCharter(period_vesselCharter);
 							final ISequenceElement completeE = completeElementMap.get(periodE.getName());
 
-							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselAvailabilityForElement(completeE));
+							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselCharterForElement(completeE));
 							assert complete_resource != null;
 
 							assert !periodToCompleteResourceLength.containsKey(period_resource);
 							periodToCompleteResourceLength.put(period_resource, new OffsetRecord(complete_resource, 1, 0));
 						}
-					} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
-							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
-							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
-							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+					} else if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+							|| period_vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
+							|| period_vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
+							|| period_vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 
 						// Step one, map the resources between scenarios.
 						IResource complete_resource = null;
 						Pair<VesselAssignmentType, Integer> key = null;
-						if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
-								|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
+						if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+								|| period_vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
 
-							final VesselAvailability period_VA = periodDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_vesselAvailability, VesselAvailability.class);
+							final VesselCharter period_VA = periodDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_vesselCharter, VesselCharter.class);
 
-							final @Nullable VesselAvailability complete_VA = periodMapping.getOriginalFromCopy(period_VA);
+							final @Nullable VesselCharter complete_VA = periodMapping.getOriginalFromCopy(period_VA);
 							if (complete_VA == null) {
-								// Probably a re-introduced cargo with duplicate availability.
+								// Probably a re-introduced cargo with duplicate vessel charter.
 								continue;
 							}
-							final IVesselAvailability complete_vesselAvailability = completeDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(complete_VA, IVesselAvailability.class);
+							final IVesselCharter complete_vesselCharter = completeDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(complete_VA, IVesselCharter.class);
 
-							complete_resource = complete_vesselProvider.getResource(complete_vesselAvailability);
+							complete_resource = complete_vesselProvider.getResource(complete_vesselCharter);
 
 							key = new Pair<>(period_VA, 0);
 
-						} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
-								|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-							final @Nullable ISpotCharterInMarket period_spotCharterInMarket = period_vesselAvailability.getSpotCharterInMarket();
-							final int period_spotIndex = period_vesselAvailability.getSpotIndex();
+						} else if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
+								|| period_vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+							final @Nullable ISpotCharterInMarket period_spotCharterInMarket = period_vesselCharter.getSpotCharterInMarket();
+							final int period_spotIndex = period_vesselCharter.getSpotIndex();
 
 							final CharterInMarket period_CharterInMarket = periodDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_spotCharterInMarket, CharterInMarket.class);
 
@@ -226,9 +226,9 @@ public class PeriodExporter {
 									ISpotCharterInMarket.class);
 
 							for (final IResource poss_complete_resource : completeSequences.getResources()) {
-								final IVesselAvailability complete_vesselAvailability = complete_vesselProvider.getVesselAvailability(poss_complete_resource);
-								if (complete_vesselAvailability.getSpotCharterInMarket() == complete_spotCharterterInMarket) {
-									if (complete_vesselAvailability.getSpotIndex() == complete_spotIndex) {
+								final IVesselCharter complete_vesselCharter = complete_vesselProvider.getVesselCharter(poss_complete_resource);
+								if (complete_vesselCharter.getSpotCharterInMarket() == complete_spotCharterterInMarket) {
+									if (complete_vesselCharter.getSpotIndex() == complete_spotIndex) {
 										complete_resource = poss_complete_resource;
 										key = new Pair<>(period_CharterInMarket, complete_spotIndex);
 										break;
@@ -241,7 +241,7 @@ public class PeriodExporter {
 
 						// If it is a round trip, there is no coherent segment to extract, rather a set
 						// of elements out of an unsorted list. We need to handle these differently.
-						if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+						if (period_vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 							final List<ISequenceElement> elements = new LinkedList<>();
 							if (size > 0) {
 								for (int i = 0; i < size; ++i) {

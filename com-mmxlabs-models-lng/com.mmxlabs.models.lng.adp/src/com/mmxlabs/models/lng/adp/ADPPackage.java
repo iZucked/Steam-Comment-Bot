@@ -2682,13 +2682,13 @@ public interface ADPPackage extends EPackage {
 	int DES_SPACING_ALLOCATION__CONTRACT = SPACING_ALLOCATION__CONTRACT;
 
 	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION__VESSEL = SPACING_ALLOCATION_FEATURE_COUNT + 0;
+	int DES_SPACING_ALLOCATION__VESSEL_CHARTER = SPACING_ALLOCATION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Des Spacing Rows</b></em>' containment reference list.
@@ -4238,15 +4238,15 @@ public interface ADPPackage extends EPackage {
 	EClass getDesSpacingAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVessel <em>Vessel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVessel()
+	 * @return the meta object for the reference '<em>Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVesselCharter()
 	 * @see #getDesSpacingAllocation()
 	 * @generated
 	 */
-	EReference getDesSpacingAllocation_Vessel();
+	EReference getDesSpacingAllocation_VesselCharter();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getDesSpacingRows <em>Des Spacing Rows</em>}'.
@@ -5529,12 +5529,12 @@ public interface ADPPackage extends EPackage {
 		EClass DES_SPACING_ALLOCATION = eINSTANCE.getDesSpacingAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Charter</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DES_SPACING_ALLOCATION__VESSEL = eINSTANCE.getDesSpacingAllocation_Vessel();
+		EReference DES_SPACING_ALLOCATION__VESSEL_CHARTER = eINSTANCE.getDesSpacingAllocation_VesselCharter();
 
 		/**
 		 * The meta object literal for the '<em><b>Des Spacing Rows</b></em>' containment reference list feature.

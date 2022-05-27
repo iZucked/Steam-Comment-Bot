@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -48,7 +48,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 
-	private VesselAvailability defaultVesselAvailability;
+	private VesselCharter defaultVesselCharter;
 
 	@Test
 	public void testEvaluateDoesNotUpair() {
@@ -76,7 +76,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
 				.makeFOBPurchase("F1", LocalDate.of(2018, 11, 1), purchaseContract.getPreferredPort(), purchaseContract, null, null).build() //
 				.makeDESSale("D1", LocalDate.of(2018, 12, 1), salesContract.getPreferredPort(), salesContract, null, null).build() //
-				.withVesselAssignment(defaultVesselAvailability, 1) //
+				.withVesselAssignment(defaultVesselCharter, 1) //
 				.build();
 
 		final Slot<?> load = testCargo.getSlots().get(0);
@@ -268,9 +268,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-		vesselAvailability.setStartAfter(vesselAvailability.getStartAfter().plusMonths(2));
-		vesselAvailability.setStartBy(vesselAvailability.getStartAfter());
+		final VesselCharter vesselCharter = cargoModelFinder.findVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vesselCharter.setStartAfter(vesselCharter.getStartAfter().plusMonths(2));
+		vesselCharter.setStartBy(vesselCharter.getStartAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2019, 10));
@@ -313,11 +313,11 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-		vesselAvailability.setStartAfter(vesselAvailability.getStartAfter().plusMonths(2));
-		vesselAvailability.setStartBy(vesselAvailability.getStartAfter());
-		vesselAvailability.setEndAfter(vesselAvailability.getEndAfter().minusMonths(2));
-		vesselAvailability.setEndBy(vesselAvailability.getEndAfter());
+		final VesselCharter vesselCharter = cargoModelFinder.findVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vesselCharter.setStartAfter(vesselCharter.getStartAfter().plusMonths(2));
+		vesselCharter.setStartBy(vesselCharter.getStartAfter());
+		vesselCharter.setEndAfter(vesselCharter.getEndAfter().minusMonths(2));
+		vesselCharter.setEndBy(vesselCharter.getEndAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2019, 10));
@@ -360,9 +360,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-		vesselAvailability.setEndAfter(vesselAvailability.getEndAfter().minusMonths(2));
-		vesselAvailability.setEndBy(vesselAvailability.getEndAfter());
+		final VesselCharter vesselCharter = cargoModelFinder.findVesselCharter(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vesselCharter.setEndAfter(vesselCharter.getEndAfter().minusMonths(2));
+		vesselCharter.setEndBy(vesselCharter.getEndAfter());
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2019, 10));
@@ -403,8 +403,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		// final VesselAvailability vesselAvailability =
-		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselCharter vesselCharter =
+		// cargoModelFinder.findVesselCharter(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 11), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2018, 11));
@@ -445,10 +445,10 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		// final VesselAvailability vesselAvailability =
-		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		// final VesselAvailability vesselAvailability =
-		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselCharter vesselCharter =
+		// cargoModelFinder.findVesselCharter(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselCharter vesselCharter =
+		// cargoModelFinder.findVesselCharter(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 12), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2018, 12));
@@ -512,11 +512,11 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_INCHEON);
 
 		// Sanity validation check
-		Assertions.assertFalse(defaultVesselAvailability.getStartAfter().isAfter(maintenanceStartTime));
-		Assertions.assertFalse(maintenanceStartTime.plusDays(maintenanceDurationDays).isAfter(defaultVesselAvailability.getEndBy()));
+		Assertions.assertFalse(defaultVesselCharter.getStartAfter().isAfter(maintenanceStartTime));
+		Assertions.assertFalse(maintenanceStartTime.plusDays(maintenanceDurationDays).isAfter(defaultVesselCharter.getEndBy()));
 
 		final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("Maintenance-event", maintenanceStartTime, maintenanceStartTime, maintenancePort)
-				.withDurationInDays(maintenanceDurationDays).withVesselAssignment(defaultVesselAvailability, 0).build();
+				.withDurationInDays(maintenanceDurationDays).withVesselAssignment(defaultVesselCharter, 0).build();
 
 		// Check initial conditions are correct
 		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
@@ -572,11 +572,11 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Port dryDockPort = portFinder.findPortById(InternalDataConstants.PORT_INCHEON);
 
 		// Sanity validation check
-		Assertions.assertFalse(defaultVesselAvailability.getStartAfter().isAfter(dryDockStartTime));
-		Assertions.assertFalse(dryDockStartTime.plusDays(dryDockDurationDays).isAfter(defaultVesselAvailability.getEndBy()));
+		Assertions.assertFalse(defaultVesselCharter.getStartAfter().isAfter(dryDockStartTime));
+		Assertions.assertFalse(dryDockStartTime.plusDays(dryDockDurationDays).isAfter(defaultVesselCharter.getEndBy()));
 
 		final DryDockEvent dryDockEvent = cargoModelBuilder.makeDryDockEvent("Dry-dock-event", dryDockStartTime, dryDockStartTime, dryDockPort).withDurationInDays(dryDockDurationDays)
-				.withVesselAssignment(defaultVesselAvailability, 0).build();
+				.withVesselAssignment(defaultVesselCharter, 0).build();
 
 		// Check initial conditions are correct
 		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
@@ -632,12 +632,12 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		final Port charterOutPort = portFinder.findPortById(InternalDataConstants.PORT_INCHEON);
 
 		// Sanity validation check
-		Assertions.assertFalse(defaultVesselAvailability.getStartAfter().isAfter(charterOutStartTime));
-		Assertions.assertFalse(charterOutStartTime.plusDays(charterOutDurationDays).isAfter(defaultVesselAvailability.getEndBy()));
+		Assertions.assertFalse(defaultVesselCharter.getStartAfter().isAfter(charterOutStartTime));
+		Assertions.assertFalse(charterOutStartTime.plusDays(charterOutDurationDays).isAfter(defaultVesselCharter.getEndBy()));
 
 		final CharterOutEvent charterOutEvent = cargoModelBuilder.makeCharterOutEvent("Charter out event", charterOutStartTime, charterOutStartTime, charterOutPort)
 				.withDurationInDays(charterOutDurationDays).withRequiredHeelOptions(0, 5000, EVesselTankState.EITHER, "").withAvailableHeelOptions(0, 5000, 22.3, "")
-				.withVesselAssignment(defaultVesselAvailability, 0).build();
+				.withVesselAssignment(defaultVesselCharter, 0).build();
 
 		// Check initial conditions are correct
 		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
@@ -679,7 +679,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(false);
 
-		defaultVesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
+		defaultVesselCharter = cargoModelBuilder.makeVesselCharter(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0)) //

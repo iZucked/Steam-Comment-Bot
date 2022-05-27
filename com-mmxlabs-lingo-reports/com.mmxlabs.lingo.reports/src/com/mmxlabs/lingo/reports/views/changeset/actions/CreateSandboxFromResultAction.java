@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.analytics.VesselEventReference;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -89,9 +89,9 @@ public class CreateSandboxFromResultAction extends Action {
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 		final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
 		final Map<Pair<CharterInMarket, Integer>, ShippingOption> roundTripMap = new HashMap<>();
-		final Map<VesselAvailability, ExistingVesselCharterOption> vesselAvailOptionMap = new HashMap<>();
+		final Map<VesselCharter, ExistingVesselCharterOption> vesselAvailOptionMap = new HashMap<>();
 
-		final Function<VesselAvailability, ExistingVesselCharterOption> availOptionComputer = (va) -> {
+		final Function<VesselCharter, ExistingVesselCharterOption> availOptionComputer = (va) -> {
 			final ExistingVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 			opt.setVesselCharter(va);
 			newModel.getShippingTemplates().add(opt);
@@ -186,9 +186,9 @@ public class CreateSandboxFromResultAction extends Action {
 							return Optional.of(opt);
 						}
 					}
-				} else if (sequence.getVesselAvailability() != null) {
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					final ExistingVesselCharterOption opt = vesselAvailOptionMap.computeIfAbsent(vesselAvailability, availOptionComputer);
+				} else if (sequence.getVesselCharter() != null) {
+					final VesselCharter vesselCharter = sequence.getVesselCharter();
+					final ExistingVesselCharterOption opt = vesselAvailOptionMap.computeIfAbsent(vesselCharter, availOptionComputer);
 					return Optional.of(opt);
 				}
 			}

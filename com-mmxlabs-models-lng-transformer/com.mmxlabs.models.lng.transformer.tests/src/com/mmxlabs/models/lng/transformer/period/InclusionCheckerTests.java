@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
@@ -543,11 +543,11 @@ public class InclusionCheckerTests {
 	}
 
 	@Test
-	public void testVesselAvailabilityInclusion_NoVesselAvailabilityBounds() {
+	public void testVesselCharterInclusion_NoVesselCharterBounds() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
@@ -555,56 +555,56 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability,  periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter,  periodRecord));
 	}
 
 	@Test
-	public void testVesselAvailabilityInclusion_NoBounds() {
+	public void testVesselCharterInclusion_NoBounds() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability,  periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter,  periodRecord));
 
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
-		Mockito.when(vesselAvailability.getStartBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.getStartBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
-		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.getEndBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability,  periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter,  periodRecord));
 	}
 
 	@Test
-	public void testVesselAvailabilityInclusion_LowerCutoff_EndBySet() {
+	public void testVesselCharterInclusion_LowerCutoff_EndBySet() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 4, 0));
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 4, 0));
 		//
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 	}
 
 	@Test
-	public void testVesselAvailabilityInclusion_LowerCutoff_EndAfterSet() {
+	public void testVesselCharterInclusion_LowerCutoff_EndAfterSet() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
@@ -612,143 +612,143 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
 
-		// Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		// Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
+		// Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		// Mockito.when(vesselCharter.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 		//
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 	}
 
 	@Test
-	public void testVesselAvailabilityInclusion_Bounds() {
+	public void testVesselCharterInclusion_Bounds() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 0));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 0));
 
 		// Completely out
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 
 		// Completely out
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 19);
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 		// Partially in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 
 		// Partially in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 19);
-		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord));
+		Assertions.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getVesselCharterInclusionType(vesselCharter, periodRecord));
 	}
 
 	@Test
-	public void getObjectInVesselAvailabilityRangeTest() {
+	public void getObjectInVesselCharterRangeTest() {
 
 		final InclusionChecker checker = new InclusionChecker();
 
 		final PortVisit portVisit = Mockito.mock(PortVisit.class);
-		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		final VesselCharter vesselCharter = Mockito.mock(VesselCharter.class);
 
 		// Set some dates
 		Mockito.when(portVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(portVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
 		// No bounds, so always in
-		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
 
 		// Completely in
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
 
-		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
-
-		// Partially in
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
-
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
-
-		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
 
 		// Partially in
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 6, 0));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 1));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
 
-		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
+
+		// Partially in
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 6, 0));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
+
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 1));
+
+		Assertions.assertEquals(InclusionType.In, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
 
 		// Completely out
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 5, 0));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 6, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 5, 0));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 6, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
-		Assertions.assertEquals(InclusionType.Out, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
+		Assertions.assertEquals(InclusionType.Out, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
 
 		// Completely out
-		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 1));
-		Mockito.when(vesselAvailability.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
+		Mockito.when(vesselCharter.isSetStartAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetStartBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9, 1));
+		Mockito.when(vesselCharter.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10, 0));
 
-		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
-		Mockito.when(vesselAvailability.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 11, 0));
-		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 12, 0));
-		Assertions.assertEquals(InclusionType.Out, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Mockito.when(vesselCharter.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselCharter.getEndAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 11, 0));
+		Mockito.when(vesselCharter.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 12, 0));
+		Assertions.assertEquals(InclusionType.Out, checker.getObjectInVesselCharterRange(portVisit, vesselCharter));
 
 	}
 

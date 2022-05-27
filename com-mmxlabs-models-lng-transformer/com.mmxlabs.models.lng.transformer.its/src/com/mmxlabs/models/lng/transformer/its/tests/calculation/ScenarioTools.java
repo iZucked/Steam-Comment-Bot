@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -239,11 +239,11 @@ public class ScenarioTools {
 
 		final int spotCharterCount = 0;
 
-		VesselAvailability[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
+		VesselCharter[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
 				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, minHeelVolume, false);
 
-		final VesselAvailability availability = vessels[0];
+		final VesselCharter vesselCharter = vessels[0];
 
 		final PurchaseContract pc = csc.purchaseContract;
 		final SalesContract sc = csc.salesContract;
@@ -276,7 +276,7 @@ public class ScenarioTools {
 				.withVolumeLimits(0, dischargeMaxQuantity, VolumeUnits.M3) //
 				.build() //
 
-				.withVesselAssignment(availability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		if (useDryDock) {
@@ -286,7 +286,7 @@ public class ScenarioTools {
 			final DryDockEvent dryDockJourney = csc.getScenarioModelBuilder().getCargoModelBuilder() //
 					.makeDryDockEvent("DryDock", thenNext, thenNext, A) //
 					.withDurationInDays(0) //
-					.withVesselAssignment(availability, 2) //
+					.withVesselAssignment(vesselCharter, 2) //
 					.build();
 		}
 		return csc.getScenarioDataProvider();
@@ -321,7 +321,7 @@ public class ScenarioTools {
 		final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 
-		VesselAvailability[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
+		VesselCharter[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
 				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, minHeelVolume, false);
 
@@ -500,8 +500,8 @@ public class ScenarioTools {
 
 	public static void printSequence(final Sequence seq) {
 
-		if (seq.getVesselAvailability() != null) {
-			final VesselAvailability va = seq.getVesselAvailability();
+		if (seq.getVesselCharter() != null) {
+			final VesselCharter va = seq.getVesselCharter();
 
 			System.err.println(va.getStartAfterAsDateTime());
 			System.err.println(va.getEndByAsDateTime());

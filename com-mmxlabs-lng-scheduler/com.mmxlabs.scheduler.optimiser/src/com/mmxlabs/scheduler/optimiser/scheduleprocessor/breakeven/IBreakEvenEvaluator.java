@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -21,7 +21,7 @@ public interface IBreakEvenEvaluator {
 	static final String MARKER = "?";
 
 	@Nullable
-	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(IVesselAvailability vesselAvailability, VoyagePlan vp, IPortTimesRecord portTimesRecord,
+	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(IVesselCharter vesselCharter, VoyagePlan vp, IPortTimesRecord portTimesRecord,
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution);
 
 }
