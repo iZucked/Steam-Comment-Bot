@@ -19,13 +19,11 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
-/**
- */
 public abstract class AbstractClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(@NonNull final EClass targetClass, @NonNull final CSVReader reader, @NonNull final IMMXImportContext context) {
-		final List<EObject> result = new LinkedList<EObject>();
+		final List<EObject> result = new LinkedList<>();
 
 		Map<String, String> row;
 		try {
