@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.spotmarkets.editor.editorpart;
 import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -50,14 +49,12 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		charterInMarketPane = new CharterInMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterInMarketPane.createControl(sash);
-		charterInMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets() }), editorPart.getAdapterFactory(),
-				editorPart.getModelReference());
+		charterInMarketPane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		charterInMarketPane.getViewer().setInput(modelObject);
 
 		charterOutMarketPane = new CharterOutMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterOutMarketPane.createControl(sash);
-		charterOutMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets() }), editorPart.getAdapterFactory(),
-				editorPart.getModelReference());
+		charterOutMarketPane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		charterOutMarketPane.getViewer().setInput(modelObject);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterInMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
@@ -74,27 +71,27 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		fobPurchasesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.FOB_PURCHASE);
 		fobPurchasesPane.createControl(sash2);
-		fobPurchasesPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+		fobPurchasesPane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets()),
 				editorPart.getAdapterFactory(), editorPart.getModelReference());
 		fobPurchasesPane.getViewer().setInput(modelObject);
 		fobPurchasesPane.defaultSetTitle("FOB purchase");
 
 		desPurchasePane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.DES_PURCHASE);
 		desPurchasePane.createControl(sash2);
-		desPurchasePane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+		desPurchasePane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets()),
 				editorPart.getAdapterFactory(), editorPart.getModelReference());
 		desPurchasePane.getViewer().setInput(modelObject);
 		desPurchasePane.defaultSetTitle("DES purchase");
 
 		desSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.DES_SALE);
 		desSalesPane.createControl(sash3);
-		desSalesPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+		desSalesPane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets()),
 				editorPart.getAdapterFactory(), editorPart.getModelReference());
 		desSalesPane.getViewer().setInput(modelObject);
 		desSalesPane.defaultSetTitle("DES sale");
 		fobSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.FOB_SALE);
 		fobSalesPane.createControl(sash3);
-		fobSalesPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+		fobSalesPane.init(Arrays.asList(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets()),
 				editorPart.getAdapterFactory(), editorPart.getModelReference());
 		fobSalesPane.getViewer().setInput(modelObject);
 		fobSalesPane.defaultSetTitle("FOB sale");
@@ -120,8 +117,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 	@Override
 	public boolean canHandle(final IStatus status) {
-		if (status instanceof DetailConstraintStatusDecorator) {
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator dcsd) {
 
 			final Object target = dcsd.getTarget();
 
