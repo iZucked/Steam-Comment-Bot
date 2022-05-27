@@ -31,6 +31,7 @@ import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsManagerDialog;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 
 @Testcontainers
@@ -212,15 +213,15 @@ public class CustomTeamReportsTests {
 	public void createUserReportThenAddToTeam() throws Exception {
 		openUserReportsManager();
 		createUserReport("test2");
-		bot.table().select("test2");
+		bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).select("test2");
 		bot.button("Save");
-		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		logger.info(Integer.toString(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).rowCount()));
 		bot.button("Add to Team").click();
 		bot.radio("Team reports").click();
-		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		logger.info(Integer.toString(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).rowCount()));
 		// Delay to allow UI to catch up before trying to find it.	
 		Thread.sleep(3000);
-		assertTrue(bot.tableWithId("customReportsViewer").containsItem("test2"));
+		assertTrue(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).containsItem("test2"));
 	}
 
 	/**

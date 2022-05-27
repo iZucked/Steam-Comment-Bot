@@ -70,6 +70,10 @@ import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 
 public class CustomReportsManagerDialog extends TrayDialog {
 
+	public static final String WIDGET_CUSTOM_REPORTS_VIEWER = "customReportsViewer";
+
+	private static final String ORG_ECLIPSE_SWTBOT_WIDGET_KEY = "org.eclipse.swtbot.widget.key";
+
 	private static Logger logger = LoggerFactory.getLogger(CustomReportsManagerDialog.class);
 
 	private static final String DIFF_TITLE = "In diff mode";
@@ -998,7 +1002,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		data.widthHint = convertWidthInCharsToPixels(20);
 		data.heightHint = table.getItemHeight() * 15;
 		table.setLayoutData(data);
-		table.setData("org.eclipse.swtbot.widget.key", "customReportsViewer"); // this id is used in swtbot tests
+		table.setData(ORG_ECLIPSE_SWTBOT_WIDGET_KEY, WIDGET_CUSTOM_REPORTS_VIEWER); // this id is used in swtbot tests
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Custom Reports");
