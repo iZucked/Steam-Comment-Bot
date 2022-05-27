@@ -38,6 +38,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
 
+		miscFolder.addView("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView");
 		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
 		miscFolder.addView("org.eclipse.pde.runtime.LogView");
 		miscFolder.addPlaceholder(TotalsHierarchyView.ID);
