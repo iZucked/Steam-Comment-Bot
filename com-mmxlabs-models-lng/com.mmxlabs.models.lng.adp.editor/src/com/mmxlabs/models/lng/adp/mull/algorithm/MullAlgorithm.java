@@ -29,11 +29,14 @@ public abstract class MullAlgorithm implements IMullAlgorithm {
 	protected final GlobalStatesContainer globalStatesContainer;
 	protected final AlgorithmState algorithmState;
 	protected final List<InventoryLocalState> inventoryLocalStates;
+	protected final boolean updateRunningAllocationBeforeLift;
 
-	protected MullAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates) {
+	protected MullAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates, final boolean updateRunningAllocationBeforeLift) {
 		this.globalStatesContainer = globalStatesContainer;
 		this.algorithmState = algorithmState;
 		this.inventoryLocalStates = inventoryLocalStates;
+		// Dirty hack - move this decision to a parameterised algorithm, i.e. steps: runningAllocation, startofMonthTasks, cargoHandlingTasks, doLift - allow these in any order.
+		this.updateRunningAllocationBeforeLift = updateRunningAllocationBeforeLift;
 	}
 
 	@Override
@@ -46,8 +49,13 @@ public abstract class MullAlgorithm implements IMullAlgorithm {
 				.isBefore(globalStatesContainer.getAdpGlobalState().getEndDateTimeExclusive()); currentDateTime = currentDateTime.plusHours(1L)) {
 			for (final InventoryLocalState inventoryLocalState : inventoryLocalStates) {
 				assert currentDateTime.equals(inventoryLocalState.getRollingLoadWindow().getStartDateTime());
-				final InventoryDateTimeEvent currentEvent = inventoryLocalState.getRollingLoadWindow().getCurrentEvent();
-				inventoryLocalState.getMullContainer().updateRunningAllocation(currentEvent.getNetVolumeIn());
+
+				if (updateRunningAllocationBeforeLift) {
+					final int productionAmount = inventoryLocalState.getRollingLoadWindow().getProductionToAllocate();
+					if (productionAmount != 0) {
+						inventoryLocalState.getMullContainer().updateRunningAllocation(productionAmount);
+					}
+				}
 
 				if (MullUtil.isAtStartHourOfMonth(currentDateTime)) {
 					runStartOfMonthTasks(currentDateTime, inventoryLocalState);
@@ -82,6 +90,12 @@ public abstract class MullAlgorithm implements IMullAlgorithm {
 						if (assignedVessel != null) {
 							algorithmState.getVesselUsageLookBehind().put(assignedVessel, currentDateTime);
 						}
+					}
+				}
+				if (!updateRunningAllocationBeforeLift) {
+					final int productionAmount = inventoryLocalState.getRollingLoadWindow().getProductionToAllocate();
+					if (productionAmount != 0) {
+						inventoryLocalState.getMullContainer().updateRunningAllocation(productionAmount);
 					}
 				}
 				inventoryLocalState.getRollingLoadWindow().stepForward();

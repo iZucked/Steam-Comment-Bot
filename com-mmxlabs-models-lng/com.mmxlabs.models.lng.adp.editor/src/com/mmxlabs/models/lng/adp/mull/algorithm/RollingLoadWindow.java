@@ -234,4 +234,9 @@ public class RollingLoadWindow implements IRollingWindow {
 		return this.endWindowVolume;
 	}
 
+	@Override
+	public int getProductionToAllocate() {
+		return this.getCurrentEvent().getNetVolumeIn();
+	}
+
 }

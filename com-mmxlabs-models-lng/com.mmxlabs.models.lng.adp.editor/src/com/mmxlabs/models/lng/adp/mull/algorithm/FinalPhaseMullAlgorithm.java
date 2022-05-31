@@ -56,7 +56,7 @@ public class FinalPhaseMullAlgorithm extends MullAlgorithm {
 	public FinalPhaseMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates,
 			final HarmonisationMullAlgorithm previousMullAlgorithm, final Map<Inventory, Map<BaseLegalEntity, Map<YearMonth, Map<IMullDischargeWrapper, Integer>>>> originalInventoryToMonthlyCounts,
 			final Map<Inventory, Map<YearMonth, List<Cargo>>> monthMappedExistingCargoes) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		this.harmonisationMullAlgorithm = previousMullAlgorithm;
 		this.inventoryLocalStates.forEach(ils -> inventoryLocalStateMap.put(ils.getInventoryGlobalState().getInventory(), ils));
 		for (final InventoryLocalState inventoryLocalState : harmonisationMullAlgorithm.getInventoryLocalStates()) {

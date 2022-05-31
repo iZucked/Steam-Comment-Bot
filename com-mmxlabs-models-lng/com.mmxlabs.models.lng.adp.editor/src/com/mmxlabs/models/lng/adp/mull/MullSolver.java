@@ -819,7 +819,7 @@ public class MullSolver {
 
 			final InventoryGlobalState inventoryGlobalState = globalStatesContainer.getInventoryGlobalStates().get(mullSubprofile.getInventory());
 			final IRollingWindow rollingLoadWindow = new VanillaRollingLoadWindow(inventoryGlobalState, inventoryGlobalState.getInsAndOuts().entrySet().iterator(),
-					inventoryGlobalState.getLoadDuration(), inventoryGlobalState.getPreAdpStartTankVolume(), LocalTime.of(8, 0), 0);
+					inventoryGlobalState.getLoadDuration(), inventoryGlobalState.getPreAdpStartTankVolume(), LocalTime.of(0, 0));
 			final InventoryLocalState inventoryLocalState = new InventoryLocalState(inventoryGlobalState, rollingLoadWindow, mullContainer);
 			inventoryLocalStates.add(inventoryLocalState);
 		}

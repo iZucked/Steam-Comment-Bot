@@ -32,6 +32,8 @@ public interface IRollingWindow {
 	public List<ICargoBlueprint> startFixedLoad(final Cargo cargo, final LinkedList<ICargoBlueprint> generatedCargoBlueprints);
 	
 	public InventoryDateTimeEvent getCurrentEvent();
+
+	public int getProductionToAllocate();
 	
 	public int getEndWindowTankMin();
 	

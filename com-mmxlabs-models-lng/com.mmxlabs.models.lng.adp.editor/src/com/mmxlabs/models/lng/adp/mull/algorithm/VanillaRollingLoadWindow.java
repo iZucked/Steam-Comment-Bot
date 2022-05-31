@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.adp.mull.algorithm;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
 import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.ILoadSequence;
 import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.SequentialLoadSequence;
@@ -22,17 +24,21 @@ import com.mmxlabs.models.lng.adp.mull.algorithm.loadsequence.SimpleLoadSequence
 @NonNullByDefault
 public class VanillaRollingLoadWindow extends RollingLoadWindow {
 
-	protected final LocalTime ratTime;
-	protected final int preLoadSetupTime;
+	protected final LocalTime liftTriggerTime;
+//	protected final int preLoadSetupTime;
 	// protected final LocalTime loadTime;
 	protected final List<ILoadSequence> loadSequences = new LinkedList<>();
+	protected final HourlyToDailyEventIterator lookaheadIterator;
+	
+	
 
 	public VanillaRollingLoadWindow(InventoryGlobalState inventoryGlobalState, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries, int maxExistingLoadDuration, int initialTankVolume,
-			final LocalTime ratTime, final int preLoadSetupTime) {
-		super(inventoryGlobalState, entries, maxExistingLoadDuration + preLoadSetupTime, initialTankVolume);
+			final LocalTime liftTriggerTime) {
+		super(inventoryGlobalState, entries, maxExistingLoadDuration, initialTankVolume);
 		// this.loadTime = loadTime;
-		this.ratTime = ratTime;
-		this.preLoadSetupTime = preLoadSetupTime;
+		this.liftTriggerTime = liftTriggerTime;
+//		this.preLoadSetupTime = preLoadSetupTime;
+		lookaheadIterator = new HourlyToDailyEventIterator(inventoryGlobalState.getInsAndOuts().entrySet().iterator());
 	}
 
 	@Override
@@ -77,63 +83,24 @@ public class VanillaRollingLoadWindow extends RollingLoadWindow {
 	@Override
 	public boolean canLift(int allocationDrop) {
 		final LocalTime localLoadTime = LocalTime.of(this.startDateTime.getHour(), 0);
-		if (!localLoadTime.equals(this.ratTime)) {
+		if (!localLoadTime.equals(this.liftTriggerTime)) {
 			return false;
 		}
-		if (this.endWindowVolume >= allocationDrop + this.endWindowTankMin) {
-			int localTankVolume = this.beforeWindowTankVolume;
-			final int localTailLoad = allocationDrop / this.loadDuration;
-			final int localHeadLoad = localTailLoad + (allocationDrop % this.loadDuration);
 
-			// Create grouped sequence since it's convenient
-			final ILoadSequence localLoadSequence;
-			{
-				final List<ILoadSequence> localSequences = new ArrayList<>();
-				localSequences.add(new SimpleLoadSequence(0, preLoadSetupTime));
-				localSequences.add(new SimpleLoadSequence(localHeadLoad, 1));
-				localSequences.add(new SimpleLoadSequence(localTailLoad, this.loadDuration - 1));
-
-				localLoadSequence = new SequentialLoadSequence(localSequences);
+		final int productionAmount;
+		final LocalDate currentDate = this.startDateTime.toLocalDate();
+		if (currentDate.equals(lookaheadIterator.getCachedLastNextDate())) {
+			productionAmount = lookaheadIterator.getCachedLastNextVolume();
+		} else {
+			if (lookaheadIterator.hasNext()) {
+				final Pair<LocalDate, Integer> nextPair = lookaheadIterator.next();
+				assert currentDate.equals(nextPair.getFirst());
+				productionAmount = nextPair.getSecond();
+			} else {
+				productionAmount = 0;
 			}
-			boolean usingBackIter = false;
-			Iterator<InventoryDateTimeEvent> iter = this.frontWindow.iterator();
-			final List<Iterator<Integer>> remainingLoadSequenceIters = new LinkedList<>();
-			loadSequences.stream().map(ILoadSequence::createRemainingLoadIterator).forEach(remainingLoadSequenceIters::add);
-			remainingLoadSequenceIters.add(localLoadSequence.createRemainingLoadIterator());
-
-			InventoryDateTimeEvent currentEvent;
-			for (int i = 0; i < preLoadSetupTime + loadDuration; ++i) {
-				if (!iter.hasNext()) {
-					if (!usingBackIter) {
-						iter = this.backWindow.iterator();
-						usingBackIter = true;
-					}
-					if (!iter.hasNext()) {
-						throw new IllegalStateException("Ran out of events");
-					}
-				}
-				currentEvent = iter.next();
-
-				int volumeLifted = remainingLoadSequenceIters.stream() //
-						.mapToInt(Iterator::next) //
-						.sum();
-				int currentVolumeChange = currentEvent.getNetVolumeIn() - volumeLifted;
-
-				localTankVolume += currentVolumeChange;
-				if (localTankVolume < currentEvent.minVolume) {
-					return false;
-				}
-				// Clear any empty iterators
-				final Iterator<Iterator<Integer>> iterRemainingLoadSequenceIters = remainingLoadSequenceIters.iterator();
-				while (iterRemainingLoadSequenceIters.hasNext()) {
-					if (!iterRemainingLoadSequenceIters.next().hasNext()) {
-						iterRemainingLoadSequenceIters.remove();
-					}
-				}
-			}
-			return true;
 		}
-		return false;
+		return this.beforeWindowTankVolume + productionAmount >= allocationDrop + this.endWindowTankMin;
 	}
 
 	@Override
@@ -143,12 +110,31 @@ public class VanillaRollingLoadWindow extends RollingLoadWindow {
 			final int localTailLoad = allocationDrop / this.loadDuration;
 			final int localHeadLoad = localTailLoad + (allocationDrop % this.loadDuration);
 			final List<ILoadSequence> localSequences = new ArrayList<>();
-			localSequences.add(new SimpleLoadSequence(0, preLoadSetupTime));
 			localSequences.add(new SimpleLoadSequence(localHeadLoad, 1));
 			localSequences.add(new SimpleLoadSequence(localTailLoad, this.loadDuration - 1));
 			
 			newLoadSequence = new SequentialLoadSequence(localSequences);
 		}
 		this.loadSequences.add(newLoadSequence);
+	}
+
+	@Override
+	public int getProductionToAllocate() {
+		final LocalTime currentTime = this.startDateTime.toLocalTime();
+		if (currentTime != this.liftTriggerTime) {
+			return 0;
+		}
+		final LocalDate currentDate = this.startDateTime.toLocalDate();
+		if (currentDate.equals(lookaheadIterator.getCachedLastNextDate())) {
+			return lookaheadIterator.getCachedLastNextVolume();
+		} else {
+			if (lookaheadIterator.hasNext()) {
+				final Pair<LocalDate, Integer> nextPair = lookaheadIterator.next();
+				assert currentDate.equals(nextPair.getFirst());
+				return nextPair.getSecond();
+			} else {
+				return 0;
+			}
+		}
 	}
 }

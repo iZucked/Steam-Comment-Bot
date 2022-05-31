@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 public class DefaultShippedInventoryBasedGenerationAlgorithm extends MullAlgorithm {
 
 	public DefaultShippedInventoryBasedGenerationAlgorithm(final LNGScenarioModel sm, GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<@NonNull InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		final Set<Vessel> vesselsInFleet = sm.getCargoModel().getVesselAvailabilities().stream().map(VesselAvailability::getVessel).collect(Collectors.toSet());
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {

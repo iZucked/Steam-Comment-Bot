@@ -23,7 +23,7 @@ public class VanillaMullAlgorithm extends MullAlgorithm {
 	private final Map<InventoryLocalState, IMudContainer> mullCache = new HashMap<>();
 
 	public VanillaMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, false);
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {
 				for (final IAllocationTracker allocationTracker : mudContainer.getAllocationTrackers()) {
