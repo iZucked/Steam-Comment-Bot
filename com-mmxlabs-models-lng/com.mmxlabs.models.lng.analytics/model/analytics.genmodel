@@ -31,24 +31,30 @@
     <genClasses ecoreClass="analytics.ecore#//OpenSell"/>
     <genClasses ecoreClass="analytics.ecore#//OpenBuy"/>
     <genClasses ecoreClass="analytics.ecore#//BuyOpportunity">
+      <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/desPurchase"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/priceExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/cv"/>
+      <genFeatures createChild="false" propertyDescription="Cargo CV. Will inherit from contract or port if not set"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/cv"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/miscCosts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/volumeMode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/minVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/maxVolume"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/volumeUnits"/>
+      <genFeatures createChild="false" propertyDescription="Volume mode: Not Specified - no restrictions, Fixed - extact volume, Range - min/max bounds"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/volumeUnits"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/specifyWindow"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/windowSize"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/windowSizeUnits"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SellOpportunity">
+      <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/fobSale"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/contract"/>
@@ -57,7 +63,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/miscCosts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/volumeMode"/>
+      <genFeatures createChild="false" propertyDescription="Volume mode: Not Specified - no restrictions, Fixed - extact volume, Range - min/max bounds"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/volumeMode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/minVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/maxVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/volumeUnits"/>
@@ -66,16 +73,24 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/windowSizeUnits"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyMarket">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyMarket/market"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The spot market this option is based on"
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyMarket/market"/>
+      <genFeatures createChild="false" propertyDescription="Optional pricing month for the market option."
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyMarket/month"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SellMarket">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellMarket/market"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The spot market this option is based on"
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellMarket/market"/>
+      <genFeatures createChild="false" propertyDescription="Optional pricing month for the market option."
+          ecoreFeature="ecore:EAttribute analytics.ecore#//SellMarket/month"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyReference/slot"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Existing position in the base case"
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyReference/slot"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SellReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellReference/slot"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Existing position in the base case"
+          propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellReference/slot"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//VesselEventOption"/>
     <genClasses ecoreClass="analytics.ecore#//VesselEventReference">

@@ -1409,6 +1409,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCargoAllocation_IsHeelSource() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoAllocation_IsHeelSink() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getCargoAllocation__GetName() {
 		return cargoAllocationEClass.getEOperations().get(0);
 	}
@@ -3399,6 +3419,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__CARGO_TYPE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_BONUS_FEE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__REPOSITIONING_FEE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__IS_HEEL_SOURCE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__IS_HEEL_SINK);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
 
 		marketAllocationEClass = createEClass(MARKET_ALLOCATION);
@@ -3847,6 +3869,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCargoAllocation_CargoType(), theCargoPackage.getCargoType(), "cargoType", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_BallastBonusFee(), ecorePackage.getELong(), "ballastBonusFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_RepositioningFee(), ecorePackage.getELong(), "repositioningFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_IsHeelSource(), ecorePackage.getEBoolean(), "isHeelSource", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_IsHeelSink(), ecorePackage.getEBoolean(), "isHeelSink", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 

@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -26,7 +27,7 @@ public class BuyOpportunityConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof BuyOpportunity buyOpportunity) {
 
-			if (buyOpportunity.getCv() == 0.0) {
+			if (AnalyticsBuilder.getCargoCV(buyOpportunity) == 0.0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Buy is missing CV value!"));
 				deco.addEObjectAndFeature(buyOpportunity, AnalyticsPackage.eINSTANCE.getBuyOpportunity_Cv());
 				statuses.add(deco);

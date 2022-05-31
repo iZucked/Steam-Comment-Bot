@@ -57,4 +57,8 @@ public interface IAllocationAnnotation extends IPortTimesRecord, IElementAnnotat
 	 * @return
 	 */
 	int getSlotCargoCV(IPortSlot slot);
+	
+	boolean isHeelCarrySource();
+	
+	boolean isHeelCarrySink();
 }

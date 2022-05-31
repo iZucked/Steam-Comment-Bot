@@ -42,6 +42,7 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyWindowConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.GroupedSlotsConstraintCheckerFactory;
@@ -358,6 +359,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(VesselEventConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(CounterPartyVolumeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(CounterPartyWindowConstraintCheckerFactory.NAME, true));
 
 			constraints.add(createConstraint(OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortTypeConstraintCheckerFactory.NAME, true));

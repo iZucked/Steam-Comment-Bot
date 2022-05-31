@@ -46,7 +46,7 @@ public class RollForwardHandler extends AbstractHandler {
 					final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(sdp);
 					final Schedule schedule = scheduleModel.getSchedule();
 					if (schedule == null || scheduleModel.isDirty()) {
-						MessageDialog.openError(shell, "Dirty Scenario", "Scenario is dirty - please evaluate before attempting to roll forward");
+						MessageDialog.openError(shell, "Scenario needs evaluating", "Please evaluate scenario before using Roll Forward.");
 						return null;
 					}
 				}

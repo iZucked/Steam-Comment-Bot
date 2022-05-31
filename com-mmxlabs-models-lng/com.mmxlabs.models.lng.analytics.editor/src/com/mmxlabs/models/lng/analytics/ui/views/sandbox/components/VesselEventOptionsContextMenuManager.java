@@ -30,6 +30,9 @@ import com.mmxlabs.models.lng.analytics.ui.views.ResultsSetDeletionHelper;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class VesselEventOptionsContextMenuManager implements MenuDetectListener {
 
@@ -69,7 +72,7 @@ public class VesselEventOptionsContextMenuManager implements MenuDetectListener 
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
-			mgr.add(new RunnableAction("Delete", () -> {
+			mgr.add(new RunnableAction("Delete", CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				Streams.<Object>stream(selection.iterator()) //
 						.map(EObject.class::cast) //
@@ -93,7 +96,7 @@ public class VesselEventOptionsContextMenuManager implements MenuDetectListener 
 			if (row instanceof VesselEventReference eventReference) {
 				final VesselEvent slot = eventReference.getEvent();
 				// if (slot != null) {
-				// mgr.add(new RunnableAction("Copy", () -> {
+				// mgr.add(new RunnableAction("Copy", CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled), () -> {
 				// final BuyOpportunity newBuy = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
 				// newBuy.setDesPurchase(slot.isDESPurchase());
 				// newBuy.setPort(slot.getPort());
@@ -121,7 +124,7 @@ public class VesselEventOptionsContextMenuManager implements MenuDetectListener 
 				// }
 			}
 			// if (row instanceof BuyOpportunity) {
-			// mgr.add(new RunnableAction("Copy", () -> {
+			// mgr.add(new RunnableAction("Copy", CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled), () -> {
 			// final BuyOption copy = EcoreUtil.copy(row);
 			// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 			// AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS, copy), abstractAnalysisModel,

@@ -37,6 +37,8 @@ public class PortPickerDialog extends ListSelectionDialog {
 
 	private List<CellLabelProvider> searchedColumns = new ArrayList<>();
 
+	private String title = "Value Selection";
+
 	public PortPickerDialog(final Shell parentShell, final Object input) {
 		this(parentShell, input, new ArrayContentProvider(), new LabelProvider() {
 
@@ -52,12 +54,19 @@ public class PortPickerDialog extends ListSelectionDialog {
 		super(parentShell, input, contentProvider, labelProvider);
 	}
 
+	public void withTitle(String title) {
+		this.title = title;
+	}
+	public void withMultiSelect(boolean multiSelect) {
+		this.multiSelect = multiSelect;
+	}
+
 	public List<EObject> pick(final List<Pair<String, EObject>> options, final Collection<EObject> currentValue, final EReference feature) {
 		if (!options.isEmpty() && options.get(0).getSecond() == null) {
 			options.remove(0);
 		}
 
-		setTitle("Value Selection");
+		setTitle(title);
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<>();
 		final Collection<EObject> sel = currentValue;
@@ -106,7 +115,7 @@ public class PortPickerDialog extends ListSelectionDialog {
 				if (pc == PortCapability.TRANSFER && !STS_ENABLED) {
 					continue;
 				}
-				
+
 				addColumn(pc.getName(), new ColumnLabelProvider() {
 					@Override
 					public String getText(final Object element) {

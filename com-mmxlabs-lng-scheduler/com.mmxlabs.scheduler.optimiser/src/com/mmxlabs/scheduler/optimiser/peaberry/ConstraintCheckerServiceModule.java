@@ -16,6 +16,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyWindowConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
@@ -112,6 +113,10 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 		
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(CounterPartyVolumeConstraintCheckerFactory.class.getCanonicalName()))
 		.toProvider(Peaberry.service(new CounterPartyVolumeConstraintCheckerFactory()).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(CounterPartyWindowConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new CounterPartyWindowConstraintCheckerFactory()).export());
+
 
 	}
 }

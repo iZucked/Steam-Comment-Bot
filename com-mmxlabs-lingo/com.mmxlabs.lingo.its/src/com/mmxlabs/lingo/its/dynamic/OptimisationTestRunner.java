@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.dynamic;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.lingo.its.cloud.CloudRunnerITSUtil;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.TestMode;
@@ -52,7 +54,6 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-
 
 public class OptimisationTestRunner {
 	private OptimisationTestRunner() {
@@ -99,6 +100,46 @@ public class OptimisationTestRunner {
 				}
 			}));
 
+			if (TestingModes.OptimisationTestMode == TestMode.Run) {
+
+				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
+						final ObjectMapper objectMapper = new ObjectMapper();
+
+						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
+						resultsFolder.mkdir();
+
+						final File fitnessesFile = new File(resultsFolder, paramsFile.getName() + ".fitnesses");
+						final File comparisonFile = new File(resultsFolder, paramsFile.getName() + ".compare.html");
+
+						final ScenarioFitnessState existingState = fitnessesFile.exists() ? objectMapper.readValue(fitnessesFile, ScenarioFitnessState.class) : null;
+						final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
+						final BiConsumer<ScenarioFitnessState, String> saver = (fitnesses, comparison) -> {
+							try {
+								new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(fitnessesFile, fitnesses);
+
+								Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
+
+							} catch (final Exception e) {
+								Assertions.fail(e.getMessage(), e);
+							}
+						};
+
+						final Path tempDir = Files.createTempDirectory(ScenarioStorageUtil.getTempDirectory().toPath(), "its");
+
+						final File solutionFile = CloudRunnerITSUtil.runScenario(tempDir.toFile(), "optimisation", scenarioFile, paramsFile);
+						final AbstractSolutionSet result = CloudRunnerITSUtil.solutionReady(scenarioDataProvider, solutionFile);
+						checkOptimisationResult(result, modelRecord, existingState, existingCompare, saver, null);
+					};
+
+					if (scenarioFile.toString().endsWith(".lingo")) {
+						ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+					} else if (scenarioFile.toString().endsWith(".zip")) {
+						CSVImporter.runFromCSVZipFile(scenarioFile, action);
+					}
+				}));
+			}
+
 			// Extra repeatability based test cases
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
@@ -116,7 +157,8 @@ public class OptimisationTestRunner {
 					// Ignore as may be a different parameters file format
 				}
 
-				// If we have an ADP optimisation, the initial cargo pairing should not influence the result.
+				// If we have an ADP optimisation, the initial cargo pairing should not
+				// influence the result.
 				if (isADPOptimisation) {
 
 					childCases.add(DynamicTest.dynamicTest("ADP - unpair cargoes", () -> {
@@ -137,7 +179,8 @@ public class OptimisationTestRunner {
 
 							OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver);
 
-							// Special ADP code path - re-run with all cargoes unpaired. Expect the same result.
+							// Special ADP code path - re-run with all cargoes unpaired. Expect the same
+							// result.
 							if (TestingModes.OptimisationTestMode == TestMode.Run) {
 								final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 								final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
@@ -267,6 +310,40 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
+				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
+						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
+						resultsFolder.mkdir();
+
+						final File comparisonFile = new File(resultsFolder, paramsFile.getName() + ".compare.html");
+
+						final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
+						final Consumer<String> saver = comparison -> {
+							try {
+								Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
+
+							} catch (final Exception e) {
+								Assertions.fail(e.getMessage(), e);
+							}
+						};
+
+						final Path tempDir = Files.createTempDirectory(ScenarioStorageUtil.getTempDirectory().toPath(), "its");
+
+						final File solutionFile = CloudRunnerITSUtil.runScenario(tempDir.toFile(), "sandbox", scenarioFile, paramsFile);
+						final AbstractSolutionSet result = CloudRunnerITSUtil.solutionReady(scenarioDataProvider, solutionFile);
+						checkSandboxResult(result, modelRecord, existingCompare, saver, null);
+					};
+
+					if (scenarioFile.toString().endsWith(".lingo")) {
+						ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), action);
+					} else if (scenarioFile.toString().endsWith(".zip")) {
+						CSVImporter.runFromCSVZipFile(scenarioFile, action);
+					}
+				}));
+			}
+
+			if (TestingModes.OptimisationTestMode == TestMode.Run) {
+
 				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
 					ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
@@ -345,9 +422,6 @@ public class OptimisationTestRunner {
 			@NonNull final File paramsFile, @Nullable final ScenarioFitnessState existingState, @Nullable final String existingCompareContent,
 			@Nullable final BiConsumer<ScenarioFitnessState, String> saver, @Nullable final Consumer<AbstractSolutionSet> preCompareAction) throws Exception {
 
-		final boolean checkFitnesses = TestingModes.OptimisationTestMode == TestMode.Run;
-		final boolean saveFitnesses = TestingModes.OptimisationTestMode == TestMode.Generate;
-
 		// Clear existing results
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 		analyticsModel.getOptimisations().clear();
@@ -359,10 +433,22 @@ public class OptimisationTestRunner {
 		// Run the optimisation
 		final AbstractSolutionSet solutionSet = runner.run(new NullProgressMonitor());
 		Assertions.assertNotNull(solutionSet);
-		
+
+		checkOptimisationResult(solutionSet, modelRecord, existingState, existingCompareContent, saver, preCompareAction);
+	}
+
+	public static void checkOptimisationResult(final AbstractSolutionSet solutionSet, final ScenarioModelRecord modelRecord, @Nullable final ScenarioFitnessState existingState,
+			@Nullable final String existingCompareContent, @Nullable final BiConsumer<ScenarioFitnessState, String> saver, @Nullable final Consumer<AbstractSolutionSet> preCompareAction)
+			throws Exception {
+
+		final boolean checkFitnesses = TestingModes.OptimisationTestMode == TestMode.Run;
+		final boolean saveFitnesses = TestingModes.OptimisationTestMode == TestMode.Generate;
+
+		Assertions.assertNotNull(solutionSet);
+
 		// Always force base in the solution rather than scenario state
 		solutionSet.setUseScenarioBase(false);
-		
+
 		if (preCompareAction != null) {
 			preCompareAction.accept(solutionSet);
 		}
@@ -424,13 +510,19 @@ public class OptimisationTestRunner {
 			@NonNull final File paramsFile, @Nullable final String existingCompareContent, @Nullable final Consumer<String> saver, @Nullable final Consumer<AbstractSolutionSet> preCompareAction)
 			throws Exception {
 
-		final boolean checkResults = TestingModes.OptimisationTestMode == TestMode.Run;
-		final boolean saveResults = TestingModes.OptimisationTestMode == TestMode.Generate;
-
 		final SandboxJobRunner runner = new SandboxJobRunner();
 		runner.withScenario(sdp);
 		runner.withParams(paramsFile);
 		final AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
+
+		checkSandboxResult(solutionSet, modelRecord, existingCompareContent, saver, preCompareAction);
+	}
+
+	public static void checkSandboxResult(final AbstractSolutionSet solutionSet, final ScenarioModelRecord modelRecord, final String existingCompareContent, final Consumer<String> saver,
+			final Consumer<AbstractSolutionSet> preCompareAction) throws Exception {
+
+		final boolean checkResults = TestingModes.OptimisationTestMode == TestMode.Run;
+		final boolean saveResults = TestingModes.OptimisationTestMode == TestMode.Generate;
 
 		if (preCompareAction != null) {
 			preCompareAction.accept(solutionSet);
@@ -456,6 +548,5 @@ public class OptimisationTestRunner {
 		}
 		return ss;
 	}
-}
 
-	
+}

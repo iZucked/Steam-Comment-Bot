@@ -41,6 +41,7 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -186,27 +187,20 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 		tableViewer.getGrid().setCellSelectionEnabled(true);
 		tableViewer.getGrid().setSelectionEnabled(false);
 
-		final Point cell[] = new Point[1];
+		final Point[] cell = new Point[1];
 
-		tableViewer.getGrid().addMouseListener(new MouseListener() {
+		tableViewer.getGrid().addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(final MouseEvent e) {
-				// TODO Auto-generated method stub
 				cell[0] = null;
 			}
 
 			@Override
 			public void mouseDown(final MouseEvent e) {
-				// TODO Auto-generated method stub
 				cell[0] = tableViewer.getGrid().getCell(new Point(e.x, e.y));
 			}
-
-			@Override
-			public void mouseDoubleClick(final MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+ 
 		});
 
 		tableViewer.getGrid().addMouseMoveListener(new MouseMoveListener() {
@@ -259,8 +253,7 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 					cell.setText("");
 
 					final Object element = cell.getElement();
-					if (element instanceof BreakEvenAnalysisRow) {
-						final BreakEvenAnalysisRow row = (BreakEvenAnalysisRow) element;
+					if (element instanceof BreakEvenAnalysisRow row) {
 						for (final BreakEvenAnalysisResultSet rs : row.getRhsResults()) {
 							if (rs.getBasedOn() != null && rs.getBasedOn() == row.getRhsBasedOn()) {
 								cell.setText(String.format("%.2f", rs.getPrice()));
@@ -347,8 +340,7 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 						cell.setText("");
 
 						final Object element = cell.getElement();
-						if (element instanceof BreakEvenAnalysisRow) {
-							final BreakEvenAnalysisRow row = (BreakEvenAnalysisRow) element;
+						if (element instanceof BreakEvenAnalysisRow row) {
 							if (row.getBuyOption() != null) {
 								for (final BreakEvenAnalysisResultSet resultSet : row.getRhsResults()) {
 									if (resultSet.getBasedOn() == row.getRhsBasedOn()) {
@@ -384,19 +376,21 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 		inputWants.add(refreshDynamicColumns);
 		tableViewer.setContentProvider(new BreakEvenAnalyticsModelContentProvider());
 
+
 		final MenuManager mgr = new MenuManager();
 
-		// final PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(tableViewer, scenarioEditingLocation, mgr);
-		// tableViewer.getGrid().addMenuDetectListener(listener);
-		// inputWants.add(model -> listener.setOptionAnalysisModel(model));
-
+		final MainTableContextMenuManager listener = new MainTableContextMenuManager(tableViewer, scenarioEditingLocation, mgr);
+		tableViewer.getGrid().addMenuDetectListener(listener);
+		inputWants.add(listener::setOptionAnalysisModel);
+		
+		
 		inputWants.add(model -> tableViewer.setInput(model));
 		inputWants.add(model -> partialCaseDiagram.setRoot(model));
 
-		// hookDragSource(tableViewer);
 		return tableViewer.getGrid();
 	}
 
+	@Override
 	protected void hookDragSource(final GridTreeViewer viewer) {
 
 		final DragSource source = new DragSource(viewer.getGrid(), DND.DROP_MOVE);

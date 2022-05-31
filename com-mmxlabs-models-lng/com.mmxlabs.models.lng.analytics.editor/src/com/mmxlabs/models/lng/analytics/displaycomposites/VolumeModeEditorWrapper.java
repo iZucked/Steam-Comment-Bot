@@ -118,8 +118,8 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 		if (mode == VolumeMode.NOT_SPECIFIED) {
 			enabled = false;
 		} else if (mode == VolumeMode.FIXED) {
-			// Just disable the min controls
-			enabled = !((feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME) || (feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME));
+			// Just disable the max controls
+			enabled = !((feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME) || (feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME));
 		} else if (mode == VolumeMode.RANGE) {
 			enabled = true;
 		}
@@ -141,7 +141,6 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 
 	@Override
 	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

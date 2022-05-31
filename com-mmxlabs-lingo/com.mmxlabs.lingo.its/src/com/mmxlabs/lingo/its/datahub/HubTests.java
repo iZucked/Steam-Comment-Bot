@@ -178,11 +178,16 @@ public class HubTests {
 		logger.info("Test executing on display thread? " + (Thread.currentThread() == Display.getDefault().getThread()));
 		
 		openDatahubPreferencePage();
+		
+		Thread.sleep(5000);
+
+		
 		// type backspace character to trigger change
 		Matcher<Widget> urlTextField = withText("&URL");
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		// FIXME typeText is supposed to notify event listeners...
+		bot.textWithLabel("&URL").setFocus();
 		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);

@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isDesPurchase <em>Des Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getContract <em>Contract</em>}</li>
@@ -209,9 +210,12 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cv</em>' attribute.
+	 * @see #isSetCv()
+	 * @see #unsetCv()
 	 * @see #setCv(double)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_Cv()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
 	 * @generated
 	 */
 	double getCv();
@@ -221,10 +225,35 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cv</em>' attribute.
+	 * @see #isSetCv()
+	 * @see #unsetCv()
 	 * @see #getCv()
 	 * @generated
 	 */
 	void setCv(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCv()
+	 * @see #getCv()
+	 * @see #setCv(double)
+	 * @generated
+	 */
+	void unsetCv();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv <em>Cv</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cv</em>' attribute is set.
+	 * @see #unsetCv()
+	 * @see #getCv()
+	 * @see #setCv(double)
+	 * @generated
+	 */
+	boolean isSetCv();
 
 	/**
 	 * Returns the value of the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -458,6 +487,55 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * @generated
 	 */
 	void setWindowSizeUnits(TimePeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
+	 * @see #setName(String)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_Name()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	void unsetName();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Name</em>' attribute is set.
+	 * @see #unsetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	boolean isSetName();
 
 } // end of  BuyOpportunity
 

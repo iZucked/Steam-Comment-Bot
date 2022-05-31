@@ -168,6 +168,8 @@ public class VisitEventExporter {
 				eAllocation.setCargoType(cargoType);
 			}
 			eAllocation.getSlotAllocations().add(slotAllocation);
+			eAllocation.setIsHeelSink(allocation.isHeelCarrySink());
+			eAllocation.setIsHeelSource(allocation.isHeelCarrySource());
 
 			final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 			slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));

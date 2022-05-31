@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
 import com.mmxlabs.models.lng.analytics.BuyMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +20,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.BuyMarket} object.
@@ -49,6 +52,7 @@ public class BuyMarketItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addMarketPropertyDescriptor(object);
+			addMonthPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -65,12 +69,34 @@ public class BuyMarketItemProvider extends UUIDObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_BuyMarket_market_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BuyMarket_market_feature", "_UI_BuyMarket_type"),
+				 getString("_UI_BuyMarket_market_description"),
 				 AnalyticsPackage.Literals.BUY_MARKET__MARKET,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Month feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMonthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyMarket_month_feature"),
+				 getString("_UI_BuyMarket_month_description"),
+				 AnalyticsPackage.Literals.BUY_MARKET__MONTH,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -90,14 +116,14 @@ public class BuyMarketItemProvider extends UUIDObjectItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BuyMarket)object).getUuid();
-		return label == null || label.length() == 0 ?
+		SpotMarket mkt = ((BuyMarket)object).getMarket();
+		return mkt == null ?
 			getString("_UI_BuyMarket_type") :
-			getString("_UI_BuyMarket_type") + " " + label;
+				mkt.getName();
 	}
 	
 
@@ -111,6 +137,12 @@ public class BuyMarketItemProvider extends UUIDObjectItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(BuyMarket.class)) {
+			case AnalyticsPackage.BUY_MARKET__MONTH:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

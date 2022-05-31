@@ -7,18 +7,18 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-
-import com.mmxlabs.models.lng.analytics.SellReference;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.SellReference} object.
@@ -65,7 +65,7 @@ public class SellReferenceItemProvider extends UUIDObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_SellReference_slot_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SellReference_slot_feature", "_UI_SellReference_type"),
+				 getString("_UI_SellReference_slot_description"),
 				 AnalyticsPackage.Literals.SELL_REFERENCE__SLOT,
 				 true,
 				 false,
@@ -90,14 +90,14 @@ public class SellReferenceItemProvider extends UUIDObjectItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SellReference)object).getUuid();
-		return label == null || label.length() == 0 ?
+		Slot<?> slot = ((SellReference)object).getSlot();
+		return slot == null  ?
 			getString("_UI_SellReference_type") :
-			getString("_UI_SellReference_type") + " " + label;
+			slot.getName();
 	}
 	
 

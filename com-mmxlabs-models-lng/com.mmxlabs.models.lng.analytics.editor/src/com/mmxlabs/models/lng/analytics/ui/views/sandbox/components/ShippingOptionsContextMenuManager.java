@@ -33,6 +33,9 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 
@@ -73,8 +76,25 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 		
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
+
+		if (items.length == 1) {
+
+			final Object ed = items[0].getData();
+			final ShippingOption row = (ShippingOption) ed;
+
+			if (row instanceof SellOpportunity) {
+				mgr.add(new RunnableAction("Copy", CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled), () -> {
+					final ShippingOption copy = EMFCopier.copy(row);
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, copy),
+							abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
+				}));
+			}
+		}
+		
 		if (items.length > 0) {
-			mgr.add(new RunnableAction("Delete", () -> {
+			mgr.add(new RunnableAction("Delete", CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), () -> {
 				final Collection<EObject> c = new LinkedHashSet<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 				final CompoundCommand compoundCommand = new CompoundCommand("Delete shipping option");
@@ -87,22 +107,6 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
 				}
 			}));
-		}
-
-		if (items.length == 1) {
-
-			final Object ed = items[0].getData();
-			final ShippingOption row = (ShippingOption) ed;
-
-			if (row instanceof SellOpportunity) {
-				mgr.add(new RunnableAction("Copy", () -> {
-					final ShippingOption copy = EMFCopier.copy(row);
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, copy),
-							abstractAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
-				}));
-			}
 		}
 		menu.setVisible(true);
 	}

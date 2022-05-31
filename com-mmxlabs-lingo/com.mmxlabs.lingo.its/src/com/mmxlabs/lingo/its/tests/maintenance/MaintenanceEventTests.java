@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.util.ScheduleSequenceTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -63,7 +64,9 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	private static final List<Class<? extends Event>> HANDLED_EVENT_CLASSES;
 
 	/*
-	 * Set of classes for which checkFuelSequence is currently defined, checkFuelSequence and this set may have to be updated when adding new tests/changing model.
+	 * Set of classes for which checkFuelSequence is currently defined,
+	 * checkFuelSequence and this set may have to be updated when adding new
+	 * tests/changing model.
 	 */
 	static {
 		HANDLED_EVENT_CLASSES = new ArrayList<>();
@@ -139,7 +142,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	}
 
 	/*
-	 * Checks that the fuels used in travelling make sense with respect to presence of LNG onboard
+	 * Checks that the fuels used in travelling make sense with respect to presence
+	 * of LNG onboard
 	 */
 	private void checkFuelSequence(final @NonNull List<Event> events) {
 		assert !events.isEmpty();
@@ -171,17 +175,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 				}
 			}
 			runningHeel = nextEvent.getHeelAtEnd();
-		}
-	}
-
-	/*
-	 * Checks that the sequence of classes in expectedSequence is matched by the sequence of instances in events.
-	 */
-	private void checkSequence(final @NonNull List<Class<? extends Event>> expectedClassSequence, final @NonNull List<Event> events) {
-		Assertions.assertEquals(expectedClassSequence.size(), events.size());
-		final Iterator<Event> eventIter = events.iterator();
-		for (final Class<? extends Event> expectedClass : expectedClassSequence) {
-			Assertions.assertTrue(expectedClass.isInstance(eventIter.next()));
 		}
 	}
 
@@ -221,7 +214,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have (strictly positive) heel during all events
@@ -229,15 +222,11 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					Assertions.assertTrue(hasLngBoiloff);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -277,7 +266,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have zero heel during all events
@@ -285,15 +274,11 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertEquals(0, event.getHeelAtStart());
 				Assertions.assertEquals(0, event.getHeelAtEnd());
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					Assertions.assertFalse(hasLngBoiloff);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -333,15 +318,16 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have heel before maintenance and none after
 			boolean foundMaintenance = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
-					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+				if (event instanceof final Idle idleEvent) {
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream() //
+							.map(FuelQuantity::getFuel) //
+							.anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					if (foundMaintenance) {
 						Assertions.assertEquals(0, event.getHeelAtStart());
 						Assertions.assertEquals(0, event.getHeelAtEnd());
@@ -350,11 +336,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 						Assertions.assertTrue(event.getHeelAtStart() > 0);
 						Assertions.assertTrue(hasLngBoiloff);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -396,14 +379,13 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have heel before maintenance and none after
 			boolean foundMaintenance = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					if (foundMaintenance) {
 						Assertions.assertEquals(0, event.getHeelAtStart());
@@ -413,11 +395,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 						Assertions.assertTrue(event.getHeelAtStart() > 0);
 						Assertions.assertTrue(hasLngBoiloff);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -455,15 +434,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have heel before maintenance and after maintenance.
 			// After maintenance NBO time should be less than idle time
 			boolean foundMaintenance = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -476,11 +454,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 						Assertions.assertTrue(event.getHeelAtEnd() > 0);
 						Assertions.assertFalse(hasBunkerUse);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -522,15 +497,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have heel before maintenance and after maintenance.
 			// After maintenance NBO time should be less than idle time
 			boolean foundMaintenance = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -543,11 +517,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 						Assertions.assertTrue(event.getHeelAtEnd() > 0);
 						Assertions.assertFalse(hasBunkerUse);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -589,7 +560,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// All events should start and end with heel
@@ -597,18 +568,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertFalse(hasBunkerUse);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			// Last event end heel should be larger than max allowed
@@ -652,7 +619,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// All events should start and end with heel
@@ -660,18 +627,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
+				if (event instanceof final Idle idleEvent) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertFalse(hasBunkerUse);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
-						foundMaintenance = true;
-					}
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
 				}
 			}
 			// Last event end heel should be larger than max allowed
@@ -720,7 +683,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// All events should start and end with heel
@@ -729,22 +692,17 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
+				if (event instanceof final Idle idleEvent) {
 					if (!event.getStart().equals(event.getEnd())) {
-						final Idle idleEvent = (Idle) event;
 						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 						Assertions.assertTrue(hasLngBoiloff);
 						Assertions.assertFalse(hasBunkerUse);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
-				} else if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				} else if (event instanceof final Journey journey) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -800,15 +758,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			boolean foundMaintenance = false;
 			boolean usedPanama = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
+				if (event instanceof final Idle idleEvent) {
 					if (!event.getStart().equals(event.getEnd())) {
-						final Idle idleEvent = (Idle) event;
 						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -824,13 +781,9 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 							Assertions.assertFalse(hasBunkerUse);
 						}
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
-				} else if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				} else if (event instanceof final Journey journey) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -895,15 +848,14 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			boolean foundMaintenance = false;
 			boolean usedPanama = false;
 			for (final Event event : events) {
-				if (event instanceof Idle) {
+				if (event instanceof final Idle idleEvent) {
 					if (!event.getStart().equals(event.getEnd())) {
-						final Idle idleEvent = (Idle) event;
 						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -919,13 +871,9 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 							Assertions.assertFalse(hasBunkerUse);
 						}
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
-				} else if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				} else if (event instanceof final Journey journey) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -942,7 +890,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					if (journey.getRouteOption() == RouteOption.PANAMA) {
 						usedPanama = true;
 					}
-				} else if (event instanceof EndEvent) {
+				} else if (event instanceof final EndEvent endEvent) {
 					Assertions.assertEquals(0, event.getHeelAtStart());
 				}
 			}
@@ -991,7 +939,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// All events should start and end with heel
@@ -1000,22 +948,17 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
+				if (event instanceof final Idle idleEvent) {
 					if (!event.getStart().equals(event.getEnd())) {
-						final Idle idleEvent = (Idle) event;
 						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 						Assertions.assertTrue(hasLngBoiloff);
 						Assertions.assertFalse(hasBunkerUse);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
-				} else if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				} else if (event instanceof final Journey journey) {
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
@@ -1134,7 +1077,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence("s-i-sv-j-i-sv-j-i-vev-j-i-e");
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// All events should start and end with heel
@@ -1142,22 +1085,17 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
+				if (event instanceof final Idle idleEvent) {
 					if (!event.getStart().equals(event.getEnd())) {
-						final Idle idleEvent = (Idle) event;
 						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 						Assertions.assertTrue(hasLngBoiloff);
 						Assertions.assertFalse(hasBunkerUse);
 					}
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
-				} else if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				} else if (event instanceof final Journey journey) {
 					// all journeys should be using lng boiloff
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
@@ -1218,7 +1156,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			final List<Event> events = sequence.getEvents();
 
 			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-			checkSequence(expectedClassSequence, events);
+			ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedClassSequence, events);
 			checkFuelSequence(events);
 
 			// Sequence should have (strictly positive) heel during all events
@@ -1226,15 +1164,13 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
 				Assertions.assertTrue(event.getHeelAtEnd() > 0);
-				if (event instanceof Idle) {
-					final Idle idleEvent = (Idle) event;
-					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+				if (event instanceof final Idle idleEvent) {
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream() //
+							.map(FuelQuantity::getFuel) //
+							.anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					Assertions.assertTrue(hasLngBoiloff);
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) event;
-					if (vev.getVesselEvent() == maintenanceEvent) {
+				} else if (event instanceof final VesselEventVisit vev && vev.getVesselEvent() == maintenanceEvent) {
 						foundMaintenance = true;
-					}
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);

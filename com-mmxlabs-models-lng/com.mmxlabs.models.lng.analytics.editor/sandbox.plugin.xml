@@ -31,4 +31,10 @@
           id="com.mmxlabs.models.lng.analytics.ui.commands.SandboxLoadSlotUpdatingCommandProvider">
     	</ModelCommandProvider>
     </extension>
+   <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    	<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.analytics.ui.commands.SandboxOpportunityCommandProvider"
+          id="com.mmxlabs.models.lng.analytics.ui.commands.SandboxOpportunityCommandProvider">
+    	</ModelCommandProvider>
+    </extension>
 </plugin>

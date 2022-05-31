@@ -7,17 +7,26 @@ import java.time.LocalDate;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -28,6 +37,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#isDesPurchase <em>Des Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getContract <em>Contract</em>}</li>
@@ -49,6 +59,35 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * This is true if the Name attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean nameESet;
+
 	/**
 	 * The default value of the '{@link #isDesPurchase() <em>Des Purchase</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -158,6 +197,15 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	 * @ordered
 	 */
 	protected double cv = CV_EDEFAULT;
+
+	/**
+	 * This is true if the Cv attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cvESet;
 
 	/**
 	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
@@ -566,8 +614,35 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	public void setCv(double newCv) {
 		double oldCv = cv;
 		cv = newCv;
+		boolean oldCvESet = cvESet;
+		cvESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__CV, oldCv, cv));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__CV, oldCv, cv, !oldCvESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetCv() {
+		double oldCv = cv;
+		boolean oldCvESet = cvESet;
+		cv = CV_EDEFAULT;
+		cvESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.BUY_OPPORTUNITY__CV, oldCv, CV_EDEFAULT, oldCvESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetCv() {
+		return cvESet;
 	}
 
 	/**
@@ -783,8 +858,60 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	 * @generated
 	 */
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		boolean oldNameESet = nameESet;
+		nameESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__NAME, oldName, name, !oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetName() {
+		String oldName = name;
+		boolean oldNameESet = nameESet;
+		name = NAME_EDEFAULT;
+		nameESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.BUY_OPPORTUNITY__NAME, oldName, NAME_EDEFAULT, oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetName() {
+		return nameESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
+				return getName();
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				return isDesPurchase();
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
@@ -833,6 +960,9 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
+				setName((String)newValue);
+				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				setDesPurchase((Boolean)newValue);
 				return;
@@ -893,6 +1023,9 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
+				unsetName();
+				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				setDesPurchase(DES_PURCHASE_EDEFAULT);
 				return;
@@ -912,7 +1045,7 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 				setEntity((BaseLegalEntity)null);
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
-				setCv(CV_EDEFAULT);
+				unsetCv();
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
@@ -953,6 +1086,8 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
+				return isSetName();
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				return desPurchase != DES_PURCHASE_EDEFAULT;
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
@@ -966,7 +1101,7 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 			case AnalyticsPackage.BUY_OPPORTUNITY__ENTITY:
 				return entity != null;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
-				return cv != CV_EDEFAULT;
+				return isSetCv();
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
@@ -999,14 +1134,16 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (desPurchase: ");
+		result.append(" (name: ");
+		if (nameESet) result.append(name); else result.append("<unset>");
+		result.append(", desPurchase: ");
 		result.append(desPurchase);
 		result.append(", date: ");
 		result.append(date);
 		result.append(", priceExpression: ");
 		result.append(priceExpression);
 		result.append(", cv: ");
-		result.append(cv);
+		if (cvESet) result.append(cv); else result.append("<unset>");
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
 		result.append(", miscCosts: ");
@@ -1029,6 +1166,39 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 		return result.toString();
 	}
 
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV) {
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__CONTRACT || changedFeature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					Object result = null;
+					final PurchaseContract purchaseContract =  getContract();
+					if (purchaseContract != null) {
+						// Get value if set, otherwise we want to fall back to current load port, not contract fallback.
+						if (purchaseContract.eIsSet(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV)) {
+							result = purchaseContract.eGet(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);
+						}
+					}
+					if (result == null && port != null) {
+						result =  port.eGetWithDefault(PortPackage.Literals.PORT__CV_VALUE);
+					}
+					if (result == null) {
+						result = 0.0;
+					}
+					return result;
+					
+				}				
+			};
+		}
+		return super.getUnsetValueOrDelegate(feature);
+	}
+	
 } // end of BuyOpportunityImpl
 
 // finish type fixing

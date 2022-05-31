@@ -312,7 +312,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 		listenToScenarioSelection();
 		mainComposite.setSashWidth(4);
-		mainComposite.setWeights(new int[] { 16, 84 });
+		mainComposite.setWeights(new int[] { 20, 80 });
 		packAll(mainComposite);
 		// Normally not needed and can probably be removed.
 		mainComposite.addMouseListener(new MouseAdapter() {

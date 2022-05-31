@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lingo.its.util.ScheduleSequenceTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -43,6 +46,8 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -51,7 +56,9 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
@@ -671,6 +678,56 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		// Pull in all late cargoes
 		// OR charter length should NOT permit empty heel in this case.
 
+	}
+
+	/*
+	 * Checks that charter length works without any events present. Added to catch bug where scheduler would consider canals when travelling to/from anywhere.
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoneCharterLengthEndCold() {
+		final Vessel mediumShip = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
+		final VesselAvailability mediumShipVa = cargoModelBuilder.makeVesselAvailability(mediumShip, entity) //
+				.withCharterRate("70000") //
+				.withStartHeel(0, 2000, 23, "3") //
+				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+				.withStartWindow(LocalDateTime.of(2022, 01, 15, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2022, 03, 15, 0, 0)) //
+				.build();
+		evaluate(true);
+
+		// Basic checks
+		final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		Assertions.assertNotNull(schedule);
+
+		final List<Sequence> sequences = schedule.getSequences();
+		Assertions.assertEquals(1, sequences.size());
+
+		final Sequence sequence = sequences.get(0);
+		Assertions.assertEquals(mediumShipVa, sequence.getVesselAvailability());
+
+		@NonNull
+		final List<@NonNull Class<? extends Event>> expectedEventSequence = new ArrayList<>();
+		expectedEventSequence.add(StartEvent.class);
+		expectedEventSequence.add(Idle.class);
+		expectedEventSequence.add(CharterLengthEvent.class);
+		expectedEventSequence.add(Cooldown.class);
+		expectedEventSequence.add(EndEvent.class);
+
+		final List<Event> events = sequence.getEvents();
+		ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedEventSequence, events);
+
+		// Check that idle event has zero length
+		
+		// Make sure that there is not an unexpected event
+		for (final Event event : events) {
+			if (event instanceof final Idle idleEvent) {
+				// idle time should be zero
+				Assertions.assertEquals(idleEvent.getStart(), idleEvent.getEnd());
+				// There should only be one idle event
+				break;
+			}
+		}
 	}
 
 	public static @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {

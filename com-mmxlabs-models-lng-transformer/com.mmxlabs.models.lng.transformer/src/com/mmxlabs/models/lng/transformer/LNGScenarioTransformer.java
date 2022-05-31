@@ -56,7 +56,6 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesUtil;
 import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -209,6 +208,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyWindowProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
@@ -435,6 +435,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private ICancellationFeeProviderEditor cancellationFeeProviderEditor;
+
+	@Inject
+	private ICounterPartyWindowProviderEditor counterPartyWindowProviderEditor;
 
 	@Inject
 	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
@@ -1705,6 +1708,9 @@ public class LNGScenarioTransformer {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
 						dischargeSlot.getSchedulingTimeWindow().getDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatePricingEvent()), dischargeSlot.isOptional(),
 						slotLocked, isSpot, isVolumeLimitInM3, slotCancelled);
+				if (dischargeSlot.isWindowCounterParty()) {
+					counterPartyWindowProviderEditor.setCounterPartyWindow(discharge);
+				}
 			}
 		}
 
@@ -1889,6 +1895,9 @@ public class LNGScenarioTransformer {
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegateCV()), loadSlot.getSchedulingTimeWindow().getDuration(), loadSlot.isSetArriveCold(),
 					loadSlot.isArriveCold(), loadSlot.isSchedulePurge(), slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatePricingEvent()), loadSlot.isOptional(), slotLocked, isSpot,
 					isVolumeLimitInM3, slotCancelled);
+			if (loadSlot.isWindowCounterParty()) {
+				counterPartyWindowProviderEditor.setCounterPartyWindow(load);
+			}
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);

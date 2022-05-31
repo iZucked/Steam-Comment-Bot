@@ -29,8 +29,7 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final CargoModel cm = lngScenarioModel.getCargoModel();
 			if (cm == null) {
 				return null;

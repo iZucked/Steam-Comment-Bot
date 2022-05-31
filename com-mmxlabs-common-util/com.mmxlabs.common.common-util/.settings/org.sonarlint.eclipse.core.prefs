@@ -1,7 +1,3 @@
 autoEnabled=true
 eclipse.preferences.version=1
 fileExclusions=FILE\:src/com/mmxlabs/common/parser/impl/Parser.java
-idePrefixKey=
-projectKey=com.mmxlabs.lingo.master\:com.mmxlabs.lingo.master.parent
-serverId=sonar.mmxlabs.com
-sqPrefixKey=com-mmxlabs-common-util/com.mmxlabs.common.common-util

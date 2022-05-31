@@ -5,6 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
@@ -19,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	private static final Logger log = LoggerFactory.getLogger(CheckingVoyagePlanEvaluator.class);
@@ -50,6 +54,12 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
+	}
+	
+	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
+			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results){
+		return delegate.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, previousHeelRecord, initialPortTimesRecord, lastPlan, keepDetails, annotatedSolution, results);
 	}
 
 	@Override

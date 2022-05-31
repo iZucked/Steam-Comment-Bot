@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
+import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -112,6 +113,8 @@ public class EditObjectMouseListener extends MouseAdapter {
 					}
 					viewer.refresh(row);
 				}
+			} else if (element instanceof final BreakEvenAnalysisRow row) {
+				// Do not edit
 			} else if (element instanceof final EObject eObj) {
 				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, eObj);
 			}

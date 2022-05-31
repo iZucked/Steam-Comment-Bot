@@ -517,8 +517,8 @@ public class BaseCaseToScheduleSpecification {
 	}
 
 	private boolean sellNeedsDate(final SellOption sellOption) {
-		if (sellOption instanceof SellMarket) {
-			return true;
+		if (sellOption instanceof SellMarket sellMarket) {
+			return !sellMarket.isSetMonth() || sellMarket.getMonth() == null;
 		}
 		if (sellOption instanceof SellReference) {
 			return false;
@@ -531,8 +531,8 @@ public class BaseCaseToScheduleSpecification {
 	}
 
 	private boolean buyNeedsDate(final BuyOption buyOption) {
-		if (buyOption instanceof BuyMarket) {
-			return true;
+		if (buyOption instanceof BuyMarket buyMarket) {
+			return !buyMarket.isSetMonth() || buyMarket.getMonth() == null;
 		}
 		if (buyOption instanceof BuyReference) {
 			return false;

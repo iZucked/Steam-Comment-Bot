@@ -16,14 +16,22 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -79,7 +87,47 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 				});
 
 			}
+			// Check for unique names
+			{
+				Set<String> existingNames = new HashSet<>();
+				if (extraContext.getRootObject() instanceof LNGScenarioModel sm) {
+					CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
+					cargoModel.getLoadSlots().stream().map(NamedObject::getName).forEach(existingNames::add);
+					cargoModel.getDischargeSlots().stream().map(NamedObject::getName).forEach(existingNames::add);
+
+					{
+						BuyOptionDescriptionFormatter renderer = new BuyOptionDescriptionFormatter();
+						model.getBuys().forEach(option -> {
+							if (option instanceof BuyOpportunity op) {
+								String name = renderer.render(op);
+								if (!existingNames.add(name)) {
+									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus(String.format("Option name is not unique (%s).", name)));
+									deco.addEObjectAndFeature(op, AnalyticsPackage.Literals.BUY_OPPORTUNITY__NAME);
+									statuses.add(deco);
+								}
+							}
+						});
+					}
+					{
+						SellOptionDescriptionFormatter renderer = new SellOptionDescriptionFormatter();
+						model.getBuys().forEach(option -> {
+							if (option instanceof SellOpportunity op) {
+								String name = renderer.render(op);
+								if (!existingNames.add(name)) {
+									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus(String.format("Option name is not unique (%s).", name)));
+									deco.addEObjectAndFeature(op, AnalyticsPackage.Literals.SELL_OPPORTUNITY__NAME);
+									statuses.add(deco);
+								}
+							}
+						});
+					}
+				}
+
+			}
 		}
+
 	}
 
 	public void processModel(final OptionAnalysisModel model, final BiConsumer<BuyOption, LoadSlot> visitLoadSlot, final BiConsumer<SellOption, DischargeSlot> visitDischargeSlot) {
