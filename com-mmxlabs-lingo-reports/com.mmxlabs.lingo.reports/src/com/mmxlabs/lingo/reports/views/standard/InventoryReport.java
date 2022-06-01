@@ -90,6 +90,8 @@ import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
+import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartModeAction;
+import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartState;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
@@ -130,6 +132,10 @@ import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
+
+	public enum OverliftChartMode {
+		CUMULATIVE, NON_CUMULATIVE
+	}
 
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.InventoryReport";
 
@@ -172,6 +178,9 @@ public class InventoryReport extends ViewPart {
 
 	private ChartColourSchemeAction colourSchemeAction;
 	private ActionContributionItem colourSchemeActionContributionItem;
+
+	private OverliftChartModeAction overliftChartModeAction;
+	private ActionContributionItem overliftChartModeActionContributionItem;
 
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
@@ -538,6 +547,10 @@ public class InventoryReport extends ViewPart {
 				mullMonthlyOverliftChart.getTitle().setVisible(false);
 				chartItem2.setControl(mullMonthlyOverliftChart);
 			}
+			overliftChartModeAction = new OverliftChartModeAction(mullMonthlyOverliftChart);
+			overliftChartModeActionContributionItem = new ActionContributionItem(overliftChartModeAction);
+			getViewSite().getActionBars().getToolBarManager().add(overliftChartModeActionContributionItem);
+			overliftChartModeActionContributionItem.setVisible(folder.getSelectionIndex() == 6);
 
 			final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
 			chartItem3.setText("# Cargo Chart");
@@ -581,6 +594,8 @@ public class InventoryReport extends ViewPart {
 						mullDailyTableFilterField.toggleVisibility();
 					}
 					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 5);
+
+					overliftChartModeActionContributionItem.setVisible(currentTabSelection == 6);
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
@@ -631,6 +646,7 @@ public class InventoryReport extends ViewPart {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
 			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
+			overliftChartModeAction.clear();
 		}
 
 		LocalDate minDate = null;
@@ -1064,7 +1080,12 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
+
+												final List<MullInformation> mullInformationList = pairedMullList.stream().map(Pair::getFirst).toList();
+												final OverliftChartState overliftChartState = new OverliftChartState(mullInformationList, entitiesOrdered, formattedMonthLabels, mullChartColourSequence);
+												overliftChartModeAction.setState(overliftChartState);
+												overliftChartModeAction.updateChartData();
+//												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
 												// int axisId = mullMonthlyOverliftChart.getAxisSet().createXAxis();
 												// final IAxis xAxis2 = mullMonthlyOverliftChart.getAxisSet().getXAxis(axisId);
 												//// xAxis2.setPosition(Position.Primary);
@@ -2132,8 +2153,8 @@ public class InventoryReport extends ViewPart {
 				currRow.entity = entity;
 				currRow.ym = ym;
 				currRow.lifted = actualLift.get(ym).get(entityMirrorObject);
-				currRow.overlift = actualLift.get(ym).get(entityMirrorObject) - monthlyRE.get(ym).get(entityMirrorObject);
 				currRow.monthlyRE = monthlyRE.get(ym).get(entityMirrorObject);
+				currRow.overlift = currRow.lifted - currRow.monthlyRE;
 				currRow.cargoCount = cargoCount.get(ym).get(entityMirrorObject);
 				currRow.delta = currRow.monthlyRE - currRow.lifted;
 				currRow.deltaViolatesFCL = currRow.delta > fclValue || currRow.delta < -fclValue;
