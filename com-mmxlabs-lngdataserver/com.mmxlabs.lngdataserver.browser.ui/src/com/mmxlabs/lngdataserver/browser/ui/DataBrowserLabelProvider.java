@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
@@ -76,9 +75,8 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 		if (element instanceof CompositeNode) {
 			// TODO: Select an image!
-		} else if (element instanceof Node) {
+		} else if (element instanceof Node node) {
 			// figure out if published
-			final Node node = (Node) element;
 
 			if (node.eContainer() instanceof CompositeNode) {
 				final CompositeNode compositeNode = (CompositeNode) node.eContainer();
@@ -102,11 +100,13 @@ public class DataBrowserLabelProvider extends ColumnLabelProvider implements ICo
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof Node) {
-			final Node node = (Node) element;
+		if (element instanceof Node node) {
 			String prefix = "";
-			// if (node.eContainer() instanceof CompositeNode) {
-			// final CompositeNode compositeNode = (CompositeNode) node.eContainer();
+			 if (node.eContainer() instanceof CompositeNode compositeNode) {
+				 if (node == compositeNode.getCurrent()) {
+					 prefix = "** ";
+				 }
+			 }
 			//
 			// if (compositeNode.getType() != null) {
 			// if (baseCaseProvider != null && Objects.equals(node.getVersionIdentifier(), baseCaseProvider.getVersion(compositeNode.getType()))) {

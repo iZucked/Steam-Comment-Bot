@@ -55,8 +55,14 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 		listenForNewLocalVersions = false;
 	}
 
+	@Override
 	public void registerLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
+	}
+	
+	@Override
+	public void deregisterLocalVersionListener(final Runnable versionConsumer) {
+		newLocalVersionCallbacks.remove(versionConsumer);
 	}
 
 	protected boolean canWaitForNewLocalVersion() {
@@ -92,6 +98,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 		return false;
 	}
 
+	@Override
 	public List<DataVersion> getLocalVersions() {
 
 		final ImmutableList<GeneralDataRecord> records = GeneralDataRepository.INSTANCE.getRecords(type);
@@ -121,5 +128,10 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 		return getLocalVersions().stream() //
 				.filter(v -> Objects.equals(uuid, v.getIdentifier())) //
 				.findFirst().isPresent();
+	}
+
+	@Override
+	public @Nullable String getCurrentVersion() {
+		return GeneralDataRepository.INSTANCE.getCurrentVersion(type);
 	}
 }

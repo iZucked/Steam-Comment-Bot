@@ -31,7 +31,11 @@ public class PricingTypeRecord implements TypeRecord {
 	@Override
 	public String getUploadURL() {
 		return "/pricing/sync/versions/";
-
+	}
+	
+	@Override
+	public String getCurrentURL() {
+		return "/pricing/version/current/id";
 	}
 
 	@Override

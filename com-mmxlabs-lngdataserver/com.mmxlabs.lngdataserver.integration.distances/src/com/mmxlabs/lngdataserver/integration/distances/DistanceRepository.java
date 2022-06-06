@@ -25,4 +25,10 @@ public class DistanceRepository extends AbstractGenericDataRepository<DistancesV
 	public DistancesVersion getLocalVersion(final String uuid) throws Exception {
 		return doGetLocalVersion(uuid, DistancesIO::read);
 	}
+
+	@Override
+	public void deregisterLocalVersionListener(Runnable versionConsumer) {
+		// TODO Auto-generated method stub
+		
+	}
 }

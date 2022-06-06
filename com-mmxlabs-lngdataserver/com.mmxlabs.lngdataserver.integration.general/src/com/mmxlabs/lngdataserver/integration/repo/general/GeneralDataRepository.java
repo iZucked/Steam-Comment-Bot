@@ -193,4 +193,13 @@ public class GeneralDataRepository {
 	public void removeListener(TypeRecord typeRecord, IUpdateListener l) {
 		listeners.get(typeRecord).remove(l);
 	}
+	
+	public @Nullable String getCurrentVersion(final TypeRecord type) {
+		try {
+			return client.getCurrentVersion(type);
+		} catch (Exception e) {
+			// We can't do anything at this point
+		}
+        return null;
+    }
 }

@@ -18,13 +18,14 @@ public class PricingRepository extends AbstractGeneralDataRepository<PricingVers
 		startListenForNewLocalVersions();
 	}
 
+	@Override
 	public boolean publishVersion(final PricingVersion version) throws Exception {
 		final String json = PricingIO.write(version);
 		return uploadData(json);
 	}
 
+	@Override
 	public PricingVersion getLocalVersion(final String uuid) throws Exception   {
 		return doGetLocalVersion(uuid, PricingIO::read);
 	}
-
 }

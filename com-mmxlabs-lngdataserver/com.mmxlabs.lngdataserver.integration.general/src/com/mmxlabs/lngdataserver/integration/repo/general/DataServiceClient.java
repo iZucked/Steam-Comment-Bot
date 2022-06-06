@@ -161,6 +161,32 @@ public class DataServiceClient {
 			}
 		}
 	}
+	
+	public String getCurrentVersion(TypeRecord typeRecord) throws IOException {
+
+		if (typeRecord.getCurrentURL() == null) {
+			return null;
+		}
+		
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getCurrentURL());
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder //
+				.build();
+
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				// 404 Not found is a valid response if there is no current pricing version
+				if (response.code() != 404) {
+					throw new IOException("Unexpected code: " + response);
+				}
+				return "";
+			}
+			return response.body().string();
+		}
+	}
 
 	public @Nullable List<GeneralDataRecord> parseRecordsJSONData(TypeRecord typeRecord, final String jsonData) {
 		final ObjectMapper mapper = new ObjectMapper();
