@@ -120,17 +120,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	protected StringFieldEditor editor;
 
-	@Override
-	protected void initialize() {
-		super.initialize();
-//		editor.setPropertyChangeListener(disableLogin);
-//		forceBasicAuth.setPropertyChangeListener(disableLogin);
-	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		
-		// TODO Auto-generated method stub
 		super.propertyChange(event);
 		if (event.getSource() == editor || event.getSource() == forceBasicAuth) {
 			disableLogin();
@@ -138,12 +130,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void disableLogin() {
-		System.out.println("Disable login fired");
-		var store = DataHubActivator.getDefault().getPreferenceStore();
-
-		System.out.println("After (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
-
-		
 		LOGGER.info("disableLogin event fired");
 
 		detailsValid = false;
@@ -224,21 +210,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	protected void createFieldEditors() {
 
-		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent()) {
-			
-			@Override
-			protected void valueChanged() {
-			System.out.println("URL value changed");
-				super.valueChanged();
-			}
-			
-			@Override
-			public void setPropertyChangeListener(IPropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				super.setPropertyChangeListener(listener);
-			}
-			
-		};
+		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
 		Composite c = new Composite(getFieldEditorParent(), SWT.NONE);

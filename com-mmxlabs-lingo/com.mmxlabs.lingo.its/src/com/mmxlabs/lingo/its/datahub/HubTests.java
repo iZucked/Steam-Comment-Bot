@@ -177,40 +177,13 @@ public class HubTests {
 
 	@Test
 	public void changingUrlWithoutApplyingDisablesLoginButton() throws InterruptedException {
-
-		logger.info("Test executing on display thread? " + (Thread.currentThread() == Display.getDefault().getThread()));
-
 		openDatahubPreferencePage();
-
-		Thread.sleep(5000);
-
 		// type backspace character to trigger change
 		Matcher<Widget> urlTextField = withText("&URL");
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
-		// FIXME typeText is supposed to notify event listeners...
-		bot.textWithLabel("&URL").setFocus();
-
-//		bot.activeShell()
-		var store = DataHubActivator.getDefault().getPreferenceStore();
-
-		System.out.println("Before (ctl) " + bot.textWithLabel("&URL").getText());
-		System.out.println("Before (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
-
-		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
-
-		System.out.println("After (ctl) " + bot.textWithLabel("&URL").getText());
-		System.out.println("After (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
 
 		bot.textWithLabel("&URL").setText("anything").pressShortcut(Keystrokes.TAB);
-
-		System.out.println("After2 (ctl) " + bot.textWithLabel("&URL").getText());
-		System.out.println("After2 (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
-
-		bot.buttonWithId("login").setFocus();
-
-		System.out.println("After3 (ctl) " + bot.textWithLabel("&URL").getText());
-		System.out.println("After3 (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
 
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
@@ -225,12 +198,7 @@ public class HubTests {
 	@Test
 	public void changingAuthSchemeDisablesLoginButton() throws InterruptedException {
 		openDatahubPreferencePage();
-		var store = DataHubActivator.getDefault().getPreferenceStore();
-
-		System.out.println("Before (pref - force) " + store.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
-
 		bot.checkBox("Force local authentication").click();
-		System.out.println("After (pref - force) " + store.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		Thread.sleep(1000);
 		assertFalse(bot.buttonWithId("login").isEnabled());
 	}
