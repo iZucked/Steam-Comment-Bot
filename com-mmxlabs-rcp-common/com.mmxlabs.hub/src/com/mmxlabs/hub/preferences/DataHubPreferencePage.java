@@ -20,6 +20,7 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -122,8 +123,18 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	protected void initialize() {
 		super.initialize();
-		editor.setPropertyChangeListener(disableLogin);
-		forceBasicAuth.setPropertyChangeListener(disableLogin);
+//		editor.setPropertyChangeListener(disableLogin);
+//		forceBasicAuth.setPropertyChangeListener(disableLogin);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		
+		// TODO Auto-generated method stub
+		super.propertyChange(event);
+		if (event.getSource() == editor || event.getSource() == forceBasicAuth) {
+			disableLogin();
+		}
 	}
 
 	public void disableLogin() {
@@ -219,6 +230,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			protected void valueChanged() {
 			System.out.println("URL value changed");
 				super.valueChanged();
+			}
+			
+			@Override
+			public void setPropertyChangeListener(IPropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+				super.setPropertyChangeListener(listener);
 			}
 			
 		};
