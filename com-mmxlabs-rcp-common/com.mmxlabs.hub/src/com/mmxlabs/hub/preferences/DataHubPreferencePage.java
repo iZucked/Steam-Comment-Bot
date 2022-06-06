@@ -127,6 +127,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void disableLogin() {
+		System.out.println("Disable login fired");
+		
 		LOGGER.info("disableLogin event fired");
 
 		detailsValid = false;
