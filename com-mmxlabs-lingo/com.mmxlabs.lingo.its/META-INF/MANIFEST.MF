@@ -86,7 +86,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  wrapped.com.github.docker-java.docker-java-transport;bundle-version="3.2.13",
  wrapped.com.github.docker-java.docker-java-transport-zerodep;bundle-version="3.2.13",
  org.eclipse.equinox.security;bundle-version="1.3.400",
- com.mmxlabs.models.lng.parameters.editor
+ com.mmxlabs.models.lng.parameters.editor,
+ com.mmxlabs.models.lng.nominations.editor
 Bundle-ClassPath: data/,
  .
 Import-Package: com.sun.jna;version="4.5.1",
