@@ -128,6 +128,10 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 	public void disableLogin() {
 		System.out.println("Disable login fired");
+		var store = DataHubActivator.getDefault().getPreferenceStore();
+
+		System.out.println("After (pref) " + store.getString(DataHubPreferenceConstants.P_DATAHUB_URL_KEY));
+
 		
 		LOGGER.info("disableLogin event fired");
 
@@ -209,7 +213,15 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	protected void createFieldEditors() {
 
-		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
+		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent()) {
+			
+			@Override
+			protected void valueChanged() {
+			System.out.println("URL value changed");
+				super.valueChanged();
+			}
+			
+		};
 		addField(editor);
 
 		Composite c = new Composite(getFieldEditorParent(), SWT.NONE);
