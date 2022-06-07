@@ -183,8 +183,10 @@ public class HubTests {
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 
+		bot.textWithLabel("&URL").setFocus();
 		bot.textWithLabel("&URL").setText("anything").pressShortcut(Keystrokes.TAB);
-
+		bot.buttonWithId("login").setFocus();
+		
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
