@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
-	private final Random randomForVerification = new Random(0);
+	private final Random randomForVerification = new Random(GeneralCacheSettings.RANDOM_VERIFICATION_SEED);
 
 	@Inject
 	private PortTimesRecordMaker portTimesRecordMaker;

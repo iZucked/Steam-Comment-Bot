@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.Tag;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper.ReportRecord;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.scheduler.optimiser.cache.GeneralCacheSettings;
 
 public abstract class DynamicTestCaseRunner {
 
@@ -40,6 +43,18 @@ public abstract class DynamicTestCaseRunner {
 		}
 	}
 
+	@BeforeAll
+	public static void enableCacheTesting() {
+		// Note: Default seed is based on the days between *now* and epoch
+		GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = true;
+		GeneralCacheSettings.VERIFICATION_CHANCE = 0.05; // 5% chance
+	}
+	
+	@AfterAll
+	public static void disableCacheTesting() {
+		GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = false;
+	}
+	
 	@TestFactory
 	@Tag(TestCategories.OPTIMISATION_TEST)
 	public List<DynamicNode> runOptimisationTests() {

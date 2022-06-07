@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -66,7 +65,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 @NonNullByDefault
 public class PNLBasedWindowTrimmer {
 
-	private final Random randomForVerification = new Random(0);
+	private final Random randomForVerification = new Random(GeneralCacheSettings.RANDOM_VERIFICATION_SEED);
 
 	public static final int SIZE_OF_POOL = 80; // Maximum number of solutions to keep in the pool for the next iteration
 

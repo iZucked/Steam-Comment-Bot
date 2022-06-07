@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
-	private final Random randomForVerification = new Random(0);
+	private final Random randomForVerification = new Random(GeneralCacheSettings.RANDOM_VERIFICATION_SEED);
 
 	private final LoadingCache<ShippedVoyagePlanCacheKey, Optional<ImmutableList<ScheduledVoyagePlanResult>>> shippedCache;
 	private final LoadingCache<NonShippedVoyagePlanCacheKey, Optional<ScheduledVoyagePlanResult>> nonShippedCache;
