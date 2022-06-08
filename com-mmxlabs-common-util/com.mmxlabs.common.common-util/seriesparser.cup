@@ -77,7 +77,7 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
 						
 						@Override
 						public boolean canEvaluate() {
-							return e.canEvaluate()
+							return e.canEvaluate();
 						}
 					};         :}
   	     %prec UMINUS
