@@ -27,10 +27,15 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord;
 import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.mull.algorithm.AdpGlobalState;
 import com.mmxlabs.models.lng.adp.mull.algorithm.AlgorithmState;
+import com.mmxlabs.models.lng.adp.mull.algorithm.AnyTimeSpecifier;
+import com.mmxlabs.models.lng.adp.mull.algorithm.DateTimeConstrainedLiftTimeSpecifier;
+import com.mmxlabs.models.lng.adp.mull.algorithm.SingleTimeSetLiftTimeSpecifier;
 import com.mmxlabs.models.lng.adp.mull.algorithm.GlobalStatesContainer;
+import com.mmxlabs.models.lng.adp.mull.algorithm.ILiftTimeSpecifier;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IMullAlgorithm;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IMullDischargeWrapper;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IRollingWindow;
@@ -137,7 +142,8 @@ public class MullUtil {
 		return new AdpGlobalState(adpStart, adpEnd, nominalMarket);
 	}
 
-	public static InventoryGlobalState buildInventoryGlobalState(final Inventory inventory, final AdpGlobalState adpGlobalState, final LNGScenarioModel sm) {
+	public static InventoryGlobalState buildInventoryGlobalState(final Inventory inventory, final List<AllowedArrivalTimeRecord> allowedArrivalTimes, final AdpGlobalState adpGlobalState,
+			final LNGScenarioModel sm) {
 		if (inventory.getPort() == null) {
 			throw new IllegalStateException("Inventory must be at a port");
 		}
@@ -149,7 +155,26 @@ public class MullUtil {
 			throw new IllegalStateException("Inventory must correspond to purchase contract");
 		}
 		final PurchaseContract inventoryPurchaseContract = optInventoryPurchaseContract.get();
-		return new InventoryGlobalState(inventory, inventoryPurchaseContract, adpGlobalState.getStartDateTime(), adpGlobalState.getEndDateTimeExclusive());
+		final ILiftTimeSpecifier liftTimeSpecifier = createLiftTimeSpecifier(allowedArrivalTimes, adpGlobalState);
+		return new InventoryGlobalState(inventory, inventoryPurchaseContract, adpGlobalState.getStartDateTime(), adpGlobalState.getEndDateTimeExclusive(), liftTimeSpecifier);
+	}
+
+	private static ILiftTimeSpecifier createLiftTimeSpecifier(final List<AllowedArrivalTimeRecord> allowedArrivalTimes, final AdpGlobalState adpGlobalState) {
+		if (allowedArrivalTimes.isEmpty()) {
+			return new AnyTimeSpecifier();
+		} else if (allowedArrivalTimes.size() == 1) {
+			final AllowedArrivalTimeRecord allowedArrivalTimeRecord = allowedArrivalTimes.get(0);
+
+			if (!allowedArrivalTimeRecord.getPeriodStart().isAfter(adpGlobalState.getStartDate())) {
+				final List<Integer> allowedTimes = allowedArrivalTimeRecord.getAllowedTimes();
+				if (allowedTimes.size() == 24) {
+					return new AnyTimeSpecifier();
+				} else {
+					return new SingleTimeSetLiftTimeSpecifier(allowedTimes);
+				}
+			}
+		}
+		return new DateTimeConstrainedLiftTimeSpecifier(allowedArrivalTimes);
 	}
 
 	public static MullGlobalState buildMullGlobalState(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final LNGScenarioModel sm) {
@@ -181,7 +206,7 @@ public class MullUtil {
 			if (inventory == null) {
 				throw new IllegalStateException("Mull subprofile must be associated with an inventory");
 			}
-			inventoryGlobalStates.add(MullUtil.buildInventoryGlobalState(inventory, adpGlobalState, sm));
+			inventoryGlobalStates.add(MullUtil.buildInventoryGlobalState(inventory, subprofile.getAllowedArrivalTimes(), adpGlobalState, sm));
 		}
 		final MullGlobalState mullGlobalState = MullUtil.buildMullGlobalState(mullProfile, sm);
 		return new GlobalStatesContainer(adpGlobalState, inventoryGlobalStates, mullGlobalState);

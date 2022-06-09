@@ -37,8 +37,9 @@ public class InventoryGlobalState {
 	private final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts;
 	private final Map<YearMonth, Integer> monthlyProductions;
 	private final int preAdpStartTankVolume;
+	private final ILiftTimeSpecifier liftTimeSpecifier;
 
-	public InventoryGlobalState(final Inventory inventory, final PurchaseContract purchaseContract, final LocalDateTime productionStartInclusive, final LocalDateTime productionStopExclusive) {
+	public InventoryGlobalState(final Inventory inventory, final PurchaseContract purchaseContract, final LocalDateTime productionStartInclusive, final LocalDateTime productionStopExclusive, final ILiftTimeSpecifier liftTimeSpecifier) {
 		this.inventory = inventory;
 		if (inventory.getPort() == null) {
 			throw new IllegalStateException("Inventory must be at a port");
@@ -60,6 +61,7 @@ public class InventoryGlobalState {
 		this.preAdpStartTankVolume = startVolume;
 		this.monthlyProductions = new HashMap<>();
 		this.insAndOuts.forEach((dateTime, event) -> this.monthlyProductions.compute(YearMonth.from(dateTime), (k, v) -> v != null ? v + event.getNetVolumeIn() : event.getNetVolumeIn()));
+		this.liftTimeSpecifier = liftTimeSpecifier;
 	}
 
 	public Inventory getInventory() {
@@ -82,6 +84,10 @@ public class InventoryGlobalState {
 		return this.yearlyProduction;
 	}
 
+	public int getNumberOfBerths() {
+		return this.inventory.getPort().getBerths();
+	}
+
 	public TreeMap<LocalDateTime, InventoryDateTimeEvent> getInsAndOuts() {
 		return this.insAndOuts;
 	}
@@ -92,6 +98,10 @@ public class InventoryGlobalState {
 
 	public int getProductionInMonth(final YearMonth yearMonth) {
 		return this.monthlyProductions.get(yearMonth);
+	}
+
+	public ILiftTimeSpecifier getLiftTimeSpecifier() {
+		return liftTimeSpecifier;
 	}
 
 	private static int calculateYearlyProduction(final Inventory inventory, final LocalDateTime startTimeInclusive, final LocalDateTime endTimeExclusive) {

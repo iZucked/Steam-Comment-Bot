@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 
@@ -38,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullSubprofileImpl#getInventory <em>Inventory</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullSubprofileImpl#getEntityTable <em>Entity Table</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullSubprofileImpl#getAllowedArrivalTimes <em>Allowed Arrival Times</em>}</li>
  * </ul>
  *
  * @generated
@@ -62,6 +64,16 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 	 * @ordered
 	 */
 	protected EList<MullEntityRow> entityTable;
+
+	/**
+	 * The cached value of the '{@link #getAllowedArrivalTimes() <em>Allowed Arrival Times</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedArrivalTimes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AllowedArrivalTimeRecord> allowedArrivalTimes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,10 +153,25 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 	 * @generated
 	 */
 	@Override
+	public EList<AllowedArrivalTimeRecord> getAllowedArrivalTimes() {
+		if (allowedArrivalTimes == null) {
+			allowedArrivalTimes = new EObjectContainmentEList.Resolving<AllowedArrivalTimeRecord>(AllowedArrivalTimeRecord.class, this, ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES);
+		}
+		return allowedArrivalTimes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.MULL_SUBPROFILE__ENTITY_TABLE:
 				return ((InternalEList<?>)getEntityTable()).basicRemove(otherEnd, msgs);
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
+				return ((InternalEList<?>)getAllowedArrivalTimes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -162,6 +189,8 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 				return basicGetInventory();
 			case ADPPackage.MULL_SUBPROFILE__ENTITY_TABLE:
 				return getEntityTable();
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
+				return getAllowedArrivalTimes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -182,6 +211,10 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 				getEntityTable().clear();
 				getEntityTable().addAll((Collection<? extends MullEntityRow>)newValue);
 				return;
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
+				getAllowedArrivalTimes().clear();
+				getAllowedArrivalTimes().addAll((Collection<? extends AllowedArrivalTimeRecord>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -200,6 +233,9 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 			case ADPPackage.MULL_SUBPROFILE__ENTITY_TABLE:
 				getEntityTable().clear();
 				return;
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
+				getAllowedArrivalTimes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -216,6 +252,8 @@ public class MullSubprofileImpl extends EObjectImpl implements MullSubprofile {
 				return inventory != null;
 			case ADPPackage.MULL_SUBPROFILE__ENTITY_TABLE:
 				return entityTable != null && !entityTable.isEmpty();
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
+				return allowedArrivalTimes != null && !allowedArrivalTimes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

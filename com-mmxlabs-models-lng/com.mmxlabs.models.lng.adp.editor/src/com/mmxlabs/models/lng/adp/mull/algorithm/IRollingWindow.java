@@ -28,6 +28,8 @@ public interface IRollingWindow {
 	public boolean canLift(final int allocationDrop);
 
 	public void startLoad(final int allocationDrop);
+
+	public void startLoad(final ICargoBlueprint cargoBlueprint);
 	
 	public List<ICargoBlueprint> startFixedLoad(final Cargo cargo, final LinkedList<ICargoBlueprint> generatedCargoBlueprints);
 	

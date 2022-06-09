@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 public interface ILoadSequence {
 
+	int getUndoVolumeToRestore();
+
 	int stepForward();
 
 	boolean isComplete();

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.adp.validation;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -22,6 +24,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
@@ -30,6 +33,10 @@ import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -67,6 +74,14 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 				final List<InventoryCapacityRow> validCapacityRows = inventory.getCapacities().stream().filter(row -> row.getDate() != null && row.getMinVolume() <= row.getMaxVolume())
 						.collect(Collectors.toList());
 
+				final Port inventoryPort = inventory.getPort();
+				if (inventoryPort != null && inventoryPort.getBerths() <= 0) {
+					factory.copyName() //
+							.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
+							.withMessage(String.format("%s port should have at least one berth", ScenarioElementNameHelper.getName(inventory, "<Unknown>"))) //
+							.make(ctx);
+				}
+
 				if (validCapacityRows.isEmpty()) {
 					factory.copyName() //
 							.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
@@ -74,7 +89,7 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				} else {
 					final LocalDate earliestCapacityDate = validCapacityRows.stream().map(InventoryCapacityRow::getDate).min((d1, d2) -> d1.compareTo(d2)).get();
-					final ADPModel adpModel = (ADPModel) mullSubprofile.eContainer().eContainer();
+					final ADPModel adpModel = ScenarioModelUtil.getADPModel((LNGScenarioModel) extraContext.getRootObject());
 					final LocalDate adpStart = adpModel.getYearStart().atDay(1);
 					if (earliestCapacityDate.isAfter(adpStart)) {
 						factory.copyName() //
@@ -84,7 +99,7 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 
-				final ADPModel adpModel = (ADPModel) (target.eContainer().eContainer());
+				final ADPModel adpModel = ScenarioModelUtil.getADPModel((LNGScenarioModel) extraContext.getRootObject());
 				final YearMonth adpStart = adpModel.getYearStart();
 				if (adpStart != null) {
 					final YearMonth adpEnd = adpModel.getYearEnd();
@@ -131,6 +146,8 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 				}
 				validateDuplicateEntities(factory, mullSubprofile, ctx, statuses);
 			}
+
+			validateDuplicateArrivalTimeDates(factory, mullSubprofile, ctx, statuses);
 		}
 	}
 
@@ -153,6 +170,28 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 						factory.copyName() //
 								.withObjectAndFeatures(entry.getValue().stream().map(row -> Pair.of(row, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY)).toArray(Pair[]::new)) //
 								.withMessage(String.format("Duplicate entry for %s", entry.getKey().getName())) //
+								.make(ctx, statuses);
+					}
+				});
+	}
+
+	private void validateDuplicateArrivalTimeDates(@NonNull final DetailConstraintStatusFactory factory, final MullSubprofile mullSubprofile, final IValidationContext ctx,
+			final List<IStatus> statuses) {
+		final Map<LocalDate, List<AllowedArrivalTimeRecord>> allowedArrivalTimeRecordRows = new HashMap<>();
+		for (final AllowedArrivalTimeRecord allowedArrivalTimeRecord : mullSubprofile.getAllowedArrivalTimes()) {
+			final LocalDate periodStart = allowedArrivalTimeRecord.getPeriodStart();
+			if (periodStart == null) {
+				continue;
+			}
+			final List<AllowedArrivalTimeRecord> allowedArrivalTimeRecordList = allowedArrivalTimeRecordRows.computeIfAbsent(periodStart, date -> new ArrayList<>());
+			allowedArrivalTimeRecordList.add(allowedArrivalTimeRecord);
+		}
+		allowedArrivalTimeRecordRows.entrySet().stream() //
+				.forEach(entry -> {
+					if (entry.getValue().size() > 1) {
+						factory.copyName() //
+								.withObjectAndFeatures(entry.getValue().stream().map(rec -> Pair.of(rec, ADPPackage.Literals.ALLOWED_ARRIVAL_TIME_RECORD__PERIOD_START)).toArray(Pair[]::new)) //
+								.withMessage(String.format("Duplicate entry for date: %s", entry.getKey().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))) //
 								.make(ctx, statuses);
 					}
 				});

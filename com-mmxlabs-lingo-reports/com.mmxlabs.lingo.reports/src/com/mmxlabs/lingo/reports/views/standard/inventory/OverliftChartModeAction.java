@@ -41,9 +41,9 @@ public class OverliftChartModeAction extends Action {
 
 	private String getModeText() {
 		if (chartMode == OverliftChartMode.CUMULATIVE) {
-			return "cumulative";
+			return "additive";
 		} else {
-			return "non-cumulative";
+			return "standard";
 		}
 	}
 

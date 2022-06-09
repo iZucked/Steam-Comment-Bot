@@ -6,11 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public class SequentialLoadSequence implements ILoadSequence {
-	
-	private final Deque<ILoadSequence> sequences;
-	
-	public SequentialLoadSequence(final List<ILoadSequence> sequences) {
+
+	private final Deque<@NonNull ILoadSequence> completedSequences = new LinkedList<>();
+	private final Deque<@NonNull ILoadSequence> sequences;
+
+	public SequentialLoadSequence(final List<@NonNull ILoadSequence> sequences) {
 		this.sequences = new LinkedList<>(sequences);
 	}
 
@@ -22,7 +25,7 @@ public class SequentialLoadSequence implements ILoadSequence {
 		final ILoadSequence firstSequence = sequences.getFirst();
 		final int amountToReturn = firstSequence.stepForward();
 		if (firstSequence.isComplete()) {
-			this.sequences.removeFirst();
+			completedSequences.add(this.sequences.removeFirst());
 		}
 		return amountToReturn;
 	}
@@ -41,5 +44,9 @@ public class SequentialLoadSequence implements ILoadSequence {
 		return stream().iterator();
 	}
 
-	
+	@Override
+	public int getUndoVolumeToRestore() {
+		return completedSequences.stream().mapToInt(ILoadSequence::getUndoVolumeToRestore).sum() + sequences.getFirst().getUndoVolumeToRestore();
+	}
+
 }

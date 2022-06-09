@@ -67,6 +67,12 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow">
    </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullSubprofileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullSubprofileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.MullSubprofile">
+   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
