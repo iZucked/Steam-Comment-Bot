@@ -61,6 +61,10 @@ public class UserNameUpdater {
 					// Assume older hub without this endpoint
 					return userId;
 				}
+				if (response.code() == 204) {
+					// Endpoing supported, but no mapping found
+					return userId;
+				}
 				return null;
 			}
 			UserNameRecord record = mapper.readValue(response.body().bytes(), UserNameRecord.class);
