@@ -134,7 +134,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		switch (columnID) {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL, LOAD_START_GROUP,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all except discharge slots", ColumnType.NORMAL, LOAD_START_GROUP,
 					DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan, rendMan, "Load ID", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
 		}
 			break;
@@ -600,7 +600,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE,
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE,
 					DISCHARGE_START_GROUP + "_1", rendMan, rendMan, "Discharge ID", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
 		}
 			break;

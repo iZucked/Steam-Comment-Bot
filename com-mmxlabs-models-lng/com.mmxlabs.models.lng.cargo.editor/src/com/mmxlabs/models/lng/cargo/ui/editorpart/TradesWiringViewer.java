@@ -1057,7 +1057,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.LOAD);
-			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "L-ID", manipulator, assignmentPath);
+			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "ID", manipulator, assignmentPath);
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
@@ -1237,13 +1237,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), commandHandler), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
 				.setHeaderTooltip("in m³ or mmBtu");
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, commandHandler), new RowDataEMFPath(false, Type.DISCHARGE));
-		// addTradesColumn(dischargeColumns, "D-ID", new
-		// BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(),
-		// editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
-			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "D-ID", manipulator, assignmentPath);
+			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "ID", manipulator, assignmentPath);
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
