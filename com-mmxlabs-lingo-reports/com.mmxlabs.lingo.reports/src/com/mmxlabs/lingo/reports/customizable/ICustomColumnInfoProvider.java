@@ -1,27 +1,20 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
- * All rights reserved.
- */
-package com.mmxlabs.models.ui.tabular.columngeneration;
+package com.mmxlabs.lingo.reports.customizable;
 
-/**
- * Update various aspects of a columns from a viewer such {@link TableViewer}
- */
-public interface IColumnInfoProvider {
+public interface ICustomColumnInfoProvider {
 
 	/**
 	 * Get corresponding index for the column
 	 * 
 	 * @param columnObj
 	 */
-	int getColumnIndex(ColumnBlock columnObj);
+	int getColumnIndex(String blockID);
 
 	/**
 	 * Get the width of the column
 	 * 
 	 * @param columnObj
 	 */
-	default int getColumnWidth(ColumnBlock columnObj) {
+	default int getColumnWidth(String blockID) {
 		return 0;
 	}
 
@@ -30,14 +23,16 @@ public interface IColumnInfoProvider {
 	 * 
 	 * @param columnObj
 	 */
-	boolean isColumnVisible(ColumnBlock columnObj);
+	default boolean isColumnVisible(String blockID) {
+		return true;
+	}
 
 	/**
 	 * Returns true if the column represented by parameters is configured as movable
 	 * 
 	 * @param columnObj
 	 */
-	default boolean isColumnMovable(ColumnBlock columnObj) {
+	default boolean isColumnMovable(String blockID) {
 		return true;
 	}
 
@@ -47,7 +42,7 @@ public interface IColumnInfoProvider {
 	 * 
 	 * @param columnObj
 	 */
-	default boolean isColumnResizable(ColumnBlock columnObj) {
+	default boolean isColumnResizable(String blockID) {
 		return false;
 	}
 

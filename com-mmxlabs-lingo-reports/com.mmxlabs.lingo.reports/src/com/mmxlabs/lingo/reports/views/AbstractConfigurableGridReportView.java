@@ -59,12 +59,11 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
-import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.utils.IColumnUpdater;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -435,26 +434,26 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	}
 
 	private void openConfigureContentsDialog(final IWorkbenchWindow win, final AbstractConfigurableGridReportView reportView) {
-		final com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
+		final  IColumnInfoProvider infoProvider = new IColumnInfoProvider() {
 
 			@Override
-			public int getColumnIndex(final Object columnObj) {
-				return getBlockManager().getBlockIndex((ColumnBlock) columnObj);
+			public int getColumnIndex(final ColumnBlock columnObj) {
+				return getBlockManager().getBlockIndex(columnObj);
 			}
 
 			@Override
-			public boolean isColumnVisible(final Object columnObj) {
-				return getBlockManager().getBlockVisible((ColumnBlock) columnObj);
+			public boolean isColumnVisible(final ColumnBlock columnObj) {
+				return getBlockManager().getBlockVisible( columnObj);
 			}
 
 		};
 
-		final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
+		final IColumnUpdater updater = new IColumnUpdater() {
 
 			@Override
-			public void setColumnVisible(final Object columnObj, final boolean visible) {
+			public void setColumnVisible(final ColumnBlock columnObj, final boolean visible) {
 
-				((ColumnBlock) columnObj).setUserVisible(visible);
+			columnObj.setUserVisible(visible);
 				if (updateScollBarsRunnable != null) {
 					updateScollBarsRunnable.run();
 				}
@@ -462,13 +461,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			}
 
 			@Override
-			public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-				getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+			public void swapColumnPositions(final ColumnBlock columnObj1, final ColumnBlock columnObj2) {
+				getBlockManager().swapBlockOrder( columnObj1,  columnObj2);
 				viewer.refresh();
 			}
 
 			@Override
-			public Object[] resetColumnStates() {
+			public ColumnBlock[] resetColumnStates() {
 				// Hide everything
 				for (final String blockId : getBlockManager().getBlockIDOrder()) {
 					getBlockManager().getBlockByID(blockId).setUserVisible(false);
@@ -476,7 +475,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				// Apply the initial state
 				setInitialState();
 				// Return!
-				return getBlockManager().getBlocksInVisibleOrder().toArray();
+				return getBlockManager().getBlocksInVisibleOrder().toArray(new ColumnBlock[0]);
 			}
 
 		};
@@ -526,7 +525,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				return updater;
 			}
 		};
-		dialog.setColumnsObjs(getBlockManager().getBlocksInVisibleOrder().toArray());
+		dialog.setColumnsObjs(getBlockManager().getBlocksInVisibleOrder().toArray(new ColumnBlock[0]));
 
 		// See if this report has any additional check items to add
 		addDialogCheckBoxes(dialog);

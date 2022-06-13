@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -26,7 +28,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -60,8 +61,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
-import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
@@ -80,17 +79,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private static final String ROWS_TITLE = "Show rows for";
 
-	private static int RESET_ID = IDialogConstants.CLIENT_ID + 1;
-
-	private static int SAVE_ID = RESET_ID + 1;
-
-	private static int PUBLISH_ID = SAVE_ID + 1;
-
 	/** The list contains columns that are currently visible in viewer */
-	private List<ColumnBlock> visible = new ArrayList<>();
-
+	private List<String> visible = new ArrayList<>();
 	/** The list contains columns that are note shown in viewer */
-	private List<ColumnBlock> nonVisible = new ArrayList<>();
+	private List<String> nonVisible = new ArrayList<>();
+
+	private Map<String, ColumnBlock> blockIdToColumnBlock = new HashMap<>();
 
 	private List<CustomReportDefinition> userReportDefinitions;
 
@@ -152,9 +146,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private boolean modeChanged = false;
 
-	private final Comparator<ColumnBlock> comparator = new Comparator<>() {
+	private final Comparator<String> comparator = new Comparator<>() {
 		@Override
-		public int compare(final ColumnBlock arg0, final ColumnBlock arg1) {
+		public int compare(final String arg0, final String arg1) {
 			return getColumnIndex(arg0) - getColumnIndex(arg1);
 		}
 	};
@@ -850,8 +844,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private void updateReportDefinitionWithChangesFromDialog(CustomReportDefinition reportDefinition) {
 		reportDefinition.getColumns().clear();
-		for (ColumnBlock cb : getVisible()) {
-			reportDefinition.getColumns().add(cb.blockID);
+		for (String blockID : getVisible()) {
+			reportDefinition.getColumns().add(blockID);
 		}
 		for (CheckboxInfoManager cbim : this.checkboxInfo) {
 			if (cbim.title.equals(ROWS_TITLE)) {
@@ -1021,7 +1015,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		customReportsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
-				handleCustomReportSelection(event.getSelection());
+				handleCustomReportSelection(event.getStructuredSelection());
 			}
 		});
 		customReportsViewer.setInput(getUserReportDefinitions());
@@ -1084,8 +1078,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		}
 	}
 
-	private void handleCustomReportSelection(ISelection selection) {
-		final List<CustomReportDefinition> selectedReports = ((IStructuredSelection) selection).toList();
+	private void handleCustomReportSelection(IStructuredSelection selection) {
+		final List<CustomReportDefinition> selectedReports = selection.toList();
 
 		// It is possible in some cases when moving from team to user reports to select
 		// more than 1 report, but we are
@@ -1194,21 +1188,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private void updateViewWithReportDefinition(CustomReportDefinition reportDefinition) {
-		HashMap<String, ColumnBlock> blockIdToColumnBlock = new HashMap<>();
-		for (ColumnBlock cb : visible) {
-			blockIdToColumnBlock.put(cb.blockID, cb);
-		}
-		for (ColumnBlock cb : nonVisible) {
-			blockIdToColumnBlock.put(cb.blockID, cb);
-		}
-		List<ColumnBlock> hiddenColumnsAfter = new ArrayList<>();
+		List<String> hiddenColumnsAfter = new ArrayList<>();
 		hiddenColumnsAfter.addAll(visible);
 		hiddenColumnsAfter.addAll(nonVisible);
-		hiddenColumnsAfter.removeIf(k -> reportDefinition.getColumns().contains(k.blockID));
+		hiddenColumnsAfter.removeIf(reportDefinition.getColumns()::contains);
 
-		List<ColumnBlock> visibleColumnsAfter = new ArrayList<>();
+		List<String> visibleColumnsAfter = new ArrayList<>();
 		for (String blockId : reportDefinition.getColumns()) {
-			visibleColumnsAfter.add(blockIdToColumnBlock.get(blockId));
+			visibleColumnsAfter.add(blockId);
 		}
 
 		this.nonVisible.clear();
@@ -1270,95 +1257,36 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Enabled Columns");
-		final Listener columnResize = new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				column.setWidth(table.getClientArea().width);
-			}
-		};
+		final Listener columnResize = event -> column.setWidth(table.getClientArea().width);
 		table.addListener(SWT.Resize, columnResize);
 
 		visibleViewer = new TableViewer(table);
 		ColumnViewerToolTipSupport.enableFor(visibleViewer);
 		visibleViewer.setLabelProvider(doGetLabelProvider());
 		visibleViewer.setContentProvider(ArrayContentProvider.getInstance());
-		visibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				handleVisibleSelection(event.getSelection());
-			}
-		});
+		visibleViewer.addSelectionChangedListener(event -> handleVisibleSelection(event.getStructuredSelection()));
 		visibleViewer.setInput(getVisible());
 		return table;
 	}
 
-	List<ColumnBlock> getVisible() {
+	List<String> getVisible() {
 		return this.visible;
-	}
-
-	/**
-	 * Internal helper to @see
-	 * {@link ColumnConfigurationDialog#getColumnInfoProvider()}
-	 */
-	IColumnInfoProvider doGetColumnInfoProvider() {
-		return getColumnInfoProvider();
 	}
 
 	/**
 	 * To configure the columns we need further information. The supplied column
 	 * objects are adapted for its properties via {@link IColumnInfoProvider}
 	 */
-	protected IColumnInfoProvider getColumnInfoProvider() {
-		return new ColumnConfigurationDialog.ColumnInfoAdapter() {
+	protected ICustomColumnInfoProvider getColumnInfoProvider() {
+		return new ICustomColumnInfoProvider() {
 			@Override
-			public int getColumnIndex(final Object columnObj) {
-				ColumnBlock cb = (ColumnBlock) columnObj;
-				return current.getColumns().indexOf(cb.blockID);
+			public int getColumnIndex(final String blockID) {
+				return current.getColumns().indexOf(blockID);
 			}
 
 			@Override
-			public boolean isColumnVisible(final Object columnObj) {
-				ColumnBlock cb = (ColumnBlock) columnObj;
-				return current.getColumns().contains(cb.blockID);
-			}
-		};
-	}
-
-	/**
-	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnUpdater()}
-	 */
-	IColumnUpdater doGetColumnUpdater() {
-		return getColumnUpdater();
-	}
-
-	/**
-	 * To configure properties/order of the columns is achieved via
-	 * {@link IColumnUpdater}
-	 */
-	protected IColumnUpdater getColumnUpdater() {
-		return new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
-
-			@Override
-			public void setColumnVisible(final Object columnObj, final boolean visible) {
-				// ((ColumnBlock) columnObj).setUserVisible(visible);
-			}
-
-			@Override
-			public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-				// getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock)
-				// columnObj2);
-			}
-
-			@Override
-			public Object[] resetColumnStates() {
-				/*
-				 * // Hide everything for (final String blockId :
-				 * getBlockManager().getBlockIDOrder()) {
-				 * getBlockManager().getBlockByID(blockId).setUserVisible(false); } // Apply the
-				 * initial state setInitialState(); // Return! return
-				 * getBlockManager().getBlocksInVisibleOrder().toArray();
-				 */
-				return new Object[0];
+			public boolean isColumnVisible(final String blockID) {
+				return current.getColumns().contains(blockID);
 			}
 		};
 	}
@@ -1403,12 +1331,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		nonVisibleViewer.setLabelProvider(doGetLabelProvider());
 		nonVisibleViewer.setContentProvider(ArrayContentProvider.getInstance());
-		nonVisibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				handleNonVisibleSelection(event.getSelection());
-			}
-		});
+		nonVisibleViewer.addSelectionChangedListener(event -> handleNonVisibleSelection(event.getStructuredSelection()));
 		nonVisibleViewer.setInput(getNonVisible());
 		nonVisibleViewer.setComparator(new ViewerComparator() {
 			@Override
@@ -1425,8 +1348,10 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	protected void handleToVisibleButton(Event event) {
 
 		if (this.current != null) {
-			final IStructuredSelection selection = (IStructuredSelection) nonVisibleViewer.getSelection();
-			final List<ColumnBlock> selVCols = (List<ColumnBlock>) selection.toList();
+			final IStructuredSelection selection = nonVisibleViewer.getStructuredSelection();
+			// Make a mutable copy
+			final List<String> selVCols = new LinkedList<>(selection.toList()); // Do not allow invalid definition to be made visible
+			selVCols.removeIf(id -> blockIdToColumnBlock.get(id) == null);
 			this.nonVisible.removeAll(selVCols);
 			this.visible.addAll(selVCols);
 			Collections.sort(this.visible, comparator);
@@ -1439,7 +1364,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			nonVisibleViewer.refresh();
 
 			handleVisibleSelection(selection);
-			handleNonVisibleSelection(nonVisibleViewer.getSelection());
+			handleNonVisibleSelection(nonVisibleViewer.getStructuredSelection());
 
 			onReportModified();
 		}
@@ -1451,21 +1376,21 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 * 
 	 * @param selection
 	 */
-	void handleVisibleSelection(final ISelection selection) {
+	private void handleVisibleSelection(final IStructuredSelection selection) {
 		assert selection != null;
-		final List<?> selVCols = ((IStructuredSelection) selection).toList();
-		final List<ColumnBlock> allVCols = getVisible();
+		final List<String> selVCols = selectionToList(selection);
+		final List<String> allVCols = getVisible();
 		toNonVisibleBtt.setEnabled(!selVCols.isEmpty() && allVCols.size() > selVCols.size() && this.current != null);
 		if (!selection.isEmpty()) {
 			nonVisibleViewer.setSelection(null);
 		}
 
-		final IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
+		final ICustomColumnInfoProvider infoProvider = getColumnInfoProvider();
 		boolean moveDown = !selVCols.isEmpty();
 		boolean moveUp = !selVCols.isEmpty();
-		final Iterator<?> iterator = selVCols.iterator();
+		final Iterator<String> iterator = selVCols.iterator();
 		while (iterator.hasNext()) {
-			final Object columnObj = iterator.next();
+			final String columnObj = iterator.next();
 			if (!infoProvider.isColumnMovable(columnObj)) {
 				moveUp = false;
 				moveDown = false;
@@ -1495,8 +1420,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 * 
 	 * @param selection
 	 */
-	void handleNonVisibleSelection(final ISelection selection) {
-		final Object[] nvKeys = ((IStructuredSelection) selection).toArray();
+	void handleNonVisibleSelection(final IStructuredSelection selection) {
+		final String[] nvKeys = selectionToArray(selection);
 		if (selection != null && selection.isEmpty() == false) {
 			visibleViewer.setSelection(null);
 		}
@@ -1510,11 +1435,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 */
 	void handleDownButton(final Event e) {
 		if (this.current != null) {
-			final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
-			final Object[] selVCols = selection.toArray();
-			final List<ColumnBlock> allVCols = getVisible();
+			final IStructuredSelection selection = visibleViewer.getStructuredSelection();
+			final String[] selVCols = selectionToArray(selection);
+			final List<String> allVCols = getVisible();
 			for (int i = selVCols.length - 1; i >= 0; i--) {
-				final ColumnBlock colObj = (ColumnBlock) selVCols[i];
+				final String colObj = (String) selVCols[i];
 				final int visibleIndex = allVCols.indexOf(colObj);
 				allVCols.remove(visibleIndex);
 				allVCols.add(visibleIndex + 1, colObj);
@@ -1534,11 +1459,11 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 */
 	void handleUpButton(final Event e) {
 		if (this.current != null) {
-			final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
+			final IStructuredSelection selection = visibleViewer.getStructuredSelection();
 			final Object[] selVCols = selection.toArray();
-			final List<ColumnBlock> allVCols = getVisible();
+			final List<String> allVCols = getVisible();
 			for (int i = 0; i < selVCols.length; i++) {
-				final ColumnBlock colObj = (ColumnBlock) selVCols[i];
+				final String colObj = (String) selVCols[i];
 				final int visibleIndex = allVCols.indexOf(colObj);
 				allVCols.remove(visibleIndex);
 				allVCols.add(visibleIndex - 1, colObj);
@@ -1566,9 +1491,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	protected void handleToNonVisibleButton(final Event e) {
 
 		if (this.current != null) {
-			final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
-			final List<ColumnBlock> selVCols = selection.toList();
+			final IStructuredSelection selection = visibleViewer.getStructuredSelection();
+			// Make a mutable copy
+			final List<String> selVCols = new LinkedList<>(selection.toList());
 			getVisible().removeAll(selVCols);
+
+			// Do not allow invalid definition to be added to the non-visible list
+			selVCols.removeIf(id -> blockIdToColumnBlock.get(id) == null);
+
 			getNonVisible().addAll(selVCols);
 
 			Collections.sort(getNonVisible(), comparator);
@@ -1579,14 +1509,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			nonVisibleViewer.refresh();
 			nonVisibleViewer.setSelection(selection);
 			visibleViewer.refresh();
-			handleVisibleSelection(visibleViewer.getSelection());
-			handleNonVisibleSelection(nonVisibleViewer.getSelection());
+			handleVisibleSelection(visibleViewer.getStructuredSelection());
+			handleNonVisibleSelection(nonVisibleViewer.getStructuredSelection());
 
 			onReportModified();
 		}
 	}
 
-	List<ColumnBlock> getNonVisible() {
+	List<String> getNonVisible() {
 		return this.nonVisible;
 	}
 
@@ -1647,11 +1577,16 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return bttArea;
 	}
 
-	private boolean isVisible(ColumnBlock block) {
+	private boolean isVisible(String blockID) {
 		if (this.current != null) {
-			return this.current.getColumns().contains(block.blockID);
+			return this.current.getColumns().contains(blockID);
 		} else {
-			return CustomReportsRegistry.getInstance().isBlockVisible(block);
+			ColumnBlock block = blockIdToColumnBlock.get(blockID);
+			if (block != null) {
+				return CustomReportsRegistry.getInstance().isBlockDefaultVisible(block);
+			}
+			// Unknown block ID
+			return false;
 		}
 	}
 
@@ -1659,12 +1594,15 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		List<ColumnBlock> defaultColumns = CustomReportsRegistry.getInstance().getColumnDefinitions();
 		this.visible.clear();
 		this.nonVisible.clear();
+		this.blockIdToColumnBlock.clear();
 
 		for (ColumnBlock block : defaultColumns) {
-			if (isVisible(block)) {
-				this.visible.add(block);
+			blockIdToColumnBlock.put(block.blockID, block);
+
+			if (isVisible(block.blockID)) {
+				this.visible.add(block.blockID);
 			} else {
-				this.nonVisible.add(block);
+				this.nonVisible.add(block.blockID);
 			}
 		}
 
@@ -1672,14 +1610,20 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		builder.setRowFilter(CustomReportsRegistry.getInstance().getDefaults().getRowFilters().toArray(new String[0]));
 	}
 
-	public int getColumnIndex(final ColumnBlock columnObj) {
+	public int getColumnIndex(final String blockID) {
 		if (this.current != null) {
-			int index = this.current.getColumns().indexOf(columnObj.blockID);
+			int index = this.current.getColumns().indexOf(blockID);
 			if (index >= 0) {
 				return index;
 			}
 		}
-		return CustomReportsRegistry.getInstance().getBlockIndex(columnObj);
+
+		ColumnBlock block = blockIdToColumnBlock.get(blockID);
+		if (block != null) {
+			return CustomReportsRegistry.getInstance().getBlockDefaultIndex(block);
+		}
+		// Unknown block ID
+		return -1;
 	}
 
 	protected void performDefaults() {
@@ -1710,13 +1654,18 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				final ColumnBlock block = (ColumnBlock) element;
-				return block.blockName;
+				final String blockID = (String) element;
+
+				ColumnBlock block = blockIdToColumnBlock.get(blockID);
+				if (block != null) {
+					return block.blockName;
+				}
+				return "<Unknown column>";
 			}
 
 			@Override
 			public Image getImage(final Object element) {
-				final ColumnBlock block = (ColumnBlock) element;
+				final String block = (String) element;
 				if (isVisible(block)) {
 					return visibleIcon;
 				} else {
@@ -1726,8 +1675,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				final ColumnBlock block = (ColumnBlock) element;
-				return block.tooltip;
+				final String blockID = (String) element;
+
+				ColumnBlock block = blockIdToColumnBlock.get(blockID);
+				if (block != null) {
+					return block.tooltip;
+				}
+				return null;
 			}
 		};
 	}
@@ -1778,5 +1732,13 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				}
 			}
 		}
+	}
+
+	private String[] selectionToArray(IStructuredSelection ss) {
+		return ((List<String>) ss.toList()).toArray(new String[0]);
+	}
+
+	private List<String> selectionToList(IStructuredSelection ss) {
+		return ((List<String>) ss.toList());
 	}
 }

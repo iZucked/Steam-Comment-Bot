@@ -340,7 +340,7 @@ public class CustomReportsRegistry {
 		return defaults.getColumnDefinitions();
 	}
 	
-	public boolean isBlockVisible(ColumnBlock column) {
+	public boolean isBlockDefaultVisible(ColumnBlock column) {
 		return defaults.isVisible(column);
 	}
 	
@@ -348,8 +348,8 @@ public class CustomReportsRegistry {
 		return defaults;
 	}
 
-	public int getBlockIndex(ColumnBlock columnObj) {
-		return defaults.getBlockManager().getBlockIndex((ColumnBlock) columnObj);
+	public int getBlockDefaultIndex(ColumnBlock columnObj) {
+		return defaults.getBlockManager().getBlockIndex(columnObj);
 	}
 
 	public void deleteUserReport(CustomReportDefinition toDelete) {
