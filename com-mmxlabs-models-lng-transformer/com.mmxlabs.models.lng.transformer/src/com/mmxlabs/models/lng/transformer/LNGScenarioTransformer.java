@@ -155,6 +155,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -3137,42 +3138,49 @@ public class LNGScenarioTransformer {
 			assert eVessel != null;
 			// TODO: TEMPORARY FIX: Populate fleet data with default values for additional
 			// fuel types.
+			final IVessel oVessel;
+			
+			if(eVessel.isMarker() && (builder instanceof SchedulerBuilder sBuilder)) {
+				long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
 
-			final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
-			IBaseFuel oIdleBaseFuel = null;
-			final BaseFuel eIdleBaseFuel = eVessel.getVesselOrDelegateIdleBaseFuel();
-			if (eIdleBaseFuel != null) {
-				oIdleBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eIdleBaseFuel, IBaseFuel.class);
+				oVessel =  sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
 			} else {
-				oIdleBaseFuel = oTravelBaseFuel;
-			}
-			IBaseFuel oInPortBaseFuel = null;
-			final BaseFuel eInPortBaseFuel = eVessel.getVesselOrDelegateInPortBaseFuel();
-			if (eInPortBaseFuel != null) {
-				oInPortBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eInPortBaseFuel, IBaseFuel.class);
-			} else {
-				oInPortBaseFuel = oTravelBaseFuel;
-			}
-			IBaseFuel oPilotLightBaseFuel = null;
-			final BaseFuel ePilotLightBaseFuel = eVessel.getVesselOrDelegatePilotLightBaseFuel();
-			if (ePilotLightBaseFuel != null) {
-				oPilotLightBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(ePilotLightBaseFuel, IBaseFuel.class);
-			} else {
-				oPilotLightBaseFuel = oTravelBaseFuel;
-			}
-
-			final IVessel oVessel = TransformerHelper.buildIVessel(builder, eVessel, oTravelBaseFuel, oIdleBaseFuel, oInPortBaseFuel, oPilotLightBaseFuel);
-
-			/*
-			 * set up inaccessible ports by applying resource allocation constraints
-			 */
-			final Set<IPort> oInaccessiblePorts = new HashSet<>();
-			for (final Port ePort : SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts())) {
-				oInaccessiblePorts.add(portAssociation.lookup(ePort));
-			}
-
-			if (!oInaccessiblePorts.isEmpty()) {
-				builder.setVesselInaccessiblePorts(oVessel, oInaccessiblePorts);
+				final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
+				IBaseFuel oIdleBaseFuel = null;
+				final BaseFuel eIdleBaseFuel = eVessel.getVesselOrDelegateIdleBaseFuel();
+				if (eIdleBaseFuel != null) {
+					oIdleBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eIdleBaseFuel, IBaseFuel.class);
+				} else {
+					oIdleBaseFuel = oTravelBaseFuel;
+				}
+				IBaseFuel oInPortBaseFuel = null;
+				final BaseFuel eInPortBaseFuel = eVessel.getVesselOrDelegateInPortBaseFuel();
+				if (eInPortBaseFuel != null) {
+					oInPortBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eInPortBaseFuel, IBaseFuel.class);
+				} else {
+					oInPortBaseFuel = oTravelBaseFuel;
+				}
+				IBaseFuel oPilotLightBaseFuel = null;
+				final BaseFuel ePilotLightBaseFuel = eVessel.getVesselOrDelegatePilotLightBaseFuel();
+				if (ePilotLightBaseFuel != null) {
+					oPilotLightBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(ePilotLightBaseFuel, IBaseFuel.class);
+				} else {
+					oPilotLightBaseFuel = oTravelBaseFuel;
+				}
+	
+				oVessel = TransformerHelper.buildIVessel(builder, eVessel, oTravelBaseFuel, oIdleBaseFuel, oInPortBaseFuel, oPilotLightBaseFuel);
+	
+				/*
+				 * set up inaccessible ports by applying resource allocation constraints
+				 */
+				final Set<IPort> oInaccessiblePorts = new HashSet<>();
+				for (final Port ePort : SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts())) {
+					oInaccessiblePorts.add(portAssociation.lookup(ePort));
+				}
+	
+				if (!oInaccessiblePorts.isEmpty()) {
+					builder.setVesselInaccessiblePorts(oVessel, oInaccessiblePorts);
+				}
 			}
 
 			/*

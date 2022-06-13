@@ -32,8 +32,7 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Vessel) {
-			final Vessel vessel = (Vessel) target;
+		if (target instanceof Vessel vessel && !vessel.isMarker()) {
 			final VesselStateAttributes laden = vessel.getLadenAttributes();
 			final VesselStateAttributes ballast = vessel.getBallastAttributes();
 

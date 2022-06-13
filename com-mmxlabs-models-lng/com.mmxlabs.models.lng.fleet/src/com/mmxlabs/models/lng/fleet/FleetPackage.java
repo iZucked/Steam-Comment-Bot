@@ -568,13 +568,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__MMX_REFERENCE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 34;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__MARKER = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 35;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 35;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -1168,6 +1177,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVessel_MmxReference();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isMarker <em>Marker</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Marker</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isMarker()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_Marker();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
@@ -1836,6 +1856,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL__MMX_REFERENCE = eINSTANCE.getVessel_MmxReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Marker</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__MARKER = eINSTANCE.getVessel_Marker();
 
 		/**
 		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.

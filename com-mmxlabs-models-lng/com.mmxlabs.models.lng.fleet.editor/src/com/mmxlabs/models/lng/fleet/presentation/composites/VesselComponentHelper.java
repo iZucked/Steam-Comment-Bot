@@ -61,5 +61,7 @@ public class VesselComponentHelper extends DefaultComponentHelper {
 	protected void sortEditors(List<IInlineEditor> editors) {
 		// After the reference vessel field and before the capacity field
 		sortEditorBeforeOtherEditor(editors, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, FleetPackage.Literals.VESSEL__CAPACITY);
+		sortEditorBeforeOtherEditor(editors, FleetPackage.Literals.VESSEL__MARKER, FleetPackage.Literals.VESSEL__CAPACITY);
+
 	}
 }

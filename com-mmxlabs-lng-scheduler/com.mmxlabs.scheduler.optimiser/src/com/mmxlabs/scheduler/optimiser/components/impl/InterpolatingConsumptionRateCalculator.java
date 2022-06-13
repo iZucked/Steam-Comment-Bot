@@ -38,6 +38,10 @@ public class InterpolatingConsumptionRateCalculator implements IConsumptionRateC
 
 	@Override
 	public long getRate(final int speed) {
+		if (keypoints.isEmpty()) {
+			return 0;
+		}
+		
 		// Check for exact match first
 		if (keypoints.containsKey(speed)) {
 			return keypoints.get(speed);

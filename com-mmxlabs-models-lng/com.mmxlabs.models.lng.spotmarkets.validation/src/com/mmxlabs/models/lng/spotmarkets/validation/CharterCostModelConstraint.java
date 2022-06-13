@@ -32,6 +32,11 @@ public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
 				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL);
 				statuses.add(dsd);
+			} else if (ccm.getVessel().isMarker()) {
+				final String failureMessage = "A charter in market model needs to be associated with a non-marker vessel.";
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL);
+				statuses.add(dsd);
 			}
 			if (ccm.getCharterInRate() == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
