@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.utils;
 
 import org.eclipse.jface.viewers.TableViewer;
