@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>5.5.5-SNAPSHOT</version>
+		<version>5.6.1.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.product-definition</artifactId>

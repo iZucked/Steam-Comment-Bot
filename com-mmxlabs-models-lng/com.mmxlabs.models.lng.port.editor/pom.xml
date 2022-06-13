@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>5.5.5-SNAPSHOT</version>
+		<version>5.6.1.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.port.editor</artifactId>
