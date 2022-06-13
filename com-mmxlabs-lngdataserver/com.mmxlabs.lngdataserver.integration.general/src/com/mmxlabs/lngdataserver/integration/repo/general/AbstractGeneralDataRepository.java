@@ -7,9 +7,10 @@ package com.mmxlabs.lngdataserver.integration.repo.general;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,7 +31,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	private final @NonNull TypeRecord type;
 
 	protected boolean listenForNewLocalVersions;
-	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
+	protected final Collection<Runnable> newLocalVersionCallbacks = new ConcurrentLinkedQueue<>();
 
 	protected AbstractGeneralDataRepository(final @NonNull TypeRecord type) {
 		this.type = type;
