@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>5.6.1.RELEASE</version>
+		<version>5.6.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.lngdataserver.integration.pricing</artifactId>

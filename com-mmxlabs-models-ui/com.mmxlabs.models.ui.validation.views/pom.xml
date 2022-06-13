@@ -3,7 +3,7 @@
   <parent>
     <artifactId>com.mmxlabs.models.ui.parent</artifactId>
     <groupId>com.mmxlabs.models.ui</groupId>
-    <version>5.6.1.RELEASE</version>
+    <version>5.6.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>com.mmxlabs.models.ui</groupId>
