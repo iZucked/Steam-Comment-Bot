@@ -100,6 +100,8 @@ public final class CommonImages {
 		Error(16, "icons/legacy/16x16/error.gif"), //
 		Information(16, "icons/legacy/16x16/information.gif"), //
 		Warning(16, "icons/legacy/16x16/warning.gif"), //
+		
+		Read(16, "icons/legacy/16x16/read_obj.gif"),
 
 		// 24x24
 		Cloud_24(24, "icons/24x24/cloud.png"), //

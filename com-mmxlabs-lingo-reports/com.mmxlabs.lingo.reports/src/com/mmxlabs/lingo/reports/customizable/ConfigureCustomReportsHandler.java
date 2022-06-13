@@ -16,25 +16,22 @@ import org.slf4j.LoggerFactory;
 public class ConfigureCustomReportsHandler extends AbstractHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(ConfigureCustomReportsHandler.class);
-	
-	//com.mmxlabs.lingo.reports.views.schedule.ConfigureCustomReportsHandler
+
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		try {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 			openCustomReportsManagerDialog(win);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.error("Problem opening Custom Reports Manager dialog: ", ex);
 		}
 
 		return null;
 	}
-	
-	private void openCustomReportsManagerDialog(final IWorkbenchWindow win) {	
+
+	private void openCustomReportsManagerDialog(final IWorkbenchWindow win) {
 		final CustomReportsManagerDialog dialog = new CustomReportsManagerDialog(win.getShell());
 		dialog.open();
-		dialog.dispose();
 	}
 }
