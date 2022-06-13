@@ -20,6 +20,7 @@ import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord;
 import com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel;
 import com.mmxlabs.models.lng.adp.CargoNumberDistributionModel;
@@ -381,6 +382,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass spacingAllocationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass allowedArrivalTimeRecordEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1625,6 +1633,16 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getMullSubprofile_AllowedArrivalTimes() {
+		return (EReference)mullSubprofileEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMullAllocationRow() {
 		return mullAllocationRowEClass;
 	}
@@ -1855,6 +1873,36 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getAllowedArrivalTimeRecord() {
+		return allowedArrivalTimeRecordEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAllowedArrivalTimeRecord_PeriodStart() {
+		return (EAttribute)allowedArrivalTimeRecordEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAllowedArrivalTimeRecord_AllowedTimes() {
+		return (EAttribute)allowedArrivalTimeRecordEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getIntervalType() {
 		return intervalTypeEEnum;
 	}
@@ -2048,6 +2096,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		mullSubprofileEClass = createEClass(MULL_SUBPROFILE);
 		createEReference(mullSubprofileEClass, MULL_SUBPROFILE__INVENTORY);
 		createEReference(mullSubprofileEClass, MULL_SUBPROFILE__ENTITY_TABLE);
+		createEReference(mullSubprofileEClass, MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES);
 
 		mullAllocationRowEClass = createEClass(MULL_ALLOCATION_ROW);
 		createEAttribute(mullAllocationRowEClass, MULL_ALLOCATION_ROW__WEIGHT);
@@ -2078,6 +2127,10 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		spacingAllocationEClass = createEClass(SPACING_ALLOCATION);
 		createEReference(spacingAllocationEClass, SPACING_ALLOCATION__CONTRACT);
+
+		allowedArrivalTimeRecordEClass = createEClass(ALLOWED_ARRIVAL_TIME_RECORD);
+		createEAttribute(allowedArrivalTimeRecordEClass, ALLOWED_ARRIVAL_TIME_RECORD__PERIOD_START);
+		createEAttribute(allowedArrivalTimeRecordEClass, ALLOWED_ARRIVAL_TIME_RECORD__ALLOWED_TIMES);
 
 		// Create enums
 		intervalTypeEEnum = createEEnum(INTERVAL_TYPE);
@@ -2344,6 +2397,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEClass(mullSubprofileEClass, MullSubprofile.class, "MullSubprofile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMullSubprofile_Inventory(), theCargoPackage.getInventory(), null, "inventory", null, 0, 1, MullSubprofile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullSubprofile_EntityTable(), this.getMullEntityRow(), null, "entityTable", null, 0, -1, MullSubprofile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMullSubprofile_AllowedArrivalTimes(), this.getAllowedArrivalTimeRecord(), null, "allowedArrivalTimes", null, 0, -1, MullSubprofile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mullAllocationRowEClass, MullAllocationRow.class, "MullAllocationRow", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMullAllocationRow_Weight(), ecorePackage.getEInt(), "weight", null, 0, 1, MullAllocationRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2374,6 +2428,10 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		initEClass(spacingAllocationEClass, SpacingAllocation.class, "SpacingAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSpacingAllocation_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, SpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(allowedArrivalTimeRecordEClass, AllowedArrivalTimeRecord.class, "AllowedArrivalTimeRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAllowedArrivalTimeRecord_PeriodStart(), theDateTimePackage.getLocalDate(), "periodStart", null, 0, 1, AllowedArrivalTimeRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAllowedArrivalTimeRecord_AllowedTimes(), ecorePackage.getEInt(), "allowedTimes", null, 0, -1, AllowedArrivalTimeRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(intervalTypeEEnum, IntervalType.class, "IntervalType");

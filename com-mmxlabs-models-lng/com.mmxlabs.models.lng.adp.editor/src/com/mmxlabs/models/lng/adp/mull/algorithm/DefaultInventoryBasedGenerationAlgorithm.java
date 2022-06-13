@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 public class DefaultInventoryBasedGenerationAlgorithm extends MullAlgorithm {
 
 	public DefaultInventoryBasedGenerationAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {
 				for (final IAllocationTracker allocationTracker : mudContainer.getAllocationTrackers()) {

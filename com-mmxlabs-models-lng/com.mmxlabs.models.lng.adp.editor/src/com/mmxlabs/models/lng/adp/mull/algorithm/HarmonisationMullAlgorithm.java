@@ -60,7 +60,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 
 	public HarmonisationMullAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates,
 			final HarmonisationMap harmonisationMap) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		this.harmonisationMap = harmonisationMap;
 	}
 

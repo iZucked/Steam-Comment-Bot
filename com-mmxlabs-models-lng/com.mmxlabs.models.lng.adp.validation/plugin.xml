@@ -214,6 +214,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.AllowedArrivalTimesRecordConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.AllowedArrivalTimesRecordConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="AllowedArrivalTimesRecordConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="AllowedArrivalTimeRecord">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.adp.validation.MullAllocationRowConstraint"
                   id="com.mmxlabs.models.lng.adp.validation.MullAllocationRowConstraint"
                   isEnabledByDefault="true"

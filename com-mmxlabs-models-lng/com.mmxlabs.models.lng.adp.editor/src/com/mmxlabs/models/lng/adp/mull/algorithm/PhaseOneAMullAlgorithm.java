@@ -24,7 +24,7 @@ public class PhaseOneAMullAlgorithm extends MullAlgorithm implements IMonthEndTr
 	private final Map<Inventory, Map<BaseLegalEntity, Map<YearMonth, Long>>> monthEndEntitlements;
 
 	public PhaseOneAMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		monthEndEntitlements = new HashMap<>();
 		inventoryLocalStates.stream() //
 				.map(InventoryLocalState::getMullContainer) //

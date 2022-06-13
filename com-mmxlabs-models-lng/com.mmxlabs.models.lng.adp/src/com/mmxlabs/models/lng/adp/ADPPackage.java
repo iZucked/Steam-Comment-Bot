@@ -2434,13 +2434,22 @@ public interface ADPPackage extends EPackage {
 	int MULL_SUBPROFILE__ENTITY_TABLE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Arrival Times</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES = 2;
+
+	/**
 	 * The number of structural features of the '<em>Mull Subprofile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_SUBPROFILE_FEATURE_COUNT = 2;
+	int MULL_SUBPROFILE_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Mull Subprofile</em>' class.
@@ -2764,6 +2773,52 @@ public interface ADPPackage extends EPackage {
 	int DES_SPACING_ROW_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.AllowedArrivalTimeRecordImpl <em>Allowed Arrival Time Record</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.AllowedArrivalTimeRecordImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getAllowedArrivalTimeRecord()
+	 * @generated
+	 */
+	int ALLOWED_ARRIVAL_TIME_RECORD = 43;
+
+	/**
+	 * The feature id for the '<em><b>Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOWED_ARRIVAL_TIME_RECORD__PERIOD_START = 0;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Times</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOWED_ARRIVAL_TIME_RECORD__ALLOWED_TIMES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Allowed Arrival Time Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOWED_ARRIVAL_TIME_RECORD_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Allowed Arrival Time Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALLOWED_ARRIVAL_TIME_RECORD_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2771,7 +2826,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 43;
+	int INTERVAL_TYPE = 44;
 
 
 	/**
@@ -2782,7 +2837,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 44;
+	int LNG_VOLUME_UNIT = 45;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -4012,6 +4067,17 @@ public interface ADPPackage extends EPackage {
 	EReference getMullSubprofile_EntityTable();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.MullSubprofile#getAllowedArrivalTimes <em>Allowed Arrival Times</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Allowed Arrival Times</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MullSubprofile#getAllowedArrivalTimes()
+	 * @see #getMullSubprofile()
+	 * @generated
+	 */
+	EReference getMullSubprofile_AllowedArrivalTimes();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.MullAllocationRow <em>Mull Allocation Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4256,6 +4322,38 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSpacingAllocation_Contract();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord <em>Allowed Arrival Time Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Allowed Arrival Time Record</em>'.
+	 * @see com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord
+	 * @generated
+	 */
+	EClass getAllowedArrivalTimeRecord();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord#getPeriodStart <em>Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord#getPeriodStart()
+	 * @see #getAllowedArrivalTimeRecord()
+	 * @generated
+	 */
+	EAttribute getAllowedArrivalTimeRecord_PeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord#getAllowedTimes <em>Allowed Times</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Allowed Times</em>'.
+	 * @see com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord#getAllowedTimes()
+	 * @see #getAllowedArrivalTimeRecord()
+	 * @generated
+	 */
+	EAttribute getAllowedArrivalTimeRecord_AllowedTimes();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}'.
@@ -5293,6 +5391,14 @@ public interface ADPPackage extends EPackage {
 		EReference MULL_SUBPROFILE__ENTITY_TABLE = eINSTANCE.getMullSubprofile_EntityTable();
 
 		/**
+		 * The meta object literal for the '<em><b>Allowed Arrival Times</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES = eINSTANCE.getMullSubprofile_AllowedArrivalTimes();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.MullAllocationRowImpl <em>Mull Allocation Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5489,6 +5595,32 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPACING_ALLOCATION__CONTRACT = eINSTANCE.getSpacingAllocation_Contract();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.AllowedArrivalTimeRecordImpl <em>Allowed Arrival Time Record</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.AllowedArrivalTimeRecordImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getAllowedArrivalTimeRecord()
+		 * @generated
+		 */
+		EClass ALLOWED_ARRIVAL_TIME_RECORD = eINSTANCE.getAllowedArrivalTimeRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ALLOWED_ARRIVAL_TIME_RECORD__PERIOD_START = eINSTANCE.getAllowedArrivalTimeRecord_PeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Times</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ALLOWED_ARRIVAL_TIME_RECORD__ALLOWED_TIMES = eINSTANCE.getAllowedArrivalTimeRecord_AllowedTimes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.

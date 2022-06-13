@@ -946,6 +946,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AllowedArrivalTimeRecordItemProvider allowedArrivalTimeRecordItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAllowedArrivalTimeRecordAdapter() {
+		if (allowedArrivalTimeRecordItemProvider == null) {
+			allowedArrivalTimeRecordItemProvider = new AllowedArrivalTimeRecordItemProvider(this);
+		}
+
+		return allowedArrivalTimeRecordItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1114,6 +1137,7 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (desSpacingAllocationItemProvider != null) desSpacingAllocationItemProvider.dispose();
 		if (desSpacingRowItemProvider != null) desSpacingRowItemProvider.dispose();
 		if (spacingAllocationItemProvider != null) spacingAllocationItemProvider.dispose();
+		if (allowedArrivalTimeRecordItemProvider != null) allowedArrivalTimeRecordItemProvider.dispose();
 	}
 
 }

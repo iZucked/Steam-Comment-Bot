@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.adp.mull.container.IMullContainer;
 public class PhaseOneMullAlgorithm extends MullAlgorithm {
 
 	public PhaseOneMullAlgorithm(GlobalStatesContainer globalStatesContainer, AlgorithmState algorithmState, List<InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 	}
 
 	@Override

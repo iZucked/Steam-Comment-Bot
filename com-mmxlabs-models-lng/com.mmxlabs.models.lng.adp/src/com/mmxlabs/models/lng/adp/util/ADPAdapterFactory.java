@@ -75,8 +75,8 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ADPSwitch<@Nullable Adapter> modelSwitch =
-		new ADPSwitch<@Nullable Adapter>() {
+	protected ADPSwitch<Adapter> modelSwitch =
+		new ADPSwitch<Adapter>() {
 			@Override
 			public Adapter caseADPModel(ADPModel object) {
 				return createADPModelAdapter();
@@ -248,6 +248,10 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSpacingAllocation(SpacingAllocation object) {
 				return createSpacingAllocationAdapter();
+			}
+			@Override
+			public Adapter caseAllowedArrivalTimeRecord(AllowedArrivalTimeRecord object) {
+				return createAllowedArrivalTimeRecordAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -876,6 +880,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSpacingAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord <em>Allowed Arrival Time Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord
+	 * @generated
+	 */
+	public Adapter createAllowedArrivalTimeRecordAdapter() {
 		return null;
 	}
 
