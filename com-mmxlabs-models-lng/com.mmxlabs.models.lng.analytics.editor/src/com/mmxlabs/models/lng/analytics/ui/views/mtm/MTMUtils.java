@@ -94,7 +94,7 @@ public final class MTMUtils {
 	}
 	
 	protected static boolean allowSlot(final Slot<?> slot, final boolean allowCargoes, final boolean allowSpotCargoes) {
-		if (slot instanceof SpotSlot || slot.isCancelled()) {
+		if (slot instanceof SpotSlot || slot.isCancelled() || slot.isLocked()) {
 			return false;
 		}
 		if (allowSpotCargoes) {
