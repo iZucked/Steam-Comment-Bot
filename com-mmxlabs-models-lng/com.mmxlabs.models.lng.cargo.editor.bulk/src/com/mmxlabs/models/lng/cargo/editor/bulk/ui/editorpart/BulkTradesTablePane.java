@@ -879,7 +879,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 			for (final ITradeBasedBulkColumnExtension ext : columnExtensions) {
 				ITradesColumnFactory factory;
-				System.out.println(ext.getColumnID());
 				if (ext.getHandlerID() != null) {
 					factory = handlerMap.get(ext.getHandlerID());
 				} else {
