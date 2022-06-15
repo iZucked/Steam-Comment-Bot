@@ -155,56 +155,56 @@ public interface IVessel {
 	int getMinBaseFuelConsumptionInMTPerDay();
 
 	/**
-	 * Get the base fuel used by this vessel class.
+	 * Get the base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	IBaseFuel getTravelBaseFuel();
 
 	/**
-	 * Set the base fuel used by this vessel class.
+	 * Set the base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	void setTravelBaseFuel(IBaseFuel baseFuel);
 
 	/**
-	 * Get the in port base fuel used by this vessel class.
+	 * Get the in port base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	IBaseFuel getInPortBaseFuel();
 
 	/**
-	 * Set the in port base fuel used by this vessel class.
+	 * Set the in port base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	void setInPortBaseFuel(IBaseFuel baseFuel);
 
 	/**
-	 * Get the pilot light base fuel used by this vessel class.
+	 * Get the pilot light base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	IBaseFuel getPilotLightBaseFuel();
 
 	/**
-	 * Set the pilot light base fuel used by this vessel class.
+	 * Set the pilot light base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	void setPilotLightBaseFuel(IBaseFuel baseFuel);
 
 	/**
-	 * Get the idle base fuel used by this vessel class.
+	 * Get the idle base fuel used by this vessel.
 	 * 
 	 * @return
 	 */
 	IBaseFuel getIdleBaseFuel();
 
 	/**
-	 * Set the idle base fuel used by this vessel class.
+	 * Set the idle base fuel used by this vessel.
 	 * 
 	 * @return
 	 */

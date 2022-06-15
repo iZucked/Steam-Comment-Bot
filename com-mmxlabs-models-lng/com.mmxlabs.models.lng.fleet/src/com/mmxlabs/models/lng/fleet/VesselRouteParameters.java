@@ -8,26 +8,26 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Vessel Class Route Parameters</b></em>'.
+ * A representation of the model object '<em><b>Vessel Route Parameters</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption <em>Route Option</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}</li>
  * </ul>
  *
- * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters()
+ * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters()
  * @model
  * @generated
  */
-public interface VesselClassRouteParameters extends MMXObject {
+public interface VesselRouteParameters extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
@@ -40,14 +40,14 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @return the value of the '<em>Route Option</em>' attribute.
 	 * @see com.mmxlabs.models.lng.port.RouteOption
 	 * @see #setRouteOption(RouteOption)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_RouteOption()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_RouteOption()
 	 * @model
 	 * @generated
 	 */
 	RouteOption getRouteOption();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption <em>Route Option</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getRouteOption <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Route Option</em>' attribute.
@@ -67,7 +67,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Extra Transit Time</em>' attribute.
 	 * @see #setExtraTransitTime(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_ExtraTransitTime()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_ExtraTransitTime()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##0'"
 	 * @generated
@@ -75,7 +75,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	int getExtraTransitTime();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Extra Transit Time</em>' attribute.
@@ -94,7 +94,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden Consumption Rate</em>' attribute.
 	 * @see #setLadenConsumptionRate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenConsumptionRate()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_LadenConsumptionRate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
@@ -102,7 +102,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	double getLadenConsumptionRate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Laden Consumption Rate</em>' attribute.
@@ -121,7 +121,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden NBO Rate</em>' attribute.
 	 * @see #setLadenNBORate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenNBORate()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_LadenNBORate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
@@ -129,7 +129,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	double getLadenNBORate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Laden NBO Rate</em>' attribute.
@@ -148,7 +148,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Consumption Rate</em>' attribute.
 	 * @see #setBallastConsumptionRate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastConsumptionRate()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_BallastConsumptionRate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
@@ -156,7 +156,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	double getBallastConsumptionRate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast Consumption Rate</em>' attribute.
@@ -175,7 +175,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast NBO Rate</em>' attribute.
 	 * @see #setBallastNBORate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastNBORate()
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselRouteParameters_BallastNBORate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
@@ -183,7 +183,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	double getBallastNBORate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast NBO Rate</em>' attribute.
@@ -192,6 +192,6 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 */
 	void setBallastNBORate(double value);
 
-} // end of  VesselClassRouteParameters
+} // end of  VesselRouteParameters
 
 // finish type fixing

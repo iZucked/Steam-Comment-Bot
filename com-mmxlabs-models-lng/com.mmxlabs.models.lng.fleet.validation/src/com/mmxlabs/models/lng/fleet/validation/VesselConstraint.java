@@ -16,7 +16,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
@@ -91,7 +91,7 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
-			final EList<VesselClassRouteParameters> routeParameters = vessel.getVesselOrDelegateRouteParameters();
+			final EList<VesselRouteParameters> routeParameters = vessel.getVesselOrDelegateRouteParameters();
 			if (routeParameters == null || routeParameters.isEmpty()) {
 				final String message = "Vessel has no canal parameters";
 				baseFactory.copyName() //
@@ -101,7 +101,7 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 			} else {
 				boolean foundSuez = false;
 				boolean foundPanama = false;
-				for (final VesselClassRouteParameters rp : routeParameters) {
+				for (final VesselRouteParameters rp : routeParameters) {
 					foundSuez |= rp.getRouteOption() == RouteOption.SUEZ;
 					foundPanama |= rp.getRouteOption() == RouteOption.PANAMA;
 				}
@@ -120,8 +120,8 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
-			final List<VesselClassRouteParameters> nonDelegateRouteParameters = vessel.getRouteParameters();
-			for (final VesselClassRouteParameters routeParameter : nonDelegateRouteParameters) {
+			final List<VesselRouteParameters> nonDelegateRouteParameters = vessel.getRouteParameters();
+			for (final VesselRouteParameters routeParameter : nonDelegateRouteParameters) {
 				final String canalName;
 				if (routeParameter.getRouteOption() == RouteOption.SUEZ) {
 					canalName = "Suez";
@@ -133,16 +133,16 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 				if (routeParameter.getBallastConsumptionRate() > 0 && routeParameter.getBallastConsumptionRate() >= routeParameter.getBallastNBORate()) {
 					baseFactory.copyName() //
 							.withMessage(String.format("%s ballast base fuel rate should be less than ballast NBO rate.", canalName)) //
-							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate()) //
-							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselRouteParameters_BallastConsumptionRate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselRouteParameters_BallastNBORate()) //
 							.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
 							.make(ctx, statuses);
 				}
 				if (routeParameter.getLadenConsumptionRate() > 0 && routeParameter.getLadenConsumptionRate() >= routeParameter.getLadenNBORate()) {
 					baseFactory.copyName() //
 							.withMessage(String.format("%s laden base fuel rate should be less than laden NBO rate.", canalName)) //
-							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate()) //
-							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselRouteParameters_LadenConsumptionRate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselRouteParameters_LadenNBORate()) //
 							.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
 							.make(ctx, statuses);
 				}

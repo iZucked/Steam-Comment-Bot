@@ -24,7 +24,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	public static final int MINIMUM_LADEN_TRAVEL_TIMES_NBO_LADEN_TRAVEL_TIME = 2;
 
 	/**
-	 * Provides the minimum travel time for a given load-discharge pair and vessel class
+	 * Provides the minimum travel time for a given load-discharge pair and vessel
 	 * 
 	 * @param load
 	 * @param discharge

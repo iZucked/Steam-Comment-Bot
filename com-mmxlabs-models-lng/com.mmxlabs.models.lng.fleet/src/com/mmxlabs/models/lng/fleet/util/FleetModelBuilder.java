@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -82,15 +82,15 @@ public class FleetModelBuilder {
 	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final double ladenConsumptionRatePerDay, final double ballastConsumptionRatePerDay,
 			final double ladenNBORatePerDay, final double ballastNBORatePerDay, final int canalTransitHours) {
 
-		VesselClassRouteParameters params = null;
-		for (final VesselClassRouteParameters p : vessel.getRouteParameters()) {
+		VesselRouteParameters params = null;
+		for (final VesselRouteParameters p : vessel.getRouteParameters()) {
 			if (Objects.equals(routeOption, p.getRouteOption())) {
 				params = p;
 				break;
 			}
 		}
 		if (params == null) {
-			params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+			params = FleetFactory.eINSTANCE.createVesselRouteParameters();
 			params.setRouteOption(routeOption);
 			vessel.getVesselOrDelegateRouteParameters().add(params);
 		}

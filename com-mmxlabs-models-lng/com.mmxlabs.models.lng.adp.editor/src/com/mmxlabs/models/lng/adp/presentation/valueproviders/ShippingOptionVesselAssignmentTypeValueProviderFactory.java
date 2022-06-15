@@ -117,8 +117,6 @@ public class ShippingOptionVesselAssignmentTypeValueProviderFactory implements I
 					// for (final AVesselSet<Vessel> s : allowedVessels) {
 					// if (s instanceof Vessel) {
 					// expandedVessels.add(s);
-					// } else if (s instanceof VesselClass) {
-					// expandedVessels.add(s);
 					// } else {
 					// // instanceof Vessel Group
 					// expandedVessels.addAll(SetUtils.getObjects(s));

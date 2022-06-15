@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 /**
  * Class which maps model entities to classes; the LNGScenarioTransformer should
  * populate one of these, which maps every PortSlot to the URI of a Slot in the
- * EMF, and similarly for vessels, vessel classes, etc etc.
+ * EMF, and similarly for vessels, etc etc.
  * 
  * @author hinton
  * 

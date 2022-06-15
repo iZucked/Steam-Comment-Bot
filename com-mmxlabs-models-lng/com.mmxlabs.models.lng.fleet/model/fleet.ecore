@@ -50,7 +50,7 @@
     <eOperations name="getVesselOrDelegateWarmingTime" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getVesselOrDelegateCoolingTime" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getVesselOrDelegateCoolingVolume" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eOperations name="getVesselOrDelegateRouteParameters" upperBound="-1" eType="#//VesselClassRouteParameters"/>
+    <eOperations name="getVesselOrDelegateRouteParameters" upperBound="-1" eType="#//VesselRouteParameters"/>
     <eOperations name="getVesselOrDelegatePilotLightRate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getVesselOrDelegateMinBaseFuelConsumption" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getVesselOrDelegateHasReliqCapability" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -172,7 +172,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeParametersOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeParameters" upperBound="-1"
-        eType="#//VesselClassRouteParameters" containment="true"/>
+        eType="#//VesselRouteParameters" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBaseFuelConsumption"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -282,7 +282,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselClassRouteParameters" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselRouteParameters" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraTransitTime" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

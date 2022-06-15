@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.Location;
@@ -197,15 +197,15 @@ public class DefaultScenarioCreator {
 
 	}
 
-	public class DefaultVesselClassRouteParametersCreator {
+	public class DefaultVesselRouteParametersCreator {
 		int defaultConsumptionRatePerHour = 10;
 		int defaultNBORatePerHour = 5;
 		int defaultConsumptionRatePerDay = TimeUnitConvert.convertPerHourToPerDay(defaultConsumptionRatePerHour);
 		int defaultNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(defaultNBORatePerHour);
 		int defaultTransitTimeInHours = 0;
 
-		public VesselClassRouteParameters createVesselClassRouteParameters(final RouteOption routeOption) {
-			final VesselClassRouteParameters result = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+		public VesselRouteParameters createVesselRouteParameters(final RouteOption routeOption) {
+			final VesselRouteParameters result = FleetFactory.eINSTANCE.createVesselRouteParameters();
 
 			result.setRouteOption(routeOption);
 			result.setLadenConsumptionRate(defaultConsumptionRatePerDay);
@@ -377,8 +377,8 @@ public class DefaultScenarioCreator {
 		 * @param route
 		 * @return
 		 */
-		public VesselClassRouteParameters assignRouteParameters(final Vessel vc, final RouteOption routeOption) {
-			final VesselClassRouteParameters result = new DefaultVesselClassRouteParametersCreator().createVesselClassRouteParameters(routeOption);
+		public VesselRouteParameters assignRouteParameters(final Vessel vc, final RouteOption routeOption) {
+			final VesselRouteParameters result = new DefaultVesselRouteParametersCreator().createVesselRouteParameters(routeOption);
 			vc.setRouteParametersOverride(true);
 			vc.getRouteParameters().add(result);
 			return result;
@@ -851,8 +851,8 @@ public class DefaultScenarioCreator {
 		return null;
 	}
 
-	public VesselClassRouteParameters getRouteParameters(final Vessel vc, final RouteOption routeOption) {
-		for (final VesselClassRouteParameters parameters : vc.getVesselOrDelegateRouteParameters()) {
+	public VesselRouteParameters getRouteParameters(final Vessel vc, final RouteOption routeOption) {
+		for (final VesselRouteParameters parameters : vc.getVesselOrDelegateRouteParameters()) {
 			if (parameters.getRouteOption() == routeOption) {
 				return parameters;
 			}

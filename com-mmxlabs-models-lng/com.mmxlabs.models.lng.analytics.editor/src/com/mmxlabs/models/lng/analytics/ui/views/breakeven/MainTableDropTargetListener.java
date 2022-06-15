@@ -82,16 +82,16 @@ public class MainTableDropTargetListener implements DropTargetListener {
 			event.detail = DND.DROP_NONE;
 			return;
 		}
-		
+
 		final BreakEvenAnalysisModel breakEvenAnalysisModel = this.breakEvenAnalysisModel;
 		if (breakEvenAnalysisModel == null) {
 			return;
 		}
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
-			
+
 			event.operations = DND.DROP_LINK;
-			
+
 			Object o = null;
 			Collection<EObject> collection = null;
 			if (selection.size() == 1) {
@@ -176,148 +176,7 @@ public class MainTableDropTargetListener implements DropTargetListener {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, breakEvenAnalysisModel, null);
 					}
 				}
-				// else if (o instanceof PartialCaseRow) {
-				// if (o == existing) {
-				// event.operations = DND.DROP_LINK;
-				// if (existing.getBuyOptions().isEmpty() && existing.getSellOptions().size() ==
-				// 1) {
-				//
-				// final SellOption option = existing.getSellOptions().get(0);
-				// final Port port = AnalyticsBuilder.getPort(option);
-				// final LocalDate date = AnalyticsBuilder.getDate(option);
-				// final boolean isShipped = AnalyticsBuilder.isShipped(option);
-				//
-				// final BuyOpportunity row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
-				// row.setDesPurchase(isShipped);
-				// row.setDate(date);
-				// row.setPort(port);
-				// row.setPriceExpression("?");
-				//
-				// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
-				//
-				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
-				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS,
-				// row), optionAnalysisModel,
-				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-				//
-				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS,
-				// Collections.singletonList(row)),
-				// existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
-				//
-				// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
-				// } else if (existing.getBuyOptions().size() == 1 &&
-				// existing.getSellOptions().isEmpty()) {
-				//
-				// final BuyOption option = existing.getBuyOptions().get(0);
-				// final Port port = AnalyticsBuilder.getPort(option);
-				// final LocalDate date = AnalyticsBuilder.getDate(option);
-				// final boolean isShipped = AnalyticsBuilder.isShipped(option);
-				//
-				// final SellOpportunity row =
-				// AnalyticsFactory.eINSTANCE.createSellOpportunity();
-				// row.setFobSale(isShipped);
-				// row.setDate(date);
-				// row.setPort(port);
-				// row.setPriceExpression("?");
-				//
-				// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
-				//
-				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
-				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS,
-				// row),
-				// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-				//
-				// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS,
-				// Collections.singletonList(row)),
-				// existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
-				//
-				// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
-				// }
-				// }
-				// } else if (o instanceof Vessel) {
-				// final Vessel vessel = (Vessel) o;
-				//
-				// if (existing != null) {
-				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel,
-				// existing, vessel, menuHelper);
-				//
-				// // final ShippingType shippingType = AnalyticsBuilder.isNonShipped(existing);
-				// // if (shippingType == ShippingType.NonShipped) {
-				// // NominatedShippingOption opt =
-				// AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel,
-				// vessel);
-				// // if (opt.eContainer() == null) {
-				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // AddCommand.create(scenarioEditingLocation.getEditingDomain(),
-				// optionAnalysisModel,
-				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-				// // optionAnalysisModel,
-				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-				// // }
-				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
-				// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // } else if (shippingType == ShippingType.Shipped) {
-				// // // final PartialCaseRow pExisting = existing;
-				// // // menuHelper.clearActions();
-				// // // menuHelper.addAction(new RunnableAction("Create RT", () -> {
-				// // // final RoundTripShippingOption opt =
-				// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-				// // // opt.setVesselClass(vessel.getVesselClass());
-				// // // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(),
-				// pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt),
-				// pExisting,
-				// // // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
-				// StructuredSelection(opt));
-				// // // }));
-				// // // menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-				// // // final FleetShippingOption opt =
-				// AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-				// // // AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-				// // // opt.setVessel(vessel);
-				// // // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // // SetCommand.create(scenarioEditingLocation.getEditingDomain(),
-				// pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt),
-				// pExisting,
-				// // // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
-				// StructuredSelection(opt));
-				// // // }));
-				// // //
-				// // // menuHelper.open();
-				// // }
-				// }
-				// } else if (o instanceof VesselClass) {
-				// final VesselClass vesselClass = (VesselClass) o;
-				// AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel,
-				// existing, vesselClass, menuHelper);
-				//
-				// // final PartialCaseRow pExisting = existing;
-				// // final RoundTripShippingOption opt =
-				// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-				// // opt.setVesselClass((VesselClass) o);
-				// // if (pExisting != null) {
-				// // final ShippingType shippingType =
-				// AnalyticsBuilder.isNonShipped(pExisting);
-				// // if (shippingType == ShippingType.Shipped) {
-				// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-				// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
-				// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-				// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
-				// StructuredSelection(opt));
-				// // }
-				// // }
-				// }
+
 				else if (o instanceof ShippingOption) {
 					if (existing != null) {
 						ShippingOption opt = null;

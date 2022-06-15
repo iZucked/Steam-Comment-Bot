@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -679,7 +679,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VesselClassRouteParameters> routeParameters;
+	protected EList<VesselRouteParameters> routeParameters;
 
 	/**
 	 * The default value of the '{@link #getMinBaseFuelConsumption() <em>Min Base Fuel Consumption</em>}' attribute.
@@ -1754,9 +1754,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public EList<VesselClassRouteParameters> getRouteParameters() {
+	public EList<VesselRouteParameters> getRouteParameters() {
 		if (routeParameters == null) {
-			routeParameters = new EObjectContainmentEList<VesselClassRouteParameters>(VesselClassRouteParameters.class, this, FleetPackage.VESSEL__ROUTE_PARAMETERS);
+			routeParameters = new EObjectContainmentEList<VesselRouteParameters>(VesselRouteParameters.class, this, FleetPackage.VESSEL__ROUTE_PARAMETERS);
 		}
 		return routeParameters;
 	}
@@ -1776,7 +1776,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public EList<VesselClassRouteParameters> getVesselOrDelegateRouteParameters() {
+	public EList<VesselRouteParameters> getVesselOrDelegateRouteParameters() {
 		if (getReference() != null && !isRouteParametersOverride()) {
 			return new DelegatingEList.UnmodifiableEList<>(getReference().getRouteParameters());
 		}
@@ -2479,26 +2479,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.add(this);
 		return result;
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public int getVesselOrVesselClassCapacity() {
-		
-		return (Integer) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_Capacity());
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public double getVesselOrVesselClassFillCapacity() {
-		return (Double) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_FillCapacity());
-	}
-
+ 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2710,7 +2691,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				getRouteParameters().clear();
-				getRouteParameters().addAll((Collection<? extends VesselClassRouteParameters>)newValue);
+				getRouteParameters().addAll((Collection<? extends VesselRouteParameters>)newValue);
 				return;
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				setMinBaseFuelConsumption((Double)newValue);

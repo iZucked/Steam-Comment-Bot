@@ -16,17 +16,17 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselRouteParameters} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class VesselClassRouteParametersItemProvider
+public class VesselRouteParametersItemProvider
 	extends MMXObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
@@ -34,7 +34,7 @@ public class VesselClassRouteParametersItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClassRouteParametersItemProvider(AdapterFactory adapterFactory) {
+	public VesselRouteParametersItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -70,9 +70,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_routeOption_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassRouteParameters_routeOption_feature", "_UI_VesselClassRouteParameters_type"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION,
+				 getString("_UI_VesselRouteParameters_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_routeOption_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION,
 				 true,
 				 false,
 				 false,
@@ -92,9 +92,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_extraTransitTime_feature"),
-				 getString("_UI_VesselClassRouteParameters_extraTransitTime_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME,
+				 getString("_UI_VesselRouteParameters_extraTransitTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_extraTransitTime_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME,
 				 true,
 				 false,
 				 false,
@@ -114,9 +114,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_ladenConsumptionRate_feature"),
-				 getString("_UI_VesselClassRouteParameters_ladenConsumptionRate_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE,
+				 getString("_UI_VesselRouteParameters_ladenConsumptionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_ladenConsumptionRate_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE,
 				 true,
 				 false,
 				 false,
@@ -136,9 +136,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_ladenNBORate_feature"),
-				 getString("_UI_VesselClassRouteParameters_ladenNBORate_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE,
+				 getString("_UI_VesselRouteParameters_ladenNBORate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_ladenNBORate_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE,
 				 true,
 				 false,
 				 false,
@@ -158,9 +158,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_ballastConsumptionRate_feature"),
-				 getString("_UI_VesselClassRouteParameters_ballastConsumptionRate_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE,
+				 getString("_UI_VesselRouteParameters_ballastConsumptionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_ballastConsumptionRate_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE,
 				 true,
 				 false,
 				 false,
@@ -180,9 +180,9 @@ public class VesselClassRouteParametersItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_ballastNBORate_feature"),
-				 getString("_UI_VesselClassRouteParameters_ballastNBORate_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE,
+				 getString("_UI_VesselRouteParameters_ballastNBORate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselRouteParameters_ballastNBORate_feature", "_UI_VesselRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE,
 				 true,
 				 false,
 				 false,
@@ -192,14 +192,14 @@ public class VesselClassRouteParametersItemProvider
 	}
 
 	/**
-	 * This returns VesselClassRouteParameters.gif.
+	 * This returns VesselRouteParameters.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselClassRouteParameters"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselRouteParameters"));
 	}
 
 	/**
@@ -210,11 +210,11 @@ public class VesselClassRouteParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		RouteOption labelValue = ((VesselClassRouteParameters)object).getRouteOption();
+		RouteOption labelValue = ((VesselRouteParameters)object).getRouteOption();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VesselClassRouteParameters_type") :
-			getString("_UI_VesselClassRouteParameters_type") + " " + label;
+			getString("_UI_VesselRouteParameters_type") :
+			getString("_UI_VesselRouteParameters_type") + " " + label;
 	}
 
 	/**
@@ -228,13 +228,13 @@ public class VesselClassRouteParametersItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(VesselClassRouteParameters.class)) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
+		switch (notification.getFeatureID(VesselRouteParameters.class)) {
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -276,7 +276,7 @@ public final class VoyagePlan extends AbstractWriteLockable {
 	}
 
 	/**
-	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class safety heel.
+	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel safety heel.
 	 * 
 	 * @param remainingHeelInM3
 	 */

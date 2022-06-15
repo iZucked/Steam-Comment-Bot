@@ -82,7 +82,6 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private int tradesViewerPageNumber = -1;
 	private ScenarioTableViewerPane tradesViewer;
 	private VesselCharterViewerPane_Editor vesselViewerPane;
-	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private PaperDealsPane paperDealsPane;
 

@@ -203,26 +203,26 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselRouteParameters} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VesselClassRouteParametersItemProvider vesselClassRouteParametersItemProvider;
+	protected VesselRouteParametersItemProvider vesselRouteParametersItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselRouteParameters}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createVesselClassRouteParametersAdapter() {
-		if (vesselClassRouteParametersItemProvider == null) {
-			vesselClassRouteParametersItemProvider = new VesselClassRouteParametersItemProvider(this);
+	public Adapter createVesselRouteParametersAdapter() {
+		if (vesselRouteParametersItemProvider == null) {
+			vesselRouteParametersItemProvider = new VesselRouteParametersItemProvider(this);
 		}
 
-		return vesselClassRouteParametersItemProvider;
+		return vesselRouteParametersItemProvider;
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselGroupItemProvider != null) vesselGroupItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
-		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();
+		if (vesselRouteParametersItemProvider != null) vesselRouteParametersItemProvider.dispose();
 	}
 
 }

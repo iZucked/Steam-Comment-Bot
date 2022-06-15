@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -436,9 +435,9 @@ public class VesselsToScenarioCopier {
 			cc.append(RemoveCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, vesselToUpdate.getRouteParameters()));
 		}
 		if (routeParameters.isPresent()) {
-			final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
+			final List<com.mmxlabs.models.lng.fleet.VesselRouteParameters> newParameters = new LinkedList<>();
 			for (final VesselRouteParameters upstreamFC : routeParameters.get()) {
-				final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters newFC = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				final com.mmxlabs.models.lng.fleet.VesselRouteParameters newFC = FleetFactory.eINSTANCE.createVesselRouteParameters();
 				newFC.setRouteOption(RouteOption.valueOf(upstreamFC.getRoute()));
 				newFC.setExtraTransitTime(upstreamFC.getExtraTransitTimeInHours());
 				newFC.setLadenNBORate(upstreamFC.getLadenNBORate());
@@ -462,9 +461,9 @@ public class VesselsToScenarioCopier {
 			vesselToUpdate.getRouteParameters().clear();
 		}
 		if (routeParameters.isPresent()) {
-			final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
+			final List<com.mmxlabs.models.lng.fleet.VesselRouteParameters> newParameters = new LinkedList<>();
 			for (final VesselRouteParameters upstreamFC : routeParameters.get()) {
-				final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters newFC = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				final com.mmxlabs.models.lng.fleet.VesselRouteParameters newFC = FleetFactory.eINSTANCE.createVesselRouteParameters();
 				newFC.setRouteOption(RouteOption.valueOf(upstreamFC.getRoute()));
 				newFC.setExtraTransitTime(upstreamFC.getExtraTransitTimeInHours());
 				newFC.setLadenNBORate(upstreamFC.getLadenNBORate());

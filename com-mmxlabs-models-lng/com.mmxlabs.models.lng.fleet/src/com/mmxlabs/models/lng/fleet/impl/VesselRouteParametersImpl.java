@@ -8,29 +8,29 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Vessel Class Route Parameters</b></em>'.
+ * An implementation of the model object '<em><b>Vessel Route Parameters</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getRouteOption <em>Route Option</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getExtraTransitTime <em>Extra Transit Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getLadenNBORate <em>Laden NBO Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getBallastNBORate <em>Ballast NBO Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getExtraTransitTime <em>Extra Transit Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getLadenNBORate <em>Laden NBO Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselRouteParametersImpl#getBallastNBORate <em>Ballast NBO Rate</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class VesselClassRouteParametersImpl extends MMXObjectImpl implements VesselClassRouteParameters {
+public class VesselRouteParametersImpl extends MMXObjectImpl implements VesselRouteParameters {
 	/**
 	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -156,7 +156,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VesselClassRouteParametersImpl() {
+	protected VesselRouteParametersImpl() {
 		super();
 	}
 
@@ -167,7 +167,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS;
+		return FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION, oldRouteOption, routeOption));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION, oldRouteOption, routeOption));
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		int oldExtraTransitTime = extraTransitTime;
 		extraTransitTime = newExtraTransitTime;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME, oldExtraTransitTime, extraTransitTime));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME, oldExtraTransitTime, extraTransitTime));
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		double oldLadenConsumptionRate = ladenConsumptionRate;
 		ladenConsumptionRate = newLadenConsumptionRate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE, oldLadenConsumptionRate, ladenConsumptionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE, oldLadenConsumptionRate, ladenConsumptionRate));
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		double oldLadenNBORate = ladenNBORate;
 		ladenNBORate = newLadenNBORate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE, oldLadenNBORate, ladenNBORate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE, oldLadenNBORate, ladenNBORate));
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		double oldBallastConsumptionRate = ballastConsumptionRate;
 		ballastConsumptionRate = newBallastConsumptionRate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE, oldBallastConsumptionRate, ballastConsumptionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE, oldBallastConsumptionRate, ballastConsumptionRate));
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		double oldBallastNBORate = ballastNBORate;
 		ballastNBORate = newBallastNBORate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE, oldBallastNBORate, ballastNBORate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE, oldBallastNBORate, ballastNBORate));
 	}
 
 	/**
@@ -315,17 +315,17 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION:
 				return getRouteOption();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				return getExtraTransitTime();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
 				return getLadenConsumptionRate();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE:
 				return getLadenNBORate();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
 				return getBallastConsumptionRate();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
 				return getBallastNBORate();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -339,22 +339,22 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION:
 				setRouteOption((RouteOption)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				setExtraTransitTime((Integer)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
 				setLadenConsumptionRate((Double)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE:
 				setLadenNBORate((Double)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
 				setBallastConsumptionRate((Double)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
 				setBallastNBORate((Double)newValue);
 				return;
 		}
@@ -369,22 +369,22 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION:
 				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				setExtraTransitTime(EXTRA_TRANSIT_TIME_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
 				setLadenConsumptionRate(LADEN_CONSUMPTION_RATE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE:
 				setLadenNBORate(LADEN_NBO_RATE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
 				setBallastConsumptionRate(BALLAST_CONSUMPTION_RATE_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
 				setBallastNBORate(BALLAST_NBO_RATE_EDEFAULT);
 				return;
 		}
@@ -399,17 +399,17 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION:
 				return routeOption != ROUTE_OPTION_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				return extraTransitTime != EXTRA_TRANSIT_TIME_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
 				return ladenConsumptionRate != LADEN_CONSUMPTION_RATE_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE:
 				return ladenNBORate != LADEN_NBO_RATE_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
 				return ballastConsumptionRate != BALLAST_CONSUMPTION_RATE_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
 				return ballastNBORate != BALLAST_NBO_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -441,6 +441,6 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		return result.toString();
 	}
 
-} // end of VesselClassRouteParametersImpl
+} // end of VesselRouteParametersImpl
 
 // finish type fixing

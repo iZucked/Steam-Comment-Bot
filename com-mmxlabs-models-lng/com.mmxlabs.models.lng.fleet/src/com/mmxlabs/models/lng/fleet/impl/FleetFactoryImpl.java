@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 
@@ -71,7 +71,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL_GROUP: return createVesselGroup();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS: return createVesselRouteParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -138,9 +138,9 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * @generated
 	 */
 	@Override
-	public VesselClassRouteParameters createVesselClassRouteParameters() {
-		VesselClassRouteParametersImpl vesselClassRouteParameters = new VesselClassRouteParametersImpl();
-		return vesselClassRouteParameters;
+	public VesselRouteParameters createVesselRouteParameters() {
+		VesselRouteParametersImpl vesselRouteParameters = new VesselRouteParametersImpl();
+		return vesselRouteParameters;
 	}
 
 	/**

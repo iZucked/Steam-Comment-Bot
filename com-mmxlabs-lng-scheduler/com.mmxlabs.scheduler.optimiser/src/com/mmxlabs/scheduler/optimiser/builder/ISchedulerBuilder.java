@@ -408,7 +408,7 @@ public interface ISchedulerBuilder {
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is
 	 * equivalent to
-	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}
+	 * {@code createVessel(name, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}
 	 * .
 	 * 
 	 * @param name

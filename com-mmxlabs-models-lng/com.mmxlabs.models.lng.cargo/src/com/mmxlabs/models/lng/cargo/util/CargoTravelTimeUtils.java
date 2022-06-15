@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -210,7 +210,7 @@ public class CargoTravelTimeUtils {
 
 		int extraTime = 0;
 		if (vessel != null) {
-			for (final VesselClassRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
+			for (final VesselRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
 				if (vcrp.getRouteOption() == routeOptions) {
 					extraTime = vcrp.getExtraTransitTime();
 				}

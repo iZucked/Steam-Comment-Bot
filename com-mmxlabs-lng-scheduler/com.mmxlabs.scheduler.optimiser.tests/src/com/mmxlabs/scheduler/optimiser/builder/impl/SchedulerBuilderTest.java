@@ -57,7 +57,7 @@ public class SchedulerBuilderTest {
 		final IBaseFuel baseFuel = new BaseFuel(indexingContext, "test");
 		baseFuel.setEquivalenceFactor(1000);
 		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, baseFuel, baseFuel, baseFuel, 0, 0, 35353, 10101, 0, false);
-		// createVesselClass("name", minSpeed,
+		// createVessel("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
 		Assertions.assertEquals(minSpeed, vessel.getMinSpeed());

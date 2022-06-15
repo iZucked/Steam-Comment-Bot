@@ -69,13 +69,13 @@ public interface FleetFactory extends EFactory {
 	FuelConsumption createFuelConsumption();
 
 	/**
-	 * Returns a new object of class '<em>Vessel Class Route Parameters</em>'.
+	 * Returns a new object of class '<em>Vessel Route Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Class Route Parameters</em>'.
+	 * @return a new object of class '<em>Vessel Route Parameters</em>'.
 	 * @generated
 	 */
-	VesselClassRouteParameters createVesselClassRouteParameters();
+	VesselRouteParameters createVesselRouteParameters();
 
 	/**
 	 * Returns a new object of class '<em>Vessel Group</em>'.

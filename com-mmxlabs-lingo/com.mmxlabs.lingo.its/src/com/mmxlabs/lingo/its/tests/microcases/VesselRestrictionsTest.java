@@ -80,7 +80,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testLoadVesselClassRestrictions_NoInstance() throws Exception {
+	public void testLoadVesselRestrictions_NoInstance1() throws Exception {
 
 		// Create the required basic elements
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -125,7 +125,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testLoadVesselClassRestrictions_Fleet() throws Exception {
+	public void testLoadVesselRestrictions_Fleet() throws Exception {
 
 		// Create the required basic elements
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -181,7 +181,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 
-		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
 
 		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("30000") //
@@ -257,7 +257,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testLoadVesselRestrictions_NoInstance() throws Exception {
+	public void testLoadVesselRestrictions_NoInstance2() throws Exception {
 
 		// Create the required basic elements
 		final Vessel source = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -301,7 +301,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testLoadVesselClassRestrictions_SpotOnly() throws Exception {
+	public void testLoadVesselRestrictions_SpotOnly() throws Exception {
 
 		// Create the required basic elements
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -566,7 +566,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	@Disabled("Restrictions do no apply to non-shipped cargoes")
-	public void testDESPurchaseVesselRestrictions_WrongVesselClass() throws Exception {
+	public void testDESPurchaseVesselRestrictions_WrongVessel2() throws Exception {
 
 		// Create the required basic elements
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);

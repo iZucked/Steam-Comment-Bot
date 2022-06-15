@@ -701,7 +701,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * namePrefix-1, namePrefix-2, etc
 	 * 
 	 * @param namePrefix
-	 * @param vesselClass
+	 * @param spotCharterInMarket
 	 * @param count
 	 * @return
 	 */
@@ -719,7 +719,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * instance type SPOT_CHARTER
 	 * 
 	 * @param name
-	 * @param vesselClass
+	 * @param spotCharterInMarket
 	 * @return the spot vessel
 	 */
 	@Override
@@ -755,8 +755,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public @NonNull IHeelOptionConsumer createHeelConsumer(final long minHeelInM3, final long maxHeelInM3, @NonNull final VesselTankState tankState, @NonNull final IHeelPriceCalculator heelPriceCalculator,
-			final boolean useLastHeelPrice) {
+	public @NonNull IHeelOptionConsumer createHeelConsumer(final long minHeelInM3, final long maxHeelInM3, @NonNull final VesselTankState tankState,
+			@NonNull final IHeelPriceCalculator heelPriceCalculator, final boolean useLastHeelPrice) {
 		return new HeelOptionConsumer(minHeelInM3, maxHeelInM3, tankState, heelPriceCalculator, useLastHeelPrice);
 	}
 
@@ -774,14 +774,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	private IVesselCharter createVesselCharter(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
-			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final ICharterContract charterContract, final int spotIndex,
-			final ILongCurve positioningFee, final boolean isOptional) {
+			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final ICharterContract charterContract,
+			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		return createVesselCharter(vessel, vessel.getName(), dailyCharterInRate, vesselInstanceType, start, end, spotCharterInMarket, charterContract, spotIndex, positioningFee, isOptional);
 	}
 
 	private IVesselCharter createVesselCharter(@NonNull final IVessel vessel, final String name, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
-			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final ICharterContract charterContract, final int spotIndex,
-			final ILongCurve positioningFee, final boolean isOptional) {
+			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final ICharterContract charterContract,
+			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -906,7 +906,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public @NonNull IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, final boolean hasTimeRequirement, @NonNull final ITimeWindow timeWindow, final IHeelOptionConsumer heelConsumer) {
+	public @NonNull IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, final boolean hasTimeRequirement, @NonNull final ITimeWindow timeWindow,
+			final IHeelOptionConsumer heelConsumer) {
 
 		if (portSet == null || portSet.isEmpty()) {
 			return new EndRequirement(Collections.singleton(ANYWHERE), false, hasTimeRequirement, timeWindow, heelConsumer);
@@ -1001,7 +1002,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				int maxFastReturnTime = 0;
 				if ((dischargePort != null) && (loadPort != null)) {
 					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
-					// what's the slowest vessel class
+					// what's the slowest vessel
 					int slowestMaxSpeed = Integer.MAX_VALUE;
 					for (final IVessel vessel : vessels) {
 						if (vessel == virtualVessel) {
@@ -1027,7 +1028,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						if (returnDistance == Integer.MAX_VALUE) {
 							continue;
 						}
-						// what's the slowest vessel class
+						// what's the slowest vessel
 						int slowestMaxSpeed = Integer.MAX_VALUE;
 						for (final IVessel vessel : vessels) {
 							if (vessel == virtualVessel) {
@@ -1168,8 +1169,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// create a new resource for each of these guys, and bind them to their
 		// resources
 		assert virtualVessel != null;
-		final IVesselCharter virtualVesselCharter = createVesselCharter(virtualVessel, "virtual-" + element.getName(), new ZeroLongCurve(), type, createStartRequirement(),
-				createEndRequirement(), null, new ZeroLongCurve(), true);
+		final IVesselCharter virtualVesselCharter = createVesselCharter(virtualVessel, "virtual-" + element.getName(), new ZeroLongCurve(), type, createStartRequirement(), createEndRequirement(),
+				null, new ZeroLongCurve(), true);
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;
@@ -1250,7 +1251,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
 
-		// Check instance is the same as that used in createVesselClass(..)
+		// Check instance is the same as that used in createVessel(..)
 		if (!(vessel instanceof Vessel)) {
 			throw new IllegalArgumentException("Expected instance of " + Vessel.class.getCanonicalName());
 		}

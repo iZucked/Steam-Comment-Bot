@@ -73,7 +73,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testCargoSlot_VesselClassInaccessible1() {
+	public void testCargoSlot_VesselInaccessible1() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
@@ -96,7 +96,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testCargoSlot_VesselClassInaccessible2() {
+	public void testCargoSlot_VesselInaccessible2() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
@@ -154,7 +154,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testVesselEvent_VesselClassInaccessible1() {
+	public void testVesselEvent_VesselInaccessible1() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
@@ -175,7 +175,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testVesselEvent_VesselClassInaccessible2() {
+	public void testVesselEvent_VesselInaccessible2() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
@@ -232,7 +232,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testCharterOut_VesselClassInaccessible1() {
+	public void testCharterOut_VesselInaccessible1() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
@@ -253,7 +253,7 @@ public class InaccessiblePortsConstraintTest {
 	}
 
 	@Test
-	public void testCharterOut_VesselClassInaccessible2() {
+	public void testCharterOut_VesselInaccessible2() {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 

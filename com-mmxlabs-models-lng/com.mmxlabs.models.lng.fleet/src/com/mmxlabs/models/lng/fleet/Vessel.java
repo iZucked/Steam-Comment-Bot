@@ -829,7 +829,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 
 	/**
 	 * Returns the value of the '<em><b>Route Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselRouteParameters}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Route Parameters</em>' containment reference list isn't clear,
@@ -841,7 +841,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<VesselClassRouteParameters> getRouteParameters();
+	EList<VesselRouteParameters> getRouteParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -1550,7 +1550,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<VesselClassRouteParameters> getVesselOrDelegateRouteParameters();
+	EList<VesselRouteParameters> getVesselOrDelegateRouteParameters();
 
 	/**
 	 * <!-- begin-user-doc -->

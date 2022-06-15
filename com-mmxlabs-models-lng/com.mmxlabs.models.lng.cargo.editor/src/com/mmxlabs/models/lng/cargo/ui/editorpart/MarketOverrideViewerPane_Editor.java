@@ -39,45 +39,6 @@ public class MarketOverrideViewerPane_Editor extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getCharterInMarketOverride_CharterInMarket());
 
-//		addTypicalColumn("Class",
-//				new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), getCommandHandler())),
-//				CargoPackage.eINSTANCE.getVesselCharter_Vessel());
-//
-//		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_Fleet(), getCommandHandler()));
-//
-//		addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_Optional(), getCommandHandler()));
-//
-//		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate(), getCommandHandler()));
-//
-//		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_RepositioningFee(), getCommandHandler()) {
-//			@Override
-//			public boolean canEdit(Object object) {
-//				if (object instanceof VesselCharter) {
-//					if (!((VesselCharter) object).isFleet()) {
-//						return true;
-//					} else {
-//						return false;
-//					}
-//				} else {
-//					return super.canEdit(object);
-//				}
-//			}
-//		});
-//
-//		addTypicalColumn("Start Port",
-//				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAt(), jointModelEditor.getReferenceValueProviderCache(), getCommandHandler()));
-//
-//		addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAfter(), getCommandHandler()));
-//
-//		addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartBy(), getCommandHandler()));
-//
-//		addTypicalColumn("End Port", new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAt(), jointModelEditor.getReferenceValueProviderCache(),
-//				getCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-//
-//		addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAfter(), getCommandHandler()));
-//
-//		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndBy(), getCommandHandler()));
-
 		setTitle("Overrides", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }

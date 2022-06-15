@@ -126,18 +126,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//FuelConsumption/speed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//FuelConsumption/consumption"/>
     </genClasses>
-    <genClasses ecoreClass="fleet.ecore#//VesselClassRouteParameters">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/routeOption"/>
-      <genFeatures createChild="false" propertyDescription="The extra time associated with this route"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/extraTransitTime"/>
-      <genFeatures createChild="false" propertyDescription="The base fuel consumption rate when travelling through the canal laden"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/ladenConsumptionRate"/>
-      <genFeatures createChild="false" propertyDescription="The NBO rate when travelling through the canal laden"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/ladenNBORate"/>
-      <genFeatures createChild="false" propertyDescription="The base fuel consumption rate when travelling through the canal unladen"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/ballastConsumptionRate"/>
-      <genFeatures createChild="false" propertyCategory="" propertyDescription="The NBO consumption rate when travelling through the canal unladen"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClassRouteParameters/ballastNBORate"/>
+    <genClasses ecoreClass="fleet.ecore#//VesselRouteParameters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/routeOption"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/extraTransitTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/ladenConsumptionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/ladenNBORate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/ballastConsumptionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselRouteParameters/ballastNBORate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

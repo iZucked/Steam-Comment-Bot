@@ -40,7 +40,7 @@
                      class="Vessel">
                </target>
                <target
-                     class="VesselClassRouteParameters">
+                     class="VesselRouteParameters">
                </target>
             </constraint>
           

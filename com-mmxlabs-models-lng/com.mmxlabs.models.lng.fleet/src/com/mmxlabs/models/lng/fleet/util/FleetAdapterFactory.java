@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -106,8 +106,8 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createFuelConsumptionAdapter();
 			}
 			@Override
-			public Adapter caseVesselClassRouteParameters(VesselClassRouteParameters object) {
-				return createVesselClassRouteParametersAdapter();
+			public Adapter caseVesselRouteParameters(VesselRouteParameters object) {
+				return createVesselRouteParametersAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -220,16 +220,16 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters <em>Vessel Class Route Parameters</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselRouteParameters <em>Vessel Route Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters
+	 * @see com.mmxlabs.models.lng.fleet.VesselRouteParameters
 	 * @generated
 	 */
-	public Adapter createVesselClassRouteParametersAdapter() {
+	public Adapter createVesselRouteParametersAdapter() {
 		return null;
 	}
 

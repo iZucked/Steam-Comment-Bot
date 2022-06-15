@@ -88,7 +88,7 @@ import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -2936,7 +2936,7 @@ public class LNGScenarioTransformer {
 		for (final IVessel oVessel : optimiserVessels) {
 			assert oVessel != null;
 			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(oVessel);
-			for (final VesselClassRouteParameters routeParameters : eVessel.getVesselOrDelegateRouteParameters()) {
+			for (final VesselRouteParameters routeParameters : eVessel.getVesselOrDelegateRouteParameters()) {
 				final ERouteOption mappedRouteOption = mapRouteOption(routeParameters.getRouteOption());
 				builder.setVesselRouteTransitTime(mappedRouteOption, oVessel, routeParameters.getExtraTransitTime());
 

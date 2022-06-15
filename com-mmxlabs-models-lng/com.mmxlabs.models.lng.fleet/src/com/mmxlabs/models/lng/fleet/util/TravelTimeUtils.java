@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -71,7 +71,7 @@ public final class TravelTimeUtils {
 
 				int extraTime = 0;
 				if (vessel != null) {
-					for (final VesselClassRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
+					for (final VesselRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
 						if (vcrp.getRouteOption() == routeOption) {
 							extraTime = vcrp.getExtraTransitTime();
 						}
@@ -110,7 +110,7 @@ public final class TravelTimeUtils {
 
 		int extraTime = 0;
 		if (vessel != null) {
-			for (final VesselClassRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
+			for (final VesselRouteParameters vcrp : vessel.getVesselOrDelegateRouteParameters()) {
 				if (vcrp.getRouteOption() == route.getRouteOption()) {
 					extraTime = vcrp.getExtraTransitTime();
 				}

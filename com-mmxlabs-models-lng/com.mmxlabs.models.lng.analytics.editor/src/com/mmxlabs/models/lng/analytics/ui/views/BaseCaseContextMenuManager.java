@@ -192,29 +192,6 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 										}));
 									}
-									// dateMenu.add(new RunnableAction("NBO speed", () -> {
-									//
-									// double cv = AnalyticsBuilder.getCargoCV(row.getBuyOption());
-									// double nboRate = vesselClass.getLadenAttributes().getNboRate();
-									// BaseFuel baseFuel = vesselClass.getBaseFuel();
-									//
-									// double nboEquiv = nboRate * cv * baseFuel.getEquivalenceFactor();
-									// // TODO: Linear interopolate speed
-									// double nboSpeed = vesselClass.getMaxSpeed();
-									//
-									// final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, nboSpeed, RouteOption.DIRECT, fromPort, toPort, portModel);
-									//
-									// final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-									// final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(row.getSellOption());
-									// final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
-									//
-									// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									// SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate), opportunity,
-									// AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
-									// }));
-									// dateMenu.add(new RunnableAction("choose speed", () -> {
-									//
-									// }));
 
 									mgr.add(dateMenu);
 								}
@@ -282,30 +259,6 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 										}));
 									}
-									// dateMenu.add(new RunnableAction("NBO speed", () -> {
-									//
-									// double cv = AnalyticsBuilder.getCargoCV(row.getBuyOption());
-									// double nboRate = vesselClass.getLadenAttributes().getNboRate();
-									// BaseFuel baseFuel = vesselClass.getBaseFuel();
-									//
-									// double nboEquiv = nboRate * cv * baseFuel.getEquivalenceFactor();
-									// // TODO: Linear interopolate speed
-									// double nboSpeed = vesselClass.getMaxSpeed();
-									//
-									// final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, nboSpeed, RouteOption.DIRECT, fromPort, toPort, portModel);
-									//
-									// final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-									// final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(row.getBuyOption());
-									// final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
-									//
-									// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									// SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate), opportunity,
-									// AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
-									//
-									// }));
-									// dateMenu.add(new RunnableAction("choose speed", () -> {
-									//
-									// }));
 
 									mgr.add(dateMenu);
 								}
@@ -324,48 +277,57 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 						}));
-						// mgr.add(new RunnableAction("Copy shipping to templates", () -> {
-						// scenarioEditingLocation.getDefaultCommandHandler()
-						// .handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
-						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
-						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-						//
-						// }));
+
 					}
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 
 						// mgr.add(new RunnableAction("Create Nominated", () -> {
-						// // final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+						// // final NominatedShippingOption o =
+						// AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 						// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+						// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 						// // AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						// NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
+						// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+						// StructuredSelection(o));
+						// NominatedShippingOption opt =
+						// AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel,
+						// vessel);
 						// if (opt.eContainer() == null) {
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-						// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+						// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+						// optionAnalysisModel,
+						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+						// optionAnalysisModel,
+						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 						// }
 						//
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), row,
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), row,
 						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						// }));
 					} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
 						// mgr.add(new RunnableAction("Create RT", () -> {
-						// final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						// final RoundTripShippingOption o =
+						// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+						// StructuredSelection(o));
 						// }));
 						// mgr.add(new RunnableAction("Create fleet", () -> {
-						// final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						// final FleetShippingOption o =
+						// AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 						// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+						// StructuredSelection(o));
 						// }));
 					}
 				}

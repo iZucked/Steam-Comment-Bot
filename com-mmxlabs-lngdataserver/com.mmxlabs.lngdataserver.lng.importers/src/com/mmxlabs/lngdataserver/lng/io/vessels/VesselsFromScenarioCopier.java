@@ -134,7 +134,7 @@ public class VesselsFromScenarioCopier {
 		// CANAL PARAMS
 		if (lingo_vessel.isRouteParametersOverride() || lingo_ReferenceVessel == null) {
 			final List<VesselRouteParameters> newParameters = new LinkedList<>();
-			for (final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters lingoFC : lingo_vessel.getRouteParameters()) {
+			for (final com.mmxlabs.models.lng.fleet.VesselRouteParameters lingoFC : lingo_vessel.getRouteParameters()) {
 				final VesselRouteParameters fc = new VesselRouteParameters();
 				fc.setRoute(lingoFC.getRouteOption().toString());
 				fc.setExtraTransitTimeInHours(lingoFC.getExtraTransitTime());

@@ -36,7 +36,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class MinMaxSpeedTest {
 
-	// The min and max speed of the vessel class.
+	// The min and max speed of the vessel.
 	private static final int minSpeed = 10;
 	private static final int maxSpeed = 20;
 

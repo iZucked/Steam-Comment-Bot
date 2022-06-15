@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
@@ -184,7 +184,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -196,7 +196,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 20, true);
 			// FIXME: Should this really be suez data or copy/paste error?
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.PANAMA);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -258,7 +258,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 30, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -269,7 +269,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vessel, RouteOption.PANAMA);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));

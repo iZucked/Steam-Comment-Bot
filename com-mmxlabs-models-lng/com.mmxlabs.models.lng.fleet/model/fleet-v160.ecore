@@ -171,6 +171,8 @@
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeParametersOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeParametersTmp" upperBound="-1"
+        eType="#//VesselRouteParameters" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeParameters" upperBound="-1"
         eType="#//VesselClassRouteParameters" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBaseFuelConsumption"
@@ -320,4 +322,42 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselRouteParameters" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraTransitTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="hours"/>
+        <details key="formatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenConsumptionRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="MT/day"/>
+        <details key="formatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenNBORate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³/day"/>
+        <details key="formatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastConsumptionRate"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="MT/day"/>
+        <details key="formatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastNBORate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³/day"/>
+        <details key="formatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>  
 </ecore:EPackage>

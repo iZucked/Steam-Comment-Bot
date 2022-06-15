@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
  * generated methods), but instead construct them using the EMF generated factories.
  * <p>
  * 
- * For example to create a VesselClass you do FleetFactory.eINSTANCE.createVesselClass(), or to create an Entity you do ContractPackage.eINSTANCE.createEntity(). If you look in lng.ecore each EClass
+ * For example to create a Vessel you do FleetFactory.eINSTANCE.createVessel(), or to create an Entity you do ContractPackage.eINSTANCE.createEntity(). If you look in lng.ecore each EClass
  * belongs to a package, which has an associated factory which is called <Packagename>Factory and has a single instance you can get through the .eINSTANCE field.
  * <p>
  * 

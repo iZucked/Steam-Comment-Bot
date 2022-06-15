@@ -149,23 +149,6 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				scenarioEditingLocation.getReferenceValueProviderCache(), commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name())));
 		addTypicalColumn("Max Speed", new VesselManipulatorWrapper<>(new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_MaxSpeed(), commandHandler)));
 
-		// getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
-		/*
-		 * getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
-		 * 
-		 * @Override public void run() {
-		 * 
-		 * final MMXRootObject rootObject = jointModelEditor.getRootObject(); if
-		 * (rootObject instanceof LNGScenarioModel) { final FleetModel fleetModel =
-		 * ((LNGScenarioModel) rootObject).getFleetModel(); final DetailCompositeDialog
-		 * dcd = new
-		 * DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().
-		 * getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
-		 * .getDefaultCommandHandler()); dcd.open(getJointModelEditorPart(),
-		 * getJointModelEditorPart().getRootObject(), fleetModel,
-		 * FleetPackage.eINSTANCE.getFleetModel_VesselClasses()); } } });
-		 */
-
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
@@ -274,7 +257,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 					&& ((List<Object>) (((IStructuredSelection) selection).toList())).stream().filter(Vessel.class::isInstance).map(Vessel.class::cast).noneMatch(Vessel::isMmxReference);
 		}
 	}
-	
+
 	@Override
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(event -> {

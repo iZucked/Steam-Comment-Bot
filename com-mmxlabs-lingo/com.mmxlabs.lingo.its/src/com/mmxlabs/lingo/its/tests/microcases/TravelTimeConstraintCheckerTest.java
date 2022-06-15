@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -157,7 +157,7 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours ( + 36 transit time)
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 3000, 1500, 3000, true);
 		vessel.setMaxSpeed(15.0);
-		for (VesselClassRouteParameters p : vessel.getVesselOrDelegateRouteParameters()) {
+		for (VesselRouteParameters p : vessel.getVesselOrDelegateRouteParameters()) {
 			p.setExtraTransitTime(36);
 		}
 

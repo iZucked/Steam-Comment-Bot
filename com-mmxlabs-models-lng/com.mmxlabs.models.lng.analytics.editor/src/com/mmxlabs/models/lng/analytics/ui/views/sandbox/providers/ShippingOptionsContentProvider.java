@@ -37,18 +37,6 @@ public class ShippingOptionsContentProvider implements ITreeContentProvider {
 			final AbstractAnalysisModel model = (AbstractAnalysisModel) inputElement;
 			return model.getShippingTemplates().toArray();
 		}
-//		return new Object[0];
-//		
-//		MMXRootObject rootObject = loc.getRootObject();
-//		if (rootObject instanceof LNGScenarioModel) {
-//			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-//			LNGReferenceModel referenceModel = lngScenarioModel.getReferenceModel();
-//			if (referenceModel != null) {
-//				FleetModel fleetModel = referenceModel.getFleetModel();
-//				return new Object[] { fleetModel.getVessels(), fleetModel.getVesselClasses() };
-//			}
-//		}
-//
 		return new Object[0];
 	}
 

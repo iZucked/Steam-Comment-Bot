@@ -607,7 +607,6 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 		inputWants.forEach(want -> want.accept(model));
 
 		// vesselsComponent.setInput(this);
-		// vesselClassesComponent.setInput(this);
 
 		rootOptionsModel = getRootOptionsModel(model);
 		if (rootOptionsModel != null) {
@@ -673,7 +672,6 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 				shippingOptionsComponent.refresh();
 				// vesselsComponent.refresh();
-				// vesselClassesComponent.refresh();
 				if (layout) {
 					// packAll(vesselComposite);
 					packAll(lhsComposite);

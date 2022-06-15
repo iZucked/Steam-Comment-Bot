@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -54,6 +56,23 @@ public class MigrateToV161 extends AbstractMigrationUnit {
 				final EObjectWrapper option = (EObjectWrapper) obj;
 				option.setRef("vesselCharter", option.getRef("vesselCharterTmp"));
 				option.unsetFeature("vesselCharterTmp");
+			}
+		}
+
+		// Part 2 - rename VesselClassRouteParameters to VesselRouteParameters
+		{
+			final EObjectWrapper referenceModel = scenarioModel.getRef("referenceModel");
+			final EObjectWrapper fleetModel = referenceModel.getRef("fleetModel");
+
+			final List<EObjectWrapper> vessels = fleetModel.getRefAsList("vessels");
+			if (vessels != null) {
+				for (final EObjectWrapper vessel : vessels) {
+					final List<EObjectWrapper> routeParameters = vessel.getRefAsList("routeParametersTmp");
+					if (routeParameters != null) {
+						vessel.setRef("routeParameters", routeParameters);
+						vessel.unsetFeature("routeParametersTmp");
+					}
+				}
 			}
 		}
 	}

@@ -28,14 +28,14 @@ import com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint;
  * generated methods), but instead construct them using the EMF generated factories.
  * <p>
  * 
- * For example to create a VesselClass you do FleetFactory.eINSTANCE.createVesselClass(), or to create an Entity you do ContractPackage.eINSTANCE.createEntity(). If you look in lng.ecore each EClass
+ * For example to create a Vesselyou do FleetFactory.eINSTANCE.createVessel(), or to create an Entity you do ContractPackage.eINSTANCE.createEntity(). If you look in lng.ecore each EClass
  * belongs to a package, which has an associated factory which is called <Packagename>Factory and has a single instance you can get through the .eINSTANCE field.
  * <p>
  * 
  * Anyway, the following fields on the following classes should make the validation constraint produce an error if they are null:
  * <p>
  * 
- * VesselClass --- basefuel, ladenAttributes, ballastAttributes
+ * Vessel --- basefuel, ladenAttributes, ballastAttributes
  * <p>
  * 
  * Vessel --- class (called class_ in the generated class, because of the java getClass() method)

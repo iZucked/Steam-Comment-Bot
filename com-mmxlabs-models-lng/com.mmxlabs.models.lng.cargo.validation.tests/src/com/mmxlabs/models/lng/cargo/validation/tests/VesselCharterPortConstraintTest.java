@@ -30,8 +30,6 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 /**
  * Test the {@link VesselCharterPortConstraintTest}. You will need the org.jmock eclipse plugin from our codebase repository to run this, as jmock doesn't currently provide an eclipse plugin.
  * 
- * TODO test behaviour of test when passed a VesselClass. It's a bit less tidy.
- * 
  * @author hinton
  * 
  */
@@ -116,7 +114,7 @@ public class VesselCharterPortConstraintTest {
 	 */
 	@Disabled("ValidationSupport doesn't allow mocking, test disabled until mocking removed.")
 	@Test
-	public void testValidityConstraintFromVesselClass() {
+	public void testValidityConstraintFromVessel() {
 		// This is the constraint we will be testing
 		final VesselCharterPortConstraint constraint = new VesselCharterPortConstraint();
 		// Mock a vessel for it to belong to.

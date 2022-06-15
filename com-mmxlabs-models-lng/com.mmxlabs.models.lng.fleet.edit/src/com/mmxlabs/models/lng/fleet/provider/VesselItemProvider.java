@@ -943,7 +943,7 @@ public class VesselItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS,
-				 FleetFactory.eINSTANCE.createVesselClassRouteParameters()));
+				 FleetFactory.eINSTANCE.createVesselRouteParameters()));
 	}
 
 	/**

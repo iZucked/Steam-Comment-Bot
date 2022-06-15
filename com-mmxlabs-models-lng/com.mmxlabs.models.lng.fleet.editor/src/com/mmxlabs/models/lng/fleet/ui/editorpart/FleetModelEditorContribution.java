@@ -25,7 +25,6 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {
-	// private VesselClassViewerPane vesselClassViewerPane;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -34,7 +33,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 
 	@Override
 	public void setLocked(final boolean locked) {
-		// vesselClassViewerPane.setLocked(locked);
+		 
 	}
 
 	@Override
