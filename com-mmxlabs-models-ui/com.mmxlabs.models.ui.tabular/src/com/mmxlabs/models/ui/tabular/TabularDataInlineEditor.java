@@ -190,6 +190,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 		private ViewerComparator viewerComparator;
 		private int heightHint;
+		private boolean changeHeaderColourWithValidation;
 
 		public Builder withContentProvider(final IContentProvider contentProvider) {
 			this.contentProvider = contentProvider;
@@ -287,9 +288,14 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		public void withHeightHint(final int heightHint) {
 			this.heightHint = heightHint;
 		}
+
+		public void withChangeHeaderColourWithValidation(boolean changeHeaderColourWithValidation) {
+			this.changeHeaderColourWithValidation = changeHeaderColourWithValidation;
+		}
 	}
 
 	protected GridTableViewer tableViewer;
+	protected Control lblControl;
 	private final Builder builder;
 
 	private IStatus lastStatus = null;
@@ -320,6 +326,8 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					.create());
 
 			controlParent = g;
+
+			lblControl = g;
 		} else {
 			final Composite g = new Composite(parent, SWT.NONE);
 			g.setBackground(parent.getBackground());
@@ -336,6 +344,8 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 				final Label lbl = new Label(g, SWT.NONE);
 				lbl.setBackground(parent.getBackground());
 				lbl.setText(builder.labelName);
+
+				lblControl = lbl;
 			}
 		}
 
@@ -537,6 +547,17 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			tableViewer.refresh();
 		}
 
+		if (builder.changeHeaderColourWithValidation && lblControl != null && status != null) {
+
+			final int severity = checkStatus(status, IStatus.OK, input, feature);
+
+			switch (severity) {
+			case IStatus.ERROR -> lblControl.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+			case IStatus.WARNING -> lblControl.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
+			default -> lblControl.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+			}
+		}
+
 		super.processValidation(status);
 	}
 
@@ -553,8 +574,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 			}
 		}
-		if (status instanceof IDetailConstraintStatus) {
-			final IDetailConstraintStatus element = (IDetailConstraintStatus) status;
+		if (status instanceof IDetailConstraintStatus element) {
 
 			final Collection<EObject> objects = element.getObjects();
 			if (objects.contains(input)) {
