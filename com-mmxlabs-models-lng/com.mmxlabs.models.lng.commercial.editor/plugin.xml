@@ -117,9 +117,10 @@
 	<!-- Other Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Entity"
-          targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.DefaultEntityModelFactory"
+          label="Legal Entity"
+          outputEClass="com.mmxlabs.models.lng.commercial.LegalEntity"
+          targetEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
           
     </factory>
     <factory

@@ -45,6 +45,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 
+	public static final String KEY_THIRD_PARTY_ENTITY = "VesselCharterConstraint.third-party-entity";
+	
 	@Override
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
@@ -66,6 +68,12 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__ENTITY) //
 						.withMessage("Entity must be specified.") //
+						.make(ctx));
+			} else if (vesselCharter.getCharterOrDelegateEntity().isThirdParty()) {
+				statuses.add(baseFactory.copyName() //
+						.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__ENTITY) //
+						.withMessage("Charters cannot use a third-party entity.") //
+						.withConstraintKey(KEY_THIRD_PARTY_ENTITY) //
 						.make(ctx));
 			}
 

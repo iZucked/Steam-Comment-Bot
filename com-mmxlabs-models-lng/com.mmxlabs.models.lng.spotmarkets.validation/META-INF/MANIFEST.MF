@@ -16,3 +16,4 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.spotmarkets.validation
+Export-Package: com.mmxlabs.models.lng.spotmarkets.validation

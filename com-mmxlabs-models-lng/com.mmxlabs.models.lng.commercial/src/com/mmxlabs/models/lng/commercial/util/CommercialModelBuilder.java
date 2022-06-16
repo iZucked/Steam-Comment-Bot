@@ -208,7 +208,7 @@ public class CommercialModelBuilder {
 				.build();
 
 	}
-	
+
 	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(@NonNull final String priceExpression) {
 
 		return makeCharterContract() //
@@ -216,7 +216,7 @@ public class CommercialModelBuilder {
 				.addLumpSumRuleForSingleStart(null, priceExpression).build() // Build Repositioning
 				.build();
 	}
-	
+
 	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(final @Nullable Port startPort, @NonNull final String priceExpression) {
 
 		return makeCharterContract() //
@@ -224,7 +224,7 @@ public class CommercialModelBuilder {
 				.addLumpSumRuleForSingleStart(startPort, priceExpression).build() // Build Repositioning
 				.build();
 	}
-	
+
 	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(final @NonNull Collection<@NonNull APortSet<Port>> startPorts, @NonNull final String priceExpression) {
 
 		return makeCharterContract() //
@@ -232,16 +232,22 @@ public class CommercialModelBuilder {
 				.addLumpSumRule(startPorts, priceExpression).build() // Build Repositioning
 				.build();
 	}
-	
-	public @NonNull GenericCharterContract createSimpleOriginRepositioningContract(final @NonNull Collection<@NonNull APortSet<Port>> startPorts,//
+
+	public @NonNull GenericCharterContract createSimpleOriginRepositioningContract(final @NonNull Collection<@NonNull APortSet<Port>> startPorts, //
 			final @Nullable Port originPort, final double speed, @NonNull final String hireExpression, @NonNull final String fuelExpression, //
 			boolean includeCanalFee, boolean includeCanalTime, @NonNull final String lumpSumExpression) {
 
 		return makeCharterContract() //
 				.withStandardRepositioning() //
-				.addOriginRule(startPorts, originPort, speed, hireExpression, fuelExpression, includeCanalFee, includeCanalTime, lumpSumExpression)
-				.build() // Build Repositioning
+				.addOriginRule(startPorts, originPort, speed, hireExpression, fuelExpression, includeCanalFee, includeCanalTime, lumpSumExpression).build() // Build Repositioning
 				.build();
+	}
+
+	public @NonNull LegalEntity createEntity(@NonNull final String name, @NonNull final LocalDate date, final float taxRate) {
+		var entity = createEntity(name);
+		setTaxRates(entity, date, taxRate);
+		return entity;
+
 	}
 
 	public @NonNull LegalEntity createEntity(@NonNull final String name) {

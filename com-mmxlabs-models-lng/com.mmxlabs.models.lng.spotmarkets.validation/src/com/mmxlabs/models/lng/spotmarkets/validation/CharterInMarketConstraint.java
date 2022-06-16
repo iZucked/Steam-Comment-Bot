@@ -36,6 +36,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
+
+	public static final String KEY_THIRD_PARTY_ENTITY = "CharterInMarketConstraint.third-party-entity";
+
 	@Override
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
@@ -88,8 +91,13 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] needs an entity set.", spotMarket.getName())));
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
 				failures.add(dsd);
+			} else if (spotMarket.getEntity().isThirdParty()) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] cannot use a third-party entity.", spotMarket.getName())));
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+				dsd.setConstraintKey(KEY_THIRD_PARTY_ENTITY);
+				failures.add(dsd);
 			}
-
 			final int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
 			final int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
 			if (minDurationInHours != 0 && maxDurationInHours != 0) {
@@ -190,7 +198,8 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 					final DetailConstraintStatusDecorator dsd;
 					if (anywhere) {
 						dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-								.createFailureStatus((String.format("%s is not covered by the repositioning rules (note the vessel can start anywhere - nominals can start at any load port)", ScenarioElementNameHelper.getName(port)))));
+								.createFailureStatus((String.format("%s is not covered by the repositioning rules (note the vessel can start anywhere - nominals can start at any load port)",
+										ScenarioElementNameHelper.getName(port)))));
 					} else {
 						dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(String.format("%s is not covered by the repositioning rules", ScenarioElementNameHelper.getName(port))));

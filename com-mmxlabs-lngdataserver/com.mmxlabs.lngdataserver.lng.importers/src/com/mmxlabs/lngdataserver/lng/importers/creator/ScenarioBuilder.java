@@ -152,7 +152,7 @@ public class ScenarioBuilder {
 		loadDefaultPortCosts();
 
 		scenarioModelBuilder.getCargoModelBuilder().initCanalBookings();
-		
+
 		createDefaultCooldownCost("1000000");
 		setDefaultBunkerCosts("400");
 
@@ -305,8 +305,7 @@ public class ScenarioBuilder {
 	}
 
 	public ScenarioBuilder configureDefaultCommercialModel(final @NonNull String defaultEntityName) {
-		final LegalEntity entity = scenarioModelBuilder.getCommercialModelBuilder().createEntity(defaultEntityName);
-		scenarioModelBuilder.getCommercialModelBuilder().setTaxRates(entity, LocalDate.of(2000, Month.JANUARY, 1), 0);
+		final LegalEntity entity = scenarioModelBuilder.getCommercialModelBuilder().createEntity(defaultEntityName, LocalDate.of(2000, Month.JANUARY, 1), 0);
 		return this;
 	}
 

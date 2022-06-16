@@ -1079,6 +1079,25 @@
                         class="Slot">
                   </target>
                </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.ThirdPartySlotEntityConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.ThirdPartySlotEntityConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="ThirdPartySlotEntityConstraint"
+                     severity="ERROR"
+                     statusCode="0">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="Slot">
+                  </target>
+                  <target
+                        class="Cargo">
+                  </target>
+               </constraint>
         </constraints>
       </constraintProvider>
       <constraintProvider

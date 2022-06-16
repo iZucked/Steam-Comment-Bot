@@ -27,6 +27,7 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class CommercialModelEditorContribution extends BaseJointModelEditorContribution<CommercialModel> {
+	private static final String HELP_TOPIC = "com.mmxlabs.lingo.doc.Editor_Commercial";
 	private int pageNumber;
 	private ContractEditorPane salesContractEditorPane;
 	private ContractEditorPane purchaseContractEditorPane;
@@ -41,33 +42,32 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterMarketEditorPane = new CharterMarketEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		
+
 		purchaseContractEditorPane.createControl(sash);
 		salesContractEditorPane.createControl(sash);
 		entityEditorPane.createControl(sash);
 		charterMarketEditorPane.createControl(sash);
-		
+
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharterContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
-		
 		entityEditorPane.getViewer().setInput(modelObject);
 		purchaseContractEditorPane.getViewer().setInput(modelObject);
 		salesContractEditorPane.getViewer().setInput(modelObject);
 		charterMarketEditorPane.getViewer().setInput(modelObject);
-		
+
 		purchaseContractEditorPane.defaultSetTitle("Purchase Contracts");
 		salesContractEditorPane.defaultSetTitle("Sales Contracts");
 
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Commercial");
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(purchaseContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(salesContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(entityEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterMarketEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(purchaseContractEditorPane.getControl(), HELP_TOPIC);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(salesContractEditorPane.getControl(), HELP_TOPIC);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(entityEditorPane.getControl(), HELP_TOPIC);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterMarketEditorPane.getControl(), HELP_TOPIC);
 
 	}
 
@@ -82,8 +82,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 	@Override
 	public boolean canHandle(final IStatus status) {
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof final DetailConstraintStatusDecorator dcsd) {
 			if (dcsd.getTarget() instanceof BaseLegalEntity) {
 				return true;
 			} else if (dcsd.getTarget() instanceof BaseEntityBook) {
@@ -94,8 +93,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				return true;
 			} else if (dcsd.getTarget() instanceof GenericCharterContract) {
 				return true;
-			} else if (dcsd.getTarget() instanceof LNGPriceCalculatorParameters) {
-				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) dcsd.getTarget();
+			} else if (dcsd.getTarget() instanceof final LNGPriceCalculatorParameters expressionPriceParameters) {
 				if (expressionPriceParameters.eContainer() instanceof Contract) {
 					return true;
 				}
@@ -108,13 +106,11 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 
 	@Override
 	public void handle(final IStatus status) {
-		if (status instanceof DetailConstraintStatusDecorator) {
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof final DetailConstraintStatusDecorator dcsd) {
 			editorPart.setActivePage(pageNumber);
 
 			EObject target = dcsd.getTarget();
-			if (target instanceof LNGPriceCalculatorParameters) {
-				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) target;
+			if (target instanceof final LNGPriceCalculatorParameters expressionPriceParameters) {
 				if (expressionPriceParameters.eContainer() instanceof Contract) {
 					target = expressionPriceParameters.eContainer();
 				}
