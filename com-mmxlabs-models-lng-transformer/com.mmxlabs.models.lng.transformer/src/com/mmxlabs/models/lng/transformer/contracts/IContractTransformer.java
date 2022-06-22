@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
@@ -22,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
  * @author hinton
  * 
  */
-public interface IContractTransformer extends ISlotTransformer {
+public interface IContractTransformer extends ITransformerExtension {
 
 	/**
 	 * Create an {@link ISalesPriceCalculator} from a {@link SalesContract}.
@@ -32,7 +33,9 @@ public interface IContractTransformer extends ISlotTransformer {
 	 * @param sc
 	 * @return
 	 */
-	ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull LNGPriceCalculatorParameters priceParameters);
+	default ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull LNGPriceCalculatorParameters priceParameters) {
+		return null;
+	}
 
 	/**
 	 * Create an {@link ILoadPriceCalculator} from a {@link PurchaseContract}
@@ -40,7 +43,9 @@ public interface IContractTransformer extends ISlotTransformer {
 	 * @param pc
 	 * @return
 	 */
-	ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull LNGPriceCalculatorParameters priceParameters);
+	default ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull LNGPriceCalculatorParameters priceParameters) {
+		return null;
+	}
 
 	/**
 	 */

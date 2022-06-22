@@ -178,8 +178,7 @@ public class PNLBasedWindowTrimmerUtils {
 	private final int DEFAULT_CV = OptimiserUnitConvertor.convertToInternalConversionFactor(22.67);
 
 	public List<TimeChoice> computeBasicIntervalsForSlot(final IPortTimeWindowsRecord portTimeWindowsRecord, final IPortSlot slot) {
-		if (slot instanceof ILoadOption) {
-			final ILoadOption load = (ILoadOption) slot;
+		if (slot instanceof ILoadOption load) {
 			List<int[]> loadPriceIntervals = null;
 
 			if (load.getLoadPriceCalculator() instanceof IPriceIntervalProvider) {
@@ -205,8 +204,7 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 				return arrivalTimeIntervals;
 			}
-		} else if (slot instanceof IDischargeOption) {
-			final IDischargeOption discharge = (IDischargeOption) slot;
+		} else if (slot instanceof IDischargeOption discharge) {
 			List<int[]> dischargePriceIntervals = null;
 			if (discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider) {
 				if (priceIntervalProviderHelper.isDischargePricingEventTime(discharge, portTimeWindowsRecord)

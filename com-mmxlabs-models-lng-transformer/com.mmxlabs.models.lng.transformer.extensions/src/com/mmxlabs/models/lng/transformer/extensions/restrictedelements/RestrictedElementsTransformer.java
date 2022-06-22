@@ -17,7 +17,6 @@ import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -28,26 +27,21 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  */
-public class RestrictedElementsTransformer implements IContractTransformer {
+public class RestrictedElementsTransformer implements ISlotTransformer {
 
 	@Inject
 	private IRestrictedElementsProviderEditor restrictedElementsProviderEditor;
@@ -244,20 +238,5 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		{
 			slotMap.computeIfAbsent(modelSlot, s -> new HashSet()).add(sequenceElement);
 		}
-	}
-
-	@Override
-	public Collection<EClass> getContractEClasses() {
-		return Collections.emptySet();
-	}
-
-	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
-	}
-
-	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
-		return null;
 	}
 }
