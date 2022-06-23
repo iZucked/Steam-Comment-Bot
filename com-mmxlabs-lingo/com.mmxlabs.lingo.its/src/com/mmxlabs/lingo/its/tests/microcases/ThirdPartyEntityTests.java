@@ -90,7 +90,7 @@ public class ThirdPartyEntityTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(0L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertNotEquals(0L, cargoAllocation.getSlotAllocations().get(0).getVolumeTransferred());
 			Assertions.assertNotEquals(0L, cargoAllocation.getSlotAllocations().get(0).getVolumeValue());
-			
+
 			Assertions.assertNotEquals(0L, cargoAllocation.getSlotAllocations().get(1).getVolumeTransferred());
 			Assertions.assertNotEquals(0L, cargoAllocation.getSlotAllocations().get(1).getVolumeValue());
 
@@ -181,6 +181,34 @@ public class ThirdPartyEntityTests extends AbstractMicroTestCase {
 			}
 
 			Assertions.assertTrue(foundL1);
+		}
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCargoNonShippedConstraint2() {
+
+		final LegalEntity thirdPartyEntity = commercialModelBuilder.createEntity("third-party-1", LocalDate.of(2000, Month.JANUARY, 1), 0);
+		thirdPartyEntity.setThirdParty(true);
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2019, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, thirdPartyEntity, "5", 23.5, null) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2019, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, thirdPartyEntity, "7") //
+				.build() //
+				.build();
+
+		{
+			final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
+			Assertions.assertNotNull(statusOrig);
+
+			// Clear out other validation errors, e.g. validation constraints may fail and
+			// get disabled, so do not abort this test.
+			final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
+
+			final List<DetailConstraintStatusDecorator> children = ValidationTestUtil.findStatus(status, ThirdPartySlotEntityConstraint.KEY_CARGO_NON_SHIPPED);
+			Assertions.assertTrue(children.isEmpty());
 		}
 	}
 

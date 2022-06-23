@@ -82,15 +82,15 @@ public class ThirdPartySlotEntityConstraint extends AbstractModelMultiConstraint
 
 					f.make(ctx, statuses);
 				}
-			}
 
-			if (cargo.getCargoType() == CargoType.FLEET) {
-				final DetailConstraintStatusFactory f = baseFactory.copyName() //
-						.withFormattedMessage("Cargoes for a third-party should be non-shipped");
-				cargo.getSlots().forEach(s -> f.withObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-				cargo.getSlots().forEach(s -> f.withObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots()));
-				f.withConstraintKey(KEY_CARGO_NON_SHIPPED);
-				f.make(ctx, statuses);
+				if (cargo.getCargoType() == CargoType.FLEET) {
+					final DetailConstraintStatusFactory f = baseFactory.copyName() //
+							.withFormattedMessage("Cargoes for a third-party should be non-shipped");
+					cargo.getSlots().forEach(s -> f.withObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+					cargo.getSlots().forEach(s -> f.withObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots()));
+					f.withConstraintKey(KEY_CARGO_NON_SHIPPED);
+					f.make(ctx, statuses);
+				}
 			}
 		}
 	}
