@@ -192,8 +192,7 @@ public class VoyagePlanRecord extends AbstractWriteLockable {
 			return true;
 		}
 
-		if (obj instanceof VoyagePlanRecord) {
-			final VoyagePlanRecord other = (VoyagePlanRecord) obj;
+		if (obj instanceof VoyagePlanRecord other) {
 
 			if (isCargo != other.isCargo) {
 				return false;
