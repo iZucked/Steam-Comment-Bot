@@ -17,23 +17,14 @@ import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
-public class InsertionPlanTransformer {
+public class InsertionPlanTransformer extends AbstractSolutionSetTransformer<SlotInsertionOptions> {
 
-	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
-		if (modelRecord != null) {
-			return new ScenarioResultImpl(modelRecord, scheduleModel);
-		} else {
-			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
-		}
-	}
-
+	@Override
 	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final SlotInsertionOptions plan, final IProgressMonitor monitor,
 			NamedObject target) {
 
@@ -65,8 +56,7 @@ public class InsertionPlanTransformer {
 
 					ScenarioResult altBase = null;
 					ScenarioResult altCurrent = null;
-					if (option instanceof DualModeSolutionOption) {
-						final DualModeSolutionOption slotInsertionOption = (DualModeSolutionOption) option;
+					if (option instanceof DualModeSolutionOption slotInsertionOption) {
 						if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
 							altBase = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroBaseCase().getScheduleModel());
 							altCurrent = make(scenarioInstance, modelRecord, slotInsertionOption.getMicroTargetCase().getScheduleModel());

@@ -16,29 +16,22 @@ import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
-public class OptimisationResultPlanTransformer {
+public class OptimisationResultPlanTransformer extends AbstractSolutionSetTransformer<OptimisationResult> {
 
-	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
-		if (modelRecord != null) {
-			return new ScenarioResultImpl(modelRecord, scheduleModel);
-		} else {
-			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
-		}
-	}
-
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final OptimisationResult plan, final IProgressMonitor monitor) {
+	@Override
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final OptimisationResult plan, final IProgressMonitor monitor,
+			@Nullable NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		ScenarioResult base;
 		if (plan.isUseScenarioBase() || plan.getBaseOption() == null) {
 			// Hacky - compare to evaluated state
-			LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(plan);
+			final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(plan);
 
 			if (scenarioModel == null || scenarioModel.getScheduleModel().getSchedule() == null) {
 				throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
