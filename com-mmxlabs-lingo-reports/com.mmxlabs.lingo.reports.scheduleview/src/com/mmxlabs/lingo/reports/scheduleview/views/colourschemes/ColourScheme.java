@@ -23,8 +23,7 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 	private String ID;
 	protected GanttChartViewer viewer;
 
-	public ColourScheme() {
-		super();
+	protected ColourScheme() {
 		ID = "";
 	}
 
@@ -34,7 +33,7 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 	}
 
 	@Override
-	public String setID(String id) {
+	public String setID(final String id) {
 		if (id != null) {
 			ID = id;
 		}
@@ -52,22 +51,22 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 	}
 
 	@Override
-	public Color getForeground(Object element) {
+	public Color getForeground(final Object element) {
 		return null;
 	}
 
 	@Override
-	public Color getBackground(Object element) {
+	public Color getBackground(final Object element) {
 		return null;
 	}
 
 	@Override
 	public int getAlpha(final Object element) {
 
-		if (element instanceof Event) {
-			Event ev = (Event) (element);
-			if (isLocked(ev, viewer) && !isOutsideTimeWindow(ev))
+		if (element instanceof Event ev) {
+			if (isLocked(ev) && !isOutsideTimeWindow(ev)) {
 				return Faded_Alpha;
+			}
 		}
 		return 255;
 	}
@@ -75,10 +74,10 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 	@Override
 	public Color getBorderColour(final Object element) {
 
-		if (element instanceof Event) {
-			final Event event = (Event) element;
-			if (isLocked(event, viewer))
+		if (element instanceof final Event event) {
+			if (isLocked(event)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Locked, ColourElements.Border);
+			}
 		}
 		return null;
 	}
@@ -86,10 +85,10 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 	@Override
 	public int getBorderWidth(final Object element) {
 
-		if (element instanceof Event) {
-			final Event event = (Event) element;
-			if (isLocked(event, viewer))
+		if (element instanceof Event event) {
+			if (isLocked(event)) {
 				return 1;
+			}
 		}
 		return 1;
 	}

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
@@ -66,7 +67,7 @@ public final class ColourPalette {
 	private static final RGB Orange = new RGB(255, 168, 64);
 
 	private static ColourPalette instance;
-	private static final Map<String, ColourPalette> namedInstances = new HashMap<>();
+	private static final Map<String, ColourPalette> namedInstances = new ConcurrentHashMap<>();
 
 	public static synchronized ColourPalette getInstance() {
 		if (instance == null) {
@@ -76,17 +77,7 @@ public final class ColourPalette {
 	}
 
 	public static ColourPalette getNamedInstance(final String name) {
-		ColourPalette cp = namedInstances.get(name);
-		if (cp == null) {
-			synchronized (ColourPalette.class) {
-				cp = namedInstances.get(name);
-				if (cp == null) {
-					cp = new ColourPalette();
-					namedInstances.put(name, cp);
-				}
-			}
-		}
-		return cp;
+		return namedInstances.computeIfAbsent(name, k -> new ColourPalette());
 	}
 
 	private ColourPalette() {
