@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
@@ -203,7 +202,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 	private synchronized void scheduleRebuildCompare(final ScenarioResult pinned, final Collection<ScenarioResult> others, final ISelection selection, final boolean block) {
 
-		// If we have too many other scenarios, then deselect *all* the others. We could pick an arbitrary one,
+		// If we have too many other scenarios, then deselect *all* the others. We could
+		// pick an arbitrary one,
 		// but that could lead to inconsistent UI behaviour
 
 		if (pinned != null && others.size() > 1) {
@@ -231,15 +231,16 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 						ISelection sel = originalSelection;
 
 						if (withChangeSets) {
-							// Selection object is expected to have ChangeSet info, so extract and update the information
+							// Selection object is expected to have ChangeSet info, so extract and update
+							// the information
 							updateChangeSetFromSelection(originalSelection, currentSelectedDataProvider);
 						} else {
-							// No new change sets, but try and retain any change set information from the previous selection state.
+							// No new change sets, but try and retain any change set information from the
+							// previous selection state.
 							final Set<Object> selectedObjects = new LinkedHashSet<>();
 
-							if (originalSelection instanceof IStructuredSelection) {
-								final IStructuredSelection ss = (IStructuredSelection) originalSelection;
-								ss.forEach(obj -> selectedObjects.add(obj));
+							if (originalSelection instanceof IStructuredSelection ss) {
+								ss.forEach(selectedObjects::add);
 							}
 
 							selectedObjects.add(currentSelectedDataProvider.getChangeSet());
@@ -251,14 +252,14 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 							// Remove any possible nulls from the list
 							selectedObjects.remove(null);
 
-							// Replace the original selection with a copy that also contains the change set info
+							// Replace the original selection with a copy that also contains the change set
+							// info
 							sel = new StructuredSelection(new ArrayList<>(selectedObjects));
 
 						}
 						currentSelectedDataProvider.setSelectedObjects(null, sel);
 
 						for (final ISelectedScenariosServiceListener l : listeners) {
-
 							try {
 								l.selectedObjectChanged(null, sel);
 							} catch (final Exception e) {
@@ -331,8 +332,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	private void updateChangeSetFromSelection(final ISelection selection, final SelectedDataProviderImpl selectedDataProvider) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection structuredSelection) {
 
 			// Where to get this from?
 			final boolean diffToBase = false;
@@ -344,18 +344,15 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 			final Iterator<?> itr = structuredSelection.iterator();
 			while (itr.hasNext()) {
 				Object o = itr.next();
-				if (o instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow r = (ChangeSetTableRow) o;
+				if (o instanceof ChangeSetTableRow r) {
 					rows.add(r);
 					o = r.eContainer();
 				}
-				if (o instanceof ChangeSetTableGroup) {
-					final ChangeSetTableGroup s = (ChangeSetTableGroup) o;
+				if (o instanceof ChangeSetTableGroup s) {
 					set = s;
 					o = s.eContainer();
 				}
-				if (o instanceof ChangeSetTableRoot) {
-					final ChangeSetTableRoot r = (ChangeSetTableRoot) o;
+				if (o instanceof ChangeSetTableRoot r) {
 					root = r;
 				}
 				changeSetSelection.add(o);
@@ -389,7 +386,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Update the current Selection. Note this will not update selected ChangeSet information.
+	 * Update the current Selection. Note this will not update selected ChangeSet
+	 * information.
 	 * 
 	 * @param newSelection
 	 */
@@ -398,7 +396,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Update the current Selection and selected ChangeSet information based on ChangeSet objects in the ISelection
+	 * Update the current Selection and selected ChangeSet information based on
+	 * ChangeSet objects in the ISelection
 	 * 
 	 * @param newSelection
 	 */
@@ -432,7 +431,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Command stack listener method, cause the linked viewer to refresh on command execution
+	 * Command stack listener method, cause the linked viewer to refresh on command
+	 * execution
 	 *
 	 */
 	private class MyCommandStackListener implements CommandStackListener {
@@ -450,19 +450,21 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		@Override
 		public void commandStackChanged(final EventObject event) {
 
-			// Find target Schedule models which may have changed via a command. We only care about the top level objects as we don't expect to change a Schedule instance once attached to the scenario
+			// Find target Schedule models which may have changed via a command. We only
+			// care about the top level objects as we don't expect to change a Schedule
+			// instance once attached to the scenario
 			final Set<Object> e = new HashSet<>();
 			for (final var ref : targets) {
 				final ScenarioResult sr = ref.get();
 				if (sr != null) {
 
 					final ScheduleModel scheduleModel = sr.getTypedResult(ScheduleModel.class);
-					e.add(scheduleModel);
-
-					final Schedule schedule = scheduleModel.getSchedule();
-
-					if (schedule != null) {
-						e.add(schedule);
+					if (scheduleModel != null) {
+						e.add(scheduleModel);
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
+							e.add(schedule);
+						}
 					}
 				}
 
@@ -492,50 +494,47 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		}
 	}
 
-	private final ISelectionListener selectionListener = new ISelectionListener() {
+	private final ISelectionListener selectionListener = (part, selectedObject) -> {
 
-		@Override
-		public void selectionChanged(final MPart part, final Object selectedObject) {
+		if (part != null) {
+			// Black list views as selection providers
+			final String elementID = part.getElementId();
 
-			if (part != null) {
-				// Black list views as selection providers
-				final String elementID = part.getElementId();
-
-				if ("com.mmxlabs.scenario.service.ui.navigator".equals(elementID)) {
-					return;
-				}
-				if ("com.mmxlabs.scheduleview.views.SchedulerView".equals(elementID)) {
-					return;
-				}
-				if ("com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView".equals(elementID)) {
-					return;
-				}
-				if ("com.mmxlabs.models.ui.validation.views.ValidationProblemsView".equals(elementID)) {
-					return;
-				}
-				if ("org.eclipse.pde.runtime.LogView".equals(elementID)) {
-					return;
-				}
+			if ("com.mmxlabs.scenario.service.ui.navigator".equals(elementID)) {
+				return;
 			}
-
-			if (SelectionServiceUtils.isSelectionValid(part, selectedObject)) {
-				// Avoid re-entrant selection changes.
-				if (inSelectionChanged.compareAndSet(false, true)) {
-					try {
-						final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-						setSelection(selection);
-					} finally {
-						inSelectionChanged.set(false);
-					}
-				}
+			if ("com.mmxlabs.scheduleview.views.SchedulerView".equals(elementID)) {
+				return;
+			}
+			if ("com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView".equals(elementID)) {
+				return;
+			}
+			if ("com.mmxlabs.models.ui.validation.views.ValidationProblemsView".equals(elementID)) {
+				return;
+			}
+			if ("org.eclipse.pde.runtime.LogView".equals(elementID)) {
+				return;
 			}
 		}
 
+		if (SelectionServiceUtils.isSelectionValid(part, selectedObject)) {
+			// Avoid re-entrant selection changes.
+			if (inSelectionChanged.compareAndSet(false, true)) {
+				try {
+					final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+					setSelection(selection);
+				} finally {
+					inSelectionChanged.set(false);
+				}
+			}
+		}
 	};
 
 	public void start() {
 		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(() -> {
-			// #stop() can be called before the workbench has been started. This can happen due to the automem workbench restart. This is a second vm instance so there is no danger of two copies of
+			// #stop() can be called before the workbench has been started. This can happen
+			// due to the automem workbench restart. This is a second vm instance so there
+			// is no danger of two copies of
 			// this service running at once due to *this* specific situation.
 			selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
 			selectionService.addPostSelectionListener(selectionListener);
@@ -564,7 +563,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 		if (newInstance != null) {
 			try {
-				// This line may fail if model cannot be loaded. Wrap everything up in exception handler
+				// This line may fail if model cannot be loaded. Wrap everything up in exception
+				// handler
 				final ScenarioResult scenarioResult = new ScenarioResultImpl(newInstance);
 				if (!others.contains(scenarioResult)) {
 					others.add(scenarioResult);

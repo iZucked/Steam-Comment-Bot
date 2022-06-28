@@ -64,7 +64,7 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 
 	@Override
 	public void init(@NonNull final IPhaseOptimisationData data) {
-		List<IResource> resources = data.getResources();
+		final List<IResource> resources = data.getResources();
 		for (int i = 0; i < resources.size(); i++) {
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resources.get(i));
 			final int countForVessel = vesselInformationProvider.getCountForVessel(vesselCharter);
@@ -114,7 +114,7 @@ public class VesselUtilisationFitnessCore implements IFitnessCore, IFitnessCompo
 	private long evaluation(final ProfitAndLossSequences volumeAllocatedSequences) {
 		long weight = 0;
 		for (final Map.Entry<IResource, Integer> e : fitnessVessels.entrySet()) {
-			IResource iResource = e.getKey();
+			final IResource iResource = e.getKey();
 			final VolumeAllocatedSequence scheduledSequenceForResource = volumeAllocatedSequences.getScheduledSequenceForResource(iResource);
 			long numLoads = 0;
 			for (final VoyagePlanRecord vpr : scheduledSequenceForResource.getVoyagePlanRecords()) {

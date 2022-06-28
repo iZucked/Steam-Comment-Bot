@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -69,8 +68,8 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
 				final ICargoFitnessComponent component = provider.createComponent(this);
 				allComponents.add(component);
-				if (component instanceof ICargoSchedulerFitnessComponent) {
-					schedulerComponents.add((ICargoSchedulerFitnessComponent) component);
+				if (component instanceof ICargoSchedulerFitnessComponent cc) {
+					schedulerComponents.add(cc);
 				}
 			}
 		}
@@ -108,7 +107,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return new ArrayList<IFitnessComponent>(allComponents);
+		return new ArrayList<>(allComponents);
 	}
 
 	@Override
@@ -120,23 +119,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 	}
 
-	@Override
-	public void dispose() {
-
-		for (final ICargoFitnessComponent c : allComponents) {
-			c.dispose();
-		}
-		allComponents.clear();
-		schedulerComponents.clear();
-		// scheduler = null;
-	}
-
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
 		return allComponents;
-	}
-
-	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-
 	}
 }

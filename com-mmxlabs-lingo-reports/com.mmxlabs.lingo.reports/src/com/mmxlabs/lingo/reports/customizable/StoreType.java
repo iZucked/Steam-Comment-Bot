@@ -1,5 +1,5 @@
 package com.mmxlabs.lingo.reports.customizable;
 
-enum StoreType {
+public enum StoreType {
 	USER, TEAM
 }

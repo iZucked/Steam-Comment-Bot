@@ -57,10 +57,9 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("causeid", "Cause ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				if (object instanceof Cooldown) {
-					final Cooldown idle = (Cooldown) object;
-					final Sequence sequence = (Sequence) idle.eContainer();
-					int index = sequence.getEvents().indexOf(idle) - 1;
+				if (object instanceof Cooldown cooldown) {
+					final Sequence sequence = (Sequence) cooldown.eContainer();
+					int index = sequence.getEvents().indexOf(cooldown) - 1;
 
 					while (index >= 0) {
 						final Event before = sequence.getEvents().get(index);
@@ -79,10 +78,9 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("id", "ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				if (object instanceof Cooldown) {
-					final Cooldown idle = (Cooldown) object;
-					final Sequence sequence = (Sequence) idle.eContainer();
-					final int index = sequence.getEvents().indexOf(idle) + 1;
+				if (object instanceof Cooldown cooldown) {
+					final Sequence sequence = (Sequence) cooldown.eContainer();
+					final int index = sequence.getEvents().indexOf(cooldown) + 1;
 					final Event after = sequence.getEvents().get(index);
 
 					return after.name();
@@ -97,8 +95,8 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("cost", "Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				if (object instanceof Cooldown) {
-					return ((Cooldown) object).getCost();
+				if (object instanceof Cooldown cooldown) {
+					return cooldown.getCost();
 				}
 				return null;
 			}
@@ -201,7 +199,6 @@ public class CooldownReportView extends EMFReportView {
 
 		for (final Object obj : result) {
 			if (obj instanceof Cooldown) {
-				final Cooldown row = (Cooldown) obj;
 				// Not managed to get this working correctly. Probably need to find the previous slot?
 				// setInputEquivalents(row, CollectionsUtil.makeArrayList(row, row.getPreviousEvent(), row.getNextEvent()));
 			}

@@ -197,8 +197,7 @@ public class AnnotatedSolutionExporter {
 			assert scheduledSequence != null;
 
 			switch (vesselCharter.getVesselInstanceType()) {
-			case TIME_CHARTER:
-			case FLEET:
+			case TIME_CHARTER, FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
 				eSequence.setVesselCharter(modelEntityMap.getModelObjectNullChecked(vesselCharter, VesselCharter.class));
 				eSequence.unsetCharterInMarket();
@@ -319,26 +318,25 @@ public class AnnotatedSolutionExporter {
 			EventGrouping eventGrouping = null;
 			for (final Event event : eSequence.getEvents()) {
 				if (event instanceof PortVisit) {
-					if (event instanceof SlotVisit) {
-						final SlotVisit visit = (SlotVisit) event;
+					if (event instanceof final SlotVisit visit) {
 						final CargoAllocation allocation = visit.getSlotAllocation().getCargoAllocation();
 						allocation.setSequence(eSequence);
 						eventGrouping = allocation;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof StartEvent) {
-						eventGrouping = (StartEvent) event;
+					} else if (event instanceof final StartEvent evt) {
+						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof EndEvent) {
-						eventGrouping = (EndEvent) event;
+					} else if (event instanceof final EndEvent evt) {
+						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof VesselEventVisit) {
-						eventGrouping = (VesselEventVisit) event;
+					} else if (event instanceof final VesselEventVisit evt) {
+						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof GeneratedCharterOut) {
-						eventGrouping = (GeneratedCharterOut) event;
+					} else if (event instanceof final GeneratedCharterOut evt) {
+						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof CharterLengthEvent) {
-						eventGrouping = (CharterLengthEvent) event;
+					} else if (event instanceof final CharterLengthEvent evt) {
+						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
 					} else {
 						eventGrouping = null;
@@ -360,7 +358,7 @@ public class AnnotatedSolutionExporter {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
 			if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
-				final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
+				final Slot<?> modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 				if (slot != null) {
 					output.getUnusedElements().add(modelSlot);
 				}
@@ -413,8 +411,8 @@ public class AnnotatedSolutionExporter {
 		});
 
 		try {
-			Iterable<IOutputScheduleProcessor> scheduleProcessors = injector.getInstance(key);
-			for (IOutputScheduleProcessor processor : scheduleProcessors) {
+			final Iterable<IOutputScheduleProcessor> scheduleProcessors = injector.getInstance(key);
+			for (final IOutputScheduleProcessor processor : scheduleProcessors) {
 				processor.process(output);
 			}
 		} catch (final ConfigurationException e) {
@@ -430,12 +428,10 @@ public class AnnotatedSolutionExporter {
 				if (port != null) {
 					final ZoneId zone = port.getZoneId();
 					event.setStart(event.getStart().withZoneSameInstant(zone));
-					if (event instanceof Journey) {
-						final Journey journey = (Journey) event;
+					if (event instanceof final Journey journey) {
 						final ZoneId eZone = journey.getDestination().getZoneId();
 						journey.setEnd(journey.getEnd().withZoneSameInstant(eZone));
-					} else if (event instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					} else if (event instanceof final VesselEventVisit vesselEventVisit) {
 						final Port redeliveryPort = vesselEventVisit.getRedeliveryPort();
 						if (redeliveryPort != null) {
 							final ZoneId eZone = redeliveryPort.getZoneId();
@@ -464,8 +460,8 @@ public class AnnotatedSolutionExporter {
 				if (firstIdle != null && firstIdle.getPort() != null) {
 					break;
 				}
-				if (event instanceof Idle) {
-					firstIdle = (Idle) event;
+				if (event instanceof final Idle idle) {
+					firstIdle = idle;
 				}
 				final Port port = event.getPort();
 				if (firstIdle != null && firstIdle.getPort() == null && port != null) {
@@ -486,8 +482,7 @@ public class AnnotatedSolutionExporter {
 				continue;
 			}
 			final Event event = sequence.getEvents().get(0);
-			if (event instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) event;
+			if (event instanceof final StartEvent startEvent) {
 				if (startEvent.getPort() == null) {
 					final Event nextEvent = startEvent.getNextEvent();
 					final Port port = nextEvent.getPort();
@@ -510,8 +505,7 @@ public class AnnotatedSolutionExporter {
 				continue;
 			}
 			final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
-			if (event instanceof EndEvent) {
-				final EndEvent endEvent = (EndEvent) event;
+			if (event instanceof final EndEvent endEvent) {
 				if (endEvent.getPort() == null) {
 					final Event prevEvent = endEvent.getPreviousEvent();
 					final Port port = prevEvent.getPort();
@@ -545,8 +539,7 @@ public class AnnotatedSolutionExporter {
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlanRecord vpr = vpi.getCurrentPlanRecord();
 
-			if (e instanceof PortDetails) {
-				final PortDetails details = (PortDetails) e;
+			if (e instanceof final PortDetails details) {
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
 
 				charterLengthEvent = null;
@@ -571,8 +564,8 @@ public class AnnotatedSolutionExporter {
 				}
 
 				final PortVisit event = portDetailsExporter.export(details, scheduledSequence, annotatedSolution, output);
-				if (event instanceof CharterLengthEvent) {
-					charterLengthEvent = (CharterLengthEvent) event;
+				if (event instanceof final CharterLengthEvent cle) {
+					charterLengthEvent = cle;
 				}
 				if (event != null) {
 					// Heel tracking
@@ -591,7 +584,7 @@ public class AnnotatedSolutionExporter {
 						}
 					}
 					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(((PortDetails) e).getCharterCost()));
-					
+
 					if (patchupRedirectCharterEvent) {
 						final IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
 						final HeelRecord heelRecord = vpr.getHeelVolumeRecords().get(currentPortSlot).portHeelRecord;
@@ -599,8 +592,7 @@ public class AnnotatedSolutionExporter {
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
 						}
-						final HeelValueRecord heelValueRecord = previous != null ? previous.getHeelValueRecord(startSlot)
-								: vpr.getHeelValueRecord(startSlot);
+						final HeelValueRecord heelValueRecord = previous != null ? previous.getHeelValueRecord(startSlot) : vpr.getHeelValueRecord(startSlot);
 
 						if (heelValueRecord != null) {
 							event.setHeelRevenueUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(heelValueRecord.getRevenueUnitPrice()));
@@ -621,8 +613,7 @@ public class AnnotatedSolutionExporter {
 						events.clear();
 					}
 				}
-			} else if (e instanceof VoyageDetails) {
-				final VoyageDetails details = (VoyageDetails) e;
+			} else if (e instanceof final VoyageDetails details) {
 
 				if (exportingRedirectedCharterOut) {
 					continue;
@@ -686,7 +677,7 @@ public class AnnotatedSolutionExporter {
 					}
 					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPurgeCharterCost()));
 
-					int purgeDuration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
+					final int purgeDuration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 					voyage_currentTime += purgeDuration;
 				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);

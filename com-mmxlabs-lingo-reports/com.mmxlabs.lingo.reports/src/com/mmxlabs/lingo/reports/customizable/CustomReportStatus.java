@@ -1,24 +1,24 @@
 package com.mmxlabs.lingo.reports.customizable;
 
 public class CustomReportStatus {
-	public StoreType storeType;
+	private StoreType storeType;
 
-	public CustomReportDefinition report;
+	private CustomReportDefinition report;
 
-	public CustomReportDefinition checkpoint;
+	private CustomReportDefinition checkpoint;
 
-	public boolean newReport;
-	public boolean saved;
+	private boolean newReport;
+	private boolean saved;
 
 	private CustomReportStatus() {
 	}
 
 	public void createCheckpoint() {
-		checkpoint = report.copy();
+		checkpoint = getReport().copy();
 	}
 
 	public void revert() {
-		report = checkpoint.copy();
+		setReport(checkpoint.copy());
 	}
 
 	/**
@@ -28,12 +28,12 @@ public class CustomReportStatus {
 	 * @param rpt
 	 * @return
 	 */
-	public static CustomReportStatus clean(StoreType storeType, CustomReportDefinition rpt) {
-		CustomReportStatus c = new CustomReportStatus();
-		c.storeType = storeType;
-		c.report = rpt;
-		c.newReport = false;
-		c.saved = true;
+	public static CustomReportStatus clean(final StoreType storeType, final CustomReportDefinition rpt) {
+		final CustomReportStatus c = new CustomReportStatus();
+		c.setStoreType(storeType);
+		c.setReport(rpt);
+		c.setNewReport(false);
+		c.setSaved(true);
 		
 		c.createCheckpoint();
 		return c;
@@ -46,12 +46,12 @@ public class CustomReportStatus {
 	 * @param rpt
 	 * @return
 	 */
-	public static CustomReportStatus newReport(StoreType storeType, CustomReportDefinition rpt) {
-		CustomReportStatus c = new CustomReportStatus();
-		c.storeType = storeType;
-		c.report = rpt;
-		c.newReport = true;
-		c.saved = false;
+	public static CustomReportStatus forNewReport(final StoreType storeType, final CustomReportDefinition rpt) {
+		final CustomReportStatus c = new CustomReportStatus();
+		c.setStoreType(storeType);
+		c.setReport(rpt);
+		c.setNewReport(true);
+		c.setSaved(false);
 		
 		c.createCheckpoint();
 		
@@ -59,20 +59,35 @@ public class CustomReportStatus {
 
 	}
 
-	/**
-	 * Create a new change record when a definition is changed
-	 * 
-	 * @param storeType
-	 * @param rpt
-	 * @return
-	 */
-	public static CustomReportStatus change(CustomReportDefinition rpt, CustomReportStatus existing) {
-		assert rpt == existing.report;
-		CustomReportStatus c = new CustomReportStatus();
-		c.storeType = existing.storeType;
-		c.report = rpt;
-		c.newReport = existing.newReport;
-		c.saved = false;
-		return c;
+	public StoreType getStoreType() {
+		return storeType;
+	}
+
+	public void setStoreType(final StoreType storeType) {
+		this.storeType = storeType;
+	}
+
+	public boolean isNewReport() {
+		return newReport;
+	}
+
+	public void setNewReport(final boolean newReport) {
+		this.newReport = newReport;
+	}
+
+	public CustomReportDefinition getReport() {
+		return report;
+	}
+
+	public void setReport(final CustomReportDefinition report) {
+		this.report = report;
+	}
+
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(final boolean saved) {
+		this.saved = saved;
 	}
 }

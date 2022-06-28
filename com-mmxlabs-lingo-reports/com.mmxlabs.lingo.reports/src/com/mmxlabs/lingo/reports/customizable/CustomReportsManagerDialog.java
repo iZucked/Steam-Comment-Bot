@@ -409,14 +409,14 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private void discardCurrentlySelectedChanges() {
 		final CustomReportStatus currentReport = this.current;
 
-		if (currentReport.newReport) {
+		if (currentReport.isNewReport()) {
 			// Remove newly created, but unsaved report.
 			deleteReport(currentReport);
 		} else {
 			// Undo any changes to the visible / hidden columns by reloading the currently
 			// selected report definition.
 			currentReport.revert();
-			currentReport.saved = true;
+			currentReport.setSaved(true);
 
 			updateViewWithReportDefinition(this.current);
 		}
@@ -429,38 +429,38 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private void deleteReport(final CustomReportStatus toDelete) {
-		switch (toDelete.storeType) {
+		switch (toDelete.getStoreType()) {
 		case USER:
-			if (!toDelete.newReport) {
-				CustomReportsRegistry.getInstance().deleteUserReport(toDelete.report);
+			if (!toDelete.isNewReport()) {
+				CustomReportsRegistry.getInstance().deleteUserReport(toDelete.getReport());
 			}
 			this.userReportDefinitions.remove(toDelete);
 			break;
 		case TEAM:
-			if (!toDelete.newReport) {
+			if (!toDelete.isNewReport()) {
 				try {
-					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete.report);
+					CustomReportsRegistry.getInstance().removeFromDatahub(toDelete.getReport());
 				} catch (final Exception ex) {
-					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \"" + toDelete.report.getName()
+					final String errorMessage = "Error connecting to datahub whilst attempting to remove report \"" + toDelete.getReport().getName()
 							+ "\" from team folder. Please check error log for more details.";
 					displayErrorDialog(errorMessage);
 					logger.error(errorMessage, ex);
 					return;
 				}
 			}
-			CustomReportsRegistry.getInstance().deleteTeamReport(toDelete.report);
+			CustomReportsRegistry.getInstance().deleteTeamReport(toDelete.getReport());
 			this.teamReportDefinitions.remove(toDelete);
 			break;
 		default:
-			logger.error("Unimplemented store type for deleteReport method: {0}", toDelete.storeType.toString());
+			logger.error("Unimplemented store type for deleteReport method: {0}", toDelete.getStoreType().toString());
 			break;
 		}
-		if (!toDelete.newReport) {
+		if (!toDelete.isNewReport()) {
 			changesMade = true;
 		}
 		// Set these flags to clear any dirty status
-		toDelete.saved = true;
-		toDelete.newReport = false;
+		toDelete.setSaved(true);
+		toDelete.setNewReport(false);
 		this.loadDefaults();
 		this.refreshViewers();
 	}
@@ -469,31 +469,31 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		final CustomReportStatus status = this.current;
 		if (status != null) {
-			final String type = status.storeType == StoreType.USER ? "save" : "publish";
+			final String type = status.getStoreType() == StoreType.USER ? "save" : "publish";
 			final InputDialog dialog = new InputDialogForSWTBot(this.getShell(), // Shell
 					String.format("Rename and %s the currently selected report", type), // Title
 					"Choose a new name for the report and press OK to " + type, // message
-					status.report.getName(), // Current name
+					status.getReport().getName(), // Current name
 					getReportNameValidator(), // Validator
 					WIDGET_REPORT_NAME_TEXT // ID for text field
 			);
 
 			if (dialog.open() == Window.OK) {
 				final String name = dialog.getValue();
-				status.report.setName(name);
+				status.getReport().setName(name);
 				if (this.currentStoreType == StoreType.USER) {
-					CustomReportsRegistry.getInstance().writeToJSON(status.report);
+					CustomReportsRegistry.getInstance().writeToJSON(status.getReport());
 					this.changesMade = true;
-					status.newReport = false;
-					status.saved = true;
+					status.setNewReport(false);
+					status.setSaved(true);
 				} else {
 					try {
-						CustomReportsRegistry.getInstance().publishReport(status.report);
-						status.newReport = false;
-						status.saved = true;
+						CustomReportsRegistry.getInstance().publishReport(status.getReport());
+						status.setNewReport(false);
+						status.setSaved(true);
 						this.changesMade = true;
 					} catch (final Exception e) {
-						final String errorMsg = "Problem publishing renamed report \"" + status.report.getName() + "\" to Data Hub.";
+						final String errorMsg = "Problem publishing renamed report \"" + status.getReport().getName() + "\" to Data Hub.";
 						logger.error(errorMsg, e);
 						displayErrorDialog(errorMsg);
 					}
@@ -513,8 +513,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private List<String> getExistingReportNames() {
 		final List<String> existingNames = new ArrayList<>();
-		userReportDefinitions.stream().forEach(r -> existingNames.add(r.report.getName().toLowerCase()));
-		teamReportDefinitions.stream().forEach(r -> existingNames.add(r.report.getName().toLowerCase()));
+		userReportDefinitions.stream().forEach(r -> existingNames.add(r.getReport().getName().toLowerCase()));
+		teamReportDefinitions.stream().forEach(r -> existingNames.add(r.getReport().getName().toLowerCase()));
 		return existingNames;
 	}
 
@@ -522,7 +522,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		final CustomReportStatus status = this.current;
 		if (status != null) {
-			if (!MessageDialog.openQuestion(getShell(), "Are you sure?", "Are you sure you want to delete the report \"" + status.report.getName() + "\"")) {
+			if (!MessageDialog.openQuestion(getShell(), "Are you sure?", "Are you sure you want to delete the report \"" + status.getReport().getName() + "\"")) {
 				return;
 			}
 			deleteReport(status);
@@ -531,7 +531,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private CustomReportStatus checkForTeamReport(final String name) {
 		for (final CustomReportStatus crd : this.teamReportDefinitions) {
-			if (crd.report.getName().equalsIgnoreCase(name)) {
+			if (crd.getReport().getName().equalsIgnoreCase(name)) {
 				return crd;
 			}
 		}
@@ -544,20 +544,20 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			final CustomReportStatus newTeamReportDefinition;
 
 			// User report - publish as new or replace existing team report.
-			if (existing.storeType == StoreType.USER) {
-				if (!existing.saved) {
+			if (existing.getStoreType() == StoreType.USER) {
+				if (!existing.isSaved()) {
 					final boolean save = MessageDialog.open(MessageDialog.QUESTION, this.getShell(), "Save before publish?",
-							"Report " + existing.report.getName() + " has unsaved changed. Save before publishing?", SWT.NONE);
+							"Report " + existing.getReport().getName() + " has unsaved changed. Save before publishing?", SWT.NONE);
 
 					if (save) {
 
 						// Save down, before publishing for user report.
-						CustomReportsRegistry.getInstance().writeToJSON(existing.report);
+						CustomReportsRegistry.getInstance().writeToJSON(existing.getReport());
 						existing.createCheckpoint();
 
 						// Update change state
-						existing.saved = true;
-						existing.newReport = false;
+						existing.setSaved(true);
+						existing.setNewReport(false);
 
 						this.changesMade = true;
 						this.saveBtn.setEnabled(false);
@@ -567,31 +567,31 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 				// Check if report with that name already exists and if so prompt the user if
 				// they want to overwrite it or cancel.
-				final CustomReportStatus existingTeamReport = this.checkForTeamReport(existing.report.getName());
+				final CustomReportStatus existingTeamReport = this.checkForTeamReport(existing.getReport().getName());
 				if (existingTeamReport == null) {
 
 					// If we are adding a user report to team, we need to clone it and create a new
 					// UUID as per PS, so that team version appears separately from user version.
 
 					// Create a new definition - copy name, new UUID
-					newTeamReportDefinition = createLightCopyOfReportDefinition(StoreType.TEAM, existing.report);
+					newTeamReportDefinition = createLightCopyOfReportDefinition(StoreType.TEAM, existing.getReport());
 					// Set the current column definition into the report
-					updateReportDefinitionWithChangesFromDialog(newTeamReportDefinition.report);
+					updateReportDefinitionWithChangesFromDialog(newTeamReportDefinition.getReport());
 				} else {
 					// If it is already a team report, ask the user if they want to overwrite it
 					// with their new one.
 					final int overwrite = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Overwrite existing team report?",
-							"There is an existing team report " + existingTeamReport.report.getName() + ". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
+							"There is an existing team report " + existingTeamReport.getReport().getName() + ". Do you want to overwrite this?", SWT.NONE, "Overwrite", "Cancel");
 
 					if (overwrite == 0) {
 						final CustomReportDefinition copy = new CustomReportDefinition();
-						copy.setUuid(existingTeamReport.report.getUuid());
-						copy.setName(existingTeamReport.report.getName());
-						copy.setType(existingTeamReport.report.getType());
-						newTeamReportDefinition = CustomReportStatus.newReport(StoreType.TEAM, copy);
-						newTeamReportDefinition.newReport = false;
+						copy.setUuid(existingTeamReport.getReport().getUuid());
+						copy.setName(existingTeamReport.getReport().getName());
+						copy.setType(existingTeamReport.getReport().getType());
+						newTeamReportDefinition = CustomReportStatus.forNewReport(StoreType.TEAM, copy);
+						newTeamReportDefinition.setNewReport(false);
 
-						updateReportDefinitionWithChangesFromDialog(newTeamReportDefinition.report);
+						updateReportDefinitionWithChangesFromDialog(newTeamReportDefinition.getReport());
 					} else {
 						// Cancel and do nothing.
 						return;
@@ -606,9 +606,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			try {
 				// Publish the report definition
-				CustomReportsRegistry.getInstance().publishReport(newTeamReportDefinition.report);
+				CustomReportsRegistry.getInstance().publishReport(newTeamReportDefinition.getReport());
 			} catch (final Exception e) {
-				final String errorMsg = "Problem publishing report \"" + newTeamReportDefinition.report.getName() + "\" to Data Hub.";
+				final String errorMsg = "Problem publishing report \"" + newTeamReportDefinition.getReport().getName() + "\" to Data Hub.";
 				logger.error(errorMsg, e);
 				displayErrorDialog(errorMsg);
 
@@ -616,8 +616,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 
 			newTeamReportDefinition.createCheckpoint();
-			newTeamReportDefinition.saved = true;
-			newTeamReportDefinition.newReport = false;
+			newTeamReportDefinition.setSaved(true);
+			newTeamReportDefinition.setNewReport(false);
 
 			final int idx = teamReportDefinitions.indexOf(existing);
 			if (idx >= 0) {
@@ -641,7 +641,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		copy.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
 		copy.setName(rd.getName());
 		copy.setType("ScheduleSummaryReport");
-		return CustomReportStatus.newReport(type, copy);
+		return CustomReportStatus.forNewReport(type, copy);
 	}
 
 	private String getUserCopyName(final String currentReportName) {
@@ -654,7 +654,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		while (!copyNameFound) {
 			copyNameFound = true;
 			for (final CustomReportStatus crd : this.userReportDefinitions) {
-				if (crd.report.getName().equalsIgnoreCase(copyName)) {
+				if (crd.getReport().getName().equalsIgnoreCase(copyName)) {
 					copyNo++;
 					copyName = currentReportName + " (User Copy " + Integer.toString(copyNo) + ")";
 					copyNameFound = false;
@@ -677,20 +677,20 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				final CustomReportDefinition copy = new CustomReportDefinition();
 
 				copy.setUuid(ScheduleSummaryReport.UUID_PREFIX + UUID.randomUUID().toString());
-				final String copyName = getUserCopyName(toSave.report.getName());
+				final String copyName = getUserCopyName(toSave.getReport().getName());
 				copy.setName(copyName);
 				copy.setType("ScheduleSummaryReport");
 
 				updateReportDefinitionWithChangesFromDialog(copy);
 
-				toSave = CustomReportStatus.newReport(StoreType.USER, copy);
+				toSave = CustomReportStatus.forNewReport(StoreType.USER, copy);
 				this.userReportDefinitions.add(toSave);
 			}
 
-			CustomReportsRegistry.getInstance().writeToJSON(toSave.report);
+			CustomReportsRegistry.getInstance().writeToJSON(toSave.getReport());
 			toSave.createCheckpoint();
-			toSave.saved = true;
-			toSave.newReport = false;
+			toSave.setSaved(true);
+			toSave.setNewReport(false);
 
 			changesMade = true;
 			this.discardBtn.setEnabled(false);
@@ -707,7 +707,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private void handleCopyBtn() {
 		String nameHint = null;
 		if (this.current != null) {
-			nameHint = this.current.report.getName() + " (Copy)";
+			nameHint = this.current.getReport().getName() + " (Copy)";
 		}
 		createNewViewDefinition(true, "Copy custom report view", nameHint);
 	}
@@ -733,7 +733,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 
 			updateReportDefinitionWithChangesFromDialog(reportDefinition);
-			final CustomReportStatus newReport = CustomReportStatus.newReport(currentStoreType, reportDefinition);
+			final CustomReportStatus newReport = CustomReportStatus.forNewReport(currentStoreType, reportDefinition);
 
 			// Add to report definitions list and select it.
 			if (this.userButton.getSelection()) {
@@ -773,7 +773,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	}
 
 	private boolean unsavedOrUnpublishedChanges(final CustomReportStatus status) {
-		if (!status.saved || status.newReport) {
+		if (!status.isSaved() || status.isNewReport()) {
 			return true;
 		}
 
@@ -784,23 +784,23 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 		for (final var status : this.userReportDefinitions) {
 			if (unsavedOrUnpublishedChanges(status)) {
-				CustomReportsRegistry.getInstance().writeToJSON(status.report);
+				CustomReportsRegistry.getInstance().writeToJSON(status.getReport());
 				status.createCheckpoint();
-				status.saved = true;
-				status.newReport = false;
+				status.setSaved(true);
+				status.setNewReport(false);
 				this.changesMade = true;
 			}
 		}
 		for (final var status : this.teamReportDefinitions) {
 			if (unsavedOrUnpublishedChanges(status)) {
 				try {
-					CustomReportsRegistry.getInstance().publishReport(status.report);
+					CustomReportsRegistry.getInstance().publishReport(status.getReport());
 
 					status.createCheckpoint();
-					status.saved = true;
-					status.newReport = false;
+					status.setSaved(true);
+					status.setNewReport(false);
 				} catch (final Exception ex) {
-					final String errorMsg = "Problem publishing report \"" + status.report.getName() + "\" to DataHub.";
+					final String errorMsg = "Problem publishing report \"" + status.getReport().getName() + "\" to DataHub.";
 					logger.error(errorMsg, ex);
 					displayErrorDialog(errorMsg);
 				}
@@ -1053,7 +1053,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	 * @return Returns true if discard selected, or false to stay put
 	 */
 	private boolean promptToDiscardOrGoBack(@NonNull final CustomReportStatus status) {
-		final String reportName = status.report.getName();
+		final String reportName = status.getReport().getName();
 		final String unSavedOrUnPublished = this.userButton.getSelection() ? " unsaved " : " un-published ";
 		final int discardChanges = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Warning",
 				"You have" + unSavedOrUnPublished + "changes to \"" + reportName + "\". Discard these changes or go back?", SWT.NONE, "Discard", "Back");
@@ -1072,9 +1072,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			// Only enable publish/write access, if in user mode or if user has team reports
 			// publish permission.
-			if (status.storeType == StoreType.USER) {
+			if (status.getStoreType() == StoreType.USER) {
 				// User reports mode.
-				saveBtn.setEnabled(!status.saved);
+				saveBtn.setEnabled(!status.isSaved());
 				deleteBtn.setEnabled(true);
 				copyBtn.setEnabled(true);
 				renameBtn.setEnabled(true);
@@ -1111,7 +1111,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private boolean checkForUnsavedUnpublishedChanges() {
 		if (this.current != null) {
 			if (this.unsavedOrUnpublishedChanges(this.current)) {
-				final String reportName = this.current.report.getName();
+				final String reportName = this.current.getReport().getName();
 				final String unSavedOrUnPublished = this.userButton.getSelection() ? " unsaved " : " un-published ";
 				final int discardChanges = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getShell(), "Warning",
 						"You have" + unSavedOrUnPublished + "changes to \"" + reportName + "\". Discard these changes or go back?", SWT.NONE, "Discard", "Back");
@@ -1162,7 +1162,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			discardBtn.setEnabled(false);
 		} else {
 
-			final CustomReportDefinition reportDefinition = status.report;
+			final CustomReportDefinition reportDefinition = status.getReport();
 
 			this.loadDefaults();
 
@@ -1196,7 +1196,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 					}
 				}
 			}
-			discardBtn.setEnabled(!status.saved);
+			discardBtn.setEnabled(!status.isSaved());
 		}
 
 		this.refreshViewers();
@@ -1252,12 +1252,12 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		return new ICustomColumnInfoProvider() {
 			@Override
 			public int getColumnIndex(final String blockID) {
-				return status.report.getColumns().indexOf(blockID);
+				return status.getReport().getColumns().indexOf(blockID);
 			}
 
 			@Override
 			public boolean isColumnVisible(final String blockID) {
-				return status.report.getColumns().contains(blockID);
+				return status.getReport().getColumns().contains(blockID);
 			}
 		};
 	}
@@ -1322,8 +1322,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			this.visible.addAll(selVCols);
 			Collections.sort(this.visible, comparator);
 
-			this.updateReportDefinitionWithChangesFromDialog(status.report);
-			status.saved = false;
+			this.updateReportDefinitionWithChangesFromDialog(status.getReport());
+			status.setSaved(false);
 
 			refreshViewers();
 			visibleViewer.setSelection(selection);
@@ -1417,8 +1417,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 			visibleViewer.refresh();
 			handleVisibleSelection(selection);
-			this.updateReportDefinitionWithChangesFromDialog(status.report);
-			status.saved = false;
+			this.updateReportDefinitionWithChangesFromDialog(status.getReport());
+			status.setSaved(false);
 			onReportModified();
 		}
 	}
@@ -1442,8 +1442,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			}
 			visibleViewer.refresh();
 			handleVisibleSelection(selection);
-			this.updateReportDefinitionWithChangesFromDialog(status.report);
-			status.saved = false;
+			this.updateReportDefinitionWithChangesFromDialog(status.getReport());
+			status.setSaved(false);
 
 			onReportModified();
 		}
@@ -1475,8 +1475,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 			Collections.sort(getNonVisible(), comparator);
 
-			this.updateReportDefinitionWithChangesFromDialog(status.report);
-			status.saved = false;
+			this.updateReportDefinitionWithChangesFromDialog(status.getReport());
+			status.setSaved(false);
 
 			refreshViewers();
 			nonVisibleViewer.setSelection(selection);
@@ -1540,7 +1540,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private boolean isVisible(final String blockID) {
 		if (this.current != null) {
-			return this.current.report.getColumns().contains(blockID);
+			return this.current.getReport().getColumns().contains(blockID);
 		} else {
 			final ColumnBlock block = blockIdToColumnBlock.get(blockID);
 			if (block != null) {
@@ -1573,7 +1573,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private int getColumnIndex(final String blockID) {
 		if (this.current != null) {
-			final int index = this.current.report.getColumns().indexOf(blockID);
+			final int index = this.current.getReport().getColumns().indexOf(blockID);
 			if (index >= 0) {
 				return index;
 			}
@@ -1648,17 +1648,17 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			public String getText(final Object element) {
 				if (element instanceof final CustomReportStatus status) {
 					String prefix = "";
-					if (!status.saved || status.newReport) {
+					if (!status.isSaved() || status.isNewReport()) {
 						prefix = "* ";
 					}
-					return prefix + status.report.getName();
+					return prefix + status.getReport().getName();
 				}
 				return "<Unknown object>";
 			}
 
 			@Override
 			public String getToolTipText(final Object element) {
-				return ((CustomReportStatus) element).report.getName();
+				return ((CustomReportStatus) element).getReport().getName();
 			}
 		};
 	}
@@ -1682,8 +1682,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 	private void handleOptionChanged() {
 		final CustomReportStatus status = this.current;
 		if (status != null) {
-			this.updateReportDefinitionWithChangesFromDialog(status.report);
-			status.saved = false;
+			this.updateReportDefinitionWithChangesFromDialog(status.getReport());
+			status.setSaved(false);
 			onReportModified();
 		}
 	}

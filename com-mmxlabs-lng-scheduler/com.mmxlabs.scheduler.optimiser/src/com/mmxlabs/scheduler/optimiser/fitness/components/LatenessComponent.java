@@ -42,12 +42,9 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	@Override
 	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
-		if (object instanceof PortDetails) {
+		if (object instanceof PortDetails detail) {
 
-			final PortDetails detail = (PortDetails) object;
-
-			@NonNull
-			final IPortSlot portSlot = detail.getOptions().getPortSlot();
+			final @NonNull IPortSlot portSlot = detail.getOptions().getPortSlot();
 
 			final VolumeAllocatedSequence volumeAllocatedSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
 			if (volumeAllocatedSequence != null) {
@@ -56,9 +53,9 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 					sequenceAccumulator += vpr.getWeightedLatenessCost(portSlot);
 				}
 
-				LatenessRecord record = volumeAllocatedSequence.getMaxDurationLatenessRecord();
-				if (record != null) {
-					sequenceAccumulator += record.weightedLateness;
+				LatenessRecord latenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
+				if (latenessRecord != null) {
+					sequenceAccumulator += latenessRecord.weightedLateness;
 				}
 			}
 		}
