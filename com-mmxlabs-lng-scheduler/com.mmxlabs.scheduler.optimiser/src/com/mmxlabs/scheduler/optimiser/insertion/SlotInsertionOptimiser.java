@@ -12,8 +12,6 @@ import java.util.Random;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
@@ -43,8 +41,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 @NonNullByDefault
 public class SlotInsertionOptimiser {
 
-	protected static final Logger LOG = LoggerFactory.getLogger(SlotInsertionOptimiser.class);
-
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
@@ -69,7 +65,7 @@ public class SlotInsertionOptimiser {
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
 
-	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> _slots) {
+	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> providedSlots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
@@ -80,7 +76,7 @@ public class SlotInsertionOptimiser {
 		final long[] initialMetrics = state.initialMetrics;
 
 		// Randomise the insertion order
-		final List<ISequenceElement> slots = new ArrayList<>(_slots);
+		final List<ISequenceElement> slots = new ArrayList<>(providedSlots);
 		Collections.shuffle(slots, new Random(seed));
 		long currentPNL = 0L;
 		for (final ISequenceElement slot : slots) {
@@ -94,10 +90,12 @@ public class SlotInsertionOptimiser {
 			final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 
 			final Random optionsRnd = new Random(seed);
-			// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
+			// For seed 0->4095 this will always return true, so kick it now it start
+			// introducing "more randomness"..
 			optionsRnd.nextBoolean();
 
-			// Set to true to do lateness and violation checks etc before returning a valid move.
+			// Set to true to do lateness and violation checks etc before returning a valid
+			// move.
 			options.setCheckingMove(true);
 			options.setExtendSearch(false);
 			// options.setStrictOptional(true);
@@ -117,9 +115,11 @@ public class SlotInsertionOptimiser {
 				return null;
 			}
 
-			// Run through the sequences manipulator of things such as start/end port replacement
+			// Run through the sequences manipulator of things such as start/end port
+			// replacement
 
-			// this will set the return elements to the right places, and remove the start elements.
+			// this will set the return elements to the right places, and remove the start
+			// elements.
 			final IModifiableSequences mSequences = new ModifiableSequences(currentSequences);
 			move.apply(mSequences);
 
@@ -179,7 +179,8 @@ public class SlotInsertionOptimiser {
 					}
 				}
 				if (sameSolutionBasis) {
-					// Insertion slots still in the same place as the original solution, reject output.
+					// Insertion slots still in the same place as the original solution, reject
+					// output.
 					return null;
 				}
 			}
@@ -189,7 +190,8 @@ public class SlotInsertionOptimiser {
 			final ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(state.originalRawSequences, currentSequences, slots);
 			boolean valid = true;
 			{
-				// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
+				// First check any non-optional input elements have been included. This can
+				// happen in a multi slot insertion where subsequent moves undo earlier moves.
 				for (final ISequenceElement slot : slots) {
 					if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 						if (simpleSeq.getUnusedElements().contains(slot)) {
@@ -222,15 +224,14 @@ public class SlotInsertionOptimiser {
 				}
 			}
 			if (!valid) {
-//				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
-
 				// Re-check sequences
 				{
-					// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
+					// First check any non-optional input elements have been included. This can
+					// happen in a multi slot insertion where subsequent moves undo earlier moves.
 					for (final ISequenceElement slot : slots) {
 						if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 							if (currentSequences.getUnusedElements().contains(slot)) {
-								System.out.println("Generated move does not include target element");
+								// Generated move does not include target element
 								return null;
 							}
 						}
@@ -241,7 +242,7 @@ public class SlotInsertionOptimiser {
 					for (final ISequenceElement e : currentSequences.getUnusedElements()) {
 						if (phaseOptimisationData.isElementRequired(e) || phaseOptimisationData.getSoftRequiredElements().contains(e)) {
 							if (!state.initiallyUnused.contains(e)) {
-//								System.out.println("New required element is in unused list");
+								// New required element is in unused list
 								return null;
 							}
 						}
@@ -259,22 +260,21 @@ public class SlotInsertionOptimiser {
 
 	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final SlotInsertionOptimiserInitialState state, final int seed) {
 
-		assert	SequencesHitchHikerHelper.checkValidSequences(state.originalRawSequences);
+		assert SequencesHitchHikerHelper.checkValidSequences(state.originalRawSequences);
 
-		
 		final List<ISequenceElement> elements = portSlots.stream() //
 				.map(portSlotProvider::getElement) //
 				.toList();
 		final Pair<ISequences, Long> result = insert(state, seed, elements);
 		if (result != null) {
-		assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
+			assert SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
 			result.setFirst(undoSpotHelper.undoSpotMarketSwaps(state.originalRawSequences, result.getFirst()));
 		}
-		
-		if (result != null ) {
-			assert	SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
+
+		if (result != null) {
+			assert SequencesHitchHikerHelper.checkValidSequences(result.getFirst());
 		}
-		
+
 		return result;
 	}
 }

@@ -127,8 +127,8 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	@Override
 	public boolean hasUpstreamVersion(final String uuid) {
 		return getLocalVersions().stream() //
-				.filter(v -> Objects.equals(uuid, v.getIdentifier())) //
-				.findFirst().isPresent();
+				.anyMatch(v -> Objects.equals(uuid, v.getIdentifier())) //
+				;
 	}
 
 	@Override

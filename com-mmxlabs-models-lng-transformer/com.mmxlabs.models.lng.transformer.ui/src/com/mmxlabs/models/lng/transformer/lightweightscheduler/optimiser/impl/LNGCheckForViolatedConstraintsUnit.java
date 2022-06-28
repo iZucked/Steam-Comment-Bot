@@ -51,7 +51,7 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 
 			@Override
 			public IMultiStateResult run(final LNGDataTransformer dt, final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				LNGCheckForViolatedConstraintsUnit t = new LNGCheckForViolatedConstraintsUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(),
+				final LNGCheckForViolatedConstraintsUnit t = new LNGCheckForViolatedConstraintsUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(),
 						dt.getHints());
 				return t.run(monitor);
 			}
@@ -77,7 +77,7 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 	@NonNull
 	private final IMultiStateResult inputState;
 
-	public LNGCheckForViolatedConstraintsUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull ISequences initialSequences,
+	public LNGCheckForViolatedConstraintsUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull final ISequences initialSequences,
 			@NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 
@@ -113,15 +113,15 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 			scope.enter();
 			monitor.beginTask("", 1);
 			try {
-				ISequences newResult = violatedConstraintChecker.run(inputState.getBestSolution().getFirst());
+				final ISequences newResult = violatedConstraintChecker.run(inputState.getBestSolution().getFirst());
 				return new MultiStateResult(newResult, new HashMap<>());
 			} 
-			catch (UserFeedbackException ufe) {
+			catch (final UserFeedbackException ufe) {
 				if (ufe.getAdditionalInfo() != null) {
-					List<Object> cis = ufe.getAdditionalInfo();
+					final List<Object> cis = ufe.getAdditionalInfo();
 					if (cis != null) {
-						String errorDetails = getErrorMessageDetails(cis);
-						String errorMsg = ufe.getMessage()+errorDetails;
+						final String errorDetails = getErrorMessageDetails(cis);
+						final String errorMsg = ufe.getMessage()+errorDetails;
 						throw new UserFeedbackException(errorMsg);
 					}
 				}
@@ -134,11 +134,11 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 	}
 	
 	//Has to be here to avoid circular dependency since optimiser code cannot know about EMF.
-	private String getErrorMessageDetails(List<Object> cis) {
-		StringBuilder errorMessage = new StringBuilder();
+	private String getErrorMessageDetails(final List<Object> cis) {
+		final StringBuilder errorMessage = new StringBuilder();
 		
-		List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> failedConstraintInfos = new ArrayList<>();
-		for (var ci : cis) {
+		final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> failedConstraintInfos = new ArrayList<>();
+		for (final var ci : cis) {
 			if (ci instanceof ConstraintInfo<?,?,?> 
 			&& ((ConstraintInfo) ci).getContractProfile() instanceof ContractProfile 
 			&& ((ConstraintInfo) ci).getProfileConstraint() instanceof ProfileConstraint) {
@@ -146,7 +146,7 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 			}
 		}
 		
-		ModelEntityMap mem = this.injector.getInstance(ModelEntityMap.class);
+		final ModelEntityMap mem = this.injector.getInstance(ModelEntityMap.class);
 		LightWeightOptimisationDataFactory.addViolatedConstraintDetails(mem, failedConstraintInfos, errorMessage);
 		
 		return errorMessage.toString();
