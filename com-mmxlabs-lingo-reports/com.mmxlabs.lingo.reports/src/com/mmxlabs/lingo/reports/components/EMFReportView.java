@@ -45,13 +45,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
@@ -539,20 +536,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	protected boolean handleSelections() {
 		return false;
-	}
-
-	/**
-	 */
-	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
-
-		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
-			final PropertySheetPage propertySheetPage = new PropertySheetPage();
-
-			propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
-			return (T) propertySheetPage;
-		}
-		return super.getAdapter(adapter);
 	}
 
 	/**
