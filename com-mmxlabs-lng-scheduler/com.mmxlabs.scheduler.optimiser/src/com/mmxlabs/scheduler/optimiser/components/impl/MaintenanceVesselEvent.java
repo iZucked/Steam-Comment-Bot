@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -45,5 +47,28 @@ public class MaintenanceVesselEvent extends VesselEvent implements IMaintenanceV
 	@Override
 	public @NonNull IHeelOptionSupplier getHeelOptionSupplier() {
 		return this.heelSupplier;
+	}
+
+	@Override
+	public int hashCode() {
+		return getStartPort().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj instanceof MaintenanceVesselEvent other) {
+			return this.getDurationHours() == other.getDurationHours()//
+					&& Objects.equals(this.heelConsumer, other.heelConsumer) //
+					&& Objects.equals(this.heelSupplier, other.heelSupplier) //
+					&& Objects.equals(this.getTimeWindow(), other.getTimeWindow()) //
+					&& Objects.equals(this.getStartPort(), other.getStartPort())
+
+			;
+		}
+		return false;
 	}
 }
