@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -24,9 +25,11 @@ public class MaintenanceVesselEventPortSlot extends VesselEventPortSlot implemen
 
 	@NonNull
 	private final IVesselEventPortSlot formerPortSlot;
+	private @NonNull String id;
 
 	public MaintenanceVesselEventPortSlot(@NonNull final String id, @Nullable final ITimeWindow timeWindow, @NonNull final IPort port, final int durationHours, @NonNull final IHeelOptionConsumer heelConsumer, @NonNull final IHeelOptionSupplier heelSupplier, @NonNull final IVesselEventPortSlot formerPortSlot) {
 		super(id, PortType.Maintenance, port, timeWindow, new MaintenanceVesselEvent(timeWindow, port, durationHours, heelConsumer, heelSupplier), heelConsumer);
+		this.id = id;
 		this.formerPortSlot = formerPortSlot;
 	}
 
@@ -44,4 +47,25 @@ public class MaintenanceVesselEventPortSlot extends VesselEventPortSlot implemen
 	public @NonNull List<@NonNull ISequenceElement> getEventSequenceElements() {
 		return Collections.singletonList(new WrappedSequenceElement(this));
 	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	@Override
+	public boolean equals(final @Nullable Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof MaintenanceVesselEventPortSlot other) {
+			return Objects.equals(id, other.id) 
+					&& Objects.equals(formerPortSlot, other.formerPortSlot)
+					&& Objects.equals(getEventPortSlots(), other.getEventPortSlots())
+					
+					;
+		}
+		return false;
+	}
+
 }
