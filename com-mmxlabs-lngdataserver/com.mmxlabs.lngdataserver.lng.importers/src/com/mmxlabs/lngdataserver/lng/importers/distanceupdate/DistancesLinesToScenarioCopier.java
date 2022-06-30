@@ -22,8 +22,6 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
@@ -40,7 +38,9 @@ import com.mmxlabs.models.lng.port.impl.PortFactoryImpl;
 
 public class DistancesLinesToScenarioCopier {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesLinesToScenarioCopier.class);
+	private DistancesLinesToScenarioCopier() {
+
+	}
 
 	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final LocationsVersion locationsVersion,
 			final @NonNull List<AtoBviaCLookupRecord> records, final List<AtoBviaCLookupRecord> manualRecords) {
@@ -304,15 +304,38 @@ public class DistancesLinesToScenarioCopier {
 					double a = Double.MAX_VALUE;
 					double b = Double.MAX_VALUE;
 					{
-						final Double leg1 = directMatrix.get(new Pair<>(from, canalA));
-						final Double leg2 = directMatrix.get(new Pair<>(canalB, to));
+						Double leg1 = directMatrix.get(new Pair<>(from, canalA));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg1 == null && from == canalA) {
+							leg1 = 0.0;
+						}
+						Double leg2 = directMatrix.get(new Pair<>(canalB, to));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg2 == null && canalB == to) {
+							leg2 = 0.0;
+						}
+
 						if (leg1 != null && leg2 != null) {
 							a = leg1 + leg2 + canalDistance;
 						}
 					}
 					{
-						final Double leg1 = directMatrix.get(new Pair<>(from, canalB));
-						final Double leg2 = directMatrix.get(new Pair<>(canalA, to));
+						Double leg1 = directMatrix.get(new Pair<>(from, canalB));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg1 == null && from == canalB) {
+							leg1 = 0.0;
+						}
+
+						Double leg2 = directMatrix.get(new Pair<>(canalA, to));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg2 == null && canalA == to) {
+							leg2 = 0.0;
+						}
+
 						if (leg1 != null && leg2 != null) {
 							b = leg1 + leg2 + canalDistance;
 						}
