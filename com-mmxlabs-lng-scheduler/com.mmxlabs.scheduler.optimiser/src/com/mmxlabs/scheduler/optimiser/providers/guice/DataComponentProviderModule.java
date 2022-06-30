@@ -35,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultGroupedSlotsConstraintDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultHeelCarrySlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLazyExpressionManager;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
@@ -365,6 +366,11 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultCounterPartyVolumeProvider.class).in(Singleton.class);
 		bind(ICounterPartyVolumeProvider.class).to(DefaultCounterPartyVolumeProvider.class);
 		bind(ICounterPartyVolumeProviderEditor.class).to(DefaultCounterPartyVolumeProvider.class);
+		
+		// Heel carry slot data provider
+		bind(DefaultHeelCarrySlotProviderEditor.class).in(Singleton.class);
+		bind(IHeelCarrySlotProvider.class).to(DefaultHeelCarrySlotProviderEditor.class);
+		bind(IHeelCarrySlotProviderEditor.class).to(DefaultHeelCarrySlotProviderEditor.class);
 
 		// Counterparty window provider
 		bind(DefaultCounterPartyWindowProvider.class).in(Singleton.class);

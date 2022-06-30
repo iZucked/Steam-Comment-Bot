@@ -24,7 +24,7 @@ public class LiNGOMigrationProvider implements IMigrationProvider {
 	 * reflective class loader to work.
 	 */
 
-	private static final int CURRENT_VERSION = 161;
+	private static final int CURRENT_VERSION = 162;
 
 	@Override
 	public int priority() {

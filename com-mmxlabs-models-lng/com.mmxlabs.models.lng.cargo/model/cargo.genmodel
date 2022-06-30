@@ -193,6 +193,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/minCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/maxCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/fobSaleDealType"/>
+      <genFeatures createChild="false" propertyDescription="Allow heel carry from previous cargo into this discharge"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/heelCarry"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMinCv"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateMaxCv"/>
       <genOperations ecoreOperation="cargo.ecore#//DischargeSlot/getSlotOrDelegateDeliveryType"/>

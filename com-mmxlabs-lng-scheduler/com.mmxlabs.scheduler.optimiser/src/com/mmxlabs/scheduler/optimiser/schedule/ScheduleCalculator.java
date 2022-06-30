@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHeelCarrySlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
@@ -93,6 +94,9 @@ public class ScheduleCalculator {
 	@Inject
 	@Named(SchedulerConstants.Key_UseHeelRetention)
 	private boolean retainHeel;
+	
+	@Inject
+	private IHeelCarrySlotProvider heelCarrySlotProvider;
 
 	@Nullable
 	public ProfitAndLossSequences schedule(final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -281,10 +285,11 @@ public class ScheduleCalculator {
 		 *   2. The first VPR has non null @ICargoValueAnnotation
 		 *   3. The first cargo's follow up slot is a load slot
 		 *   4. There is no requirment to run dry on the first VPR's CVA
+		 *   5. Second cargo's discharge slot must allow heel carry
 		 * @return
 		 */
 		private boolean validate() {
-			if (!first.isCargoRecord() || !second.isCargoRecord()) {
+			if ((!first.isCargoRecord() || !second.isCargoRecord())) {// && !sCargo.allowsHeelCarry()) {
 				return false;
 			}
 			final IPortTimesRecord firstIptr = first.getPortTimesRecord();
@@ -320,13 +325,13 @@ public class ScheduleCalculator {
 					heelRetentionFunctions.remove(bestFunc);
 					value += bestValue;
 				}
-
-				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
-						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
-					return value > 0;
-				}
-				
-				return false;
+				return value > 0;
+//				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
+//						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
+//					return value > 0;
+//				}
+//				
+//				return false;
 			}
 			return false;
 		}
@@ -554,6 +559,10 @@ public class ScheduleCalculator {
 			}
 			
 			throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
+		}
+		
+		public boolean allowsHeelCarry() {
+			return heelCarrySlotProvider.isHeelCarryAllowed(discharge);
 		}
 	}
 	
