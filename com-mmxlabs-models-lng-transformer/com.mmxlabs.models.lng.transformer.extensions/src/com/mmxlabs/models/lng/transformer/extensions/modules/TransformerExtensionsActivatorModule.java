@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModul
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
 import com.mmxlabs.models.lng.transformer.extensions.groupedslots.GroupedSlotsTransformerModule;
+import com.mmxlabs.models.lng.transformer.extensions.heelcarry.HeelCarryDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealDataModule;
@@ -52,6 +53,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new ExposureDataModule());
 		install(new PaperDealDataModule());
 		install(new CounterPartyVolumeDataModule());
+		install(new HeelCarryDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(CharterContractTransformerFactory.class).export();

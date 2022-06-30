@@ -1332,7 +1332,7 @@ public class PeriodTransformer {
 			for(final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
 				if (entry.getValue().isIsHeelSource()) {
 					previousEntry = entry;
-				} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {
+				} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {// && getDischarge(entry.getKey()).isHeelCarry()) {
 					HeelCarryCargoPair pair = new HeelCarryCargoPair();
 					pair.firstCargo = previousEntry.getKey();
 					pair.firstCargoAllocation = previousEntry.getValue();
@@ -1428,6 +1428,15 @@ public class PeriodTransformer {
 		throw new IllegalStateException(String.format("Cargo %s is in heel carry pair list, but has no pair. Please contact Minimax Labs.", cargo.getLoadName()));
 	}
 
+	private static final DischargeSlot getDischarge(final Cargo cargo) {
+		for (final Slot<?> slot : cargo.getSlots()) {
+			if (slot instanceof DischargeSlot discharge) {
+				return discharge;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * A vessel event typically need the previous cargo/event to work out heel information correctly. Return the list of prior events that are needed to compute this correctly. This could be zero to
 	 * many object depending on the sequence. We are looking for the cargo before the event (which could even be cargo, other event, other event, this event)

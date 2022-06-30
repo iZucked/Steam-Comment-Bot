@@ -9,10 +9,13 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
@@ -28,6 +31,16 @@ public class DischargeSlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__CARGO);
 		ignoreFeatures.add(CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE);
 		ignoreFeatures.add(CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO);
+		
+		addEditor(CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY, topClass -> {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_HEEL_RETENTION)) {
+				// Hide for spot loads
+				if (!CargoPackage.Literals.SPOT_DISCHARGE_SLOT.equals(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY);
+				}
+			}
+			return null;
+		});
 
 		addDefaultEditorWithWrapper(CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE, NonShppedDealTypeInlineEditorWrapper::new);
 	}

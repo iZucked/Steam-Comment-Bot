@@ -1342,6 +1342,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDischargeSlot_HeelCarry() {
+		return (EAttribute)dischargeSlotEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getDischargeSlot__GetSlotOrDelegateMinCv() {
 		return dischargeSlotEClass.getEOperations().get(0);
 	}
@@ -3345,6 +3355,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__MIN_CV_VALUE);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__MAX_CV_VALUE);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE);
+		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__HEEL_CARRY);
 		createEOperation(dischargeSlotEClass, DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_MIN_CV);
 		createEOperation(dischargeSlotEClass, DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_MAX_CV);
 		createEOperation(dischargeSlotEClass, DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE);
@@ -3822,6 +3833,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getDischargeSlot_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeSlot_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeSlot_FobSaleDealType(), theTypesPackage.getFOBSaleDealType(), "fobSaleDealType", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeSlot_HeelCarry(), ecorePackage.getEBoolean(), "heelCarry", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDischargeSlot__GetSlotOrDelegateMinCv(), ecorePackage.getEDouble(), "getSlotOrDelegateMinCv", 0, 1, IS_UNIQUE, IS_ORDERED);
 
