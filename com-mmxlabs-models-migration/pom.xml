@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>5.6.2-SNAPSHOT</version>
+		<version>5.7.1.RELEASE</version>
 	</parent>
 
 	<groupId>com.mmxlabs.models.migration</groupId>
