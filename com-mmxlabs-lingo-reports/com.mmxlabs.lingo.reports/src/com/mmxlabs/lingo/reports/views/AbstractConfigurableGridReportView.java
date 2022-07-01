@@ -226,7 +226,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				ViewerHelper.refresh(viewer, false);
 			}
 		};
-		Activator.getPlugin().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 	}
 
 	private Runnable updateScollBarsRunnable = null;
@@ -775,7 +775,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	public void dispose() {
 
 		if (propertyChangeListener != null) {
-			Activator.getPlugin().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 		if (handleSelections()) {
 			final ESelectionService service = getSite().getService(ESelectionService.class);

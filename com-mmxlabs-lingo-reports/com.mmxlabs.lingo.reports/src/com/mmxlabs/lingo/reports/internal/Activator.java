@@ -13,7 +13,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.widgets.Display;
@@ -21,7 +20,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
@@ -37,7 +35,6 @@ import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
-import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 /**
  * This is the central singleton for the model edit plugin.
@@ -91,23 +88,10 @@ public final class Activator extends EMFPlugin {
 	 */
 	@Override
 	public ResourceLocator getPluginResourceLocator() {
-		return plugin;
+		return getDefault();
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the singleton instance.
-	 * @generated
-	 */
-	public static Implementation getPlugin() {
-		return plugin;
-	}
-
-	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @return the singleton instance.
 	 * @generated NOT
 	 */
 	public static Implementation getDefault() {
@@ -171,20 +155,14 @@ public final class Activator extends EMFPlugin {
 		protected void initializeImageRegistry(final ImageRegistry reg) {
 
 			final ImageDescriptor importImageDescriptor = CommonImages.getImageDescriptor(IconPaths.PinnedRow, IconMode.Enabled);
-			getImageRegistry().put(IMAGE_PINNED_ROW, importImageDescriptor);
+			reg.put(IMAGE_PINNED_ROW, importImageDescriptor);
 
 		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-		 */
+		
 		@Override
 		public void stop(final BundleContext context) throws Exception {
 
 			getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
-			
 
 			if (imageRegistry != null) {
 				imageRegistry.dispose();
@@ -198,17 +176,14 @@ public final class Activator extends EMFPlugin {
 		public void start(final BundleContext context) throws Exception {
 			super.start(context);
 
-			propertyChangeListener = new IPropertyChangeListener() {
-				@Override
-				public void propertyChange(final PropertyChangeEvent event) {
-					final String property = event.getProperty();
-					if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
-						final String value = getPreferenceStore().getString(property);
-						if (value != null) {
-							Formatters.DurationMode m = Formatters.DurationMode.valueOf(value);
-							if (m != null) {
-								Formatters.setDurationMode(m);
-							}
+			propertyChangeListener = event -> {
+				final String property = event.getProperty();
+				if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
+					final String value = getPreferenceStore().getString(property);
+					if (value != null) {
+						Formatters.DurationMode m = Formatters.DurationMode.valueOf(value);
+						if (m != null) {
+							Formatters.setDurationMode(m);
 						}
 					}
 				}
@@ -250,7 +225,7 @@ public final class Activator extends EMFPlugin {
 		public IPreferenceStore getPreferenceStore() {
 			// Create the preference store lazily.
 			if (preferenceStore == null) {
-				preferenceStore = new ScopedPreferenceStore(new InstanceScope(), getBundle().getSymbolicName());
+				preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, getBundle().getSymbolicName());
 
 			}
 			return preferenceStore;
