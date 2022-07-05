@@ -289,7 +289,7 @@ public class ScheduleCalculator {
 		 * @return
 		 */
 		private boolean validate() {
-			if ((!first.isCargoRecord() || !second.isCargoRecord())) {// && !sCargo.allowsHeelCarry()) {
+			if ((!first.isCargoRecord() || !second.isCargoRecord()) && !sCargo.allowsHeelCarry()) {
 				return false;
 			}
 			final IPortTimesRecord firstIptr = first.getPortTimesRecord();
@@ -325,13 +325,12 @@ public class ScheduleCalculator {
 					heelRetentionFunctions.remove(bestFunc);
 					value += bestValue;
 				}
-				return value > 0;
-//				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
-//						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
-//					return value > 0;
-//				}
-//				
-//				return false;
+				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
+						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
+					return value > 0;
+				}
+				
+				return false;
 			}
 			return false;
 		}
