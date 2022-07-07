@@ -289,7 +289,7 @@ public class ScheduleCalculator {
 		 * @return
 		 */
 		private boolean validate() {
-			if ((!first.isCargoRecord() || !second.isCargoRecord()) && !sCargo.allowsHeelCarry()) {
+			if (!first.isCargoRecord() || !second.isCargoRecord() || !allowsHeelCarry(sCargo.discharge)) {
 				return false;
 			}
 			final IPortTimesRecord firstIptr = first.getPortTimesRecord();
@@ -549,20 +549,21 @@ public class ScheduleCalculator {
 			
 			throw new IllegalStateException("Cargo Value Annotation must have a Load Slot reference.");
 		}
-		
-		private IPortSlot getDischargeSlot(final ICargoValueAnnotation cva) {
+	}
+	
+	private IPortSlot getDischargeSlot(final @Nullable ICargoValueAnnotation cva) {
+		if (cva != null) {
 			for(final IPortSlot slot : cva.getSlots()) {
 				if (slot instanceof DischargeSlot ds) {
 					return ds;
 				}
 			}
-			
-			throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
 		}
-		
-		public boolean allowsHeelCarry() {
-			return heelCarrySlotProvider.isHeelCarryAllowed(discharge);
-		}
+		throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
+	}
+	
+	private boolean allowsHeelCarry(final IPortSlot discharge) {
+		return heelCarrySlotProvider.isHeelCarryAllowed(discharge);
 	}
 	
 	// Create a list of pairwise VPRs and keep only the ones where heel can be retained
@@ -654,7 +655,7 @@ public class ScheduleCalculator {
 				final VoyagePlanRecord current = iter.next();
 				if (current != null) {
 					if (lastRecord != null) {
-						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
+						if (current.isCargoRecord() && lastRecord.isCargoRecord() && allowsHeelCarry(getDischargeSlot(current.getCargoValueAnnotation()))) {
 							allPairs.add(new RetentionPair(lastRecord, current, vessel));
 						}
 					}
