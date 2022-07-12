@@ -30,12 +30,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 	}
-
-	@Override
-	public void dispose() {
-
-	}
-
+ 
 	@Override
 	public boolean evaluate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState) {
 		return true;

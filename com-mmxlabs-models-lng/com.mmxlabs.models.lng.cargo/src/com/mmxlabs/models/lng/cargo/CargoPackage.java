@@ -2401,13 +2401,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = SLOT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Heel Carry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__HEEL_CARRY = SLOT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 6;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3938,6 +3947,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Heel Carry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__HEEL_CARRY = DISCHARGE_SLOT__HEEL_CARRY;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -8456,6 +8474,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getDischargeSlot_FobSaleDealType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isHeelCarry <em>Heel Carry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Carry</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#isHeelCarry()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_HeelCarry();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrDelegateMinCv() <em>Get Slot Or Delegate Min Cv</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11194,6 +11223,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE = eINSTANCE.getDischargeSlot_FobSaleDealType();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Carry</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__HEEL_CARRY = eINSTANCE.getDischargeSlot_HeelCarry();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Cv</b></em>' operation.

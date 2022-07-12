@@ -23,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -1026,12 +1025,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
-
-		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
-			return; // This test is only applicable to old South-bound panama rules, as new
-					// south-bound idle rule allows existing panama voyages and flags as a warning
-					// in validation.
-		}
 
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();

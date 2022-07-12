@@ -16,8 +16,6 @@ import org.eclipse.nebula.widgets.grid.internal.CheckBoxRenderer;
 import org.eclipse.nebula.widgets.grid.internal.TextUtils;
 import org.eclipse.nebula.widgets.grid.internal.ToggleRenderer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -48,7 +46,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 	int textBottomMargin = 2;
 
-	private int insideMargin = 3;
+	private final int insideMargin = 3;
 
 	int treeIndent = 20;
 
@@ -60,27 +58,26 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 	private TextLayout textLayout;
 	private GridItem item;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	
+
 	@Override
 	public int getRow() {
 		int group = 0;
-		
+
 		Object object = null;
 		Object parent = null;
 
-		int row = item.getRowIndex();
-		
-		
-		for(int i = 0; i < row; i++) {
+		final int row = item.getRowIndex();
+
+		for (int i = 0; i < row; i++) {
 			parent = item.getParent().getItem(i).getData();
 			object = item.getParent().getItem(i + 1).getData();
-			
-			if (object instanceof CompositeRow) {
-				Object tmp = ((CompositeRow) object).getPinnedRow();
+
+			if (object instanceof final CompositeRow compositeRow) {
+				final Object tmp = compositeRow.getPinnedRow();
 				if (tmp != null) {
 					object = tmp;
 				} else {
@@ -88,41 +85,38 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 				}
 			}
 
-			if (parent instanceof CompositeRow) {
-				Object tmp = ((CompositeRow) parent).getPinnedRow();
+			if (parent instanceof final CompositeRow compositeRow) {
+				final Object tmp = compositeRow.getPinnedRow();
 				if (tmp != null) {
 					parent = tmp;
 				} else {
 					parent = ((CompositeRow) parent).getPreviousRow();
 				}
 			}
-			
-			if (object instanceof Row && parent instanceof Row) {
-				Row objectRow = (Row) object;
-				Row parentRow = (Row) parent;
 
+			if (object instanceof final Row objectRow && parent instanceof final Row parentRow) {
 				if (objectRow.getRowGroup() != parentRow.getRowGroup()) {
 					group += 1;
 				}
 			}
-		} 
-		
+		}
+
 		// Make sure the total row is in a different color
-		if (row == (item.getParent().getItemCount() -1)) {
+		if (row == (item.getParent().getItemCount() - 1)) {
 			if (object instanceof List<?>) {
 				return group += 1;
 			}
 		}
-		
+
 		assert group >= 0;
 		return group;
 	}
-	
-	@Override
-	public void paint(GC gc, Object value) {
 
-		Color alternativeColour = new Color(gc.getDevice(), 230, 239, 249);
-		Color alternativeLineColour = new Color(gc.getDevice(), 155, 178, 196);
+	@Override
+	public void paint(final GC gc, final Object value) {
+
+		final Color alternativeColour = new Color(gc.getDevice(), 230, 239, 249);
+		final Color alternativeLineColour = new Color(gc.getDevice(), 155, 178, 196);
 
 		item = (GridItem) value;
 
@@ -141,24 +135,23 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
 		} else {
 			if (item.getParent().isEnabled()) {
-				//Color back = null;
+				// Color back = null;
 				// Check for explicit column background colour disabled: the visualizer
 				// now always provides a default column background, so a non-null column
 				// background does not necessarily indicate an override of the default
 				// behaviour.
 				// TODO: see if the original behaviour can be retrieved by creating
-				// visualizers which explicitly return a null background. 
+				// visualizers which explicitly return a null background.
 
-				Color back = item.getBackground(getColumn());
+				final Color back = item.getBackground(getColumn());
 
-			 
 				if (getRow() % 2 == 1) {
 					gc.setBackground(alternativeColour);
 					drawBackground = true;
 				} else {
 					drawBackground = false;
 				}
-			
+
 			} else {
 				gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 			}
@@ -167,11 +160,11 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 		if (drawBackground)
 			gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
-		
+
 		int x = leftMargin;
 
 		if (isTree()) {
-			boolean renderBranches = item.getParent().getTreeLinesVisible();
+			final boolean renderBranches = item.getParent().getTreeLinesVisible();
 			if (renderBranches) {
 				branchRenderer.setBranches(getBranches(item));
 				branchRenderer.setIndent(treeIndent);
@@ -219,7 +212,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			checkRenderer.paint(gc, null);
 		}
 
-		Image image = item.getImage(getColumn());
+		final Image image = item.getImage(getColumn());
 		if (image != null) {
 			int y = getBounds().y;
 
@@ -230,7 +223,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			x += image.getBounds().width + insideMargin;
 		}
 
-		int width = getBounds().width - x - rightMargin;
+		final int width = getBounds().width - x - rightMargin;
 
 		if (drawAsSelected) {
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
@@ -239,15 +232,15 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 
 		if (!isWordWrap()) {
-			String text = TextUtils.getShortStr(gc, item.getText(getColumn()), width, SWT.RIGHT);
+			final String text = TextUtils.getShortStr(gc, item.getText(getColumn()), width, SWT.RIGHT);
 
 			if (getAlignment() == SWT.RIGHT) {
-				int len = gc.stringExtent(text).x;
+				final int len = gc.stringExtent(text).x;
 				if (len < width) {
 					x += width - len;
 				}
 			} else if (getAlignment() == SWT.CENTER) {
-				int len = gc.stringExtent(text).x;
+				final int len = gc.stringExtent(text).x;
 				if (len < width) {
 					x += (width - len) / 2;
 				}
@@ -257,32 +250,28 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		} else {
 			if (textLayout == null) {
 				textLayout = new TextLayout(gc.getDevice());
-				item.getParent().addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(DisposeEvent e) {
-						textLayout.dispose();
-					}
-				});
+				item.getParent().addDisposeListener(e -> textLayout.dispose());
 			}
 			textLayout.setFont(gc.getFont());
 			textLayout.setText(item.getText(getColumn()));
 			textLayout.setAlignment(getAlignment());
 			textLayout.setWidth(width < 1 ? 1 : width);
 			if (item.getParent().isAutoHeight()) {
-				// Look through all columns (except this one) to get the max height needed for this item
-				int columnCount = item.getParent().getColumnCount();
+				// Look through all columns (except this one) to get the max height needed for
+				// this item
+				final int columnCount = item.getParent().getColumnCount();
 				int maxHeight = textLayout.getBounds().height + textTopMargin + textBottomMargin;
 				for (int i = 0; i < columnCount; i++) {
-					GridColumn column = item.getParent().getColumn(i);
+					final GridColumn column = item.getParent().getColumn(i);
 					if (i != getColumn() && column.getWordWrap()) {
-						int height = column.getCellRenderer().computeSize(gc, column.getWidth(), SWT.DEFAULT, item).y;
+						final int height = column.getCellRenderer().computeSize(gc, column.getWidth(), SWT.DEFAULT, item).y;
 						maxHeight = Math.max(maxHeight, height);
 					}
 				}
 
 				// Also look at the row header if necessary
 				if (item.getParent().isWordWrapHeader()) {
-					int height = item.getParent().getRowHeaderRenderer().computeSize(gc, SWT.DEFAULT, SWT.DEFAULT, item).y;
+					final int height = item.getParent().getRowHeaderRenderer().computeSize(gc, SWT.DEFAULT, SWT.DEFAULT, item).y;
 					maxHeight = Math.max(maxHeight, height);
 				}
 
@@ -299,7 +288,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 			} else {
 //				if (getRow() % 2 == 1) {
-					gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+				gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 //				} else {
 //					gc.setForeground(item.getParent().getLineColor());
 //				}
@@ -310,7 +299,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 
 		if (isCellFocus()) {
-			Rectangle focusRect = new Rectangle(getBounds().x, getBounds().y, getBounds().width - 1, getBounds().height);
+			final Rectangle focusRect = new Rectangle(getBounds().x, getBounds().y, getBounds().width - 1, getBounds().height);
 
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 			gc.drawRectangle(focusRect);
@@ -326,59 +315,64 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 
 		/*
-		Color blackColour = new Color(gc.getDevice(), 0, 0, 0);
-		gc.setForeground(blackColour);
-		gc.setBackground(blackColour);
-		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
-		blackColour.dispose();
-		*/
-		
-		
+		 * Color blackColour = new Color(gc.getDevice(), 0, 0, 0);
+		 * gc.setForeground(blackColour); gc.setBackground(blackColour);
+		 * gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width,
+		 * getBounds().height); blackColour.dispose();
+		 */
+
 		alternativeColour.dispose();
 		alternativeLineColour.dispose();
 	}
 
 	/**
-	 * Calculates the sequence of branch lines which should be rendered for the provided item
+	 * Calculates the sequence of branch lines which should be rendered for the
+	 * provided item
 	 * 
 	 * @param item
-	 * @return an array of integers composed using the constants in {@link BranchRenderer}
+	 * @return an array of integers composed using the constants in
+	 *         {@link BranchRenderer}
 	 */
 	private int[] getBranches(GridItem item) {
-		int[] branches = new int[item.getLevel() + 1];
-		GridItem[] roots = item.getParent().getRootItems();
+		final int[] branches = new int[item.getLevel() + 1];
+		final GridItem[] roots = item.getParent().getRootItems();
 
 		// Is this a node or a leaf?
 		if (item.getParentItem() == null) {
 			// Add descender if not last item
 			if (!item.isExpanded() && roots[roots.length - 1].equals(item)) {
-				if (item.hasChildren())
+				if (item.hasChildren()) {
 					branches[item.getLevel()] = BranchRenderer.LAST_ROOT;
-				else
+				} else {
 					branches[item.getLevel()] = BranchRenderer.SMALL_L;
+				}
 			} else {
-				if (item.hasChildren())
+				if (item.hasChildren()) {
 					branches[item.getLevel()] = BranchRenderer.ROOT;
-				else
+				} else {
 					branches[item.getLevel()] = BranchRenderer.SMALL_T;
+				}
 			}
 
-		} else if (item.hasChildren())
-			if (item.isExpanded())
+		} else if (item.hasChildren()) {
+			if (item.isExpanded()) {
 				branches[item.getLevel()] = BranchRenderer.NODE;
-			else
+			} else {
 				branches[item.getLevel()] = BranchRenderer.NONE;
-		else
+			}
+		} else {
 			branches[item.getLevel()] = BranchRenderer.LEAF;
-
+		}
 		// Branch for current item
 		GridItem parent = item.getParentItem();
-		if (parent == null)
+		if (parent == null) {
 			return branches;
+		}
 
 		// Are there siblings below this item?
-		if (parent.indexOf(item) < parent.getItemCount() - 1)
+		if (parent.indexOf(item) < parent.getItemCount() - 1) {
 			branches[item.getLevel() - 1] = BranchRenderer.T;
+		}
 
 		// Is the next node a root?
 		else if (parent.getParentItem() == null && !parent.equals(roots[roots.length - 1]))
@@ -388,7 +382,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		else
 			branches[item.getLevel() - 1] = BranchRenderer.L;
 
-		Grid grid = item.getParent();
+		final Grid grid = item.getParent();
 		item = parent;
 		parent = item.getParentItem();
 
@@ -412,8 +406,8 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
-		GridItem item = (GridItem) value;
+	public Point computeSize(final GC gc, final int wHint, final int hHint, final Object value) {
+		final GridItem item = (GridItem) value;
 
 		gc.setFont(item.getFont(getColumn()));
 
@@ -434,7 +428,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 		int y = 0;
 
-		Image image = item.getImage(getColumn());
+		final Image image = item.getImage(getColumn());
 		if (image != null) {
 			y = topMargin + image.getBounds().height + bottomMargin;
 
@@ -442,7 +436,8 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 
 		// MOPR-DND
-		// MOPR: replaced this code (to get correct preferred height for cells in word-wrap columns)
+		// MOPR: replaced this code (to get correct preferred height for cells in
+		// word-wrap columns)
 		//
 		// x += gc.stringExtent(item.getText(column)).x + rightMargin;
 		//
@@ -462,7 +457,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			else
 				plainTextWidth = wHint - x - rightMargin;
 
-			TextLayout currTextLayout = new TextLayout(gc.getDevice());
+			final TextLayout currTextLayout = new TextLayout(gc.getDevice());
 			currTextLayout.setFont(gc.getFont());
 			currTextLayout.setText(item.getText(getColumn()));
 			currTextLayout.setAlignment(getAlignment());
@@ -487,9 +482,9 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean notify(int event, Point point, Object value) {
+	public boolean notify(final int event, final Point point, final Object value) {
 
-		GridItem item = (GridItem) value;
+		final GridItem item = (GridItem) value;
 
 		if (isCheck()) {
 			if (event == IInternalWidget.MouseMove) {
@@ -542,13 +537,13 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		return false;
 	}
 
-	private boolean overCheck(GridItem item, Point point) {
+	private boolean overCheck(final GridItem item, Point point) {
 		if (isCenteredCheckBoxOnly(item)) {
 			point = new Point(point.x, point.y);
 			point.x -= getBounds().x;
 			point.y -= getBounds().y;
 
-			Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
+			final Rectangle checkBounds = new Rectangle(0, 0, 0, 0);
 			checkBounds.x = (getBounds().width - checkRenderer.getBounds().width) / 2;
 			checkBounds.y = ((getBounds().height - checkRenderer.getBounds().height) / 2);
 			checkBounds.width = checkRenderer.getBounds().width;
@@ -567,7 +562,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			}
 
 			if (point.x >= x && point.x < (x + checkRenderer.getSize().x)) {
-				int yStart = ((getBounds().height - checkRenderer.getBounds().height) / 2);
+				final int yStart = ((getBounds().height - checkRenderer.getBounds().height) / 2);
 				if (point.y >= yStart && point.y < yStart + checkRenderer.getSize().y) {
 					return true;
 				}
@@ -577,11 +572,11 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 	}
 
-	private int getToggleIndent(GridItem item) {
+	private int getToggleIndent(final GridItem item) {
 		return item.getLevel() * treeIndent;
 	}
 
-	private boolean overToggle(GridItem item, Point point) {
+	private boolean overToggle(final GridItem item, Point point) {
 
 		point = new Point(point.x, point.y);
 
@@ -593,7 +588,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 
 		if (point.x >= x && point.x < (x + toggleRenderer.getSize().x)) {
 			// return true;
-			int yStart = ((getBounds().height - toggleRenderer.getBounds().height) / 2);
+			final int yStart = ((getBounds().height - toggleRenderer.getBounds().height) / 2);
 			if (point.y >= yStart && point.y < yStart + toggleRenderer.getSize().y) {
 				return true;
 			}
@@ -606,7 +601,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTree(boolean tree) {
+	public void setTree(final boolean tree) {
 		super.setTree(tree);
 
 		if (tree) {
@@ -622,7 +617,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setCheck(boolean check) {
+	public void setCheck(final boolean check) {
 		super.setCheck(check);
 
 		if (check) {
@@ -637,7 +632,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Rectangle getTextBounds(GridItem item, boolean preferred) {
+	public Rectangle getTextBounds(final GridItem item, final boolean preferred) {
 		int x = leftMargin;
 
 		if (isTree()) {
@@ -651,16 +646,16 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 			x += checkRenderer.getBounds().width + insideMargin;
 		}
 
-		Image image = item.getImage(getColumn());
+		final Image image = item.getImage(getColumn());
 		if (image != null) {
 			x += image.getBounds().width + insideMargin;
 		}
 
-		Rectangle bounds = new Rectangle(x, topMargin + textTopMargin, 0, 0);
+		final Rectangle bounds = new Rectangle(x, topMargin + textTopMargin, 0, 0);
 
-		GC gc = new GC(item.getParent());
+		final GC gc = new GC(item.getParent());
 		gc.setFont(item.getFont(getColumn()));
-		Point size = gc.stringExtent(item.getText(getColumn()));
+		final Point size = gc.stringExtent(item.getText(getColumn()));
 
 		bounds.height = size.y;
 
@@ -675,7 +670,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		return bounds;
 	}
 
-	private boolean isCenteredCheckBoxOnly(GridItem item) {
+	private boolean isCenteredCheckBoxOnly(final GridItem item) {
 		return !isTree() && item.getImage(getColumn()) == null && item.getText(getColumn()).equals("") && getAlignment() == SWT.CENTER;
 	}
 }

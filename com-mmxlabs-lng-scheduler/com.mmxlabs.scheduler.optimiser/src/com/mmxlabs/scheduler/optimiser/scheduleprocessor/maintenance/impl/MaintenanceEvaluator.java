@@ -59,8 +59,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(long[] startHeelVolumeRangeInM3, IVesselCharter vesselCharter, VoyagePlan vp,
-			@NonNull IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(long[] startHeelVolumeRangeInM3, IVesselCharter vesselCharter, VoyagePlan vp, @NonNull IPortTimesRecord portTimesRecord,
+			@Nullable IAnnotatedSolution annotatedSolution) {
 
 		// Only apply to "real" vessels. Exclude nominal/round-trip vessels.
 		if (!(vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
@@ -136,6 +136,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 				}
 				firstPortTimesRecord.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
 				firstPortTimesRecord.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
+				firstPortTimesRecord.setSlotAdditionalPanamaIdleHours(portSlot, originalPortTimesRecord.getSlotAdditionaPanamaIdleHours(portSlot));
+				firstPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(portSlot, originalPortTimesRecord.getSlotMaxAdditionaPanamaIdleHours(portSlot));
+				firstPortTimesRecord.setRouteOptionBooking(portSlot, originalPortTimesRecord.getRouteOptionBooking(portSlot));
 				for (var type : ExplicitIdleTime.values()) {
 					firstPortTimesRecord.setSlotExtraIdleTime(portSlot, type, originalPortTimesRecord.getSlotExtraIdleTime(portSlot, type));
 				}
@@ -175,6 +178,10 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final PortTimesRecord currentPortTimesRecord = new PortTimesRecord();
 			currentPortTimesRecord.setSlotTime(maintenancePortSlots[i], originalPortTimesRecord.getSlotTime(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setSlotDuration(maintenancePortSlots[i], originalPortTimesRecord.getSlotDuration(maintenancePortSlots[i].getFormerPortSlot()));
+
+			currentPortTimesRecord.setSlotAdditionalPanamaIdleHours(maintenancePortSlots[i], originalPortTimesRecord.getSlotAdditionaPanamaIdleHours(maintenancePortSlots[i].getFormerPortSlot()));
+			currentPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(maintenancePortSlots[i], originalPortTimesRecord.getSlotMaxAdditionaPanamaIdleHours(maintenancePortSlots[i].getFormerPortSlot()));
+			currentPortTimesRecord.setRouteOptionBooking(maintenancePortSlots[i], originalPortTimesRecord.getRouteOptionBooking(maintenancePortSlots[i].getFormerPortSlot()));
 			for (var type : ExplicitIdleTime.values()) {
 				currentPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[i], type, originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[i].getFormerPortSlot(), type));
 			}
@@ -205,6 +212,12 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			finalPortTimesRecord.setSlotTime(maintenancePortSlots[numMaintenanceEvents - 1], originalPortTimesRecord.getSlotTime(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
 			finalPortTimesRecord.setSlotDuration(maintenancePortSlots[numMaintenanceEvents - 1],
 					originalPortTimesRecord.getSlotDuration(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
+			finalPortTimesRecord.setSlotAdditionalPanamaIdleHours(maintenancePortSlots[numMaintenanceEvents - 1],
+					originalPortTimesRecord.getSlotAdditionaPanamaIdleHours(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
+			finalPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(maintenancePortSlots[numMaintenanceEvents - 1],
+					originalPortTimesRecord.getSlotMaxAdditionaPanamaIdleHours(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
+			finalPortTimesRecord.setRouteOptionBooking(maintenancePortSlots[numMaintenanceEvents - 1],
+					originalPortTimesRecord.getRouteOptionBooking(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
 			for (var type : ExplicitIdleTime.values()) {
 				finalPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1], type,
 						originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot(), type));

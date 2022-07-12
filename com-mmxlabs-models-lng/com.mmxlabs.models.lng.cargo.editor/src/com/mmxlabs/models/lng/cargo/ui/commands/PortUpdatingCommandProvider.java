@@ -36,13 +36,11 @@ public class PortUpdatingCommandProvider implements IModelCommandProvider {
 	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
-			if (parameter.getEOwner() instanceof Slot) {
-				final Slot slot = (Slot) parameter.getEOwner();
+			if (parameter.getEOwner() instanceof Slot<?> slot) {
 				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Contract()) {
 					// update contract
 					final EObject newValue = parameter.getEValue();
-					if (newValue instanceof Contract) {
-						final Contract contract = (Contract) newValue;
+					if (newValue instanceof Contract contract) {
 						if (contract.getAllowedPorts().isEmpty()) {
 							return null;
 						}

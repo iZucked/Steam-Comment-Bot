@@ -15,11 +15,11 @@ public interface ICargoFitnessComponentProvider {
 	 * The name of the fitness component being created
 	 * @return
 	 */
-	public String getFitnessComponentName();
+	String getFitnessComponentName();
 	/**
 	 * Method to create the component
 	 * @param core
 	 * @return
 	 */
-	public ICargoFitnessComponent createComponent(final CargoSchedulerFitnessCore core);
+	ICargoFitnessComponent createComponent(CargoSchedulerFitnessCore core);
 }

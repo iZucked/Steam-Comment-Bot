@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.time.LocalDateTime;
 
+import org.json.simple.JSONObject;
+
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 
@@ -30,7 +32,7 @@ public class HeadlessGenericJSONTransformer<Params extends HeadlessGenericJSON.P
 		}
 	}
 	
-	public void setBasicProperties(T json, String machineType, String scenarioFileName, int threads) {
+	public void setBasicProperties(T json, JSONObject machineType, String scenarioFileName, int threads) {
 		json.getMeta().setMachineType(machineType);
 		json.getMeta().setScenario(scenarioFileName);
 		json.getParams().setCores(threads);
@@ -62,7 +64,7 @@ public class HeadlessGenericJSONTransformer<Params extends HeadlessGenericJSON.P
 
 	private Meta createMetaData() {
 		HeadlessGenericJSON.Meta meta = new HeadlessGenericJSON.Meta();
-		meta.setMachineType("");
+		meta.setMachineType(new JSONObject());
 		meta.setVersion("");
 		meta.setScenario("");
 		meta.setClient("");

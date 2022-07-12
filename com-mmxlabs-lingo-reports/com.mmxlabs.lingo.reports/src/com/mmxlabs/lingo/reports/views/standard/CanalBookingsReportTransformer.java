@@ -17,15 +17,12 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -55,14 +52,14 @@ public class CanalBookingsReportTransformer {
 		public final RouteOption routeOption;
 		public final CanalBookingSlot booking;
 		public final String type;
-		public final Slot nextSlot;
+		public final Slot<?> nextSlot;
 		public final String notes;
-		public boolean warn;
-		public boolean pinned;
+		public final boolean warn;
+		public final boolean pinned;
 		public final @Nullable String vessel;
 
-		public RowData(final @NonNull String scheduleName, boolean pinned, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption,
-				final @NonNull LocalDateTime bookingDate, final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String type, final @Nullable Slot nextSlot,
+		public RowData(final @NonNull String scheduleName, final boolean pinned, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption,
+				final @NonNull LocalDateTime bookingDate, final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String type, final @Nullable Slot<?> nextSlot,
 				@Nullable final String notes, @Nullable final String bookingCode, @Nullable final String vessel) {
 			super();
 			this.scheduleName = scheduleName;
@@ -78,7 +75,7 @@ public class CanalBookingsReportTransformer {
 			this.notes = notes == null ? "" : notes;
 			this.bookingCode = bookingCode == null ? "" : bookingCode;
 			this.vessel = vessel == null ? "" : vessel;
-			
+
 			this.warn = false;
 
 			this.dummy = false;
@@ -105,19 +102,17 @@ public class CanalBookingsReportTransformer {
 	}
 
 	@NonNull
-	public List<RowData> transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, boolean pinned) {
+	public List<RowData> transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, final boolean pinned) {
 
 		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 
 		final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
 
-		final ModelDistanceProvider modelDistanceProvider = scenarioResult.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-
 		final Set<CanalBookingSlot> existingBookings = new LinkedHashSet<>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		if (cargoModel.getCanalBookings() != null) {
-			cargoModel.getCanalBookings().getCanalBookingSlots().forEach(booking -> existingBookings.add(booking));
+			cargoModel.getCanalBookings().getCanalBookingSlots().forEach(existingBookings::add);
 		}
 
 		final List<RowData> result = new LinkedList<>();
@@ -129,28 +124,25 @@ public class CanalBookingsReportTransformer {
 
 			for (final Event evt : seq.getEvents()) {
 
-				if (evt instanceof Journey) {
-					final Journey journey = (Journey) evt;
+				if (evt instanceof final Journey journey) {
 
 					String type = "";
 
 					if (journey.getCanalBooking() != null) {
 						type = "Booked";
-					}
-					else {
+					} else {
 						if (journey.getCanalJourneyEvent() != null) {
-							type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
+							type = "Wait (" + (journey.getCanalJourneyEvent().getPanamaWaitingTimeHours() / 24) + "d)";
 						} else {
 							type = "Wait";
 						}
 					}
 
 					Event nextEvent = evt.getNextEvent();
-					Slot nextSlot = null;
+					Slot<?> nextSlot = null;
 					while (nextEvent != null) {
-						if (nextEvent instanceof SlotVisit) {
-							final SlotVisit nextSlotVisit = (SlotVisit) nextEvent;
-							final Slot slot = nextSlotVisit.getSlotAllocation().getSlot();
+						if (nextEvent instanceof final SlotVisit nextSlotVisit) {
+							final Slot<?> slot = nextSlotVisit.getSlotAllocation().getSlot();
 							if (slot != null) {
 								nextSlot = slot;
 							}
@@ -163,7 +155,7 @@ public class CanalBookingsReportTransformer {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
 						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection,
-								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings(), journey)));
+								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking), getVessel(booking, journey)));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String canalTravelDirection = PortModelLabeller.getDirection(journey.getCanalEntrance());
@@ -189,25 +181,25 @@ public class CanalBookingsReportTransformer {
 			final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
 			if (booking.getBookingDate() != null) {
 				result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection, null, "Unused", null,
-					booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings(), null)));
+						booking.getNotes(), getBookingCode(booking), getVessel(booking, null)));
 			}
 		}
 
 		return result;
 	}
-	
-	private String getVesselBookingCode(Journey journey, CanalBookings canalBookings) {
+
+	private String getVesselBookingCode(final Journey journey, final CanalBookings canalBookings) {
 		Vessel v = null;
 		String defaultGroupName = "";
 		if (journey.getSequence() != null && canalBookings != null) {
 			if (journey.getSequence().getVesselCharter() != null) {
 				v = journey.getSequence().getVesselCharter().getVessel();
-			} else if(journey.getSequence().getCharterInMarket() != null) {
+			} else if (journey.getSequence().getCharterInMarket() != null) {
 				v = journey.getSequence().getCharterInMarket().getVessel();
 			}
-			
+
 			if (v != null) {
-				for (var vgp : canalBookings.getVesselGroupCanalParameters()) {
+				for (final var vgp : canalBookings.getVesselGroupCanalParameters()) {
 					if (vgp.getVesselGroup() == null || vgp.getVesselGroup().isEmpty()) {
 						defaultGroupName = vgp.getName();
 					}
@@ -221,29 +213,28 @@ public class CanalBookingsReportTransformer {
 		return defaultGroupName;
 	}
 
-	String getVesselName(final Journey journey) {
+	private String getVesselName(final Journey journey) {
 		if (journey.getSequence() != null) {
-			if (journey.getSequence().getVesselCharter() != null && 
-					journey.getSequence().getVesselCharter().getVessel() != null) {
+			if (journey.getSequence().getVesselCharter() != null && journey.getSequence().getVesselCharter().getVessel() != null) {
 				return journey.getSequence().getVesselCharter().getVessel().getName();
-			} else if(journey.getSequence().getCharterInMarket() != null) {
+			} else if (journey.getSequence().getCharterInMarket() != null) {
 				return journey.getSequence().getCharterInMarket().getName();
 			}
 		}
-		//Else we don't know yet?
+		// Else we don't know yet?
 		return "";
 	}
-	
-	String getVessel(final CanalBookingSlot booking, final CanalBookings bookings, final @Nullable Journey journey) {
+
+	private String getVessel(final CanalBookingSlot booking, final @Nullable Journey journey) {
 		if (booking.getVessel() instanceof Vessel || booking.getVessel() instanceof VesselGroup) {
 			return booking.getVessel().getName();
-		} else if (journey != null){
+		} else if (journey != null) {
 			return getVesselName(journey);
 		}
 		return "";
 	}
-	
-	String getBookingCode(final CanalBookingSlot booking, final CanalBookings bookings) {
+
+	private String getBookingCode(final CanalBookingSlot booking) {
 		if (booking.getBookingCode() != null && booking.getBookingCode().getName() != null) {
 			return booking.getBookingCode().getName();
 		}

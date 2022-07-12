@@ -53,6 +53,7 @@ public class DischargeSlotItemProvider
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
 			addFobSaleDealTypePropertyDescriptor(object);
+			addHeelCarryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -190,6 +191,28 @@ public class DischargeSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Heel Carry feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelCarryPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_heelCarry_feature"),
+				 getString("_UI_DischargeSlot_heelCarry_description"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns DischargeSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -231,6 +254,7 @@ public class DischargeSlotItemProvider
 			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
 			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
+			case CargoPackage.DISCHARGE_SLOT__HEEL_CARRY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

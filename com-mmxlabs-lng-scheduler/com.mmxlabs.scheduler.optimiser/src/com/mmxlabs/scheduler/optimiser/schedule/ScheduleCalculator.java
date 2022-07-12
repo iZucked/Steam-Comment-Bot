@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHeelCarrySlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
@@ -93,6 +94,9 @@ public class ScheduleCalculator {
 	@Inject
 	@Named(SchedulerConstants.Key_UseHeelRetention)
 	private boolean retainHeel;
+	
+	@Inject
+	private IHeelCarrySlotProvider heelCarrySlotProvider;
 
 	@Nullable
 	public ProfitAndLossSequences schedule(final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -281,10 +285,11 @@ public class ScheduleCalculator {
 		 *   2. The first VPR has non null @ICargoValueAnnotation
 		 *   3. The first cargo's follow up slot is a load slot
 		 *   4. There is no requirment to run dry on the first VPR's CVA
+		 *   5. Second cargo's discharge slot must allow heel carry
 		 * @return
 		 */
 		private boolean validate() {
-			if (!first.isCargoRecord() || !second.isCargoRecord()) {
+			if (!first.isCargoRecord() || !second.isCargoRecord() || !allowsHeelCarry(sCargo.discharge)) {
 				return false;
 			}
 			final IPortTimesRecord firstIptr = first.getPortTimesRecord();
@@ -320,7 +325,6 @@ public class ScheduleCalculator {
 					heelRetentionFunctions.remove(bestFunc);
 					value += bestValue;
 				}
-
 				if ((firstCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv)) //
 						|| (secondCargoTransferredVolumeMMBTu > Calculator.convertM3ToMMBTu(MinVolumeCutOff, fCargo.cv))) {
 					return value > 0;
@@ -545,16 +549,21 @@ public class ScheduleCalculator {
 			
 			throw new IllegalStateException("Cargo Value Annotation must have a Load Slot reference.");
 		}
-		
-		private IPortSlot getDischargeSlot(final ICargoValueAnnotation cva) {
+	}
+	
+	private IPortSlot getDischargeSlot(final @Nullable ICargoValueAnnotation cva) {
+		if (cva != null) {
 			for(final IPortSlot slot : cva.getSlots()) {
 				if (slot instanceof DischargeSlot ds) {
 					return ds;
 				}
 			}
-			
-			throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
 		}
+		throw new IllegalStateException("Cargo Value Annotation must have a Discharge Slot reference.");
+	}
+	
+	private boolean allowsHeelCarry(final IPortSlot discharge) {
+		return heelCarrySlotProvider.isHeelCarryAllowed(discharge);
 	}
 	
 	// Create a list of pairwise VPRs and keep only the ones where heel can be retained
@@ -646,7 +655,7 @@ public class ScheduleCalculator {
 				final VoyagePlanRecord current = iter.next();
 				if (current != null) {
 					if (lastRecord != null) {
-						if (current.isCargoRecord() && lastRecord.isCargoRecord()) {
+						if (current.isCargoRecord() && lastRecord.isCargoRecord() && allowsHeelCarry(getDischargeSlot(current.getCargoValueAnnotation()))) {
 							allPairs.add(new RetentionPair(lastRecord, current, vessel));
 						}
 					}

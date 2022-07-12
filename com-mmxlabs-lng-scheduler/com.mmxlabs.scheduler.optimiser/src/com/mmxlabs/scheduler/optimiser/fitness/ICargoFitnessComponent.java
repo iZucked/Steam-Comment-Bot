@@ -32,9 +32,4 @@ public interface ICargoFitnessComponent extends IFitnessComponent {
 	 * Accept the last evaluation (for {@link IFitnessComponent#getFitness()}
 	 */
 	void acceptLastEvaluation();
-
-	/**
-	 * Clean up references as this component is no longer required.
-	 */
-	void dispose();
 }

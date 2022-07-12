@@ -9,10 +9,13 @@ import org.json.XML;
 
 public class JSONToXMLHelper {
 
+	private JSONToXMLHelper() {
+
+	}
+
 	public static String convertToXml(final String jsonStr) {
-		JSONObject json = new JSONObject(jsonStr);
-		String xml = XML.toString(json);
-		return xml;
+		final JSONObject json = new JSONObject(jsonStr);
+		return XML.toString(json);
 	}
 
 	public static String convertToJson(final String xmlStr) {

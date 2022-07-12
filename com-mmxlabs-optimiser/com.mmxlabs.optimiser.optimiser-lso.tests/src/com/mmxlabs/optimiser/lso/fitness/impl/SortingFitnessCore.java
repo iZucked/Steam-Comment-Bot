@@ -10,7 +10,6 @@ import java.util.Collections;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -32,12 +31,6 @@ public final class SortingFitnessCore implements IFitnessCore {
 
 	public SortingFitnessCore() {
 		component = new SortingFitnessComponent(this);
-	}
-
-	@Override
-	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
-
-		// Nothing to do here, no state is recorded
 	}
 
 	@Override
@@ -95,15 +88,5 @@ public final class SortingFitnessCore implements IFitnessCore {
 			}
 		}
 		return fitness;
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-
 	}
 }

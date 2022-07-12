@@ -5,9 +5,11 @@
 package com.mmxlabs.scheduler.optimiser.curves;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,6 +22,10 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 
 	private final TreeSet<Integer> intervals = new TreeSet<>();
+
+	public Set<Integer> getIntervals() {
+		return Collections.unmodifiableSet(intervals);
+	}
 
 	@Override
 	public void add(int point) {

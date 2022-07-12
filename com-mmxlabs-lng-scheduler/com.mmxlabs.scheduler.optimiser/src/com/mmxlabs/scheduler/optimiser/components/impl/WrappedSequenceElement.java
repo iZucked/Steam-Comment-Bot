@@ -39,8 +39,7 @@ public class WrappedSequenceElement implements ISequenceElement {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof WrappedSequenceElement) {
-			final WrappedSequenceElement other = (WrappedSequenceElement) obj;
+		if (obj instanceof WrappedSequenceElement other) {
 			return Objects.equals(portSlot, other.portSlot);
 		}
 		return false;

@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
@@ -40,19 +41,19 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 	}
 
 	@Override
-	public List<int @NonNull []> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
-		if (slot instanceof ILoadOption) {
-			return priceIntervalProviderUtil.getPriceIntervalsList((ILoadOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
-		} else if (slot instanceof IDischargeOption) {
-			return priceIntervalProviderUtil.getPriceIntervalsList((IDischargeOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
+	public List<int @NonNull []> getPriceIntervals(@NonNull final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
+		if (slot instanceof final ILoadOption option) {
+			return priceIntervalProviderUtil.getPriceIntervalsList(option, priceChangeIntervalsInHours, startOfRange, endOfRange, portTimeWindowRecord);
+		} else if (slot instanceof final IDischargeOption option) {
+			return priceIntervalProviderUtil.getPriceIntervalsList(option, priceChangeIntervalsInHours, startOfRange, endOfRange, portTimeWindowRecord);
 		} else {
 			throw new IllegalStateException("getPriceIntervals() requires either an ILoadOption or IDischargeOption");
 		}
 	}
 
 	@Override
-	public List<@NonNull Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		int[] intervals = priceChangeIntervalsInHours.getIntervalsAs1dArray(start, end);
+	public @Nullable List<@NonNull Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+		final int[] intervals = priceChangeIntervalsInHours.getIntervalsAs1dArray(start, end);
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
 		} else if (slot instanceof IDischargeOption) {
@@ -60,5 +61,9 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 		} else {
 			return null;
 		}
+	}
+
+	public ICurve getExpressionCurve() {
+		return this.expressionCurve;
 	}
 }

@@ -48,11 +48,9 @@ public final class IdleTimeComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	@Override
 	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
-		if (object instanceof PortDetails) {
-			final PortDetails detail = (PortDetails) object;
+		if (object instanceof PortDetails detail) {
 
-			@NonNull
-			final IPortSlot portSlot = detail.getOptions().getPortSlot();
+			final @NonNull IPortSlot portSlot = detail.getOptions().getPortSlot();
 
 			final VolumeAllocatedSequence volumeAllocatedSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
 			if (volumeAllocatedSequence != null) {

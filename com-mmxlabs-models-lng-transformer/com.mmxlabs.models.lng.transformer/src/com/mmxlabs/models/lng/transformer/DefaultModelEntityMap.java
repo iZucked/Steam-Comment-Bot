@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -118,10 +117,7 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 	@SuppressWarnings("null")
 	@NonNull
 	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
-		final String timeZone = (tz == null) ? "UTC" : tz;
-		final ZonedDateTime rawDate = dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours);
-		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromDate(rawDate);
-		return rawDate.plusMinutes(offsetMinutes);
+		return dateHelper.getDateFromHours(hours, tz);
 	}
 
 	/**

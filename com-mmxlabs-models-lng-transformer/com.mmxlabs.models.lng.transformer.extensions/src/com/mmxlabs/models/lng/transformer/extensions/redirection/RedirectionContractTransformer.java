@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -42,14 +43,15 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 
 /**
- * An abstract contract transformer for redirection contracts which can switch between FOB and DES purchase within the optimisation. TODO:
+ * An abstract contract transformer for redirection contracts which can switch
+ * between FOB and DES purchase within the optimisation. TODO:
  * 
  * @author Simon Goodall
  * 
  * 
  *         TODO: Roll this directly in to the transformer!
  */
-public abstract class RedirectionContractTransformer implements IContractTransformer {
+public abstract class RedirectionContractTransformer implements IContractTransformer, ISlotTransformer {
 
 	private ModelEntityMap modelEntityMap;
 
@@ -101,9 +103,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 		if (generatedOptions.contains(optimiserSlot)) {
 			return;
 		}
-		if (modelSlot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) modelSlot;
-
+		if (modelSlot instanceof LoadSlot loadSlot) {
 			if (loadSlot.getContract() != null) {
 				final PurchaseContract purchaseContract = loadSlot.getContract();
 
@@ -212,7 +212,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							modelEntityMap.addModelObject(desSlot, alternativeSlot);
 
 							// TODO Reuse RedirectionDESPurchaseBindingsGenerator
-							// desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, desSlot, alternativeSlot);
+							// desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder,
+							// desSlot, alternativeSlot);
 
 							redirectionGroup.add(desSlot);
 
@@ -220,7 +221,9 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							transformSlot(desSlot, alternativeSlot);
 						}
 
-						// Bind the current and generated slots together and pass into the redirection group provider. The post export processor and constraint checker need this information.
+						// Bind the current and generated slots together and pass into the redirection
+						// group provider. The post export processor and constraint checker need this
+						// information.
 						redirectionGroupProvider.createRedirectionGroup(redirectionGroup);
 
 						// final ISequenceElement elementA = portSlotProvider.getElement(optimiserSlot);
@@ -232,7 +235,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 		}
 	}
 
-	private void transformSlot(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	private void transformSlot(final Slot<?> modelSlot, final IPortSlot optimiserSlot) {
 
 		if (transformerExtensions == null) {
 			transformerExtensions = injector.getInstance(Key.get(new TypeLiteral<List<ITransformerExtension>>() {
@@ -243,33 +246,9 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 			if (e == this) {
 				continue;
 			}
-			if (e instanceof IContractTransformer) {
-				final IContractTransformer ct = (IContractTransformer) e;
-				ct.slotTransformed(modelSlot, optimiserSlot);
+			if (e instanceof ISlotTransformer st) {
+				st.slotTransformed(modelSlot, optimiserSlot);
 			}
 		}
 	}
-
-	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {
-
-		if (priceExpression == null || priceExpression.isEmpty()) {
-			return new StepwiseIntegerCurve();
-		}
-
-		final IExpression<ISeries> expression = indices.parse(priceExpression);
-		final ISeries parsed = expression.evaluate();
-
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-		} else {
-
-			curve.setDefaultValue(0);
-			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
-			}
-		}
-		return curve;
-	}
-
 }

@@ -35,8 +35,6 @@ public class VolumeAllocatedSequence {
 		return new VolumeAllocatedSequence(resource, sequence, 0, Collections.emptyList());
 	}
 
-	/**
-	 */
 	public VolumeAllocatedSequence(final @NonNull IResource resource, final @NonNull ISequence sequence, final int startTime, final List<VoyagePlanRecord> voyagePlans) {
 
 		this.sequence = sequence;

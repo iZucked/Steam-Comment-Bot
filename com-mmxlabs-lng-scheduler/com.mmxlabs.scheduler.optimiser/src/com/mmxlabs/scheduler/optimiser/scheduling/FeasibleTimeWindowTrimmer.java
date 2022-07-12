@@ -160,9 +160,6 @@ public class FeasibleTimeWindowTrimmer {
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
-	private Injector injector;
-
-	@Inject
 	private IExtraIdleTimeProvider extraIdleTimeProvider;
 
 	@Inject

@@ -559,7 +559,7 @@
                      class="LoadSlot">
                </target>
             </constraint>
- <constraint
+ 			<constraint
                   class="com.mmxlabs.models.lng.cargo.validation.LoadSlotPurgeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.LoadSlotPurgeConstraint"
                   isEnabledByDefault="true"
@@ -575,7 +575,7 @@
                      class="LoadSlot">
                </target>
             </constraint>            
-                        <constraint
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
                   isEnabledByDefault="true"
@@ -864,7 +864,7 @@
                      class="VesselEvent">
                </target>
             </constraint>   
-               <constraint
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CharterOutConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CharterOutConstraint"
                   lang="Java"
@@ -882,7 +882,7 @@
                      class="CharterOutEvent">
                </target>
             </constraint>
-               <constraint
+            <constraint
                      class="com.mmxlabs.models.lng.cargo.validation.SlotEntityConstraint"
                      id="com.mmxlabs.models.lng.cargo.validation.SlotEntityConstraint"
                      isEnabledByDefault="true"
@@ -1098,6 +1098,24 @@
                         class="Cargo">
                   </target>
                </constraint>
+               <!--<constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoHeelCarryConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoHeelCarryConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo Heel Carry Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  
+               </description>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>-->
         </constraints>
       </constraintProvider>
       <constraintProvider

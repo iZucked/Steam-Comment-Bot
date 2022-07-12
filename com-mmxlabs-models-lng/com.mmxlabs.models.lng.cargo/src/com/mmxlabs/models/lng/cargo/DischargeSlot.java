@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.types.FOBSaleDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isHeelCarry <em>Heel Carry</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot()
@@ -305,6 +306,28 @@ public interface DischargeSlot extends Slot<SalesContract> {
 	 * @generated
 	 */
 	boolean isSetFobSaleDealType();
+
+	/**
+	 * Returns the value of the '<em><b>Heel Carry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel Carry</em>' attribute.
+	 * @see #setHeelCarry(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_HeelCarry()
+	 * @model
+	 * @generated
+	 */
+	boolean isHeelCarry();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isHeelCarry <em>Heel Carry</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel Carry</em>' attribute.
+	 * @see #isHeelCarry()
+	 * @generated
+	 */
+	void setHeelCarry(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

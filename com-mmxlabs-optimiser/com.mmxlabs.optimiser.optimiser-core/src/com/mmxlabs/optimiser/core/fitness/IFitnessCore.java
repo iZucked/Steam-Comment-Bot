@@ -65,12 +65,6 @@ public interface IFitnessCore {
 	}
 
 	/**
-	 * Clean up resources once the {@link IFitnessCore} is no longer required.
-	 */
-	default void dispose() {
-	}
-
-	/**
 	 * Add annotations of the given sequences to the associated {@link IAnnotatedSolution}. Performs a full evaluation, but should <em>not</em> change the fitness stored in the associated components
 	 * 
 	 * @param fullSequences

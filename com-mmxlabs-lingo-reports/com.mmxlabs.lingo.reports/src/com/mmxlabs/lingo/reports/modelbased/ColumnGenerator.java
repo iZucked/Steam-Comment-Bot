@@ -44,21 +44,27 @@ import com.mmxlabs.models.ui.tabular.IFilterProvider;
 
 public class ColumnGenerator {
 
+	private ColumnGenerator() {
+
+	}
+
 	private static final String COLUMN_DATA_FIELD = "field";
+
 	private static Set<Class<?>> numericTypes = Sets.newHashSet(short.class, int.class, long.class, float.class, double.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
 			Number.class);
+
 	private static Set<Class<?>> dateTypes = Sets.newHashSet(LocalDate.class, LocalDateTime.class);
 
-	public static class ColumnInfo{
-		final public Map<Integer, Field> mapOfFields;
-		final public Map<Field, GridViewerColumn> mapOfFieldColumns;
-		
+	public static class ColumnInfo {
+		public final Map<Integer, Field> mapOfFields;
+		public final Map<Field, GridViewerColumn> mapOfFieldColumns;
+
 		public ColumnInfo(final Map<Integer, Field> mapOfFields, final Map<Field, GridViewerColumn> mapOfFieldColumns) {
 			this.mapOfFields = mapOfFields;
 			this.mapOfFieldColumns = mapOfFieldColumns;
 		}
 	}
-	
+
 	public static ColumnInfo createColumns(final GridTableViewer viewer, @Nullable final EObjectTableViewerSortingSupport sortingSupport, @Nullable final EObjectTableViewerFilterSupport filterSupport,
 			final Class<?> cls, final BiConsumer<ViewerCell, Field> styler) {
 
@@ -67,7 +73,7 @@ public class ColumnGenerator {
 		final Map<Integer, Field> mapOfFields = new HashMap<>();
 		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
 		int counter = -1;
-		
+
 		for (final Field f : cls.getFields()) {
 			if (f.getAnnotation(LingoIgnore.class) != null) {
 				continue;
@@ -75,7 +81,7 @@ public class ColumnGenerator {
 
 			final ColumnName columnName = f.getAnnotation(ColumnName.class);
 			final GridViewerColumn col;
-			
+
 			if (columnName != null) {
 				col = new GridViewerColumn(viewer, SWT.NONE);
 				if (!columnName.lingo().isEmpty()) {
@@ -92,7 +98,7 @@ public class ColumnGenerator {
 			mapOfFieldColumns.put(f, col);
 
 			final Function<Object, String> formatter;
-			Function<Object, Comparable> sortFunction;
+			Function<Object, Comparable<?>> sortFunction;
 			if (dateTypes.contains(f.getType())) {
 				DateTimeFormatter dtf;
 				final LingoFormat format = f.getAnnotation(LingoFormat.class);
@@ -171,7 +177,7 @@ public class ColumnGenerator {
 				}
 				final Method pAltSortMethod = altSortMethod;
 
-				final IComparableProvider provider = (m) -> {
+				final IComparableProvider provider = m -> {
 					try {
 						if (pAltSortMethod != null) {
 							return sortFunction.apply(pAltSortMethod.invoke(m));
@@ -219,18 +225,16 @@ public class ColumnGenerator {
 			});
 		}
 
-		if (sortingSupport != null) {
-			if (!defaultSortColumns.isEmpty()) {
-				// Reverse sort.
-				Collections.sort(defaultSortColumns, (a, b) -> b.getFirst() - a.getFirst());
-				// Set initial sort order
-				defaultSortColumns.forEach(p -> {
-					sortingSupport.setSortDescending(!p.getThird());
-					sortingSupport.sortColumnsBy(p.getSecond().getColumn());
-				});
-			}
+		if (sortingSupport != null && !defaultSortColumns.isEmpty()) {
+			// Reverse sort.
+			Collections.sort(defaultSortColumns, (a, b) -> b.getFirst() - a.getFirst());
+			// Set initial sort order
+			defaultSortColumns.forEach(p -> {
+				sortingSupport.setSortDescending(!p.getThird());
+				sortingSupport.sortColumnsBy(p.getSecond().getColumn());
+			});
 		}
-		
+
 		return new ColumnInfo(mapOfFields, mapOfFieldColumns);
 	}
 }
