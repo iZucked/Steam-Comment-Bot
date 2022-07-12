@@ -188,7 +188,7 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 	private Map<PurchaseContract, Map<YearMonth, Integer>> fetchPurchaseContractMonthlyCount(final CargoModel cargoModel) {
 		final Map<PurchaseContract, Map<YearMonth, Integer>> purchaseContractMonthlyCount = new HashMap<>();
 		cargoModel.getCargoes().stream() //
-				.map(c -> c.getSlots().get(0)) //
+				.map(c -> c.getSortedSlots().get(0)) //
 				.filter(s -> s.getEntity() != null && !s.getEntity().isThirdParty()) //
 				.map(LoadSlot.class::cast) //
 				.forEach(loadSlot -> purchaseContractMonthlyCount.computeIfAbsent(loadSlot.getContract(), pc -> new HashMap<>()).compute(YearMonth.from(loadSlot.getWindowStart()),

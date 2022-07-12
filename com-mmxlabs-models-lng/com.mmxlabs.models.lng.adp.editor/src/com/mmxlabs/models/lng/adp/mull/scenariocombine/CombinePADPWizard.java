@@ -94,7 +94,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 					final LNGScenarioModel supplySideRoot = (LNGScenarioModel) supplySideObject;
 					final CargoModel supplySideCargoModel = ScenarioModelUtil.getCargoModel(supplySideRoot);
 					final Set<PurchaseContract> expectedPurchaseContracts = supplySideCargoModel.getCargoes().stream() //
-							.map(c -> c.getSlots().get(0)) //
+							.map(c -> c.getSortedSlots().get(0)) //
 							.filter(s -> s.getEntity() != null && !s.getEntity().isThirdParty()) //
 							.map(LoadSlot.class::cast) //
 							.map(LoadSlot::getContract).collect(Collectors.toSet());
@@ -173,7 +173,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 							transferLiftingDates(combinedModelRoot, inAdpPurchaseContractLiftingDates);
 							regenerateSlots(combinedSDP, combinedModelRoot, expectedPurchaseContracts, expectedSalesContracts);
 
-							final List<LoadSlot> supplySidePreAdpLoadSlots = supplySideCargoModel.getCargoes().stream().map(c -> c.getSlots().get(0))
+							final List<LoadSlot> supplySidePreAdpLoadSlots = supplySideCargoModel.getCargoes().stream().map(c -> c.getSortedSlots().get(0))
 									.filter(s -> s.getWindowStart().isBefore(adpStartDate)).map(LoadSlot.class::cast).collect(Collectors.toList());
 							transferPreAdpLoadSlots(combinedModelRoot, supplySidePreAdpLoadSlots);
 
@@ -203,7 +203,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 	private Map<PurchaseContract, List<LocalDate>> fetchInAdpPurchaseContractLiftingDates(final CargoModel cargoModel, final LocalDate adpStartDate) {
 		final Map<PurchaseContract, List<LocalDate>> purchaseContractLiftingDates = new HashMap<>();
 		cargoModel.getCargoes().stream() //
-				.map(c -> c.getSlots().get(0)) //
+				.map(c -> c.getSortedSlots().get(0)) //
 				.filter(s -> s.getEntity() != null && !s.getEntity().isThirdParty()) //
 				.filter(s -> !s.getWindowStart().isBefore(adpStartDate)) //
 				.map(LoadSlot.class::cast) //

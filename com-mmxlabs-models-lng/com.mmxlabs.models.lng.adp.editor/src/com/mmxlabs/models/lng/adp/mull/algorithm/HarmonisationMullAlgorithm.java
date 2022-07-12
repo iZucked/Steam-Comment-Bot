@@ -150,8 +150,8 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 			final Map<Pair<BaseLegalEntity, IMullDischargeWrapper>, Pair<IMudContainer, IAllocationTracker>> remappingTrackers = inventoryToRemappingTrackers.get(inventory);
 			final LinkedList<ICargoBlueprint> cargoBlueprintsToGenerate = inventoryLocalState.getCargoBlueprintsToGenerate();
 			final List<ICargoBlueprint> cargoBlueprintsToUndo = inventoryLocalState.getRollingLoadWindow().startFixedLoad(nextFixedCargo.getValue(), cargoBlueprintsToGenerate);
-			final LoadSlot loadSlot = (LoadSlot) nextFixedCargo.getValue().getSlots().get(0);
-			final DischargeSlot dischargeSlot = (DischargeSlot) nextFixedCargo.getValue().getSlots().get(1);
+			final LoadSlot loadSlot = (LoadSlot) nextFixedCargo.getValue().getSortedSlots().get(0);
+			final DischargeSlot dischargeSlot = (DischargeSlot) nextFixedCargo.getValue().getSortedSlots().get(1);
 			@Nullable
 			Vessel fixedCargoAssignedVessel = null;
 

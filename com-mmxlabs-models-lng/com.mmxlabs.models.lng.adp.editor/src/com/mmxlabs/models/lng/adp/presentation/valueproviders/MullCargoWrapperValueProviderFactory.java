@@ -47,7 +47,7 @@ public class MullCargoWrapperValueProviderFactory implements IReferenceValueProv
 						return false;
 					} else {
 						final Cargo cargo = loadSlot.getCargo();
-						return cargo.getSlots().get(1) != null;
+						return cargo.getSortedSlots().get(1) != null;
 					}
 				}).collect(Collectors.toList());
 			}

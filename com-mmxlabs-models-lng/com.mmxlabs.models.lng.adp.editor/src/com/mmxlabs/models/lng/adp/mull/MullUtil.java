@@ -426,15 +426,15 @@ public class MullUtil {
 		if (globalStates.getMullGlobalState().getCargoesToKeep().isEmpty()) {
 			cargoesToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes().stream() //
 					.filter(c -> {
-						final YearMonth loadYm = YearMonth.from(((LoadSlot) c.getSlots().get(0)).getWindowStart());
+						final YearMonth loadYm = YearMonth.from(((LoadSlot) c.getSortedSlots().get(0)).getWindowStart());
 						return !loadYm.isBefore(adpStart) && loadYm.isBefore(adpEndExc);
 					}) //
 					.toList();
 			loadSlotsToDelete = cargoesToDelete.stream() //
-					.map(c -> (LoadSlot) c.getSlots().get(0)) //
+					.map(c -> (LoadSlot) c.getSortedSlots().get(0)) //
 					.toList();
 			dischargeSlotsToDelete = cargoesToDelete.stream() //
-					.map(c -> (DischargeSlot) c.getSlots().get(1)) //
+					.map(c -> (DischargeSlot) c.getSortedSlots().get(1)) //
 					.toList();
 		} else {
 			final Set<Cargo> cargoesToKeepSet = globalStates.getMullGlobalState().getCargoesToKeep().stream() //
@@ -446,12 +446,12 @@ public class MullUtil {
 			cargoesToDelete = new ArrayList<>(numSlotsToDelete);
 			for (final Cargo cargo : ScenarioModelUtil.getCargoModel(sdp).getCargoes()) {
 				if (!cargoesToKeepSet.contains(cargo)) {
-					final LoadSlot loadSlot = (LoadSlot) cargo.getSlots().get(0);
+					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					final YearMonth loadYm = YearMonth.from(loadSlot.getWindowStart());
 					if (!loadYm.isBefore(adpStart) && loadYm.isBefore(adpEndExc)) {
 						cargoesToDelete.add(cargo);
 						loadSlotsToDelete.add(loadSlot);
-						dischargeSlotsToDelete.add((DischargeSlot) cargo.getSlots().get(1));
+						dischargeSlotsToDelete.add((DischargeSlot) cargo.getSortedSlots().get(1));
 					}
 				}
 			}
