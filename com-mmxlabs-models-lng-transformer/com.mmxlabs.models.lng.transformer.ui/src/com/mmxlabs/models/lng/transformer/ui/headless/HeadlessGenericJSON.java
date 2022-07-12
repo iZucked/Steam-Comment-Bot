@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 
 /**
  * This class represents a wrapper for JSON output logs from a headless algorithm run.
@@ -62,7 +64,7 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 	 *
 	 */
 	public static class Meta {
-		private String machineType;
+		private JSONObject machineType;
 		private String scenario;
 		private String checkSum;
 		private LocalDateTime date;
@@ -88,11 +90,11 @@ public abstract class HeadlessGenericJSON<T extends HeadlessGenericJSON.Params, 
 			this.scenario = scenario;
 		}
 
-		public String getMachineType() {
+		public JSONObject getMachineType() {
 			return machineType;
 		}
 
-		public void setMachineType(String machineType) {
+		public void setMachineType(JSONObject machineType) {
 			this.machineType = machineType;
 		}
 

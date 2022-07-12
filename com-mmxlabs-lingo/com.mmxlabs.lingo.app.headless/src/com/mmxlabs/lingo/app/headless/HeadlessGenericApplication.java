@@ -4,14 +4,20 @@
  */
 package com.mmxlabs.lingo.app.headless;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +45,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.io.CharStreams;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
@@ -102,9 +107,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 
 	protected static final String JOB_TYPE = "jobtype";
 
-	
 	protected String clientCode;
-	protected String machineInfo;
+	protected JSONObject machineInfo;
 	protected String buildVersion;
 	protected CommandLine commandLine;
 
@@ -195,8 +199,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		json.getMeta().setMaxHeapSize(Runtime.getRuntime().maxMemory());
 		json.getParams().setCores(threads);
 	}
-	
-	protected Meta writeMetaFields( File scenarioFile, HeadlessApplicationOptions hOptions) {
+
+	protected Meta writeMetaFields(File scenarioFile, HeadlessApplicationOptions hOptions) {
 		Meta meta = new Meta();
 		meta.setDate(LocalDateTime.now());
 		meta.setCheckSum(mD5Checksum(scenarioFile));
@@ -207,7 +211,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		meta.setCustomInfo(hOptions.customInfo);
 		meta.setMaxHeapSize(Runtime.getRuntime().maxMemory());
 //		json.getParams().setCores(threads);
-		
+
 		return meta;
 	}
 
@@ -306,10 +310,14 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 
 		machineInfo = getDefaultMachineInfo();
-		// get the machine info from a file specified in the command line
+		// merge the machine info from a file specified in the command line
 		if (commandLine.hasOption(MACHINE_INFO)) {
 			try {
-				machineInfo = CharStreams.toString(new FileReader(commandLine.getOptionValue(MACHINE_INFO)));
+				String infoStr = Files.readString(Path.of(commandLine.getOptionValue(MACHINE_INFO)), StandardCharsets.UTF_8);
+				JSONObject parsed = new JSONObject(infoStr);
+				for (var key : parsed.keySet()) {
+					machineInfo.put(key.toString(), parsed.get(key.toString()));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -480,9 +488,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
 		options.addOption(JSON, true, "JSON file containing parameters for algorithm being run");
-		
-		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
 
+		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
 
 		// create the command line parser
 
@@ -497,8 +504,31 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 	}
 
-	protected String getDefaultMachineInfo() {
-		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
+	protected JSONObject getDefaultMachineInfo() {
+		JSONObject machInfo = new JSONObject();
+		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
+		machInfo.put("os", System.getProperty("os.name"));
+		machInfo.put("JavaVersion", System.getProperty("java.version"));
+
+		{
+			// If we are running on EC2, then we can try to grab the instance type
+			try {
+				Process process = Runtime.getRuntime().exec("ec2-metadata -t");
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						int idx = line.indexOf(':');
+						if (idx > 0) {
+							machInfo.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
+						}
+					}
+				}
+			} catch (Exception e) {
+				// Ignore any exceptions
+			}
+		}
+
+		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
 
