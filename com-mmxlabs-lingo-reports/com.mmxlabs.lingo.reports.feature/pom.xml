@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>5.7.2-SNAPSHOT</version>
+		<version>5.7.3.RELEASE</version>
 	</parent>
 
 	<groupId>com.mmxlabs.lingo.reports.feature</groupId>
