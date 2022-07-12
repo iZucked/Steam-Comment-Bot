@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 
 import org.eclipse.osgi.framework.console.CommandInterpreter;
 import org.eclipse.osgi.framework.console.CommandProvider;
+import org.json.simple.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -201,8 +202,9 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 		return sdfTimestamp.format(new Date());
 	}
 
-	private String getMachineInfo() {
-		String machInfo = "AvailableProcessors:" + Integer.toString(Runtime.getRuntime().availableProcessors());
+	private JSONObject getMachineInfo() {
+		JSONObject machInfo = new JSONObject();
+		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
 		return machInfo;
 	}
 
