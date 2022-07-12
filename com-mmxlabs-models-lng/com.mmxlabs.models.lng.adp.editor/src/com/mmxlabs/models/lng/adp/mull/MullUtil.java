@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
@@ -177,7 +178,7 @@ public class MullUtil {
 		return new DateTimeConstrainedLiftTimeSpecifier(allowedArrivalTimes);
 	}
 
-	public static MullGlobalState buildMullGlobalState(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final LNGScenarioModel sm) {
+	public static MullGlobalState buildMullGlobalState(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final LNGScenarioModel sm, final Predicate<BaseLegalEntity> isFirstPartyEntity) {
 		final int loadWindowInDays = mullProfile.getWindowSize();
 		final int volumeFlex = mullProfile.getVolumeFlex();
 		final int fullCargoLotValue = mullProfile.getFullCargoLotValue();
@@ -189,16 +190,14 @@ public class MullUtil {
 			}
 			cargoesToKeep.add(mullCargoWrapper);
 		}
-		final Set<BaseLegalEntity> firstPartyEntities = new HashSet<>();
-		for (final BaseLegalEntity entity : ScenarioModelUtil.getCommercialModel(sm).getEntities()) {
-			if (!entity.isThirdParty()) {
-				firstPartyEntities.add(entity);
-			}
-		}
+
+		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
+				.filter(isFirstPartyEntity) //
+				.collect(Collectors.toSet());
 		return new MullGlobalState(loadWindowInDays, volumeFlex, fullCargoLotValue, cargoVolume, cargoesToKeep, firstPartyEntities);
 	}
 
-	public static GlobalStatesContainer buildDefaultGlobalStates(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final ADPModel adpModel, final LNGScenarioModel sm) {
+	public static GlobalStatesContainer buildDefaultGlobalStates(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final ADPModel adpModel, final LNGScenarioModel sm, final Predicate<BaseLegalEntity> isFirstPartyEntity) {
 		final AdpGlobalState adpGlobalState = MullUtil.buildAdpGlobalState(adpModel);
 		final List<InventoryGlobalState> inventoryGlobalStates = new ArrayList<>(mullProfile.getInventories().size());
 		for (final com.mmxlabs.models.lng.adp.MullSubprofile subprofile : mullProfile.getInventories()) {
@@ -208,7 +207,7 @@ public class MullUtil {
 			}
 			inventoryGlobalStates.add(MullUtil.buildInventoryGlobalState(inventory, subprofile.getAllowedArrivalTimes(), adpGlobalState, sm));
 		}
-		final MullGlobalState mullGlobalState = MullUtil.buildMullGlobalState(mullProfile, sm);
+		final MullGlobalState mullGlobalState = MullUtil.buildMullGlobalState(mullProfile, sm, isFirstPartyEntity);
 		return new GlobalStatesContainer(adpGlobalState, inventoryGlobalStates, mullGlobalState);
 	}
 
@@ -306,7 +305,8 @@ public class MullUtil {
 				final Cargo cargo = CargoEditingCommands.createNewCargo(editingDomain, commands, ScenarioModelUtil.getCargoModel(sdp), null, 0);
 				loadSlot.setCargo(cargo);
 				dischargeSlot.setCargo(cargo);
-				cargo.setAllowRewiring(!cargoBlueprint.getMudContainer().getEntity().isThirdParty());
+				final boolean isFirstParty = globalStates.getMullGlobalState().getFirstPartyEntities().contains(cargoBlueprint.getMudContainer().getEntity());
+				cargo.setAllowRewiring(isFirstParty);
 				final Vessel vessel = cargoBlueprint.getVessel();
 				if (!dischargeSlot.isFOBSale() && vessel != null) {
 					final VesselCharter va = vesselToVa.get(vessel);
