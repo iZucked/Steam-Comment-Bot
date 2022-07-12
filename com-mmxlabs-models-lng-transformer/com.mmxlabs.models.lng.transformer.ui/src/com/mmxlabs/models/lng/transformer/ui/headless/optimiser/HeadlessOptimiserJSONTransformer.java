@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
 import java.io.File;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSONTransformer;

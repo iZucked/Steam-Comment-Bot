@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.time.LocalDateTime;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;

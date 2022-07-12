@@ -37,7 +37,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
@@ -314,11 +315,11 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		if (commandLine.hasOption(MACHINE_INFO)) {
 			try {
 				String infoStr = Files.readString(Path.of(commandLine.getOptionValue(MACHINE_INFO)), StandardCharsets.UTF_8);
-				JSONObject parsed = new JSONObject(infoStr);
+				JSONObject parsed = (JSONObject) new JSONParser().parse(infoStr);
 				for (var key : parsed.keySet()) {
 					machineInfo.put(key.toString(), parsed.get(key.toString()));
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -589,7 +590,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 				JSONObject obj = new JSONObject();
 				obj.put("error", sw.toString());
 				try (PrintWriter pw = new PrintWriter(outFile)) {
-					obj.write(pw);
+					obj.writeJSONString(pw);
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();

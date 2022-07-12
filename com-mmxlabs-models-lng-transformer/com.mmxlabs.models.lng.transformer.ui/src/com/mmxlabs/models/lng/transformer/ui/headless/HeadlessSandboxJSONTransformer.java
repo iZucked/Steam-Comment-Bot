@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 import java.io.File;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 

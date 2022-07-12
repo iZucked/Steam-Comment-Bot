@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
