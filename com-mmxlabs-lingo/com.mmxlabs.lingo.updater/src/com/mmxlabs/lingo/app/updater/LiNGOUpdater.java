@@ -16,7 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.DigestInputStream;
 import java.security.DigestOutputStream;
 import java.security.KeyFactory;
@@ -84,35 +88,34 @@ import okio.BufferedSource;
 
 /**
  * 
- * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt
+ * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt //
  * 
+ * Digital signatures 
+ * https://www.baeldung.com/java-digital-signature
  *
  */
 public class LiNGOUpdater {
 
-	public static RSAPublicKey readPublicKey(String resource) throws Exception {
+	public static RSAPublicKey readPublicKey(final String resource) throws Exception {
 		byte[] keyBytes;
 		try (InputStream is = LiNGOUpdater.class.getResourceAsStream(resource)) {
 			keyBytes = ByteStreams.toByteArray(is);
 		}
-		String key = new String(keyBytes, StandardCharsets.UTF_8);
+		final String key = new String(keyBytes, StandardCharsets.UTF_8);
 		// Strip the header/footer from the encoded content
-		String publicKeyPEM = key //
+		final String publicKeyPEM = key //
 				.replace("-----BEGIN PUBLIC KEY-----", "") //
 				.replaceAll(System.lineSeparator(), "") // Maybe be \r\n
 				.replaceAll("\n", "") //
 				.replace("-----END PUBLIC KEY-----", "");
 
-		byte[] encoded = Base64.getDecoder().decode(publicKeyPEM);
+		final byte[] encoded = Base64.getDecoder().decode(publicKeyPEM);
 
-		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
+		final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
 		return (RSAPublicKey) keyFactory.generatePublic(keySpec);
 
 	}
-
-//	Digital signatures
-// https://www.baeldung.com/java-digital-signature
 
 	private static final String FILE_VERSION_JSON = "LiNGO/version.json";
 	private static final String FILE_VERSION_JSON_ALT = "version.json";
@@ -123,7 +126,7 @@ public class LiNGOUpdater {
 	private String user = null;
 	private String pw = null;
 
-	private void withAuthHeader(Request.Builder b) {
+	private void withAuthHeader(final Request.Builder b) {
 		if (user != null && pw != null) {
 			b.header("Authorization", Credentials.basic(user, pw));
 		}
@@ -144,10 +147,10 @@ public class LiNGOUpdater {
 				try (InputStream is = url.openStream()) {
 					versionBytes = ByteStreams.toByteArray(is);
 				}
-				String jsonText = new String(versionBytes, StandardCharsets.UTF_8);
-				JSONObject json = new JSONObject(jsonText);
+				final String jsonText = new String(versionBytes, StandardCharsets.UTF_8);
+				final JSONObject json = new JSONObject(jsonText);
 
-				String string = json.getString("version");
+				final String string = json.getString("version");
 				return Version.fromString(string);
 			} catch (final IOException e) {
 				// Ignore
@@ -166,15 +169,15 @@ public class LiNGOUpdater {
 	public File getUpdatesFolder() {
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		IPath updatesPath = workspaceLocation.append("updates/");
-		File file = updatesPath.toFile();
+		final IPath updatesPath = workspaceLocation.append("updates/");
+		final File file = updatesPath.toFile();
 		file.mkdirs();
 		return file;
 	}
 
 	public void update(final @Nullable String path, final IProgressMonitor monitor) {
 
-		SubMonitor m = SubMonitor.convert(monitor);
+		final SubMonitor m = SubMonitor.convert(monitor);
 
 		m.beginTask("Update", 100);
 		try {
@@ -185,8 +188,8 @@ public class LiNGOUpdater {
 				url = new URL(path);
 				updateVersion = getVersion(url);
 			} else {
-				List<URL> updateSites = getUpdateSites();
-				for (URL u : updateSites) {
+				final List<URL> updateSites = getUpdateSites();
+				for (final URL u : updateSites) {
 					final UpdateVersion version = getVersion(u);
 					if (version != null) {
 						if (updateVersion == null || version.isBetter(updateVersion)) {
@@ -200,12 +203,12 @@ public class LiNGOUpdater {
 			if (updateVersion != null) {
 				final UpdateVersion pUpdateVersion = updateVersion;
 				{
-					Version v = getLiNGOVersion();
+					final Version v = getLiNGOVersion();
 					if (v != null) {
 						if (updateVersion.isBetter(v)) {
-							boolean[] proceed = new boolean[1];
+							final boolean[] proceed = new boolean[1];
 							Display.getDefault().syncExec(() -> {
-								String msg = String.format("An update to LiNGO %s has been found.\nCurrent version is %s.\nProceed?", pUpdateVersion, v);
+								final String msg = String.format("An update to LiNGO %s has been found.\nCurrent version is %s.\nProceed?", pUpdateVersion, v);
 								if (MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "Update found", msg)) {
 									proceed[0] = true;
 								}
@@ -220,7 +223,7 @@ public class LiNGOUpdater {
 //							Update?()
 						} else {
 							Display.getDefault().syncExec(() -> {
-								String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
+								final String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
 								MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
 							});
 							return;
@@ -252,13 +255,15 @@ public class LiNGOUpdater {
 					return;
 				}
 				m.setWorkRemaining(50);
-				File repo = new File(getUpdatesFolder(), updateVersion.getVersion() + ".zip");
+				final File repo = new File(getUpdatesFolder(), updateVersion.getVersion() + ".zip");
 
 				System.out.println("Updating to " + updateVersion.getVersion());
 				m.subTask("Running updating");
 				if (updateFromRepo(repo, m.split(50))) {
-					// Trigger restart
-					// TODO: Prompt user!
+
+					// Clean up the updates folder removing this and any other updates
+					cleanUpdatesFolder();
+
 					Display.getDefault().asyncExec(() -> {
 						if (MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "Restart needed", "A restart is needed to complete update. Would you like to restart now?")) {
 							// Note: JVM *may* need to somehow relaunch rather than restart
@@ -280,27 +285,55 @@ public class LiNGOUpdater {
 
 	}
 
-	public boolean versionExists(UpdateVersion uv) {
+	/**
+	 * Remove all files in the updates folder
+	 */
+	private void cleanUpdatesFolder() {
 
-		File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
+		final File updatesFolder = getUpdatesFolder();
+		if (updatesFolder != null && updatesFolder.exists() && updatesFolder.isDirectory()) {
+			try {
+				final Path tempDir = updatesFolder.toPath();
+				Files.walkFileTree(tempDir, new SimpleFileVisitor<Path>() {
+					@Override
+					public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+						Files.delete(dir);
+						return FileVisitResult.CONTINUE;
+					}
+
+					@Override
+					public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+						Files.delete(file);
+						return FileVisitResult.CONTINUE;
+					}
+				});
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public boolean versionExists(final UpdateVersion uv) {
+
+		final File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
 
 		return repo.exists();
 	}
 
-	public boolean verifyDownload(UpdateVersion uv, IProgressMonitor monitor) throws Exception {
+	public boolean verifyDownload(final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
 
-		File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
+		final File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
 
 		{
-			File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
+			final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
 			if (file.exists()) {
 				// Read in signature
-				byte[] encryptedMessageHash = Files.readAllBytes(file.toPath());
-				RSAPublicKey publicKey = readPublicKey("/certs/update-cert.pem");
+				final byte[] encryptedMessageHash = Files.readAllBytes(file.toPath());
+				final RSAPublicKey publicKey = readPublicKey("/certs/update-cert.pem");
 
 				Security.addProvider(new BouncyCastleProvider());
 
-				Signature signature = Signature.getInstance("SHA256WithRSA", "BC");
+				final Signature signature = Signature.getInstance("SHA256WithRSA", "BC");
 				signature.initVerify(publicKey);
 
 				try (FileInputStream fin = new FileInputStream(repo)) {
@@ -309,7 +342,7 @@ public class LiNGOUpdater {
 					}
 				}
 
-				boolean validSig = signature.verify(encryptedMessageHash);
+				final boolean validSig = signature.verify(encryptedMessageHash);
 
 				System.out.println("Valid sig? " + validSig);
 
@@ -319,10 +352,10 @@ public class LiNGOUpdater {
 
 		{
 
-			File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
+			final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
 			if (file.exists()) {
 
-				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				final MessageDigest md = MessageDigest.getInstance("SHA-256");
 				try (FileInputStream fout = new FileInputStream(repo)) {
 					try (DigestInputStream out = new DigestInputStream(fout, md)) {
 						ByteStreams.copy(out, ByteStreams.nullOutputStream());
@@ -330,9 +363,9 @@ public class LiNGOUpdater {
 				}
 
 				// Expected hash
-				byte[] actualHashBytes = md.digest();
+				final byte[] actualHashBytes = md.digest();
 
-				String expected = Files.readString(file.toPath());
+				final String expected = Files.readString(file.toPath());
 
 				// If we have a valid download, then move tmp file to real location
 				if (expected != null && actualHashBytes != null)
@@ -342,11 +375,11 @@ public class LiNGOUpdater {
 					for (final byte b : actualHashBytes) {
 						sb.append(String.format("%02X", b));
 					}
-					String str = sb.toString().toLowerCase();
+					final String str = sb.toString().toLowerCase();
 					// Ass
-					String expectedSum = expected.split(" ")[0].toLowerCase();
+					final String expectedSum = expected.split(" ")[0].toLowerCase();
 
-					boolean validChecksum = str.equals(expectedSum);
+					final boolean validChecksum = str.equals(expectedSum);
 					System.out.println("Checksum match? " + validChecksum);
 					return validChecksum;
 				}
@@ -355,14 +388,14 @@ public class LiNGOUpdater {
 		return false;
 	}
 
-	public boolean downloadVersion(URL baseUrl, UpdateVersion uv, IProgressMonitor monitor) throws Exception {
-		URL url = expandURL(baseUrl);
-		SubMonitor progress = SubMonitor.convert(monitor);
+	public boolean downloadVersion(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+		final URL url = expandURL(baseUrl);
+		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
 //		try {
 
 		// TODO: Sanitise version
-		File file = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
+		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
 		byte[] messageHash = null;
 
 		// Download to a temp file.
@@ -394,7 +427,7 @@ public class LiNGOUpdater {
 					throw new IOException("" + response);
 				}
 
-				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				final MessageDigest md = MessageDigest.getInstance("SHA-256");
 				try (FileOutputStream fout = new FileOutputStream(file)) {
 					try (DigestOutputStream out = new DigestOutputStream(fout, md)) {
 
@@ -413,14 +446,14 @@ public class LiNGOUpdater {
 
 	}
 
-	public void downloadVersionChecksum(URL baseUrl, UpdateVersion uv, IProgressMonitor monitor) throws Exception {
-		URL url = new URL(expandURL(baseUrl).toString() + ".sha256");
-		SubMonitor progress = SubMonitor.convert(monitor);
+	public void downloadVersionChecksum(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+		final URL url = new URL(expandURL(baseUrl).toString() + ".sha256");
+		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
 //		try {
 
 		// TODO: Sanitise version
-		File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
+		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
 		OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
@@ -457,14 +490,14 @@ public class LiNGOUpdater {
 //		return file;
 	}
 
-	public void downloadVersionSignature(URL baseUrl, UpdateVersion uv, IProgressMonitor monitor) throws Exception {
-		URL url = new URL(expandURL(baseUrl).toString() + ".sha256.sig");
-		SubMonitor progress = SubMonitor.convert(monitor);
+	public void downloadVersionSignature(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+		final URL url = new URL(expandURL(baseUrl).toString() + ".sha256.sig");
+		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
 //		try {
 
 		// TODO: Sanitise version
-		File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
+		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
 		OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
@@ -503,7 +536,7 @@ public class LiNGOUpdater {
 
 	public UpdateVersion getVersion(final URL baseUrl) throws Exception {
 		// If URL ends in .zip - then assume file.
-		URL url = expandURL(baseUrl);
+		final URL url = expandURL(baseUrl);
 		final AtomicInteger bytesRead2 = new AtomicInteger();
 
 		if (url.toString().startsWith("http")) {
@@ -575,7 +608,7 @@ public class LiNGOUpdater {
 							}
 						}
 					}
-				} catch (EOFException e) {
+				} catch (final EOFException e) {
 					// If we hit here, then we were unable to find version.json at the start of the
 					// zip file.
 
@@ -620,21 +653,21 @@ public class LiNGOUpdater {
 				throw new RuntimeException("Location was not provisioned by p2");
 			}
 
-			IMetadataRepositoryManager mgr = (IMetadataRepositoryManager) agent.getService(IMetadataRepositoryManager.class.getName());
-			URI[] knownRepositories = mgr.getKnownRepositories(IMetadataRepositoryManager.REPOSITORIES_ALL);
-			List<URL> urls = new LinkedList<>();
-			for (var u : knownRepositories) {
+			final IMetadataRepositoryManager mgr = (IMetadataRepositoryManager) agent.getService(IMetadataRepositoryManager.class.getName());
+			final URI[] knownRepositories = mgr.getKnownRepositories(IMetadataRepositoryManager.REPOSITORIES_ALL);
+			final List<URL> urls = new LinkedList<>();
+			for (final var u : knownRepositories) {
 				urls.add(u.toURL());
 			}
 			return urls;
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 
 	}
 
-	public boolean updateFromRepo(final File file, IProgressMonitor monitor) throws Exception {
+	public boolean updateFromRepo(final File file, final IProgressMonitor monitor) throws Exception {
 
 		final String UPDATE_SITE_URL = "jar:" + file.toURI().toString() + "!/LiNGO";
 
@@ -706,7 +739,7 @@ public class LiNGOUpdater {
 		return false;
 	}
 
-	public boolean installFromRepo(final File file, IProgressMonitor monitor) throws Exception {
+	public boolean installFromRepo(final File file, final IProgressMonitor monitor) throws Exception {
 
 		final String UPDATE_SITE_URL = "jar:" + file.toURI().toString() + "!/LiNGO";
 
@@ -741,15 +774,15 @@ public class LiNGOUpdater {
 			artifactManager.addRepository(new URI(UPDATE_SITE_URL));
 
 //					// Load and query the metadata
-			IMetadataRepository metadataRepo = manager.loadRepository(new URI(UPDATE_SITE_URL), progress.split(25));
-			Collection toInstall = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.feature.feature.group"), progress.split(25)).toUnmodifiableSet();
+			final IMetadataRepository metadataRepo = manager.loadRepository(new URI(UPDATE_SITE_URL), progress.split(25));
+			final Collection toInstall = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.feature.feature.group"), progress.split(25)).toUnmodifiableSet();
 //					Collection toInstall2 = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.?.feature.feature.group"),progress.split(25)).toUnmodifiableSet();
 //					Collection toInstall3 = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.app.product.id"),progress.split(25)).toUnmodifiableSet();
 //
-			InstallOperation operation = new InstallOperation(session, toInstall);
+			final InstallOperation operation = new InstallOperation(session, toInstall);
 //agent.
 
-			SynchronizeOperation operation2 = new SynchronizeOperation(session, toInstall);
+			final SynchronizeOperation operation2 = new SynchronizeOperation(session, toInstall);
 
 //			final UpdateOperation operation = new UpdateOperation(session);
 
@@ -767,7 +800,7 @@ public class LiNGOUpdater {
 
 			// Skip the bundle verification step as we will assume content is validated from
 			// zip
-			if (provisioningJob instanceof ProfileModificationJob profileModificationJob) {
+			if (provisioningJob instanceof final ProfileModificationJob profileModificationJob) {
 				profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
 			}
 
@@ -791,9 +824,8 @@ public class LiNGOUpdater {
 		return false;
 	}
 
-	public void setAuth(String user, String pw) {
+	public void setAuth(final String user, final String pw) {
 		this.user = user;
 		this.pw = pw;
-
 	}
 }
