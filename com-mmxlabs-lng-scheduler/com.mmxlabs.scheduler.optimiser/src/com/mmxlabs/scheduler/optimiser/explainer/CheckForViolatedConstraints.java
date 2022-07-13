@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -32,30 +31,28 @@ public class CheckForViolatedConstraints {
 		} else {
 			messages = null;
 		}
-		List<IConstraintChecker> failedConstraints = new ArrayList<>();
+		final List<IConstraintChecker> failedConstraints = new ArrayList<>();
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker instanceof MinMaxSlotGroupConstraintChecker && !checker.checkConstraints(rawSequences, null, messages)) {
-				failedConstraints.add(checker);				
+				failedConstraints.add(checker);
 			}
 		}
 		// TODO: we might want to log the failed messages?
-		
+
 		if (!failedConstraints.isEmpty()) {
-			List<Object> failedConstraintInfos = getConstraintInfo(rawSequences, failedConstraints);
-			String errorMessage = "Some ADP constraints cannot be satisfied without manual pairing or an ADP clean slate optimisation:\r\n\r\n";
+			final List<Object> failedConstraintInfos = getConstraintInfo(rawSequences, failedConstraints);
+			final String errorMessage = "Some ADP constraints cannot be satisfied without manual pairing or an ADP clean slate optimisation:\r\n\r\n";
 			throw new UserFeedbackException(errorMessage, failedConstraintInfos);
 		}
 		return rawSequences;
 	}
 
-	private List<Object> getConstraintInfo(@NonNull final ISequences rawSequences, List<IConstraintChecker> failedConstraints) {
-		List<Object> cis = new ArrayList<>();
-		for (IConstraintChecker fc : failedConstraints) {
-			if (fc instanceof IConstraintInfoGetter) {
-				IConstraintInfoGetter fcig = (IConstraintInfoGetter)fc;
-				@NonNull List<Object> fcis = fcig.getFailedConstraintInfos(rawSequences, null);
-				cis.addAll(fcis);
+	private List<Object> getConstraintInfo(@NonNull final ISequences rawSequences, final List<IConstraintChecker> failedConstraints) {
+		final List<Object> cis = new ArrayList<>();
+		for (final IConstraintChecker fc : failedConstraints) {
+			if (fc instanceof final IConstraintInfoGetter constraintInfoGetter) {
+				cis.addAll(constraintInfoGetter.getFailedConstraintInfos(rawSequences, null));
 			}
 		}
 		return cis;

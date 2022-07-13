@@ -68,29 +68,33 @@ public class MinMaxSlotGroupConstraintChecker implements IPairwiseConstraintChec
 
 		for (final ConstraintInfo<?, ?, IDischargeOption> constraintInfo : allMinDischargeGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < constraintInfo.getBound()) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add(String.format("%s: Some slots are not within min discharge group bound", this.name));
+				}
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, IDischargeOption> constraintInfo : allMaxDischargeGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > constraintInfo.getBound()) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add(String.format("%s: Some slots are not within max discharge group bound", this.name));
+				}
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, ILoadOption> constraintInfo : allMinLoadGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() < constraintInfo.getBound()) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add(String.format("%s: Some slots are not within min load group bound", this.name));
+				}
 				return false;
 			}
 		}
 		for (final ConstraintInfo<?, ?, ILoadOption> constraintInfo : allMaxLoadGroupCounts) {
 			if (constraintInfo.getSlots().stream().filter(s -> !unusedSet.contains(portSlotProvider.getElement(s))).count() > constraintInfo.getBound()) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add(String.format("%s: Some slots are not within max load group bound", this.name));
+				}
 				return false;
 			}
 		}
