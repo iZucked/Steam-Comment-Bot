@@ -23,8 +23,7 @@ public class UserFeedbackException extends RuntimeException {
 	private final transient List<Object> additionalInfo;
 
 	public UserFeedbackException(@NonNull String message) {
-		super(message);
-		this.additionalInfo = null;
+		this(message, null);
 	}
 
 	public UserFeedbackException(@NonNull String message, List<Object> additionalInfo) {
