@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+<plugin>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated transfers -->
+      <editor
+            id="com.mmxlabs.models.lng.transfers.presentation.TransfersEditorID"
+            name="%_UI_TransfersEditor_label"
+            icon="icons/full/obj16/TransfersModelFile.gif"
+            extensions="transfers"
+            class="com.mmxlabs.models.lng.transfers.presentation.TransfersEditor"
+            contributorClass="com.mmxlabs.models.lng.transfers.presentation.TransfersActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
