@@ -220,7 +220,7 @@ public class LiNGOUpdater {
 //							Update?()
 						} else {
 							Display.getDefault().syncExec(() -> {
-								String msg = String.format("An update to LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
+								String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
 								MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
 							});
 							return;
