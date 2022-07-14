@@ -8,23 +8,15 @@ import java.io.File;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions.ScenarioFileFormat;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSON;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTransformer;
-import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserJobRunner;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 /**
  * Headless Optimisation Runner
@@ -42,8 +34,18 @@ public class HeadlessOptioniserApplication extends HeadlessGenericApplication {
 		
 		final OptioniserJobRunner jobRunner = new OptioniserJobRunner();
 		jobRunner.withLogging(meta);
-		jobRunner.withParams(new File(hOptions.algorithmConfigFile));
-		
+		File bundledParams = new File(HeadlessApplicationOptions.fileNameWithoutExt(scenarioFile.getAbsolutePath()) + ".userSettings.json");
+		if (bundledParams.exists()) {
+			jobRunner.withParams(bundledParams);
+		} else {
+
+			File file = new File(hOptions.algorithmConfigFile);
+			if (file.exists()) {
+				jobRunner.withParams(file);
+			} else {
+				throw new IllegalStateException("No optioniser parameters found");
+			}
+		}		
 		// Consumer taking the SDP. We need to run within the action to avoid the SDP being closed when the scope closes
 		final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> runnerAction = (modelRecord, scenarioDataProvider) -> {
 			jobRunner.withScenario(scenarioDataProvider);
