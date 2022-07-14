@@ -72,8 +72,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 
 		if (this.targetEditor != null) {
 			final IEditorInput editorInput = targetEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+			if (editorInput instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
