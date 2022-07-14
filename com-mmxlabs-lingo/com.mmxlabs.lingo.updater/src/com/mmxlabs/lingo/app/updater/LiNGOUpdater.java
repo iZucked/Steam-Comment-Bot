@@ -21,19 +21,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.security.DigestInputStream;
-import java.security.DigestOutputStream;
 import java.security.KeyFactory;
-import java.security.MessageDigest;
 import java.security.Security;
 import java.security.Signature;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -43,21 +38,15 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.equinox.internal.p2.artifact.repository.ArtifactRepositoryManager;
-import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
+import org.eclipse.equinox.internal.p2.operations.IStatusCodes;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
-import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.PhaseSetFactory;
-import org.eclipse.equinox.p2.operations.InstallOperation;
 import org.eclipse.equinox.p2.operations.ProfileModificationJob;
 import org.eclipse.equinox.p2.operations.ProvisioningJob;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
-import org.eclipse.equinox.p2.operations.SynchronizeOperation;
 import org.eclipse.equinox.p2.operations.UpdateOperation;
-import org.eclipse.equinox.p2.query.QueryUtil;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
-import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -68,6 +57,8 @@ import org.json.JSONObject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
@@ -90,11 +81,12 @@ import okio.BufferedSource;
  * 
  * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt //
  * 
- * Digital signatures 
- * https://www.baeldung.com/java-digital-signature
+ * Digital signatures https://www.baeldung.com/java-digital-signature
  *
  */
 public class LiNGOUpdater {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LiNGOUpdater.class);
 
 	public static RSAPublicKey readPublicKey(final String resource) throws Exception {
 		byte[] keyBytes;
@@ -125,6 +117,8 @@ public class LiNGOUpdater {
 
 	private String user = null;
 	private String pw = null;
+
+	private boolean performSigCheck = true;
 
 	private void withAuthHeader(final Request.Builder b) {
 		if (user != null && pw != null) {
@@ -216,11 +210,7 @@ public class LiNGOUpdater {
 							if (!proceed[0]) {
 								return;
 							}
-//							
-//							
-//							dialog. Update to lingo xxxx found.
-//							Current version yyyy.
-//							Update?()
+
 						} else {
 							Display.getDefault().syncExec(() -> {
 								final String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
@@ -234,36 +224,31 @@ public class LiNGOUpdater {
 				}
 
 				if (!versionExists(updateVersion)) {
-					m.subTask("Downloading files");
-					if (!downloadVersion(url, updateVersion, m.split(41))) {
-						System.out.println("Downloaded file did not match expected checksum");
-						return;
+					if (performSigCheck) {
+						m.subTask("Downloading update signature");
+						downloadVersionSignature(url, updateVersion, m.split(2));
 					}
-					m.subTask("Downloading checksums");
-
-					downloadVersionSignature(url, updateVersion, m.split(2));
-					downloadVersionChecksum(url, updateVersion, m.split(2));
-
-				} else {
+					// TODO: Move sig check into the download loop
+					m.subTask("Downloading update file");
+					downloadVersion(url, updateVersion, m.split(41));
 				}
 
 				m.subTask("Verifying download");
 
-				if (!verifyDownload(updateVersion, m.split(5))) {
-					// Download signature or checksum failed
-					MessageDialog.openError(Display.getDefault().getActiveShell(), "Download failure", "Failed to verify download.");
+				if (performSigCheck && !verifyDownload(updateVersion, m.split(5))) {
+					// Downloaded file signature failed
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Download failure", "Download signature check failed. Please retry.");
+					// Cleanup downloads so we are clean for a retry
+					cleanUpdatesFolder();
 					return;
 				}
+
 				m.setWorkRemaining(50);
+
 				final File repo = new File(getUpdatesFolder(), updateVersion.getVersion() + ".zip");
 
-				System.out.println("Updating to " + updateVersion.getVersion());
 				m.subTask("Running updating");
 				if (updateFromRepo(repo, m.split(50))) {
-
-					// Clean up the updates folder removing this and any other updates
-					cleanUpdatesFolder();
-
 					Display.getDefault().asyncExec(() -> {
 						if (MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "Restart needed", "A restart is needed to complete update. Would you like to restart now?")) {
 							// Note: JVM *may* need to somehow relaunch rather than restart
@@ -272,17 +257,13 @@ public class LiNGOUpdater {
 					});
 				}
 			}
-
 		} catch (final Exception e) {
-			// Message dialog!
-			e.printStackTrace();
-
-			Display.getDefault().asyncExec(() -> {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", e.getMessage());
-
-			});
+			LOGGER.error("Error updating " + e.getMessage(), e);
+			Display.getDefault().asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", e.getMessage() + "\nPlease try again"));
+		} finally {
+			// Always try to clean up download folder
+			cleanUpdatesFolder();
 		}
-
 	}
 
 	/**
@@ -308,19 +289,20 @@ public class LiNGOUpdater {
 					}
 				});
 			} catch (final IOException e) {
-				e.printStackTrace();
+				LOGGER.error("Error cleaning updates folder " + e.getMessage(), e);
 			}
 		}
 	}
 
-	public boolean versionExists(final UpdateVersion uv) {
+	private boolean versionExists(final UpdateVersion uv) {
 
 		final File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
+		final File sig = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
 
-		return repo.exists();
+		return repo.exists() && (!performSigCheck || sig.exists());
 	}
 
-	public boolean verifyDownload(final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+	private boolean verifyDownload(final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
 
 		final File repo = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
 
@@ -331,6 +313,7 @@ public class LiNGOUpdater {
 				final byte[] encryptedMessageHash = Files.readAllBytes(file.toPath());
 				final RSAPublicKey publicKey = readPublicKey("/certs/update-cert.pem");
 
+				// TODO: We probably should not do this on every call...
 				Security.addProvider(new BouncyCastleProvider());
 
 				final Signature signature = Signature.getInstance("SHA256WithRSA", "BC");
@@ -342,118 +325,18 @@ public class LiNGOUpdater {
 					}
 				}
 
-				final boolean validSig = signature.verify(encryptedMessageHash);
-
-				System.out.println("Valid sig? " + validSig);
-
-				return validSig;
-			}
-		}
-
-		{
-
-			final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
-			if (file.exists()) {
-
-				final MessageDigest md = MessageDigest.getInstance("SHA-256");
-				try (FileInputStream fout = new FileInputStream(repo)) {
-					try (DigestInputStream out = new DigestInputStream(fout, md)) {
-						ByteStreams.copy(out, ByteStreams.nullOutputStream());
-					}
-				}
-
-				// Expected hash
-				final byte[] actualHashBytes = md.digest();
-
-				final String expected = Files.readString(file.toPath());
-
-				// If we have a valid download, then move tmp file to real location
-				if (expected != null && actualHashBytes != null)
-
-				{
-					final StringBuilder sb = new StringBuilder();
-					for (final byte b : actualHashBytes) {
-						sb.append(String.format("%02X", b));
-					}
-					final String str = sb.toString().toLowerCase();
-					// Ass
-					final String expectedSum = expected.split(" ")[0].toLowerCase();
-
-					final boolean validChecksum = str.equals(expectedSum);
-					System.out.println("Checksum match? " + validChecksum);
-					return validChecksum;
-				}
+				return signature.verify(encryptedMessageHash);
 			}
 		}
 		return false;
 	}
 
-	public boolean downloadVersion(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+	private void downloadVersion(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
 		final URL url = expandURL(baseUrl);
 		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
-//		try {
 
-		// TODO: Sanitise version
 		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
-		byte[] messageHash = null;
-
-		// Download to a temp file.
-		if (true) {
-
-			final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
-			OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
-			if (progressListener != null) {
-				clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-					@Override
-					public Response intercept(final Chain chain) throws IOException {
-						final Response originalResponse = chain.proceed(chain.request());
-						return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
-					}
-				});
-			}
-			final OkHttpClient localHttpClient = clientBuilder //
-					.build();
-
-			final Request.Builder requestBuilder = new Request.Builder() //
-					.url(url) //
-			;
-			withAuthHeader(requestBuilder);
-
-			final Request request = requestBuilder //
-					.build();
-			try (Response response = localHttpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					throw new IOException("" + response);
-				}
-
-				final MessageDigest md = MessageDigest.getInstance("SHA-256");
-				try (FileOutputStream fout = new FileOutputStream(file)) {
-					try (DigestOutputStream out = new DigestOutputStream(fout, md)) {
-
-						try (BufferedSource bufferedSource = response.body().source()) {
-							ByteStreams.copy(bufferedSource.inputStream(), out);
-						}
-					}
-
-				}
-
-				// Expected hash
-				messageHash = md.digest();
-			}
-		}
-		return true;
-
-	}
-
-	public void downloadVersionChecksum(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
-		final URL url = new URL(expandURL(baseUrl).toString() + ".sha256");
-		final SubMonitor progress = SubMonitor.convert(monitor);
-		progress.beginTask("Download", 100);
-//		try {
-
-		// TODO: Sanitise version
-		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
 		OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
@@ -481,22 +364,19 @@ public class LiNGOUpdater {
 				throw new IOException("" + response);
 			}
 
-			try (FileOutputStream fout = new FileOutputStream(file)) {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				try (BufferedSource bufferedSource = response.body().source()) {
-					ByteStreams.copy(bufferedSource.inputStream(), fout);
+					ByteStreams.copy(bufferedSource.inputStream(), out);
 				}
 			}
 		}
-//		return file;
 	}
 
-	public void downloadVersionSignature(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+	private void downloadVersionSignature(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
 		final URL url = new URL(expandURL(baseUrl).toString() + ".sha256.sig");
 		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
-//		try {
 
-		// TODO: Sanitise version
 		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
@@ -522,7 +402,11 @@ public class LiNGOUpdater {
 				.build();
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				throw new IOException("" + response);
+				if (response.code() == 404) {
+					throw new RuntimeException("No signature file found at " + url);
+				} else {
+					throw new RuntimeException("Unable to find signature file at " + url + " Code " + response.code());
+				}
 			}
 
 			try (FileOutputStream fout = new FileOutputStream(file)) {
@@ -531,34 +415,15 @@ public class LiNGOUpdater {
 				}
 			}
 		}
-//		return file;
 	}
 
-	public UpdateVersion getVersion(final URL baseUrl) throws Exception {
+	private UpdateVersion getVersion(final URL baseUrl) throws Exception {
 		// If URL ends in .zip - then assume file.
 		final URL url = expandURL(baseUrl);
-		final AtomicInteger bytesRead2 = new AtomicInteger();
 
 		if (url.toString().startsWith("http")) {
 
 			OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
-
-			if (true) {
-				// Debugging to check we only download part of the file
-				clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-					@Override
-					public Response intercept(final Chain chain) throws IOException {
-						final Response originalResponse = chain.proceed(chain.request());
-						return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), new IProgressListener() {
-							@Override
-							public void update(final long bytesRead, final long contentLength, final boolean done) {
-								bytesRead2.addAndGet((int) bytesRead);
-
-							}
-						})).build();
-					}
-				});
-			}
 
 			final OkHttpClient localHttpClient = clientBuilder //
 					.build();
@@ -571,16 +436,12 @@ public class LiNGOUpdater {
 					.build();
 			try (Response response = localHttpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
-					System.out.println("Server returned " + response.code());
+					Display.getDefault().asyncExec(() -> {
+						final String msg = String.format("Failed to connect to update server - HTTP Error %d", response.code());
+						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
+					});
 					return null;
 				}
-
-				final AtomicInteger bytesRead = new AtomicInteger();
-
-				// Note: Downloading from Jenkins (via nginx) would grab 8k (inc headers)
-				// Downloading from s3 (via apache) downloads the whole file
-				// (Because it was an old file with the version.json at the end rather than the
-				// beginning)
 
 				// Read up to 8k bytes of the upstream file. This sets a hard limit on the
 				// amount downloaded. We will alway grab 8k (unless the file is smaller).
@@ -596,24 +457,27 @@ public class LiNGOUpdater {
 							while (entry != null && (entry.isDirectory() || !entry.getName().contains("version"))) {
 								entry = zis.getNextEntry();
 							}
+							if (entry != null) {
+								if (FILE_VERSION_JSON.equals(entry.getName()) || FILE_VERSION_JSON_ALT.equals(entry.getName())) {
+									final ByteArrayOutputStream out = new ByteArrayOutputStream();
+									ByteStreams.copy(zis, out);
+									final String str = out.toString();
 
-							if (FILE_VERSION_JSON.equals(entry.getName()) || FILE_VERSION_JSON_ALT.equals(entry.getName())) {
-								final ByteArrayOutputStream out = new ByteArrayOutputStream();
-								ByteStreams.copy(zis, out);
-								final String str = out.toString();
-
-								final ObjectMapper mapper = new ObjectMapper();
-								final UpdateVersion uv = mapper.readValue(str, UpdateVersion.class);
-								return uv;
+									final ObjectMapper mapper = new ObjectMapper();
+									final UpdateVersion uv = mapper.readValue(str, UpdateVersion.class);
+									return uv;
+								}
 							}
 						}
 					}
 				} catch (final EOFException e) {
 					// If we hit here, then we were unable to find version.json at the start of the
 					// zip file.
-
-				} finally {
-					System.out.println(bytesRead + " -- " + bytesRead2);
+					Display.getDefault().asyncExec(() -> {
+						final String msg = String.format("Malformed update file found");
+						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
+					});
+					return null;
 				}
 			}
 		}
@@ -635,7 +499,7 @@ public class LiNGOUpdater {
 	}
 
 	/** Get the list of currently enabled update sites */
-	public List<URL> getUpdateSites() {
+	private List<URL> getUpdateSites() {
 
 		final BundleContext context = FrameworkUtil.getBundle(LiNGOUpdater.class).getBundleContext();
 		final ServiceReference<IProvisioningAgentProvider> providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
@@ -654,7 +518,7 @@ public class LiNGOUpdater {
 			}
 
 			final IMetadataRepositoryManager mgr = (IMetadataRepositoryManager) agent.getService(IMetadataRepositoryManager.class.getName());
-			final URI[] knownRepositories = mgr.getKnownRepositories(IMetadataRepositoryManager.REPOSITORIES_ALL);
+			final URI[] knownRepositories = mgr.getKnownRepositories(IRepositoryManager.REPOSITORIES_ALL);
 			final List<URL> urls = new LinkedList<>();
 			for (final var u : knownRepositories) {
 				urls.add(u.toURL());
@@ -667,7 +531,7 @@ public class LiNGOUpdater {
 
 	}
 
-	public boolean updateFromRepo(final File file, final IProgressMonitor monitor) throws Exception {
+	private boolean updateFromRepo(final File file, final IProgressMonitor monitor) throws Exception {
 
 		final String UPDATE_SITE_URL = "jar:" + file.toURI().toString() + "!/LiNGO";
 
@@ -695,127 +559,58 @@ public class LiNGOUpdater {
 			final ProvisioningSession session = new ProvisioningSession(agent);
 
 //					   //get the repository managers and define our repositories
-			final IMetadataRepositoryManager manager = new MetadataRepositoryManager(agent);
-			final IArtifactRepositoryManager artifactManager = new ArtifactRepositoryManager(agent);
-			manager.addRepository(new URI(UPDATE_SITE_URL));
-			artifactManager.addRepository(new URI(UPDATE_SITE_URL));
+			// final IMetadataRepositoryManager manager = new
+			// MetadataRepositoryManager(agent);
+			// final IArtifactRepositoryManager artifactManager = new
+			// ArtifactRepositoryManager(agent);
+			// manager.addRepository(new URI(UPDATE_SITE_URL));
+			// artifactManager.addRepository(new URI(UPDATE_SITE_URL));
 
 			final UpdateOperation operation = new UpdateOperation(session);
 
-			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
+//			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
 
 			operation.getProvisioningContext().setArtifactRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
 			operation.getProvisioningContext().setMetadataRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
 
 			final IStatus status = operation.resolveModal(progress.split(10));
-			System.out.println(status.getMessage());
+
+			if (!status.isOK()) {
+
+				if (status.getCode() == IStatusCodes.NOTHING_TO_UPDATE) {
+					Display.getDefault().asyncExec(() -> {
+						MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "No updates found in update file");
+					});
+				} else {
+					Display.getDefault().asyncExec(() -> {
+						MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + status.getMessage());
+					});
+				}
+				return false;
+			}
 
 			final ProvisioningJob provisioningJob = operation.getProvisioningJob(progress.split(10));
 
 			// Skip the bundle verification step as we will assume content is validated from
 			// zip
-			if (provisioningJob instanceof ProfileModificationJob) {
-				final ProfileModificationJob profileModificationJob = (ProfileModificationJob) provisioningJob;
+			if (provisioningJob instanceof ProfileModificationJob profileModificationJob) {
 				profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
 			}
 
 			final IStatus st = provisioningJob.runModal(progress.split(30));
-
-			final int ii = 0;
-			System.out.println(st.getMessage());
-
-			if (st != null && st.isOK()) {
+			if (st.isOK()) {
 				return true;
+			} else {
+				Display.getDefault().asyncExec(() -> {
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + st.getMessage());
+				});
 			}
 
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			// When you're done, make sure you 'unget' the service.
-			context.ungetService(providerRef);
-		}
-
-		return false;
-	}
-
-	public boolean installFromRepo(final File file, final IProgressMonitor monitor) throws Exception {
-
-		final String UPDATE_SITE_URL = "jar:" + file.toURI().toString() + "!/LiNGO";
-
-		final SubMonitor progress = SubMonitor.convert(monitor, 100);
-
-		final BundleContext context = FrameworkUtil.getBundle(LiNGOUpdater.class).getBundleContext();
-		final ServiceReference<IProvisioningAgentProvider> providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
-		if (providerRef == null) {
-			throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
-		}
-		try {
-			final IProvisioningAgentProvider provider = context.getService(providerRef);
-			if (provider == null) {
-				throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
-			}
-
-			// See
-			// http://wiki.eclipse.org/Equinox/p2/FAQ#But_why_aren.27t_uninstalled_bundles.2Ffeatures_immediately_removed.3F
-			// IProvisioningAgentProvider provider = // obtain the
-			// IProvisioningAgentProvider using OSGi services
-			final IProvisioningAgent agent = provider.createAgent(null); // null = location for running system
-			if (agent == null)
-				throw new RuntimeException("Location was not provisioned by p2");
-//					String UPDATE_SITE_URL = String.format("jar:%s!/LiNGO", file.toURI());
-			final ProvisioningSession session = new ProvisioningSession(agent);
-
-//					   //get the repository managers and define our repositories
-			final IMetadataRepositoryManager manager = new MetadataRepositoryManager(agent);
-//					   IMetadataRepositoryManager manager = 
-			final IArtifactRepositoryManager artifactManager = new ArtifactRepositoryManager(agent);
-			manager.addRepository(new URI(UPDATE_SITE_URL));
-			artifactManager.addRepository(new URI(UPDATE_SITE_URL));
-
-//					// Load and query the metadata
-			final IMetadataRepository metadataRepo = manager.loadRepository(new URI(UPDATE_SITE_URL), progress.split(25));
-			final Collection toInstall = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.feature.feature.group"), progress.split(25)).toUnmodifiableSet();
-//					Collection toInstall2 = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.?.feature.feature.group"),progress.split(25)).toUnmodifiableSet();
-//					Collection toInstall3 = metadataRepo.query(QueryUtil.createIUQuery("com.mmxlabs.lingo.app.product.id"),progress.split(25)).toUnmodifiableSet();
-//
-			final InstallOperation operation = new InstallOperation(session, toInstall);
-//agent.
-
-			final SynchronizeOperation operation2 = new SynchronizeOperation(session, toInstall);
-
-//			final UpdateOperation operation = new UpdateOperation(session);
-
-			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
-//					provisioningPlan.
-//					op
-//					operation.setSelectedUpdates(null);
-			operation.getProvisioningContext().setArtifactRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
-			operation.getProvisioningContext().setMetadataRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
-
-			final IStatus status = operation.resolveModal(progress.split(10));
-			System.out.println(status.getMessage());
-
-			final ProvisioningJob provisioningJob = operation.getProvisioningJob(progress.split(10));
-
-			// Skip the bundle verification step as we will assume content is validated from
-			// zip
-			if (provisioningJob instanceof final ProfileModificationJob profileModificationJob) {
-				profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
-			}
-
-			final IStatus st = provisioningJob.runModal(progress.split(30));
-
-			final int ii = 0;
-			System.out.println(st.getMessage());
-
-			if (st != null && st.isOK()) {
-				return true;
-			}
-
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
+			Display.getDefault().asyncExec(() -> {
+				MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Exception during update " + e.getMessage());
+			});
 		} finally {
 			// When you're done, make sure you 'unget' the service.
 			context.ungetService(providerRef);
@@ -827,5 +622,10 @@ public class LiNGOUpdater {
 	public void setAuth(final String user, final String pw) {
 		this.user = user;
 		this.pw = pw;
+	}
+
+	public void disableSigCheck(boolean b) {
+		this.performSigCheck = !b;
+
 	}
 }
