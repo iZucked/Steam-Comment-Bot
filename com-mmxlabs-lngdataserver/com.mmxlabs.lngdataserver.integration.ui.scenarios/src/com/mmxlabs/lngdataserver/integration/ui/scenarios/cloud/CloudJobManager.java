@@ -157,7 +157,7 @@ public class CloudJobManager extends AbstractJobManager {
 			{
 				try {
 					final EditingDomain editingDomain = copyScenarioDataProvider.getEditingDomain();
-					anonymisationMap = ScenarioServicePushToCloudAction.anonymiseScenario(UUID.randomUUID().toString(), progressMonitor, copyScenarioModel, editingDomain);
+					anonymisationMap = ScenarioServicePushToCloudAction.anonymiseScenario(UUID.randomUUID().toString(), progressMonitor, copyScenarioModel, editingDomain, true /* Strip notes */);
 					cRecord.setAnonyMapFileName(anonymisationMap.getName());
 				} catch (final IOException e) {
 					logger.error("Failed to create temp anonymisation map file");

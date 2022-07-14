@@ -139,12 +139,12 @@ public class ScenarioServicePushToCloudAction {
 	}
 
  
-	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain) throws IOException {
+	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain, boolean stripComments) throws IOException {
 		progressMonitor.subTask("Anonymising scenario");
 
 		final File anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioUUID, ".amap").toFile();
 
-		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
+		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap, stripComments);
 		if (cmd != null && !cmd.isEmpty()) {
 			editingDomain.getCommandStack().execute(cmd);
 		}
