@@ -45,6 +45,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.Clou
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -85,7 +86,6 @@ public class ScenarioServicePushToCloudAction {
 
 	private ScenarioServicePushToCloudAction() {
 	}
-  
 
 	public static File encryptScenarioWithCloudKey(final SubMonitor progressMonitor, IScenarioDataProvider copyScenarioDataProvider, File anonymisationMap, KeyData keyData) {
 		File tmpEncryptedScenarioFile = null;
@@ -106,6 +106,11 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void stripScenario(final String problemType, final LNGScenarioModel copyScenarioModel, final @Nullable String sandboxUUID) {
+
+		// Nominations are not currently used in the optimisation
+		if (copyScenarioModel.getNominationsModel() != null) {
+			copyScenarioModel.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
+		}
 
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(copyScenarioModel);
 		if (!Objects.equals(problemType, "sandbox")) {
@@ -138,8 +143,8 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
- 
-	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain, boolean stripComments) throws IOException {
+	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain, boolean stripComments)
+			throws IOException {
 		progressMonitor.subTask("Anonymising scenario");
 
 		final File anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioUUID, ".amap").toFile();
@@ -167,8 +172,6 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	 
- 
 	public static void cleanup(final File anonyMap, final KeyData keyData, File tmpEncryptedScenarioFile, File zipToUpload) {
 		deleteFile(anonyMap);
 		if (keyData != null) {
@@ -232,7 +235,7 @@ public class ScenarioServicePushToCloudAction {
 			zos.closeEntry();
 		}
 	}
- 
+
 	public static String createManifest(final String scenarioName, @NonNull final String problemType, final String keyUUID) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
