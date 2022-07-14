@@ -21,9 +21,11 @@ import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransfersFactory;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
+import com.mmxlabs.models.lng.transfers.ui.manipulators.TransferIncotermEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -32,6 +34,11 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
+/**
+ * Pane (table) which shows TransferAgreements in tabular view
+ * @author FM
+ *
+ */
 public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
@@ -56,6 +63,12 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("To Entity", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
+				getCommandHandler()));
+		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
+				getCommandHandler()));
+		// TODO: Mihnea to add company status
+
 	}
 
 	private Action createAddAction() {

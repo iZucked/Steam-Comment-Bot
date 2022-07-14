@@ -33,4 +33,17 @@
             inheritable="true">
       </displayCompositeFactory>
 </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.TransferIncotermValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.TransferIncotermValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="TransferIncoterm"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    </extension>
 </plugin>

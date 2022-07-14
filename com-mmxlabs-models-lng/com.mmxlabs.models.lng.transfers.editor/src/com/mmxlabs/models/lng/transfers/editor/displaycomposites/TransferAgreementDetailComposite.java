@@ -19,6 +19,12 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 
+/**
+ * Composite which is being shown on the dialog window
+ * Allows editing the TransferAgreement instance
+ * @author FM
+ *
+ */
 public class TransferAgreementDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
 
 	public TransferAgreementDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
@@ -31,7 +37,8 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,//
-				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY//
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY,//
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION
 
 		);
 		// Reverse the list so that we can move the editors to the head of the list
@@ -60,6 +67,10 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				.withRow() //
 				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY) //
+				.makeRow() //
+				//
+				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION) //
 				.makeRow() //
 				.make() //
 		;

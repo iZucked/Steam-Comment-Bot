@@ -11,6 +11,12 @@ import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.lng.transfers.ui.editorpart.TransferAgreementsViewerPane;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 
+/**
+ * View to spawn the pane to show the TransferAgreements list
+ * Spawns the {@link TransferAgreementsViewerPane}
+ * @author FM
+ *
+ */
 public class TransferAgreementsView extends ScenarioTableViewerView<TransferAgreementsViewerPane>{
 
 	@Override

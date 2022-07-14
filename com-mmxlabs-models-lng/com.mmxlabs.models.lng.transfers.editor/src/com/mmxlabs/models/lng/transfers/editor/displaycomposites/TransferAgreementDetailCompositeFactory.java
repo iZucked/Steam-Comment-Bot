@@ -16,7 +16,7 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 /**
  * Factory for {@link TransferAgreementDetailComposite}.
  * 
- * @author Simon Goodall, FM
+ * @author FM
  * 
  */
 public class TransferAgreementDetailCompositeFactory extends DefaultDisplayCompositeFactory {
