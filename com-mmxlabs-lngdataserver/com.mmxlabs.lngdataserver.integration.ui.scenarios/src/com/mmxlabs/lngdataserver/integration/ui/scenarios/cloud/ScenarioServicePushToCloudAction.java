@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationPushException.Type;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
@@ -114,7 +116,7 @@ public class ScenarioServicePushToCloudAction {
 
 		// Clear base schedule model
 		copyScenarioModel.getScheduleModel().setSchedule(null);
-		
+
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(copyScenarioModel);
 		if (!Objects.equals(problemType, "sandbox")) {
 			// Strip all existing optimisation results and sandboxes
@@ -187,7 +189,11 @@ public class ScenarioServicePushToCloudAction {
 
 	public static void deleteFile(final File file) {
 		if (file != null && file.exists()) {
-			file.delete();
+			try {
+				FileDeleter.delete(file, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
+			} catch (Exception e) {
+				LOG.error("Error deleting file " + file.getAbsolutePath() + ". " + e.getMessage(), e);
+			}
 		}
 	}
 
