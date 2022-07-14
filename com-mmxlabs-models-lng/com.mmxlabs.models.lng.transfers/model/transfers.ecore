@@ -44,7 +44,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="stale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="TransferIncoterm">
-    <eLiterals name="Any"/>
+    <eLiterals name="Both"/>
     <eLiterals name="FOB" value="1"/>
     <eLiterals name="DES" value="2"/>
   </eClassifiers>

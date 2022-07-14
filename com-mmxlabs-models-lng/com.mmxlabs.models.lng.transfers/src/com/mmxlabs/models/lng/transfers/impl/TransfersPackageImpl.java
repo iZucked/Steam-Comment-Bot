@@ -507,7 +507,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 
 		// Initialize enums and add enum literals
 		initEEnum(transferIncotermEEnum, TransferIncoterm.class, "TransferIncoterm");
-		addEEnumLiteral(transferIncotermEEnum, TransferIncoterm.ANY);
+		addEEnumLiteral(transferIncotermEEnum, TransferIncoterm.BOTH);
 		addEEnumLiteral(transferIncotermEEnum, TransferIncoterm.FOB);
 		addEEnumLiteral(transferIncotermEEnum, TransferIncoterm.DES);
 

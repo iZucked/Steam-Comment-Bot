@@ -84,7 +84,7 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @generated
 	 * @ordered
 	 */
-	protected static final TransferIncoterm INCOTERM_EDEFAULT = TransferIncoterm.ANY;
+	protected static final TransferIncoterm INCOTERM_EDEFAULT = TransferIncoterm.BOTH;
 
 	/**
 	 * The cached value of the '{@link #getIncoterm() <em>Incoterm</em>}' attribute.

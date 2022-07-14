@@ -14,16 +14,23 @@
  $Id$
 -->
 <plugin>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated transfers -->
-      <editor
-            id="com.mmxlabs.models.lng.transfers.presentation.TransfersEditorID"
-            name="%_UI_TransfersEditor_label"
-            icon="icons/full/obj16/TransfersModelFile.gif"
-            extensions="transfers"
-            class="com.mmxlabs.models.lng.transfers.presentation.TransfersEditor"
-            contributorClass="com.mmxlabs.models.lng.transfers.presentation.TransfersActionBarContributor">
-      </editor>
-   </extension>
-
+<extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.lngdataserver.views.dataserver"
+          class="com.mmxlabs.models.lng.transfers.editor.views.TransferAgreementsView"
+          id="com.mmxlabs.models.lng.transfers.editor.views.TransferAgreementsView"
+          name="Transfer Agreements"
+          restorable="true">
+    </view>
+</extension>
+<extension
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.transfers.TransferAgreement"
+            factory="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+</extension>
 </plugin>

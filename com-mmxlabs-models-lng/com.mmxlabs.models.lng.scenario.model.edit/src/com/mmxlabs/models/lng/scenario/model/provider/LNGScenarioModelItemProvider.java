@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.transfers.TransfersFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXRootObjectItemProvider;
 
 /**
@@ -199,6 +200,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_NominationsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SensitivityModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel());
 		}
 		return childrenFeatures;
 	}
@@ -269,6 +271,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ADP_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__NOMINATIONS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -330,6 +333,11 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SensitivityModel(),
 				 AnalyticsFactory.eINSTANCE.createSensitivityModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(),
+				 TransfersFactory.eINSTANCE.createTransferModel()));
 	}
 
 }

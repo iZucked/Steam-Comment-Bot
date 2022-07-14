@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.transfers.TransfersPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 import java.time.LocalDate;
@@ -22,6 +22,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -186,7 +187,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 * @ordered
 	 */
-	protected static final TransferIncoterm INCOTERM_EDEFAULT = TransferIncoterm.ANY;
+	protected static final TransferIncoterm INCOTERM_EDEFAULT = TransferIncoterm.BOTH;
 
 	/**
 	 * The cached value of the '{@link #getIncoterm() <em>Incoterm</em>}' attribute.
@@ -673,61 +674,60 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public BaseLegalEntity getFromEntity() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		if (getTransferAgreement() != null) {
+			return getTransferAgreement().getFromEntity();
+		}
+		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public BaseLegalEntity getToEntity() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		if (getTransferAgreement() != null) {
+			return getTransferAgreement().getToEntity();
+		}
+		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public CompanyStatus getCompanyStatus() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		if (getTransferAgreement() != null) {
+			getTransferAgreement().getCompanyStatus();
+		}
+		return null;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getRecordOrDelegatePriceExpression() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (String) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION).getValue(this);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public TransferIncoterm getRecordOrDelegateIncoterm() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (TransferIncoterm) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM).getValue(this);
 	}
 
 	/**
@@ -951,6 +951,17 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 		result.append(stale);
 		result.append(')');
 		return result.toString();
+	}
+	
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		final TransfersPackage transferPackage = TransfersPackage.eINSTANCE;
+		if (transferPackage.getTransferRecord_PriceExpression() == feature) {
+			return new DelegateInformation(transferPackage.getTransferRecord_PriceExpression(), transferPackage.getTransferAgreement_PriceExpression(),"");
+		} else if (transferPackage.getTransferRecord_Incoterm() == feature) {
+			return new DelegateInformation(transferPackage.getTransferRecord_Incoterm(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
+		}
+		return super.getUnsetValueOrDelegate(feature);
 	}
 
 } //TransferRecordImpl

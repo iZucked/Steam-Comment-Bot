@@ -19,16 +19,14 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum TransferIncoterm implements Enumerator {
 	/**
-	 * The '<em><b>Any</b></em>' literal object.
+	 * The '<em><b>Both</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #ANY_VALUE
+	 * @see #BOTH_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	ANY(0, "Any", "Any"),
-
-	/**
+	BOTH(0, "Both", "Both"), /**
 	 * The '<em><b>FOB</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -49,15 +47,15 @@ public enum TransferIncoterm implements Enumerator {
 	DES(2, "DES", "DES");
 
 	/**
-	 * The '<em><b>Any</b></em>' literal value.
+	 * The '<em><b>Both</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #ANY
-	 * @model name="Any"
+	 * @see #BOTH
+	 * @model name="Both"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int ANY_VALUE = 0;
+	public static final int BOTH_VALUE = 0;
 
 	/**
 	 * The '<em><b>FOB</b></em>' literal value.
@@ -89,7 +87,7 @@ public enum TransferIncoterm implements Enumerator {
 	 */
 	private static final TransferIncoterm[] VALUES_ARRAY =
 		new TransferIncoterm[] {
-			ANY,
+			BOTH,
 			FOB,
 			DES,
 		};
@@ -148,7 +146,7 @@ public enum TransferIncoterm implements Enumerator {
 	 */
 	public static TransferIncoterm get(int value) {
 		switch (value) {
-			case ANY_VALUE: return ANY;
+			case BOTH_VALUE: return BOTH;
 			case FOB_VALUE: return FOB;
 			case DES_VALUE: return DES;
 		}

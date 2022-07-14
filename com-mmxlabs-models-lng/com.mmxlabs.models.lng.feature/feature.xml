@@ -10,7 +10,7 @@
       label="Models: LNG Feature"
       version="5.7.2.qualifier"
       provider-name="Minimax Labs Ltd.">
- 
+
    <plugin
          id="com.mmxlabs.models.lng.cargo"
          download-size="0"
@@ -430,4 +430,33 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transfers"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transfers.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transfers.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transfers.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
