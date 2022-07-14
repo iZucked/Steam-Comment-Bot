@@ -112,6 +112,9 @@ public class ScenarioServicePushToCloudAction {
 			copyScenarioModel.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
 		}
 
+		// Clear base schedule model
+		copyScenarioModel.getScheduleModel().setSchedule(null);
+		
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(copyScenarioModel);
 		if (!Objects.equals(problemType, "sandbox")) {
 			// Strip all existing optimisation results and sandboxes
