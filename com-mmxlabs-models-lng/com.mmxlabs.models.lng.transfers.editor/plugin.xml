@@ -23,6 +23,13 @@
           name="Transfer Agreements"
           restorable="true">
     </view>
+    <view
+          category="com.mmxlabs.lngdataserver.views.dataserver"
+          class="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          id="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          name="Transfer Records"
+          restorable="true">
+    </view>
 </extension>
 <extension
          point="com.mmxlabs.models.ui.displaycompositefactories">

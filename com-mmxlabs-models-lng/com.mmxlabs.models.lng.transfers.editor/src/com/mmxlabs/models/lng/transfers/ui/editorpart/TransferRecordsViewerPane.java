@@ -19,14 +19,15 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
+import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersFactory;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
-import com.mmxlabs.models.lng.transfers.ui.manipulators.CompanyStatusEnumAttributeManipulator;
 import com.mmxlabs.models.lng.transfers.ui.manipulators.TransferIncotermEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -36,15 +37,15 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
- * Pane (table) which shows TransferAgreements in tabular view
- * @author FM
+ * Pane (table) which shows TransferRecords in tabular view
+ * @author Mihnea Savin
  *
  */
-public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
+public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
 	
-	public TransferAgreementsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
+	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.scenarioEditingLocation = location;
 	}
@@ -58,34 +59,29 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 		}
 		
 		getToolBarManager().update(true);
-		
 		addNameManipulator("Name");
-		addTypicalColumn("From Entity", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
-		addTypicalColumn("To Entity", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
-		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
+		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
 				getCommandHandler()));
-		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
+		addTypicalColumn("Pricing Date", new LocalDateAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PricingDate(), //
 				getCommandHandler()));
-		addTypicalColumn("Company Status", new CompanyStatusEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_CompanyStatus(), 
+		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
 				getCommandHandler()));
 	}
 
 	private Action createAddAction() {
 		addAction = new RunnableAction("Add", CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), () -> {
 			final CompoundCommand cmd = new CompoundCommand("New transfer agreement");
-			final TransferAgreement ta = TransfersFactory.eINSTANCE.createTransferAgreement();
+			final TransferRecord ta = TransfersFactory.eINSTANCE.createTransferRecord();
 			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
 			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
 			TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
 			if (tm == null) {
 				tm = TransfersFactory.eINSTANCE.createTransferModel();
-				tm.getTransferAgreements().add(ta);
+				tm.getTransferRecords().add(ta);
 				cmd.append(SetCommand.create(getEditingDomain(), scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(), tm));
 			} else {
 				cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getTransferModel(getScenarioEditingLocation().getScenarioDataProvider()),
-						TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_AGREEMENTS, Collections.singleton(ta)));
+						TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_RECORDS, Collections.singleton(ta)));
 			}
 			final CommandStack commandStack = getEditingDomain().getCommandStack();
 			commandStack.execute(cmd);
