@@ -67,7 +67,6 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 				getCommandHandler()));
 		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
 				getCommandHandler()));
-		// TODO: Mihnea to add company status
 
 	}
 

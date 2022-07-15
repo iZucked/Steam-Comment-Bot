@@ -23,6 +23,13 @@
           name="Transfer Agreements"
           restorable="true">
     </view>
+    <view
+          category="com.mmxlabs.lngdataserver.views.dataserver"
+          class="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          id="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          name="Transfer Records"
+          restorable="true">
+    </view>
 </extension>
 <extension
          point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -30,6 +37,12 @@
             eClass="com.mmxlabs.models.lng.transfers.TransferAgreement"
             factory="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
             id="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+            factory="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferRecordDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferRecordDetailCompositeFactory"
             inheritable="true">
       </displayCompositeFactory>
 </extension>
@@ -41,6 +54,26 @@
        <FeatureAnyOf>
           <EDataTypeIs
                 EDataTypeName="TransferIncoterm"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CompanyStatus"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.TransferStatusValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.TransferStatusValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="TransferStatus"
                 EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
           </EDataTypeIs>
        </FeatureAnyOf>

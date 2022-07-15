@@ -62,13 +62,12 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				getCommandHandler()));
 		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
 				getCommandHandler()));
-		// TODO: Mihnea to add company status
 
 	}
 
 	private Action createAddAction() {
 		addAction = new RunnableAction("Add", CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), () -> {
-			final CompoundCommand cmd = new CompoundCommand("New transfer agreement");
+			final CompoundCommand cmd = new CompoundCommand("New transfer record");
 			final TransferRecord ta = TransfersFactory.eINSTANCE.createTransferRecord();
 			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
 			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
