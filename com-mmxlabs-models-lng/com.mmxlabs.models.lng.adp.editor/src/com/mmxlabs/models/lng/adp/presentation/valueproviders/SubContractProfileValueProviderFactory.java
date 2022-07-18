@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ContractProfile;
@@ -28,7 +28,7 @@ public class SubContractProfileValueProviderFactory implements IReferenceValuePr
 		return new BaseReferenceValueProvider() {
 
 			@Override
-			public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+			public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 
 				if (target instanceof ContractProfile<?, ?>) {
 					ContractProfile<?, ?> contractProfile = (ContractProfile<?, ?>) target;

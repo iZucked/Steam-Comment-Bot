@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -34,7 +34,7 @@ public class SellMarketReferenceValueProvider extends BaseReferenceValueProvider
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;

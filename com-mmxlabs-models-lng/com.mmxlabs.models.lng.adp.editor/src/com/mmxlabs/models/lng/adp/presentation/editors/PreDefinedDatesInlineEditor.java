@@ -31,7 +31,7 @@ public class PreDefinedDatesInlineEditor extends DialogInlineEditor {
 	@Override
 	protected Object displayDialog(final Object currentValue) {
 		final PreDefinedDatesInlineEditorDialog ccd = new PreDefinedDatesInlineEditorDialog(getShell());
-		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getModelReference(), rootObject, input, (EReference) feature) == Window.OK) {
+		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getModelReference(), rootObject, input, (EReference) typedElement) == Window.OK) {
 			return ccd.getResult();
 		}
 		return null;

@@ -82,7 +82,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 		super.display(dialogContext, context, input, range);
 	}
 
@@ -128,10 +128,10 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 		if (value == SetCommand.UNSET_VALUE) {
 			CompoundCommand cmd = new CompoundCommand();
 			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			return cmd;
 		} else {
-			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, typedElement, (Collection<?>) value);
 			return setter;
 		}
 	}
@@ -148,7 +148,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 				if (sb.length() > 0) {
 					sb.append(", ");
 				}
-				sb.append(valueProvider.getName(input, (EReference) feature, obj));
+				sb.append(valueProvider.getName(input, (EReference) typedElement, obj));
 			}
 			theLabel.setText(sb.toString());
 		}
@@ -156,7 +156,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 
 	@SuppressWarnings("unchecked")
 	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
-		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, typedElement);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
@@ -328,7 +328,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 							commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.TRUE), input, overrideToggleFeature);
 						}
 						// Apply a set command otherwise the display value may not be the value stored in eobject
-						commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, feature, getValue()), input, feature);
+						commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, getValue()), input, typedElement);
 						setControlEnabled(inner, true);
 					} else {
 						unsetValue();
@@ -354,22 +354,20 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 	@Override
 	protected Object getValue() {
 
-		if (input == null) {
-			return null;
-		}
-		{
+		if (input != null && typedElement instanceof EStructuralFeature feature){
 			if (!canOverride()) {
-				return ((MMXObject) input).getUnsetValue(getFeature());
+				return ((MMXObject) input).getUnsetValue(feature);
 			} else if (input.eIsSet(feature)) {
 				return super.getValue();
 			} else {
 				if (input instanceof MMXObject) {
-					return ((MMXObject) input).getUnsetValue(getFeature());
+					return ((MMXObject) input).getUnsetValue(feature);
 				} else {
 					return null;
 				}
 			}
 		}
+		return null;
 	}
 
 	@Override
@@ -391,10 +389,10 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 	}
 
 	protected boolean valueIsSet() {
-		if (input == null) {
-			return false;
+		if (input != null && typedElement instanceof EStructuralFeature feature){
+			return input.eIsSet(feature);
 		}
-		return input.eIsSet(getFeature());
+		return false;
 	}
 
 	@Override

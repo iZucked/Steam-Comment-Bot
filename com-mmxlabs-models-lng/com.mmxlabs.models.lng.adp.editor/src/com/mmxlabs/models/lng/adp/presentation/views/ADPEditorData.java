@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
@@ -104,7 +104,7 @@ public final class ADPEditorData implements IScenarioEditingLocation {
 		return new ICommandHandler() {
 
 			@Override
-			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+			public void handleCommand(Command command, EObject target, ETypedElement feature) {
 				delegate.getDefaultCommandHandler().handleCommand(command, target, feature);
 			}
 

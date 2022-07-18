@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.SetCommand;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -25,7 +25,7 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 	private IDialogEditingContext dialogContext;
 	private Collection<EObject> range;
 
-	public VesselEventVesselsInlineEditor(final EStructuralFeature feature) {
+	public VesselEventVesselsInlineEditor(final ETypedElement feature) {
 		super(feature);
 	}
 

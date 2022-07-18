@@ -220,7 +220,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 		boolean changed = false;
 		for (final IInlineEditor editor : editors) {
-			final EStructuralFeature feature = editor.getFeature();
+			final var feature = editor.getFeature();
 			final boolean visible = dialogContext.getDialogController().getEditorVisibility(object, feature);
 			final List<Control> controls = dialogContext.getEditorControls(object, feature);
 			if (controls != null) {

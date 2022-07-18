@@ -7,7 +7,7 @@ package com.mmxlabs.models.ui.dates;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
@@ -29,7 +29,7 @@ public class TimeOfDayInlineEditor extends ValueListInlineEditor<Object> {
 	 * @param feature
 	 * @param DEFAULT_VALUES
 	 */
-	public TimeOfDayInlineEditor(EStructuralFeature feature) {
+	public TimeOfDayInlineEditor(ETypedElement feature) {
 		super(feature, DEFAULT_VALUES);
 	}
 

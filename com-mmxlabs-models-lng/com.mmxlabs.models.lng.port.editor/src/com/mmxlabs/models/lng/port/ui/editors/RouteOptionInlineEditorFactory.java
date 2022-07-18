@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 
 public class RouteOptionInlineEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement feature) {
 
 		ArrayList<Object> objectsList = new ArrayList<>();
 		for (final RouteOption routeOption : RouteOption.values()) {
@@ -30,7 +30,7 @@ public class RouteOptionInlineEditorFactory implements IInlineEditorFactory {
 		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
 	}
 
-	public static IInlineEditor createPanamaOnlyEditor(final EClass owner, final EStructuralFeature feature) {
+	public static IInlineEditor createPanamaOnlyEditor(final EClass owner, final ETypedElement feature) {
 
 		ArrayList<Object> objectsList = new ArrayList<>();
 		final String name = PortModelLabeller.getName(RouteOption.PANAMA);

@@ -7,11 +7,10 @@ package com.mmxlabs.models.lng.adp.presentation.valueproviders;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
@@ -37,7 +36,7 @@ public class MullCargoWrapperValueProviderFactory implements IReferenceValueProv
 		return new BaseReferenceValueProvider() {
 
 			@Override
-			public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+			public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 				final IReferenceValueProvider loadSlotProvider = existingLoadSlots.createReferenceValueProvider(CargoPackage.Literals.CARGO_MODEL, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS,
 						rootObject);
 				final List<Pair<String, EObject>> loadSlots = loadSlotProvider.getAllowedValues(target, field);

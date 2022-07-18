@@ -81,7 +81,7 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 
 	@Override
 	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
-		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, typedElement);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);

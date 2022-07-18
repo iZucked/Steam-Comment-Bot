@@ -16,10 +16,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -929,6 +931,28 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 */
 	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case TransfersPackage.TRANSFER_RECORD___GET_FROM_ENTITY:
+				return getFromEntity();
+			case TransfersPackage.TRANSFER_RECORD___GET_TO_ENTITY:
+				return getToEntity();
+			case TransfersPackage.TRANSFER_RECORD___GET_COMPANY_STATUS:
+				return getCompanyStatus();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICE_EXPRESSION:
+				return getRecordOrDelegatePriceExpression();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM:
+				return getRecordOrDelegateIncoterm();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -957,9 +981,9 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		final TransfersPackage transferPackage = TransfersPackage.eINSTANCE;
 		if (transferPackage.getTransferRecord_PriceExpression() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_PriceExpression(), transferPackage.getTransferAgreement_PriceExpression(),"");
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PriceExpression(),"");
 		} else if (transferPackage.getTransferRecord_Incoterm() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_Incoterm(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

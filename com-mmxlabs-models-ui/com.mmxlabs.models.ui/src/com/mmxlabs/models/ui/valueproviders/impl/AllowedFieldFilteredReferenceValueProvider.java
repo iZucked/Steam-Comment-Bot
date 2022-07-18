@@ -8,9 +8,8 @@ import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
@@ -25,7 +24,7 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 	}
 
 	@Override
-	protected boolean isAllowedValue(EObject target, EStructuralFeature field,
+	protected boolean isAllowedValue(EObject target, ETypedElement field,
 			Pair<String, EObject> value) {
 
 		// get the list of allowed values in the field
@@ -66,9 +65,9 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 	}
 	
 	protected abstract EList<FieldType> getAllowedValuesFromField(
-			EObject target, EStructuralFeature field);
+			EObject target, ETypedElement field);
 
-	protected abstract FieldType getCurrentValue(EObject target, EStructuralFeature field);
+	protected abstract FieldType getCurrentValue(EObject target, ETypedElement field);
 
 	protected abstract boolean fieldValueIncludesObject(FieldType fieldValue, FieldType queryValue);
 }

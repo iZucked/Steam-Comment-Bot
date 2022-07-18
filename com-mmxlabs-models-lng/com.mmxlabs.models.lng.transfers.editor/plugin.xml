@@ -79,4 +79,18 @@
        </FeatureAnyOf>
     </editorFactory>
     </extension>
+    <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.transfers.TransferAgreement">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+    </valueProvider>
+    </extension>
 </plugin>

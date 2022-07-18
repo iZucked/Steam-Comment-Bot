@@ -70,23 +70,25 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(feature.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}
@@ -96,9 +98,9 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 		if (input == null) {
 			valueProvider = null;
 		} else {
-			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 			if (valueProvider == null) {
-				log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+				log.error("Could not get a value provider for " + input.eClass().getName() + "." + typedElement.getName());
 			}
 		}
 		super.display(dialogContext, context, input, range);
@@ -134,7 +136,11 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 		// this.combo = toolkit.createCombo(parent, SWT.READ_ONLY);
 		toolkit.adapt(editor, true, true);
 
+		if (typedElement instanceof EStructuralFeature feature) {
 		editor.setEnabled(feature.isChangeable() && isEditorEnabled());
+		} else {
+			editor.setEnabled(false);
+		}
 		editor.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -207,7 +213,7 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	protected List<Pair<String, EObject>> getValues() {
-		return valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
+		return valueProvider != null ? valueProvider.getAllowedValues(input, typedElement) : Collections.<Pair<String, EObject>> emptyList();
 	}
 
 	@Override

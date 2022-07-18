@@ -12,7 +12,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -42,7 +42,7 @@ public class VesselCharterStartPortValueProviderFactory implements IReferenceVal
 			return new SimpleReferenceValueProvider(portModel, PortPackage.Literals.PORT_MODEL__PORTS) {
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 					return getRestrictedPortsList(cargoModel, portModel, target);
 				}
 

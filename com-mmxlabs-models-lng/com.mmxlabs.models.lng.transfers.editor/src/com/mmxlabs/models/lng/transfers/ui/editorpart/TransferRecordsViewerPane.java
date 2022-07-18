@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
@@ -58,10 +59,12 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 		getToolBarManager().update(true);
 		
 		addNameManipulator("Name");
+//		addTypicalColumn("Transfer Agreement", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement(), //
+//				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
 				getCommandHandler()));
-		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
-				getCommandHandler()));
+//		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
+//				getCommandHandler()));
 
 	}
 

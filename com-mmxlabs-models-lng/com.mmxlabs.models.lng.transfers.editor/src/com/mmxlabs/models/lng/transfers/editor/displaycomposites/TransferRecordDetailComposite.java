@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.google.common.collect.Lists;
@@ -34,13 +35,13 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 	@Override
 	protected void sortEditors(List<IInlineEditor> editors) {
 		// Sub classes can sort the editor list prior to rendering
-		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
+		List<ETypedElement> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
 				TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE,//
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION,//
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE
-
 		);
+
 		// Reverse the list so that we can move the editors to the head of the list
 		Collections.reverse(orderedFeatures);
 		for (var feature : orderedFeatures) {
@@ -60,15 +61,16 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
-				.makeRow() //
-				//
-				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
-				.makeRow() //
-				//
-				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
+				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
+//				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
+//				.makeRow() //
+//				//
+//				.withRow() //
+//				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
+//				.makeRow() //
+//				//
+//				.withRow() //
+//				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
 				.makeRow() //
 				.make() //
 		;

@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
@@ -23,7 +23,7 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	/**
 	 * @since 2.2
 	 */
-	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<>();
+	protected final HashSet<ETypedElement> ignoredFeatures = new HashSet<>();
 
 	private boolean enabled = true;
 

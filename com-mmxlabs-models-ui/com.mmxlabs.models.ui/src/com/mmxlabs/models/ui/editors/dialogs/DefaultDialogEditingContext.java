@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.widgets.Control;
 
@@ -22,7 +22,7 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 	private final boolean multiEdit;
 	private final boolean newEdit;
 
-	private PairKeyedMap<EObject, EStructuralFeature, List<Control>> objectControls = new PairKeyedMap<>();
+	private PairKeyedMap<EObject, ETypedElement, List<Control>> objectControls = new PairKeyedMap<>();
 
 	/**
 	 * Creates an object encapsulating relevant information about the editing context.
@@ -51,24 +51,24 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 	}
 
 	@Override
-	public List<Control> getEditorControls(EObject target, EStructuralFeature feature) {
+	public List<Control> getEditorControls(EObject target, ETypedElement typedElement) {
 
-		if (objectControls.contains(target, feature)) {
-			return objectControls.get(target, feature);
+		if (objectControls.contains(target, typedElement)) {
+			return objectControls.get(target, typedElement);
 		} else {
 			return Collections.emptyList();
 		}
 	}
 
 	@Override
-	public void registerEditorControl(EObject target, EStructuralFeature feature, Control control) {
+	public void registerEditorControl(EObject target, ETypedElement typedElement, Control control) {
 
 		List<Control> controls;
-		if (objectControls.contains(target, feature)) {
-			controls = objectControls.get(target, feature);
+		if (objectControls.contains(target, typedElement)) {
+			controls = objectControls.get(target, typedElement);
 		} else {
 			controls = new LinkedList<>();
-			objectControls.put(target, feature, controls);
+			objectControls.put(target, typedElement, controls);
 		}
 		controls.add(control);
 	}

@@ -7,7 +7,7 @@ package com.mmxlabs.models.ui.editors.autocomplete;
 import java.util.Collection;
 import java.util.function.Function;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -27,7 +27,7 @@ import org.osgi.framework.ServiceReference;
 
 public class AutoCompleteHelper {
 
-	public static IMMXContentProposalProvider createControlProposalAdapter(final Control text, final EStructuralFeature attribute) {
+	public static IMMXContentProposalProvider createControlProposalAdapter(final Control text, final ETypedElement attribute) {
 		return createControlProposalAdapter(text, factory -> factory.create(attribute));
 	}
 

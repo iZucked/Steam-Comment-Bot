@@ -14,7 +14,7 @@ import java.util.Collection;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
@@ -44,7 +44,7 @@ public interface IInlineEditor {
 
 	void processValidation(IStatus status);
 
-	EStructuralFeature getFeature();
+	ETypedElement getFeature();
 
 	EObject getEditorTarget();
 

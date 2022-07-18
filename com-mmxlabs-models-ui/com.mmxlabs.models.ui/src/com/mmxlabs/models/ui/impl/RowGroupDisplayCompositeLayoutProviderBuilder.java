@@ -126,7 +126,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 
 				for (RowBuilder row : rows) {
 					if (row.orderedFeatures.contains(feature)) {

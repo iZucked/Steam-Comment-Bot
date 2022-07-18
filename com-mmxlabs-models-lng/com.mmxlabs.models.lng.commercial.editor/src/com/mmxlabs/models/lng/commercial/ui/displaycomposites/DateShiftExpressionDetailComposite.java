@@ -10,7 +10,6 @@ package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
  */
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -51,7 +50,7 @@ public class DateShiftExpressionDetailComposite extends DefaultDetailComposite {
 
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 				if (feature == CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__SPECIFIC_DAY //
 						|| feature == CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE //
 				) {

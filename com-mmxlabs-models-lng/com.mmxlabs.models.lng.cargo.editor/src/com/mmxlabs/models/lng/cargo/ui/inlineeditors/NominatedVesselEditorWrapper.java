@@ -46,7 +46,7 @@ public class NominatedVesselEditorWrapper extends IInlineEditorEnablementWrapper
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 
 		wrapperEnabled = false;
-		final EStructuralFeature feature = wrapped.getFeature();
+		final var feature = wrapped.getFeature();
 		if (feature == CargoPackage.Literals.SLOT__NOMINATED_VESSEL) {
 			if (object instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) object;

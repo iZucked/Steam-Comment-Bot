@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -28,10 +29,10 @@ public interface IDialogEditingContext {
 	/**
 	 * Returns all the controls of interest for the given object feature.
 	 */
-	List<Control> getEditorControls(EObject target, EStructuralFeature feature);
+	List<Control> getEditorControls(EObject target, ETypedElement typedElement);
 
 	/**
 	 * Register the controls of interest for a given object feature. This is used in combination with IDialogController get/setEditorVisibility.
 	 */
-	void registerEditorControl(EObject target, EStructuralFeature feature, Control control);
+	void registerEditorControl(EObject target, ETypedElement typedElement, Control control);
 }

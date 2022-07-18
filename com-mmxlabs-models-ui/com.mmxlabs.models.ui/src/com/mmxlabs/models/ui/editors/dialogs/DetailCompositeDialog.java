@@ -23,7 +23,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -54,11 +54,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +68,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -88,8 +84,6 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-
-import jdk.jfr.Enabled;
 
 /**
  * A dialog for editing scenario objects using the generated detail views.
@@ -169,7 +163,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, ETypedElement, Boolean> visibilityMap = new PairKeyedMap<>();
 
 		@Override
 		public void validate() {
@@ -204,15 +198,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		@Override
-		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
-			visibilityMap.put(object, feature, visible);
+		public void setEditorVisibility(final EObject object, final ETypedElement typedElement, final boolean visible) {
+			visibilityMap.put(object, typedElement, visible);
 
 		}
 
 		@Override
-		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
-			if (visibilityMap.contains(object, feature)) {
-				return visibilityMap.get(object, feature).booleanValue();
+		public boolean getEditorVisibility(final EObject object, final ETypedElement typedElement) {
+			if (visibilityMap.contains(object, typedElement)) {
+				return visibilityMap.get(object, typedElement).booleanValue();
 			}
 			return true;
 		}
@@ -345,7 +339,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		this.commandHandler = new ICommandHandler() {
 			@Override
-			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+			public void handleCommand(final Command command, final EObject target, final ETypedElement feature) {
 				// we want to directly execute these commands, because they are
 				// on copies anyway
 				// so (a) no undo needed and (b) don't want to make the command

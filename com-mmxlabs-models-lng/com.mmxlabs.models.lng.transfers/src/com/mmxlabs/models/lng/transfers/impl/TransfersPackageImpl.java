@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.EReference;
@@ -352,6 +353,56 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EOperation getTransferRecord__GetFromEntity() {
+		return transferRecordEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferRecord__GetToEntity() {
+		return transferRecordEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferRecord__GetCompanyStatus() {
+		return transferRecordEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferRecord__GetRecordOrDelegatePriceExpression() {
+		return transferRecordEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferRecord__GetRecordOrDelegateIncoterm() {
+		return transferRecordEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getTransferIncoterm() {
 		return transferIncotermEEnum;
 	}
@@ -427,6 +478,11 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__STATUS);
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__NOTES);
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__STALE);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_FROM_ENTITY);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_TO_ENTITY);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_COMPANY_STATUS);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICE_EXPRESSION);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM);
 
 		// Create enums
 		transferIncotermEEnum = createEEnum(TRANSFER_INCOTERM);
@@ -471,7 +527,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		transferRecordEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		transferRecordEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
-		// Initialize classes and features; add operations and parameters
+		// Initialize classes, features, and operations; add parameters
 		initEClass(transferModelEClass, TransferModel.class, "TransferModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferModel_TransferAgreements(), this.getTransferAgreement(), null, "transferAgreements", null, 0, -1, TransferModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferModel_TransferRecords(), this.getTransferRecord(), null, "transferRecords", null, 0, -1, TransferModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -495,15 +551,15 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferRecord_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_Stale(), ecorePackage.getEBoolean(), "stale", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(transferRecordEClass, theCommercialPackage.getBaseLegalEntity(), "getFromEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getTransferRecord__GetFromEntity(), theCommercialPackage.getBaseLegalEntity(), "getFromEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(transferRecordEClass, theCommercialPackage.getBaseLegalEntity(), "getToEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getTransferRecord__GetToEntity(), theCommercialPackage.getBaseLegalEntity(), "getToEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(transferRecordEClass, this.getCompanyStatus(), "getCompanyStatus", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getTransferRecord__GetCompanyStatus(), this.getCompanyStatus(), "getCompanyStatus", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(transferRecordEClass, ecorePackage.getEString(), "getRecordOrDelegatePriceExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getTransferRecord__GetRecordOrDelegatePriceExpression(), ecorePackage.getEString(), "getRecordOrDelegatePriceExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(transferRecordEClass, this.getTransferIncoterm(), "getRecordOrDelegateIncoterm", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getTransferRecord__GetRecordOrDelegateIncoterm(), this.getTransferIncoterm(), "getRecordOrDelegateIncoterm", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(transferIncotermEEnum, TransferIncoterm.class, "TransferIncoterm");

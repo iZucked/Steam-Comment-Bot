@@ -10,7 +10,6 @@ package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
 
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,7 +38,7 @@ public class NominationSpecsDetailComposite extends DefaultDetailComposite imple
 		public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 
 			// Special case
-			final EStructuralFeature feature = editor.getFeature();
+			final var feature = editor.getFeature();
 			if (feature == NominationsPackage.Literals.ABSTRACT_NOMINATION_SPEC__SIZE || feature == NominationsPackage.Literals.ABSTRACT_NOMINATION_SPEC__SIZE_UNITS) {
 				final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				// 64 - magic constant from MultiDetailDialog

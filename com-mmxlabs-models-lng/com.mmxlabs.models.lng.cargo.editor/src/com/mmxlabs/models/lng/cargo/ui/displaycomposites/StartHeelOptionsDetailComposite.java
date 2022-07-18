@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +36,7 @@ public class StartHeelOptionsDetailComposite extends DefaultDetailComposite {
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 				
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 				if (feature == CommercialPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE 
 						|| feature == CommercialPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);

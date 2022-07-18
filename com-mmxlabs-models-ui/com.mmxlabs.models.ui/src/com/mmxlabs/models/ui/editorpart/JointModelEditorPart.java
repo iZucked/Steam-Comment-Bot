@@ -28,7 +28,7 @@ import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -142,7 +142,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private final ICommandHandler defaultCommandHandler = new ICommandHandler() {
 		@Override
-		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+		public void handleCommand(final Command command, final EObject target, final ETypedElement typedElement) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
 

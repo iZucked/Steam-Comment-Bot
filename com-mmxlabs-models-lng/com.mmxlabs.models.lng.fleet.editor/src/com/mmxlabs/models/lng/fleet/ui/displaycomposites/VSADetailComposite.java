@@ -22,7 +22,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -89,8 +89,8 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	private IDisplayComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
-	private final Map<EStructuralFeature, IInlineEditor> feature2Editor = new HashMap<>();
-	private Set<EStructuralFeature> portFeatures = Sets.newHashSet(FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE);
+	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<>();
+	private Set<ETypedElement> portFeatures = Sets.newHashSet(FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE);
 
 	public VSADetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
@@ -102,7 +102,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 				editor = super.addInlineEditor(editor);
 				if (editor != null) {
-					final EStructuralFeature f = editor.getFeature();
+					final var f = editor.getFeature();
 					feature2Editor.put(f, editor);
 
 				}

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -36,8 +36,8 @@ public class EditorControlFactory {
 	 * @param fs
 	 * @return
 	 */
-	public static Control makeControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Composite c, final EStructuralFeature[] fs,
-			final Map<EStructuralFeature, IInlineEditor> feature2Editor, final EMFDataBindingContext dbc, final IDisplayCompositeLayoutProvider layoutProvider, final FormToolkit toolkit) {
+	public static Control makeControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Composite c, final ETypedElement[] fs,
+			final Map<ETypedElement, IInlineEditor> feature2Editor, final EMFDataBindingContext dbc, final IDisplayCompositeLayoutProvider layoutProvider, final FormToolkit toolkit) {
 
 		Composite holder = c;
 		if (fs.length > 1) {
@@ -50,7 +50,7 @@ public class EditorControlFactory {
 			gl.marginHeight = 0;
 			holder.setLayout(gl);
 		}
-		for (final EStructuralFeature f : fs) {
+		for (final ETypedElement f : fs) {
 			final IInlineEditor editor = feature2Editor.get(f);
 			if (editor != null) {
 				createLabelledEditorControl(dialogContext, root, object, holder, editor, dbc, layoutProvider, toolkit);

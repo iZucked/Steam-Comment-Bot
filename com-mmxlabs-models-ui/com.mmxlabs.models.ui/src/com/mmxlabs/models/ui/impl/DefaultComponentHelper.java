@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -37,9 +38,9 @@ public class DefaultComponentHelper implements IComponentHelper {
 	 */
 	protected final EClass targetClass;
 
-	protected final Set<EStructuralFeature> ignoreFeatures = new HashSet<>();
+	protected final Set<ETypedElement> ignoreFeatures = new HashSet<>();
 
-	protected final Map<EStructuralFeature, Function<EClass, List<IInlineEditor>>> editorFactories = new HashMap<>();
+	protected final Map<ETypedElement, Function<EClass, List<IInlineEditor>>> editorFactories = new HashMap<>();
 
 	public DefaultComponentHelper(final EClass targetClass) {
 		this.targetClass = targetClass;
@@ -61,11 +62,11 @@ public class DefaultComponentHelper implements IComponentHelper {
 		}
 	}
 
-	protected void addEditors(final EStructuralFeature feature, final Function<EClass, List<IInlineEditor>> factory) {
+	protected void addEditors(final ETypedElement feature, final Function<EClass, List<IInlineEditor>> factory) {
 		editorFactories.put(feature, factory);
 	}
 
-	protected void addEditor(final EStructuralFeature feature, final Function<EClass, IInlineEditor> factory) {
+	protected void addEditor(final ETypedElement feature, final Function<EClass, IInlineEditor> factory) {
 		editorFactories.put(feature, topClass -> {
 			final IInlineEditor editor = factory.apply(topClass);
 			if (editor != null) {
@@ -75,11 +76,11 @@ public class DefaultComponentHelper implements IComponentHelper {
 		});
 	}
 
-	protected void addDefaultReadonlyEditor(final EStructuralFeature feature) {
+	protected void addDefaultReadonlyEditor(final ETypedElement feature) {
 		addDefaultEditorWithWrapper(feature, ReadOnlyInlineEditorWrapper::new);
 	}
 
-	protected void addDefaultEditorWithWrapper(final EStructuralFeature feature, Function<IInlineEditor, IInlineEditorEnablementWrapper> wrapperFactory) {
+	protected void addDefaultEditorWithWrapper(final ETypedElement feature, Function<IInlineEditor, IInlineEditorEnablementWrapper> wrapperFactory) {
 		editorFactories.put(feature, topClass -> {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
 			if (editor != null) {

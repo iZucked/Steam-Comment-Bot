@@ -10,7 +10,7 @@ import java.util.Collections;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -48,7 +48,7 @@ public class EmbeddedDetailComposite {
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, ETypedElement, Boolean> visibilityMap = new PairKeyedMap<>();
 
 		@Override
 		public void validate() {
@@ -74,15 +74,15 @@ public class EmbeddedDetailComposite {
 		}
 
 		@Override
-		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
-			visibilityMap.put(object, feature, visible);
+		public void setEditorVisibility(final EObject object, final ETypedElement typedElement, final boolean visible) {
+			visibilityMap.put(object, typedElement, visible);
 
 		}
 
 		@Override
-		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
-			if (visibilityMap.contains(object, feature)) {
-				return visibilityMap.get(object, feature).booleanValue();
+		public boolean getEditorVisibility(final EObject object, final ETypedElement typedElement) {
+			if (visibilityMap.contains(object, typedElement)) {
+				return visibilityMap.get(object, typedElement).booleanValue();
 			}
 			return true;
 		}

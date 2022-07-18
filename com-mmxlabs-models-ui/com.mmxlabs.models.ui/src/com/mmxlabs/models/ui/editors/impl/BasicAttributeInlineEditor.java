@@ -7,6 +7,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,7 +19,9 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -37,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.spi.Element;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -74,7 +78,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected EObject input;
 	protected Collection<EObject> ranges;
 
-	protected final EStructuralFeature feature;
+	protected final ETypedElement typedElement;
 	protected boolean currentlySettingValue = false;
 
 	protected ICommandHandler commandHandler;
@@ -133,8 +137,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	protected MMXRootObject rootObject;
 
-	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
-		this.feature = feature;
+	public BasicAttributeInlineEditor(final ETypedElement feature) {
+		this.typedElement = feature;
 	}
 
 	@Override
@@ -175,7 +179,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			// descriptor for the feature
 			for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(input)) {
 
-				if (feature.equals(descriptor.getFeature(input))) {
+				if (typedElement.equals(descriptor.getFeature(input))) {
 					// Found match
 
 					this.propertyDescriptor = descriptor;
@@ -251,7 +255,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @return
 	 */
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		return feature.equals(changedFeature);
+		return typedElement.equals(changedFeature);
 	}
 
 	@Override
@@ -261,14 +265,14 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 		// check if msg is relevant
 		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
-			doUpdateDisplayWithValue(feature.equals(msg.getFeature()) == false);
+			doUpdateDisplayWithValue(typedElement.equals(msg.getFeature()) == false);
 		}
-		if (msg.getFeature() != null && msg.getFeature().equals(feature)) {
+		if (msg.getFeature() != null && msg.getFeature().equals(typedElement)) {
 			// it is a change to our feature
 			doUpdateDisplayWithValue();
 		}
 		// TODO: Annotations!
-		if (msg.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) msg.getFeature()).getName().equals(feature.getName() + "Override")) {
+		if (msg.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) msg.getFeature()).getName().equals(typedElement.getName() + "Override")) {
 			// it is a change to our feature
 			doUpdateDisplayWithValue();
 		}
@@ -306,7 +310,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		final Object currentValue = getValue();
 		if (forceCommandExecution || !(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
 			final Command command = createSetCommand(value);
-			commandHandler.handleCommand(command, input, feature);
+			commandHandler.handleCommand(command, input, typedElement);
 			// editingDomain.getCommandStack().execute(command);
 		}
 
@@ -391,7 +395,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			final Collection<EObject> objects = element.getObjects();
 			if (objects.contains(input)) {
-				if (element.getFeaturesForEObject(input).contains(feature)) {
+				if (element.getFeaturesForEObject(input).contains(typedElement)) {
 
 					sb.append(element.getMessage());
 					sb.append("\n");
@@ -413,7 +417,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		// System.err.println("Creating set command (" + input + "." +
 		// feature.getName() + " <- " + value + ")");
 
-		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input, feature, value));
+		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input, typedElement, value));
 
 		return command;
 	}
@@ -423,7 +427,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		if (input == null) {
 			return null;
 		}
-		return input.eGet(feature);
+		if (typedElement instanceof EStructuralFeature f) {
+			return input.eGet(f);
+		} else if (typedElement instanceof EOperation operation) {
+			try {
+				return input.eInvoke(operation, null);
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	public Control wrapControl(final Control c) {
@@ -462,8 +476,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	@Override
-	public EStructuralFeature getFeature() {
-		return feature;
+	public ETypedElement getFeature() {
+		return typedElement;
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -62,20 +63,21 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 	 * @param editingDomain
 	 * @param commandProcessor
 	 */
-	public PortMultiReferenceInlineEditor(final EStructuralFeature feature) {
+	public PortMultiReferenceInlineEditor(final ETypedElement feature) {
 		super(feature);
 	}
 
 	@Override
 	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
 		isOverridable = false;
+		if (typedElement instanceof EStructuralFeature feature) {
 		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
 		if (eAnnotation == null) {
 			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
 		}
 		if (eAnnotation != null) {
 			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+				if (f.getName().equals(typedElement.getName() + "Override")) {
 					isOverridable = true;
 					this.overrideToggleFeature = f;
 				}
@@ -87,12 +89,13 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 		if (isOverridable) {
 			isOverridableWithButton = true;
 		}
+		}
 		return super.createControl(parent, dbc, toolkit);
 	}
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 		super.display(dialogContext, context, input, range);
 	}
 
@@ -137,13 +140,13 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 		if (value == SetCommand.UNSET_VALUE) {
 			CompoundCommand cmd = new CompoundCommand();
 
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			if (overrideToggleFeature != null) {
 				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
 			}
 			return cmd;
 		} else {
-			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, typedElement, (Collection<?>) value);
 			return setter;
 		}
 	}
@@ -159,7 +162,7 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 			final StringBuilder sb = new StringBuilder();
 			int numNamesAdded = 0;
 			for (final EObject obj : selectedValues) {
-				String name = valueProvider.getName(input, (EReference) feature, obj);
+				String name = valueProvider.getName(input, (EReference) typedElement, obj);
 				if (sb.length() > 0) {
 					sb.append(", ");
 				}
@@ -177,13 +180,13 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@SuppressWarnings("unchecked")
 	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
-		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, typedElement);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
 
 		PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
-		return picker.pick(options, (List<EObject>) getValue(), (EReference) feature);
+		return picker.pick(options, (List<EObject>) getValue(), (EReference) typedElement);
 
 	}
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.lng.transfers.TransferStatus;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
  */
 public class TransferStatusValueListInlineEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement typedElement) {
 		
 		ArrayList<Object> objectsList = new ArrayList<>();
 		for (final TransferStatus type : TransferStatus.values()) {
@@ -41,6 +41,6 @@ public class TransferStatusValueListInlineEditorFactory implements IInlineEditor
 			objectsList.add(name);
 			objectsList.add(type);
 		}
-		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
+		return new EENumInlineEditor((EAttribute) typedElement, objectsList.toArray());
 	}
 }

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.dialogs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,8 +25,10 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -49,7 +52,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -105,7 +107,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * This maps from proxy objects and features to set modes
 	 */
-	private final Map<Pair<EObject, EStructuralFeature>, SetMode> featuresToSet = new HashMap<>();
+	private final Map<Pair<EObject, ETypedElement>, SetMode> featuresToSet = new HashMap<>();
 	private EClass editingClass;
 	private List<EObject> editedObjects;
 	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<>();
@@ -163,7 +165,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		displayComposite.setEditorWrapper(wrapper);
 		final ICommandHandler immediate = new ICommandHandler() {
 			@Override
-			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+			public void handleCommand(final Command command, final EObject target, final ETypedElement feature) {
 				command.execute();
 			}
 
@@ -344,9 +346,9 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		final CompoundCommand command = new CompoundCommand();
 		command.append(IdentityCommand.INSTANCE); // add the identity command so that even if we set no features the command is executable
 
-		for (final Map.Entry<Pair<EObject, EStructuralFeature>, SetMode> featureToSet : featuresToSet.entrySet()) {
+		for (final Map.Entry<Pair<EObject, ETypedElement>, SetMode> featureToSet : featuresToSet.entrySet()) {
 			final EObject proxy = featureToSet.getKey().getFirst();
-			final EStructuralFeature feature = featureToSet.getKey().getSecond();
+			final ETypedElement typedElement = featureToSet.getKey().getSecond();
 
 			// Handle custom extensions. These are typically contained in the MMX extensions feature list and may be dynamically created
 			if (!proxies.contains(proxy)) {
@@ -381,22 +383,30 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 			}
 
-			final SetMode mode = feature.isMany() ? featureToSet.getValue() : SetMode.REPLACE;
+			final SetMode mode = typedElement.isMany() ? featureToSet.getValue() : SetMode.REPLACE;
 			switch (mode) {
 			case REPLACE:
-				final Object newValue = (!feature.isUnsettable() || proxy.eIsSet(feature)) ? proxy.eGet(feature) : SetCommand.UNSET_VALUE;
+				Object newValue = null;
+				if (typedElement instanceof EStructuralFeature feature) {
+					newValue = (!feature.isUnsettable() || proxy.eIsSet(feature)) ? proxy.eGet(feature) : SetCommand.UNSET_VALUE;
+				} else if (typedElement instanceof EOperation operation){
+					try {
+						newValue = proxy.eInvoke(operation, null);
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				boolean isContainment = false;
-				if (feature instanceof EReference) {
-					final EReference eReference = (EReference) feature;
+				if (typedElement instanceof EReference eReference) {
 					if (eReference.isContainment()) {
 						isContainment = true;
-
 					}
 				}
 				for (final EObject original : proxyCounterparts.get(proxy)) {
 					Object value = newValue;
 					if (isContainment) {
-						if (feature.isMany()) {
+						if (typedElement.isMany()) {
 							final List<EObject> l = new LinkedList<>();
 							for (final Object o : (List<?>) newValue) {
 								l.add(EcoreUtil.copy((EObject) o));
@@ -406,24 +416,46 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 							value = EcoreUtil.copy((EObject) newValue);
 						}
 					}
-					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, value));
+					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, typedElement, value));
 				}
 				break;
 			case UNION:
 			case INTERSECTION:
-				final List<?> newValues = (List<?>) proxy.eGet(feature);
-				for (final EObject original : proxyCounterparts.get(proxy)) {
-					final List<?> oldValues = (List<?>) original.eGet(feature);
-
-					final Set<Object> lhs = new LinkedHashSet<>();
-					lhs.addAll(oldValues);
-					if (mode == SetMode.UNION) {
-						lhs.addAll(newValues);
-					} else {
-						lhs.retainAll(newValues);
+				if (typedElement instanceof EStructuralFeature feature) {
+					final List<?> newValues = (List<?>) proxy.eGet(feature);
+					for (final EObject original : proxyCounterparts.get(proxy)) {
+						final List<?> oldValues = (List<?>) original.eGet(feature);
+	
+						final Set<Object> lhs = new LinkedHashSet<>();
+						lhs.addAll(oldValues);
+						if (mode == SetMode.UNION) {
+							lhs.addAll(newValues);
+						} else {
+							lhs.retainAll(newValues);
+						}
+						final List<Object> combination = new ArrayList<>(lhs);
+						command.append(SetCommand.create(commandHandler.getEditingDomain(), original, typedElement, combination));
 					}
-					final List<Object> combination = new ArrayList<>(lhs);
-					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, combination));
+				} 
+				else if (typedElement instanceof EOperation operation) {
+					try {
+						final List<?> newValues = (List<?>) proxy.eInvoke(operation, null);
+						for (final EObject original : proxyCounterparts.get(proxy)) {
+							final List<?> oldValues = (List<?>) original.eInvoke(operation, null);
+
+							final Set<Object> lhs = new LinkedHashSet<>();
+							lhs.addAll(oldValues);
+							if (mode == SetMode.UNION) {
+								lhs.addAll(newValues);
+							} else {
+								lhs.retainAll(newValues);
+							}
+							final List<Object> combination = new ArrayList<>(lhs);
+							command.append(SetCommand.create(commandHandler.getEditingDomain(), original, typedElement, combination));
+						}
+					} catch (Exception e) {
+
+					}
 				}
 				break;
 			}
@@ -531,8 +563,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			}
 
 			return new IInlineEditor() {
-				private Pair<EObject, EStructuralFeature> key; // Main feature pair
-				private Pair<EObject, EStructuralFeature> key2; // optional override feature pair
+				private Pair<EObject, ETypedElement> key; // Main feature pair
+				private Pair<EObject, ETypedElement> key2; // optional override feature pair
 
 				@Override
 				public void processValidation(final IStatus status) {
@@ -564,17 +596,23 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					controlsToDisable.add(proxy);
 
 					final ToolBarManager manager = new ToolBarManager(SWT.NONE);
-					final Pair<EObject, EStructuralFeature> pair = new Pair<>(null, getFeature());
+					final Pair<EObject, ETypedElement> pair = new Pair<>(null, getFeature());
 					// Check for secondary override feature.
-					Pair<EObject, EStructuralFeature> l_pair2 = null;
-					if (pair.getSecond() != null) {
-						for (final EStructuralFeature f : pair.getSecond().getEContainingClass().getEAllAttributes()) {
-							if (f.getName().equals(pair.getSecond().getName() + "Override")) {
+					Pair<EObject, ETypedElement> l_pair2 = null;
+					if (pair.getSecond() instanceof EStructuralFeature feature) {
+						for (final ETypedElement f : feature.getEContainingClass().getEAllAttributes()) {
+							if (f.getName().equals(feature.getName() + "Override")) {
+								l_pair2 = new Pair<>(null, f);
+							}
+						}
+					} else if (pair.getSecond() instanceof EOperation operation) {
+						for (final ETypedElement f : operation.getEContainingClass().getEAllAttributes()) {
+							if (f.getName().equals(operation.getName() + "Override")) {
 								l_pair2 = new Pair<>(null, f);
 							}
 						}
 					}
-					final Pair<EObject, EStructuralFeature> pair2 = l_pair2;
+					final Pair<EObject, ETypedElement> pair2 = l_pair2;
 
 					this.key = pair;
 					this.key2 = pair2;
@@ -613,7 +651,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 
 				@Override
-				public EStructuralFeature getFeature() {
+				public ETypedElement getFeature() {
 					return proxy.getFeature();
 				}
 
@@ -710,10 +748,10 @@ class MultiFeatureAction extends AbstractMenuLockableAction {
 	protected static final SetMode[] MODES = new SetMode[] { SetMode.REPLACE, SetMode.INTERSECTION, SetMode.UNION };
 
 	private SetMode mode = SetMode.REPLACE;
-	private final Pair<EObject, EStructuralFeature> path;
-	private final Map<Pair<EObject, EStructuralFeature>, SetMode> map;
+	private final Pair<EObject, ETypedElement> path;
+	private final Map<Pair<EObject, ETypedElement>, SetMode> map;
 
-	public MultiFeatureAction(final Pair<EObject, EStructuralFeature> p, final Map<Pair<EObject, EStructuralFeature>, SetMode> m) {
+	public MultiFeatureAction(final Pair<EObject, ETypedElement> p, final Map<Pair<EObject, ETypedElement>, SetMode> m) {
 		super("");
 		this.map = m;
 		this.path = p;

@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -67,7 +66,7 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 //				if (feature == CommercialPackage.Literals.CONTRACT__MAX_QUANTITY || feature == CommercialPackage.Literals.CONTRACT__MIN_QUANTITY
 //						|| feature == CommercialPackage.Literals.CONTRACT__VOLUME_LIMITS_UNIT || feature == CommercialPackage.Literals.CONTRACT__OPERATIONAL_TOLERANCE) {
 //					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);

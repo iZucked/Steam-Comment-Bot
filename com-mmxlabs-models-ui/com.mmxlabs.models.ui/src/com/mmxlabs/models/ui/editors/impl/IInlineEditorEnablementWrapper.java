@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -87,7 +87,7 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	@Override
-	public EStructuralFeature getFeature() {
+	public ETypedElement getFeature() {
 		return wrapped.getFeature();
 	}
 

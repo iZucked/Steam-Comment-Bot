@@ -6,6 +6,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -95,6 +96,15 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_MODEL_FEATURE_COUNT = 2;
 
 	/**
+	 * The number of operations of the '<em>Transfer Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl <em>Transfer Agreement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -175,6 +185,42 @@ public interface TransfersPackage extends EPackage {
 	 * @ordered
 	 */
 	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Transfer Agreement</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl <em>Transfer Record</em>}' class.
@@ -311,6 +357,87 @@ public interface TransfersPackage extends EPackage {
 	 * @ordered
 	 */
 	int TRANSFER_RECORD_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get From Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_FROM_ENTITY = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get To Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_TO_ENTITY = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Company Status</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_COMPANY_STATUS = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Record Or Delegate Price Expression</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICE_EXPRESSION = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Record Or Delegate Incoterm</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
+
+	/**
+	 * The number of operations of the '<em>Transfer Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
@@ -561,6 +688,56 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferRecord_Stale();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromEntity() <em>Get From Entity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get From Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getFromEntity()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetFromEntity();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToEntity() <em>Get To Entity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get To Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getToEntity()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetToEntity();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getCompanyStatus() <em>Get Company Status</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Company Status</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getCompanyStatus()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetCompanyStatus();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePriceExpression() <em>Get Record Or Delegate Price Expression</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Record Or Delegate Price Expression</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePriceExpression()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetRecordOrDelegatePriceExpression();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegateIncoterm() <em>Get Record Or Delegate Incoterm</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Record Or Delegate Incoterm</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegateIncoterm()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetRecordOrDelegateIncoterm();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -758,6 +935,41 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSFER_RECORD__STALE = eINSTANCE.getTransferRecord_Stale();
+		/**
+		 * The meta object literal for the '<em><b>Get From Entity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_FROM_ENTITY = eINSTANCE.getTransferRecord__GetFromEntity();
+		/**
+		 * The meta object literal for the '<em><b>Get To Entity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_TO_ENTITY = eINSTANCE.getTransferRecord__GetToEntity();
+		/**
+		 * The meta object literal for the '<em><b>Get Company Status</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_COMPANY_STATUS = eINSTANCE.getTransferRecord__GetCompanyStatus();
+		/**
+		 * The meta object literal for the '<em><b>Get Record Or Delegate Price Expression</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICE_EXPRESSION = eINSTANCE.getTransferRecord__GetRecordOrDelegatePriceExpression();
+		/**
+		 * The meta object literal for the '<em><b>Get Record Or Delegate Incoterm</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = eINSTANCE.getTransferRecord__GetRecordOrDelegateIncoterm();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
 		 * <!-- begin-user-doc -->

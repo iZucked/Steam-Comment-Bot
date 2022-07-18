@@ -12,18 +12,15 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.FobSpacingAllocation;
-import com.mmxlabs.models.lng.adp.SpacingAllocation;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -71,7 +68,7 @@ public class SpacingAllocationValueProviderFactory implements IReferenceValuePro
 				}
 				
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 					if (target instanceof SpacingProfile) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>();

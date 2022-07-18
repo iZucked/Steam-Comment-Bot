@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -21,10 +22,10 @@ import org.eclipse.emf.edit.domain.EditingDomain;
  * 
  */
 public class CommandUtil {
-	public static CompoundCommand createMultipleAttributeSetter(final EditingDomain editingDomain, final EObject target, final EStructuralFeature feature, final Collection<?> value) {
+	public static CompoundCommand createMultipleAttributeSetter(final EditingDomain editingDomain, final EObject target, final ETypedElement typedElement, final Collection<?> value) {
 		final CompoundCommand setter = new CompoundCommand();
 
-		if (feature.isUnique()) {
+		if (typedElement.isUnique() && typedElement instanceof EStructuralFeature feature) {
 			final Collection<?> oldValues = (Collection<?>) target.eGet(feature);
 			final Collection<?> newValues = value;
 
@@ -38,16 +39,16 @@ public class CommandUtil {
 
 			setter.append(new IdentityCommand());
 			if (!removeValues.isEmpty()) {
-				setter.append(RemoveCommand.create(editingDomain, target, feature, removeValues));
+				setter.append(RemoveCommand.create(editingDomain, target, typedElement, removeValues));
 			}
 
 			if (!addedValues.isEmpty()) {
-				setter.append(AddCommand.create(editingDomain, target, feature, addedValues));
+				setter.append(AddCommand.create(editingDomain, target, typedElement, addedValues));
 			}
 		} else {
-			setter.append(SetCommand.create(editingDomain, target, feature, SetCommand.UNSET_VALUE));
+			setter.append(SetCommand.create(editingDomain, target, typedElement, SetCommand.UNSET_VALUE));
 			if (!value.isEmpty()) {
-				setter.append(AddCommand.create(editingDomain, target, feature, value));
+				setter.append(AddCommand.create(editingDomain, target, typedElement, value));
 			}
 		}
 		return setter;
