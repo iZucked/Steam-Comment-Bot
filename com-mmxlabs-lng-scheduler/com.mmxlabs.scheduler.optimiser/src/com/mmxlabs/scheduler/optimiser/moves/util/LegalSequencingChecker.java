@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
  * 
  */
 public class LegalSequencingChecker {
-	private static final Logger log = LoggerFactory.getLogger(LegalSequencingChecker.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LegalSequencingChecker.class);
 
 	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private final List<IResource> resources;
@@ -97,13 +97,13 @@ public class LegalSequencingChecker {
 		}
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 			if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
-				messages.stream().forEach(log::debug);
+				messages.stream().forEach(LOG::debug);
 			return false;
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
-					messages.stream().forEach(log::debug);
+					messages.stream().forEach(LOG::debug);
 				return false;
 			}
 		}
@@ -126,7 +126,7 @@ public class LegalSequencingChecker {
 			}
 		}
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
-			messages.stream().forEach(log::debug);
+			messages.stream().forEach(LOG::debug);
 
 		return result;
 	}

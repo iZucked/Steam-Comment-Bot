@@ -34,7 +34,8 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
  * 
  */
 public class InventoryImportAction extends ImportAction {
-	private static final Logger log = LoggerFactory.getLogger(SimpleImportAction.class);
+	private static final Logger LOG = LoggerFactory.getLogger(InventoryImportAction.class);
+
 	private final CargoModel cargoModel;
 
 	public InventoryImportAction(final ImportHooksProvider iph, final CargoModel cargoModel) {
@@ -56,14 +57,14 @@ public class InventoryImportAction extends ImportAction {
 			reader = new FileCSVReader(new File(path), importHooksProvider.getCsvSeparator());
 			final InventoryExtraImporter importer = new InventoryExtraImporter();
 			final Map<String, Map<String, List<InventoryEventRow>>> eventRows = importer.doImportInventoryEvents(reader, context);
-			
+
 //			final List<Inventory> models = importer.doImportModel(reader, context);
 			final CompoundCommand cmd = new CompoundCommand("Import inventories");
 			final Map<String, Inventory> existingInventories = new HashMap<>();
 			for (final Inventory inventory : cargoModel.getInventoryModels()) {
 				existingInventories.put(inventory.getName().toLowerCase(), inventory);
 			}
-			
+
 			for (Entry<String, Map<String, List<InventoryEventRow>>> entry : eventRows.entrySet()) {
 				Inventory inventory = existingInventories.get(entry.getKey().toLowerCase());
 				if (inventory != null) {
@@ -93,7 +94,7 @@ public class InventoryImportAction extends ImportAction {
 //			cmd.append(AddCommand.create(importHooksProvider.getEditingDomain(), cargoModel, CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS, models));
 			importHooksProvider.getEditingDomain().getCommandStack().execute(cmd);
 		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		} finally {
 			try {
 				if (reader != null) {

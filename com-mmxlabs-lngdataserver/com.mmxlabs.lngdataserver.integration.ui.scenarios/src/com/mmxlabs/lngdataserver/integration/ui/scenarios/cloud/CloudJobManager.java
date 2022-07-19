@@ -76,7 +76,7 @@ import com.mmxlabs.scenario.service.ui.IProgressProvider;
  */
 public class CloudJobManager extends AbstractJobManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(CloudJobManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CloudJobManager.class);
 
 	/**
 	 * Singleton instance
@@ -121,9 +121,9 @@ public class CloudJobManager extends AbstractJobManager {
 			// gateway connectivity check
 			try {
 				final String info = CloudOptimisationDataService.INSTANCE.getInfo();
-				logger.info("gateway is reachable: " + info);
+				LOG.info("gateway is reachable: " + info);
 			} catch (final IOException e) {
-				logger.error(e.getLocalizedMessage());
+				LOG.error(e.getLocalizedMessage());
 				throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_FAILED_STATUS_CHECK, Type.FAILED_STATUS_CHECK);
 			}
 
@@ -160,7 +160,7 @@ public class CloudJobManager extends AbstractJobManager {
 					anonymisationMap = ScenarioServicePushToCloudAction.anonymiseScenario(UUID.randomUUID().toString(), progressMonitor, copyScenarioModel, editingDomain, true /* Strip notes */);
 					cRecord.setAnonyMapFileName(anonymisationMap.getName());
 				} catch (final IOException e) {
-					logger.error("Failed to create temp anonymisation map file");
+					LOG.error("Failed to create temp anonymisation map file");
 					throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_SAVING_ANOM_MAP, Type.FAILED_TO_SAVE, e);
 				}
 			}
@@ -195,7 +195,7 @@ public class CloudJobManager extends AbstractJobManager {
 				zipToUpload = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".zip").toFile();
 				ScenarioServicePushToCloudAction.archive(zipToUpload, filesToZip);
 			} catch (final IOException e) {
-				logger.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 				throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
 
@@ -209,7 +209,7 @@ public class CloudJobManager extends AbstractJobManager {
 				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum", originalModelRecord.getScenarioInstance().getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor), keyData.encryptedSymmetricKey());
 			} catch (final Exception e) {
-				logger.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 				throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, e);
 			} finally {
 				uploadMonitor.done();

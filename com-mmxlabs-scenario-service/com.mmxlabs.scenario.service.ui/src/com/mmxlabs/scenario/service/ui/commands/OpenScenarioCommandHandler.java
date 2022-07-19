@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class OpenScenarioCommandHandler extends AbstractHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(OpenScenarioCommandHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OpenScenarioCommandHandler.class);
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
@@ -111,7 +111,7 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 
 			MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
 
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}

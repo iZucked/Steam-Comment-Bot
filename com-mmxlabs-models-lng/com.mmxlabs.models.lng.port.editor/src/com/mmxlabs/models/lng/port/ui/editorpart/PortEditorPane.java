@@ -31,8 +31,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -58,8 +56,6 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(PortEditorPane.class);
 
 	public PortEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);

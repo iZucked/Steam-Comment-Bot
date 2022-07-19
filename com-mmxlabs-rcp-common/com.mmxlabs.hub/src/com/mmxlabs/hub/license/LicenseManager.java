@@ -26,7 +26,7 @@ import okio.Okio;
 
 public final class LicenseManager {
 
-	private static final Logger log = LoggerFactory.getLogger(LicenseManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LicenseManager.class);
 
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
@@ -51,11 +51,11 @@ public final class LicenseManager {
 		try (var response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				if (response.code() == 401) {
-					log.error("insufficient permissions to retrieve license from DataHub");
+					LOG.error("insufficient permissions to retrieve license from DataHub");
 				} else if (response.code() == 404) {
-					log.error("there is currently no selected license on the DataHub");
+					LOG.error("there is currently no selected license on the DataHub");
 				} else {
-					log.error("unable to retrieve license from DataHub, unexpected code: " + response);
+					LOG.error("unable to retrieve license from DataHub, unexpected code: " + response);
 				}
 
 				return null;
@@ -89,7 +89,7 @@ public final class LicenseManager {
 					instance.load(inStream, password.toCharArray());
 					licenseKeystore = instance;
 				} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
-					log.error("failed to read from newly written license file in user's home: " + e.getMessage());
+					LOG.error("failed to read from newly written license file in user's home: " + e.getMessage());
 				}
 			}
 		}

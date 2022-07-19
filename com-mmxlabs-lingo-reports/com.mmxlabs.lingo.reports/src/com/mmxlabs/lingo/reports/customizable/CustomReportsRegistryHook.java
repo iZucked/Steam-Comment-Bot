@@ -31,7 +31,7 @@ import com.google.inject.Injector;
 @SuppressWarnings("restriction")
 public class CustomReportsRegistryHook {
 
-	private static final Logger log = LoggerFactory.getLogger(CustomReportsRegistryHook.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CustomReportsRegistryHook.class);
 
 	@Inject
 	private IExtensionRegistry extensionRegistry;
@@ -55,7 +55,7 @@ public class CustomReportsRegistryHook {
 				try (InputStream is = new FileInputStream(pluginXMLFile)) {
 					regImpl.addContribution(is, contributor, false, null, null, token);
 				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 			// As per SG, do not write any errors or warning if first time startup and no

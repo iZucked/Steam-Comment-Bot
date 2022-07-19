@@ -15,7 +15,7 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 
 public class MovingAverageThresholder implements IThresholder {
 
-	private static final Logger log = LoggerFactory.getLogger(MovingAverageThresholder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MovingAverageThresholder.class);
 
 	@NonNull
 	private final Random random;
@@ -84,7 +84,7 @@ public class MovingAverageThresholder implements IThresholder {
 		} else {
 			if (tick == 0) {
 				logAlpha = Math.log(alpha0 * Math.pow(cooling, epoch));
-				log.debug("Epoch " + epoch + ", alpha = " + (alpha0 * Math.pow(cooling, epoch)) + " T=" + lastT);
+				LOG.debug("Epoch " + epoch + ", alpha = " + (alpha0 * Math.pow(cooling, epoch)) + " T=" + lastT);
 			}
 			tick++;
 		}

@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 
 public class SimpleInitialSequenceBuilder implements IInitialSequenceBuilder {
 
-	private static final Logger log = LoggerFactory.getLogger(SimpleInitialSequenceBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SimpleInitialSequenceBuilder.class);
 
 	@Inject
 	private IPhaseOptimisationData phaseOptimisationData;
@@ -59,7 +59,7 @@ public class SimpleInitialSequenceBuilder implements IInitialSequenceBuilder {
 		for (final ISequence seq : suggestion.getSequences().values()) {
 			for (final ISequenceElement element : seq) {
 				if (!unsequencedElements.contains(element)) {
-					log.warn("Element {} is already sequenced", element);
+					LOG.warn("Element {} is already sequenced", element);
 				}
 				unsequencedElements.remove(element);
 			}

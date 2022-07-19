@@ -14,8 +14,6 @@ import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -44,8 +42,6 @@ import com.mmxlabs.models.ui.merge.IMappingDescriptor;
  * 
  */
 public final class CargoImportAction extends SimpleImportAction {
-
-	private static final Logger log = LoggerFactory.getLogger(CargoImportAction.class);
 
 	public CargoImportAction(final IScenarioEditingLocation part, final ScenarioTableViewer viewer) {
 		super(part, viewer);

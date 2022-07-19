@@ -31,7 +31,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  */
 public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 
-	private static final Logger log = LoggerFactory.getLogger(BasicOperationRenderer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(BasicOperationRenderer.class);
 
 	protected final EOperation operation;
 	protected final EditingDomain editingDomain;
@@ -100,7 +100,7 @@ public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 		try {
 			result = ((EObject) object).eInvoke(operation, new BasicEList<Object>());
 		} catch (InvocationTargetException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		if ((result == null) && (operation.getEType() == EcorePackage.eINSTANCE.getEString())) {
 			return "";

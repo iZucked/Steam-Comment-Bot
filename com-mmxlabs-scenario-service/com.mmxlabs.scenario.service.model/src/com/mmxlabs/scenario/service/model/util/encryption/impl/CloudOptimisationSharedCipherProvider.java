@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model.util.encryption.impl;
 
-import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +11,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
 import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 
 public class CloudOptimisationSharedCipherProvider implements IScenarioCipherProvider {
-	private static final Logger log = LoggerFactory.getLogger(CloudOptimisationSharedCipherProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationSharedCipherProvider.class);
 
 	private KeyFileV2 keyfile;
 

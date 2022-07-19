@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  */
 public class CalibratingGeometricThresholder implements IThresholder {
 
-	private static final Logger log = LoggerFactory.getLogger(CalibratingGeometricThresholder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CalibratingGeometricThresholder.class);
 
 	private static final double ACCEPTABLE_ERROR = 0.01;
 	private final double initialAcceptanceRate;
@@ -94,7 +94,7 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		calibratedTemperature = T0;
 		delegate = new GeometricThresholder(random, epochLength, T0, alpha);
 		delegate.init();
-		log.debug("Calibrated temperature: " + T0);
+		LOG.debug("Calibrated temperature: " + T0);
 	}
 
 	private double evaluate(final double temperature) {

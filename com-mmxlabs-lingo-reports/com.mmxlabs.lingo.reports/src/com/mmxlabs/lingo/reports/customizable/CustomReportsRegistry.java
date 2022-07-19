@@ -42,7 +42,7 @@ public class CustomReportsRegistry {
 
 	private static final String USER_REPORTS_CATEGORY_ID = "com.mmxlabs.lingo.reports.customizable.user";
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomReportsRegistry.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CustomReportsRegistry.class);
 
 	public static final String USER_REPORTS_DIR = "reports";
 
@@ -84,7 +84,7 @@ public class CustomReportsRegistry {
 			final List<CustomReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
 			writeReportsPluginXMLFile(userReportDefinitions, teamReportDefinitions);
 		} catch (final Exception ex) {
-			logger.error("Error updating report definition plugin.xml", ex);
+			LOG.error("Error updating report definition plugin.xml", ex);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class CustomReportsRegistry {
 		try {
 			fromHub = ServiceHelper.withCheckedService(ICustomReportDataRepository.class, ICustomReportDataRepository::getTeamReports);
 		} catch (final Throwable ex) {
-			logger.error("Something went wrong reading team reports", ex);
+			LOG.error("Something went wrong reading team reports", ex);
 			fromHub = Collections.emptyList();
 		}
 		reports.addAll(fromHub);
@@ -183,7 +183,7 @@ public class CustomReportsRegistry {
 					final CustomReportDefinition reportDefinition = mapper.readValue(reportJsonFile, CustomReportDefinition.class);
 					reportDefinitions.add(reportDefinition);
 				} catch (final Exception e) {
-					logger.error("Problem reading file " + reportJsonFile.getName(), e);
+					LOG.error("Problem reading file " + reportJsonFile.getName(), e);
 				}
 			}
 		}
@@ -266,7 +266,7 @@ public class CustomReportsRegistry {
 		try {
 			mapper.writeValue(reportsFile, jsonObject);
 		} catch (final IOException e) {
-			logger.error("Problem saving to json report file: ", e);
+			LOG.error("Problem saving to json report file: ", e);
 		}
 	}
 
@@ -327,7 +327,7 @@ public class CustomReportsRegistry {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		final File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + USER_REPORTS_DIR + IPath.SEPARATOR + JSON_REPORT_PREFIX + toDelete.getUuid() + ".json");
 		if (reportsFile.exists() && !reportsFile.delete()) {
-			logger.error("Could not delete file: " + reportsFile.toString());
+			LOG.error("Could not delete file: " + reportsFile.toString());
 		}
 
 		// Update reports.xml with all plug-in info in.
@@ -340,7 +340,7 @@ public class CustomReportsRegistry {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		final File reportsFile = new File(workspaceLocation.toOSString() + IPath.SEPARATOR + TEAM_REPORTS_DIR + IPath.SEPARATOR + toDelete.getUuid() + ".json");
 		if (reportsFile.exists() && !reportsFile.delete()) {
-			logger.error("Could not delete file: " + reportsFile.toString());
+			LOG.error("Could not delete file: " + reportsFile.toString());
 		}
 		// FIXME: end
 

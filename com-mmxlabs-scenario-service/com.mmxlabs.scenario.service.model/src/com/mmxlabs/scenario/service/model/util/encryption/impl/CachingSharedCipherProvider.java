@@ -23,7 +23,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
  */
 public class CachingSharedCipherProvider implements IScenarioCipherProvider {
 
-	private static final Logger log = LoggerFactory.getLogger(CachingSharedCipherProvider.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CachingSharedCipherProvider.class);
 
 	private Cipher cipher = null;
 
@@ -37,7 +37,7 @@ public class CachingSharedCipherProvider implements IScenarioCipherProvider {
 				cipher = new PassthoughCipher();
 				// Ignore
 			} catch (final Exception e) {
-				log.error("Unable to load cipher: " + e.getMessage(), e);
+				LOG.error("Unable to load cipher: " + e.getMessage(), e);
 				// Used to disable dialog during test runs, otherwise test blocks until the "OK" button is pressed.
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 

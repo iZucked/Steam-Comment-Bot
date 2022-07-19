@@ -66,7 +66,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
 
 	public class ScenarioTableViewerDeleteAction extends ScenarioModifyingAction {
 

@@ -63,7 +63,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
  * 
  */
 public class OptimisationTransformer implements IOptimisationTransformer {
-	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OptimisationTransformer.class);
 
 	@Inject
 	@NonNull
@@ -104,7 +104,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
 		 * reordered
 		 */
-		log.debug("Creating advice for sequence builder");
+		LOG.debug("Creating advice for sequence builder");
 		
 		// Heads now contains the head of every chunk that has to go together.
 				// We need to pull out all the chunks and sort out their rules

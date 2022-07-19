@@ -242,7 +242,7 @@ public class LNGScenarioTransformer {
 
 	private static final int NOMINAL_CARGO_INDEX = -1;
 
-	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
 	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
 	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
@@ -507,7 +507,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public void addTransformerExtension(@NonNull final ITransformerExtension extension) {
-		log.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
+		LOG.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
 		allTransformerExtensions.add(extension);
 	}
 
@@ -520,7 +520,7 @@ public class LNGScenarioTransformer {
 	public void addContractTransformer(@NonNull final IContractTransformer transformer) {
 		contractTransformers.add(transformer);
 		for (final EClass ec : transformer.getContractEClasses()) {
-			log.debug(transformer.getClass().getCanonicalName() + " handling contracts with eClass " + ec.getName());
+			LOG.debug(transformer.getClass().getCanonicalName() + " handling contracts with eClass " + ec.getName());
 			contractTransformersByEClass.put(ec, transformer);
 		}
 	}
@@ -636,7 +636,7 @@ public class LNGScenarioTransformer {
 					priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 				}
 			} catch (final Exception exception) {
-				log.warn("Error evaluating series " + index.getName(), exception);
+				LOG.warn("Error evaluating series " + index.getName(), exception);
 			}
 		}
 
@@ -670,7 +670,7 @@ public class LNGScenarioTransformer {
 				modelEntityMap.addModelObject(index, curve);
 				baseFuelIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
-				log.warn("Error evaluating series " + index.getName(), exception);
+				LOG.warn("Error evaluating series " + index.getName(), exception);
 			}
 		}
 
@@ -694,7 +694,7 @@ public class LNGScenarioTransformer {
 				modelEntityMap.addModelObject(index, curve);
 				charterIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
-				log.warn("Error evaluating series " + index.getName(), exception);
+				LOG.warn("Error evaluating series " + index.getName(), exception);
 			}
 		}
 
@@ -3723,7 +3723,7 @@ public class LNGScenarioTransformer {
 	private void addSpotSlotToCount(@NonNull final SpotSlot spotSlot) {
 		final SpotMarket market = spotSlot.getMarket();
 		if (market == null) {
-			log.warn("Spot slot with an invalid market found");
+			LOG.warn("Spot slot with an invalid market found");
 			return;
 		}
 

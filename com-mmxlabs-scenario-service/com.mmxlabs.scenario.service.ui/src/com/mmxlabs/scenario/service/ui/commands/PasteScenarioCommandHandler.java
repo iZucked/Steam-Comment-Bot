@@ -51,7 +51,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
  * 
  */
 public class PasteScenarioCommandHandler extends AbstractHandler {
-	private static final Logger log = LoggerFactory.getLogger(PasteScenarioCommandHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PasteScenarioCommandHandler.class);
 
 	/*
 	 * (non-Javadoc)
@@ -118,14 +118,14 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 								if (o instanceof ScenarioInstance) {
 									final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
 									monitor.subTask("Copying " + scenarioInstance.getName());
-									log.debug("Local paste " + scenarioInstance.getName());
+									LOG.debug("Local paste " + scenarioInstance.getName());
 									try {
 										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames, monitor.split(2));
 										if (duplicate != null) {
 											existingNames.add(duplicate.getName());
 										}
 									} catch (final Exception e) {
-										log.error("Unable to paste scenario: " + scenarioInstance.getName(), e);
+										LOG.error("Unable to paste scenario: " + scenarioInstance.getName(), e);
 									}
 								}
 								monitor.worked(1);
@@ -245,14 +245,14 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 								}
 							} catch (final Exception e) {
-								log.error(e.getMessage(), e);
+								LOG.error(e.getMessage(), e);
 							} finally {
 								m.done();
 							}
 						}
 					});
 				} catch (final InvocationTargetException | InterruptedException e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 				return true;
 			});

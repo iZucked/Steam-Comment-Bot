@@ -94,7 +94,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
  * 
  */
 public class AnnotatedSolutionExporter {
-	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
 
 	private final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
@@ -248,7 +248,7 @@ public class AnnotatedSolutionExporter {
 
 			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselCharter() == null && eSequence.getCharterInMarket() == null)) {
-					log.error("No vessel set on sequence!?");
+					LOG.error("No vessel set on sequence!?");
 				}
 			}
 

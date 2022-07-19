@@ -32,7 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * 
  */
 public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDomain {
-	private static final Logger log = LoggerFactory.getLogger(CommandProviderAwareEditingDomain.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommandProviderAwareEditingDomain.class);
 	private final MMXRootObject rootObject;
 
 	private boolean commandProvidersDisabled = false;
@@ -157,7 +157,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 					if (addition != null) {
 //						log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 						if (!addition.canExecute() && !(addition instanceof CancelledCommand)) {
-							log.error("Provided command was not executable", new RuntimeException());
+							LOG.error("Provided command was not executable", new RuntimeException());
 						}
 						wrapper.append(addition);
 					}
@@ -174,7 +174,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				if (addition != null) {
 //					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (!addition.canExecute() && !(addition instanceof CancelledCommand)) {
-						log.error("Provided command was not executable", new RuntimeException());
+						LOG.error("Provided command was not executable", new RuntimeException());
 					}
 					wrapper.append(addition);
 				}

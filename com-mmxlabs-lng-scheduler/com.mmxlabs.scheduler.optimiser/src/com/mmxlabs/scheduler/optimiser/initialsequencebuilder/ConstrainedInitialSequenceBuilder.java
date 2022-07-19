@@ -54,7 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilder {
 
-	private static final Logger log = LoggerFactory.getLogger(ConstrainedInitialSequenceBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConstrainedInitialSequenceBuilder.class);
 
 	/**
 	 * The initial maximum acceptable lateness; every cargo in the solution should be feasible on the fastest ship in the fleet with this much slack.
@@ -180,7 +180,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			for (final ISequence seq : suggestion.getSequences().values()) {
 				for (final ISequenceElement element : seq) {
 					if (!unsequencedElements.contains(element)) {
-						log.warn("Element {} is already sequenced", element);
+						LOG.warn("Element {} is already sequenced", element);
 					}
 					unsequencedElements.remove(element);
 				}
@@ -195,7 +195,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// Remove the optional elements from further consideration by the builder
 		unsequencedElements.removeAll(optionalElements);
 
-		log.debug("Elements remaining to be sequenced: {}", unsequencedElements);
+		LOG.debug("Elements remaining to be sequenced: {}", unsequencedElements);
 
 		// Loop through the unsequenced elements and determine which elements can follow other elements.
 
@@ -335,7 +335,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				chunks.add(guy);
 			}
 		}
-		log.debug("Elements remaining to be sequenced: {}", unsequencedElements);
+		LOG.debug("Elements remaining to be sequenced: {}", unsequencedElements);
 
 		// These are the things which we need to schedule on routes. We need to
 		// sort them
@@ -408,17 +408,17 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		Collections.sort(chunks, comparator);
 
-		log.debug("{}", chunks);
+		LOG.debug("{}", chunks);
 
 		final ChunkChecker chunkChecker = new ChunkChecker(checker);
 		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<>();
 
 		if (suggestion == null) {
-			log.debug("No suggested start solution - constructing one");
+			LOG.debug("No suggested start solution - constructing one");
 			for (final IResource resource : resources) {
 				final SequenceChunk end = endChunks.get(resource);
 
-				log.debug("Scheduling elements for resource {}", resource);
+				LOG.debug("Scheduling elements for resource {}", resource);
 				final List<SequenceChunk> sequence = new ArrayList<>();
 				sequences.put(resource, sequence);
 
@@ -448,10 +448,10 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						sequence.add(there);
 						for (final ISequenceElement e : there) {
 							if (!sequencedElements.add(e)) {
-								log.error("Sequence element {} has already been sequenced", e.getName());
+								LOG.error("Sequence element {} has already been sequenced", e.getName());
 							}
 						}
-						log.debug("Adding chunk {}", there);
+						LOG.debug("Adding chunk {}", there);
 						here = there;
 						iterator.remove();
 					}
@@ -459,7 +459,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			}
 		} else {
 			// copy suggestion state into one-element chunks.
-			log.debug("Starting with suggested solution");
+			LOG.debug("Starting with suggested solution");
 			for (final IResource resource : suggestion.getResources()) {
 				final List<SequenceChunk> sequence = new ArrayList<>();
 				sequences.put(resource, sequence);
@@ -472,7 +472,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					sequence.add(chunk);
 					for (final ISequenceElement e : chunk) {
 						if (!sequencedElements.add(e)) {
-							log.error("Sequence element {} has already been sequenced", e.getName());
+							LOG.error("Sequence element {} has already been sequenced", e.getName());
 						}
 					}
 				}
@@ -504,7 +504,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							sequence.add(there);
 							for (final ISequenceElement e : there) {
 								if (!sequencedElements.add(e)) {
-									log.error("Sequence element {} has already been sequenced", e.getName());
+									LOG.error("Sequence element {} has already been sequenced", e.getName());
 								}
 							}
 							here = there;
@@ -521,7 +521,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-		log.debug("Trying to insert {} unscheduled elements into solution ({})", chunks.size(), chunks);
+		LOG.debug("Trying to insert {} unscheduled elements into solution ({})", chunks.size(), chunks);
 		int numTries = chunks.size();
 		while (!chunks.isEmpty() && numTries-- != 0) {
 			final Iterator<SequenceChunk> iterator = chunks.iterator();
@@ -533,7 +533,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					IResource suggestedResource = null;
 					for (final ISequenceElement element : here) {
 						final IResource suggestionForElement = resourceSuggestion.get(element);
-						log.debug("Suggestion for {} = {} ", element, suggestionForElement);
+						LOG.debug("Suggestion for {} = {} ", element, suggestionForElement);
 						if (suggestionForElement != null) {
 							suggestedResource = suggestionForElement;
 							break;
@@ -542,13 +542,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 					if (suggestedResource != null) {
 						// try inserting on suggested resource first
-						log.debug("Trying to insert on {}", suggestedResource);
+						LOG.debug("Trying to insert on {}", suggestedResource);
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
 						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource, sequencedElements)) {
 							break top;
 						} else {
-							log.debug("Could not insert at suggested location");
+							LOG.debug("Could not insert at suggested location");
 						}
 					}
 
@@ -577,7 +577,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 
 		if (!chunks.isEmpty()) {
-			log.error("Could not schedule the following {} elements anywhere: {}", chunks.size(), chunks);
+			LOG.error("Could not schedule the following {} elements anywhere: {}", chunks.size(), chunks);
 			throw new RuntimeException(
 					"Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
 		}
@@ -609,7 +609,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						continue;
 					}
 					if (!actualElements.add(e)) {
-						log.error("Sequence element ({}) has been used multiple times", e.getName());
+						LOG.error("Sequence element ({}) has been used multiple times", e.getName());
 					}
 					actualSize++;
 				}
@@ -653,7 +653,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				sequence.add(here);
 				for (final ISequenceElement e : here) {
 					if (!sequencedElements.add(e)) {
-						log.error("Sequence element {} has already been sequenced", e.getName());
+						LOG.error("Sequence element {} has already been sequenced", e.getName());
 					}
 				}
 				iterator.remove();
@@ -666,7 +666,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					sequence.add(i + 1, here);
 					for (final ISequenceElement e : here) {
 						if (!sequencedElements.add(e)) {
-							log.error("Sequence element {} has already been sequenced", e.getName());
+							LOG.error("Sequence element {} has already been sequenced", e.getName());
 						}
 					}
 					iterator.remove();

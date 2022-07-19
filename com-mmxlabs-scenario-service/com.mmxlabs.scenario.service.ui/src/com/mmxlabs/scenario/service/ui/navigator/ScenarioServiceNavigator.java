@@ -77,7 +77,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	public static final int COLUMN_SHOW_IDX = 1;
 	public static final int COLUMN_STATUS_IDX = 2;
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	private final Image showColumnImage;
 	private final Image statusColumnImage;
@@ -421,7 +421,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			try {
 				handlerService.executeCommand("com.mmxlabs.scenario.service.ui.open", null);
 			} catch (final Exception e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 			}
 		} else {
 			super.handleDoubleClick(anEvent);

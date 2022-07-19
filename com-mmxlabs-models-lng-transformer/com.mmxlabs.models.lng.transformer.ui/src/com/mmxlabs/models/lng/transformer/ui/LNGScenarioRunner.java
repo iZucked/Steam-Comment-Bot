@@ -32,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer
 public class LNGScenarioRunner {
 
 	@NonNull
-	private static final Logger log = LoggerFactory.getLogger(LNGScenarioRunner.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioRunner.class);
 
 	@NonNull
 	private final IChainRunner chainRunner;
@@ -127,8 +127,8 @@ public class LNGScenarioRunner {
 	public IMultiStateResult runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 
 		final IMultiStateResult result = chainRunner.run(progressMonitor);
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
+		if (LOG.isDebugEnabled()) {
+			LOG.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 		}
 		return result;
 	}

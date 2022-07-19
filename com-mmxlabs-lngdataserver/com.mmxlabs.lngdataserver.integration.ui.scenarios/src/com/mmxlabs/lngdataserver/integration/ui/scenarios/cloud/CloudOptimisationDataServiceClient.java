@@ -56,7 +56,7 @@ public class CloudOptimisationDataServiceClient {
 	//		optimisationServiceURL = preferences.get("URL", OPTI_CLOUD_BASE_URL);
 	//	}
 
-	private static final Logger log = LoggerFactory.getLogger(CloudOptimisationDataServiceClient.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationDataServiceClient.class);
 
 	private static final String LIST_SCENARIOS_URL = "/scenarios";
 	private static final String LIST_RESULTS_URL = "/results";
@@ -288,7 +288,7 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				if (response.code() == 500) {
-					log.error("failed to abort remote optimisation job");
+					LOG.error("failed to abort remote optimisation job");
 				}
 				return false;
 			}

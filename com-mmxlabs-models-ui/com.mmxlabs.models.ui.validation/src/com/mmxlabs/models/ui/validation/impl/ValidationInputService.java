@@ -16,7 +16,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class ValidationInputService {
-	private static final Logger log = LoggerFactory.getLogger(ValidationInputService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ValidationInputService.class);
 	final ThreadLocal<IExtraValidationContext> extraContext = new ThreadLocal<>();
 
 	public IExtraValidationContext getExtraContext() {
@@ -25,7 +25,7 @@ public class ValidationInputService {
 
 	public void setExtraContext(final IExtraValidationContext extraContext) {
 		if (extraContext != null && getExtraContext() != null) {
-			log.warn("extra validation context was set without being cleared first; this suggests use of a validator without the ValidationHelper support class, which could cause problems");
+			LOG.warn("extra validation context was set without being cleared first; this suggests use of a validator without the ValidationHelper support class, which could cause problems");
 		}
 		this.extraContext.set(extraContext);
 	}

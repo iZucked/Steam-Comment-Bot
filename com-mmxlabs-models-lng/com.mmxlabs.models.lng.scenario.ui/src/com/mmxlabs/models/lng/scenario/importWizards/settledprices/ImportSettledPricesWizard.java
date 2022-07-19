@@ -36,7 +36,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
  */
 public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 
-	private static final Logger log = LoggerFactory.getLogger(ImportSettledPricesWizard.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ImportSettledPricesWizard.class);
 
 	private ImportSettledPricesPage bip;
 	private List<ScenarioInstance> selectedScenarios;
@@ -87,7 +87,7 @@ public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 			try {
 				getContainer().run(false, true, operation);
 			} catch (InvocationTargetException | InterruptedException e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 			}
 		}
 
@@ -140,7 +140,7 @@ public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 				}
 			}
 		} catch (final Throwable t) {
-			log.error(t.getMessage(), t);
+			LOG.error(t.getMessage(), t);
 			allProblems.add(String.format("Uncaught exception during import. Import aborted. See error log"));
 		} finally {
 			monitor.done();
@@ -176,7 +176,7 @@ public class ImportSettledPricesWizard extends Wizard implements IImportWizard {
 			}
 		} catch (final Exception e) {
 			final String description = e.getMessage();
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			if (!uniqueProblems.contains(description)) {
 				uniqueProblems.add(description);
 				allProblems.add(description);

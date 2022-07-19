@@ -22,7 +22,7 @@ import com.google.inject.Injector;
 @SuppressWarnings("restriction")
 public class ReplaceableViewManager {
 
-	private static final Logger log = LoggerFactory.getLogger(ReplaceableViewManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReplaceableViewManager.class);
 
 	@Inject
 	private IExtensionRegistry extensionRegistry;
@@ -73,7 +73,7 @@ public class ReplaceableViewManager {
 				try (final InputStream is = new ByteArrayInputStream(pluginXML.getBytes())) {
 					extensionRegistry.addContribution(is, contributor, false, null, null, token);
 				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}

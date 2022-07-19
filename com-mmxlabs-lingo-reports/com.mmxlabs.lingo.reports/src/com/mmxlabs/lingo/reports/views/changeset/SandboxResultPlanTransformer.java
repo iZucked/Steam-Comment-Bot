@@ -30,7 +30,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class SandboxResultPlanTransformer extends AbstractSolutionSetTransformer<SandboxResult> {
-	private static final Logger logger = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
 
 	@Override
 	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor,
@@ -79,14 +80,14 @@ public class SandboxResultPlanTransformer extends AbstractSolutionSetTransformer
 					if (changeSet.getMetricsToDefaultBase() != null) {
 						changeSets.add(changeSet);
 					} else {
-						logger.error("Got null pointer when opening solution");
+						LOG.error("Got null pointer when opening solution");
 					}
 				} else {
 					final ChangeSet changeSet = transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null);
 					if (changeSet.getMetricsToDefaultBase() != null) {
 						changeSets.add(changeSet);
 					} else {
-						logger.error("Got null pointer when opening solution");
+						LOG.error("Got null pointer when opening solution");
 					}
 				}
 

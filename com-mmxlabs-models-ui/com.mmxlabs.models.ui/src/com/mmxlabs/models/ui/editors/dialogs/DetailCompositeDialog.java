@@ -54,11 +54,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +68,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -89,15 +85,13 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
-import jdk.jfr.Enabled;
-
 /**
  * A dialog for editing scenario objects using the generated detail views.
  * 
  * @author hinton
  */
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
-	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DetailCompositeDialog.class);
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	private IDisplayComposite displayComposite;
@@ -1011,7 +1005,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 
 				} else {
@@ -1044,7 +1038,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 				}
 			}

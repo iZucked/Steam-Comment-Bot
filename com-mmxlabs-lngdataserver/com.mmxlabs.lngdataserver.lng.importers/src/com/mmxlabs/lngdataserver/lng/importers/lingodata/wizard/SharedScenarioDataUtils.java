@@ -128,7 +128,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public final class SharedScenarioDataUtils {
-	private static final Logger log = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
 
 	private SharedScenarioDataUtils() {
 
@@ -242,7 +242,7 @@ public final class SharedScenarioDataUtils {
 										}
 									}
 									if (!command.canExecute()) {
-										log.error("Update command failed for scenario " + destModelRecord.getName());
+										LOG.error("Update command failed for scenario " + destModelRecord.getName());
 										throw new RuntimeException("Unable to execute command");
 									}
 									RunnerHelper.syncExecDisplayOptional(() -> target.getCommandStack().execute(command));
@@ -250,12 +250,12 @@ public final class SharedScenarioDataUtils {
 										try {
 											target.getModelReference().save();
 										} catch (final IOException e) {
-											log.error("Unable to auto save " + destModelRecord.getName(), e);
+											LOG.error("Unable to auto save " + destModelRecord.getName(), e);
 										}
 									}
 								});
 								if (!ranUpdate) {
-									log.error("Unable to update scenario " + destModelRecord.getName());
+									LOG.error("Unable to update scenario " + destModelRecord.getName());
 								}
 							}
 							monitor.worked(1);

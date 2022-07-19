@@ -35,8 +35,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudJobManager;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
@@ -68,8 +66,6 @@ import com.mmxlabs.scenario.service.ui.IProgressProvider.IProgressChanged;
 import com.mmxlabs.scenario.service.ui.IProgressProvider.RunType;
 
 public class CloudManagerView extends ViewPart {
-
-	private static final Logger log = LoggerFactory.getLogger(CloudManagerView.class);
 
 	private GridTableViewer viewer;
 	private Action packAction;
