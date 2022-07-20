@@ -610,7 +610,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 		} else if (attemptBackup) {
 			// back-up resource
-			LOG.debug("Backing up " + storeURI);
+			LOG.info("Backing up " + storeURI);
 			try (final InputStream inputStream = resourceSet.getURIConverter().createInputStream(storeURI)) {
 				try (final OutputStream outputStream = resourceSet.getURIConverter().createOutputStream(backupURI)) {
 					int x;

@@ -571,9 +571,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			}
 
 			travelTimeChecker.setMaxLateness(maxLateness + 1);
-			// log.info("Lateness constraint relaxed to " + maxLateness + " as "
-			// + chunks.size() + " elements are unscheduled (" + chunks
-			// + ")");
 		}
 
 		if (!chunks.isEmpty()) {

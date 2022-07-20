@@ -507,7 +507,6 @@ public class LNGScenarioTransformer {
 	}
 
 	public void addTransformerExtension(@NonNull final ITransformerExtension extension) {
-		LOG.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
 		allTransformerExtensions.add(extension);
 	}
 
@@ -520,7 +519,6 @@ public class LNGScenarioTransformer {
 	public void addContractTransformer(@NonNull final IContractTransformer transformer) {
 		contractTransformers.add(transformer);
 		for (final EClass ec : transformer.getContractEClasses()) {
-			LOG.debug(transformer.getClass().getCanonicalName() + " handling contracts with eClass " + ec.getName());
 			contractTransformersByEClass.put(ec, transformer);
 		}
 	}

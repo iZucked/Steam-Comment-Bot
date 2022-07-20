@@ -534,20 +534,12 @@ public class ScenarioStorageUtil {
 					archiveURI = originalArchiveURI;
 				}
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" +
-				// scenarioInstance.getUuid() + ") needs loading");
-
 				if (migrationCallback != null) {
 					migrationCallback.accept(modelRecord, archiveURI, monitor);
 				}
 				monitor.setTaskName("Loading scenario");
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" +
-				// scenarioInstance.getUuid() + ") needs loading");
-
 				// acquire sub models
-				LOG.debug("Loading rootObject from " + archiveURI);
-
 				final URI rootObjectURI = createArtifactURI(archiveURI, path);
 				final Resource resource = ResourceHelper.loadResource(resourceSet, rootObjectURI);
 
@@ -870,13 +862,13 @@ public class ScenarioStorageUtil {
 			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
 			if (resource.getContents().size() == 1) {
 				final EObject top = resource.getContents().get(0);
-				if (top instanceof Manifest) {
-					return (Manifest) top;
+				if (top instanceof Manifest manifest) {
+					return manifest;
 				}
 			}
 		} catch (final Exception e) {
 			// Unable to parse file for some reason
-			LOG.debug("Unable to find manifest for " + scenarioFile, e);
+			LOG.warn("Unable to find manifest for " + scenarioFile, e);
 		}
 		return null;
 	}

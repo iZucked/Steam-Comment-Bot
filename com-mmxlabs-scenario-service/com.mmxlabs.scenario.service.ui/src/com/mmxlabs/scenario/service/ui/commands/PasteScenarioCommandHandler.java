@@ -111,14 +111,12 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					@Override
 					public void run(final IProgressMonitor parentMonitor) throws InvocationTargetException, InterruptedException {
 
-						SubMonitor monitor = SubMonitor.convert(parentMonitor);
+						final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 						monitor.beginTask("Copying", 3 * numTasks);
 						try {
 							for (final Object o : iterable) {
-								if (o instanceof ScenarioInstance) {
-									final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+								if (o instanceof final ScenarioInstance scenarioInstance) {
 									monitor.subTask("Copying " + scenarioInstance.getName());
-									LOG.debug("Local paste " + scenarioInstance.getName());
 									try {
 										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames, monitor.split(2));
 										if (duplicate != null) {
@@ -136,8 +134,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					}
 				});
 			} catch (final InvocationTargetException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			}
 			return true;
 		}
@@ -183,11 +180,8 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	 */
 	private boolean pasteFromFiles(final Clipboard clipboard, final Container container) throws IOException {
 		final Object fileData = clipboard.getContents(FileTransfer.getInstance());
-		if (fileData instanceof String[]) {
+		if (fileData instanceof String[] files) {
 			return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-
-				final String[] files = (String[]) fileData;
-
 				// Scan tree creating folder structure and gathering scenarios.
 				final List<File> scenarioFiles = new LinkedList<>();
 				final Map<File, Container> scenarioContainerMap = new HashMap<>();
@@ -221,7 +215,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 						@Override
 						public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-							SubMonitor m = SubMonitor.convert(monitor, "Copying", 10 * scenarioFiles.size());
+							final SubMonitor m = SubMonitor.convert(monitor, "Copying", 10 * scenarioFiles.size());
 							try {
 
 								for (final File f : scenarioFiles) {
