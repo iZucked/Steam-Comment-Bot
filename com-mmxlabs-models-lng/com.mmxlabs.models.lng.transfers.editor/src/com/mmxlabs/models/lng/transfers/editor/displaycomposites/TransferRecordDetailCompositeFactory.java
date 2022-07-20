@@ -23,6 +23,6 @@ public class TransferRecordDetailCompositeFactory extends DefaultDisplayComposit
 
 	@Override
 	public IDisplayComposite createSublevelComposite(Composite parent, EClass eClass, IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return new TransferAgreementDetailComposite(parent, SWT.NONE, toolkit);
+		return new TransferRecordDetailComposite(parent, SWT.NONE, toolkit);
 	}
 }

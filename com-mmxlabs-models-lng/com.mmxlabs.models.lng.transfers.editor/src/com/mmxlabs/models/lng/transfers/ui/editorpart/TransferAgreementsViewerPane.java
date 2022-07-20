@@ -59,13 +59,13 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 		getToolBarManager().update(true);
 		
 		addNameManipulator("Name");
-		addTypicalColumn("From Entity", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
+		addTypicalColumn("From", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
-		addTypicalColumn("To Entity", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
+		addTypicalColumn("To", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
-		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
+		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
 				getCommandHandler()));
-		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
+		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
 				getCommandHandler()));
 
 	}

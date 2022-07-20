@@ -8,7 +8,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferRecords" upperBound="-1"
         eType="#//TransferRecord" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TransferAgreement" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="TransferAgreement" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -19,15 +19,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="incoterm" eType="#//TransferIncoterm"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="companyStatus" eType="#//CompanyStatus"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TransferRecord" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="TransferRecord" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eOperations name="getFromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eOperations name="getToEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eOperations name="getCompanyStatus" eType="#//CompanyStatus"/>
     <eOperations name="getRecordOrDelegatePriceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getRecordOrDelegateIncoterm" eType="#//TransferIncoterm"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferAgreement" eType="#//TransferAgreement"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoReleaseDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         unsettable="true">

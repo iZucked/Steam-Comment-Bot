@@ -84,13 +84,28 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
           referenceEClass="com.mmxlabs.models.lng.transfers.TransferAgreement">
     </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
-          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
-          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
-    </valueProvider>
+       <valueProvider
+             factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+             id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+             ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+             referenceEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+       </valueProvider>
+       <valueProvider
+             factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
+             id="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
+             ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+             referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+       </valueProvider>
     </extension>
+    <extension
+         point="com.mmxlabs.models.ui.componenthelpers">
+      <componentHelper
+            helperClass="com.mmxlabs.models.lng.transfers.presentation.composites.TransferRecordComponentHelper"
+            id="com.mmxlabs.models.lng.transfers.presentation.composites.TransferRecordComponentHelper"
+            inheritable="false"
+            modelClass="com.mmxlabs.models.lng.transfers.TransferRecord"/>
+    </extension>  
 </plugin>

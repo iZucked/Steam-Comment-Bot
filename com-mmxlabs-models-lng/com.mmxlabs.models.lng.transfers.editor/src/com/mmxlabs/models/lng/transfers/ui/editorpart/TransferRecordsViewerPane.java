@@ -22,10 +22,12 @@ import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersFactory;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.lng.transfers.ui.manipulators.TransferIncotermEnumAttributeManipulator;
+import com.mmxlabs.models.lng.transfers.ui.manipulators.TransferStatusEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -40,12 +42,9 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  *
  */
 public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
-
-	private final IScenarioEditingLocation scenarioEditingLocation;
 	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.scenarioEditingLocation = location;
 	}
 
 	@Override
@@ -59,12 +58,20 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 		getToolBarManager().update(true);
 		
 		addNameManipulator("Name");
-//		addTypicalColumn("Transfer Agreement", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement(), //
-//				getReferenceValueProviderCache(), getCommandHandler()));
-		addTypicalColumn("Price Expression", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
+		addTypicalColumn("Agreement", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement(), //
+				getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Deal", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), //
+				getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Next transfer", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Rhs(), //
+				getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
 				getCommandHandler()));
-//		addTypicalColumn("Incoterm", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
-//				getCommandHandler()));
+		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
+				getCommandHandler()));
+		addTypicalColumn("Status", new TransferStatusEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Status(), //
+				getCommandHandler()));
+		addTypicalColumn("Stale", new BooleanFlagAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Stale(), //
+				getCommandHandler()));
 
 	}
 

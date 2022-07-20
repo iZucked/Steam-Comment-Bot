@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.transfers.impl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -12,6 +13,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transfers.CompanyStatus;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferIncoterm;
@@ -125,13 +127,15 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		isInited = true;
 
 		// Initialize simple dependencies
+		CargoPackage.eINSTANCE.eClass();
 		CommercialPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 		FleetPackage.eINSTANCE.eClass();
 		TypesPackage.eINSTANCE.eClass();
 		MMXCorePackage.eINSTANCE.eClass();
 		PortPackage.eINSTANCE.eClass();
 		PricingPackage.eINSTANCE.eClass();
-		DateTimePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theTransfersPackage.createPackageContents();
@@ -516,6 +520,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
@@ -541,8 +546,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 
 		initEClass(transferRecordEClass, TransferRecord.class, "TransferRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferRecord_TransferAgreement(), this.getTransferAgreement(), null, "transferAgreement", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferRecord_Lhs(), ecorePackage.getEObject(), null, "lhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferRecord_Rhs(), ecorePackage.getEObject(), null, "rhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecord_Lhs(), theCargoPackage.getLoadSlot(), null, "lhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecord_Rhs(), theCargoPackage.getDischargeSlot(), null, "rhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_CargoReleaseDate(), theDateTimePackage.getLocalDate(), "cargoReleaseDate", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_PricingDate(), theDateTimePackage.getLocalDate(), "pricingDate", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

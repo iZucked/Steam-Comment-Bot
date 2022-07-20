@@ -12,6 +12,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.transfers;visibility:=reexport,
  org.eclipse.emf.edit;bundle-version="2.8.0";visibility:=reexport,
+ com.mmxlabs.models.lng.cargo;visibility:=reexport,
+ com.mmxlabs.models.lng.cargo.edit;visibility:=reexport,
  com.mmxlabs.models.lng.commercial;visibility:=reexport,
  com.mmxlabs.models.lng.commercial.edit;visibility:=reexport,
  com.mmxlabs.models.lng.fleet;visibility:=reexport,
@@ -24,6 +26,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.port.edit;visibility:=reexport,
  com.mmxlabs.models.lng.pricing;visibility:=reexport,
  com.mmxlabs.models.lng.pricing.edit;visibility:=reexport,
+ com.mmxlabs.models.lng.spotmarkets;visibility:=reexport,
+ com.mmxlabs.models.lng.spotmarkets.edit;visibility:=reexport,
  com.mmxlabs.models.lng.types;bundle-version="[5.7.2,6.0.0)";visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy

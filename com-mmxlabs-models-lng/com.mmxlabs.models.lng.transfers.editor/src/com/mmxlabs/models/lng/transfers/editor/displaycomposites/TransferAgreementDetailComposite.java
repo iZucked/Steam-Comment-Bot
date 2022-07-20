@@ -36,10 +36,12 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		// Sub classes can sort the editor list prior to rendering
 		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY,//
-				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION
-
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,//
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM
+				
 		);
 		// Reverse the list so that we can move the editors to the head of the list
 		Collections.reverse(orderedFeatures);
@@ -61,16 +63,17 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
 				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY) //
-				.makeRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS) //
+				.makeRow()
 				//
-				.withRow() //
-				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
+				.withRow()
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY) //
 				.makeRow() //
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM) //
 				.makeRow() //
 				.make() //
 		;

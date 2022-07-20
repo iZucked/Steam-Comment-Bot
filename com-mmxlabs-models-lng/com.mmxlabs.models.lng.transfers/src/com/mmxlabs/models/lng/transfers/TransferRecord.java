@@ -2,6 +2,8 @@
  */
 package com.mmxlabs.models.lng.transfers;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -64,12 +66,12 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lhs</em>' reference.
-	 * @see #setLhs(EObject)
+	 * @see #setLhs(LoadSlot)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_Lhs()
 	 * @model
 	 * @generated
 	 */
-	EObject getLhs();
+	LoadSlot getLhs();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getLhs <em>Lhs</em>}' reference.
@@ -79,19 +81,19 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @see #getLhs()
 	 * @generated
 	 */
-	void setLhs(EObject value);
+	void setLhs(LoadSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Rhs</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Rhs</em>' reference.
-	 * @see #setRhs(EObject)
+	 * @see #setRhs(DischargeSlot)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_Rhs()
 	 * @model
 	 * @generated
 	 */
-	EObject getRhs();
+	DischargeSlot getRhs();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRhs <em>Rhs</em>}' reference.
@@ -101,7 +103,7 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @see #getRhs()
 	 * @generated
 	 */
-	void setRhs(EObject value);
+	void setRhs(DischargeSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Release Date</b></em>' attribute.

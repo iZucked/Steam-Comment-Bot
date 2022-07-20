@@ -2,32 +2,28 @@
  */
 package com.mmxlabs.models.lng.transfers.impl;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.transfers.CompanyStatus;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferIncoterm;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransferStatus;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -91,7 +87,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 * @ordered
 	 */
-	protected EObject lhs;
+	protected LoadSlot lhs;
 
 	/**
 	 * The cached value of the '{@link #getRhs() <em>Rhs</em>}' reference.
@@ -101,7 +97,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 * @ordered
 	 */
-	protected EObject rhs;
+	protected DischargeSlot rhs;
 
 	/**
 	 * The default value of the '{@link #getCargoReleaseDate() <em>Cargo Release Date</em>}' attribute.
@@ -357,10 +353,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 */
 	@Override
-	public EObject getLhs() {
+	public LoadSlot getLhs() {
 		if (lhs != null && lhs.eIsProxy()) {
 			InternalEObject oldLhs = (InternalEObject)lhs;
-			lhs = eResolveProxy(oldLhs);
+			lhs = (LoadSlot)eResolveProxy(oldLhs);
 			if (lhs != oldLhs) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_RECORD__LHS, oldLhs, lhs));
@@ -374,7 +370,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EObject basicGetLhs() {
+	public LoadSlot basicGetLhs() {
 		return lhs;
 	}
 
@@ -384,8 +380,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 */
 	@Override
-	public void setLhs(EObject newLhs) {
-		EObject oldLhs = lhs;
+	public void setLhs(LoadSlot newLhs) {
+		LoadSlot oldLhs = lhs;
 		lhs = newLhs;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__LHS, oldLhs, lhs));
@@ -397,10 +393,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 */
 	@Override
-	public EObject getRhs() {
+	public DischargeSlot getRhs() {
 		if (rhs != null && rhs.eIsProxy()) {
 			InternalEObject oldRhs = (InternalEObject)rhs;
-			rhs = eResolveProxy(oldRhs);
+			rhs = (DischargeSlot)eResolveProxy(oldRhs);
 			if (rhs != oldRhs) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_RECORD__RHS, oldRhs, rhs));
@@ -414,7 +410,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EObject basicGetRhs() {
+	public DischargeSlot basicGetRhs() {
 		return rhs;
 	}
 
@@ -424,8 +420,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @generated
 	 */
 	@Override
-	public void setRhs(EObject newRhs) {
-		EObject oldRhs = rhs;
+	public void setRhs(DischargeSlot newRhs) {
+		DischargeSlot oldRhs = rhs;
 		rhs = newRhs;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__RHS, oldRhs, rhs));
@@ -707,7 +703,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	@Override
 	public CompanyStatus getCompanyStatus() {
 		if (getTransferAgreement() != null) {
-			getTransferAgreement().getCompanyStatus();
+			return getTransferAgreement().getCompanyStatus();
 		}
 		return null;
 	}
@@ -784,10 +780,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				setTransferAgreement((TransferAgreement)newValue);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__LHS:
-				setLhs((EObject)newValue);
+				setLhs((LoadSlot)newValue);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__RHS:
-				setRhs((EObject)newValue);
+				setRhs((DischargeSlot)newValue);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__CARGO_RELEASE_DATE:
 				setCargoReleaseDate((LocalDate)newValue);
@@ -829,10 +825,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				setTransferAgreement((TransferAgreement)null);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__LHS:
-				setLhs((EObject)null);
+				setLhs((LoadSlot)null);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__RHS:
-				setRhs((EObject)null);
+				setRhs((DischargeSlot)null);
 				return;
 			case TransfersPackage.TRANSFER_RECORD__CARGO_RELEASE_DATE:
 				setCargoReleaseDate(CARGO_RELEASE_DATE_EDEFAULT);

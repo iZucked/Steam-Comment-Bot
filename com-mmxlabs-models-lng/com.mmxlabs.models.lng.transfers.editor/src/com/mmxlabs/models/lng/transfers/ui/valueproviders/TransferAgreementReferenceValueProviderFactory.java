@@ -12,6 +12,11 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
+/**
+ * Provides the list of all transfer agreements
+ * @author FM
+ *
+ */
 public class TransferAgreementReferenceValueProviderFactory implements IReferenceValueProviderFactory {
 
 	@Override
