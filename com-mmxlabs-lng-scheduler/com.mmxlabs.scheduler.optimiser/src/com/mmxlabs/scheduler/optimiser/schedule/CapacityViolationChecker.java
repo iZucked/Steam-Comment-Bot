@@ -203,10 +203,7 @@ public class CapacityViolationChecker {
 	private void checkDischargeOptionLimits(final @NonNull IDischargeOption portSlot, final @NonNull VoyagePlanRecord voyagePlanRecord) {
 		final IAllocationAnnotation allocationAnnotation = voyagePlanRecord.getAllocationAnnotation();
 		assert allocationAnnotation != null;
-		// We use -1 for the CV as it does not matter - CV is used to convert between m3
-		// and mmbtu, but here we are checking type first so we know conversion will not
-		// happen.
-		final int cargoCV = -1;
+
 		if (portSlot.isVolumeSetInM3()) {
 			final long commercialVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
 			if (commercialVolumeInM3 > portSlot.getMaxDischargeVolume(-1)) {
@@ -215,6 +212,9 @@ public class CapacityViolationChecker {
 				addEntryToCapacityViolationAnnotation(portSlot, CapacityViolationType.MIN_DISCHARGE, portSlot.getMinDischargeVolume(-1) - commercialVolumeInM3, voyagePlanRecord);
 			}
 		} else {
+			// CV needed to convert mmbtu back to m3 
+			final int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
+			
 			final long commercialVolumeInMMBTu = allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
 			// input is set in MMBTu
 			if (commercialVolumeInMMBTu > portSlot.getMaxDischargeVolumeMMBTU(-1)) {
