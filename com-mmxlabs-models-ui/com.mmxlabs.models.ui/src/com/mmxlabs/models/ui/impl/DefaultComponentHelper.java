@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 
@@ -37,6 +38,8 @@ public class DefaultComponentHelper implements IComponentHelper {
 	 * parameters which are the top level class whe are querying.
 	 */
 	protected final EClass targetClass;
+	
+	protected boolean includeEOperations = false;
 
 	protected final Set<ETypedElement> ignoreFeatures = new HashSet<>();
 
@@ -160,6 +163,21 @@ public class DefaultComponentHelper implements IComponentHelper {
 				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
 				if (editor != null) {
 					detailComposite.addInlineEditor(editor);
+				}
+			}
+		}
+		if (includeEOperations) {
+			for (final EOperation operation : targetClass.getEOperations()) {
+				if (ignoreFeatures.contains(operation)) {
+					continue;
+				}
+				if (editorFactories.containsKey(operation)) {
+					final List<IInlineEditor> editors = editorFactories.get(operation).apply(topClass);
+					if (editors != null) {
+						editors.forEach(detailComposite::addInlineEditor);
+					}
+				} else {
+					// Currently assuming that any EOperation must have a custom editor
 				}
 			}
 		}

@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

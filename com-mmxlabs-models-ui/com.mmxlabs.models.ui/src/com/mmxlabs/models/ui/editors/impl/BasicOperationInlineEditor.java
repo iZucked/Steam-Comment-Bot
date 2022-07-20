@@ -15,23 +15,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -55,12 +48,12 @@ import com.mmxlabs.rcp.common.RunnerHelper;
  * 
  * TODO sometimes field B should be refreshed when field A changes; currently only field A knows about changes because they happen in here.
  * 
- * @author Tom Hinton
+ * @author Tom Hinton, FM
  * 
  */
-public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implements IInlineEditor {
+public abstract class BasicOperationInlineEditor extends MMXAdapterImpl implements IInlineEditor {
 
-	private static final Logger log = LoggerFactory.getLogger(BasicAttributeInlineEditor.class);
+	private static final Logger log = LoggerFactory.getLogger(BasicOperationInlineEditor.class);
 
 	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<>();
 
@@ -83,41 +76,21 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected ICommandHandler commandHandler;
 
 	/**
-	 * {@link ControlDecoration} used to show validation messages.
-	 */
-	private ControlDecoration validationDecoration;
-
-	/**
 	 * Reference to the {@link Control} to use to display tool tips.
 	 */
 	private Control tooltipControl;
-
-	/**
-	 * Cached reference to the Information icon
-	 */
-	protected final FieldDecoration decorationInfo = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
-
-	/**
-	 * Cached reference to the Warning icon
-	 */
-	protected final FieldDecoration decorationWarning = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_WARNING);
-
-	/**
-	 * Cached reference to the Error icon
-	 */
-	protected final FieldDecoration decorationError = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
 
 	private final DisposeListener disposeListener = new DisposeListener() {
 		@Override
 		public void widgetDisposed(final DisposeEvent e) {
 			if (e.widget == tooltipControl) {
 				if (input != null) {
-					input.eAdapters().remove(BasicAttributeInlineEditor.this);
+					input.eAdapters().remove(BasicOperationInlineEditor.this);
 				}
 
 				if (ranges != null) {
 					for (final EObject eObj : ranges) {
-						eObj.eAdapters().remove(BasicAttributeInlineEditor.this);
+						eObj.eAdapters().remove(BasicOperationInlineEditor.this);
 					}
 				}
 
@@ -136,7 +109,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	protected MMXRootObject rootObject;
 
-	public BasicAttributeInlineEditor(final ETypedElement feature) {
+	public BasicOperationInlineEditor(final ETypedElement feature) {
 		this.typedElement = feature;
 	}
 
@@ -270,11 +243,6 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			// it is a change to our feature
 			doUpdateDisplayWithValue();
 		}
-		// TODO: Annotations!
-		if (msg.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) msg.getFeature()).getName().equals(typedElement.getName() + "Override")) {
-			// it is a change to our feature
-			doUpdateDisplayWithValue();
-		}
 
 	}
 
@@ -290,84 +258,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 */
 	protected abstract void updateDisplay(Object value);
 
-	/**
-	 * Subclasses should call this method when their value has been changed.
-	 * 
-	 * @param value
-	 */
-	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
-
-		if (input == null) {
-			return;
-		}
-		// System.err.println("setvalue on " + feature.getName() + " to " +
-		// value + " (" + currentlySettingValue + ")");
-		if (currentlySettingValue) {
-			return; // avoid re-entering
-		}
-		currentlySettingValue = true;
-		final Object currentValue = getValue();
-		if (forceCommandExecution || !(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
-			final Command command = createSetCommand(value);
-			commandHandler.handleCommand(command, input, typedElement);
-			// editingDomain.getCommandStack().execute(command);
-		}
-
-		// create set command here.
-		currentlySettingValue = false;
-	}
 
 	@Override
 	public void processValidation(final IStatus status) {
-		if (validationDecoration == null || validationDecoration.getControl() == null || validationDecoration.getControl().isDisposed()) {
-			return;
-		}
 
-		if (status.isOK()) {
-			// No problems, so hide decoration
-			if (validationDecoration != null) {
-				validationDecoration.hide();
-			}
-		} else {
-			// Default severity
-			int severity = IStatus.OK;
-
-			// Builder used to accumulate messages
-			final StringBuilder sb = new StringBuilder();
-
-			severity = checkStatus(status, IStatus.OK, sb);
-
-			final String description = sb.toString();
-			if (description.isEmpty()) {
-				// No problems, so hide decoration
-				if (validationDecoration != null) {
-					validationDecoration.hide();
-				}
-				return;
-			}
-
-			// Update description text
-			if (!description.equals(validationDecoration.getDescriptionText())) {
-				validationDecoration.setDescriptionText(description);
-			}
-
-			// Update icon
-			switch (severity) {
-			case IStatus.INFO:
-				validationDecoration.setImage(decorationInfo.getImage());
-				break;
-			case IStatus.WARNING:
-				validationDecoration.setImage(decorationWarning.getImage());
-				break;
-			case IStatus.ERROR:
-			default:
-				validationDecoration.setImage(decorationError.getImage());
-				break;
-			}
-
-			// Show the decoration.
-			validationDecoration.show();
-		}
 	}
 
 	/**
@@ -412,15 +306,6 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		return currentSeverity;
 	}
 
-	protected Command createSetCommand(final Object value) {
-		// System.err.println("Creating set command (" + input + "." +
-		// feature.getName() + " <- " + value + ")");
-
-		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input, typedElement, value));
-
-		return command;
-	}
-
 	protected Object getValue() {
 		// May be null if control is hidden/disabled, but external code has still triggered a refresh
 		if (input == null) {
@@ -439,22 +324,6 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	public Control wrapControl(final Control c) {
-		// Create decorator for validation items
-		{
-			validationDecoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
-			validationDecoration.hide();
-
-			// These should be the defaults...
-			validationDecoration.setShowHover(true);
-			validationDecoration.setShowOnlyOnFocus(false);
-
-			// Set a default image
-			// commented out, because this takes about 70% of the runtime of displaying the editor
-			// validationDecoration.setImage(decorationInfo.getImage());
-
-			// Hide by default
-		}
-
 		// Store reference to this control so we can display tool tips.
 		tooltipControl = c;
 		c.addDisposeListener(disposeListener);

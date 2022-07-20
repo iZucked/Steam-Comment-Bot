@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Control;
@@ -35,10 +35,10 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 	public class RowBuilder {
 
 		private String label;
-		private List<EStructuralFeature> orderedFeatures = new LinkedList<>();
-		private Map<EStructuralFeature, Integer> spans = new HashMap<>();
-		private Map<EStructuralFeature, Integer> widthHints = new HashMap<>();
-		private Map<EStructuralFeature, String> labels = new HashMap<>();
+		private List<ETypedElement> orderedFeatures = new LinkedList<>();
+		private Map<ETypedElement, Integer> spans = new HashMap<>();
+		private Map<ETypedElement, Integer> widthHints = new HashMap<>();
+		private Map<ETypedElement, String> labels = new HashMap<>();
 
 		/**
 		 * If called, use this String as the label for the start of the row. Hide labels for the other controls
@@ -54,7 +54,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		/**
 		 * Define a feature for the row
 		 */
-		public RowBuilder withFeature(EStructuralFeature feature) {
+		public RowBuilder withFeature(ETypedElement feature) {
 			orderedFeatures.add(feature);
 			return this;
 		}
@@ -62,7 +62,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		/**
 		 * Define a feature for the row with a label override. Calling #withLabel will override this behaviour
 		 */
-		public RowBuilder withFeature(EStructuralFeature feature, String label) {
+		public RowBuilder withFeature(ETypedElement feature, String label) {
 			orderedFeatures.add(feature);
 			labels.put(feature,  label);
 			return this;
@@ -76,7 +76,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		 * @param widthHint
 		 * @return
 		 */
-		public RowBuilder withFeature(EStructuralFeature feature, int widthHint) {
+		public RowBuilder withFeature(ETypedElement feature, int widthHint) {
 			orderedFeatures.add(feature);
 			widthHints.put(feature, widthHint);
 			return this;
@@ -104,7 +104,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		// TODO: Not tested! (also see how we apply the value)
 		for (RowBuilder row : rows) {
 			int count = 0;
-			for (EStructuralFeature f : row.orderedFeatures) {
+			for (ETypedElement f : row.orderedFeatures) {
 				row.spans.merge(f, 1, Integer::sum);
 				if (count++ == maxFeatures) {
 					break;
