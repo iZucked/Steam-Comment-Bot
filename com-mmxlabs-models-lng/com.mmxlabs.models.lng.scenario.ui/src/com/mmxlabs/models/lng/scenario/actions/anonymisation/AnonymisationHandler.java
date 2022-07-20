@@ -82,7 +82,7 @@ public class AnonymisationHandler {
 	private void renameSlots(final @NonNull LNGScenarioModel currentModel, final EditingDomain editingDomain, final List<AnonymisationRecord> records, //
 			final CompoundCommand renameCommand, final Set<String> usedIDStrings, final Function<AnonymisationEntry, Command> renameFunction, final boolean stripNotes) {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(currentModel);
-		final Set<Slot<?>> usedSlots = new HashSet();
+		final Set<Slot<?>> usedSlots = new HashSet<>();
 		for (final Cargo c : cargoModel.getCargoes()) {
 			for (final Slot<?> s : c.getSlots()) {
 				if (s instanceof LoadSlot) {
