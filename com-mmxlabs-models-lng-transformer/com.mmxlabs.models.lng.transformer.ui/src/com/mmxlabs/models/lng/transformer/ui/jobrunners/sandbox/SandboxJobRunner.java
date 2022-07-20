@@ -234,7 +234,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				json.setMeta(meta);
 			}
 			json.getParams().setCores(threadsAvailable);
-			// Should grab this from the task 
+			// Should grab this from the task
 			json.setType("sandbox:define");
 			loggingData = json;
 		}
@@ -459,8 +459,8 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
 			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 
-			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
-					dualPNLMode, true /* enableChangeDescription */);
+			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings,
+					dualPNLMode ? AnalyticsFactory.eINSTANCE::createDualModeSolutionOption : AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, true /* enableChangeDescription */);
 
 			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
 			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
