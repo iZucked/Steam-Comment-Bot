@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestFactory;
 
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper.ReportRecord;
+import com.mmxlabs.lingo.its.tests.TestMode;
+import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.scheduler.optimiser.cache.GeneralCacheSettings;
 
@@ -46,21 +48,23 @@ public abstract class DynamicTestCaseRunner {
 	@BeforeAll
 	public static void enableCacheTesting() {
 		// Note: Default seed is based on the days between *now* and epoch
-		GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = true;
-		GeneralCacheSettings.VERIFICATION_CHANCE = 0.05; // 5% chance
+		if (TestingModes.OptimisationTestMode == TestMode.Run) {
+			GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = true;
+			GeneralCacheSettings.VERIFICATION_CHANCE = 0.05; // 5% chance
+		}
 	}
-	
+
 	@AfterAll
 	public static void disableCacheTesting() {
 		GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = false;
 	}
-	
+
 	@TestFactory
 	@Tag(TestCategories.OPTIMISATION_TEST)
 	public List<DynamicNode> runOptimisationTests() {
 		return OptimisationTestRunner.runOptimisationTests(getBaseDirectory());
 	}
-	
+
 	@TestFactory
 	@Tag(TestCategories.OPTIMISATION_TEST)
 	public List<DynamicNode> runSandboxTests() {
