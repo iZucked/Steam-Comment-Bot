@@ -34,9 +34,13 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.apache.felix.scr;bundle-version="2.1.24",
  com.mmxlabs.rcp.icons.lingo,
  org.eclipse.ui.workbench,
- com.mmxlabs.lingo.reports.scheduleview
+ com.mmxlabs.lingo.reports.scheduleview,
+ org.ops4j.peaberry,
+ org.ops4j.peaberry.eclipse;bundle-version="1.3.0",
+ com.google.inject;bundle-version="5.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.lingo.app
-Import-Package: org.slf4j
+Import-Package: javax.inject;version="1.0.0",
+ org.slf4j
 Bundle-Activator: com.mmxlabs.lingo.app.internal.Activator

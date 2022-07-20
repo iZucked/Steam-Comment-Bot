@@ -21,6 +21,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -48,6 +49,7 @@ import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationPushException.Type;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.ScenarioServicePushToCloudAction.KeyData;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugContants;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.AbstractJobManager;
@@ -95,7 +97,9 @@ public class CloudJobManager extends AbstractJobManager {
 	}
 
 	/**
-	 * Sub-class of main {@link Task} to include a {@link CountDownLatch} used to retain the scenario lock until the cloud report the task has finished one way or another.
+	 * Sub-class of main {@link Task} to include a {@link CountDownLatch} used to
+	 * retain the scenario lock until the cloud report the task has finished one way
+	 * or another.
 	 * 
 	 */
 	static class CloudTask extends Task {
@@ -110,7 +114,8 @@ public class CloudJobManager extends AbstractJobManager {
 		parentProgressMonitor.beginTask("Sending scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 
-		// Temporary files to clean up on failure or success. Successful upload with move the required temp files into final location
+		// Temporary files to clean up on failure or success. Successful upload with
+		// move the required temp files into final location
 		File anonymisationMap = null;
 		KeyData keyData = null;
 		File tmpEncryptedScenarioFile = null;
@@ -135,7 +140,8 @@ public class CloudJobManager extends AbstractJobManager {
 			IScenarioDataProvider copyScenarioDataProvider = null;
 			LNGScenarioModel copyScenarioModel = null;
 
-			// Create a copy of the scenario so we can strip out excess data and later anonymise it.
+			// Create a copy of the scenario so we can strip out excess data and later
+			// anonymise it.
 			try (IScenarioDataProvider originalScenarioDataProvider = originalModelRecord.aquireScenarioDataProvider("ScenarioServicePushToCloudAction:doUploadScenario")) {
 				final LNGScenarioModel originalScenarioModel = originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
@@ -165,12 +171,15 @@ public class CloudJobManager extends AbstractJobManager {
 				}
 			}
 
-			// // Try to evaluate the scenario - if this fails, then it would fail on the cloud server too.
+			// // Try to evaluate the scenario - if this fails, then it would fail on the
+			// cloud server too.
 			// try {
 			// evaluateScenario(userSettings, progressMonitor, copyScenarioDataProvider);
 			// } catch (final Exception e) {
 			// LOG.error(e.getMessage(), e);
-			// throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
+			// throw new
+			// CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_EVALUATING,
+			// Type.FAILED_TO_EVALUATE);
 			// }
 
 			keyData = ScenarioServicePushToCloudAction.generateKeyPairs(progressMonitor, UUID.randomUUID().toString());
@@ -185,7 +194,8 @@ public class CloudJobManager extends AbstractJobManager {
 			filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MF_SCENARIO_NAME, tmpEncryptedScenarioFile));
 
 			// Add (unused) jvm options
-			// filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MF_JVM_OPTS_NAME, createJVMOptions()));
+			// filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MF_JVM_OPTS_NAME,
+			// createJVMOptions()));
 
 			// // Add in the parameters
 			filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MF_PARAMETERS_NAME, task.job.getTaskParameters()));
@@ -257,7 +267,7 @@ public class CloudJobManager extends AbstractJobManager {
 		job.setScenarioInstance(scenarioInstance);
 
 		final ScenarioModelRecord scenarioModelRecord = SSDataManager.Instance.getModelRecordChecked(job.getScenarioInstance());
-		
+
 		// We need a special unique thread for exclusive locking.
 		final ScenarioModelReferenceThread thread = new ScenarioModelReferenceThread(job.getScenarioName(), scenarioModelRecord, sdp -> {
 			final ScenarioLock scenarioLock = sdp.getModelReference().getLock();
@@ -429,6 +439,11 @@ public class CloudJobManager extends AbstractJobManager {
 			// Create a resource to load the result into
 			rr = ed.getResourceSet().createResource(URI.createFileURI(solutionFile.getAbsolutePath()));
 			final Resource pRR = rr;
+
+			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+				LOG.trace("Import Result (%s): Loading result from %s", task.remoteJobID, rr.getURI().toString());
+			}
+
 			// Load in the result.
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
 				final Map<String, URIConverter.Cipher> options = new HashMap<>();
@@ -436,12 +451,20 @@ public class CloudJobManager extends AbstractJobManager {
 				pRR.load(options);
 			});
 
+			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+				LOG.trace("Import Result (%s): Loaded result from %s", task.remoteJobID, rr.getURI().toString());
+			}
+
 			final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
 			assert res != null;
 
 			// "Resolve" the references. The result references to the main scenario may be
 			// "proxy" objects
 			EcoreUtil.resolveAll(ed.getResourceSet());
+
+			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+				LOG.trace("Import Result (%s): Resolved cross-references", task.remoteJobID);
+			}
 
 			// Remove result from it's resource
 			rr.getContents().clear();
@@ -454,6 +477,11 @@ public class CloudJobManager extends AbstractJobManager {
 
 			return true;
 		} catch (final Exception e) {
+
+			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+				LOG.trace(String.format("Import Result (%s): Exception during import %s", task.remoteJobID, e.getMessage()), e);
+			}
+
 			// Check for a specific issues of bad datamodel
 			if (e.getCause() instanceof final IOWrappedException we) {
 				if (we.getCause() instanceof final FeatureNotFoundException fnfe) {

@@ -28,6 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugContants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
@@ -129,6 +131,11 @@ class CloudOptimisationDataUpdater {
 				final IGatewayResponse downloadResult = downloadData(cRecord, temp);
 				if (downloadResult == null) {
 					// Failed, probably offline, we can try again
+
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Null gateway response", cRecord.getJobid());
+					}
+
 					return;
 				} else if (!downloadResult.isResultDownloaded()) {
 					// Download failed, but we got a response from our gateway.
@@ -138,10 +145,18 @@ class CloudOptimisationDataUpdater {
 						cRecord.setComplete(true);
 						// Record the failure state
 						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to download result"));
+
+						if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+							LOG.trace("Download Result (%s): Download failed - no further retries", cRecord.getJobid());
+						}
 					}
 					return;
 
 				} else {
+
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Result downloaded to %s", cRecord.getJobid(), temp.getAbsolutePath());
+					}
 
 					// Successful download. Now we need to de-crypt the result and import it.
 					final File keyfileFile = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
@@ -176,6 +191,10 @@ class CloudOptimisationDataUpdater {
 
 						}
 					});
+					
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Result re-encrypted to %s", cRecord.getJobid(), solutionFile.getAbsolutePath());
+					}
 
 					// Nothing further for this task to do regarding upstream.
 					cRecord.setComplete(true);
@@ -212,6 +231,7 @@ class CloudOptimisationDataUpdater {
 					try {
 						ret[0] = client.downloadTo(rtd.getJobid(), f, WrappedProgressMonitor.wrapMonitor(monitor));
 					} catch (final Exception e) {
+						LOG.error("Unable to read/write to user id file in cloud-opti folder", e);
 						// return Status.
 						e.printStackTrace();
 					} finally {
@@ -327,6 +347,7 @@ class CloudOptimisationDataUpdater {
 				userid = userId.toString();
 			} catch (final IOException e) {
 				e.printStackTrace();
+				LOG.error("Unable to read/write to user id file in cloud-opti folder", e);
 			}
 		} else if (userIdFile.canRead()) {
 			try (BufferedReader reader = new BufferedReader(new FileReader(userIdFile))) {
@@ -334,6 +355,7 @@ class CloudOptimisationDataUpdater {
 				client.setUserId(userid);
 			} catch (final IOException e) {
 				e.printStackTrace();
+				LOG.error("Unable to read/write to user id file in cloud-opti folder", e);
 			}
 		} else {
 			LOG.error("Unable to read/write to user id file in cloud-opti folder");
@@ -363,6 +385,10 @@ class CloudOptimisationDataUpdater {
 				r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
 			} catch (final Exception e) {
 				// Keep old status if there is some kind of exception.
+
+				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
+					LOG.trace(String.format("Status Result (%s): Exception getting statues %s", r.getJobid(), e.getMessage()), e);
+				}
 			}
 
 			if (r.getStatus().isNotFound()) {
@@ -459,10 +485,10 @@ class CloudOptimisationDataUpdater {
 	}
 
 	/**
-	 * Returns records from the master list of records. Returns null if no record found.
+	 * Returns records from the master list of records. Returns null if no record
+	 * found.
 	 *
-	 * @param jobId
-	 *            - jobId if next arg is false
+	 * @param jobId  - jobId if next arg is false
 	 * @param isUUID
 	 * @return
 	 */
