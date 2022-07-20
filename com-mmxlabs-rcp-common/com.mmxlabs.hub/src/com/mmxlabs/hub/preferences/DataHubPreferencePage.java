@@ -92,6 +92,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		if (editor != null) {
 			editor.dispose();
 		}
+		
+		super.dispose();
 	}
 
 	protected String loginButtonText = "Login";
