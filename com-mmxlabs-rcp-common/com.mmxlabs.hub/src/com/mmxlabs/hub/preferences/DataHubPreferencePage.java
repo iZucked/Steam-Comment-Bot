@@ -61,7 +61,7 @@ import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	private static Logger LOG = LoggerFactory.getLogger(DataHubPreferencePage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataHubPreferencePage.class);
 
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
