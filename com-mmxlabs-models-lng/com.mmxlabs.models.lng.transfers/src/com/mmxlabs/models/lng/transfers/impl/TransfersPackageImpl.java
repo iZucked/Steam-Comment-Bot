@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -546,8 +547,11 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 
 		initEClass(transferRecordEClass, TransferRecord.class, "TransferRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferRecord_TransferAgreement(), this.getTransferAgreement(), null, "transferAgreement", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferRecord_Lhs(), theCargoPackage.getLoadSlot(), null, "lhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferRecord_Rhs(), theCargoPackage.getDischargeSlot(), null, "rhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		EGenericType g1 = createEGenericType(theCargoPackage.getSlot());
+		EGenericType g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getTransferRecord_Lhs(), g1, null, "lhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecord_Rhs(), this.getTransferRecord(), null, "rhs", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_CargoReleaseDate(), theDateTimePackage.getLocalDate(), "cargoReleaseDate", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_PricingDate(), theDateTimePackage.getLocalDate(), "pricingDate", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

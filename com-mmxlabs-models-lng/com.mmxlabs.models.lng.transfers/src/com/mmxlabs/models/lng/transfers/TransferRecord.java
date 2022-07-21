@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.transfers;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -66,44 +67,98 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lhs</em>' reference.
-	 * @see #setLhs(LoadSlot)
+	 * @see #isSetLhs()
+	 * @see #unsetLhs()
+	 * @see #setLhs(Slot)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_Lhs()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
-	LoadSlot getLhs();
+	Slot<?> getLhs();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getLhs <em>Lhs</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Lhs</em>' reference.
+	 * @see #isSetLhs()
+	 * @see #unsetLhs()
 	 * @see #getLhs()
 	 * @generated
 	 */
-	void setLhs(LoadSlot value);
+	void setLhs(Slot<?> value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getLhs <em>Lhs</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetLhs()
+	 * @see #getLhs()
+	 * @see #setLhs(Slot)
+	 * @generated
+	 */
+	void unsetLhs();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getLhs <em>Lhs</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Lhs</em>' reference is set.
+	 * @see #unsetLhs()
+	 * @see #getLhs()
+	 * @see #setLhs(Slot)
+	 * @generated
+	 */
+	boolean isSetLhs();
 
 	/**
 	 * Returns the value of the '<em><b>Rhs</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Rhs</em>' reference.
-	 * @see #setRhs(DischargeSlot)
+	 * @see #isSetRhs()
+	 * @see #unsetRhs()
+	 * @see #setRhs(TransferRecord)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_Rhs()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
-	DischargeSlot getRhs();
+	TransferRecord getRhs();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRhs <em>Rhs</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Rhs</em>' reference.
+	 * @see #isSetRhs()
+	 * @see #unsetRhs()
 	 * @see #getRhs()
 	 * @generated
 	 */
-	void setRhs(DischargeSlot value);
+	void setRhs(TransferRecord value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRhs <em>Rhs</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRhs()
+	 * @see #getRhs()
+	 * @see #setRhs(TransferRecord)
+	 * @generated
+	 */
+	void unsetRhs();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRhs <em>Rhs</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Rhs</em>' reference is set.
+	 * @see #unsetRhs()
+	 * @see #getRhs()
+	 * @see #setRhs(TransferRecord)
+	 * @generated
+	 */
+	boolean isSetRhs();
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Release Date</b></em>' attribute.

@@ -91,13 +91,13 @@
              factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
              id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
              ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
-             referenceEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+             referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
        </valueProvider>
        <valueProvider
              factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
              id="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
              ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
-             referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+             referenceEClass="com.mmxlabs.models.lng.transfers.TransferRecord">
        </valueProvider>
     </extension>
     <extension

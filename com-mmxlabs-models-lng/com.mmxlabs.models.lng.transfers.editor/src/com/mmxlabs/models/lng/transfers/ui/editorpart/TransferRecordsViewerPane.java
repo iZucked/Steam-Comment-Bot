@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.transfers.ui.editorpart;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,27 +73,27 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				getCommandHandler()));
 		addTypicalColumn("Stale", new BooleanFlagAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Stale(), //
 				getCommandHandler()));
-
 	}
 
 	private Action createAddAction() {
 		addAction = new RunnableAction("Add", CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), () -> {
 			final CompoundCommand cmd = new CompoundCommand("New transfer record");
-			final TransferRecord ta = TransfersFactory.eINSTANCE.createTransferRecord();
+			final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
+			tr.setCargoReleaseDate(LocalDate.now());
 			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
 			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
 			TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
 			if (tm == null) {
 				tm = TransfersFactory.eINSTANCE.createTransferModel();
-				tm.getTransferRecords().add(ta);
+				tm.getTransferRecords().add(tr);
 				cmd.append(SetCommand.create(getEditingDomain(), scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(), tm));
 			} else {
 				cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getTransferModel(getScenarioEditingLocation().getScenarioDataProvider()),
-						TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_RECORDS, Collections.singleton(ta)));
+						TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_RECORDS, Collections.singleton(tr)));
 			}
 			final CommandStack commandStack = getEditingDomain().getCommandStack();
 			commandStack.execute(cmd);
-			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), ta, commandStack.getMostRecentCommand());
+			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), tr, commandStack.getMostRecentCommand());
 		});
 		return addAction;
 	}
