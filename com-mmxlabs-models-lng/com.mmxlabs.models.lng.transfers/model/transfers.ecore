@@ -26,8 +26,13 @@
     <eOperations name="getRecordOrDelegatePriceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getRecordOrDelegateIncoterm" eType="#//TransferIncoterm"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferAgreement" eType="#//TransferAgreement"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" unsettable="true">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//TransferRecord"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoReleaseDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         unsettable="true">
