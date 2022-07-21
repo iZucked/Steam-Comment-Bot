@@ -28,7 +28,7 @@ public class CloudOptiDebugOptionsProvider implements IDebugOptionsProvider {
 
 	@Override
 	public EnumSet<DebugOptionsLevel> getSupportedLevels() {
-		return EnumSet.of(DebugOptionsLevel.NONE, DebugOptionsLevel.FULL);
+		return EnumSet.of(DebugOptionsLevel.OFF, DebugOptionsLevel.ON);
 	}
 
 	@Override
@@ -39,10 +39,10 @@ public class CloudOptiDebugOptionsProvider implements IDebugOptionsProvider {
 		}
 		
 		// Enable logging if needed
-		if (lvl != DebugOptionsLevel.NONE && !debugOptions.isDebugEnabled()) {
+		if (lvl != DebugOptionsLevel.OFF && !debugOptions.isDebugEnabled()) {
 			debugOptions.setDebugEnabled(true);
 		}
-		final String state = Boolean.toString(lvl != DebugOptionsLevel.NONE);
+		final String state = Boolean.toString(lvl != DebugOptionsLevel.OFF);
 		debugOptions.setOption(CloudOptiDebugContants.DEBUG_DOWNLOAD, state);
 		debugOptions.setOption(CloudOptiDebugContants.DEBUG_IMPORT, state);
 		debugOptions.setOption(CloudOptiDebugContants.DEBUG_POLL, state);
@@ -53,7 +53,7 @@ public class CloudOptiDebugOptionsProvider implements IDebugOptionsProvider {
 	public DebugOptionsLevel getCurrentLevel(final DebugOptions debugOptions) {
 
 		if (debugOptions.isDebugEnabled()) {
-			DebugOptionsLevel lvl = DebugOptionsLevel.NONE;
+			DebugOptionsLevel lvl = DebugOptionsLevel.OFF;
 			int count = 0;
 			if (debugOptions.getBooleanOption(CloudOptiDebugContants.DEBUG_DOWNLOAD, false)) {
 				++count;
@@ -68,12 +68,12 @@ public class CloudOptiDebugOptionsProvider implements IDebugOptionsProvider {
 				lvl = DebugOptionsLevel.PARTIAL;
 			}
 			if (count == 3) {
-				lvl = DebugOptionsLevel.FULL;
+				lvl = DebugOptionsLevel.ON;
 			}
 			return lvl;
 		}
 
-		return DebugOptionsLevel.NONE;
+		return DebugOptionsLevel.OFF;
 	}
 
 }

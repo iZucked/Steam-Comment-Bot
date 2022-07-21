@@ -84,7 +84,7 @@ public class DebugOptionsPreferencePage extends PreferencePage implements IWorkb
 
 		{
 			final Label descLabel = new Label(c, SWT.NONE);
-			descLabel.setText("This page shows various debug logging options for LiNGO. These should normally be disabled and set to None unless requested by Minimax Labs.");
+			descLabel.setText("This page shows various debug logging options for LiNGO. These should normally be disabled and set to Off unless requested by Minimax Labs.");
 			descLabel.setLayoutData(GridDataFactory.fillDefaults().create());
 
 			// Just for inserting some space
@@ -134,14 +134,12 @@ public class DebugOptionsPreferencePage extends PreferencePage implements IWorkb
 				public String getText(final Object element) {
 					if (element instanceof final DebugOptionsLevel lvl) {
 						switch (lvl) {
-						case FULL:
-							return "Full";
-						case BASIC:
-							return "Basic";
+						case OFF:
+							return "Off";
+						case ON:
+							return "On";
 						case PARTIAL:
 							return "Partial (externally configured)";
-						case NONE:
-							return "None";
 						}
 						return lvl.toString();
 					}
