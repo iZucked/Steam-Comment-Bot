@@ -11,8 +11,10 @@ mappings = {
   'wrapped.com.squareup.okhttp3.okhttp' : { 'name':'okhttp','group':'com.squareup.okhttp3' }
 }
 
-infile = sys.argv[2]
-outfile = sys.argv[3]
+infile = sys.argv[1]
+outfile = sys.argv[2]
+
+print("Converting", infile, "to", outfile")
 
 bom = None
 with open(infile) as json_data:
