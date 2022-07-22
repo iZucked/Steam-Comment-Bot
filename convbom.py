@@ -7,7 +7,7 @@ mappings = {
   'com.fasterxml.jackson.datatype.jackson-datatype-jsr310' : { 'name':'jackson-datatype-jsr310','group':'com.fasterxml.jackson.datatype' },
   'com.fasterxml.jackson.core.jackson-core' : { 'name':'jackson-core','group':'com.fasterxml.jackson.core' },
   'com.fasterxml.jackson.core.jackson-annotations' : { 'name':'jackson-annotations','group':'com.fasterxml.jackson.core' },
-  'org.apache.log4j' : { 'name':'log4j','group':'log4j', 'version':'1.2.15' },
+  'org.apache.log4j' : { 'name':'log4j','group':'log4j', 'stripQualifier': true },
   'wrapped.com.squareup.okhttp3.okhttp' : { 'name':'okhttp','group':'com.squareup.okhttp3' }
 }
 
@@ -30,6 +30,10 @@ for component in bom['components']:
         #    component['version'] = v['version']
         #    
         #u = { **component , **v}
+        
+        if 'stripQualifier' in v:
+           v['version'] =    component['version'][:component['version'].rindex('.')]
+           print (v['version'] )
         u = component.copy()
         u.update(v)
         component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
