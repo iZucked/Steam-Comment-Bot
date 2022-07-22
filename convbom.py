@@ -23,8 +23,8 @@ mappings = {
   'org.bouncycastle.bcpg' : { 'name':'bcpg-jdk16','group':'org.bouncycastle' },
   'org.bouncycastle.bcutil' : { 'name':'bcutil-jdk15on','group':'org.bouncycastle' },
   
-  'ch.qos.logback.classic' : { 'name':'logback-classic','group':'ch.qos.logback' }
-  'ch.qos.logback.core' : { 'name':'logback-core','group':'ch.qos.logback' }
+  'ch.qos.logback.classic' : { 'name':'logback-classic','group':'ch.qos.logback' },
+  'ch.qos.logback.core' : { 'name':'logback-core','group':'ch.qos.logback' },
   'ch.qos.logback.slf4j' : { 'name':'logback-classic','group':'ch.qos.logback' } ## SLF4j is really part of the main classic jar file
 }
 
