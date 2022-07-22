@@ -14,6 +14,8 @@ mappings = {
   'wrapped.org.testcontainers.testcontainers' : { 'name':'testcontainers','group':'org.testcontainers' },
   'wrapped.org.testcontainers.junit-jupiter' : { 'name':'junit-jupiter','group':'org.testcontainers' },
   
+  'com.google.guava' : { 'name':'failureaccess','group':'com.google.guava' },
+  'com.google.guava.failureaccess' : { 'name':'guava','group':'com.google.guava' },
   'wrapped.com.google.errorprone.error_prone_annotations' : { 'name':'error_prone_annotations','group':'com.google.errorprone' },
   
   'org.bouncycastle.bcprov' : { 'name':'bcprov-jdk15on</','group':'org.bouncycastle' },
