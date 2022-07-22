@@ -27,7 +27,9 @@ for component in bom['components']:
         #if 'version' in v:
         #    component['version'] = v['version']
         #    
-        u = { **component , **v}
+        #u = { **component , **v}
+        u = component.copy()
+        u.update(v)
         component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
         component['purl'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
 
