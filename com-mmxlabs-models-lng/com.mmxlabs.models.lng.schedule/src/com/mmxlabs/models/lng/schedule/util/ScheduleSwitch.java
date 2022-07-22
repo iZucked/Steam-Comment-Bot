@@ -64,7 +64,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage
  * @generated
  */
-public class ScheduleSwitch<T> extends Switch<T> {
+public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -578,6 +578,13 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseMatchingContractDetails(originPortRepositioningFeeTermDetails);
 				if (result == null) result = caseUUIDObject(originPortRepositioningFeeTermDetails);
 				if (result == null) result = caseMMXObject(originPortRepositioningFeeTermDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS: {
+				TransferRecordPNLDetails transferRecordPNLDetails = (TransferRecordPNLDetails)theEObject;
+				T result = caseTransferRecordPNLDetails(transferRecordPNLDetails);
+				if (result == null) result = caseGeneralPNLDetails(transferRecordPNLDetails);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1407,6 +1414,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOriginPortRepositioningFeeTermDetails(OriginPortRepositioningFeeTermDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Transfer Record PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Transfer Record PNL Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTransferRecordPNLDetails(TransferRecordPNLDetails object) {
 		return null;
 	}
 

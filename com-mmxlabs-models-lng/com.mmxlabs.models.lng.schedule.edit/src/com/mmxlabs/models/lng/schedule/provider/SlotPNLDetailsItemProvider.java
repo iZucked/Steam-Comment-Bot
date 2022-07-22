@@ -178,6 +178,11 @@ public class SlotPNLDetailsItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createCharterContractFeeDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createTransferRecordPNLDetails()));
 	}
 
 }

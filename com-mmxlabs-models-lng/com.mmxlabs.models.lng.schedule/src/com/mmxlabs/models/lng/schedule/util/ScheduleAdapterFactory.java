@@ -106,8 +106,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleSwitch<Adapter> modelSwitch =
-		new ScheduleSwitch<Adapter>() {
+	protected ScheduleSwitch<@Nullable Adapter> modelSwitch =
+		new ScheduleSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseScheduleModel(ScheduleModel object) {
 				return createScheduleModelAdapter();
@@ -327,6 +327,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseOriginPortRepositioningFeeTermDetails(OriginPortRepositioningFeeTermDetails object) {
 				return createOriginPortRepositioningFeeTermDetailsAdapter();
+			}
+			@Override
+			public Adapter caseTransferRecordPNLDetails(TransferRecordPNLDetails object) {
+				return createTransferRecordPNLDetailsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -1135,6 +1139,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOriginPortRepositioningFeeTermDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails <em>Transfer Record PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails
+	 * @generated
+	 */
+	public Adapter createTransferRecordPNLDetailsAdapter() {
 		return null;
 	}
 

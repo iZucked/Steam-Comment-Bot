@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultTransferModelDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
@@ -353,6 +354,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultExposureDataProvider.class).in(Singleton.class);
 		bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
 		bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
+		
+		bind(DefaultTransferModelDataProviderEditor.class).in(Singleton.class);
+		bind(ITransferModelDataProvider.class).to(DefaultTransferModelDataProviderEditor.class);
+		bind(ITransferModelDataProviderEditor.class).to(DefaultTransferModelDataProviderEditor.class);
 
 		bind(DefaultPaperDealDataProvider.class).in(Singleton.class);
 		bind(IPaperDealDataProvider.class).to(DefaultPaperDealDataProvider.class);

@@ -7975,6 +7975,97 @@ public interface SchedulePackage extends EPackage {
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS_OPERATION_COUNT = NOTIONAL_JOURNEY_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl <em>Transfer Record PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS = 55;
+
+	/**
+	 * The feature id for the '<em><b>Transfer Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>From Entity Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>From Entity Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>From Entity Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>To Entity Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>To Entity Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>To Entity Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
+
+	/**
+	 * The number of structural features of the '<em>Transfer Record PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 7;
+
+	/**
+	 * The number of operations of the '<em>Transfer Record PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7982,7 +8073,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 57;
+	int FUEL_UNIT = 58;
 
 
 	/**
@@ -7993,7 +8084,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 56;
+	int FUEL = 57;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -8003,7 +8094,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 55;
+	int SEQUENCE_TYPE = 56;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -8013,7 +8104,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 58;
+	int CAPACITY_VIOLATION_TYPE = 59;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -8023,7 +8114,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 59;
+	int PORT_VISIT_LATENESS_TYPE = 60;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -8033,7 +8124,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 60;
+	int SLOT_ALLOCATION_TYPE = 61;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -8043,7 +8134,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 61;
+	int PANAMA_BOOKING_PERIOD = 62;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -8053,7 +8144,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 62;
+	int CALENDAR = 63;
 
 
 	/**
@@ -8064,7 +8155,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 63;
+	int ITERABLE = 64;
 
 
 	/**
@@ -8075,7 +8166,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 64;
+	int OBJECT = 65;
 
 
 	/**
@@ -10918,6 +11009,93 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getOriginPortRepositioningFeeTermDetails_OriginPort();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails <em>Transfer Record PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Transfer Record PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails
+	 * @generated
+	 */
+	EClass getTransferRecordPNLDetails();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferPrice <em>Transfer Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transfer Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferPrice()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_TransferPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName <em>From Entity Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>From Entity Name</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_FromEntityName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityRevenue <em>From Entity Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>From Entity Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityRevenue()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_FromEntityRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityCost <em>From Entity Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>From Entity Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityCost()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_FromEntityCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName <em>To Entity Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>To Entity Name</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_ToEntityName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityRevenue <em>To Entity Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>To Entity Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityRevenue()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_ToEntityRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityCost <em>To Entity Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>To Entity Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityCost()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EAttribute getTransferRecordPNLDetails_ToEntityCost();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13263,6 +13441,72 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT = eINSTANCE.getOriginPortRepositioningFeeTermDetails_OriginPort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl <em>Transfer Record PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getTransferRecordPNLDetails()
+		 * @generated
+		 */
+		EClass TRANSFER_RECORD_PNL_DETAILS = eINSTANCE.getTransferRecordPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Transfer Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE = eINSTANCE.getTransferRecordPNLDetails_TransferPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>From Entity Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME = eINSTANCE.getTransferRecordPNLDetails_FromEntityName();
+
+		/**
+		 * The meta object literal for the '<em><b>From Entity Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE = eINSTANCE.getTransferRecordPNLDetails_FromEntityRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>From Entity Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST = eINSTANCE.getTransferRecordPNLDetails_FromEntityCost();
+
+		/**
+		 * The meta object literal for the '<em><b>To Entity Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME = eINSTANCE.getTransferRecordPNLDetails_ToEntityName();
+
+		/**
+		 * The meta object literal for the '<em><b>To Entity Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE = eINSTANCE.getTransferRecordPNLDetails_ToEntityRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>To Entity Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = eINSTANCE.getTransferRecordPNLDetails_ToEntityCost();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
