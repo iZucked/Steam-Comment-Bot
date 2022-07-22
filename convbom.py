@@ -31,7 +31,7 @@ mappings = {
 infile = sys.argv[1]
 outfile = sys.argv[2]
 
-print("Converting", infile, "to", outfile")
+print("Converting", infile, "to", outfile)
 
 bom = None
 with open(infile) as json_data:
