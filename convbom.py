@@ -1,13 +1,18 @@
 import json
 import sys
 
+## This script is used to map the p2 generated URL to something DepTrack understands. Most dependencies have a maven equivalent or have been imported directly from maven.
+
+## Mapping the eclipse bundle name to the maven artifactif and groupid.
+## Some bundles will have an osgi version and qualifier that does not map directly to the maven version.
+## These need special treatment. For now stripQualifier from the qualifier component from the osgi version string.
 mappings = {
   'com.fasterxml.jackson.core.jackson-databind' : { 'name':'jackson-databind','group':'com.fasterxml.jackson.core' },
   'com.fasterxml.jackson.datatype.jackson-datatype-jdk8' : { 'name':'jackson-datatype-jdk8','group':'com.fasterxml.jackson.datatype' },
   'com.fasterxml.jackson.datatype.jackson-datatype-jsr310' : { 'name':'jackson-datatype-jsr310','group':'com.fasterxml.jackson.datatype' },
   'com.fasterxml.jackson.core.jackson-core' : { 'name':'jackson-core','group':'com.fasterxml.jackson.core' },
   'com.fasterxml.jackson.core.jackson-annotations' : { 'name':'jackson-annotations','group':'com.fasterxml.jackson.core' },
-  'org.apache.log4j' : { 'name':'log4j','group':'log4j', 'stripQualifier': true },
+  'org.apache.log4j' : { 'name':'log4j','group':'log4j', 'stripQualifier': 'true' },
   'wrapped.com.squareup.okhttp3.okhttp' : { 'name':'okhttp','group':'com.squareup.okhttp3' },
   'wrapped.com.squareup.okhttp3.okio' : { 'name':'okio','group':'com.squareup.okio' },
   
@@ -54,7 +59,11 @@ for component in bom['components']:
         u = component.copy()
         u.update(v)
         component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
+        ## PURL is the main piece used by deptrack to link back to the original maven artifact and any issues linked to it.
         component['purl'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
+
+## TODO: Run through the deps section and update the name (is the bom-ref or purl used here?)
+
 
 with open(outfile, 'w') as f:
     json.dump(bom, f, indent=4)
