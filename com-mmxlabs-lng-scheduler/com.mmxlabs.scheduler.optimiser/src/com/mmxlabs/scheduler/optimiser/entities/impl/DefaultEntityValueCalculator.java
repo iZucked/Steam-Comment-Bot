@@ -447,7 +447,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 		
-		evaluateTransferPricingPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		if (annotatedSolution != null && entityBookDetailTreeMap != null) {
+			evaluateTransferPricingPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		}
 	}
 	
 	protected void evaluateTransferPricingPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
@@ -494,14 +496,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final Iterator<BasicTransferRecord> iter = records.iterator();
 			BasicTransferRecord previousRecord = null;
 			TranferRecordAnnotation prevAnnotation = null;
-			while (iter.hasNext()) {
-				BasicTransferRecord record = iter.next();
+			for(final BasicTransferRecord currentRecord : records) {
 				
-				int tpPrice = record.getPricingSeries().getValueAtPoint(record.getPricingDate());
+				int tpPrice = getTransferPrice(currentRecord);
 				
 				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
-				annotation.fromEntityName = record.getFromEntity().getName();
-				annotation.toEntityName = record.getToEntity().getName();
+				annotation.fromEntity = currentRecord.getFromEntity();
+				annotation.toEntity = currentRecord.getToEntity();
 				annotation.tpPrice = tpPrice;
 				
 				long purchaseCost = loadPurchaseCost;
@@ -520,29 +521,38 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				
 				// Add previous annotation into the book
 				if (prevAnnotation != null && previousRecord != null) {
-					addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, previousRecord.getToEntity(), previousRecord.getFromEntity(), prevAnnotation);
+					addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
 				}
 				
-				previousRecord = record;
+				previousRecord = currentRecord;
 				prevAnnotation = annotation;
 			}
 			
 			// Add the last annotation into the book
 			if (prevAnnotation != null && previousRecord != null) {
-				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, previousRecord.getToEntity(), previousRecord.getFromEntity(), prevAnnotation);
+				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
 			}
 		}
 	}
 	
+	/**
+	 * Override-able method to add any back-market or contingency time
+	 * @param record
+	 * @return
+	 */
+	protected int getTransferPrice(final BasicTransferRecord record) {
+		return record.getPricingSeries().getValueAtPoint(record.getPricingDate());
+	}
+	
 	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,
-			final IEntity toEntity, final IEntity fromEntity, final TranferRecordAnnotation annotation) {
-		addEntityBookProfit(entityPreTaxProfit, toEntity.getTradingBook(), annotation.toEntityCost);
-		addEntityBookProfit(entityPreTaxProfit, toEntity.getTradingBook(), annotation.toEntityRevenue);
-		addEntityBookProfit(entityPreTaxProfit, fromEntity.getTradingBook(), annotation.fromEntityCost);
-		addEntityBookProfit(entityPreTaxProfit, fromEntity.getTradingBook(), annotation.fromEntityRevenue);
+			final TranferRecordAnnotation annotation) {
+		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityRevenue);
+		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityRevenue);
 		
 		if (entityBookDetailTreeMap != null) {
-			final IDetailTree detailTree = getEntityBookDetails(entityBookDetailTreeMap, toEntity.getTradingBook());
+			final IDetailTree detailTree = getEntityBookDetails(entityBookDetailTreeMap, annotation.fromEntity.getTradingBook());
 			detailTree.addChild(TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY, annotation);
 		}
 	}
@@ -550,7 +560,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private List<BasicTransferRecord> getSortedTransferRecords(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IEntity loadEntity, final IEntity dischargeEntity){
 		final List<BasicTransferRecord> unsorted = transferModelDataProvider.getTransferRecordsForSlot(loadOption);
 		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(dischargeOption));
-		if (unsorted.size() == 1) {
+		if (unsorted.size() <= 1 ) {
 			return unsorted;
 		}
 		
@@ -558,7 +568,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		IEntity toEntity = loadEntity;
 		for (int i = 0; i < unsorted.size(); i++) {
 			for (final BasicTransferRecord r : unsorted) {
-				if (toEntity.equals(loadEntity)) {
+				if (toEntity.equals(r.getFromEntity())) {
 					sorted.add(r);
 					toEntity = r.getToEntity();
 				}

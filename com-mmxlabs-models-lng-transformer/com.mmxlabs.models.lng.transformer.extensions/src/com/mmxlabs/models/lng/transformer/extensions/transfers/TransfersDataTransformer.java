@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.extensions.transfers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,20 +48,31 @@ public class TransfersDataTransformer implements ISlotTransformer {
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 	
+	LNGScenarioModel lngScenarioModel;
+	ModelEntityMap modelEntityMap;
+	final List<IPortSlot> seenSlots = new LinkedList<>();
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
-		transferModelDataProviderEditor.reconsileIPortSlotWithLookupData(optimiserSlot);
+		seenSlots.add(optimiserSlot);
+		
 	}
 	
 	@Override
 	public void startTransforming(LNGScenarioModel lngScenarioModel, ModelEntityMap modelEntityMap, ISchedulerBuilder builder) {
+		this.lngScenarioModel = lngScenarioModel;
+		this.modelEntityMap = modelEntityMap;
+	}
+	
+	@Override
+	public void finishTransforming() {
 		if (true) {
 			if (lngScenarioModel != null) {
 				final TransferModel transferModel = lngScenarioModel.getTransferModel();
 				if (transferModel != null) {					
 					transferModelDataProviderEditor.addLookupData(createLookUpData(transferModel, modelEntityMap));
 				}
+				seenSlots.forEach(transferModelDataProviderEditor::reconsileIPortSlotWithLookupData);
 			}
 		}
 	}

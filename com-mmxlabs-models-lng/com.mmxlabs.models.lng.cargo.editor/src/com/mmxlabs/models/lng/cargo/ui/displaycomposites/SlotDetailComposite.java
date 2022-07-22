@@ -484,7 +484,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		esPricing.init(eo);
 		esWindow.init(eo);
 		esTerms.init(eo);
-		esOther.init(eo);
+		//esOther.init(eo);
 	}
 
 	@Override

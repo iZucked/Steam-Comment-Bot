@@ -57,24 +57,24 @@ public class TransfersDataExtensionExporter implements IExporterExtension {
 					// Find child
 
 					if (profitAndLoss != null) {
-						{
-							final TranferRecordAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY, TranferRecordAnnotation.class);
-							if (annotation != null) {
-								final IEntity optimiserEntity = SlotContractHelper.findDetailsAnnotationEntity(profitAndLoss, TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY);
-								final TransferRecordPNLDetails details = ScheduleFactory.eINSTANCE.createTransferRecordPNLDetails();
-								
-								details.setTransferPrice(OptimiserUnitConvertor.convertToExternalPrice(annotation.tpPrice));
-								details.setFromEntityName(annotation.fromEntityName);
-								details.setFromEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.fromEntityCost));
-								details.setFromEntityRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.fromEntityRevenue));
-								details.setToEntityName(annotation.toEntityName);
-								details.setToEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityCost));
-								details.setToEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityRevenue));
-	
-								final BaseLegalEntity modelEntity = modelEntityMap.getModelObjectNullChecked(optimiserEntity, BaseLegalEntity.class);
-								ExporterExtensionUtils.addEntityPNLDetails(profitAndLossContainer, modelEntity, details);
-							}
+						for(final TranferRecordAnnotation annotation : SlotContractHelper.findAllDetailsAnnotation(profitAndLoss, TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY, TranferRecordAnnotation.class)) {
+
+							final IEntity optimiserEntity = SlotContractHelper.findDetailsAnnotationEntity(profitAndLoss, TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY);
+							final TransferRecordPNLDetails details = ScheduleFactory.eINSTANCE.createTransferRecordPNLDetails();
+
+							details.setTransferPrice(OptimiserUnitConvertor.convertToExternalPrice(annotation.tpPrice));
+							details.setFromEntityName(annotation.fromEntity.getName());
+							details.setFromEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.fromEntityCost));
+							details.setFromEntityRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.fromEntityRevenue));
+							details.setToEntityName(annotation.toEntity.getName());
+							details.setToEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityCost));
+							details.setToEntityRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityRevenue));
+
+							final BaseLegalEntity modelEntity = modelEntityMap.getModelObjectNullChecked(annotation.fromEntity, BaseLegalEntity.class);
+							//ExporterExtensionUtils.addEntityPNLDetails(profitAndLossContainer, modelEntity, details);
+							profitAndLossContainer.getGeneralPNLDetails().add(details);
 						}
+						
 					}
 				}
 			}
