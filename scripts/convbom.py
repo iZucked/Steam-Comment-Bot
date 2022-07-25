@@ -22,8 +22,8 @@ bom = None
 with open(infile) as json_data:
     bom = json.load(json_data)
 
-
-for component in bom['components']:
+componentsToRemove = []
+for component in list(bom['components']):
     if component['name'] in mappings:
         v = mappings[component['name']]
         #component['name'] = v['name']
@@ -43,6 +43,11 @@ for component in bom['components']:
         
         #component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
         component['purl'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
+       
+	else if component['name'].startswith("com.mmxlabs"):
+		## Remove out internal components
+		bom['components'].remove(component)
+			
 
 with open(outfile, 'w') as f:
     json.dump(bom, f, indent=4)
