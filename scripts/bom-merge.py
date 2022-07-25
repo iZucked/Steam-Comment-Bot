@@ -27,7 +27,7 @@ if 'dependencies' in bom2:
 	for dependency in bom2['dependencies']:
 	    bom['dependencies'].append(dependency)
 
-if 'component' in bom2:
+if 'components' in bom2:
 	for component in bom2['components']:
 	    bom['components'].append(component)
 
