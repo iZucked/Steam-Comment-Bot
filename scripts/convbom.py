@@ -41,7 +41,7 @@ for component in bom['components']:
         
         ## PURL is the main piece used by deptrack to link back to the original maven artifact and any issues linked to it.
         
-        component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
+        #component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
         component['purl'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
 
 with open(outfile, 'w') as f:
