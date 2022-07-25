@@ -3,9 +3,9 @@ import sys
 
  
 
-infile1 = sys.argv[2]
-infile2 = sys.argv[3]
-outfile = sys.argv[4]
+infile1 = sys.argv[1]
+infile2 = sys.argv[2]
+outfile = sys.argv[3]
 
 bom = None
 with open(infile1,  encoding='utf-8') as json_data:
