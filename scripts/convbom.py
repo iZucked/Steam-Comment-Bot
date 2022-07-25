@@ -44,7 +44,7 @@ for component in list(bom['components']):
         #component['bom-ref'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
         component['purl'] = 'pkg:maven/{group}/{name}@{version}?type=jar'.format(**u)
        
-	else if component['name'].startswith("com.mmxlabs"):
+	elif component['name'].startswith("com.mmxlabs"):
 		## Remove out internal components
 		bom['components'].remove(component)
 			
