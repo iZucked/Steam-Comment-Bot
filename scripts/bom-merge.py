@@ -1,6 +1,6 @@
 import json
 import sys
-
+import io
  
 
 infile1 = sys.argv[1]
@@ -8,12 +8,12 @@ infile2 = sys.argv[2]
 outfile = sys.argv[3]
 
 bom = None
-with open(infile1,  encoding='utf-8') as json_data:
+with io.open(infile1,  encoding='utf-8') as json_data:
     bom = json.load(json_data)
 
 
 bom2 = None
-with open(infile2,  encoding='utf-8') as json_data:
+with io.open(infile2,  encoding='utf-8') as json_data:
     bom2 = json.load(json_data)
 
 
