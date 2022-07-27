@@ -735,7 +735,7 @@ public final class UserSettingsHelper {
 		// Check period optimisation is permitted
 
 		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "From (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
