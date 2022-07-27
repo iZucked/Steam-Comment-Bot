@@ -161,10 +161,14 @@ class CloudOptimisationDataUpdater {
 					// Successful download. Now we need to de-crypt the result and import it.
 					final File keyfileFile = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
 					if (!keyfileFile.exists()) {
+						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to find decryption key"));
+						cRecord.setComplete(true);
 						throw new RuntimeException(String.format("Failed to get the result decryption key for job %s", cRecord.getJobid()));
 					}
 					final KeyFileV2 keyfilev2 = KeyFileLoader.loadKeyFile(keyfileFile);
 					if (keyfilev2 == null) {
+						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to load decryption key"));
+						cRecord.setComplete(true);
 						throw new RuntimeException(String.format("Failed to load keyfile from key store for job %s", cRecord.getJobid()));
 					}
 
