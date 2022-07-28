@@ -271,6 +271,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DesSpacingAllocation" eSuperTypes="#//SpacingAllocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselCharter" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselCharter"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="desSpacingRows" upperBound="-1"
         eType="#//DesSpacingRow" containment="true"/>
