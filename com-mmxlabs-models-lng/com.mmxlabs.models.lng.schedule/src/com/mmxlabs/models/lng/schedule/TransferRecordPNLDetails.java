@@ -2,6 +2,9 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.mmxcore.NamedObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -12,11 +15,12 @@ package com.mmxlabs.models.lng.schedule;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferRecord <em>Transfer Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferPrice <em>Transfer Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName <em>From Entity Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntity <em>From Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityRevenue <em>From Entity Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityCost <em>From Entity Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName <em>To Entity Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntity <em>To Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityRevenue <em>To Entity Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityCost <em>To Entity Cost</em>}</li>
  * </ul>
@@ -26,6 +30,28 @@ package com.mmxlabs.models.lng.schedule;
  * @generated
  */
 public interface TransferRecordPNLDetails extends GeneralPNLDetails {
+	/**
+	 * Returns the value of the '<em><b>Transfer Record</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Transfer Record</em>' reference.
+	 * @see #setTransferRecord(NamedObject)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getTransferRecordPNLDetails_TransferRecord()
+	 * @model
+	 * @generated
+	 */
+	NamedObject getTransferRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferRecord <em>Transfer Record</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transfer Record</em>' reference.
+	 * @see #getTransferRecord()
+	 * @generated
+	 */
+	void setTransferRecord(NamedObject value);
+
 	/**
 	 * Returns the value of the '<em><b>Transfer Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -49,26 +75,26 @@ public interface TransferRecordPNLDetails extends GeneralPNLDetails {
 	void setTransferPrice(double value);
 
 	/**
-	 * Returns the value of the '<em><b>From Entity Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>From Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>From Entity Name</em>' attribute.
-	 * @see #setFromEntityName(String)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getTransferRecordPNLDetails_FromEntityName()
+	 * @return the value of the '<em>From Entity</em>' reference.
+	 * @see #setFromEntity(BaseLegalEntity)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getTransferRecordPNLDetails_FromEntity()
 	 * @model
 	 * @generated
 	 */
-	String getFromEntityName();
+	BaseLegalEntity getFromEntity();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName <em>From Entity Name</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntity <em>From Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>From Entity Name</em>' attribute.
-	 * @see #getFromEntityName()
+	 * @param value the new value of the '<em>From Entity</em>' reference.
+	 * @see #getFromEntity()
 	 * @generated
 	 */
-	void setFromEntityName(String value);
+	void setFromEntity(BaseLegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>From Entity Revenue</b></em>' attribute.
@@ -115,26 +141,26 @@ public interface TransferRecordPNLDetails extends GeneralPNLDetails {
 	void setFromEntityCost(int value);
 
 	/**
-	 * Returns the value of the '<em><b>To Entity Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>To Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>To Entity Name</em>' attribute.
-	 * @see #setToEntityName(String)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getTransferRecordPNLDetails_ToEntityName()
+	 * @return the value of the '<em>To Entity</em>' reference.
+	 * @see #setToEntity(BaseLegalEntity)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getTransferRecordPNLDetails_ToEntity()
 	 * @model
 	 * @generated
 	 */
-	String getToEntityName();
+	BaseLegalEntity getToEntity();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName <em>To Entity Name</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntity <em>To Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>To Entity Name</em>' attribute.
-	 * @see #getToEntityName()
+	 * @param value the new value of the '<em>To Entity</em>' reference.
+	 * @see #getToEntity()
 	 * @generated
 	 */
-	void setToEntityName(String value);
+	void setToEntity(BaseLegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>To Entity Revenue</b></em>' attribute.

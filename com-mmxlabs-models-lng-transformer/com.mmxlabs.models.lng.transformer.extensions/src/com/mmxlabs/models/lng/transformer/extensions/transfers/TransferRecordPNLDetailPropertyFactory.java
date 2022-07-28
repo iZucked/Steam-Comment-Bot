@@ -26,12 +26,13 @@ public class TransferRecordPNLDetailPropertyFactory extends AbstractDetailProper
 			details.setName("Transfer Record Details");
 		}
 		{
+			addDetailProperty("Record", "", "", "", transferRecordPNLDetails.getTransferRecord().getName(), new StringFormatLabelProvider("%s"), details);
 			addDetailProperty("Price", "", "$/mmBtu", "", transferRecordPNLDetails.getTransferPrice(), new StringFormatLabelProvider("%.2f"), details);
-			addDetailProperty("From", "", "", "", transferRecordPNLDetails.getFromEntityName(), new StringFormatLabelProvider("%s"), details);
+			addDetailProperty("From", "", "", "", transferRecordPNLDetails.getFromEntity().getName(), new StringFormatLabelProvider("%s"), details);
 			addDetailProperty("Cost", "", "$", "", transferRecordPNLDetails.getFromEntityCost(), new StringFormatLabelProvider("%,d"), details);
 			addDetailProperty("Revenue", "", "$", "", transferRecordPNLDetails.getFromEntityRevenue(), new StringFormatLabelProvider("%,d"), details);
 			// Line break or something?
-			addDetailProperty("To", "", "", "", transferRecordPNLDetails.getToEntityName(), new StringFormatLabelProvider("%s"), details);
+			addDetailProperty("To", "", "", "", transferRecordPNLDetails.getToEntity().getName(), new StringFormatLabelProvider("%s"), details);
 			addDetailProperty("Cost", "", "$", "", transferRecordPNLDetails.getToEntityCost(), new StringFormatLabelProvider("%,d"), details);
 			addDetailProperty("Revenue", "", "$", "", transferRecordPNLDetails.getToEntityRevenue(), new StringFormatLabelProvider("%,d"), details);
 		}

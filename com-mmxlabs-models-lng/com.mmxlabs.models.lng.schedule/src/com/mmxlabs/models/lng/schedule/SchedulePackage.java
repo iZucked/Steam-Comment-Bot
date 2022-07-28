@@ -7985,22 +7985,31 @@ public interface SchedulePackage extends EPackage {
 	int TRANSFER_RECORD_PNL_DETAILS = 55;
 
 	/**
+	 * The feature id for the '<em><b>Transfer Record</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Transfer Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+	int TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>From Entity Name</b></em>' attribute.
+	 * The feature id for the '<em><b>From Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>From Entity Revenue</b></em>' attribute.
@@ -8009,7 +8018,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>From Entity Cost</b></em>' attribute.
@@ -8018,16 +8027,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
+	int TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>To Entity Name</b></em>' attribute.
+	 * The feature id for the '<em><b>To Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>To Entity Revenue</b></em>' attribute.
@@ -8036,7 +8045,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>To Entity Cost</b></em>' attribute.
@@ -8045,7 +8054,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
+	int TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = GENERAL_PNL_DETAILS_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Transfer Record PNL Details</em>' class.
@@ -8054,7 +8063,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 7;
+	int TRANSFER_RECORD_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Transfer Record PNL Details</em>' class.
@@ -11019,6 +11028,17 @@ public interface SchedulePackage extends EPackage {
 	EClass getTransferRecordPNLDetails();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferRecord <em>Transfer Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Transfer Record</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferRecord()
+	 * @see #getTransferRecordPNLDetails()
+	 * @generated
+	 */
+	EReference getTransferRecordPNLDetails_TransferRecord();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getTransferPrice <em>Transfer Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11030,15 +11050,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getTransferRecordPNLDetails_TransferPrice();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName <em>From Entity Name</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntity <em>From Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>From Entity Name</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityName()
+	 * @return the meta object for the reference '<em>From Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntity()
 	 * @see #getTransferRecordPNLDetails()
 	 * @generated
 	 */
-	EAttribute getTransferRecordPNLDetails_FromEntityName();
+	EReference getTransferRecordPNLDetails_FromEntity();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getFromEntityRevenue <em>From Entity Revenue</em>}'.
@@ -11063,15 +11083,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getTransferRecordPNLDetails_FromEntityCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName <em>To Entity Name</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntity <em>To Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>To Entity Name</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityName()
+	 * @return the meta object for the reference '<em>To Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntity()
 	 * @see #getTransferRecordPNLDetails()
 	 * @generated
 	 */
-	EAttribute getTransferRecordPNLDetails_ToEntityName();
+	EReference getTransferRecordPNLDetails_ToEntity();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails#getToEntityRevenue <em>To Entity Revenue</em>}'.
@@ -13453,6 +13473,14 @@ public interface SchedulePackage extends EPackage {
 		EClass TRANSFER_RECORD_PNL_DETAILS = eINSTANCE.getTransferRecordPNLDetails();
 
 		/**
+		 * The meta object literal for the '<em><b>Transfer Record</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD = eINSTANCE.getTransferRecordPNLDetails_TransferRecord();
+
+		/**
 		 * The meta object literal for the '<em><b>Transfer Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13461,12 +13489,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE = eINSTANCE.getTransferRecordPNLDetails_TransferPrice();
 
 		/**
-		 * The meta object literal for the '<em><b>From Entity Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>From Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME = eINSTANCE.getTransferRecordPNLDetails_FromEntityName();
+		EReference TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY = eINSTANCE.getTransferRecordPNLDetails_FromEntity();
 
 		/**
 		 * The meta object literal for the '<em><b>From Entity Revenue</b></em>' attribute feature.
@@ -13485,12 +13513,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST = eINSTANCE.getTransferRecordPNLDetails_FromEntityCost();
 
 		/**
-		 * The meta object literal for the '<em><b>To Entity Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>To Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME = eINSTANCE.getTransferRecordPNLDetails_ToEntityName();
+		EReference TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY = eINSTANCE.getTransferRecordPNLDetails_ToEntity();
 
 		/**
 		 * The meta object literal for the '<em><b>To Entity Revenue</b></em>' attribute feature.

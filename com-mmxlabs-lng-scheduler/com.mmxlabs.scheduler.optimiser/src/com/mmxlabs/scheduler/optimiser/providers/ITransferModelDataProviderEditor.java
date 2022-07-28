@@ -11,5 +11,5 @@ import com.mmxlabs.scheduler.optimiser.transfers.TransfersLookupData;
 public interface ITransferModelDataProviderEditor extends ITransferModelDataProvider {
 	void reconsileIPortSlotWithLookupData(IPortSlot slot);
 	
-	void addLookupData(TransfersLookupData lookupdata);
+	void setLookupData(TransfersLookupData lookupdata);
 }

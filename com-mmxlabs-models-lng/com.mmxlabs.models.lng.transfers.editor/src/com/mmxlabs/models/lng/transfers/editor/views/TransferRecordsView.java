@@ -5,6 +5,9 @@ import java.util.Arrays;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
@@ -19,9 +22,12 @@ import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
  */
 public class TransferRecordsView extends ScenarioTableViewerView<TransferRecordsViewerPane>{
 
+	private TransferRecordsViewerPane pane;
+	
 	@Override
 	protected @NonNull TransferRecordsViewerPane createViewerPane() {
-		return new TransferRecordsViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
+		pane = new TransferRecordsViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
+		return pane;
 	}
 
 	@Override
@@ -33,5 +39,4 @@ public class TransferRecordsView extends ScenarioTableViewerView<TransferRecords
 			pane.getViewer().setInput(getRootObject());
 		}
 	}
-
 }

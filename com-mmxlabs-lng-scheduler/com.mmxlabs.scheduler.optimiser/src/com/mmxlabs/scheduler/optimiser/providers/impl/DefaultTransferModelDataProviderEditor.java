@@ -24,7 +24,7 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 
 	@Override
 	public List<BasicTransferRecord> getTransferRecordsForSlot(IPortSlot slot) {
-		return slotsToTransferRecords.getOrDefault(slot, Collections.EMPTY_LIST);
+		return slotsToTransferRecords.getOrDefault(slot, Collections.emptyList());
 	}
 
 	@Override
@@ -32,12 +32,15 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 		return this.lookupData;
 	}
 
+	/**
+	 * Do NOT call before look up data is set!
+	 */
 	@Override
 	public void reconsileIPortSlotWithLookupData(IPortSlot slot) {
 		if (this.lookupData != null) {
 			List<BasicTransferRecord> temp = new ArrayList<>();
 			for(final BasicTransferRecord record : lookupData.records) {
-				if (record.getSlotName().equalsIgnoreCase(slot.getId())) {
+				if (record.getSlot().equals(slot)) {
 					temp.add(record);
 				}
 			}
@@ -50,7 +53,7 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	}
 
 	@Override
-	public void addLookupData(TransfersLookupData lookupdata) {
+	public void setLookupData(TransfersLookupData lookupdata) {
 		this.lookupData = lookupdata;
 	}
 

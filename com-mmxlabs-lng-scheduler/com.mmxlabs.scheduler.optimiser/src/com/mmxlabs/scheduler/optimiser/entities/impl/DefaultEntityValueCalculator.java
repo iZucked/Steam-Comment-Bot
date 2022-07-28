@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
@@ -117,6 +118,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	
 	@Inject
 	private ITransferModelDataProvider transferModelDataProvider;
+	
+	@Inject
+	@Named(SchedulerConstants.PROCESS_TRANSFER_MODEL)
+	private boolean processTransferModel;
 
 	/**
 	 * Evaluate the group value of the given cargo. This method first calculates
@@ -263,6 +268,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
 		evaluateCargoPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		// Calculate actual transfer pricing between entities based on transfer records
+		if (processTransferModel && annotatedSolution != null && entityBookDetailTreeMap != null) {
+			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		}
 
 		// The first load entity
 		IEntity baseEntity = null;
@@ -446,13 +455,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
 			}
 		}
-		
-		if (annotatedSolution != null && entityBookDetailTreeMap != null) {
-			evaluateTransferPricingPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
-		}
 	}
 	
-	protected void evaluateTransferPricingPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
+	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
 			final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		if (cargoPNLData.getSlots().size() > 2) {
@@ -493,7 +498,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long loadPurchaseCost = cargoPNLData.getSlotValue(loadOption);
 			final long dischargeSaleRevenue = cargoPNLData.getSlotValue(dischargeOption);
 			
-			final Iterator<BasicTransferRecord> iter = records.iterator();
 			BasicTransferRecord previousRecord = null;
 			TranferRecordAnnotation prevAnnotation = null;
 			for(final BasicTransferRecord currentRecord : records) {
@@ -501,6 +505,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				int tpPrice = getTransferPrice(currentRecord);
 				
 				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
+				annotation.transferRecord = currentRecord;
 				annotation.fromEntity = currentRecord.getFromEntity();
 				annotation.toEntity = currentRecord.getToEntity();
 				annotation.tpPrice = tpPrice;
@@ -531,6 +536,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Add the last annotation into the book
 			if (prevAnnotation != null && previousRecord != null) {
 				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
+			} else {
+				//throw new Exception
 			}
 		}
 	}
@@ -546,9 +553,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	
 	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,
 			final TranferRecordAnnotation annotation) {
-		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), -annotation.toEntityCost);
 		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityRevenue);
-		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), -annotation.fromEntityCost);
 		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityRevenue);
 		
 		if (entityBookDetailTreeMap != null) {
@@ -576,6 +583,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 		if (!sorted.get(unsorted.size() - 1).getToEntity().equals(dischargeEntity)) {
 			// something is wrong!
+			// throw new IllegalStateException
 		}
 				
 		return sorted;

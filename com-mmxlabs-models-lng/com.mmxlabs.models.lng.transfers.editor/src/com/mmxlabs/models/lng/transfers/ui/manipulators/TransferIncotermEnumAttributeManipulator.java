@@ -26,7 +26,7 @@ public class TransferIncotermEnumAttributeManipulator extends ValueListAttribute
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		values.add(new Pair<String, Object>("FOB", TransferIncoterm.FOB));
 		values.add(new Pair<String, Object>("DES", TransferIncoterm.DES));
-		values.add(new Pair<String, Object>("Any", TransferIncoterm.BOTH));
+		values.add(new Pair<String, Object>("Both", TransferIncoterm.BOTH));
 		return values;
 	}
 

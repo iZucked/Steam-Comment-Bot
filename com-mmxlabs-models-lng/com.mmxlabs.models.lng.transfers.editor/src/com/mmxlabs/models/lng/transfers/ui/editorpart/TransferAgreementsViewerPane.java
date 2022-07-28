@@ -40,17 +40,15 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  *
  */
 public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
-
-	private final IScenarioEditingLocation scenarioEditingLocation;
 	
 	public TransferAgreementsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.scenarioEditingLocation = location;
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
+		super.defaultSetTitle("Transfer agreements");
 
 		{
 			getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, createAddAction());

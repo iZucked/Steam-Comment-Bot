@@ -3,7 +3,11 @@ package com.mmxlabs.models.lng.transfers.ui.editorpart;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -11,9 +15,12 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -30,6 +37,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
@@ -46,6 +54,8 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
+		//final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		//service.addPostSelectionListener(selectionListener);
 	}
 
 	@Override
@@ -80,6 +90,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 			final CompoundCommand cmd = new CompoundCommand("New transfer record");
 			final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
 			tr.setCargoReleaseDate(LocalDate.now());
+			tr.setPricingDate(LocalDate.now());
 			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
 			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
 			TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
@@ -102,4 +113,55 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 	protected Action createDuplicateAction() {
 		return null;
 	}
+	
+//	@Override
+//	public void dispose() {
+//		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+//		service.removePostSelectionListener(selectionListener);
+//
+//		super.dispose();
+//	}
+//	
+//	private final ISelectionListener selectionListener = new ISelectionListener() {
+//
+//		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
+//
+//		@Override
+//		public void selectionChanged(final MPart part, final Object selectedObject) {
+//
+//			{
+//				final IWorkbenchPart view = SelectionHelper.getE3Part(part);
+//
+//				if (view == TransferRecordsViewerPane.this.part) {
+//					return;
+//				}
+//				if (view instanceof PropertySheet) {
+//					return;
+//				}
+//			}
+//
+//			// Convert selection
+//			final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+//
+//			// Avoid re-entrant selection changes.
+//			if (inSelectionChanged.compareAndSet(false, true)) {
+//				try {
+//					// Avoid cyclic selection changes
+//					if (TransferRecordsViewerPane.this.page == null || TransferRecordsViewerPane.this.page.getActivePart() == TransferRecordsViewerPane.this.part) {
+//						return;
+//					}
+//					if (viewer != null) {
+//						try {
+//							viewer.setSelection(selection, true);
+//						} catch (final Exception e) {
+//							//log.error(e.getMessage(), e);
+//						}
+//					}
+//				} finally {
+//					inSelectionChanged.set(false);
+//				}
+//			}
+//		}
+//
+//	};
 }

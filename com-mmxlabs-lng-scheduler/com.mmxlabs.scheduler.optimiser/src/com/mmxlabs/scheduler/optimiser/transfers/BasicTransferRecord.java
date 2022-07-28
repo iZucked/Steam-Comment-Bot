@@ -6,6 +6,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * Basic representation of the transfer record
  */
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 public class BasicTransferRecord {
@@ -16,22 +17,23 @@ public class BasicTransferRecord {
 	private String priceExpression;
 	private int pricingDate;
 	
-	private String slotName;
+	// reference the IPortSlot instead
+	private IPortSlot slot;
+	// reference the BasicTransferRecord
 	private String nextTransferName;
 	
 	/**
-	 * Slot name must be with internal slots' name prefixes: "FP", "DP", "FS" or "DS"
 	 * @param name
 	 * @param agreement
 	 * @param pricingOverride
 	 * @param pricingSeries
 	 * @param priceExpression
 	 * @param pricingDate
-	 * @param slotName
+	 * @param slot
 	 * @param nextTransferName
 	 */
 	public BasicTransferRecord(String name, ITransferAgreement agreement, boolean pricingOverride, @Nullable ICurve  pricingSeries, @Nullable String priceExpression, //
-			int pricingDate, String slotName, String nextTransferName) {
+			int pricingDate, IPortSlot slot, String nextTransferName) {
 		super();
 		this.name = name;
 		this.agreement = agreement;
@@ -43,7 +45,7 @@ public class BasicTransferRecord {
 			this.priceExpression = agreement.getPriceExpression();
 		}
 		this.pricingDate = pricingDate;
-		this.slotName = slotName;
+		this.slot = slot;
 		this.nextTransferName = nextTransferName;
 	}
 	
@@ -69,8 +71,8 @@ public class BasicTransferRecord {
 	 * Must return internal slot name with "FP", "DP", "FS" or "DS" prefixes
 	 * @return
 	 */
-	public String getSlotName() {
-		return slotName;
+	public IPortSlot getSlot() {
+		return slot;
 	}
 	public String getNextTransferName() {
 		return nextTransferName;

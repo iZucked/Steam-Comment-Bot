@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.transformer.extensions.transfers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,13 +17,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
+import com.mmxlabs.models.lng.transfers.TransferStatus;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -37,42 +38,51 @@ import com.mmxlabs.scheduler.optimiser.transfers.TransfersLookupData;
 /**
  */
 public class TransfersDataTransformer implements ISlotTransformer {
-	
+
 	@Inject
 	private ITransferModelDataProviderEditor transferModelDataProviderEditor;
-	
+
 	@Inject
 	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser commodityParser;
-	
+
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
-	
+
+	@Inject
+	@Named(SchedulerConstants.PROCESS_TRANSFER_MODEL)
+	private boolean processTransferModel;
+
 	LNGScenarioModel lngScenarioModel;
 	ModelEntityMap modelEntityMap;
 	final List<IPortSlot> seenSlots = new LinkedList<>();
+	final Map<Slot<?>, IPortSlot> modelToOptimiserSlots = new HashMap<>();
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
-		seenSlots.add(optimiserSlot);
-		
+		if (processTransferModel) {
+			seenSlots.add(optimiserSlot);
+			modelToOptimiserSlots.put(modelSlot, optimiserSlot);
+		}
 	}
-	
+
 	@Override
 	public void startTransforming(LNGScenarioModel lngScenarioModel, ModelEntityMap modelEntityMap, ISchedulerBuilder builder) {
-		this.lngScenarioModel = lngScenarioModel;
-		this.modelEntityMap = modelEntityMap;
+		if (processTransferModel) {
+			this.lngScenarioModel = lngScenarioModel;
+			this.modelEntityMap = modelEntityMap;
+		}
 	}
-	
+
 	@Override
 	public void finishTransforming() {
-		if (true) {
+		if (processTransferModel) {
 			if (lngScenarioModel != null) {
 				final TransferModel transferModel = lngScenarioModel.getTransferModel();
 				if (transferModel != null) {					
-					transferModelDataProviderEditor.addLookupData(createLookUpData(transferModel, modelEntityMap));
+					transferModelDataProviderEditor.setLookupData(createLookUpData(transferModel, modelEntityMap));
+					seenSlots.forEach(transferModelDataProviderEditor::reconsileIPortSlotWithLookupData);
 				}
-				seenSlots.forEach(transferModelDataProviderEditor::reconsileIPortSlotWithLookupData);
 			}
 		}
 	}
@@ -84,56 +94,79 @@ public class TransfersDataTransformer implements ISlotTransformer {
 		return new TransfersLookupData(agreements, records);
 	}
 
+	/**
+	 * Does not add transfer records where:
+	 * 1. Source and destination entities are equal
+	 * 2. Price expression is missing or empty
+	 * @param transfersModel
+	 * @param modelEntityMap
+	 * @return
+	 */
 	private List<BasicTransferAgreement> createBasicAgreements(final @NonNull TransferModel transfersModel, //
 			final @NonNull ModelEntityMap modelEntityMap) {
 		final List<BasicTransferAgreement> agreements = new ArrayList<>(transfersModel.getTransferAgreements().size());
 		for (final TransferAgreement ta : transfersModel.getTransferAgreements()) {
-			final String priceExpression = ta.getPriceExpression();
-			if (priceExpression != null && !priceExpression.isBlank()) {
-				final ICurve curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
-				final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
-				final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
-				final BasicTransferAgreement foo = new BasicTransferAgreement(ta.getName(), fromEntity, //
-						toEntity, curve, priceExpression);
-				agreements.add(foo);
-				modelEntityMap.addModelObject(ta, foo);
+			if (ta.getFromEntity() != ta.getToEntity()) {
+				final String priceExpression = ta.getPriceExpression();
+				if (priceExpression != null && !priceExpression.isEmpty()) {
+					final ICurve curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
+					final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
+					final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
+					final BasicTransferAgreement basicTA = new BasicTransferAgreement(ta.getName(), fromEntity, //
+							toEntity, curve, priceExpression);
+					agreements.add(basicTA);
+					modelEntityMap.addModelObject(ta, basicTA);
+				}
 			}
 		}
 		return agreements;
 	}
 
+	/** Does not process transfer records where:
+	 * 0. Cancelled transfer records
+	 * 1. Transfer agreement is not set
+	 * 2. LHS is not referred
+	 * 3. Price expression is missing or empty
+	 * 4. Pricing date is not set
+	 * @param transfersModel
+	 * @param modelEntityMap
+	 * @return
+	 */
 	private List<BasicTransferRecord> createBasicRecords(final @NonNull TransferModel transfersModel, //
 			final @NonNull ModelEntityMap modelEntityMap){
 		final List<BasicTransferRecord> records = new ArrayList<>(transfersModel.getTransferRecords().size());
 		for (final TransferRecord tr : transfersModel.getTransferRecords()) {
-			final TransferAgreement ta = tr.getTransferAgreement();
-			if (ta != null) {
+			if (tr.getStatus() != TransferStatus.CANCELLED) {
+				final TransferAgreement ta = tr.getTransferAgreement();
+				final boolean pricingOverride;
+				final String priceExpression;
+				if (tr.getPriceExpression() != null && !tr.getPriceExpression().isEmpty()) {
+					pricingOverride = true;
+					priceExpression = tr.getPriceExpression();
+				} else if (ta.getPriceExpression() != null && !ta.getPriceExpression().isEmpty()) {
+					pricingOverride = false;
+					priceExpression = ta.getPriceExpression();
+				} else {
+					throw new IllegalStateException(String.format("Transfer record %s is missing the pricing expression", tr.getName()));
+				}
 
-				final BasicTransferAgreement fooTA = modelEntityMap.getOptimiserObjectNullChecked(ta, BasicTransferAgreement.class);
-				final Slot<?> slot = tr.getLhs();
-				if (slot != null) {
-					String prefix = "FP-";
-					if (slot instanceof LoadSlot) {
-						prefix = "FP-";
-						if (((LoadSlot) slot).isDESPurchase()) {
-							prefix = "DP-";
-						}
+				if (ta != null && tr.getLhs() != null && tr.getPricingDate() != null) {
+
+					final BasicTransferAgreement basicTA = modelEntityMap.getOptimiserObjectNullChecked(ta, BasicTransferAgreement.class);
+					final Slot<?> slot = tr.getLhs();
+					final IPortSlot portSlot = modelToOptimiserSlots.get(slot);
+					final ICurve curve;
+					if (pricingOverride) {
+						curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
 					} else {
-						prefix = "DS-";
-						if (((DischargeSlot) slot).isFOBSale()) {
-							prefix = "FS-";
-						}
+						curve = basicTA.getPricingSeries();
 					}
-					ICurve curve = null;
-					final String priceExpression = tr.getPriceExpression();
-					if (priceExpression != null && !priceExpression.isBlank()) {
-						curve = dateAndCurveHelper.generateExpressionCurve(tr.getPriceExpression(), commodityParser);
-					}
-					final BasicTransferRecord barTR = new BasicTransferRecord(tr.getName(), fooTA,
-							tr.isSetPriceExpression(), curve, tr.getPriceExpression(), dateAndCurveHelper.convertTime(tr.getPricingDate()), //
-							prefix + slot.getName(), tr.getRhs() == null ? "" : tr.getRhs().getName());
-					records.add(barTR);
-					modelEntityMap.addModelObject(tr, barTR);
+					final BasicTransferRecord basicTR = new BasicTransferRecord(tr.getName(), basicTA,
+							pricingOverride, curve, priceExpression, dateAndCurveHelper.convertTime(tr.getPricingDate()), //
+							portSlot, tr.getRhs() == null ? "" : tr.getRhs().getName());
+					records.add(basicTR);
+					modelEntityMap.addModelObject(tr, basicTR);
+
 				}
 			}
 		}

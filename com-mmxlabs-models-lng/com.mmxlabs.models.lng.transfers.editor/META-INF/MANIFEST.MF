@@ -47,3 +47,4 @@ Import-Package: com.mmxlabs.models.lng.cargo.ui.editorpart.actions,
  javax.inject;version="1.0.0",
  org.slf4j;version="1.7.10"
 Automatic-Module-Name: com.mmxlabs.models.lng.transfers.editor
+Export-Package: com.mmxlabs.models.lng.transfers.ui.editorpart

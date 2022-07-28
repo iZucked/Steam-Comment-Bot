@@ -2,13 +2,16 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails;
 
+import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -19,11 +22,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getTransferRecord <em>Transfer Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getTransferPrice <em>Transfer Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getFromEntityName <em>From Entity Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getFromEntity <em>From Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getFromEntityRevenue <em>From Entity Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getFromEntityCost <em>From Entity Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getToEntityName <em>To Entity Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getToEntity <em>To Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getToEntityRevenue <em>To Entity Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.TransferRecordPNLDetailsImpl#getToEntityCost <em>To Entity Cost</em>}</li>
  * </ul>
@@ -31,6 +35,16 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implements TransferRecordPNLDetails {
+	/**
+	 * The cached value of the '{@link #getTransferRecord() <em>Transfer Record</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTransferRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected NamedObject transferRecord;
+
 	/**
 	 * The default value of the '{@link #getTransferPrice() <em>Transfer Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -52,24 +66,14 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	protected double transferPrice = TRANSFER_PRICE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getFromEntityName() <em>From Entity Name</em>}' attribute.
+	 * The cached value of the '{@link #getFromEntity() <em>From Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFromEntityName()
+	 * @see #getFromEntity()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String FROM_ENTITY_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getFromEntityName() <em>From Entity Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFromEntityName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String fromEntityName = FROM_ENTITY_NAME_EDEFAULT;
+	protected BaseLegalEntity fromEntity;
 
 	/**
 	 * The default value of the '{@link #getFromEntityRevenue() <em>From Entity Revenue</em>}' attribute.
@@ -112,24 +116,14 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	protected int fromEntityCost = FROM_ENTITY_COST_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getToEntityName() <em>To Entity Name</em>}' attribute.
+	 * The cached value of the '{@link #getToEntity() <em>To Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getToEntityName()
+	 * @see #getToEntity()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TO_ENTITY_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getToEntityName() <em>To Entity Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getToEntityName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String toEntityName = TO_ENTITY_NAME_EDEFAULT;
+	protected BaseLegalEntity toEntity;
 
 	/**
 	 * The default value of the '{@link #getToEntityRevenue() <em>To Entity Revenue</em>}' attribute.
@@ -196,6 +190,46 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	 * @generated
 	 */
 	@Override
+	public NamedObject getTransferRecord() {
+		if (transferRecord != null && transferRecord.eIsProxy()) {
+			InternalEObject oldTransferRecord = (InternalEObject)transferRecord;
+			transferRecord = (NamedObject)eResolveProxy(oldTransferRecord);
+			if (transferRecord != oldTransferRecord) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD, oldTransferRecord, transferRecord));
+			}
+		}
+		return transferRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NamedObject basicGetTransferRecord() {
+		return transferRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTransferRecord(NamedObject newTransferRecord) {
+		NamedObject oldTransferRecord = transferRecord;
+		transferRecord = newTransferRecord;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD, oldTransferRecord, transferRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getTransferPrice() {
 		return transferPrice;
 	}
@@ -219,8 +253,25 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	 * @generated
 	 */
 	@Override
-	public String getFromEntityName() {
-		return fromEntityName;
+	public BaseLegalEntity getFromEntity() {
+		if (fromEntity != null && fromEntity.eIsProxy()) {
+			InternalEObject oldFromEntity = (InternalEObject)fromEntity;
+			fromEntity = (BaseLegalEntity)eResolveProxy(oldFromEntity);
+			if (fromEntity != oldFromEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY, oldFromEntity, fromEntity));
+			}
+		}
+		return fromEntity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseLegalEntity basicGetFromEntity() {
+		return fromEntity;
 	}
 
 	/**
@@ -229,11 +280,11 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	 * @generated
 	 */
 	@Override
-	public void setFromEntityName(String newFromEntityName) {
-		String oldFromEntityName = fromEntityName;
-		fromEntityName = newFromEntityName;
+	public void setFromEntity(BaseLegalEntity newFromEntity) {
+		BaseLegalEntity oldFromEntity = fromEntity;
+		fromEntity = newFromEntity;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME, oldFromEntityName, fromEntityName));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY, oldFromEntity, fromEntity));
 	}
 
 	/**
@@ -288,8 +339,25 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	 * @generated
 	 */
 	@Override
-	public String getToEntityName() {
-		return toEntityName;
+	public BaseLegalEntity getToEntity() {
+		if (toEntity != null && toEntity.eIsProxy()) {
+			InternalEObject oldToEntity = (InternalEObject)toEntity;
+			toEntity = (BaseLegalEntity)eResolveProxy(oldToEntity);
+			if (toEntity != oldToEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY, oldToEntity, toEntity));
+			}
+		}
+		return toEntity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseLegalEntity basicGetToEntity() {
+		return toEntity;
 	}
 
 	/**
@@ -298,11 +366,11 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	 * @generated
 	 */
 	@Override
-	public void setToEntityName(String newToEntityName) {
-		String oldToEntityName = toEntityName;
-		toEntityName = newToEntityName;
+	public void setToEntity(BaseLegalEntity newToEntity) {
+		BaseLegalEntity oldToEntity = toEntity;
+		toEntity = newToEntity;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME, oldToEntityName, toEntityName));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY, oldToEntity, toEntity));
 	}
 
 	/**
@@ -359,16 +427,21 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD:
+				if (resolve) return getTransferRecord();
+				return basicGetTransferRecord();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE:
 				return getTransferPrice();
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME:
-				return getFromEntityName();
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY:
+				if (resolve) return getFromEntity();
+				return basicGetFromEntity();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE:
 				return getFromEntityRevenue();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST:
 				return getFromEntityCost();
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME:
-				return getToEntityName();
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY:
+				if (resolve) return getToEntity();
+				return basicGetToEntity();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE:
 				return getToEntityRevenue();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST:
@@ -385,11 +458,14 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD:
+				setTransferRecord((NamedObject)newValue);
+				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE:
 				setTransferPrice((Double)newValue);
 				return;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME:
-				setFromEntityName((String)newValue);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY:
+				setFromEntity((BaseLegalEntity)newValue);
 				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE:
 				setFromEntityRevenue((Integer)newValue);
@@ -397,8 +473,8 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST:
 				setFromEntityCost((Integer)newValue);
 				return;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME:
-				setToEntityName((String)newValue);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY:
+				setToEntity((BaseLegalEntity)newValue);
 				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE:
 				setToEntityRevenue((Integer)newValue);
@@ -418,11 +494,14 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD:
+				setTransferRecord((NamedObject)null);
+				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE:
 				setTransferPrice(TRANSFER_PRICE_EDEFAULT);
 				return;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME:
-				setFromEntityName(FROM_ENTITY_NAME_EDEFAULT);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY:
+				setFromEntity((BaseLegalEntity)null);
 				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE:
 				setFromEntityRevenue(FROM_ENTITY_REVENUE_EDEFAULT);
@@ -430,8 +509,8 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST:
 				setFromEntityCost(FROM_ENTITY_COST_EDEFAULT);
 				return;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME:
-				setToEntityName(TO_ENTITY_NAME_EDEFAULT);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY:
+				setToEntity((BaseLegalEntity)null);
 				return;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE:
 				setToEntityRevenue(TO_ENTITY_REVENUE_EDEFAULT);
@@ -451,16 +530,18 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD:
+				return transferRecord != null;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE:
 				return transferPrice != TRANSFER_PRICE_EDEFAULT;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME:
-				return FROM_ENTITY_NAME_EDEFAULT == null ? fromEntityName != null : !FROM_ENTITY_NAME_EDEFAULT.equals(fromEntityName);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY:
+				return fromEntity != null;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE:
 				return fromEntityRevenue != FROM_ENTITY_REVENUE_EDEFAULT;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST:
 				return fromEntityCost != FROM_ENTITY_COST_EDEFAULT;
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME:
-				return TO_ENTITY_NAME_EDEFAULT == null ? toEntityName != null : !TO_ENTITY_NAME_EDEFAULT.equals(toEntityName);
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY:
+				return toEntity != null;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE:
 				return toEntityRevenue != TO_ENTITY_REVENUE_EDEFAULT;
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST:
@@ -481,14 +562,10 @@ public class TransferRecordPNLDetailsImpl extends GeneralPNLDetailsImpl implemen
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (transferPrice: ");
 		result.append(transferPrice);
-		result.append(", fromEntityName: ");
-		result.append(fromEntityName);
 		result.append(", fromEntityRevenue: ");
 		result.append(fromEntityRevenue);
 		result.append(", fromEntityCost: ");
 		result.append(fromEntityCost);
-		result.append(", toEntityName: ");
-		result.append(toEntityName);
 		result.append(", toEntityRevenue: ");
 		result.append(toEntityRevenue);
 		result.append(", toEntityCost: ");

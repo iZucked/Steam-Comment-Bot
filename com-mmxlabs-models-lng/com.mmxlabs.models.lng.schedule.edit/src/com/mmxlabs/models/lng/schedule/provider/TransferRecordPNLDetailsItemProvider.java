@@ -45,15 +45,38 @@ public class TransferRecordPNLDetailsItemProvider extends GeneralPNLDetailsItemP
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addTransferRecordPropertyDescriptor(object);
 			addTransferPricePropertyDescriptor(object);
-			addFromEntityNamePropertyDescriptor(object);
+			addFromEntityPropertyDescriptor(object);
 			addFromEntityRevenuePropertyDescriptor(object);
 			addFromEntityCostPropertyDescriptor(object);
-			addToEntityNamePropertyDescriptor(object);
+			addToEntityPropertyDescriptor(object);
 			addToEntityRevenuePropertyDescriptor(object);
 			addToEntityCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Transfer Record feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransferRecordPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecordPNLDetails_transferRecord_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecordPNLDetails_transferRecord_feature", "_UI_TransferRecordPNLDetails_type"),
+				 SchedulePackage.Literals.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -79,23 +102,23 @@ public class TransferRecordPNLDetailsItemProvider extends GeneralPNLDetailsItemP
 	}
 
 	/**
-	 * This adds a property descriptor for the From Entity Name feature.
+	 * This adds a property descriptor for the From Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFromEntityNamePropertyDescriptor(Object object) {
+	protected void addFromEntityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_TransferRecordPNLDetails_fromEntityName_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecordPNLDetails_fromEntityName_feature", "_UI_TransferRecordPNLDetails_type"),
-				 SchedulePackage.Literals.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME,
+				 getString("_UI_TransferRecordPNLDetails_fromEntity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecordPNLDetails_fromEntity_feature", "_UI_TransferRecordPNLDetails_type"),
+				 SchedulePackage.Literals.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -145,23 +168,23 @@ public class TransferRecordPNLDetailsItemProvider extends GeneralPNLDetailsItemP
 	}
 
 	/**
-	 * This adds a property descriptor for the To Entity Name feature.
+	 * This adds a property descriptor for the To Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addToEntityNamePropertyDescriptor(Object object) {
+	protected void addToEntityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_TransferRecordPNLDetails_toEntityName_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecordPNLDetails_toEntityName_feature", "_UI_TransferRecordPNLDetails_type"),
-				 SchedulePackage.Literals.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME,
+				 getString("_UI_TransferRecordPNLDetails_toEntity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecordPNLDetails_toEntity_feature", "_UI_TransferRecordPNLDetails_type"),
+				 SchedulePackage.Literals.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -229,10 +252,8 @@ public class TransferRecordPNLDetailsItemProvider extends GeneralPNLDetailsItemP
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((TransferRecordPNLDetails)object).getFromEntityName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_TransferRecordPNLDetails_type") :
-			getString("_UI_TransferRecordPNLDetails_type") + " " + label;
+		TransferRecordPNLDetails transferRecordPNLDetails = (TransferRecordPNLDetails)object;
+		return getString("_UI_TransferRecordPNLDetails_type") + " " + transferRecordPNLDetails.getTransferPrice();
 	}
 
 
@@ -249,10 +270,8 @@ public class TransferRecordPNLDetailsItemProvider extends GeneralPNLDetailsItemP
 
 		switch (notification.getFeatureID(TransferRecordPNLDetails.class)) {
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE:
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME:
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE:
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST:
-			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME:
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE:
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

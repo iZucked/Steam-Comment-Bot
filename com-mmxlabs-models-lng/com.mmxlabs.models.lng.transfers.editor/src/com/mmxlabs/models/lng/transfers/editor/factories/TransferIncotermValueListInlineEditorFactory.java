@@ -22,15 +22,11 @@ public class TransferIncotermValueListInlineEditorFactory implements IInlineEdit
 	public IInlineEditor createEditor(final EClass owner, final ETypedElement typedElement) {
 		
 		ArrayList<Object> objectsList = new ArrayList<>();
-		if (typedElement instanceof EStructuralFeature feature && feature.isUnsettable()) {
-			objectsList.add("<Not set>");
-			objectsList.add(null);
-		}
 		for (final TransferIncoterm type : TransferIncoterm.values()) {
 			final String name;
 			switch (type) {
 			case BOTH:
-				name = "Any";
+				name = "Both";
 				break;
 			case FOB:
 				name = "FOB";

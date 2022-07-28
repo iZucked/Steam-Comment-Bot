@@ -3288,8 +3288,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTransferRecordPNLDetails_TransferPrice() {
-		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(0);
+	public EReference getTransferRecordPNLDetails_TransferRecord() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3298,7 +3298,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTransferRecordPNLDetails_FromEntityName() {
+	public EAttribute getTransferRecordPNLDetails_TransferPrice() {
 		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -3308,8 +3308,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTransferRecordPNLDetails_FromEntityRevenue() {
-		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(2);
+	public EReference getTransferRecordPNLDetails_FromEntity() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3318,7 +3318,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTransferRecordPNLDetails_FromEntityCost() {
+	public EAttribute getTransferRecordPNLDetails_FromEntityRevenue() {
 		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -3328,7 +3328,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTransferRecordPNLDetails_ToEntityName() {
+	public EAttribute getTransferRecordPNLDetails_FromEntityCost() {
 		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -3338,8 +3338,18 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getTransferRecordPNLDetails_ToEntity() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getTransferRecordPNLDetails_ToEntityRevenue() {
-		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -3349,7 +3359,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	@Override
 	public EAttribute getTransferRecordPNLDetails_ToEntityCost() {
-		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -3801,11 +3811,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(originPortRepositioningFeeTermDetailsEClass, ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT);
 
 		transferRecordPNLDetailsEClass = createEClass(TRANSFER_RECORD_PNL_DETAILS);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE);
-		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_NAME);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST);
-		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_NAME);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST);
 
@@ -4273,11 +4284,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getOriginPortRepositioningFeeTermDetails_OriginPort(), ecorePackage.getEString(), "originPort", "", 1, 1, OriginPortRepositioningFeeTermDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(transferRecordPNLDetailsEClass, TransferRecordPNLDetails.class, "TransferRecordPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTransferRecordPNLDetails_TransferRecord(), theMMXCorePackage.getNamedObject(), null, "transferRecord", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_TransferPrice(), ecorePackage.getEDouble(), "transferPrice", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTransferRecordPNLDetails_FromEntityName(), ecorePackage.getEString(), "fromEntityName", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecordPNLDetails_FromEntity(), theCommercialPackage.getBaseLegalEntity(), null, "fromEntity", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_FromEntityRevenue(), ecorePackage.getEInt(), "fromEntityRevenue", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_FromEntityCost(), ecorePackage.getEInt(), "fromEntityCost", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTransferRecordPNLDetails_ToEntityName(), ecorePackage.getEString(), "toEntityName", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecordPNLDetails_ToEntity(), theCommercialPackage.getBaseLegalEntity(), null, "toEntity", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_ToEntityRevenue(), ecorePackage.getEInt(), "toEntityRevenue", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_ToEntityCost(), ecorePackage.getEInt(), "toEntityCost", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

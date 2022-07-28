@@ -224,6 +224,10 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
 
 		// ----->
+		// <------ Transfers
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PROCESS_TRANSFER_MODEL))//
+		.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL));
+		// ----->
 
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
