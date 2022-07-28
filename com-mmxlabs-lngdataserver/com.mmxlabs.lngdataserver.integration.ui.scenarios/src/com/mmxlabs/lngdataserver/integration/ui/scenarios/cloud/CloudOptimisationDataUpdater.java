@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,6 +177,22 @@ class CloudOptimisationDataUpdater {
 
 					File pSolutionFile = solutionFile;
 					File pTempFile = temp;
+
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						try (final FileInputStream fin = new FileInputStream(pTempFile)) {
+							final byte[] initialBytes;
+							try {
+								initialBytes = fin.readNBytes(CloudOptiDebugContants.NUM_TEMP_FILE_BYTES_TO_PRINT);
+								final String initialString = new String(initialBytes);
+								LOG.trace("Download Result (%s): reading solution into LiNGO. Initial characters: %s", cRecord.getJobid(), initialString);
+							} catch (final IOException e) {
+								LOG.trace("Download Result (%s): Failed to read solution file", cRecord.getJobid());
+							} catch (final Exception e) {
+								LOG.trace("Download Result (%s): Could not print initial solution file contents", cRecord.getJobid());
+							}
+							
+						}
+					}
 					// Re-encrypt the results file.
 					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
 						final Cipher localCipher = cipherProvider.getSharedCipher();
@@ -188,10 +205,9 @@ class CloudOptimisationDataUpdater {
 									}
 								}
 							}
-
 						}
 					});
-					
+
 					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
 						LOG.trace("Download Result (%s): Result re-encrypted to %s", cRecord.getJobid(), solutionFile.getAbsolutePath());
 					}
@@ -212,11 +228,13 @@ class CloudOptimisationDataUpdater {
 				task.errorHandler.accept("Error importing solution " + e.getMessage(), e);
 				mgr.updateTaskStatus(task, TaskStatus.failed(e.getMessage()));
 			} finally {
-				if (solutionFile != null && solutionFile.exists()) {
-					solutionFile.delete();
-				}
-				if (temp != null && temp.exists()) {
-					temp.delete();
+				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+					if (solutionFile != null && solutionFile.exists()) {
+						solutionFile.delete();
+					}
+					if (temp != null && temp.exists()) {
+						temp.delete();
+					}
 				}
 			}
 

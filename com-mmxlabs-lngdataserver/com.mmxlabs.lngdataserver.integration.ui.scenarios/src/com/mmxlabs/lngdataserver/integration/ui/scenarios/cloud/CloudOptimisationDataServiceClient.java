@@ -215,7 +215,7 @@ public class CloudOptimisationDataServiceClient {
 
 		try (Response response = localHttpClient.newCall(request).execute()) {
 
-			if (!response.isSuccessful()) {
+			if (response.code() != 200) {
 				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
 					LOG.trace("Download Result (%s): Error response code is %d", jobid, response.code());
 				}
