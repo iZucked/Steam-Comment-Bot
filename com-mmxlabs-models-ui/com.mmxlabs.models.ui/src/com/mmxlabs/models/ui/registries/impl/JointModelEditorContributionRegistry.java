@@ -15,8 +15,6 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -27,7 +25,6 @@ import com.mmxlabs.models.ui.extensions.IJointModelEditorExtension;
 import com.mmxlabs.models.ui.registries.IJointModelEditorContributionRegistry;
 
 public class JointModelEditorContributionRegistry implements IJointModelEditorContributionRegistry {
-	private static final Logger log = LoggerFactory.getLogger(JointModelEditorContributionRegistry.class);
 	@Inject
 	Iterable<IJointModelEditorExtension> extensions;
 

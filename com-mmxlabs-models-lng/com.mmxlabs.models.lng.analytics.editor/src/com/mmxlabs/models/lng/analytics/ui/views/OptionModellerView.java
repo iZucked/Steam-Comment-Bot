@@ -89,7 +89,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SellOptionsC
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.ShippingOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.VesselEventOptionsComponent;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -352,14 +352,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		} else {
 			final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instance);
-			try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("ScenarioInstanceView:1")) {
-				final MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
+			if (mr != null) {
+				try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("ScenarioInstanceView:1")) {
+					final MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
 
-				if (Objects.equal(instance, this.scenarioInstance)) {
-					return;
+					if (Objects.equal(instance, this.scenarioInstance)) {
+						return;
+					}
+
+					displayScenarioInstance(instance, ro, null);
 				}
-
-				displayScenarioInstance(instance, ro, null);
 			}
 		}
 	}
@@ -543,7 +545,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return new Pair<>(true, EnumSet.of(SectionType.EVENTS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
-			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselAvailability) {
+			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselCharter) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
@@ -587,6 +589,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private boolean partialCaseValid;
 
 	private Composite beModeToggle;
+
+	private Button portfolioLinkBtn;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
 
@@ -910,10 +914,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (m != null) {
 					final int mode = m.getMode();
 					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
-						// BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
 						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
+					} else if (mode == SandboxModeConstants.MODE_OPTIONISE && !m.getBaseCase().isKeepExistingScenario()) {
+						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optionise mode needs portfolio link enabled");
 					} else {
-
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
 								WhatIfEvaluator.runSandbox(OptionModellerView.this, m);
@@ -1130,8 +1134,23 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					if (beModeToggle != null) {
 						beModeToggle.setVisible(mode != 1);
 					}
-					getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE, mode), m,
-							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
+
+					final CompoundCommand cmd = new CompoundCommand();
+					cmd.append(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE, mode));
+
+					if (portfolioLinkBtn != null) {
+						if (mode == SandboxModeConstants.MODE_OPTIMISE || mode == SandboxModeConstants.MODE_OPTIONISE) {
+							if (!portfolioLinkBtn.getSelection()) {
+								cmd.append(SetCommand.create(getEditingDomain(), m.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO, Boolean.TRUE));
+								cmd.append(SetCommand.create(getEditingDomain(), m.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, Boolean.TRUE));
+								portfolioLinkBtn.setSelection(true);
+							}
+							portfolioLinkBtn.setEnabled(false);
+						} else {
+							portfolioLinkBtn.setEnabled(true);
+						}
+					}
+					getDefaultCommandHandler().handleCommand(cmd, m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
 					refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 				} else {
 					baseCaseComponent.setMode(-1);
@@ -1148,13 +1167,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		// Need to hook up explicitly to the refresh adapter
 
 		inputWants.add(am -> {
-			if (am instanceof OptionAnalysisModel) {
-				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
+			if (am instanceof OptionAnalysisModel optionAnalysisModel) {
 				final int mode = optionAnalysisModel.getMode();
 				combo.select(mode);
 				partialCaseComponent.setVisible(mode == SandboxModeConstants.MODE_DERIVE);
 				if (beModeToggle != null) {
 					beModeToggle.setVisible(mode != SandboxModeConstants.MODE_OPTIMISE);
+				}
+				if (portfolioLinkBtn != null) {
+					if (mode == SandboxModeConstants.MODE_OPTIMISE || mode == SandboxModeConstants.MODE_OPTIONISE) {
+//						portfolioLinkBtn.setSelection(true);
+						portfolioLinkBtn.setEnabled(false);
+					} else {
+						portfolioLinkBtn.setEnabled(true);
+					}
 				}
 				baseCaseComponent.setMode(mode);
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
@@ -1164,6 +1190,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		});
 
 		return matching;
+
 	}
 
 	private Composite createPortfolioToggleComposite(final Composite composite) {
@@ -1196,12 +1223,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 		});
+
+		this.portfolioLinkBtn = matchingButton;
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
 		inputWants.add(m -> matching.setEnabled(m != null));
 
 		inputWants.add(am -> {
-			if (am instanceof OptionAnalysisModel) {
-				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
+			if (am instanceof OptionAnalysisModel optionAnalysisModel) {
 				matchingButton.setSelection(optionAnalysisModel.getBaseCase().isKeepExistingScenario());
 			}
 		});

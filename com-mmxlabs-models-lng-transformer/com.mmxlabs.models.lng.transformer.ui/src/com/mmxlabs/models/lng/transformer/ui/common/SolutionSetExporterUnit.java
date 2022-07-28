@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.Bre
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -175,9 +175,9 @@ public class SolutionSetExporterUnit {
 						if (cm != null && cm.eContainer() == null) {
 							plan.getExtraCharterInMarkets().add(cm);
 						}
-						final VesselAvailability va = seq.getVesselAvailability();
+						final VesselCharter va = seq.getVesselCharter();
 						if (va != null && va.eContainer() == null) {
-							plan.getExtraVesselAvailabilities().add(va);
+							plan.getExtraVesselCharters().add(va);
 						}
 						for (final Event evt : seq.getEvents()) {
 							if (evt instanceof final VesselEventVisit vesselEventVisit) {

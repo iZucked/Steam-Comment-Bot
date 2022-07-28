@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -29,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -128,8 +127,8 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<int @NonNull []> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
-			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final int start, final int end,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
 		return buildIntervalsList(slot, intervals, start, end, portTimeWindowRecord);
 	}
 
@@ -145,8 +144,8 @@ public class PriceIntervalProviderHelper {
 	 * @param portTimeWindowRecord
 	 * @return
 	 */
-	public List<int @NonNull []> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start,
-			final int end, final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {		
+	public List<int @NonNull []> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final int start, final int end,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
 		return buildIntervalsList(slot, intervals, start, end, portTimeWindowRecord);
 	}
 
@@ -429,7 +428,7 @@ public class PriceIntervalProviderHelper {
 
 	@Nullable
 	IVessel getVessel(@NonNull final IResource resource) {
-		final IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter availability = vesselProvider.getVesselCharter(resource);
 		if (availability == null) {
 			return null;
 		}
@@ -573,12 +572,17 @@ public class PriceIntervalProviderHelper {
 
 	/**
 	 * Build a list of price intervals.
-	 * @param slot - the slot we are building the price intervals for (also where we get the price calculator + price curve from).
-	 * @param intervals - a list of time points to consider.
-	 * @param start - the start of the time range to consider.
-	 * @param end - the end of the time range to consider.
-	 * @param portTimeWindowsRecord - the port times window record for the cargo which slot is part of.
-	 * @return a list of price intervals with the first element of the integer array the start of the bucket, and the second element the price.
+	 * 
+	 * @param slot                  - the slot we are building the price intervals
+	 *                              for (also where we get the price calculator +
+	 *                              price curve from).
+	 * @param intervals             - a list of time points to consider.
+	 * @param start                 - the start of the time range to consider.
+	 * @param end                   - the end of the time range to consider.
+	 * @param portTimeWindowsRecord - the port times window record for the cargo
+	 *                              which slot is part of.
+	 * @return a list of price intervals with the first element of the integer array
+	 *         the start of the bucket, and the second element the price.
 	 */
 	@NonNull
 	List<int @NonNull []> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final int start, final int end,
@@ -951,10 +955,10 @@ public class PriceIntervalProviderHelper {
 
 	public long getCharterRateForTimePickingDecision(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart,
 			@NonNull final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			if (portTimeWindowRecord == portTimeWindowRecordStart) {
-				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
+				return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselCharter, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
 			}
 		}
 		return 0L;

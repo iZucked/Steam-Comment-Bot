@@ -72,7 +72,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -202,7 +202,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		prepareLongTermData(stage1Injector, referenceSequences);
 		progress.worked(1);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
+		final IVesselCharter pnlVessel = stage1Injector.getInstance(Key.get(IVesselCharter.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final ILightWeightOptimisationData lwOptimsdationData = computeStage1Data(stage1Injector, pnlVessel, progress.split(29));
 
@@ -232,7 +232,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		prepareLongTermData(stage1Injector, referenceSequences);
 		progress.worked(1);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
+		final IVesselCharter pnlVessel = stage1Injector.getInstance(Key.get(IVesselCharter.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
@@ -292,7 +292,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	}
 
-	public ILightWeightOptimisationData computeStage1Data(final Injector stage1Injector, final IVesselAvailability pnlVessel, final IProgressMonitor monitor) {
+	public ILightWeightOptimisationData computeStage1Data(final Injector stage1Injector, final IVesselCharter pnlVessel, final IProgressMonitor monitor) {
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
@@ -310,7 +310,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		prepareLongTermData(stage1Injector, referenceSequences);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
+		final IVesselCharter pnlVessel = stage1Injector.getInstance(Key.get(IVesselCharter.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
@@ -321,7 +321,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		return scheduler.createNominalADP(pnlVessel, calculator, localExecutorService, monitor);
 	}
 
-	public @NonNull IMultiStateResult runStage2(final @NonNull IVesselAvailability pnlVessel, @NonNull final Injector stage2Injector, final @NonNull IProgressMonitor monitor) {
+	public @NonNull IMultiStateResult runStage2(final @NonNull IVesselCharter pnlVessel, @NonNull final Injector stage2Injector, final @NonNull IProgressMonitor monitor) {
 
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl s = stage2Injector.getInstance(ThreadLocalScopeImpl.class);
@@ -362,9 +362,9 @@ public class LightWeightSchedulerOptimiserUnit {
 	 * @return
 	 */
 	private static IMultiStateResult mapInternalADPVesselToOriginal(final LNGDataTransformer dataTransformer, final IMultiStateResult internalResult) {
-		final IVesselAvailability internalVessel = (IVesselAvailability) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+		final IVesselCharter internalVessel = (IVesselCharter) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
 		assert internalVessel != null;
-		final IVesselAvailability externalVessel = (IVesselAvailability) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL);
+		final IVesselCharter externalVessel = (IVesselCharter) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL);
 		assert externalVessel != null;
 
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);

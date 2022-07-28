@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Optional Availability Shipping Option</b></em>'.
+ * An implementation of the model object '<em><b>Optional Charter Shipping Option</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -461,4 +461,4 @@ public class OptionalSimpleVesselCharterOptionImpl extends SimpleVesselCharterOp
 		return result.toString();
 	}
 
-} //OptionalAvailabilityShippingOptionImpl
+} //OptionalSimpleVesselCharterOptionImpl

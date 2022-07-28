@@ -32,7 +32,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see com.mmxlabs.models.lng.adp.ADPPackage
  * @generated
  */
-public class ADPSwitch<@Nullable T1> extends Switch<T1> {
+public class ADPSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -373,6 +373,12 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 			case ADPPackage.SPACING_ALLOCATION: {
 				SpacingAllocation spacingAllocation = (SpacingAllocation)theEObject;
 				T1 result = caseSpacingAllocation(spacingAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.ALLOWED_ARRIVAL_TIME_RECORD: {
+				AllowedArrivalTimeRecord allowedArrivalTimeRecord = (AllowedArrivalTimeRecord)theEObject;
+				T1 result = caseAllowedArrivalTimeRecord(allowedArrivalTimeRecord);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1022,6 +1028,21 @@ public class ADPSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSpacingAllocation(SpacingAllocation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Allowed Arrival Time Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Allowed Arrival Time Record</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseAllowedArrivalTimeRecord(AllowedArrivalTimeRecord object) {
 		return null;
 	}
 

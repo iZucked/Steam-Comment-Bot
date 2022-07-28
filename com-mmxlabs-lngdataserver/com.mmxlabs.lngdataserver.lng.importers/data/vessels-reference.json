@@ -121,6 +121,7 @@
     "idleBaseFuel" : "HFO",
     "inPortBaseFuel" : "HFO",
     "pilotLightBaseFuel" : "HFO",
+    "isMarker" : true,
     "ladenAttributes" : {
       "nboRate" : 286.0,
       "idleNBORate" : 286.0,
@@ -197,6 +198,7 @@
     "idleBaseFuel" : "HFO",
     "inPortBaseFuel" : "HFO",
     "pilotLightBaseFuel" : "HFO",
+    "isMarker" : true,
     "ladenAttributes" : {
       "nboRate" : 338.0,
       "idleNBORate" : 338.0,

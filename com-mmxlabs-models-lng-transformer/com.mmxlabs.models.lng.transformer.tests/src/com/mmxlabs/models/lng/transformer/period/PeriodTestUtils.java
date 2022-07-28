@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -185,15 +185,15 @@ public class PeriodTestUtils {
 		return vessel;
 	}
 
-	public static VesselAvailability createVesselAvailability(final LNGScenarioModel scenarioModel, final Vessel vessel) {
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel);
+	public static VesselCharter createVesselCharter(final LNGScenarioModel scenarioModel, final Vessel vessel) {
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel);
 
-		vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-		vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+		vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
-		scenarioModel.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
-		return vesselAvailability;
+		scenarioModel.getCargoModel().getVesselCharters().add(vesselCharter);
+		return vesselCharter;
 	}
 
 	public static Port createPort(final LNGScenarioModel scenarioModel, final String name) {
@@ -396,9 +396,9 @@ public class PeriodTestUtils {
 		return ScheduleFactory.eINSTANCE.createCooldown();
 	}
 
-	public static CollectedAssignment createCollectedAssignment(final VesselAvailability vesselAvailability, final AssignableElement... elements) {
+	public static CollectedAssignment createCollectedAssignment(final VesselCharter vesselCharter, final AssignableElement... elements) {
 
-		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability, null, null, null);
+		return new CollectedAssignment(Arrays.asList(elements), vesselCharter, null, null, null);
 	}
 
 	@NonNull

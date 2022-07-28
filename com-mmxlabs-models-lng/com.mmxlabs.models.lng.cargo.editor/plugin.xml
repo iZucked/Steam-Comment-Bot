@@ -59,10 +59,10 @@
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
 
 		<componentHelper
-			id="com.mmxlabs.models.lng.cargo.helpers.VesselAvailiability"
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselAvailabilityComponentHelper"
+			id="com.mmxlabs.models.lng.cargo.helpers.VesselCharter"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselCharterComponentHelper"
 			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.VesselAvailability" />			
+			modelClass="com.mmxlabs.models.lng.cargo.VesselCharter" />			
 		<componentHelper
 			id="com.mmxlabs.models.lng.cargo.helpers.VesselEvent"
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselEventComponentHelper"
@@ -145,6 +145,18 @@
           referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselMarkerValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselMarkerValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselCharter"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CharterInVesselMarkerValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CharterInVesselMarkerValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint"
@@ -194,15 +206,15 @@
           referenceEClass="com.mmxlabs.models.lng.types.VesselAssignmentType">
     </valueProvider>
     <valueProvider
-          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselCharter"
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselPortValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselPortValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselCharter"
           referenceEClass="com.mmxlabs.models.lng.types.APortSet">
     </valueProvider>
      <valueProvider
@@ -213,8 +225,13 @@
      </valueProvider>
      <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
-           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselAvailability"
-           referenceEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselCharter"
+           referenceEClass="com.mmxlabs.models.lng.cargo.VesselCharter">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselEvent"
+           referenceEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
      </valueProvider>
      <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AllowedVesselsValueProviderFactory"
@@ -229,9 +246,9 @@
            referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
      </valueProvider>
      <valueProvider
-           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityStartPortValueProviderFactory"
-           id="VesselAvailabilityStartPortValueProviderFactory"
-           ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterStartPortValueProviderFactory"
+           id="VesselCharterStartPortValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.VesselCharter"
            referenceEClass="com.mmxlabs.models.lng.port.Port">
      </valueProvider>
      <valueProvider
@@ -267,9 +284,9 @@
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
-          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityCompositeFactory"
+          eClass="com.mmxlabs.models.lng.cargo.VesselCharter"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharteryCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
@@ -311,7 +328,7 @@
             class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
       </extramodelimporter>
       <extramodelimporter
-            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityCharterContractIExtraModelImporter">
+            class="com.mmxlabs.models.lng.cargo.importer.VesselCharterContractIExtraModelImporter">
       </extramodelimporter>
       <extramodelimporter
             class="com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter">
@@ -345,9 +362,9 @@
           inheritable="true">
     </classImporter>
     <classImporter
-          ID="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityImporter"
-          classImporterClass="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityImporter"
-          eClassName="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          ID="com.mmxlabs.models.lng.cargo.importer.VesselCharterImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.VesselCharterImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.VesselCharter"
           inheritable="true">
     </classImporter>
     
@@ -399,10 +416,10 @@
     </factory>
   
       <factory
-          ID="com.mmxlabs.models.lng.cargo.editor.vesselAvailabilityFactory"
+          ID="com.mmxlabs.models.lng.cargo.editor.VesselCharterFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Vessel charter"
-          targetEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselCharter">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.cargo.editor.charterOutFactory"
@@ -561,8 +578,8 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider">
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VesselCharterCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.VesselCharterCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider"

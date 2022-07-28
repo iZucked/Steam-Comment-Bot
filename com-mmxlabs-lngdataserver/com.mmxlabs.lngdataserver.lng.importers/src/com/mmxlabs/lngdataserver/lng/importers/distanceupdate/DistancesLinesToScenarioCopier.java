@@ -22,8 +22,6 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
@@ -40,17 +38,19 @@ import com.mmxlabs.models.lng.port.impl.PortFactoryImpl;
 
 public class DistancesLinesToScenarioCopier {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesLinesToScenarioCopier.class);
+	private DistancesLinesToScenarioCopier() {
 
-	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, LocationsVersion locationsVersion,
-			final @NonNull List<AtoBviaCLookupRecord> records, List<AtoBviaCLookupRecord> manualRecords) {
+	}
+
+	public static CompoundCommand getUpdateCommand(final @NonNull EditingDomain editingDomain, final @NonNull PortModel portModel, final LocationsVersion locationsVersion,
+			final @NonNull List<AtoBviaCLookupRecord> records, final List<AtoBviaCLookupRecord> manualRecords) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update distances");
 
-		Map<String, String> fallbackUpstreaIDMapping = new HashMap<>();
-		Map<String, String> mmxIdToUpstreaIDMapping = new HashMap<>();
-		for (BasicLocation bl : locationsVersion.getLocations()) {
-			String fallbackId = bl.getFallbackUpstreamId();
+		final Map<String, String> fallbackUpstreaIDMapping = new HashMap<>();
+		final Map<String, String> mmxIdToUpstreaIDMapping = new HashMap<>();
+		for (final BasicLocation bl : locationsVersion.getLocations()) {
+			final String fallbackId = bl.getFallbackUpstreamId();
 			if (fallbackId != null) {
 				fallbackUpstreaIDMapping.put(bl.getUpstreamID(), bl.getFallbackUpstreamId());
 			}
@@ -117,7 +117,7 @@ public class DistancesLinesToScenarioCopier {
 						: manualRecords.stream() // .
 								.collect(Collectors.toMap(r -> Pair.of(r.getFrom(), r.getTo()), r -> r));
 
-				BiFunction<String, String, @Nullable AtoBviaCLookupRecord> lookupFunction = makeLookupFunction(recordsMap, manualRecordsMap, fallbackUpstreaIDMapping);
+				final BiFunction<String, String, @Nullable AtoBviaCLookupRecord> lookupFunction = makeLookupFunction(recordsMap, manualRecordsMap, fallbackUpstreaIDMapping);
 
 				{
 					final Route route = routeMap.get(RouteOption.DIRECT);
@@ -163,11 +163,13 @@ public class DistancesLinesToScenarioCopier {
 									continue;
 								}
 
-								AtoBviaCLookupRecord record = lookupFunction.apply(fromID, toID);
+								final AtoBviaCLookupRecord record = lookupFunction.apply(fromID, toID);
 								if (record == null) {
 
-									// No distance found, but maybe with the fallback id we have the same port, if so set the distance to zero rather than just missing
-									// We don't do this in the earlier check in case we do have a distance between original id an fallback id that we can use.
+									// No distance found, but maybe with the fallback id we have the same port, if
+									// so set the distance to zero rather than just missing
+									// We don't do this in the earlier check in case we do have a distance between
+									// original id an fallback id that we can use.
 									if ((fallbackFromID != null && Objects.equals(fallbackFromID, toID)) //
 											|| (fallbackToID != null && Objects.equals(fromID, fallbackToID)) //
 											|| (fallbackFromID != null && fallbackToID != null && Objects.equals(fallbackFromID, fallbackToID)) //
@@ -291,22 +293,49 @@ public class DistancesLinesToScenarioCopier {
 
 	private static List<RouteLine> createCanalRoutes(final List<Port> ports, final double canalDistance, final Port canalA, final Port canalB, final Map<Pair<Port, Port>, Double> directMatrix) {
 
+		// Map of generated canal distance lines
+		final Map<Pair<Port, Port>, RouteLine> m = new HashMap<>();
+
 		final List<RouteLine> toAdd = new LinkedList<>();
 		for (final Port from : ports) {
 			for (final Port to : ports) {
 				if (from != to) {
+
 					double a = Double.MAX_VALUE;
 					double b = Double.MAX_VALUE;
 					{
-						final Double leg1 = directMatrix.get(new Pair<>(from, canalA));
-						final Double leg2 = directMatrix.get(new Pair<>(canalB, to));
+						Double leg1 = directMatrix.get(new Pair<>(from, canalA));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg1 == null && from == canalA) {
+							leg1 = 0.0;
+						}
+						Double leg2 = directMatrix.get(new Pair<>(canalB, to));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg2 == null && canalB == to) {
+							leg2 = 0.0;
+						}
+
 						if (leg1 != null && leg2 != null) {
 							a = leg1 + leg2 + canalDistance;
 						}
 					}
 					{
-						final Double leg1 = directMatrix.get(new Pair<>(from, canalB));
-						final Double leg2 = directMatrix.get(new Pair<>(canalA, to));
+						Double leg1 = directMatrix.get(new Pair<>(from, canalB));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg1 == null && from == canalB) {
+							leg1 = 0.0;
+						}
+
+						Double leg2 = directMatrix.get(new Pair<>(canalA, to));
+						// These checks are from distances through the canal from the canal entrance.
+						// This 0 distance would not have been included in the directMatrix
+						if (leg2 == null && canalA == to) {
+							leg2 = 0.0;
+						}
+
 						if (leg1 != null && leg2 != null) {
 							b = leg1 + leg2 + canalDistance;
 						}
@@ -354,21 +383,49 @@ public class DistancesLinesToScenarioCopier {
 					}
 					rl.setDistance(distance);
 					toAdd.add(rl);
+
+					// Record the valid distance line
+					final Pair<Port, Port> key = Pair.of(from, to);
+					m.put(key, rl);
 				}
 
 			}
 		}
+
+		// We can generate valid distances but only in one direction. The direct matrix
+		// should have been fully populated both ways. The likely issue is that one way
+		// direct is smaller, the otherway the canal distance is smaller. There is no
+		// point paying for the canal if direct is closer, so we ignore the canal route.
+		// Here we remove the dangling distance on the assumption the canal is only
+		// marginally closer.
+		for (final Port from : ports) {
+			for (final Port to : ports) {
+				if (from != to) {
+
+					final RouteLine forward = m.get(Pair.of(from, to));
+					final RouteLine backward = m.get(Pair.of(to, from));
+
+					if (forward == null && backward != null) {
+						toAdd.remove(backward);
+					}
+					if (forward != null && backward == null) {
+						toAdd.remove(forward);
+					}
+				}
+			}
+		}
+
 		return toAdd;
 	}
 
-	private static BiFunction<String, String, @Nullable AtoBviaCLookupRecord> makeLookupFunction(Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap, //
-			Map<Pair<String, String>, AtoBviaCLookupRecord> manualRecordsMap, Map<String, String> fallbackIDMapping) {
+	private static BiFunction<String, String, @Nullable AtoBviaCLookupRecord> makeLookupFunction(final Map<Pair<String, String>, AtoBviaCLookupRecord> recordsMap, final //
+	Map<Pair<String, String>, AtoBviaCLookupRecord> manualRecordsMap, final Map<String, String> fallbackIDMapping) {
 
 		// Test for a valid and usable distance record
-		Predicate<AtoBviaCLookupRecord> isValidRecord = record -> record != null && record.getErrorCode() == null && record.getDistance() >= 0.0;
+		final Predicate<AtoBviaCLookupRecord> isValidRecord = record -> record != null && record.getErrorCode() == null && record.getDistance() >= 0.0;
 
 		// Returns the record if usable, otherwise null
-		BiFunction<String, String, AtoBviaCLookupRecord> getIfValid = (fromID, toID) -> {
+		final BiFunction<String, String, AtoBviaCLookupRecord> getIfValid = (fromID, toID) -> {
 			// Try primary ID pair first of all.
 			AtoBviaCLookupRecord record = recordsMap.get(Pair.of(fromID, toID));
 			if (isValidRecord.test(record)) {
@@ -404,22 +461,22 @@ public class DistancesLinesToScenarioCopier {
 				return record;
 			}
 			if (fallbackIDMapping.containsKey(fromID)) {
-				String fallbackFromID = fallbackIDMapping.get(fromID);
+				final String fallbackFromID = fallbackIDMapping.get(fromID);
 				record = getIfValid.apply(fallbackFromID, toID);
 				if (record != null) {
 					return record;
 				}
 			}
 			if (fallbackIDMapping.containsKey(toID)) {
-				String fallbackToID = fallbackIDMapping.get(toID);
+				final String fallbackToID = fallbackIDMapping.get(toID);
 				record = getIfValid.apply(fromID, fallbackToID);
 				if (record != null) {
 					return record;
 				}
 			}
 			if (fallbackIDMapping.containsKey(fromID) && fallbackIDMapping.containsKey(toID)) {
-				String fallbackFromID = fallbackIDMapping.get(fromID);
-				String fallbackToID = fallbackIDMapping.get(toID);
+				final String fallbackFromID = fallbackIDMapping.get(fromID);
+				final String fallbackToID = fallbackIDMapping.get(toID);
 
 				record = getIfValid.apply(fallbackFromID, fallbackToID);
 				if (record != null) {

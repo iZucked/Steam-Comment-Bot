@@ -141,37 +141,6 @@
          </handler>
       </extension>
 
-	<extension
-         point="org.eclipse.ui.commands">
-         <category
-            id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.category"
-            name="Optimisation Commands">
-      </category>
-   
-      <command
-            categoryId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.category"
-            id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob"
-            name="Save Optimisation Job">
-      </command>
-   </extension>
-   
-   <extension
-         id="toolbar:com.mmxlabs.jobcontroller.views.JobManager"
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:com.mmxlabs.jobcontroller.views.JobManager">
-         <command
-               commandId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob"
-               disabledIcon="icons/dtool16/saveas_edit.gif"
-               icon="icons/etool16/saveas_edit.gif"
-               label="Save"
-               style="push"
-               tooltip="Save selected optimisation">
-         </command>
-      </menuContribution>
-      </extension>
-   
       <extension
             point="org.eclipse.ui.commands">
          <category

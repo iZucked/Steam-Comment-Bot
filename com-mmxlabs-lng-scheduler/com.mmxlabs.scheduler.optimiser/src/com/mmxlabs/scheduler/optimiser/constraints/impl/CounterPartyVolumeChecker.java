@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProvider;
@@ -120,8 +120,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 			return true;
 		}
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 			return true;
 		}
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
@@ -181,8 +181,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 		final Collection<@NonNull IResource> loopResources = rawSequences.getResources();
 
 		for (final IResource resource : loopResources) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 				continue;
 			}
 			final ISequence sequence = rawSequences.getSequence(resource);

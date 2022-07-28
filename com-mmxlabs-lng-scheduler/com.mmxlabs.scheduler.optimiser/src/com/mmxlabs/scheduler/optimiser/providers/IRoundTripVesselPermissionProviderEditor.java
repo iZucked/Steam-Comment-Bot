@@ -9,11 +9,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public interface IRoundTripVesselPermissionProviderEditor extends IRoundTripVesselPermissionProvider {
 
-	void permitElementOnResource(@NonNull ISequenceElement element, @NonNull IPortSlot portSlot, @NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability);
+	void permitElementOnResource(@NonNull ISequenceElement element, @NonNull IPortSlot portSlot, @NonNull IResource resource, @NonNull IVesselCharter vesselCharter);
 	
 	void makeBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second);
 

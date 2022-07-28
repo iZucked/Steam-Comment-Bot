@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.util.ILingoReferenceVesselImportCommandProvider;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -131,14 +131,14 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 					for (final Route route : portModel.getRoutes()) {
 						if (route.getRouteOption() != RouteOption.DIRECT) {
-							vessel_classes: for (final Vessel vessel : fleetModel.getVessels()) {
-								for (final VesselClassRouteParameters parameters : vessel.getVesselOrDelegateRouteParameters()) {
+							vessels: for (final Vessel vessel : fleetModel.getVessels()) {
+								for (final VesselRouteParameters parameters : vessel.getVesselOrDelegateRouteParameters()) {
 									if (parameters.getRouteOption() == route.getRouteOption())
-										continue vessel_classes;
+										continue vessels;
 								}
 
 								// construct blank parameters
-								final VesselClassRouteParameters parameters = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+								final VesselRouteParameters parameters = FleetFactory.eINSTANCE.createVesselRouteParameters();
 								parameters.setRouteOption(route.getRouteOption());
 								vessel.getRouteParameters().add(parameters);
 							}

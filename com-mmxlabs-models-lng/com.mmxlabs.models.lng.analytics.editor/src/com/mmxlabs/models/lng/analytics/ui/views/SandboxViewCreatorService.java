@@ -5,9 +5,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -23,13 +20,14 @@ public class SandboxViewCreatorService {
 	public static final String ChangeSetViewCreatorService_Topic = "create-sandbox-view";
 	public static final String ChangeSetViewCreatorService_TopicWithResult = "create-sandbox-view-with-result";
 
-	private static final Logger log = LoggerFactory.getLogger(SandboxViewCreatorService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SandboxViewCreatorService.class);
+
 	private final EventHandler eventHandler = event -> {
 		try {
 			final SandboxScenario solution = (SandboxScenario) event.getProperty(IEventBroker.DATA);
 			openView(solution, false);
 		} catch (final Exception e) {
-			log.error("Error handling create change set view event", e);
+			LOG.error("Error handling create change set view event", e);
 		}
 	};
 	private final EventHandler eventHandler2 = event -> {
@@ -37,7 +35,7 @@ public class SandboxViewCreatorService {
 			final SandboxScenario solution = (SandboxScenario) event.getProperty(IEventBroker.DATA);
 			openView(solution, true);
 		} catch (final Exception e) {
-			log.error("Error handling create change set view event", e);
+			LOG.error("Error handling create change set view event", e);
 		}
 	};
 

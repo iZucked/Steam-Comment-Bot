@@ -17,7 +17,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -56,14 +56,14 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final Vessel vessel_1 = fleetModelBuilder.createVesselFrom("Vessel-1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel_2 = fleetModelBuilder.createVesselFrom("Vessel-2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+		final VesselCharter vesselCharter_1 = cargoModelBuilder.makeVesselCharter(vessel_1, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 2, 1, 0, 0, 0)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 1, 0, 0, 0)) //
 				.build();
 
-		final VesselAvailability vesselAvailability_2 = cargoModelBuilder.makeVesselAvailability(vessel_2, entity) //
+		final VesselCharter vesselCharter_2 = cargoModelBuilder.makeVesselCharter(vessel_2, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
 				.withStartWindow(LocalDateTime.of(2015, 2, 1, 0, 0, 0)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
@@ -73,7 +73,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final CharterOutEvent charter_1 = cargoModelBuilder
 				.makeCharterOutEvent("CharterOut1", LocalDateTime.of(2015, 4, 1, 0, 0, 0), LocalDateTime.of(2015, 4, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability_1, 1) //
+				.withVesselAssignment(vesselCharter_1, 1) //
 				.withAllowedVessels(vessel_1, vessel_2) //
 				.build();
 
@@ -108,14 +108,14 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 
 		// Check locked flags
 		final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-		Assertions.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
+		Assertions.assertEquals(vessel_1.getName(), ((VesselCharter) period_event.getVesselAssignmentType()).getVessel().getName());
 
 		Assertions.assertFalse(period_event.isLocked());
 		Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
 		Assertions.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
 
 		runner.run(true);
-		Assertions.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
+		Assertions.assertSame(vesselCharter_2, charter_1.getVesselAssignmentType());
 	}
 
 	/**
@@ -132,14 +132,14 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final Vessel vessel_1 = fleetModelBuilder.createVesselFrom("Vessel-1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final Vessel vessel_2 = fleetModelBuilder.createVesselFrom("Vessel-2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
-		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+		final VesselCharter vesselCharter_1 = cargoModelBuilder.makeVesselCharter(vessel_1, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withStartWindow(LocalDateTime.of(2015, 2, 1, 0, 0, 0)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withEndWindow(LocalDateTime.of(2015, 9, 1, 0, 0, 0)) //
 				.build();
 
-		final VesselAvailability vesselAvailability_2 = cargoModelBuilder.makeVesselAvailability(vessel_2, entity) //
+		final VesselCharter vesselCharter_2 = cargoModelBuilder.makeVesselCharter(vessel_2, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
 				.withStartWindow(LocalDateTime.of(2015, 2, 1, 0, 0, 0)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
@@ -149,7 +149,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final CharterOutEvent charter_1 = cargoModelBuilder
 				.makeCharterOutEvent("CharterOut1", LocalDateTime.of(2015, 3, 30, 0, 0, 0), LocalDateTime.of(2015, 3, 30, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_BONNY)) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability_1, 1) //
+				.withVesselAssignment(vesselCharter_1, 1) //
 				.withAllowedVessels(vessel_1, vessel_2) //
 				.build();
 
@@ -184,7 +184,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 
 		// Check locked flags
 		final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-		final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
+		final Vessel period_vessel_1 = ((VesselCharter) period_event.getVesselAssignmentType()).getVessel();
 		Assertions.assertEquals(vessel_1.getName(), period_vessel_1.getName());
 
 		Assertions.assertTrue(period_event.isLocked());
@@ -193,6 +193,6 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		Assertions.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
 		runner.run(true);
-		Assertions.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
+		Assertions.assertSame(vesselCharter_1, charter_1.getVesselAssignmentType());
 	}
 }

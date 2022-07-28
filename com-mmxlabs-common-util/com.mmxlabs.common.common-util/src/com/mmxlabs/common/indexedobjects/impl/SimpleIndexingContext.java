@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public final class SimpleIndexingContext extends AbstractIndexingContext {
 
-	private static final Logger log = LoggerFactory.getLogger(SimpleIndexingContext.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SimpleIndexingContext.class);
 
 	/**
 	 * A set to keep track of what types we have complained about indexing as plain
@@ -30,7 +30,7 @@ public final class SimpleIndexingContext extends AbstractIndexingContext {
 			while (type != null) {
 				if (indices.containsKey(type)) {
 					if ((type == Object.class) && !warnedTypes.contains(baseType)) {
-						log.warn("Warning: using object index for {}", baseType.getSimpleName());
+						LOG.warn("Warning: using object index for {}", baseType.getSimpleName());
 						warnedTypes.add(baseType);
 					}
 					return indices.get(type);
@@ -42,7 +42,7 @@ public final class SimpleIndexingContext extends AbstractIndexingContext {
 
 			if (indices.containsKey(type)) {
 				if ((type == Object.class) && !warnedTypes.contains(baseType)) {
-					log.warn("Warning: using object index for {}", baseType.getSimpleName());
+					LOG.warn("Warning: using object index for {}", baseType.getSimpleName());
 					warnedTypes.add(baseType);
 				}
 				return indices.get(type);

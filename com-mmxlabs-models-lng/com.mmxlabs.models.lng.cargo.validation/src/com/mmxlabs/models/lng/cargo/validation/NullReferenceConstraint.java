@@ -21,7 +21,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -35,7 +35,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
 			// TODO add any more refs to check here
 			CargoPackage.eINSTANCE.getSlot_Contract(), CargoPackage.eINSTANCE.getCharterOutEvent_RelocateTo(), CargoPackage.eINSTANCE.getVesselEvent_Port(),
-			CargoPackage.eINSTANCE.getVesselAvailability_Vessel(), CargoPackage.eINSTANCE.getVesselAvailability_Entity());
+			CargoPackage.eINSTANCE.getVesselCharter_Vessel(), CargoPackage.eINSTANCE.getVesselCharter_Entity());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
@@ -81,9 +81,9 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 			if(target instanceof Cargo){
 				targetType = "Cargo";
 				name = ((Cargo) target).getLoadName();
-			} else if (target instanceof VesselAvailability){
+			} else if (target instanceof VesselCharter){
 				targetType = "Vessel";
-				Vessel v = ((VesselAvailability) target).getVessel();
+				Vessel v = ((VesselCharter) target).getVessel();
 				name = v == null ? "<unspecified>" : v.getName();
 			}
 			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";	

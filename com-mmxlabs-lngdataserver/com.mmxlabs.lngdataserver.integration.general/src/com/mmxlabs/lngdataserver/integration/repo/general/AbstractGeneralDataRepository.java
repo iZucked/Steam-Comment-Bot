@@ -7,9 +7,10 @@ package com.mmxlabs.lngdataserver.integration.repo.general;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,7 +31,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	private final @NonNull TypeRecord type;
 
 	protected boolean listenForNewLocalVersions;
-	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
+	protected final Collection<Runnable> newLocalVersionCallbacks = new ConcurrentLinkedQueue<>();
 
 	protected AbstractGeneralDataRepository(final @NonNull TypeRecord type) {
 		this.type = type;
@@ -55,8 +56,14 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 		listenForNewLocalVersions = false;
 	}
 
+	@Override
 	public void registerLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
+	}
+	
+	@Override
+	public void deregisterLocalVersionListener(final Runnable versionConsumer) {
+		newLocalVersionCallbacks.remove(versionConsumer);
 	}
 
 	protected boolean canWaitForNewLocalVersion() {
@@ -92,6 +99,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 		return false;
 	}
 
+	@Override
 	public List<DataVersion> getLocalVersions() {
 
 		final ImmutableList<GeneralDataRecord> records = GeneralDataRepository.INSTANCE.getRecords(type);
@@ -119,7 +127,12 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	@Override
 	public boolean hasUpstreamVersion(final String uuid) {
 		return getLocalVersions().stream() //
-				.filter(v -> Objects.equals(uuid, v.getIdentifier())) //
-				.findFirst().isPresent();
+				.anyMatch(v -> Objects.equals(uuid, v.getIdentifier())) //
+				;
+	}
+
+	@Override
+	public @Nullable String getCurrentVersion() {
+		return GeneralDataRepository.INSTANCE.getCurrentVersion(type);
 	}
 }

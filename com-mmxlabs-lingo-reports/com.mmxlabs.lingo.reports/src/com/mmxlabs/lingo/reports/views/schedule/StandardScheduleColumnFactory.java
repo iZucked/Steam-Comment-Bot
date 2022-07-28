@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -1816,7 +1816,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (sequence == null) {
 							return null;
 						}
-						final VesselAvailability va = sequence.getVesselAvailability();
+						final VesselCharter va = sequence.getVesselCharter();
 						if (va != null) {
 							final BaseLegalEntity entity = va.getCharterOrDelegateEntity();
 							if (entity != null) {

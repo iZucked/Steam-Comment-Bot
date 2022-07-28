@@ -24,7 +24,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -61,7 +61,7 @@ public class VesselImporter extends DefaultClassImporter {
 	@Inject
 	private void registryInit() {
 		if (importerRegistry != null) {
-			parameterImporter = importerRegistry.getClassImporter(FleetPackage.eINSTANCE.getVesselClassRouteParameters());
+			parameterImporter = importerRegistry.getClassImporter(FleetPackage.eINSTANCE.getVesselRouteParameters());
 		}
 	}
 
@@ -105,7 +105,7 @@ public class VesselImporter extends DefaultClassImporter {
 							subMap.put("routeoption", canalName);
 						}
 
-						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter.importObject(parent, FleetPackage.eINSTANCE.getVesselClassRouteParameters(),
+						final VesselRouteParameters parameters = (VesselRouteParameters) parameterImporter.importObject(parent, FleetPackage.eINSTANCE.getVesselRouteParameters(),
 								subMap, context).importedObject;
 						if (parameters.getRouteOption() != null) {
 							vessel.getVesselOrDelegateRouteParameters().add(parameters);
@@ -129,7 +129,7 @@ public class VesselImporter extends DefaultClassImporter {
 		final Vessel vessel = (Vessel) object;
 		final Map<String, String> result = super.exportObject(object, context);
 
-		for (final VesselClassRouteParameters routeParameters : vessel.getVesselOrDelegateRouteParameters()) {
+		for (final VesselRouteParameters routeParameters : vessel.getVesselOrDelegateRouteParameters()) {
 			final Map<String, String> exportedParameters = parameterImporter.exportObjects(Collections.singleton(routeParameters), context).iterator().next();
 			final String route = exportedParameters.get("routeOption");
 			exportedParameters.remove("routeOption");

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -144,7 +145,7 @@ public class SelectionToSandboxUtil {
 			final Map<LoadSlot, BuyOption> buyMap = new HashMap<>();
 			final Map<DischargeSlot, SellOption> sellMap = new HashMap<>();
 
-			final Map<VesselAvailability, ShippingOption> vaMap = new HashMap<>();
+			final Map<VesselCharter, ShippingOption> vaMap = new HashMap<>();
 			final Map<Pair<CharterInMarket, Integer>, ShippingOption> cimMap = new HashMap<>();
 			{
 				final Iterator<?> itr = ss.iterator();
@@ -229,9 +230,9 @@ public class SelectionToSandboxUtil {
 							// Get vessel allocation
 							final Sequence sequence = cargoAllocation.getSequence();
 							if (sequence != null) {
-								final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-								if (vesselAvailability != null) {
-									setVesselAvailability(portfolioMode, vaMap, row, vesselAvailability);
+								final VesselCharter vesselCharter = sequence.getVesselCharter();
+								if (vesselCharter != null) {
+									setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
 								} else {
 									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 									if (charterInMarket != null) {
@@ -286,10 +287,10 @@ public class SelectionToSandboxUtil {
 						}
 						// Get vessel allocation
 						final VesselAssignmentType sequence = cargo.getVesselAssignmentType();
-						if (sequence instanceof VesselAvailability) {
-							final VesselAvailability vesselAvailability = (VesselAvailability) sequence;
-							if (vesselAvailability != null) {
-								setVesselAvailability(portfolioMode, vaMap, row, vesselAvailability);
+						if (sequence instanceof VesselCharter) {
+							final VesselCharter vesselCharter = (VesselCharter) sequence;
+							if (vesselCharter != null) {
+								setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
 							} else if (sequence instanceof CharterInMarket) {
 								final CharterInMarket charterInMarket = (CharterInMarket) sequence;
 								setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
@@ -364,20 +365,20 @@ public class SelectionToSandboxUtil {
 		}
 	}
 
-	private static void setVesselAvailability(final boolean portfolioMode, final Map<VesselAvailability, ShippingOption> vaMap, final BaseCaseRow row, final VesselAvailability vesselAvailability) {
-		if (vaMap.containsKey(vesselAvailability)) {
-			row.setShipping(vaMap.get(vesselAvailability));
+	private static void setVesselCharter(final boolean portfolioMode, final Map<VesselCharter, ShippingOption> vaMap, final BaseCaseRow row, final VesselCharter vesselCharter) {
+		if (vaMap.containsKey(vesselCharter)) {
+			row.setShipping(vaMap.get(vesselCharter));
 		} else {
 			if (portfolioMode) {
 				final ExistingVesselCharterOption eva = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
-				eva.setVesselCharter(vesselAvailability);
-				vaMap.put(vesselAvailability, eva);
+				eva.setVesselCharter(vesselCharter);
+				vaMap.put(vesselCharter, eva);
 				row.setShipping(eva);
 			} else {
 				final RoundTripShippingOption eva = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-				eva.setVessel(vesselAvailability.getVessel());
-				eva.setHireCost(vesselAvailability.getTimeCharterRate());
-				vaMap.put(vesselAvailability, eva);
+				eva.setVessel(vesselCharter.getVessel());
+				eva.setHireCost(vesselCharter.getTimeCharterRate());
+				vaMap.put(vesselCharter, eva);
 				row.setShipping(eva);
 			}
 		}
@@ -399,6 +400,8 @@ public class SelectionToSandboxUtil {
 			// }
 			final BuyMarket marketOption = AnalyticsFactory.eINSTANCE.createBuyMarket();
 			marketOption.setMarket(market);
+			marketOption.setMonth(YearMonth.from(spotLoadSlot.getWindowStart()));
+
 			map.put(slot, marketOption);
 
 			return marketOption;
@@ -416,8 +419,8 @@ public class SelectionToSandboxUtil {
 		}
 
 		if (slot instanceof SpotDischargeSlot) {
-			final SpotDischargeSlot spotLoadSlot = (SpotDischargeSlot) slot;
-			final SpotMarket market = spotLoadSlot.getMarket();
+			final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) slot;
+			final SpotMarket market = spotDischargeSlot.getMarket();
 			// TODO: AnalyticsScenarioEvaluator Code currently assumes we use a market option once rather than multiple times. I.e. it will filter out combinations where the market option is used more
 			// than once.
 
@@ -426,6 +429,8 @@ public class SelectionToSandboxUtil {
 			// }
 			final SellMarket marketOption = AnalyticsFactory.eINSTANCE.createSellMarket();
 			marketOption.setMarket(market);
+			marketOption.setMonth(YearMonth.from(spotDischargeSlot.getWindowStart()));
+
 			map.put(slot, marketOption);
 
 			return marketOption;

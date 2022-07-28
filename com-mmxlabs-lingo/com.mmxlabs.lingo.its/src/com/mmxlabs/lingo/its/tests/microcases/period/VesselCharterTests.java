@@ -16,7 +16,7 @@ import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
@@ -41,7 +41,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withRepositioning("5000") //
 				.build();
 
@@ -50,7 +50,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -59,7 +59,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -67,9 +67,9 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
 
 		// Check pre-conditions
-		Assertions.assertNull(vesselAvailability.getGenericCharterContract());
-		Assertions.assertNotNull(vesselAvailability.getContainedCharterContract());
-		Assertions.assertNotNull(vesselAvailability.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
+		Assertions.assertNull(vesselCharter.getGenericCharterContract());
+		Assertions.assertNotNull(vesselCharter.getContainedCharterContract());
+		Assertions.assertNotNull(vesselCharter.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
 
 		evaluateWithLSOTest(true, optimisationPlan -> {
 			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2022, 2, 1));
@@ -83,7 +83,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect first cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
@@ -113,16 +113,16 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
-		vesselAvailability.setGenericCharterContract(gcc);
+		vesselCharter.setGenericCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 26), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -131,7 +131,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -139,7 +139,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
 
 		// Check pre-conditions
-		Assertions.assertNotNull(vesselAvailability.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
+		Assertions.assertNotNull(vesselCharter.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
 
 		evaluateWithLSOTest(true, optimisationPlan -> {
 			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2022, 2, 1));
@@ -153,7 +153,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect first cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 			// Vessel should have no repositioning terms
 			Assertions.assertNull(periodVA.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
 
@@ -174,21 +174,21 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		// Ballast bonus
 		final GenericCharterContract gcc = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptySet(), 16.0, "35000", "200", false, false,
 				Collections.singleton(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)));
-		vesselAvailability.setCharterContractOverride(true);
-		vesselAvailability.setContainedCharterContract(gcc);
+		vesselCharter.setCharterContractOverride(true);
+		vesselCharter.setContainedCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 26), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -197,7 +197,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -205,7 +205,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
 
 		// Check pre-conditions
-		Assertions.assertNotNull(vesselAvailability.getCharterOrDelegateCharterContract().getBallastBonusTerms());
+		Assertions.assertNotNull(vesselCharter.getCharterOrDelegateCharterContract().getBallastBonusTerms());
 
 		evaluateWithLSOTest(true, optimisationPlan -> {
 			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2021, 9, 1));
@@ -219,7 +219,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
@@ -237,21 +237,21 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		// Ballast bonus
 		final GenericCharterContract gcc = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptySet(), 16.0, "35000", "200", false, false,
 				Collections.singleton(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)));
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
-		vesselAvailability.setGenericCharterContract(gcc);
+		vesselCharter.setGenericCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 26), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -260,7 +260,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -268,7 +268,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
 
 		// Check pre-conditions
-		Assertions.assertNotNull(vesselAvailability.getCharterOrDelegateCharterContract().getBallastBonusTerms());
+		Assertions.assertNotNull(vesselCharter.getCharterOrDelegateCharterContract().getBallastBonusTerms());
 
 		evaluateWithLSOTest(true, optimisationPlan -> {
 			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2021, 9, 1));
@@ -282,7 +282,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			Assertions.assertNull(periodVA.getCharterOrDelegateCharterContract().getBallastBonusTerms());
 
@@ -301,7 +301,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withMinDuration(100) //
 				.withMaxDuration(300) //
 
@@ -313,7 +313,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -322,7 +322,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -341,7 +341,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec)
 			Assertions.assertEquals(100 - 92, periodVA.getMinDuration());
@@ -362,7 +362,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 
 				.build();
 
@@ -371,7 +371,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
 		gcc.setMinDuration(100);
 		gcc.setMaxDuration(300);
-		vesselAvailability.setGenericCharterContract(gcc);
+		vesselCharter.setGenericCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
@@ -379,7 +379,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -388,7 +388,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -407,7 +407,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
@@ -432,7 +432,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withMinDuration(100) //
 				.withMaxDuration(300) //
 				.withStartWindow(LocalDateTime.of(2021, 9, 28, 0, 0, 0)) //
@@ -444,7 +444,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -453,7 +453,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -472,7 +472,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec )
 			int cargoTime = 92;
@@ -501,7 +501,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2021, 9, 28, 0, 0, 0)) //
 				.build();
 
@@ -509,7 +509,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
 		gcc.setMinDuration(100);
 		gcc.setMaxDuration(300);
-		vesselAvailability.setGenericCharterContract(gcc);
+		vesselCharter.setGenericCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
@@ -517,7 +517,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -526,7 +526,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -545,7 +545,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec )
 			int cargoTime = 92;
@@ -571,7 +571,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withMinDuration(100) //
 				.withMaxDuration(300) //
 				.withEndWindow(LocalDateTime.of(2022, 3, 1, 0, 0, 0)) // Set end window to make maths easier
@@ -584,7 +584,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -593,7 +593,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -612,7 +612,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Loose first cargo (so reduce min duration by 31 days Jan, 28 Feb)
 			// -1 for round error due to timezones (whole days vs hours)
@@ -634,7 +634,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2022, 3, 1, 0, 0, 0)) // Set end window to make maths easier
 
 				.build();
@@ -643,7 +643,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
 		gcc.setMinDuration(100);
 		gcc.setMaxDuration(300);
-		vesselAvailability.setGenericCharterContract(gcc);
+		vesselCharter.setGenericCharterContract(gcc);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
@@ -651,7 +651,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 1), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -660,7 +660,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -679,7 +679,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Loose first cargo (so reduce min duration by 31 days Jan, 28 Feb)
 			// -1 for round error due to timezones (whole days vs hours)
@@ -704,7 +704,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.build();
 
@@ -721,7 +721,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			final CargoModel cargoModel = optimiserScenario.getCargoModel();
 
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// Values should be unchanged.
 			Assertions.assertNull(periodVA.getEndAfter());
@@ -740,7 +740,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.build();
 		
@@ -759,7 +759,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			final CargoModel cargoModel = optimiserScenario.getCargoModel();
 			
-			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter periodVA = cargoModel.getVesselCharters().get(0);
 
 			// No change
 			Assertions.assertTrue(periodVA.getEndAt().isEmpty());

@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.Inject;
-import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
@@ -23,11 +22,7 @@ public class PanamaBookingHelper {
 
 	@Inject
 	private IPanamaBookingsProvider panamaBookingsProvider;
-
-	public static boolean isSouthboundIdleTimeRuleEnabled() {
-		return NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled();
-	}
-	
+ 
 	public int getTravelTimeToCanal(IVessel vessel, IPort sourcePort, boolean includeMargin) {
 		IPort routeOptionEntryPort = distanceProvider.getRouteOptionEntryPort(sourcePort, ERouteOption.PANAMA);
 		if (routeOptionEntryPort == null) {

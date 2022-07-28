@@ -60,7 +60,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.importer.AssignmentImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -152,7 +152,7 @@ public class ScenarioBuilder {
 		loadDefaultPortCosts();
 
 		scenarioModelBuilder.getCargoModelBuilder().initCanalBookings();
-		
+
 		createDefaultCooldownCost("1000000");
 		setDefaultBunkerCosts("400");
 
@@ -305,8 +305,7 @@ public class ScenarioBuilder {
 	}
 
 	public ScenarioBuilder configureDefaultCommercialModel(final @NonNull String defaultEntityName) {
-		final LegalEntity entity = scenarioModelBuilder.getCommercialModelBuilder().createEntity(defaultEntityName);
-		scenarioModelBuilder.getCommercialModelBuilder().setTaxRates(entity, LocalDate.of(2000, Month.JANUARY, 1), 0);
+		final LegalEntity entity = scenarioModelBuilder.getCommercialModelBuilder().createEntity(defaultEntityName, LocalDate.of(2000, Month.JANUARY, 1), 0);
 		return this;
 	}
 
@@ -580,7 +579,7 @@ public class ScenarioBuilder {
 			try (CSVReader reader = new CSVReader(',', inputStream)) {
 
 				final DefaultClassImporter importer = new DefaultClassImporter();
-				cargoModel.getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>) importer.importObjects(CargoPackage.Literals.VESSEL_AVAILABILITY, reader, context));
+				cargoModel.getVesselCharters().addAll((Collection<? extends VesselCharter>) importer.importObjects(CargoPackage.Literals.VESSEL_CHARTER, reader, context));
 			}
 			context.run();
 

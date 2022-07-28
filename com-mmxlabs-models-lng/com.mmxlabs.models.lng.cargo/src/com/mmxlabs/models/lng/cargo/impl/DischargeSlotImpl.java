@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.types.FOBSaleDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getFobSaleDealType <em>Fob Sale Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#isHeelCarry <em>Heel Carry</em>}</li>
  * </ul>
  *
  * @generated
@@ -180,6 +181,25 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	 * @ordered
 	 */
 	protected boolean fobSaleDealTypeESet;
+
+	/**
+	 * The default value of the '{@link #isHeelCarry() <em>Heel Carry</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHeelCarry()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HEEL_CARRY_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isHeelCarry() <em>Heel Carry</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHeelCarry()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean heelCarry = HEEL_CARRY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -499,6 +519,29 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHeelCarry() {
+		return heelCarry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHeelCarry(boolean newHeelCarry) {
+		boolean oldHeelCarry = heelCarry;
+		heelCarry = newHeelCarry;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DISCHARGE_SLOT__HEEL_CARRY, oldHeelCarry, heelCarry));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegateMinCv() {
@@ -584,6 +627,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return getMaxCvValue();
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
 				return getFobSaleDealType();
+			case CargoPackage.DISCHARGE_SLOT__HEEL_CARRY:
+				return isHeelCarry();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -613,6 +658,9 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return;
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
 				setFobSaleDealType((FOBSaleDealType)newValue);
+				return;
+			case CargoPackage.DISCHARGE_SLOT__HEEL_CARRY:
+				setHeelCarry((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -644,6 +692,9 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
 				unsetFobSaleDealType();
 				return;
+			case CargoPackage.DISCHARGE_SLOT__HEEL_CARRY:
+				setHeelCarry(HEEL_CARRY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -668,6 +719,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 				return isSetMaxCvValue();
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE_DEAL_TYPE:
 				return isSetFobSaleDealType();
+			case CargoPackage.DISCHARGE_SLOT__HEEL_CARRY:
+				return heelCarry != HEEL_CARRY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -712,6 +765,8 @@ public class DischargeSlotImpl extends SlotImpl<SalesContract> implements Discha
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
 		result.append(", fobSaleDealType: ");
 		if (fobSaleDealTypeESet) result.append(fobSaleDealType); else result.append("<unset>");
+		result.append(", heelCarry: ");
+		result.append(heelCarry);
 		result.append(')');
 		return result.toString();
 	}

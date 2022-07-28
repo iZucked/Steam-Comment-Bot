@@ -17,7 +17,7 @@ import com.mmxlabs.lingo.its.ExpectedLongValue;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.validation.ValidationTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.validation.SlotNameUniquenessConstraint;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
@@ -510,7 +510,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		// Generic flat rate
 		scenarioModelBuilder.getCostModelBuilder().createRouteCost(vessel1, RouteOption.SUEZ, 8_000, 8_000);
 
-		VesselAvailability charter1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_QALHAT)) //
 				.build();

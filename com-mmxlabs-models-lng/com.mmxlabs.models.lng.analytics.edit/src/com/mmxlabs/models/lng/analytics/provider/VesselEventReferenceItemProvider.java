@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.VesselEventReference;
-
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
@@ -91,14 +91,14 @@ public class VesselEventReferenceItemProvider extends UUIDObjectItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VesselEventReference)object).getUuid();
-		return label == null || label.length() == 0 ?
+		VesselEvent event = ((VesselEventReference)object).getEvent();
+		return event == null ?
 			getString("_UI_VesselEventReference_type") :
-			getString("_UI_VesselEventReference_type") + " " + label;
+			event.getName();
 	}
 
 

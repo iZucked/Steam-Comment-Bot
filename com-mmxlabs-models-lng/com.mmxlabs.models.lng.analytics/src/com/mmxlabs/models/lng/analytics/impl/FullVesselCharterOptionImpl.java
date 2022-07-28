@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>New Vessel Availability</b></em>'.
+ * An implementation of the model object '<em><b>New Vessel Charter</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -42,7 +42,7 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailability vesselCharter;
+	protected VesselCharter vesselCharter;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,7 +68,7 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	 * @generated
 	 */
 	@Override
-	public VesselAvailability getVesselCharter() {
+	public VesselCharter getVesselCharter() {
 		return vesselCharter;
 	}
 
@@ -77,8 +77,8 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetVesselCharter(VesselAvailability newVesselCharter, NotificationChain msgs) {
-		VesselAvailability oldVesselCharter = vesselCharter;
+	public NotificationChain basicSetVesselCharter(VesselCharter newVesselCharter, NotificationChain msgs) {
+		VesselCharter oldVesselCharter = vesselCharter;
 		vesselCharter = newVesselCharter;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER, oldVesselCharter, newVesselCharter);
@@ -93,7 +93,7 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	 * @generated
 	 */
 	@Override
-	public void setVesselCharter(VesselAvailability newVesselCharter) {
+	public void setVesselCharter(VesselCharter newVesselCharter) {
 		if (newVesselCharter != vesselCharter) {
 			NotificationChain msgs = null;
 			if (vesselCharter != null)
@@ -144,7 +144,7 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case AnalyticsPackage.FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER:
-				setVesselCharter((VesselAvailability)newValue);
+				setVesselCharter((VesselCharter)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -159,7 +159,7 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case AnalyticsPackage.FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER:
-				setVesselCharter((VesselAvailability)null);
+				setVesselCharter((VesselCharter)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -179,4 +179,4 @@ public class FullVesselCharterOptionImpl extends UUIDObjectImpl implements FullV
 		return super.eIsSet(featureID);
 	}
 
-} //NewVesselAvailabilityImpl
+} //NewVesselCharterImpl

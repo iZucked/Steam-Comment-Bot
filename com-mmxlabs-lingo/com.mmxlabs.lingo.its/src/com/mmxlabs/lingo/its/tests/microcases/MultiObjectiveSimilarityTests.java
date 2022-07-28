@@ -53,7 +53,7 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 	}
 
 	// Override default behaviour to also import portfolio data e.g. cargoes, vessel
-	// availabilities, events
+	// charters, events
 	@NonNull
 	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 

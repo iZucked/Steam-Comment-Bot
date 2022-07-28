@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -67,7 +67,7 @@ public class CargoExistenceCheckTest {
 		final int numOfClassTwo = 2;
 		final int numOfClassThree = 1;
 
-		List<VesselAvailability> charters = new LinkedList<>();
+		List<VesselCharter> charters = new LinkedList<>();
 		charters.addAll(Lists.newArrayList(csc.addVesselSimple("classOne", numOfClassOne, 10, 10, 1000000, 10, 10, 0, 500, false)));
 		charters.addAll(Lists.newArrayList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 15, 700000, 11, 9, 7, 0, false)));
 		charters.addAll(Lists.newArrayList(csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true)));

@@ -19,7 +19,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.BallastBonusContrac
 import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.NotionalJourneyBallastBonusTermAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -72,7 +72,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 		int voyageStartTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
@@ -82,20 +82,20 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		long minCost = Long.MAX_VALUE;
 		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot.getPort(), returnPort,
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
 					speedInKnots, AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
-			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
+			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
 			int hireTime = quickestTravelTime.getSecond();
-			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
+			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
 			long fuelUsedCanal = 0L;
 			if (this.includeCanalTime) {
-				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
+				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTimeUTC, CostType.Ballast);
+			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselCharter.getVessel(), voyageStartTimeUTC, CostType.Ballast);
 			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTimeUTC) * hireTime) / 24L);
 			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTimeUTC)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
@@ -110,7 +110,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
@@ -125,21 +125,21 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		IPort minReturnPort = null;
 		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot.getPort(), returnPort,
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
 					speedInKnots, AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
-			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
+			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
 			int hireTime = quickestTravelTime.getSecond();
-			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
+			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
 			long fuelUsedCanal = 0L;
 
 			if (this.includeCanalTime) {
-				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
+				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
 			} else {
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), vesselEndTime, CostType.Ballast);
+			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselCharter.getVessel(), vesselEndTime, CostType.Ballast);
 			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(vesselEndTime) * hireTime) / 24L);
 			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(vesselEndTime)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
@@ -162,7 +162,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 			notionalJourneyBallastBonusRuleAnnotation = new NotionalJourneyBallastBonusTermAnnotation();
 			notionalJourneyBallastBonusRuleAnnotation.lumpSum = lumpSum;
 			notionalJourneyBallastBonusRuleAnnotation.returnPort = minReturnPort;
-			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), slot.getPort(), minReturnPort, vesselAvailability.getVessel());
+			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), slot.getPort(), minReturnPort, vesselCharter.getVessel());
 			notionalJourneyBallastBonusRuleAnnotation.totalTimeInHours = minTravel.getSecond();
 			notionalJourneyBallastBonusRuleAnnotation.totalFuelUsed = minfuelUsed;
 			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = (int) Calculator.percentageLow(this.pctFuelRate, (long) fuelPriceCurve.getValueAtPoint(vesselEndTime));
@@ -187,7 +187,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	/**
 	 * portTimesRecord - end port
 	 */
-	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {	
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {	
 		// 
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 		int vesselStartTimeUTC = utcOffsetProvider.UTC(vesselStartTime, vesselStartPort);

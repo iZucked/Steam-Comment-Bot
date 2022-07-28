@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityRow;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
@@ -134,7 +134,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			}
 		} else if (object instanceof ExistingVesselCharterOption) {
 			final ExistingVesselCharterOption option = (ExistingVesselCharterOption) object;
-			final VesselAvailability availability = option.getVesselCharter();
+			final VesselCharter availability = option.getVesselCharter();
 			String vesselName = "<No vessel>";
 			if (availability != null) {
 				Vessel vessel = availability.getVessel();
@@ -148,7 +148,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			return String.format("%s (existing)", vesselName);
 		} else if (object instanceof FullVesselCharterOption) {
 			final FullVesselCharterOption option = (FullVesselCharterOption) object;
-			final VesselAvailability availability = option.getVesselCharter();
+			final VesselCharter availability = option.getVesselCharter();
 			String vesselName = "<No vessel>";
 			if (availability != null) {
 				Vessel vessel = availability.getVessel();

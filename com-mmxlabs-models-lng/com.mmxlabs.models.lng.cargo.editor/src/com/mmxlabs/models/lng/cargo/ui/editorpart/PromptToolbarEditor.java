@@ -263,6 +263,10 @@ public class PromptToolbarEditor extends ControlContribution {
 
 				@Override
 				public void mouseDoubleClick(final MouseEvent e) {
+					if (isLocked()) {
+						return;
+					}
+
 					if (!scenarioModel.isSetSchedulingEndDate()) {
 						final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusMonths(9));
 						editingDomain.getCommandStack().execute(cmd);
@@ -366,9 +370,7 @@ public class PromptToolbarEditor extends ControlContribution {
 		this.locked = locked;
 		periodStartEditor.getControl().setEnabled(!locked);
 		periodEndEditor.setEnabled(!locked);
-		if (scenarioModel != null) {
-			scheduleHorizonEditor.setEnabled(!locked && scenarioModel.isSetSchedulingEndDate());
-		}
+		scheduleHorizonEditor.setEnabled(!locked);
 		btn90Day.setEnabled(!locked);
 	}
 

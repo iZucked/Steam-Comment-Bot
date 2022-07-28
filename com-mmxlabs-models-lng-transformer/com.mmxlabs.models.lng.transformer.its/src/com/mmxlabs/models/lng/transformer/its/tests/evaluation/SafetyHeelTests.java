@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
@@ -51,12 +51,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// change from default scenario
 		final SequenceTester checker = getDefaultTester(classes);
 
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(1);
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(1);
+		final VesselCharter vesselCharter = msc.vesselCharter;
+		vesselCharter.getStartHeel().setMinVolumeAvailable(1);
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(1);
 		// FIXME: These need to match the cargo defaults....
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPriceExpression("1");
+		vesselCharter.getStartHeel().setCvValue(21);
+		vesselCharter.getStartHeel().setPriceExpression("1");
 
 		msc.vessel.setSafetyHeel(5000);
 
@@ -151,12 +151,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// change from default scenario
 		final SequenceTester checker = getDefaultTester();
 
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(5000);
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(5000);
+		final VesselCharter vesselCharter = msc.vesselCharter;
+		vesselCharter.getStartHeel().setMinVolumeAvailable(5000);
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(5000);
 		// FIXME: These need to match the cargo defaults....
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPriceExpression("1");
+		vesselCharter.getStartHeel().setCvValue(21);
+		vesselCharter.getStartHeel().setPriceExpression("1");
 
 		// Push up base fuel price for force NBO+FBO
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
@@ -266,12 +266,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// change from default scenario
 		final SequenceTester checker = getDefaultTester();
 
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(0);
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(500);
+		final VesselCharter vesselCharter = msc.vesselCharter;
+		vesselCharter.getStartHeel().setMinVolumeAvailable(0);
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(500);
 		// FIXME: These need to match the cargo defaults....
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPriceExpression("1");
+		vesselCharter.getStartHeel().setCvValue(21);
+		vesselCharter.getStartHeel().setPriceExpression("1");
 
 		// Set up cooldown infrastructure
 		msc.vessel.setWarmingTime(0);
@@ -334,7 +334,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 			}
 		}
 
-		final int expectedHeelRolledOver = 0;// (int) vesselAvailability.getStartHeel().getMinVolumeAvailable() - legLNG[0];
+		final int expectedHeelRolledOver = 0;// (int) vesselCharter.getStartHeel().getMinVolumeAvailable() - legLNG[0];
 		final int totalLNGUsed = legLNG[1] + legLNG[2];
 
 		final int vesselCapacity = (int) (msc.vessel.getVesselOrDelegateCapacity() * msc.vessel.getVesselOrDelegateFillCapacity());
@@ -368,15 +368,15 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		// create an additional cargo
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
-		secondCargo.setVesselAssignmentType(msc.vesselAvailability);
+		secondCargo.setVesselAssignmentType(msc.vesselCharter);
 		// and send the vessel back to the origin port at end of itinerary
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(500);
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(500);
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPriceExpression("1");
+		final VesselCharter vesselCharter = msc.vesselCharter;
+		vesselCharter.getStartHeel().setMinVolumeAvailable(500);
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(500);
+		vesselCharter.getStartHeel().setCvValue(21);
+		vesselCharter.getStartHeel().setPriceExpression("1");
 
 		msc.vessel.setSafetyHeel(500);
 
@@ -432,7 +432,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
 		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
 		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		final int startheel = (int) vesselAvailability.getStartHeel().getMaxVolumeAvailable();
+		final int startheel = (int) vesselCharter.getStartHeel().getMaxVolumeAvailable();
 		final int orphanHeel = startheel - legLNG[0];
 		final int firstLoad = 10000 - orphanHeel; // No start event heel rollover
 		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vessel.getVesselOrDelegateSafetyHeel();
@@ -461,14 +461,14 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		@SuppressWarnings("unused")
 		final Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 		// and send the vessel back to the origin port at end of itinerary
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 
-		secondCargo.setVesselAssignmentType(msc.vesselAvailability);
+		secondCargo.setVesselAssignmentType(msc.vesselCharter);
 
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(500);
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPriceExpression("1");
+		final VesselCharter vesselCharter = msc.vesselCharter;
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(500);
+		vesselCharter.getStartHeel().setCvValue(21);
+		vesselCharter.getStartHeel().setPriceExpression("1");
 
 		msc.vessel.setSafetyHeel(500);
 
@@ -529,7 +529,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 			}
 		}
 
-		final int startheel = (int) vesselAvailability.getStartHeel().getMaxVolumeAvailable();
+		final int startheel = (int) vesselCharter.getStartHeel().getMaxVolumeAvailable();
 		final int orphanHeel = startheel - legLNG[0];
 		final int firstLoad = 10000 - orphanHeel;
 		// No safety heel
@@ -563,10 +563,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final Port eventPort = msc.loadPort;
 
 		VesselEvent event = msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 
-		// and recalculate the vessel availability
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		// and recalculate the vessel charter
+		msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 
 		// force a heel rollover at the maintenance port
 		msc.vessel.setSafetyHeel(500);
@@ -617,15 +617,15 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LocalDateTime charterStartAfterDate = startLoad.minusHours(25);
 		final int charterOutRate = 24;
 		final CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 		// set the charter out required end heel to 5000 (and set some other things)
 		event.getAvailableHeel().setMinVolumeAvailable(5000);
 		event.getAvailableHeel().setMaxVolumeAvailable(5000);
 		event.getAvailableHeel().setCvValue(21);
 		event.getAvailableHeel().setPriceExpression("1");
 
-		// recalculate the vessel availability based on the new timetable
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		// recalculate the vessel charter based on the new timetable
+		msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 
 		// we now expect an idle and a vessel event visit before the first journey
 		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class,
@@ -674,7 +674,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		@SuppressWarnings("unused")
 		final CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.loadPort);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 
 		final SequenceTester checker = getTesterForVesselEventPostDischarge();
 		// SequenceTester checker = getDefaultTester();
@@ -702,7 +702,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.loadPort);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 
 		event.getAvailableHeel().setCvValue(21);
 		event.getAvailableHeel().setPriceExpression("1");

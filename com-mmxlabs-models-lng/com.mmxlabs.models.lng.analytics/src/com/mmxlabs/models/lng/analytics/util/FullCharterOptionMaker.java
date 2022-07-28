@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
@@ -32,23 +32,23 @@ public class FullCharterOptionMaker {
 
 	protected FullVesselCharterOption option = null;
 
-	private VesselAvailability vesselAvailability;
+	private VesselCharter vesselCharter;
 
 	public FullCharterOptionMaker(@NonNull final SandboxModelBuilder builder) {
 		this.builder = builder;
 		this.option = AnalyticsFactory.eINSTANCE.createFullVesselCharterOption();
 
-		vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-		vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+		vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
-		this.option.setVesselCharter(vesselAvailability);
+		this.option.setVesselCharter(vesselCharter);
 	}
 
 	@NonNull
 	public FullCharterOptionMaker create(Vessel vessel, @NonNull BaseLegalEntity entity) {
-		this.vesselAvailability.setVessel(vessel);
-		this.vesselAvailability.setEntity(entity);
+		this.vesselCharter.setVessel(vessel);
+		this.vesselCharter.setEntity(entity);
 		return this;
 	}
 
@@ -70,29 +70,29 @@ public class FullCharterOptionMaker {
 	}
 
 	public FullCharterOptionMaker withStartPort(@Nullable final Port port) {
-		vesselAvailability.setStartAt(port);
+		vesselCharter.setStartAt(port);
 
 		return this;
 	}
 
 	public FullCharterOptionMaker withEndPort(@Nullable final Port port) {
-		vesselAvailability.getEndAt().clear();
+		vesselCharter.getEndAt().clear();
 		if (port != null) {
-			vesselAvailability.getEndAt().add(port);
+			vesselCharter.getEndAt().add(port);
 		}
 
 		return this;
 	}
 
 	public FullCharterOptionMaker withEndPorts(APortSet<Port> endPorts) {
-		vesselAvailability.getEndAt().clear();
-		vesselAvailability.getEndAt().add(endPorts);
+		vesselCharter.getEndAt().clear();
+		vesselCharter.getEndAt().add(endPorts);
 		return this;
 	}
 
 	public FullCharterOptionMaker withEndPorts(Collection<APortSet<Port>> endPorts) {
-		vesselAvailability.getEndAt().clear();
-		vesselAvailability.getEndAt().addAll(endPorts);
+		vesselCharter.getEndAt().clear();
+		vesselCharter.getEndAt().addAll(endPorts);
 		return this;
 	}
 
@@ -102,14 +102,14 @@ public class FullCharterOptionMaker {
 
 	public FullCharterOptionMaker withStartWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
-			vesselAvailability.setStartAfter(windowStart);
+			vesselCharter.setStartAfter(windowStart);
 		} else {
-			vesselAvailability.unsetStartAfter();
+			vesselCharter.unsetStartAfter();
 		}
 		if (windowEnd != null) {
-			vesselAvailability.setStartBy(windowEnd);
+			vesselCharter.setStartBy(windowEnd);
 		} else {
-			vesselAvailability.unsetStartBy();
+			vesselCharter.unsetStartBy();
 		}
 		return this;
 	}
@@ -120,29 +120,29 @@ public class FullCharterOptionMaker {
 
 	public FullCharterOptionMaker withEndWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
-			vesselAvailability.setEndAfter(windowStart);
+			vesselCharter.setEndAfter(windowStart);
 		} else {
-			vesselAvailability.unsetEndAfter();
+			vesselCharter.unsetEndAfter();
 		}
 		if (windowEnd != null) {
-			vesselAvailability.setEndBy(windowEnd);
+			vesselCharter.setEndBy(windowEnd);
 		} else {
-			vesselAvailability.unsetEndBy();
+			vesselCharter.unsetEndBy();
 		}
 		return this;
 	}
 
 	public FullCharterOptionMaker withOptionality(final boolean isOptional) {
-		vesselAvailability.setOptional(isOptional);
+		vesselCharter.setOptional(isOptional);
 		return this;
 	}
 
 	public FullCharterOptionMaker withRepositioning(final String fee) {
 		if (fee != null && !fee.isEmpty()) {
-			GenericCharterContract gcc = vesselAvailability.getCharterOrDelegateCharterContract();
+			GenericCharterContract gcc = vesselCharter.getCharterOrDelegateCharterContract();
 			if (gcc == null) {
 				gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
-				vesselAvailability.setContainedCharterContract(gcc);
+				vesselCharter.setContainedCharterContract(gcc);
 			}
 			IRepositioningFee repositioningFee = gcc.getRepositioningFeeTerms();
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
@@ -168,7 +168,7 @@ public class FullCharterOptionMaker {
 	 * @return
 	 */
 	public FullCharterOptionMaker withSafeyStartHeel() {
-		return withStartHeel(vesselAvailability.getVessel().getSafetyHeel(), vesselAvailability.getVessel().getSafetyHeel(), 22.6, "0");
+		return withStartHeel(vesselCharter.getVessel().getSafetyHeel(), vesselCharter.getVessel().getSafetyHeel(), 22.6, "0");
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class FullCharterOptionMaker {
 	 * @return
 	 */
 	public FullCharterOptionMaker withSafeyEndHeel() {
-		return withEndHeel(vesselAvailability.getVessel().getSafetyHeel(), vesselAvailability.getVessel().getSafetyHeel(), EVesselTankState.MUST_BE_COLD, "0");
+		return withEndHeel(vesselCharter.getVessel().getSafetyHeel(), vesselCharter.getVessel().getSafetyHeel(), EVesselTankState.MUST_BE_COLD, "0");
 	}
 
 	public FullCharterOptionMaker withStartHeel(final double minVolumeInM3, final double maxVolumeInM3, final double cvValue, final String pricePerMMBTu) {
@@ -196,10 +196,10 @@ public class FullCharterOptionMaker {
 			throw new IllegalArgumentException();
 		}
 
-		vesselAvailability.getStartHeel().setMinVolumeAvailable(minVolumeInM3);
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(maxVolumeInM3);
-		vesselAvailability.getStartHeel().setCvValue(cvValue);
-		vesselAvailability.getStartHeel().setPriceExpression(pricePerMMBTu);
+		vesselCharter.getStartHeel().setMinVolumeAvailable(minVolumeInM3);
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(maxVolumeInM3);
+		vesselCharter.getStartHeel().setCvValue(cvValue);
+		vesselCharter.getStartHeel().setPriceExpression(pricePerMMBTu);
 
 		return this;
 
@@ -227,10 +227,10 @@ public class FullCharterOptionMaker {
 			}
 		}
 
-		vesselAvailability.getEndHeel().setMinimumEndHeel(minVolumeInM3);
-		vesselAvailability.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
-		vesselAvailability.getEndHeel().setTankState(state);
-		vesselAvailability.getEndHeel().setPriceExpression(priceExpression);
+		vesselCharter.getEndHeel().setMinimumEndHeel(minVolumeInM3);
+		vesselCharter.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
+		vesselCharter.getEndHeel().setTankState(state);
+		vesselCharter.getEndHeel().setPriceExpression(priceExpression);
 
 		return this;
 
@@ -258,11 +258,11 @@ public class FullCharterOptionMaker {
 			}
 		}
 
-		vesselAvailability.getEndHeel().setMinimumEndHeel(minVolumeInM3);
-		vesselAvailability.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
-		vesselAvailability.getEndHeel().setTankState(state);
-		vesselAvailability.getEndHeel().setPriceExpression("");
-		vesselAvailability.getEndHeel().setUseLastHeelPrice(useLastPrice);
+		vesselCharter.getEndHeel().setMinimumEndHeel(minVolumeInM3);
+		vesselCharter.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
+		vesselCharter.getEndHeel().setTankState(state);
+		vesselCharter.getEndHeel().setPriceExpression("");
+		vesselCharter.getEndHeel().setUseLastHeelPrice(useLastPrice);
 
 		return this;
 
@@ -270,19 +270,19 @@ public class FullCharterOptionMaker {
 
 	@NonNull
 	public FullCharterOptionMaker withCharterRate(final @NonNull String priceExpression) {
-		vesselAvailability.setTimeCharterRate(priceExpression);
+		vesselCharter.setTimeCharterRate(priceExpression);
 		return this;
 	}
 
 	@NonNull
 	public FullCharterOptionMaker withMinDuration(final int durationInDays) {
-		vesselAvailability.setMinDuration(durationInDays);
+		vesselCharter.setMinDuration(durationInDays);
 		return this;
 	}
 
 	@NonNull
 	public FullCharterOptionMaker withMaxDuration(final int durationInDays) {
-		vesselAvailability.setMaxDuration(durationInDays);
+		vesselCharter.setMaxDuration(durationInDays);
 		return this;
 	}
 }

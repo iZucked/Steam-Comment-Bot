@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -167,7 +167,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				final VesselAssignmentType dischargeVesselSet = dischargeCargo.getVesselAssignmentType();
 
 				boolean problem = false;
-				if (loadVesselSet instanceof VesselAvailability && dischargeVesselSet instanceof VesselAvailability) {
+				if (loadVesselSet instanceof VesselCharter && dischargeVesselSet instanceof VesselCharter) {
 					if (loadVesselSet.equals(dischargeVesselSet)) {
 						problem = true;
 					}

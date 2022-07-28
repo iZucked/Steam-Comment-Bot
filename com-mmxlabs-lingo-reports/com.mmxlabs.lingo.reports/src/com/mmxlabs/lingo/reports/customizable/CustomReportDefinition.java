@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomReportDefinition {
-	String uuid;
-	String name;
-	String type;
-	final List<String> filters = new ArrayList<>();
-	final List<String> columns = new ArrayList<>();
-	final List<String> diffOptions = new ArrayList<>();
+	private String uuid;
+	private String name;
+	private String type;
+	private final List<String> filters = new ArrayList<>();
+	private final List<String> columns = new ArrayList<>();
+	private final List<String> diffOptions = new ArrayList<>();
 
 	public CustomReportDefinition copy() {
-		CustomReportDefinition rd = new CustomReportDefinition();
+		final CustomReportDefinition rd = new CustomReportDefinition();
 		rd.uuid = uuid;
 		rd.name = name;
 		rd.type = type;
@@ -29,35 +29,35 @@ public class CustomReportDefinition {
 	public String getUuid() {
 		return uuid;
 	}
-	
-	public void setUuid(String uuid) {
+
+	public void setUuid(final String uuid) {
 		this.uuid = uuid;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
+
+	public void setName(final String name) {
 		this.name = name;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
-	
-	public void setType(String type) {
+
+	public void setType(final String type) {
 		this.type = type;
 	}
-	
+
 	public List<String> getFilters() {
 		return filters;
 	}
-	
+
 	public List<String> getColumns() {
 		return columns;
 	}
-	
+
 	public List<String> getDiffOptions() {
 		return diffOptions;
 	}

@@ -116,6 +116,7 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 		return topClass -> {
 			final TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 			b.withShowHeaders(true);
+			b.withChangeHeaderColourWithValidation(true);
 			b.withLabel("Vessel groups");
 			b.withContentProvider(new ArrayContentProvider());
 			b.withHeightHint(100);
@@ -154,6 +155,7 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 		return topClass -> {
 			final TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 			b.withShowHeaders(true);
+			b.withChangeHeaderColourWithValidation(true);
 			b.withLabel("Seasonal waiting days");
 			b.withContentProvider(new ArrayContentProvider());
 			b.withHeightHint(100);

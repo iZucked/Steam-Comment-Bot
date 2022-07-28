@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -69,7 +69,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		vessel.setMaxSpeed(15.0);
 
 		@NonNull
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 6, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
 				.withStartHeel(0, 0, 22.8, "0") //
@@ -79,7 +79,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		final DryDockEvent drydock = cargoModelBuilder
 				.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		// Load date is too soon and we will be late. Ensure we still schedule a purge
@@ -91,7 +91,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluatePurgeTest(scenarioRunner -> {
@@ -145,7 +145,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		vessel.setMaxSpeed(15.0);
 
 		@NonNull
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 6, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
 				.withStartHeel(0, 0, 22.8, "0") //
@@ -155,7 +155,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		final DryDockEvent drydock = cargoModelBuilder
 				.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		// Load date is too soon and we will be late. Ensure we still schedule a purge
@@ -167,7 +167,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.makeDESSale("D2", LocalDate.of(2017, 12, 30), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluatePurgeTest(scenarioRunner -> {
@@ -221,7 +221,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		vessel.setMaxSpeed(15.0);
 
 		@NonNull
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 6, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
 				.withStartHeel(0, 0, 22.8, "0") //
@@ -238,7 +238,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluatePurgeTest(scenarioRunner -> {
@@ -298,7 +298,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 		charterOutMarket.setEnabled(true);
 		charterOutMarket.setMinCharterOutDuration(1);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //

@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -103,8 +103,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		final int maxSpeed = vesselCharter.getVessel().getMaxSpeed();
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -129,9 +129,9 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	 */
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), Mode.APPLY, messages);
+		return checkPairwiseConstraint(first, second, resource, vesselCharter.getVessel().getMaxSpeed(), Mode.APPLY, messages);
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode, final List<String> messages) {
@@ -144,8 +144,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			return true;
 		}
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType().isNonShipped()) {
 			return true;
 		}
 

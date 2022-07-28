@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
@@ -67,7 +67,7 @@ public class MTMSandboxEvaluator {
 
 		assert profitAndLossSequences != null;
 
-		final IVesselAvailability va = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter va = vesselProvider.getVesselCharter(resource);
 		assert va != null;
 
 		final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);

@@ -146,7 +146,7 @@ public class FullVesselCharterOptionItemProvider extends UUIDObjectItemProvider 
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.FULL_VESSEL_CHARTER_OPTION__VESSEL_CHARTER,
-				 CargoFactory.eINSTANCE.createVesselAvailability()));
+				 CargoFactory.eINSTANCE.createVesselCharter()));
 	}
 
 }

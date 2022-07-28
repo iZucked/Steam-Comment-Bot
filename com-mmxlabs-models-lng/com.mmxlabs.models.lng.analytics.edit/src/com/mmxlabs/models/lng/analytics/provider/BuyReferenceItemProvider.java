@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
@@ -65,7 +66,7 @@ public class BuyReferenceItemProvider extends UUIDObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_BuyReference_slot_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BuyReference_slot_feature", "_UI_BuyReference_type"),
+				 getString("_UI_BuyReference_slot_description"),
 				 AnalyticsPackage.Literals.BUY_REFERENCE__SLOT,
 				 true,
 				 false,
@@ -90,14 +91,14 @@ public class BuyReferenceItemProvider extends UUIDObjectItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BuyReference)object).getUuid();
-		return label == null || label.length() == 0 ?
+		final Slot<?> slot = ((BuyReference)object).getSlot();
+		return slot == null  ?
 			getString("_UI_BuyReference_type") :
-			getString("_UI_BuyReference_type") + " " + label;
+			slot.getName();
 	}
 	
 

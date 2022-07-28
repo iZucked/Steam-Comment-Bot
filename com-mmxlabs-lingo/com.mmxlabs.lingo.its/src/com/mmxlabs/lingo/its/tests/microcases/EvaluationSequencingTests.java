@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -56,7 +56,7 @@ public class EvaluationSequencingTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
 
-		final VesselAvailability va = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter va = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("10000") //
 				.withStartWindow(LocalDateTime.of(2022, 4, 24, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2022, 7, 31, 15, 0)) //
@@ -157,7 +157,7 @@ public class EvaluationSequencingTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
 
-		final VesselAvailability va = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter va = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("10000") //
 				.withStartWindow(LocalDateTime.of(2022, 4, 24, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2022, 7, 31, 15, 0)) //

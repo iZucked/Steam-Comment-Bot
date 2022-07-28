@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 /**
  * Editor interface for {@link IVirtualVesselSlotProvider}
@@ -14,7 +16,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
  * 
  * 
  */
+@NonNullByDefault
 public interface IVirtualVesselSlotProviderEditor extends IVirtualVesselSlotProvider {
 
-	void setVesselAvailabilityForElement(IVesselAvailability vesselAvailability, ISequenceElement element);
+	void setVesselCharterForElement(IVesselCharter vesselCharter, ISequenceElement element);
 }

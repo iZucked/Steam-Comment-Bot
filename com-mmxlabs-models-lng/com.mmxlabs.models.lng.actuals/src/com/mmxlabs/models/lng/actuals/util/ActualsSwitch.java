@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.util;
 
+import com.mmxlabs.models.lng.actuals.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -33,7 +34,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage
  * @generated
  */
-public class ActualsSwitch<@Nullable T> extends Switch<T> {
+public class ActualsSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

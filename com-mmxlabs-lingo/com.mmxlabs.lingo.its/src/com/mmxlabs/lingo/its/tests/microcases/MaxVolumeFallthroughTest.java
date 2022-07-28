@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -50,7 +50,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -69,7 +69,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -94,7 +94,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -113,7 +113,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, 15_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -141,7 +141,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -160,7 +160,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -188,7 +188,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -207,7 +207,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -232,7 +232,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -252,7 +252,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -280,7 +280,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(500_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -301,7 +301,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -327,7 +327,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(15_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -341,7 +341,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, 100_000, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -369,7 +369,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(15_000);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -383,7 +383,7 @@ public class MaxVolumeFallthroughTest extends AbstractLegacyMicroTestCase {
 				.withVolumeLimits(5_000, null, VolumeUnits.M3)//
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {

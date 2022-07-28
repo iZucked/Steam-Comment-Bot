@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -43,7 +43,7 @@ public class VesselExistenceCheckTest {
 	public void test() {
 
 		// this is the list of vessels to check against the output.
-		final List<VesselAvailability> inputVessels = new ArrayList<>();
+		final List<VesselCharter> inputVessels = new ArrayList<>();
 
 		final int loadPrice = 1;
 		final int cvValue = 10;
@@ -116,7 +116,7 @@ public class VesselExistenceCheckTest {
 	 * @param inputVessels
 	 * @param expectedNumOfVessels
 	 */
-	private void checkVesselExistence(final Schedule result, final List<VesselAvailability> inputVessels) {
+	private void checkVesselExistence(final Schedule result, final List<VesselCharter> inputVessels) {
 
 		// the list of input vessels will be changed, and the number of expected vessels it not yet know, so save the number of expected vessels.
 		final int expectedNumOfVessels = inputVessels.size();
@@ -125,7 +125,7 @@ public class VesselExistenceCheckTest {
 		int numOfVesselsInOutput = 0;
 		for (final Sequence sequence : result.getSequences()) {
 			if (sequence.isFleetVessel()) {
-				final VesselAvailability fv = sequence.getVesselAvailability();
+				final VesselCharter fv = sequence.getVesselCharter();
 
 				Assertions.assertTrue(inputVessels.contains(fv), "Input vessel exists in output");
 				// remove the vessel - it should only exist once.

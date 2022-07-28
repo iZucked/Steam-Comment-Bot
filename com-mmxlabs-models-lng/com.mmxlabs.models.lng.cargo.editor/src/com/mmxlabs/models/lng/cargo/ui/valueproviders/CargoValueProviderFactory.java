@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -29,25 +29,24 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final CargoModel cm = lngScenarioModel.getCargoModel();
 			if (cm == null) {
 				return null;
 			}
-			if (CargoPackage.eINSTANCE.getVesselAvailability().isSuperTypeOf(reference.getEReferenceType())) {
-				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()) {
+			if (CargoPackage.eINSTANCE.getVesselCharter().isSuperTypeOf(reference.getEReferenceType())) {
+				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_VesselCharters()) {
 					@Override
 					public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
-						if (referenceValue instanceof VesselAvailability) {
-							final VesselAvailability vesselAvailability = (VesselAvailability) referenceValue;
-							final Vessel vessel = vesselAvailability.getVessel();
-							final boolean uniqueAvailability = uniqueAvailability(cm.getVesselAvailabilities(), vesselAvailability);
+						if (referenceValue instanceof VesselCharter) {
+							final VesselCharter vesselCharter = (VesselCharter) referenceValue;
+							final Vessel vessel = vesselCharter.getVessel();
+							final boolean uniqueAvailability = uniqueAvailability(cm.getVesselCharters(), vesselCharter);
 							if (vessel != null && uniqueAvailability) {
 								return vessel.getName();
 							} else if (vessel != null && !uniqueAvailability) {
-								final String startByStr = vesselAvailability.getStartBy() != null ? formatter.format(vesselAvailability.getStartBy()) : null;
-								final String startAfterStr = vesselAvailability.getStartAfter() != null ? formatter.format(vesselAvailability.getStartAfter()) : null;
+								final String startByStr = vesselCharter.getStartBy() != null ? formatter.format(vesselCharter.getStartBy()) : null;
+								final String startAfterStr = vesselCharter.getStartAfter() != null ? formatter.format(vesselCharter.getStartAfter()) : null;
 								final String dateString = startByStr != null ? startByStr : startAfterStr;
 								if (dateString != null) {
 									return String.format("%s (%s)", vessel.getName(), dateString);
@@ -62,11 +61,11 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						return super.getName(referer, feature, referenceValue);
 					}
 
-					private boolean uniqueAvailability(final List<VesselAvailability> vesselAvailability, final VesselAvailability va) {
+					private boolean uniqueAvailability(final List<VesselCharter> vesselCharter, final VesselCharter va) {
 						if (va == null || (va != null && va.getVessel() == null)) {
 							return true;
 						}
-						return vesselAvailability.stream().filter(v -> va.getVessel().equals(v.getVessel())).count() == 1;
+						return vesselCharter.stream().filter(v -> va.getVessel().equals(v.getVessel())).count() == 1;
 					}
 
 					@Override

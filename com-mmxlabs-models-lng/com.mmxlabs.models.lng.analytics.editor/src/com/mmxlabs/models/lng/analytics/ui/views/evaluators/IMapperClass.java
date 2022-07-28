@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -69,15 +69,15 @@ public interface IMapperClass {
 
 	void addMapping(RoundTripShippingOption shippingOption, CharterInMarket newMarket);
 
-	void addMapping(SimpleVesselCharterOption shippingOption, VesselAvailability vesselAvailability);
+	void addMapping(SimpleVesselCharterOption shippingOption, VesselCharter vesselCharter);
 
-	void addMapping(ExistingVesselCharterOption shippingOption, VesselAvailability vesselAvailability);
+	void addMapping(ExistingVesselCharterOption shippingOption, VesselCharter vesselCharter);
 
-	void addMapping(FullVesselCharterOption shippingOption, VesselAvailability vesselAvailability);
+	void addMapping(FullVesselCharterOption shippingOption, VesselCharter vesselCharter);
 	
 	void addMapping(ExistingCharterMarketOption shippingOption, CharterInMarket newMarket);
 
-	VesselAvailability get(SimpleVesselCharterOption fleetShippingOption);
+	VesselCharter get(SimpleVesselCharterOption fleetShippingOption);
 
 	CharterInMarket get(RoundTripShippingOption roundTripShippingOption);
 	

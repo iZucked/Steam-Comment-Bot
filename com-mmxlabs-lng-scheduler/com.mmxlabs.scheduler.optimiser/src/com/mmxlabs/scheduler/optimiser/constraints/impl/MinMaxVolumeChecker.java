@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -104,15 +104,15 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			return true;
 		}
 
 		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
 			ILoadOption load = (ILoadOption) slot1;
 			IDischargeOption discharge = (IDischargeOption) slot2;
-			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselAvailability.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
+			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCharter.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// min > max
 				if (messages != null)
 					messages.add(String.format("%s: Load %s min load volume is greater than discharge %s max discharge volume", this.name, load.getId(), discharge.getId()));

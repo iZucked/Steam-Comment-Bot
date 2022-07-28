@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -20,7 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
@@ -52,57 +52,57 @@ public interface Sequence extends MMXObject {
 	EList<Event> getEvents();
 
 	/**
-	 * Returns the value of the '<em><b>Vessel Availability</b></em>' reference.
+	 * Returns the value of the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Availability</em>' reference isn't clear,
+	 * If the meaning of the '<em>Vessel Charter</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Availability</em>' reference.
-	 * @see #isSetVesselAvailability()
-	 * @see #unsetVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_VesselAvailability()
+	 * @return the value of the '<em>Vessel Charter</em>' reference.
+	 * @see #isSetVesselCharter()
+	 * @see #unsetVesselCharter()
+	 * @see #setVesselCharter(VesselCharter)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_VesselCharter()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	VesselAvailability getVesselAvailability();
+	VesselCharter getVesselCharter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Availability</em>' reference.
-	 * @see #isSetVesselAvailability()
-	 * @see #unsetVesselAvailability()
-	 * @see #getVesselAvailability()
+	 * @param value the new value of the '<em>Vessel Charter</em>' reference.
+	 * @see #isSetVesselCharter()
+	 * @see #unsetVesselCharter()
+	 * @see #getVesselCharter()
 	 * @generated
 	 */
-	void setVesselAvailability(VesselAvailability value);
+	void setVesselCharter(VesselCharter value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetVesselAvailability()
-	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
+	 * @see #isSetVesselCharter()
+	 * @see #getVesselCharter()
+	 * @see #setVesselCharter(VesselCharter)
 	 * @generated
 	 */
-	void unsetVesselAvailability();
+	void unsetVesselCharter();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}' reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Vessel Availability</em>' reference is set.
-	 * @see #unsetVesselAvailability()
-	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
+	 * @return whether the value of the '<em>Vessel Charter</em>' reference is set.
+	 * @see #unsetVesselCharter()
+	 * @see #getVesselCharter()
+	 * @see #setVesselCharter(VesselCharter)
 	 * @generated
 	 */
-	boolean isSetVesselAvailability();
+	boolean isSetVesselCharter();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Market</b></em>' reference.

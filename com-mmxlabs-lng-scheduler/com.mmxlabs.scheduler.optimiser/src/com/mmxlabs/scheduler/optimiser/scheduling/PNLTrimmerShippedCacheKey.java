@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -14,17 +16,20 @@ import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils.TimeChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @NonNullByDefault
 public final class PNLTrimmerShippedCacheKey {
-	final IVesselAvailability vesselAvailability;
+	final IVesselCharter vesselCharter;
 	final IResource resource;
 	final @Nullable IPort firstLoadPort;
 
@@ -37,11 +42,12 @@ public final class PNLTrimmerShippedCacheKey {
 	final boolean lastPlan;
 	private final int hash;
 	private final Object vesselKey;
+	private @Nullable List<Integer> calculators;
 
-	private PNLTrimmerShippedCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final @Nullable IPort firstLoadPort, final IPortTimeWindowsRecord portTimeWindowsRecord,
+	private PNLTrimmerShippedCacheKey(final IResource resource, final IVesselCharter vesselCharter, final @Nullable IPort firstLoadPort, final IPortTimeWindowsRecord portTimeWindowsRecord,
 			final boolean lastPlan, final MinTravelTimeData minTimeData, final ScheduledPlanInput spi, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 		this.resource = resource;
 		this.firstLoadPort = firstLoadPort;
 		this.ptwr = portTimeWindowsRecord;
@@ -52,11 +58,11 @@ public final class PNLTrimmerShippedCacheKey {
 		this.sequencesAttributesProvider = sequencesAttributesProvider;
 
 		// // Spot market vessels are equivalent
-		final ISpotCharterInMarket spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
-		if (spotCharterInMarket != null && vesselAvailability.getSpotIndex() >= 0) {
+		final ISpotCharterInMarket spotCharterInMarket = vesselCharter.getSpotCharterInMarket();
+		if (spotCharterInMarket != null && vesselCharter.getSpotIndex() >= 0) {
 			this.vesselKey = spotCharterInMarket;
 		} else {
-			this.vesselKey = vesselAvailability;
+			this.vesselKey = vesselCharter;
 		}
 
 		final String firstLoadPortName = getPortName(firstLoadPort);
@@ -64,6 +70,25 @@ public final class PNLTrimmerShippedCacheKey {
 
 		IWriteLockable.writeLock(ptwr);
 		IWriteLockable.writeLock(minTimeData);
+
+		// Grab break-even prices
+		for (var portSlot : portTimeWindowsRecord.getSlots()) {
+			if (portSlot instanceof ILoadOption loadOption) {
+				if (loadOption.getLoadPriceCalculator() instanceof IBreakEvenPriceCalculator c) {
+					if (calculators == null) {
+						calculators = new LinkedList<>();
+					}
+					calculators.add(c.getPrice());
+				}
+			} else if (portSlot instanceof IDischargeOption dischargeOption) {
+				if (dischargeOption.getDischargePriceCalculator() instanceof IBreakEvenPriceCalculator c) {
+					if (calculators == null) {
+						calculators = new LinkedList<>();
+					}
+					calculators.add(c.getPrice());
+				}
+			}
+		}
 	}
 
 	private String getPortName(final @Nullable IPort port) {
@@ -82,8 +107,7 @@ public final class PNLTrimmerShippedCacheKey {
 			return true;
 		}
 
-		if (obj instanceof PNLTrimmerShippedCacheKey) {
-			final PNLTrimmerShippedCacheKey other = (PNLTrimmerShippedCacheKey) obj;
+		if (obj instanceof PNLTrimmerShippedCacheKey other) {
 
 			if (!Objects.equals(sequencesAttributesProvider, other.sequencesAttributesProvider)) {
 				return false;
@@ -92,8 +116,9 @@ public final class PNLTrimmerShippedCacheKey {
 			final boolean valid = this.lastPlan == other.lastPlan //
 					&& this.vesselKey == other.vesselKey //
 					&& Objects.equals(getPortName(this.firstLoadPort), getPortName(other.firstLoadPort)) //
-					// && this.vesselAvailability == other.vesselAvailability //
-					&& Objects.equals(this.spi, other.spi);
+					// && this.vesselCharter == other.vesselCharter //
+					&& Objects.equals(this.spi, other.spi) //
+					&& Objects.equals(this.calculators, other.calculators);
 
 			if (valid) {
 				// Same input record?
@@ -126,7 +151,7 @@ public final class PNLTrimmerShippedCacheKey {
 		return false;
 	}
 
-	public static PNLTrimmerShippedCacheKey from(final ScheduledRecord r, final @Nullable IPort firstLoad, final IResource resource, final IVesselAvailability vesselAvailability,
+	public static PNLTrimmerShippedCacheKey from(final ScheduledRecord r, final @Nullable IPort firstLoad, final IResource resource, final IVesselCharter vesselCharter,
 			final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean lastPlan, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final MinTravelTimeData minTimeData,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
 
@@ -142,10 +167,10 @@ public final class PNLTrimmerShippedCacheKey {
 
 		final ScheduledPlanInput spi = new ScheduledPlanInput(r.sequenceStartTime, r.currentEndTime, r.previousHeelRecord);
 
-		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData, spi, subMap.build(), sequencesAttributesProvider);
+		return new PNLTrimmerShippedCacheKey(resource, vesselCharter, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData, spi, subMap.build(), sequencesAttributesProvider);
 	}
 
-	public static PNLTrimmerShippedCacheKey forFirstRecord(final int vesselStartTime, final @Nullable IPort firstLoad, final IResource resource, final IVesselAvailability vesselAvailability,
+	public static PNLTrimmerShippedCacheKey forFirstRecord(final int vesselStartTime, final @Nullable IPort firstLoad, final IResource resource, final IVesselCharter vesselCharter,
 			final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean lastPlan, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final MinTravelTimeData minTimeData2,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
 
@@ -160,6 +185,6 @@ public final class PNLTrimmerShippedCacheKey {
 		}
 		final ScheduledPlanInput spi = new ScheduledPlanInput(vesselStartTime, vesselStartTime, null);
 
-		return new PNLTrimmerShippedCacheKey(resource, vesselAvailability, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData2, spi, subMap.build(), sequencesAttributesProvider);
+		return new PNLTrimmerShippedCacheKey(resource, vesselCharter, firstLoad, portTimeWindowsRecord, lastPlan, minTimeData2, spi, subMap.build(), sequencesAttributesProvider);
 	}
 }

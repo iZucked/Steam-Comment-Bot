@@ -60,7 +60,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
  */
 public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioDragAssistant.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioDragAssistant.class);
 
 	@Override
 	public IStatus validateDrop(final Object target, final int operation, final TransferData transferType) {
@@ -221,7 +221,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 												try {
 													copyFolder(container, folder, monitor.split(100));
 												} catch (final Exception e) {
-													log.error(e.getMessage(), e);
+													LOG.error(e.getMessage(), e);
 													RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error copying scenarios",
 															"There was an error copying scenarios. Please ensure they can all be opened."));
 												}
@@ -230,7 +230,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 													copyScenario(container, (ScenarioInstance) c, monitor.split(100));
 													Thread.sleep(1000);
 												} catch (final Exception e) {
-													log.error(e.getMessage(), e);
+													LOG.error(e.getMessage(), e);
 												}
 											}
 											// monitor.worked(1);
@@ -241,7 +241,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 								}
 							});
 						} catch (final Exception e) {
-							log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 							return Status.CANCEL_STATUS;
 						}
 					} else {
@@ -286,21 +286,21 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 													// other #split monitor has completed.
 													ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, monitor.split(4));
 												} catch (final Exception e) {
-													log.error(e.getMessage(), e);
+													LOG.error(e.getMessage(), e);
 												}
 											}, monitor.split(5));
 
 											monitor.worked(1);
 										}
 									} catch (final Exception e) {
-										log.error(e.getMessage(), e);
+										LOG.error(e.getMessage(), e);
 									} finally {
 										monitor.done();
 									}
 								}
 							});
 						} catch (final Exception e) {
-							log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 							return Status.CANCEL_STATUS;
 						}
 						return Status.OK_STATUS;
@@ -351,14 +351,14 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											monitor.worked(10);
 										}
 									} catch (final Exception e) {
-										log.error(e.getMessage(), e);
+										LOG.error(e.getMessage(), e);
 									} finally {
 										monitor.done();
 									}
 								}
 							});
 						} catch (final Exception e) {
-							log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 							return Status.CANCEL_STATUS;
 						}
 						return Status.OK_STATUS;

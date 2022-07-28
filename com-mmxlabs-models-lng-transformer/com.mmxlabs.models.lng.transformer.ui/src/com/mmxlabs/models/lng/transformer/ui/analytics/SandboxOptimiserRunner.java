@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -73,8 +74,9 @@ public class SandboxOptimiserRunner {
 
 	private OptimisationPlan plan;
 
-	public SandboxOptimiserRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
-			final UserSettings userSettings, @Nullable ExtraDataProvider extraDataProvider, @Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
+ 
+		public SandboxOptimiserRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
+				final UserSettings userSettings, @Nullable ExtraDataProvider extraDataProvider, @Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
@@ -87,17 +89,22 @@ public class SandboxOptimiserRunner {
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		final String[] hints = hint_without_breakeven;
-		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
+		final LNGOptimisationBuilder builder = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withOptimisationPlan(plan) //
 				.withExtraDataProvider(extraDataProvider) //
 				.withOptimiserInjectorService(extraService) //
 				.withOptimiseHint() //
 				.withHints(hints) //
 				.withIncludeDefaultExportStage(false) //
-				.buildDefaultRunner();
+				;
 
+		if (builderCustomiser != null) {
+			builderCustomiser.accept(builder);
+		}
+		
+		final LNGOptimisationRunnerBuilder runner = builder.buildDefaultRunner();
 		scenarioRunner = runner.getScenarioRunner();
-
+		
 		scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 	}

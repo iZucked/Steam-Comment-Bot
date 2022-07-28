@@ -20,7 +20,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class PortValueProviderFactory implements IReferenceValueProviderFactory {
-	private static final Logger log = LoggerFactory.getLogger(PortValueProviderFactory.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PortValueProviderFactory.class);
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
@@ -43,7 +43,7 @@ public class PortValueProviderFactory implements IReferenceValueProviderFactory 
 //						);
 				return new PortSetValueProvider(portModel);
 			} else {
-				log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
+				LOG.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
 						+ owner.getName() + "." + reference.getName());
 			}
 		}

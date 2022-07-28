@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -130,8 +130,8 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCargoGroupAdapter();
 			}
 			@Override
-			public Adapter caseVesselAvailability(VesselAvailability object) {
-				return createVesselAvailabilityAdapter();
+			public Adapter caseVesselCharter(VesselCharter object) {
+				return createVesselCharterAdapter();
 			}
 			@Override
 			public Adapter caseVesselEvent(VesselEvent object) {
@@ -416,16 +416,16 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselAvailability <em>Vessel Availability</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter
 	 * @generated
 	 */
-	public Adapter createVesselAvailabilityAdapter() {
+	public Adapter createVesselCharterAdapter() {
 		return null;
 	}
 

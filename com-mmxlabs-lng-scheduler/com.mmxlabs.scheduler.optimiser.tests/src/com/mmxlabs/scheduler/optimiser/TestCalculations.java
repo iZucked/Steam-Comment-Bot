@@ -58,7 +58,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -209,7 +209,7 @@ public class TestCalculations {
 			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer);
 
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+			final IVesselCharter vesselCharter1 = builder.createVesselCharter(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
@@ -236,7 +236,7 @@ public class TestCalculations {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
-			final IResource resource = vesselProvider.getResource(vesselAvailability1);
+			final IResource resource = vesselProvider.getResource(vesselCharter1);
 
 			final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 			assert startElement != null;
@@ -267,7 +267,7 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
 						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
@@ -275,7 +275,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -553,7 +553,7 @@ public class TestCalculations {
 			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), heelOptionConsumer);
 
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+			final IVesselCharter vesselCharter1 = builder.createVesselCharter(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
@@ -582,7 +582,7 @@ public class TestCalculations {
 
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			final IResource resource = vesselProvider.getResource(vesselAvailability1);
+			final IResource resource = vesselProvider.getResource(vesselCharter1);
 
 			final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 			final ISequenceElement endElement = startEndProvider.getEndElement(resource);
@@ -610,7 +610,7 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
 						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
@@ -618,7 +618,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -825,7 +825,7 @@ public class TestCalculations {
 	}
 
 	/**
-	 * Like testCalculations3 but with optional vessel availabilities
+	 * Like testCalculations3 but with optional vessel charters
 	 */
 	@Test
 	public void testCalculations3_optional() {
@@ -907,7 +907,7 @@ public class TestCalculations {
 
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer);
 
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+			final IVesselCharter vesselCharter1 = builder.createVesselCharter(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), isOptional);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
@@ -936,7 +936,7 @@ public class TestCalculations {
 
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			final IResource resource = vesselProvider.getResource(vesselAvailability1);
+			final IResource resource = vesselProvider.getResource(vesselCharter1);
 
 			final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 			final ISequenceElement endElement = startEndProvider.getEndElement(resource);
@@ -962,7 +962,7 @@ public class TestCalculations {
 				expectedPTR2.setSlotDuration(dischargeSlot, 1);
 				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR2),
 						ArgumentMatchers.any())).thenReturn(allocationAnnotation);
 			}
 			final PortTimesRecord expectedPTR3 = new PortTimesRecord();
@@ -971,7 +971,7 @@ public class TestCalculations {
 				expectedPTR3.setSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 				expectedPTR3.setSlotDuration(portSlotProvider.getPortSlot(endElement), 0);
 
-				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselAvailability> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
+				Mockito.when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), ArgumentMatchers.<VoyagePlan> any(), ArgumentMatchers.<IPortTimesRecord> eq(expectedPTR3),
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
@@ -1260,9 +1260,10 @@ public class TestCalculations {
 				bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 				bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention)).toInstance(Boolean.FALSE);
 
 				final IMaintenanceEvaluator maintenanceEvaluator = Mockito.mock(IMaintenanceEvaluator.class);
-				Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselAvailability.class), ArgumentMatchers.any(VoyagePlan.class), ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
+				Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselCharter.class), ArgumentMatchers.any(VoyagePlan.class), ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
 				bind(IMaintenanceEvaluator.class).toInstance(maintenanceEvaluator);
 			}
 		});

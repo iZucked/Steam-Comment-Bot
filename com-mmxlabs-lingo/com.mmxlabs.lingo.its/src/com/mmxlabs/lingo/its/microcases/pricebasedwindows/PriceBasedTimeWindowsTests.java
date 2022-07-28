@@ -24,7 +24,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
@@ -69,12 +69,12 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 	}
 
-	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
+	private VesselCharter createTestVesselCharter(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		return cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(startStart, startEnd) //
 				.withEndWindow(endStart) //
@@ -90,7 +90,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLowLevelCosts() throws Exception {
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 		// Construct the cargo scenario
 
@@ -122,10 +122,10 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				final TravelRouteData[] lrd = new TravelRouteData[2];
 				lrd[0] = new TravelRouteData(52, 71, 0, 1000, 0);
 				lrd[1] = new TravelRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
-				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselAvailability1.getVessel().getName(),
-						optimiserScenario.getCargoModel().getVesselAvailabilities(), scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
+				final IVesselCharter o_vesselCharter = TimeWindowsTestsUtils.getIVesselCharterWithName(vesselCharter1.getVessel().getName(),
+						optimiserScenario.getCargoModel().getVesselCharters(), scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 
-				final @NonNull IVessel o_vessel = o_vesselAvailability.getVessel();
+				final @NonNull IVessel o_vessel = o_vesselCharter.getVessel();
 				/*
 				 * Constants
 				 */
@@ -175,7 +175,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				Assertions.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[0]);
 				final TimeWindowsTrimming timeWindowsTrimming = injector.getInstance(TimeWindowsTrimming.class);
 				final long charterRate = 0;
-				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
+				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselCharter.getVessel(), load, lrd,
 						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales }, charterRate);
 				Assertions.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 0, 1, 70, 71 });
 			});
@@ -192,7 +192,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testSimpleWindowsCase() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -204,7 +204,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -257,7 +257,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testSimpleWindowsCase2() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -269,7 +269,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -332,7 +332,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testTimeWindows_23hours_lower_price() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -345,7 +345,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -400,7 +400,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testTimeWindows_24hours_higher_price() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Create cargo 1, cargo 2
@@ -412,7 +412,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -474,7 +474,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testTimeWindows_higher_price_worthwhile() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -487,7 +487,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(3, TimePeriod.MONTHS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -546,7 +546,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testTimeWindows_higher_price_too_costly() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -559,7 +559,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //
@@ -615,7 +615,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	public void testExactTimeWindows() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -628,7 +628,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Henry_Hub", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2016, 7), 7.5) //

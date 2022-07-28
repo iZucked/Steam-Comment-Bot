@@ -31,7 +31,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV
 
 public class KeyfileInformation extends PreferencePage implements IWorkbenchPreferencePage {
 
-	private static final Logger log = LoggerFactory.getLogger(KeyfileInformation.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KeyfileInformation.class);
 
 	public KeyfileInformation() {
 		super();

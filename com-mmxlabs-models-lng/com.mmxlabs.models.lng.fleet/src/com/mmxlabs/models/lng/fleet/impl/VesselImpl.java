@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -73,6 +73,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMmxId <em>Mmx Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMmxReference <em>Mmx Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMarker <em>Marker</em>}</li>
  * </ul>
  *
  * @generated
@@ -679,7 +680,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VesselClassRouteParameters> routeParameters;
+	protected EList<VesselRouteParameters> routeParameters;
 
 	/**
 	 * The default value of the '{@link #getMinBaseFuelConsumption() <em>Min Base Fuel Consumption</em>}' attribute.
@@ -829,6 +830,26 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean mmxReference = MMX_REFERENCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isMarker() <em>Marker</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMarker()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean MARKER_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isMarker() <em>Marker</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMarker()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean marker = MARKER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1754,9 +1775,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public EList<VesselClassRouteParameters> getRouteParameters() {
+	public EList<VesselRouteParameters> getRouteParameters() {
 		if (routeParameters == null) {
-			routeParameters = new EObjectContainmentEList<VesselClassRouteParameters>(VesselClassRouteParameters.class, this, FleetPackage.VESSEL__ROUTE_PARAMETERS);
+			routeParameters = new EObjectContainmentEList<VesselRouteParameters>(VesselRouteParameters.class, this, FleetPackage.VESSEL__ROUTE_PARAMETERS);
 		}
 		return routeParameters;
 	}
@@ -1776,7 +1797,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public EList<VesselClassRouteParameters> getVesselOrDelegateRouteParameters() {
+	public EList<VesselRouteParameters> getVesselOrDelegateRouteParameters() {
 		if (getReference() != null && !isRouteParametersOverride()) {
 			return new DelegatingEList.UnmodifiableEList<>(getReference().getRouteParameters());
 		}
@@ -2057,6 +2078,29 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		mmxReference = newMmxReference;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__MMX_REFERENCE, oldMmxReference, mmxReference));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isMarker() {
+		return marker;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMarker(boolean newMarker) {
+		boolean oldMarker = marker;
+		marker = newMarker;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__MARKER, oldMarker, marker));
 	}
 
 	/**
@@ -2479,26 +2523,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.add(this);
 		return result;
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public int getVesselOrVesselClassCapacity() {
-		
-		return (Integer) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_Capacity());
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public double getVesselOrVesselClassFillCapacity() {
-		return (Double) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_FillCapacity());
-	}
-
+ 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2613,6 +2638,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isReferenceVessel();
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 				return isMmxReference();
+			case FleetPackage.VESSEL__MARKER:
+				return isMarker();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2710,7 +2737,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
 				getRouteParameters().clear();
-				getRouteParameters().addAll((Collection<? extends VesselClassRouteParameters>)newValue);
+				getRouteParameters().addAll((Collection<? extends VesselRouteParameters>)newValue);
 				return;
 			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
 				setMinBaseFuelConsumption((Double)newValue);
@@ -2732,6 +2759,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 				setMmxReference((Boolean)newValue);
+				return;
+			case FleetPackage.VESSEL__MARKER:
+				setMarker((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -2849,6 +2879,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 				setMmxReference(MMX_REFERENCE_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL__MARKER:
+				setMarker(MARKER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2930,6 +2963,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return referenceVessel != REFERENCE_VESSEL_EDEFAULT;
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 				return mmxReference != MMX_REFERENCE_EDEFAULT;
+			case FleetPackage.VESSEL__MARKER:
+				return marker != MARKER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2995,6 +3030,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(referenceVessel);
 		result.append(", mmxReference: ");
 		result.append(mmxReference);
+		result.append(", marker: ");
+		result.append(marker);
 		result.append(')');
 		return result.toString();
 	}

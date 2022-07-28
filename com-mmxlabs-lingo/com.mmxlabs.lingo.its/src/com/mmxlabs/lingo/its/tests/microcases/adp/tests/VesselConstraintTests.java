@@ -144,7 +144,7 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 		defaultCharterInMarket.setNominal(true);
 		defaultCharterInMarket.setEnabled(true);
 
-		cargoModelBuilder.makeVesselAvailability(vesselSmall, entity) //
+		cargoModelBuilder.makeVesselCharter(vesselSmall, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2020, 1, 1, 0, 0)) //
@@ -152,7 +152,7 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 				.withCharterRate("50000") //
 				.build();
 
-		cargoModelBuilder.makeVesselAvailability(vesselLarge, entity) //
+		cargoModelBuilder.makeVesselCharter(vesselLarge, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0)) //
 				.withStartHeel(1_000, 3_000, 22.6, "5") //
 				.withEndWindow(LocalDateTime.of(2020, 1, 1, 0, 0)) //

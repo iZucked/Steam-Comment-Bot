@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -212,8 +212,8 @@ public class ExporterExtensionUtils {
 			if (endElement == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
 					CharterInMarket charterInMarket = sequence.getCharterInMarket();
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (charterInMarket == null && vesselAvailability == null) {
+					final VesselCharter vesselCharter = sequence.getVesselCharter();
+					if (charterInMarket == null && vesselCharter == null) {
 						continue;
 					}
 
@@ -224,17 +224,17 @@ public class ExporterExtensionUtils {
 						if (iSpotCharterInMarket == null) {
 							continue;
 						}
-						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+						IVesselCharter iVesselCharter = vesselProvider.getVesselCharter(res);
 						@Nullable
-						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
-						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+						ISpotCharterInMarket oSpotCharterInMarket = iVesselCharter.getSpotCharterInMarket();
+						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselCharter.getSpotIndex() == sequence.getSpotIndex()) {
 							correctVessel = true;
 						}
 					} else {
 						// non-spot case
 						// Find the matching
-						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+						final IVesselCharter o_VesselCharter = modelEntityMap.getOptimiserObject(vesselCharter, IVesselCharter.class);
+						if (o_VesselCharter == vesselProvider.getVesselCharter(res)) {
 							correctVessel = true;
 						}
 					}
@@ -271,8 +271,8 @@ public class ExporterExtensionUtils {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {
 					CharterInMarket charterInMarket = sequence.getCharterInMarket();
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (charterInMarket == null && vesselAvailability == null) {
+					final VesselCharter vesselCharter = sequence.getVesselCharter();
+					if (charterInMarket == null && vesselCharter == null) {
 						continue;
 					}
 					boolean correctVessel = false;
@@ -282,17 +282,17 @@ public class ExporterExtensionUtils {
 						if (iSpotCharterInMarket == null) {
 							continue;
 						}
-						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+						IVesselCharter iVesselCharter = vesselProvider.getVesselCharter(res);
 						@Nullable
-						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
-						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+						ISpotCharterInMarket oSpotCharterInMarket = iVesselCharter.getSpotCharterInMarket();
+						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselCharter.getSpotIndex() == sequence.getSpotIndex()) {
 							correctVessel = true;
 						}
 					} else {
 						// non-spot case
 						// Find the matching
-						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+						final IVesselCharter o_VesselCharter = modelEntityMap.getOptimiserObject(vesselCharter, IVesselCharter.class);
+						if (o_VesselCharter == vesselProvider.getVesselCharter(res)) {
 							correctVessel = true;
 						}
 					}

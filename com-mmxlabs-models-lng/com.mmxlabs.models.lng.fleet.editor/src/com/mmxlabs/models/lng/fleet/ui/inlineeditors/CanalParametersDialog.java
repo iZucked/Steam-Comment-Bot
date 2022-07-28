@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -81,16 +81,16 @@ public class CanalParametersDialog extends Dialog {
 		tableViewer.setRowHeaderLabelProvider(new CellLabelProvider() {
 			@Override
 			public void update(final ViewerCell cell) {
-				VesselClassRouteParameters params = (VesselClassRouteParameters) cell.getElement();
+				VesselRouteParameters params = (VesselRouteParameters) cell.getElement();
 				cell.setText(PortModelLabeller.getName(params.getRouteOption()));
 			}
 		});
 
-		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_ExtraTransitTime(), commandHandler));
-		tableViewer.addTypicalColumn("Laden Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate(), commandHandler));
-		tableViewer.addTypicalColumn("Ballast Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate(), commandHandler));
-		tableViewer.addTypicalColumn("Laden NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate(), commandHandler));
-		tableViewer.addTypicalColumn("Ballast NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate(), commandHandler));
+		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselRouteParameters_ExtraTransitTime(), commandHandler));
+		tableViewer.addTypicalColumn("Laden Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselRouteParameters_LadenConsumptionRate(), commandHandler));
+		tableViewer.addTypicalColumn("Ballast Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselRouteParameters_BallastConsumptionRate(), commandHandler));
+		tableViewer.addTypicalColumn("Laden NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselRouteParameters_LadenNBORate(), commandHandler));
+		tableViewer.addTypicalColumn("Ballast NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselRouteParameters_BallastNBORate(), commandHandler));
 
 		tableViewer.setInput(container);
 
@@ -105,7 +105,7 @@ public class CanalParametersDialog extends Dialog {
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
 
-		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) this.container.eGet(containment);
+		final List<VesselRouteParameters> l = (List<VesselRouteParameters>) this.container.eGet(containment);
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
@@ -113,13 +113,13 @@ public class CanalParametersDialog extends Dialog {
 				if (r.getRouteOption() == RouteOption.DIRECT) {
 					continue route_loop;
 				}
-				for (final VesselClassRouteParameters vcrp : l) {
+				for (final VesselRouteParameters vcrp : l) {
 					if (vcrp.getRouteOption() == r.getRouteOption()) {
 						continue route_loop;
 					}
 				}
 
-				final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				final VesselRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselRouteParameters();
 				vcrp.setRouteOption(r.getRouteOption());
 				l.add(vcrp);
 			}
@@ -132,8 +132,8 @@ public class CanalParametersDialog extends Dialog {
 		return super.open();
 	}
 
-	public EList<VesselClassRouteParameters> getResult() {
-		return (EList<VesselClassRouteParameters>) this.container.eGet(containment);
+	public EList<VesselRouteParameters> getResult() {
+		return (EList<VesselRouteParameters>) this.container.eGet(containment);
 	}
 
 	@Override

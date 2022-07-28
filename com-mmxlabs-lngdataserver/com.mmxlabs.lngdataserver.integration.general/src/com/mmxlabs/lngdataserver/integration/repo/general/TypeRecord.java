@@ -23,4 +23,8 @@ public interface TypeRecord {
 
 	void writeHeader(OutputStream os) throws IOException;
 
+	default String getCurrentURL() {
+		return null;
+	}
+
 }

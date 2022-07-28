@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullSubprofile#getInventory <em>Inventory</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullSubprofile#getEntityTable <em>Entity Table</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.MullSubprofile#getAllowedArrivalTimes <em>Allowed Arrival Times</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullSubprofile()
@@ -63,5 +64,17 @@ public interface MullSubprofile extends EObject {
 	 * @generated
 	 */
 	EList<MullEntityRow> getEntityTable();
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Arrival Times</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Arrival Times</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullSubprofile_AllowedArrivalTimes()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<AllowedArrivalTimeRecord> getAllowedArrivalTimes();
 
 } // MullSubprofile

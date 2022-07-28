@@ -15,7 +15,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public final class NonShippedVoyagePlanCacheKey {
 
 	public final IResource resource;
-	public final IVesselAvailability vesselAvailability;
+	public final IVesselCharter vesselCharter;
 	public final IPortTimesRecord portTimesRecord;
 	public final boolean keepDetails;
 	public final ISequencesAttributesProvider sequencesAttributesProvider;
@@ -37,10 +37,10 @@ public final class NonShippedVoyagePlanCacheKey {
 
 	private final int hash;
 
-	public NonShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord, final boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider) {
+	public NonShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, final IPortTimesRecord portTimesRecord, final boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		this.resource = resource;
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 		this.portTimesRecord = portTimesRecord;
 		this.keepDetails = keepDetails;
 		this.sequencesAttributesProvider = sequencesAttributesProvider;
@@ -49,7 +49,7 @@ public final class NonShippedVoyagePlanCacheKey {
 		if (returnSlot != null) {
 			slotTimes.add(portTimesRecord.getSlotTime(returnSlot));
 		}
-		this.hash = Objects.hash(keepDetails, vesselAvailability, // Vessel
+		this.hash = Objects.hash(keepDetails, vesselCharter, // Vessel
 				portTimesRecord.getSlots().stream().map(IPortSlot::getId).collect(Collectors.toList()), // Slot Ids
 				slotTimes // Slot times.
 		);
@@ -73,7 +73,7 @@ public final class NonShippedVoyagePlanCacheKey {
 			final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 			final IPortSlot otherReturnSlot = other.portTimesRecord.getReturnSlot();
 			final boolean partA = keepDetails == other.keepDetails //
-					&& Objects.equals(vesselAvailability, other.vesselAvailability) //
+					&& Objects.equals(vesselCharter, other.vesselCharter) //
 					&& Objects.equals(returnSlot, otherReturnSlot) //
 					&& Objects.equals(portTimesRecord.getSlots(), other.portTimesRecord.getSlots()) //
 					&& Objects.equals(slotTimes, other.slotTimes) //

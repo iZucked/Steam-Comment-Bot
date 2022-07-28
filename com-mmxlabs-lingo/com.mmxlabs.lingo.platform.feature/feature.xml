@@ -8,9 +8,8 @@
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="LiNGO Eclipse Platform Feature"
-      version="5.5.2.qualifier"
+      version="5.7.4.qualifier"
       provider-name="Minimax Labs Ltd.">
-
 
    <plugin
          id="org.eclipse.compare.core"
@@ -1349,14 +1348,7 @@
          version="0.0.0"
          unpack="false"/>
 
-   <plugin
-         id="org.apache.log4j"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
+     <plugin
          id="org.eclipse.swtchart"
          download-size="0"
          install-size="0"
@@ -1635,6 +1627,13 @@
 
    <plugin
          id="jakarta.servlet-api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.com.google.errorprone.error_prone_annotations"
          download-size="0"
          install-size="0"
          version="0.0.0"

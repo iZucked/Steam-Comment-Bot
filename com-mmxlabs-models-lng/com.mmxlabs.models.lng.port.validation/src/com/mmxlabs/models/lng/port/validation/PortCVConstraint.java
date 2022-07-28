@@ -23,4 +23,9 @@ public class PortCVConstraint extends AbstractFeatureRangeConstraint {
 	protected boolean shouldValidateFeature(EObject target, EStructuralFeature feature) {
 		return (target instanceof Port port && port.getCapabilities().contains(PortCapability.LOAD));
 	}
+
+	@Override
+	protected boolean shouldValidateNonMarkerInitialVesselAttributes(EObject object, EStructuralFeature feature) {
+		return false;
+	}
 }

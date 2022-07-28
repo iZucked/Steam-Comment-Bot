@@ -312,7 +312,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 		listenToScenarioSelection();
 		mainComposite.setSashWidth(4);
-		mainComposite.setWeights(new int[] { 16, 84 });
+		mainComposite.setWeights(new int[] { 20, 80 });
 		packAll(mainComposite);
 		// Normally not needed and can probably be removed.
 		mainComposite.addMouseListener(new MouseAdapter() {
@@ -607,7 +607,6 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 		inputWants.forEach(want -> want.accept(model));
 
 		// vesselsComponent.setInput(this);
-		// vesselClassesComponent.setInput(this);
 
 		rootOptionsModel = getRootOptionsModel(model);
 		if (rootOptionsModel != null) {
@@ -673,7 +672,6 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 				shippingOptionsComponent.refresh();
 				// vesselsComponent.refresh();
-				// vesselClassesComponent.refresh();
 				if (layout) {
 					// packAll(vesselComposite);
 					packAll(lhsComposite);

@@ -799,7 +799,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EReference getSequence_VesselAvailability() {
+	public EReference getSequence_VesselCharter() {
 		return (EReference)sequenceEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1401,6 +1401,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EAttribute getCargoAllocation_RepositioningFee() {
 		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoAllocation_IsHeelSource() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoAllocation_IsHeelSink() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -3399,6 +3419,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__CARGO_TYPE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_BONUS_FEE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__REPOSITIONING_FEE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__IS_HEEL_SOURCE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__IS_HEEL_SINK);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
 
 		marketAllocationEClass = createEClass(MARKET_ALLOCATION);
@@ -3433,7 +3455,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		sequenceEClass = createEClass(SEQUENCE);
 		createEReference(sequenceEClass, SEQUENCE__EVENTS);
-		createEReference(sequenceEClass, SEQUENCE__VESSEL_AVAILABILITY);
+		createEReference(sequenceEClass, SEQUENCE__VESSEL_CHARTER);
 		createEReference(sequenceEClass, SEQUENCE__CHARTER_IN_MARKET);
 		createEReference(sequenceEClass, SEQUENCE__FITNESSES);
 		createEAttribute(sequenceEClass, SEQUENCE__SPOT_INDEX);
@@ -3847,6 +3869,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCargoAllocation_CargoType(), theCargoPackage.getCargoType(), "cargoType", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_BallastBonusFee(), ecorePackage.getELong(), "ballastBonusFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_RepositioningFee(), ecorePackage.getELong(), "repositioningFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_IsHeelSource(), ecorePackage.getEBoolean(), "isHeelSource", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_IsHeelSink(), ecorePackage.getEBoolean(), "isHeelSink", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3885,7 +3909,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSequence_Events(), this.getEvent(), this.getEvent_Sequence(), "events", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSequence_VesselAvailability(), theCargoPackage.getVesselAvailability(), null, "vesselAvailability", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSequence_VesselCharter(), theCargoPackage.getVesselCharter(), null, "vesselCharter", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_CharterInMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "charterInMarket", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

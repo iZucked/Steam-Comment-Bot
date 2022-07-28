@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
@@ -82,36 +82,36 @@ public class OptimiserDataMapper {
 		if (slot instanceof LoadSlot && ((LoadSlot) slot).isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			return vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			return vesselProvider.getResource(vesselCharter);
 		} else if (slot instanceof DischargeSlot && ((DischargeSlot) slot).isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			return vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			return vesselProvider.getResource(vesselCharter);
 		}
 		throw new IllegalArgumentException();
 
 	}
 
-	public IVesselAvailability getVesselAvailability(final VesselAvailability vesselAvailability) {
+	public IVesselCharter getVesselCharter(final VesselCharter vesselCharter) {
 
-		final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+		final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-		return o_vesselAvailability;
+		return o_vesselCharter;
 	}
 
-	public IVesselAvailability getVesselAvailability(final CharterInMarket charterInMarket, final int spotIndex) {
+	public IVesselCharter getVesselCharter(final CharterInMarket charterInMarket, final int spotIndex) {
 		final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(charterInMarket, ISpotCharterInMarket.class);
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 
 		for (final IResource o_resource : dataTransformer.getOptimisationData().getResources()) {
-			final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-			if (o_vesselAvailability.getSpotCharterInMarket() != market) {
+			final IVesselCharter o_vesselCharter = vesselProvider.getVesselCharter(o_resource);
+			if (o_vesselCharter.getSpotCharterInMarket() != market) {
 				continue;
 			}
-			if (o_vesselAvailability.getSpotIndex() == spotIndex) {
-				return o_vesselAvailability;
+			if (o_vesselCharter.getSpotIndex() == spotIndex) {
+				return o_vesselCharter;
 			}
 		}
 		throw new IllegalArgumentException();
@@ -155,11 +155,11 @@ public class OptimiserDataMapper {
 		return provider.getElementsFor(market);
 	}
 
-	public IStartRequirement getStartRequirement(final VesselAvailability vesselAvailability) {
+	public IStartRequirement getStartRequirement(final VesselCharter vesselCharter) {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
 
-		final IVesselAvailability o_vesselAvailablity = getVesselAvailability(vesselAvailability);
+		final IVesselCharter o_vesselAvailablity = getVesselCharter(vesselCharter);
 		final IResource o_resource = vesselProvider.getResource(o_vesselAvailablity);
 
 		return startEndRequirementProvider.getStartRequirement(o_resource);
@@ -169,17 +169,17 @@ public class OptimiserDataMapper {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
 
-		final IVesselAvailability o_vesselAvailablity = getVesselAvailability(charterInMarket, spotIndex);
+		final IVesselCharter o_vesselAvailablity = getVesselCharter(charterInMarket, spotIndex);
 		final IResource o_resource = vesselProvider.getResource(o_vesselAvailablity);
 
 		return startEndRequirementProvider.getStartRequirement(o_resource);
 	}
 
-	public IEndRequirement getEndRequirement(final VesselAvailability vesselAvailability) {
+	public IEndRequirement getEndRequirement(final VesselCharter vesselCharter) {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
 
-		final IVesselAvailability o_vesselAvailablity = getVesselAvailability(vesselAvailability);
+		final IVesselCharter o_vesselAvailablity = getVesselCharter(vesselCharter);
 		final IResource o_resource = vesselProvider.getResource(o_vesselAvailablity);
 
 		return startEndRequirementProvider.getEndRequirement(o_resource);
@@ -189,7 +189,7 @@ public class OptimiserDataMapper {
 		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
 		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
 
-		final IVesselAvailability o_vesselAvailablity = getVesselAvailability(charterInMarket, spotIndex);
+		final IVesselCharter o_vesselAvailablity = getVesselCharter(charterInMarket, spotIndex);
 		final IResource o_resource = vesselProvider.getResource(o_vesselAvailablity);
 
 		return startEndRequirementProvider.getEndRequirement(o_resource);
@@ -206,20 +206,17 @@ public class OptimiserDataMapper {
 
 		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
 		for (final EObject modelObject : modelObjects) {
-			if (modelObject instanceof Cargo) {
-				final Cargo cargo = (Cargo) modelObject;
+			if (modelObject instanceof Cargo cargo) {
 				for (final Slot slot : cargo.getSlots()) {
 					final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 					final ISequenceElement element = portSlotProvider.getElement(o_slot);
 					elements.add(element);
 				}
-			} else if (modelObject instanceof Slot) {
-				final Slot slot = (Slot) modelObject;
+			} else if (modelObject instanceof Slot<?> slot) {
 				final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 				final ISequenceElement element = portSlotProvider.getElement(o_slot);
 				elements.add(element);
-			} else if (modelObject instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) modelObject;
+			} else if (modelObject instanceof VesselEvent vesselEvent) {
 				final IVesselEventPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(vesselEvent, IVesselEventPortSlot.class);
 				for (final ISequenceElement e : o_slot.getEventSequenceElements()) {
 					elements.add(e);
@@ -250,13 +247,13 @@ public class OptimiserDataMapper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;
@@ -301,13 +298,13 @@ public class OptimiserDataMapper {
 		if (loadSlot.isDESPurchase()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		} else if (dischargeSlot.isFOBSale()) {
 			final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
 			final ISequenceElement element = portSlotProvider.getElement(o_slot);
-			final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(element);
-			o_resource = vesselProvider.getResource(vesselAvailability);
+			final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
+			o_resource = vesselProvider.getResource(vesselCharter);
 		}
 
 		assert o_resource != null;

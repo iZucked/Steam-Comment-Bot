@@ -74,9 +74,9 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCiph
 @SuppressWarnings("restriction")
 public class Application implements IApplication {
 
-	private AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-	private static final Logger log = LoggerFactory.getLogger(Application.class);
+	private AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
 	private Object applicationExitCode;
 
@@ -179,7 +179,7 @@ public class Application implements IApplication {
 		try {
 			cleanupP2(subMonitor.split(1));
 		} catch (final Exception e) {
-			log.error("Error during P2 cleanup: " + e.getMessage(), e);
+			LOG.error("Error during P2 cleanup: " + e.getMessage(), e);
 		}
 
 		// Defer the background polling a little
@@ -189,7 +189,7 @@ public class Application implements IApplication {
 			reencryptWorkspace(display, monitor);
 			return ApplicationCode.CONTINUE;
 		} catch (final IOException e) {
-			log.error("Error during workspace re-encryption: " + e.getMessage(), e);
+			LOG.error("Error during workspace re-encryption: " + e.getMessage(), e);
 		}
 		return IApplication.EXIT_OK;
 	}
@@ -430,7 +430,7 @@ public class Application implements IApplication {
 				try {
 					applicationExitCode = startupTasks(display, monitor);
 				} catch (Exception e) {
-					log.error("failed to start LiNGO: " + e.getMessage());
+					LOG.error("failed to start LiNGO: " + e.getMessage());
 				}
 				monitor.done();
 			});

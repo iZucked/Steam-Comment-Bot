@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -49,7 +49,7 @@ public class AllocationRecord {
 	/** The LNG volume which the vessel starts with (the start heel) */
 	public final long startVolumeInM3;
 
-	public final @NonNull IVesselAvailability vesselAvailability;
+	public final @NonNull IVesselCharter vesselCharter;
 	public final @NonNull VoyagePlan resourceVoyagePlan;
 
 	public IVessel nominatedVessel;
@@ -102,11 +102,11 @@ public class AllocationRecord {
 
 	public @NonNull IPortTimesRecord portTimesRecord;
 
-	public AllocationRecord(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3,
+	public AllocationRecord(final @NonNull IVesselCharter vesselCharter, final @NonNull VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3,
 			final long minEndVolumeInM3, final long maxEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
 			final @NonNull List<@NonNull Long> minVolumesInM3, final @NonNull List<@NonNull Long> maxVolumesInM3, @NonNull final List<@NonNull Long> minVolumesInMMBtu,
 			@NonNull final List<@NonNull Long> maxVolumesInMMBtu, final @NonNull List<@NonNull Integer> slotCV) {
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
@@ -120,13 +120,13 @@ public class AllocationRecord {
 		this.minVolumesInMMBtu = minVolumesInMMBtu;
 		this.maxVolumesInMMBtu = maxVolumesInMMBtu;
 		this.slotCV = slotCV;
-		this.allocationMode = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE)
+		this.allocationMode = (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE)
 				? AllocationMode.Transfer
 				: AllocationMode.Shipped;
 	}
 
 	public @NonNull AllocationRecord mutableCopy() {
-		return new AllocationRecord(vesselAvailability, resourceVoyagePlan, startVolumeInM3, requiredFuelVolumeInM3, minimumEndVolumeInM3, maximumEndVolumeInM3, slots, portTimesRecord, returnSlot, //
+		return new AllocationRecord(vesselCharter, resourceVoyagePlan, startVolumeInM3, requiredFuelVolumeInM3, minimumEndVolumeInM3, maximumEndVolumeInM3, slots, portTimesRecord, returnSlot, //
 				new LinkedList<>(minVolumesInM3), //
 				new LinkedList<>(maxVolumesInM3), //
 				new LinkedList<>(minVolumesInMMBtu), //

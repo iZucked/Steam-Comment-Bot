@@ -294,13 +294,22 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Des Purchase</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -309,7 +318,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -318,7 +327,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -327,7 +336,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -336,7 +345,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -345,7 +354,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -354,7 +363,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -363,7 +372,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -372,7 +381,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -381,7 +390,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -390,7 +399,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -399,7 +408,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -408,7 +417,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -417,7 +426,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -426,7 +435,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -435,7 +444,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
@@ -444,7 +453,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -465,13 +474,22 @@ s	 * <!-- end-user-doc -->
 	int SELL_OPPORTUNITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Fob Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -480,7 +498,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -489,7 +507,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -498,7 +516,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -507,7 +525,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -516,7 +534,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -525,7 +543,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -534,7 +552,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -543,7 +561,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -552,7 +570,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -561,7 +579,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -570,7 +588,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -579,7 +597,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -588,7 +606,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -597,7 +615,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
@@ -606,7 +624,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -646,13 +664,22 @@ s	 * <!-- end-user-doc -->
 	int BUY_MARKET__MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_MARKET__MONTH = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Buy Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int BUY_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellMarketImpl <em>Sell Market</em>}' class.
@@ -692,13 +719,22 @@ s	 * <!-- end-user-doc -->
 	int SELL_MARKET__MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_MARKET__MONTH = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Sell Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SELL_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyReferenceImpl <em>Buy Reference</em>}' class.
@@ -2283,13 +2319,13 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2428,13 +2464,13 @@ s	 * <!-- end-user-doc -->
 	int SANDBOX_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SANDBOX_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SANDBOX_RESULT__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2671,13 +2707,13 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int ACTIONABLE_SET_PLAN__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2806,13 +2842,13 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SLOT_INSERTION_OPTIONS__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -2995,13 +3031,13 @@ s	 * <!-- end-user-doc -->
 	int OPTIMISATION_RESULT__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISATION_RESULT__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int OPTIMISATION_RESULT__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -3122,13 +3158,13 @@ s	 * <!-- end-user-doc -->
 	int SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = 2;
+	int SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -4604,13 +4640,13 @@ s	 * <!-- end-user-doc -->
 	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_EVENTS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES;
+	int SENSITIVITY_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market Overrides</b></em>' containment reference list.
@@ -5208,6 +5244,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBuyOpportunity_WindowSizeUnits();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getName()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_Name();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5383,6 +5430,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getSellOpportunity_WindowSizeUnits();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getName()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_Name();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyMarket <em>Buy Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5404,6 +5462,17 @@ s	 * <!-- end-user-doc -->
 	EReference getBuyMarket_Market();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyMarket#getMonth <em>Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Month</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyMarket#getMonth()
+	 * @see #getBuyMarket()
+	 * @generated
+	 */
+	EAttribute getBuyMarket_Month();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellMarket <em>Sell Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5423,6 +5492,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getSellMarket_Market();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellMarket#getMonth <em>Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Month</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellMarket#getMonth()
+	 * @see #getSellMarket()
+	 * @generated
+	 */
+	EAttribute getSellMarket_Month();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyReference <em>Buy Reference</em>}'.
@@ -6445,15 +6525,15 @@ s	 * <!-- end-user-doc -->
 	EReference getAbstractSolutionSet_ExtraVesselEvents();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselCharters <em>Extra Vessel Charters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities()
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Charters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselCharters()
 	 * @see #getAbstractSolutionSet()
 	 * @generated
 	 */
-	EReference getAbstractSolutionSet_ExtraVesselAvailabilities();
+	EReference getAbstractSolutionSet_ExtraVesselCharters();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
@@ -7915,15 +7995,15 @@ s	 * <!-- end-user-doc -->
 	EReference getSolutionOptionMicroCase_ScheduleModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselCharters <em>Extra Vessel Charters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Vessel Availabilities</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselAvailabilities()
+	 * @return the meta object for the containment reference list '<em>Extra Vessel Charters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getExtraVesselCharters()
 	 * @see #getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	EReference getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+	EReference getSolutionOptionMicroCase_ExtraVesselCharters();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
@@ -8262,6 +8342,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = eINSTANCE.getBuyOpportunity_WindowSizeUnits();
 
 		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__NAME = eINSTANCE.getBuyOpportunity_Name();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8392,6 +8480,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = eINSTANCE.getSellOpportunity_WindowSizeUnits();
 
 		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__NAME = eINSTANCE.getSellOpportunity_Name();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8410,6 +8506,14 @@ s	 * <!-- end-user-doc -->
 		EReference BUY_MARKET__MARKET = eINSTANCE.getBuyMarket_Market();
 
 		/**
+		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_MARKET__MONTH = eINSTANCE.getBuyMarket_Month();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellMarketImpl <em>Sell Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8426,6 +8530,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference SELL_MARKET__MARKET = eINSTANCE.getSellMarket_Market();
+
+		/**
+		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_MARKET__MONTH = eINSTANCE.getSellMarket_Month();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyReferenceImpl <em>Buy Reference</em>}' class.
@@ -9238,12 +9350,12 @@ s	 * <!-- end-user-doc -->
 		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS = eINSTANCE.getAbstractSolutionSet_ExtraVesselEvents();
 
 		/**
-		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Extra Vessel Charters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getAbstractSolutionSet_ExtraVesselAvailabilities();
+		EReference ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS = eINSTANCE.getAbstractSolutionSet_ExtraVesselCharters();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
@@ -10408,12 +10520,12 @@ s	 * <!-- end-user-doc -->
 		EReference SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL = eINSTANCE.getSolutionOptionMicroCase_ScheduleModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Extra Vessel Charters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES = eINSTANCE.getSolutionOptionMicroCase_ExtraVesselAvailabilities();
+		EReference SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS = eINSTANCE.getSolutionOptionMicroCase_ExtraVesselCharters();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.

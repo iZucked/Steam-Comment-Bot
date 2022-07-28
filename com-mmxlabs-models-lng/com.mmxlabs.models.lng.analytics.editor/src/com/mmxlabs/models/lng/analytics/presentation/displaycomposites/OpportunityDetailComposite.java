@@ -30,12 +30,12 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
 public class OpportunityDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
 
-	public OpportunityDetailComposite(Composite parent, int style, FormToolkit toolkit) {
+	public OpportunityDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 	}
 
 	@Override
-	public boolean checkVisibility(IDialogEditingContext dialogContext) {
+	public boolean checkVisibility(final IDialogEditingContext dialogContext) {
 		boolean changed = false;
 		for (final IInlineEditor editor : editors) {
 			final EStructuralFeature feature = editor.getFeature();
@@ -59,7 +59,9 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 						if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME || feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME) {
 							if ((object instanceof BuyOpportunity && object.eGet(AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_MODE) == VolumeMode.FIXED)
 									|| (object instanceof SellOpportunity && object.eGet(AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_MODE) == VolumeMode.FIXED)) {
-								gridData.horizontalSpan = 2;
+								if (!(control instanceof Label)) {
+									gridData.horizontalSpan = 3;
+								}
 							} else {
 								gridData.horizontalSpan = 1;
 							}
@@ -73,7 +75,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 			}
 		}
 		if (changed) {
-			pack();
+			layout(true);
 		}
 
 		return changed;
@@ -85,11 +87,6 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-				// //return new FillLayout();
-				// return super.createDetailLayout(root, value);
-
-				// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
-				// we want the editor to take up two cells rather than one.
 				return new GridLayout(6, false);
 			}
 
@@ -147,7 +144,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 				}
 
 				// Anything else needs to fill the space.
-				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+				final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 5;
 				return gd;
 			}

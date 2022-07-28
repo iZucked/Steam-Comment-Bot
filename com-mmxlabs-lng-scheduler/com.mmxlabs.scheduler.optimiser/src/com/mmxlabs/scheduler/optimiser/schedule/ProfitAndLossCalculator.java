@@ -30,12 +30,12 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselCharter;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.exposures.OptimiserExposureRecords;
@@ -149,7 +149,7 @@ public class ProfitAndLossCalculator {
 			final IDischargeOption dischargeOption;
 			final int time;
 
-			final IVesselAvailability vesselAvailability;
+			final IVesselCharter vesselCharter;
 			if (portSlot instanceof ILoadOption) {
 				loadOption = (ILoadOption) portSlot;
 				if (loadOption instanceof ILoadSlot) {
@@ -161,7 +161,7 @@ public class ProfitAndLossCalculator {
 				ITimeWindow timeWindow = loadOption.getTimeWindow();
 				assert timeWindow != null;
 				time = timeWindow.getInclusiveStart();
-				vesselAvailability = new MarkToMarketVesselAvailability(market, loadOption);
+				vesselCharter = new MarkToMarketVesselCharter(market, loadOption);
 			} else if (portSlot instanceof IDischargeOption) {
 				dischargeOption = (IDischargeOption) portSlot;
 				if (dischargeOption instanceof IDischargeSlot) {
@@ -173,7 +173,7 @@ public class ProfitAndLossCalculator {
 				ITimeWindow timeWindow = dischargeOption.getTimeWindow();
 				assert timeWindow != null;
 				time = timeWindow.getInclusiveStart();
-				vesselAvailability = new MarkToMarketVesselAvailability(market, dischargeOption);
+				vesselCharter = new MarkToMarketVesselCharter(market, dischargeOption);
 			} else {
 				continue;
 			}
@@ -199,11 +199,11 @@ public class ProfitAndLossCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, voyagePlan, portTimesRecord, annotatedSolution);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselCharter, voyagePlan, portTimesRecord, annotatedSolution);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				// Calculate P&L
-				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, null, annotatedSolution);
+				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselCharter, null, annotatedSolution);
 				final ICargoValueAnnotation cargoValueAnnotation = p.getFirst();
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);

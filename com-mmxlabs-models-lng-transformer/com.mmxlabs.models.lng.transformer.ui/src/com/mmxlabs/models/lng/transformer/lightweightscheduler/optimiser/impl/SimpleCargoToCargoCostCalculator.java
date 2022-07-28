@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -55,7 +55,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, final IPortSlot startSlotB, final IVesselAvailability vessel) {
+	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, final IPortSlot startSlotB, final IVesselCharter vessel) {
 		assert ((loadA != null && dischargeA != null) || vesselEventA != null);
 		final int startA = loadA != null ? loadA.getTimeWindow().getInclusiveStart() : vesselEventA.getTimeWindow().getInclusiveStart();
 		final int endA = dischargeA != null ? dischargeA.getTimeWindow().getInclusiveStart()
@@ -133,13 +133,13 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		return dischargeA != null ? dischargeA : vesselEventA;
 	}
 
-	public long[][] getCargoCharterCostPerAvailability(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	public long[][] getCargoCharterCostPerAvailability(final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
 		final long[][] costs = new long[cargoes.size()][vessels.size()];
 		for (int i = 0; i < cargoes.size(); i++) {
 			final List<IPortSlot> cargo = cargoes.get(i);
 			for (int j = 0; j < vessels.size(); j++) {
-				final IVesselAvailability availability = vessels.get(j);
-				if (SchedulerCalculationUtils.isVesselAvailabilityOptional(availability)) {
+				final IVesselCharter availability = vessels.get(j);
+				if (SchedulerCalculationUtils.isVesselCharterOptional(availability)) {
 					costs[i][j] = availability.getDailyCharterInRate().getValueAtPoint(cargo.get(0).getTimeWindow().getInclusiveStart());
 				}
 			}
@@ -148,9 +148,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	}
 
 	@Override
-	public long[][][] createCargoToCargoCostMatrix(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	public long[][][] createCargoToCargoCostMatrix(final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
 		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final Map<IVesselCharter, Integer> vesselMap = getVesselMap(vessels);
 		final long[][][] costs = new long[cargoes.size()][cargoes.size()][vessels.size()];
 		for (final List<IPortSlot> cargoA : cargoes) {
 			final ILoadSlot loadA = getLoadSlot(cargoA);
@@ -161,7 +161,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 					final ILoadSlot loadB = getLoadSlot(cargoB);
 					final IPortSlot vesselEventB = getVesselEvent(cargoB);
 					final IPortSlot endSlot = loadB == null ? vesselEventB : loadB;
-					for (final IVesselAvailability vessel : vessels) {
+					for (final IVesselCharter vessel : vessels) {
 						if (cargoA == cargoB) {
 							costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = 0L;
 						} else {
@@ -185,9 +185,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	 * @param vessels
 	 * @return
 	 */
-	public int[][][] getMinCargoToCargoTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	public int[][][] getMinCargoToCargoTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
 		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final Map<IVesselCharter, Integer> vesselMap = getVesselMap(vessels);
 		final int[][][] times = new int[cargoes.size()][cargoes.size()][vessels.size()];
 		for (final List<IPortSlot> cargoA : cargoes) {
 			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
@@ -200,7 +200,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 					if (cargoA == cargoB) {
 						continue;
 					}
-					for (final IVesselAvailability vessel : vessels) {
+					for (final IVesselCharter vessel : vessels) {
 						final int endADuration = dischargeA != null ? elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel)) : 0;
 						IPortSlot startB = cargoB.get(0);
 
@@ -229,16 +229,16 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	 * @param vessels
 	 * @return
 	 */
-	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
 		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final Map<IVesselCharter, Integer> vesselMap = getVesselMap(vessels);
 		final int[][] times = new int[cargoes.size()][vessels.size()];
 		for (final List<IPortSlot> cargoA : cargoes) {
 			final ILoadSlot loadA = getLoadSlot(cargoA);
 			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
 			final IPortSlot vesselEventA = getVesselEvent(cargoA);
 
-			for (final IVesselAvailability vessel : vessels) {
+			for (final IVesselCharter vessel : vessels) {
 				if (vesselEventA != null) {
 					final int duration = elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
 					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = duration;
@@ -317,10 +317,10 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		return cargoMap;
 	}
 
-	private Map<IVesselAvailability, Integer> getVesselMap(final List<IVesselAvailability> vessels) {
-		final Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
+	private Map<IVesselCharter, Integer> getVesselMap(final List<IVesselCharter> vessels) {
+		final Map<IVesselCharter, Integer> vesselMap = new HashMap<>();
 		for (int i = 0; i < vessels.size(); i++) {
-			final IVesselAvailability vessel = vessels.get(i);
+			final IVesselCharter vessel = vessels.get(i);
 			vesselMap.put(vessel, i);
 		}
 		return vesselMap;

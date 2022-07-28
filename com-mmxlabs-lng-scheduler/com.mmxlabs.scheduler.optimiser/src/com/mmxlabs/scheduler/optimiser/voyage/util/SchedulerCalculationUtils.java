@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -33,42 +33,42 @@ public class SchedulerCalculationUtils {
 	}
 
 	@NonNull
-	public IVesselAvailability getVesselAvailabilityFromResource(@NonNull final IResource resource) {
-		return vesselProvider.getVesselAvailability(resource);
+	public IVesselCharter getVesselCharterFromResource(@NonNull final IResource resource) {
+		return vesselProvider.getVesselCharter(resource);
 	}
 
 	@NonNull
-	public List<IVesselAvailability> getAllVesselAvailabilities() {
-		return vesselProvider.getSortedResources().stream().map(r -> vesselProvider.getVesselAvailability(r)).collect(Collectors.toList());
+	public List<IVesselCharter> getAllVesselCharters() {
+		return vesselProvider.getSortedResources().stream().map(r -> vesselProvider.getVesselCharter(r)).collect(Collectors.toList());
 	}
 
-	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int voyagePlanStartTime) {
+	public long getVesselCharterInRatePerDay(final IVesselCharter vesselCharter, final int voyagePlanStartTime) {
 		/*
-		 * final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
+		 * final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselCharter, vesselStartTime, purchaseIntervals[purchaseIndex].start);
 		 * 
 		 */
 
 		/*
-		 * return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
+		 * return schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselCharter, portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
 		 * portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart());
 		 */
-		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, voyagePlanStartTime);
+		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselCharter, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
 	}
 	/*
-	 * TODO: replace above method with this one. public long getVesselCharterCost(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) { final long
-	 * vesselCharterInRatePerDay = charterCostCalculator.getCharterCost(vesselAvailability, vesselStartTime, v); return vesselCharterInRatePerDay; }
+	 * TODO: replace above method with this one. public long getVesselCharterCost(final IVesselCharter vesselCharter, final int vesselStartTime, final int vesselEndTime) { final long
+	 * vesselCharterInRatePerDay = charterCostCalculator.getCharterCost(vesselCharter, vesselStartTime, v); return vesselCharterInRatePerDay; }
 	 */
 
 	/**
 	 * Determines whether the vessel should be considered optional, and consequently the charter cost may not be sunk.
 	 * 
-	 * @param vesselAvailability
+	 * @param vesselCharter
 	 * @return
 	 */
-	public static boolean isVesselAvailabilityOptional(IVesselAvailability vesselAvailability) {
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP || vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER
-				|| vesselAvailability.isOptional()) {
+	public static boolean isVesselCharterOptional(IVesselCharter vesselCharter) {
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP || vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER
+				|| vesselCharter.isOptional()) {
 			return true;
 		}
 		return false;

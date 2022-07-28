@@ -87,7 +87,7 @@ public class SolutionOptionMicroCaseItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION);
 			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL);
-			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES);
+			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS);
 			childrenFeatures.add(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES);
 		}
 		return childrenFeatures;
@@ -143,7 +143,7 @@ public class SolutionOptionMicroCaseItemProvider
 		switch (notification.getFeatureID(SolutionOptionMicroCase.class)) {
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_SPECIFICATION:
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL:
-			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES:
+			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS:
 			case AnalyticsPackage.SOLUTION_OPTION_MICRO_CASE__CHARTER_IN_MARKET_OVERRIDES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -174,8 +174,8 @@ public class SolutionOptionMicroCaseItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_AVAILABILITIES,
-				 CargoFactory.eINSTANCE.createVesselAvailability()));
+				(AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__EXTRA_VESSEL_CHARTERS,
+				 CargoFactory.eINSTANCE.createVesselCharter()));
 
 		newChildDescriptors.add
 			(createChildParameter

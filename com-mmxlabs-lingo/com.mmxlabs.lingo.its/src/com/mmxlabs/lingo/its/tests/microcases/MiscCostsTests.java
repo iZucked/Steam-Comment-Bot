@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -46,7 +46,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
 				.withOptionality(true) //
@@ -78,7 +78,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -95,7 +95,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 					.get();
 			assert cargoAllocation != null;
 			Assertions.assertEquals(6042139L, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
-			StartEvent start = getStartEvent(vesselAvailability);
+			StartEvent start = getStartEvent(vesselCharter);
 			Assertions.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(6042139L, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -109,7 +109,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
 				.withOptionality(true)//
@@ -141,7 +141,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -170,7 +170,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 11, 8, 0, 0)) //
 				.withOptionality(true) //
@@ -203,7 +203,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 				.withMiscCosts(1_000_000) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -225,8 +225,8 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 		});
 	}
 
-	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
-		return ScheduleModelUtils.getStartEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
+	private StartEvent getStartEvent(final VesselCharter vesselCharter) {
+		return ScheduleModelUtils.getStartEvent(vesselCharter, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
 }

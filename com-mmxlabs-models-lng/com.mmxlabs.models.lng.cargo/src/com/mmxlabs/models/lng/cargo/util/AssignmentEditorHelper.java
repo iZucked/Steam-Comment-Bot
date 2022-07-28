@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -166,12 +166,12 @@ public class AssignmentEditorHelper {
 			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
 
 		// Map the vessel availability to assignments
-		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
+		final Map<VesselCharter, List<AssignableElement>> fleetGrouping = new HashMap<>();
 		final Map<CharterInMarketOverride, List<AssignableElement>> marketOverridesGrouping = new HashMap<>();
 		// Keep the same order as the EMF data model
-		final List<VesselAvailability> vesselAvailabilityOrder = new ArrayList<>();
-		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-			vesselAvailabilityOrder.add(va);
+		final List<VesselCharter> vesselCharterOrder = new ArrayList<>();
+		for (final VesselCharter va : cargoModel.getVesselCharters()) {
+			vesselCharterOrder.add(va);
 			// Pre-create map values
 			fleetGrouping.put(va, new ArrayList<>());
 		}
@@ -233,12 +233,12 @@ public class AssignmentEditorHelper {
 				// Groupings should have been pre-created
 				spotGrouping.get(key).add(assignableElement);
 
-			} else if (vesselAssignmentType instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof VesselCharter) {
+				final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
 				// Groupings should have been pre-created
-				List<AssignableElement> list = fleetGrouping.get(vesselAvailability);
+				List<AssignableElement> list = fleetGrouping.get(vesselCharter);
 				if (list == null) {
-					// Unexpected state, cannot continue (can happen if a vesselAvailability has been deleted)
+					// Unexpected state, cannot continue (can happen if a vesselCharter has been deleted)
 					return null;
 				}
 				list.add(assignableElement);
@@ -252,8 +252,8 @@ public class AssignmentEditorHelper {
 		final List<@NonNull CollectedAssignment> result = new ArrayList<>();
 
 		// First add in the fleet vessels
-		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {
-			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, portModel, modelDistanceProvider, assignableElementDateProvider));
+		for (final VesselCharter vesselCharter : vesselCharterOrder) {
+			result.add(new CollectedAssignment(fleetGrouping.get(vesselCharter), vesselCharter, portModel, modelDistanceProvider, assignableElementDateProvider));
 		}
 
 		// Now add in the spot charter-ins
@@ -264,15 +264,15 @@ public class AssignmentEditorHelper {
 		return result;
 	}
 
-	public static VesselAvailability findVesselAvailability(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
-			@NonNull final List<VesselAvailability> vesselAvailabilities, @Nullable final Integer charterIndex) {
+	public static VesselCharter findVesselCharter(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
+			@NonNull final List<VesselCharter> vesselAvailabilities, @Nullable final Integer charterIndex) {
 
 		// int mightMatchCount = 0;
-		// for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-		// if (vesselAvailability.getVessel() == vessel) {
+		// for (final VesselCharter vesselCharter : vesselAvailabilities) {
+		// if (vesselCharter.getVessel() == vessel) {
 		// mightMatchCount++;
-		// if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
-		// return vesselAvailability;
+		// if (isElementInVesselCharter(assignableElement, vesselCharter)) {
+		// return vesselCharter;
 		// }
 		// }
 		// }
@@ -280,16 +280,16 @@ public class AssignmentEditorHelper {
 		// multiple,
 		// // give up.
 		// if (mightMatchCount == 1) {
-		// for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-		// if (vesselAvailability.getVessel() == vessel) {
-		// return vesselAvailability;
+		// for (final VesselCharter vesselCharter : vesselAvailabilities) {
+		// if (vesselCharter.getVessel() == vessel) {
+		// return vesselCharter;
 		// }
 		// }
 		// } else {
 		final int idx = charterIndex == null ? 1 : charterIndex.intValue();
-		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-			if (vesselAvailability.getVessel() == vessel && vesselAvailability.getCharterNumber() == idx) {
-				return vesselAvailability;
+		for (final VesselCharter vesselCharter : vesselAvailabilities) {
+			if (vesselCharter.getVessel() == vessel && vesselCharter.getCharterNumber() == idx) {
+				return vesselCharter;
 			}
 		}
 		// }

@@ -12,7 +12,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 
 /**
@@ -23,16 +23,16 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
  */
 public final class HashMapVesselEditor implements IVesselProviderEditor {
 
-	private final Map<IResource, IVesselAvailability> resourceVesselAvailabilityMap = new HashMap<>();
+	private final Map<IResource, IVesselCharter> resourceVesselCharterMap = new HashMap<>();
 	private final Map<IResource, Boolean> resourceOptionalMap = new HashMap<>();
-	private final Map<IVesselAvailability, IResource> vesselAvailabilityResourceMap = new HashMap<>();
+	private final Map<IVesselCharter, IResource> vesselCharterResourceMap = new HashMap<>();
 	private final List<IResource> resources = new LinkedList<IResource>();
 
 	@Override
 	@NonNull
-	public IVesselAvailability getVesselAvailability(@NonNull final IResource resource) {
-		if (resourceVesselAvailabilityMap.containsKey(resource)) {
-			return resourceVesselAvailabilityMap.get(resource);
+	public IVesselCharter getVesselCharter(@NonNull final IResource resource) {
+		if (resourceVesselCharterMap.containsKey(resource)) {
+			return resourceVesselCharterMap.get(resource);
 		}
 
 		throw new IllegalArgumentException("Unknown resource");
@@ -40,17 +40,17 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 
 	@Override
 	@NonNull
-	public IResource getResource(@NonNull final IVesselAvailability vesselAvailability) {
-		if (vesselAvailabilityResourceMap.containsKey(vesselAvailability)) {
-			return vesselAvailabilityResourceMap.get(vesselAvailability);
+	public IResource getResource(@NonNull final IVesselCharter vesselCharter) {
+		if (vesselCharterResourceMap.containsKey(vesselCharter)) {
+			return vesselCharterResourceMap.get(vesselCharter);
 		}
-		throw new IllegalArgumentException("Unknown vesselAvailability");
+		throw new IllegalArgumentException("Unknown vesselCharter");
 	}
 
 	@Override
-	public void setVesselAvailabilityResource(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability) {
-		vesselAvailabilityResourceMap.put(vesselAvailability, resource);
-		resourceVesselAvailabilityMap.put(resource, vesselAvailability);
+	public void setVesselCharterResource(@NonNull final IResource resource, @NonNull final IVesselCharter vesselCharter) {
+		vesselCharterResourceMap.put(vesselCharter, resource);
+		resourceVesselCharterMap.put(resource, vesselCharter);
 		if (!resources.contains(resource)) {
 			resources.add(resource);
 		}

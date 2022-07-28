@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -107,8 +107,8 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		final int maxSpeed = vesselCharter.getVessel().getMaxSpeed();
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -133,9 +133,9 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed(), messages);
+		return checkPairwiseConstraint(first, second, resource, vesselCharter.getVessel().getMaxSpeed(), messages);
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, final List<String> messages) {
@@ -148,7 +148,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			return true;
 		}
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 
@@ -163,7 +163,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			final int voyageStartTime = tw1.getExclusiveEnd() - 1 + elementDurationProvider.getElementDuration(first, resource);
 
 			@NonNull
-			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
+			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
 					AvailableRouteChoices.OPTIMAL);
 			if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
 				if (messages != null)
@@ -193,7 +193,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		assert tw1 != null;
 		assert tw2 != null;
 
-		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), vesselProvider.getVesselAvailability(resource).getVessel());
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), vesselProvider.getVesselCharter(resource).getVessel());
 
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";

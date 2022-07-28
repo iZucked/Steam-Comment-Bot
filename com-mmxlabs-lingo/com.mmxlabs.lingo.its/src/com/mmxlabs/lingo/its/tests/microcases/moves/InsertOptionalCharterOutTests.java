@@ -19,7 +19,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -37,7 +37,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.InsertOptionalElementMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveHandler;
@@ -62,7 +62,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -106,9 +106,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			move.apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			// Empty vessel
@@ -131,7 +131,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -143,7 +143,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		runTest((injector, scenarioRunner) -> {
@@ -177,9 +177,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			move.apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			// 3 event: start, charter out, end
@@ -202,7 +202,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -258,9 +258,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 				final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 				move.apply(result);
 
-				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+				final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+				final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 				// Check expectations
 				// 5 events: start, start-charter, redirect-charter out, charter-out, end
@@ -297,7 +297,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -309,7 +309,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 
@@ -342,9 +342,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
 			move.apply(result);
 
-			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter1 = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+			final IResource resource1 = vesselProvider.getResource(o_vesselCharter1);
 
 			// Check expectations
 			// 5 events: start, start-charter, redirect-charter out, charter-out, end
@@ -369,7 +369,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -389,7 +389,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			// Create the sequence to export
 			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector());
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, charterOutEvent);
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, charterOutEvent);
 
 			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -418,7 +418,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -439,7 +439,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 
 			// Create the sequence to export
 			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector());
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, charterOutEvent);
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, charterOutEvent);
 
 			final Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -468,7 +468,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -480,7 +480,7 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 				.withHireRate(50_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_TOBATA)) //
 				.build();
 

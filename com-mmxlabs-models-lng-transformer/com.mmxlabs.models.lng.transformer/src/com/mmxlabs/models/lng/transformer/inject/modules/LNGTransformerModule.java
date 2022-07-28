@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
-import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -100,7 +99,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private final boolean withSpotCargoMarkets;
 
 	private final boolean hintEvaluationMode;
-	
+
 	private final boolean hintEnableCache;
 	private final boolean portfolioBreakEven;
 
@@ -191,6 +190,8 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE);
+
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention)).toInstance(Boolean.FALSE);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 
@@ -291,11 +292,11 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named(MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
-	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper, @NonNull final IntegerIntervalCurveHelper integerIntervalCurveHelper) {
+	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(final DateAndCurveHelper dateAndCurveHelper) {
 
-		return integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(//
-				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())), //
-				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
+		return dateAndCurveHelper.getMonthAlignedIntegerIntervalCurve(//
+				dateAndCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())), //
+				dateAndCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
 	}
 
 	@Provides

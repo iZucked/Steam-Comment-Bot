@@ -34,7 +34,7 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 	private final LocalDateAttributeImporter dateImporter = new LocalDateAttributeImporter();
 
 	@NonNull
-	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
+	static final  Map<String, String> inputs = new LinkedHashMap<>();
 
 	static {
 		inputs.put(PROMPT_PERIOD_KEY, "Prompt Period");
@@ -47,8 +47,7 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 
 	@Override
 	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 
 			// Always set a default period. Then overwrite with values from the CSV file.
 			final String prop = System.getProperty(Constants.PROPERTY_RUNNING_ITS);
@@ -130,8 +129,7 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 	@Override
 	public void exportModel(final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final MMXRootObject rootObject = context.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final Map<String, String> row = new LinkedHashMap<>();
 			row.put(PROMPT_PERIOD_START_KEY, dateImporter.formatLocalDate(lngScenarioModel.getPromptPeriodStart()));
 			row.put(PROMPT_PERIOD_END_KEY, dateImporter.formatLocalDate(lngScenarioModel.getPromptPeriodEnd()));

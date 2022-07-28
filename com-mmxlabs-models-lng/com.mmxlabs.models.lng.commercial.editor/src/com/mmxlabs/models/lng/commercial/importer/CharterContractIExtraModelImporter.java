@@ -38,7 +38,7 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  * Look at
- * com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter
+ * com.mmxlabs.models.lng.cargo.importer.VesselCharterBallastBonusImporterExtraImporter
  * 
  * @author FM
  *

@@ -21,7 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups <em>Cargo Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselCharters <em>Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}</li>
@@ -106,20 +106,20 @@ public interface CargoModel extends UUIDObject {
 	EList<CargoGroup> getCargoGroups();
 
 	/**
-	 * Returns the value of the '<em><b>Vessel Availabilities</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * Returns the value of the '<em><b>Vessel Charters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselCharter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Vessel Availabilities</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Availabilities</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_VesselAvailabilities()
+	 * @return the value of the '<em>Vessel Charters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_VesselCharters()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<VesselAvailability> getVesselAvailabilities();
+	EList<VesselCharter> getVesselCharters();
 
 	/**
 	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.

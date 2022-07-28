@@ -58,6 +58,8 @@ public class Vessel {
 	private Optional<Boolean> hasReliqCapacity = Optional.empty();
 	private Optional<Boolean> isReference = Optional.empty();
 	private Optional<Boolean> mmxReference = Optional.empty();
+	private Optional<Boolean> isMarker = Optional.empty();
+
 
 	public String getMmxId() {
 		return mmxId;
@@ -305,5 +307,13 @@ public class Vessel {
 
 	public void setMmxReference(final Optional<Boolean> mmxReference) {
 		this.mmxReference = mmxReference;
+	}
+
+	public Optional<Boolean> getIsMarker() {
+		return this.isMarker;
+	}
+
+	public void setIsMarker(Optional<Boolean> isMarker) {
+		this.isMarker = isMarker;
 	}
 }

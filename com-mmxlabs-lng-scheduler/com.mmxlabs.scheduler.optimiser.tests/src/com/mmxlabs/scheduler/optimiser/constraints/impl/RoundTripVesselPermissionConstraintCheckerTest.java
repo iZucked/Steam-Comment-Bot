@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
@@ -35,13 +35,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -63,19 +63,19 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter1 = Mockito.mock(IVesselCharter.class);
 		final IResource resource1 = Mockito.mock(IResource.class);
 
-		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter2 = Mockito.mock(IVesselCharter.class);
 		final IResource resource2 = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability1)).thenReturn(resource1);
-		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
-		Mockito.when(vesselProvider.getResource(vesselAvailability2)).thenReturn(resource2);
-		Mockito.when(vesselProvider.getVesselAvailability(resource2)).thenReturn(vesselAvailability2);
+		Mockito.when(vesselProvider.getResource(vesselCharter1)).thenReturn(resource1);
+		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
+		Mockito.when(vesselProvider.getResource(vesselCharter2)).thenReturn(resource2);
+		Mockito.when(vesselProvider.getVesselCharter(resource2)).thenReturn(vesselCharter2);
 
-		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
-		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter2.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -83,8 +83,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability1)).thenReturn(true);
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability1)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter1)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
@@ -106,11 +106,11 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -122,7 +122,7 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				continue;
 			}
-			Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(vesselInstanceType);
+			Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(vesselInstanceType);
 
 			Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
 			Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource, new ArrayList<>()));
@@ -138,13 +138,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -152,8 +152,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(false);
@@ -171,13 +171,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -185,8 +185,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
@@ -206,13 +206,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -220,10 +220,10 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(false);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(false);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(false);
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
@@ -231,10 +231,10 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		// Again, swap flags
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(false);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(false);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(false);
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource, new ArrayList<>()));
@@ -251,13 +251,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -267,8 +267,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		ListSequence sequence = new ListSequence(Lists.newArrayList(element1, element2));
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(false);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(false);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(false);
 
@@ -285,13 +285,13 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
@@ -301,8 +301,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 
 		ListSequence sequence = new ListSequence(Lists.newArrayList(element1, element2));
 
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
-		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselCharter)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselCharter)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);

@@ -145,7 +145,7 @@ public class CloudOptimisationDataService {
 		return client.getInfo();
 	}
 
-	public void encryptSymmetricKey(RSAPublicKey pubkey, SecretKey symkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {
+	public static void encryptSymmetricKey(RSAPublicKey pubkey, SecretKey symkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {
 		var cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, pubkey);
 		try (FileOutputStream fos = new FileOutputStream(encryptedKeyFile)) {

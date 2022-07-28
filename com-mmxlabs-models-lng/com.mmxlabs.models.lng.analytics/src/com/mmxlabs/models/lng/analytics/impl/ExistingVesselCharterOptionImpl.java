@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Existing Vessel Availability</b></em>'.
+ * An implementation of the model object '<em><b>Existing Vessel Charter</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -41,7 +41,7 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailability vesselCharter;
+	protected VesselCharter vesselCharter;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,10 +67,10 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	 * @generated
 	 */
 	@Override
-	public VesselAvailability getVesselCharter() {
+	public VesselCharter getVesselCharter() {
 		if (vesselCharter != null && vesselCharter.eIsProxy()) {
 			InternalEObject oldVesselCharter = (InternalEObject)vesselCharter;
-			vesselCharter = (VesselAvailability)eResolveProxy(oldVesselCharter);
+			vesselCharter = (VesselCharter)eResolveProxy(oldVesselCharter);
 			if (vesselCharter != oldVesselCharter) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER, oldVesselCharter, vesselCharter));
@@ -84,7 +84,7 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability basicGetVesselCharter() {
+	public VesselCharter basicGetVesselCharter() {
 		return vesselCharter;
 	}
 
@@ -94,8 +94,8 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	 * @generated
 	 */
 	@Override
-	public void setVesselCharter(VesselAvailability newVesselCharter) {
-		VesselAvailability oldVesselCharter = vesselCharter;
+	public void setVesselCharter(VesselCharter newVesselCharter) {
+		VesselCharter oldVesselCharter = vesselCharter;
 		vesselCharter = newVesselCharter;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER, oldVesselCharter, vesselCharter));
@@ -125,7 +125,7 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case AnalyticsPackage.EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER:
-				setVesselCharter((VesselAvailability)newValue);
+				setVesselCharter((VesselCharter)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -140,7 +140,7 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case AnalyticsPackage.EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER:
-				setVesselCharter((VesselAvailability)null);
+				setVesselCharter((VesselCharter)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -160,4 +160,4 @@ public class ExistingVesselCharterOptionImpl extends UUIDObjectImpl implements E
 		return super.eIsSet(featureID);
 	}
 
-} //ExistingVesselAvailabilityImpl
+} //ExistingVesselCharterImpl

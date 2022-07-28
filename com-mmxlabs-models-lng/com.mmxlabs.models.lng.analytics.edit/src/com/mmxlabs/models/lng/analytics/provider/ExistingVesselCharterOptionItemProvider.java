@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
@@ -91,14 +91,14 @@ public class ExistingVesselCharterOptionItemProvider extends UUIDObjectItemProvi
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ExistingVesselCharterOption)object).getUuid();
-		return label == null || label.length() == 0 ?
+		VesselCharter va = ((ExistingVesselCharterOption)object).getVesselCharter();
+		return va == null || va.getVessel() == null ?
 			getString("_UI_ExistingVesselCharterOption_type") :
-			getString("_UI_ExistingVesselCharterOption_type") + " " + label;
+			va.getVessel().getName();
 	}
 
 

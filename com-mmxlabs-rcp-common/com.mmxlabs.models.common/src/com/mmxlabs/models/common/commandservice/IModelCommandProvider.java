@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -26,7 +27,7 @@ public interface IModelCommandProvider {
 	 * @param input
 	 * @return
 	 */
-	public Command provideAdditionalBeforeCommand(
+	@Nullable Command provideAdditionalBeforeCommand(
 			final EditingDomain editingDomain, 
 			final MMXRootObject rootObject,
 			final Map<EObject, EObject> overrides,
@@ -41,7 +42,7 @@ public interface IModelCommandProvider {
 	 * @param input
 	 * @return
 	 */
-	public Command provideAdditionalAfterCommand(
+	@Nullable Command provideAdditionalAfterCommand(
 			final EditingDomain editingDomain, 
 			final MMXRootObject rootObject,
 			final Map<EObject, EObject> overrides,
@@ -50,7 +51,11 @@ public interface IModelCommandProvider {
 			final CommandParameter parameter, 
 			final Command input);
 	
-	public void startCommandProvision();
+	default void startCommandProvision() {
+		
+	}
 	
-	public void endCommandProvision();
+	default void endCommandProvision() {
+		
+	}
 }

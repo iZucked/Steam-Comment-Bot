@@ -45,6 +45,7 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 				return super.render(object);
 			}
 		}, CommercialPackage.eINSTANCE.getContract_PriceInfo());
+		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getContract_Counterparty(),  getCommandHandler()));
 
 		defaultSetTitle("Contracts");
 	}

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -56,7 +56,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 		
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -64,7 +64,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		
@@ -106,7 +106,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -114,7 +114,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -124,7 +124,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		
@@ -156,9 +156,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 //			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 //
 //			// No end date flex, fully costed
-//			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-//			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
-//			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
+//			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+//			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselCharter.getEndAfter());
+//			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselCharter.getEndBy());
 //
 //			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
@@ -177,7 +177,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.build();
 
@@ -207,7 +207,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
 				.build();
 
@@ -216,7 +216,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -262,7 +262,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 1, 0, 0, 0), null) //
 				.build();
 
@@ -271,7 +271,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -317,7 +317,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(null, LocalDateTime.of(2016, 4, 1, 0, 0, 0)) //
 				.build();
 
@@ -326,7 +326,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -372,7 +372,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -380,7 +380,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -389,7 +389,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 10, 1));
@@ -422,9 +422,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(horizon, period_vesselAvailability.getEndAfter().plusHours(1).toLocalDate());
-			Assertions.assertEquals(LocalDate.of(2016, 7, 1), period_vesselAvailability.getEndBy().plusHours(1).toLocalDate());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(horizon, period_vesselCharter.getEndAfter().plusHours(1).toLocalDate());
+			Assertions.assertEquals(LocalDate.of(2016, 7, 1), period_vesselCharter.getEndBy().plusHours(1).toLocalDate());
 
 		}, null);
 	}
@@ -444,7 +444,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		// Get rid of timezone to make testing easier
@@ -463,7 +463,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -474,7 +474,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D2", LocalDate.of(2016, 2, 1), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -506,9 +506,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselCharter.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselCharter.getEndBy());
 
 			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
@@ -529,7 +529,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
 				.build();
 
@@ -549,7 +549,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -560,7 +560,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D2", LocalDate.of(2016, 2, 1), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -591,9 +591,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(LocalDate.of(2016, 1, 5), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselCharter.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselCharter.getEndBy());
 
 			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
@@ -614,7 +614,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
 				.build();
 
@@ -634,7 +634,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		//
@@ -645,7 +645,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		// .makeDESSale("D2", LocalDate.of(2016, 2, 1), dischargePort, null, entity, "7") //
 		// .withWindowSize(0, TimePeriod.HOURS) //
 		// .build() //
-		// .withVesselAssignment(vesselAvailability, 2) //
+		// .withVesselAssignment(vesselCharter, 2) //
 		// .withAssignmentFlags(false, false) //
 		// .build();
 
@@ -677,9 +677,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(LocalDateTime.of(2016, 4, 16, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(LocalDateTime.of(2016, 4, 16, 0, 0, 0), period_vesselCharter.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselCharter.getEndBy());
 
 			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
@@ -700,7 +700,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
 				.build();
 
@@ -720,7 +720,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		//
@@ -731,7 +731,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		// .makeDESSale("D2", LocalDate.of(2016, 2, 1), dischargePort, null, entity, "7") //
 		// .withWindowSize(0, TimePeriod.HOURS) //
 		// .build() //
-		// .withVesselAssignment(vesselAvailability, 2) //
+		// .withVesselAssignment(vesselCharter, 2) //
 		// .withAssignmentFlags(false, false) //
 		// .build();
 
@@ -766,9 +766,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(LocalDateTime.of(2016, 1, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(LocalDateTime.of(2016, 1, 1, 0, 0, 0), period_vesselCharter.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselCharter.getEndBy());
 
 			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);
@@ -789,7 +789,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("80000") //
 				.withStartWindow(LocalDateTime.of(2016, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2021, 9, 1, 0, 0, 0)) //
@@ -811,7 +811,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.makeDESSale("D1", LocalDate.of(2017, 2, 27), dischargePort, null, entity, "7") //
 				.withWindowSize(1, TimePeriod.DAYS) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 2, 1));
@@ -842,9 +842,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 			// No end date flex, fully costed
-			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
-			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
+			VesselCharter period_vesselCharter = optimiserScenario.getCargoModel().getVesselCharters().get(0);
+			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselCharter.getEndAfter());
+			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselCharter.getEndBy());
 
 			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
 		}, null);

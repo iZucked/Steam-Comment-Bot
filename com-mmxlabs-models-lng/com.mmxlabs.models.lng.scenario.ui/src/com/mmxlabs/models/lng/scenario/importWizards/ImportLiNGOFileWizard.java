@@ -29,7 +29,7 @@ import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 
-	private static final Logger log = LoggerFactory.getLogger(ImportLiNGOFileWizard.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ImportLiNGOFileWizard.class);
 
 	private ImportLiNGOFilePage filesPage;
 
@@ -73,7 +73,7 @@ public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 								// other #split monitor has completed.
 								copyScenario[0] = ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, monitor.split(4));
 							} catch (final Exception e) {
-								log.error(e.getMessage(), e);
+								LOG.error(e.getMessage(), e);
 							}
 						}, monitor.split(5));
 
@@ -86,7 +86,7 @@ public class ImportLiNGOFileWizard extends Wizard implements IImportWizard {
 							});
 						}
 					} catch (final Exception e) {
-						log.error(e.getMessage());
+						LOG.error(e.getMessage());
 					} finally {
 						monitor.done();
 					}

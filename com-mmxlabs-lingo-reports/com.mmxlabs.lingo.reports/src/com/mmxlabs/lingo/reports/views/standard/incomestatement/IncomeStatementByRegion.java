@@ -38,14 +38,14 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 	}
 
 	private List<String> getRegions() {	
-	    IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		String regionsStr = prefs.get(PreferenceConstants.REPORT_REGIONS_LIST, "");
+	    final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		final String regionsStr = prefs.get(PreferenceConstants.REPORT_REGIONS_LIST, "");
 		if (!regionsStr.isBlank()) {
-			String[] regions = regionsStr.replace("\r", "").split("\n");
+			final String[] regions = regionsStr.replace("\r", "").split("\n");
 			if (regions.length > 0) {
 				if (Arrays.stream(regions).anyMatch(k -> k.equalsIgnoreCase(Regions.OTHER.name()))) {
 					//Insure other string matches exactly.
-					for (String region : regions) {
+					for (final String region : regions) {
 						if (region.equalsIgnoreCase(Regions.OTHER.name())) {
 							this.other = region;
 						}
@@ -53,7 +53,7 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 					return Arrays.asList(regions);
 				}
 				else {
-					List<String> regionsList = new ArrayList<>();
+					final List<String> regionsList = new ArrayList<>();
 					regionsList.addAll(Arrays.asList(regions));
 					regionsList.add(Regions.OTHER.name());
 					return regionsList;
@@ -63,20 +63,20 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 		return DEFAULT_REGIONS;
 	}
 	
-	private Map<String,String> getPortToRegionMap(PortModel portModel) {
+	private Map<String,String> getPortToRegionMap(final PortModel portModel) {
 		return this.portModelToPortToRegionMap.get(portModel);
 	}
 
-	private void computePortToRegionMap(PortModel portModel) {
+	private void computePortToRegionMap(final PortModel portModel) {
 		//Compute.
-		List<String> regions = this.getRegions();
-		Map<String, String> portToRegionMap = new HashMap<>();
+		final List<String> regions = this.getRegions();
+		final Map<String, String> portToRegionMap = new HashMap<>();
 		
-		for (String region : regions) {
-			PortGroup regionPG = getPortGroupForRegion(portModel, region);
+		for (final String region : regions) {
+			final PortGroup regionPG = getPortGroupForRegion(portModel, region);
 			
 			if (regionPG != null) {
-				for (APortSet port : SetUtils.getObjects(regionPG)) {
+				for (final var port : SetUtils.getObjects(regionPG)) {
 					portToRegionMap.put(port.getName().toLowerCase(), region);
 				}
 			}
@@ -85,16 +85,17 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 		this.portModelToPortToRegionMap.put(portModel, portToRegionMap);
 	}
 	
+	@Override
 	protected IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
-		PortModel pm = ScenarioModelUtil.getPortModel(scenarioResult.getScenarioDataProvider());
+		final PortModel pm = ScenarioModelUtil.getPortModel(scenarioResult.getScenarioDataProvider());
 		this.computePortToRegionMap(pm);
 		return super.getIncomeByMonth(scenarioResult, schedule, lineItem);
 	}
 
-	private PortGroup getPortGroupForRegion(PortModel portModel, String region) {
-		EList<PortGroup> pgs = portModel.getPortGroups();
+	private PortGroup getPortGroupForRegion(final PortModel portModel, final String region) {
+		final EList<PortGroup> pgs = portModel.getPortGroups();
 		PortGroup regionPG = null;
-		for (PortGroup pg : pgs) {
+		for (final PortGroup pg : pgs) {
 			if (region.equalsIgnoreCase(pg.getName())) {
 				regionPG = pg;
 			}
@@ -109,8 +110,8 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 			if (port != null && port.getName() != null) {
 				final PortModel pm = (PortModel)port.eContainer();
 
-				Map<String,String> portToRegion = getPortToRegionMap(pm);
-				String region = portToRegion.get(port.getName().toLowerCase());
+				final Map<String,String> portToRegion = getPortToRegionMap(pm);
+				final String region = portToRegion.get(port.getName().toLowerCase());
 
 				if (region != null) {
 					return region;
@@ -131,8 +132,8 @@ public class IncomeStatementByRegion extends AbstractIncomeStatement<String> {
 			return ((Enum)o1.key).ordinal() - ((Enum)o2.key).ordinal();
 		}
 		else {
-			String k1 = (String)o1.key;
-			String k2 = (String)o2.key;
+			final String k1 = (String)o1.key;
+			final String k2 = (String)o2.key;
 			return k1.compareTo(k2);
 		}
 	}

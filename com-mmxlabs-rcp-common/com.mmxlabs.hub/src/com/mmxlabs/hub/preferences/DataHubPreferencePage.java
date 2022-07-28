@@ -20,6 +20,7 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -60,7 +61,7 @@ import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(DataHubPreferencePage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataHubPreferencePage.class);
 
 	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
@@ -70,7 +71,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	 * is saved only when the Apply button is pressed
 	 */
 	// display note and disable login button
-	private IPropertyChangeListener disableLogin = event -> disableLogin();
+	private final IPropertyChangeListener disableLogin = event -> disableLogin();
 	private boolean detailsValid = true;
 
 	public DataHubPreferencePage() {
@@ -91,6 +92,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		if (editor != null) {
 			editor.dispose();
 		}
+		
+		super.dispose();
 	}
 
 	protected String loginButtonText = "Login";
@@ -120,14 +123,15 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected StringFieldEditor editor;
 
 	@Override
-	protected void initialize() {
-		super.initialize();
-		editor.setPropertyChangeListener(disableLogin);
-		forceBasicAuth.setPropertyChangeListener(disableLogin);
+	public void propertyChange(final PropertyChangeEvent event) {
+		super.propertyChange(event);
+		if (event.getSource() == editor || event.getSource() == forceBasicAuth) {
+			disableLogin();
+		}
 	}
 
 	public void disableLogin() {
-		LOGGER.info("disableLogin event fired");
+//		LOG.info("disableLogin event fired");
 
 		detailsValid = false;
 
@@ -137,7 +141,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void enableLogin() {
-		LOGGER.info("enableLogin event fired");
+//		LOG.info("enableLogin event fired");
 
 		detailsValid = true;
 
@@ -167,10 +171,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		setForceBasicAuthEnabled();
 	};
 
-	private @NonNull IDataHubStateChangeListener stateChangeListener = new IDataHubStateChangeListener() {
+	private @NonNull
+	final IDataHubStateChangeListener stateChangeListener = new IDataHubStateChangeListener() {
 
 		@Override
-		public void hubStateChanged(boolean online, boolean loggedin, boolean changedToOnlineAndLoggedIn) {
+		public void hubStateChanged(final boolean online, final boolean loggedin, final boolean changedToOnlineAndLoggedIn) {
 
 			// Do not update state if we are waiting for the user to press "apply"
 			if (!detailsValid) {
@@ -210,7 +215,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		editor = new StringFieldEditor(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, "&URL", getFieldEditorParent());
 		addField(editor);
 
-		Composite c = new Composite(getFieldEditorParent(), SWT.NONE);
+		final Composite c = new Composite(getFieldEditorParent(), SWT.NONE);
 		c.setLayout(new GridLayout(2, true));
 		c.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
@@ -256,8 +261,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
 				// trigger refresh datahub service logged in state
-				UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
-				UpstreamUrlProvider.StateReason reason = state.getReason();
+				final UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+				final UpstreamUrlProvider.StateReason reason = state.getReason();
 				String msg = null;
 				switch (reason) {
 				case EMPTY_URL:
@@ -269,7 +274,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				case UNKNOWN_ERROR:
 					if (state.getException() != null) {
 						msg = state.getMessage() + " (see error log for details)";
-						LOGGER.error(state.getException().getMessage(), state.getException());
+						LOG.error(state.getException().getMessage(), state.getException());
 					} else {
 						msg = state.getMessage();
 					}
@@ -283,10 +288,10 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				if (msg != null) {
 					if (reason == StateReason.HUB_ONLINE) {
 
-						boolean oAuthEnabled = authenticationManager.isOAuthEnabled() && !authenticationManager.forceBasicAuthentication.get();
+						final boolean oAuthEnabled = authenticationManager.isOAuthEnabled() && !authenticationManager.forceBasicAuthentication.get();
 						if (oAuthEnabled) {
 							if (OAuthManager.getInstance().hasToken()) {
-								boolean tokenValid = OAuthManager.getInstance().isTokenValid(UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable());
+								final boolean tokenValid = OAuthManager.getInstance().isTokenValid(UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable());
 								if (!tokenValid) {
 									MessageDialog.openError(getShell(), "Connection check", msg + "\n\nInvalid/Expired SSO token found.");
 								} else {
@@ -314,7 +319,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "&Team folder", getFieldEditorParent()));
 		}
 
-		Label lbl2 = new Label(getFieldEditorParent(), SWT.NONE);
+		final Label lbl2 = new Label(getFieldEditorParent(), SWT.NONE);
 		lbl2.setText("Check to prefer the Edge browser for web based login pages. Note: This requires the Edge WebView2 runtime to be installed.");
 		lbl2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 		preferEdgeBrowser = new BooleanFieldEditor(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER, "&Prefer Edge Browser", getFieldEditorParent());

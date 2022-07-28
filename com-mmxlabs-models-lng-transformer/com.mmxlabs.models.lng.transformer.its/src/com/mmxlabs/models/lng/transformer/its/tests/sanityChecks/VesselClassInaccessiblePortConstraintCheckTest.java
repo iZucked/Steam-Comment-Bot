@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -61,10 +61,10 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		final int numOfClassFour = 1;
 
 		// createVessels creates and adds the vessels to the scenario.
-		final List<VesselAvailability> vesselsOfClassOne = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		final List<VesselAvailability> vesselsOfClassTwo = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		final List<VesselAvailability> vesselsOfClassThree = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		final List<VesselAvailability> vesselsOfClassFour = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		final List<VesselCharter> vesselsOfClassOne = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		final List<VesselCharter> vesselsOfClassTwo = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		final List<VesselCharter> vesselsOfClassThree = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		final List<VesselCharter> vesselsOfClassFour = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// get the vessel classes
 		final Vessel vesselClassOne = vesselsOfClassOne.get(0).getVessel();
@@ -94,7 +94,7 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		for (final Sequence sequence : result.getSequences()) {
 
 			// Vessel vessel = sequence.getVessel();
-			Vessel vesselClass = sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : sequence.getCharterInMarket().getVessel();
+			Vessel vesselClass = sequence.isSetVesselCharter() ? sequence.getVesselCharter().getVessel() : sequence.getCharterInMarket().getVessel();
 
 			Port bannedPort = null;
 			if (vesselClass.equals(vesselClassOne)) {

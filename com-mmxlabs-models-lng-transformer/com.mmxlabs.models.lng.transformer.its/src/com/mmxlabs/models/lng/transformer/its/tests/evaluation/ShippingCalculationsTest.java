@@ -21,8 +21,8 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
@@ -184,7 +184,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -196,7 +196,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 20, true);
 			// FIXME: Should this really be suez data or copy/paste error?
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.PANAMA);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -258,7 +258,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 30, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -269,7 +269,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vessel, RouteOption.PANAMA);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
+			final VesselRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -346,7 +346,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 
 		// and send the vessel back to the origin port at end of itinerary
-		VesselAvailability va = msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		VesselCharter va = msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 		secondCargo.setVesselAssignmentType(va);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -642,7 +642,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = msc.vesselAvailability;
+		final VesselCharter av = msc.vesselCharter;
 		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		// return 3 hrs after discharge window ends
@@ -677,7 +677,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = msc.vesselAvailability;
+		final VesselCharter av = msc.vesselCharter;
 		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getSchedulingTimeWindow().getStartWithFlex().toLocalDateTime();
 
 		// start 3 hrs before load window begins
@@ -712,7 +712,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = msc.vesselAvailability;
+		final VesselCharter av = msc.vesselCharter;
 		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getSchedulingTimeWindow().getStart().toLocalDateTime();
 		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
@@ -843,7 +843,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
+		msc.vesselCharter.setTimeCharterRate("" + charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.hireCostPerHour = charterRatePerDay / 24;
@@ -868,7 +868,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// Remove default vessel
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
-		cargoModel.getVesselAvailabilities().clear();
+		cargoModel.getVesselCharters().clear();
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
@@ -987,7 +987,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final int charterRatePerDay = 0;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
+		msc.vesselCharter.setTimeCharterRate("" + charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1010,7 +1010,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vesselAvailability.setStartAt(null);
+		msc.vesselCharter.setStartAt(null);
 
 		// change from default scenario: vessel makes only two journeys
 		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
@@ -1060,7 +1060,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vesselAvailability.getEndAt().clear();
+		msc.vesselCharter.getEndAt().clear();
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1092,7 +1092,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
@@ -1125,7 +1125,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime maintenanceDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime maintenanceDockStartAfterDate = endLoad.plusHours(2);
 		MaintenanceEvent event = msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.MAINTENANCE, 3);
@@ -1228,8 +1228,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime startAfterDate = loadDate.minusHours(5L * travelTime);
 		final LocalDateTime startByDate = loadDate.minusHours(travelTime + firstIdle);
 
-		msc.vesselAvailability.setStartAfter(startAfterDate);
-		msc.vesselAvailability.setStartBy(startByDate);
+		msc.vesselCharter.setStartAfter(startAfterDate);
+		msc.vesselCharter.setStartBy(startByDate);
 
 		SequenceTester checker = getDefaultTester();
 
@@ -1256,7 +1256,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = msc.vesselAvailability;
+		final VesselCharter av = msc.vesselCharter;
 		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		// return 37 hrs after discharge window ends
@@ -1315,12 +1315,12 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = msc.vesselAvailability;
+		final VesselCharter av = msc.vesselCharter;
 		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
+		msc.vesselCharter.setTimeCharterRate("" + charterRatePerDay);
 
 		// return 37 hrs after discharge window ends
 		final LocalDateTime returnDate = endDischarge.plusHours(37);
@@ -1399,7 +1399,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.originPort);
 
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		event.setVesselAssignmentType(msc.vesselCharter);
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,

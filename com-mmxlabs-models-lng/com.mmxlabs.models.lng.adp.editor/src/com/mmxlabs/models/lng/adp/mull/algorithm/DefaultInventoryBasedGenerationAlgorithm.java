@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.adp.mull.algorithm;
 
 import java.time.LocalDateTime;
@@ -15,7 +19,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 public class DefaultInventoryBasedGenerationAlgorithm extends MullAlgorithm {
 
 	public DefaultInventoryBasedGenerationAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		for (final InventoryLocalState inventoryLocalState : this.inventoryLocalStates) {
 			for (final IMudContainer mudContainer : inventoryLocalState.getMullContainer().getMudContainers()) {
 				for (final IAllocationTracker allocationTracker : mudContainer.getAllocationTrackers()) {

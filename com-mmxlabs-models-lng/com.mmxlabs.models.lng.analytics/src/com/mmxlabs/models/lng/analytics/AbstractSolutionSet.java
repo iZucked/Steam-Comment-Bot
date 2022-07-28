@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -34,7 +34,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getBaseOption <em>Base Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselEvents <em>Extra Vessel Events</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselAvailabilities <em>Extra Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraVesselCharters <em>Extra Vessel Charters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#getExtraCharterInMarkets <em>Extra Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractSolutionSet#isUseScenarioBase <em>Use Scenario Base</em>}</li>
@@ -157,20 +157,20 @@ public interface AbstractSolutionSet extends UUIDObject, NamedObject {
 	EList<VesselEvent> getExtraVesselEvents();
 
 	/**
-	 * Returns the value of the '<em><b>Extra Vessel Availabilities</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * Returns the value of the '<em><b>Extra Vessel Charters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselCharter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Extra Vessel Availabilities</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Extra Vessel Charters</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Extra Vessel Availabilities</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractSolutionSet_ExtraVesselAvailabilities()
+	 * @return the value of the '<em>Extra Vessel Charters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractSolutionSet_ExtraVesselCharters()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<VesselAvailability> getExtraVesselAvailabilities();
+	EList<VesselCharter> getExtraVesselCharters();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Market Overrides</b></em>' containment reference list.

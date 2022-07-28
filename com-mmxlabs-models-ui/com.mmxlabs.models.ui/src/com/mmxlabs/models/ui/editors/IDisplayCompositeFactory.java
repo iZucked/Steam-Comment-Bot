@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -46,4 +47,8 @@ public interface IDisplayCompositeFactory {
 	 * @return
 	 */
 	List<EObject> getExternalEditingRange(MMXRootObject root, EObject value);
+
+	default @Nullable String getRenderingLabel(List<EObject> inputs) {
+		return null;
+	}
 }

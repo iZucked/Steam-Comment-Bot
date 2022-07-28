@@ -5,13 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 
 public class DefaultVesselCharterCurveProvider implements IVesselCharterInRateProvider {
 
 	@Override
-	public ILongCurve getCharterInRatePerDay(final IVesselAvailability vesselAvailability) {
-		return vesselAvailability.getDailyCharterInRate();
+	public ILongCurve getCharterInRatePerDay(final IVesselCharter vesselCharter) {
+		return vesselCharter.getDailyCharterInRate();
 	}
 }

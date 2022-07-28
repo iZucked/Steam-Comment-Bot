@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.cache;
 
+import java.time.LocalDate;
+
+import com.mmxlabs.common.time.Days;
+
 /**
  * Small params class for general cache settings.
  * 
@@ -17,13 +21,21 @@ public final class GeneralCacheSettings {
 	}
 
 	/**
-	 * Enable or disable random verification. See {@link #VERIFICATION_CHANCE} for verification frequency. This is different to {@link CacheMode#Verify} which verifies *every* cache call.
+	 * Enable or disable random verification. See {@link #VERIFICATION_CHANCE} for
+	 * verification frequency. This is different to {@link CacheMode#Verify} which
+	 * verifies *every* cache call.
 	 * 
 	 */
-	public static final boolean ENABLE_RANDOM_VERIFICATION = false;
+	public static boolean ENABLE_RANDOM_VERIFICATION = false;
+
+	/**
+	 * Use a seed which changes each day so we can get different results, but is
+	 * *easily* set to a specific seed for debugging
+	 */
+	public static final long RANDOM_VERIFICATION_SEED = Days.between(LocalDate.EPOCH, LocalDate.now());
 
 	// % chance of performing a cache verification. Lower is better for runtime.
-	public static final double VERIFICATION_CHANCE = 0.001;
+	public static double VERIFICATION_CHANCE = 0.001;
 
 	// Time Window Scheduler see TimeWindowScheduler
 	public static final int TimeWindowScheduler_Default_CacheSize = 100_000;
@@ -36,6 +48,5 @@ public final class GeneralCacheSettings {
 	// VoyagePlanEvaluator - see CachingVoyagePlanEvaluator
 	public static final int VoyagePlanEvaluator_Default_CacheSize = 5_000_000; // 5m in master
 	public static final boolean VoyagePlanEvaluator_RecordStats = false;
-	
-	
+
 }

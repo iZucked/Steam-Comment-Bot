@@ -9,9 +9,10 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -20,40 +21,48 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILazyCurve;
+import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.LazyIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerEditor;
 
 /**
- * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
- * for creating {@link ICurve}s
+ * Small helper class which is intended to be injected into external
+ * {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with
+ * date and time conversion. This also has some routines for creating
+ * {@link ICurve}s
  * 
  */
-public class DateAndCurveHelper implements IInternalDateProvider{
+public class DateAndCurveHelper implements IInternalDateProvider {
 
-	@NonNull
-	private final ZonedDateTime earliestTime;
+	private final @NonNull ZonedDateTime earliestTime;
 
-	@NonNull
-	private final ZonedDateTime latestTime;
+	private final @NonNull ZonedDateTime latestTime;
 
 	private Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes;
+
+	@Inject
+	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve monthIntervalsInHoursCurve;
+
+	@Inject
+	private ILazyExpressionManagerEditor lazyExpressionMangerEditor;
 
 	@SuppressWarnings("null")
 	@Inject
@@ -72,7 +81,8 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 	}
 
 	/**
-	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
+	 * Convert a date into relative hours; returns the number of hours between
+	 * windowStart and earliest.
 	 * 
 	 * @param earliest
 	 * @param windowStart
@@ -91,88 +101,7 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
-	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-		curve.setDefaultValue(0);
-
-		boolean gotOneEarlyDate = false;
-		for (final YearMonth date : index.getDates()) {
-			assert date != null;
-			final double value = index.getValueForMonth(date);
-			final int hours = convertTime(date);
-			if (hours < 0) {
-				if (gotOneEarlyDate)
-					continue;
-				gotOneEarlyDate = true;
-			}
-			curve.setValueAfter(hours, OptimiserUnitConvertor.convertToInternalPrice(scale * value));
-		}
-
-		return curve;
-	}
-
-	public StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, final boolean smallNumber) {
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-		curve.setDefaultValue(0);
-
-		boolean gotOneEarlyDate = false;
-		for (final YearMonth date : index.getDates()) {
-			assert date != null;
-			final int value = index.getValueForMonth(date);
-			final int hours = convertTime(date);
-
-			if (hours < 0) {
-				if (gotOneEarlyDate) {
-					// TODO: While we should skip all the early stuff, we need to keep the latest,
-					// this currently however takes the earliest value!
-					// continue;
-				}
-				gotOneEarlyDate = true;
-			}
-			final double scaledValue = (double) value * scale;
-			int internalValue;//
-			if (smallNumber) {
-				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
-			} else {
-				internalValue = OptimiserUnitConvertor.convertToInternalDailyRate(scaledValue);
-			}
-			curve.setValueAfter(hours, internalValue);
-		}
-
-		return curve;
-	}
-
-	public ICurve generateExpressionCurveWithShift(final String priceExpression, final @NonNull SeriesParser indices, int days) {
-		ICurve nonShiftedCurve = generateExpressionCurve(priceExpression, indices);
-		final ICurve shiftedCurve = new ICurve() {
-			@Override
-			public int getValueAtPoint(final int point) {
-				return nonShiftedCurve.getValueAtPoint(point + days * 24);
-			}
-		};
-		return shiftedCurve;
-	}
-
-	public Map<IPort, ICurve> generateSplitExpressionCurve(final Collection<PortsSplitExpressionMap> entries, int dayOfMonth, @NonNull SeriesParser parser,
-			final @NonNull ModelEntityMap modelEntityMap) {
-
-		Map<IPort, ICurve> splitExpressionMap = new HashMap<>();
-
-		if (entries != null) {
-			for (final PortsSplitExpressionMap entry : entries) {
-				final ICurve curve = createSplitMonthCurve(modelEntityMap, parser, entry.getExpression1(), entry.getExpression2(), dayOfMonth);
-				for (final Port p : SetUtils.getObjects(entry.getPorts())) {
-					assert p != null;
-					splitExpressionMap.put(modelEntityMap.getOptimiserObjectNullChecked(p, IPort.class), curve);
-				}
-			}
-		}
-		return splitExpressionMap;
-	}
-
-	public @Nullable StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, final SeriesParser indices) {
+	public @Nullable StepwiseIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -185,7 +114,6 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {
-
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
 				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
@@ -194,8 +122,7 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 		return curve;
 	}
 
-	@Nullable
-	public StepwiseLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
+	public @Nullable StepwiseLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -208,7 +135,6 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(Math.round(parsed.evaluate(0).doubleValue() * (double) Calculator.ScaleFactor));
 		} else {
-
 			curve.setDefaultValue(0L);
 			for (final int i : parsed.getChangePoints()) {
 				curve.setValueAfter(i, Math.round(parsed.evaluate(i).doubleValue() * (double) Calculator.ScaleFactor));
@@ -241,7 +167,8 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 	}
 
 	/**
-	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
+	 * Returns the minutes that need to be added to a date that has been rounded
+	 * down elsewhere in the application (e.g. in convertTime())
 	 * 
 	 * @param timeZone
 	 * @return
@@ -285,69 +212,138 @@ public class DateAndCurveHelper implements IInternalDateProvider{
 		return YearMonth.of(year, month);
 	}
 
-	@NonNull
-	public StepwiseIntegerCurve createDateShiftCurve(int dayOfMonth) {
-		// Create a curve, shifting the current date forwards or backwards depending on
-		// whether or not it is on or after the dayOfMonth.
-		final StepwiseIntegerCurve dateShiftCurve = new StepwiseIntegerCurve();
-		{
-			ZonedDateTime currentDate = getEarliestTime();
-
-			// Find the previous dayOfMonth
-			if (currentDate.getDayOfMonth() < dayOfMonth) {
-				currentDate = currentDate.minusMonths(1);
-			}
-			currentDate = currentDate.withDayOfMonth(dayOfMonth);
-			// Ensure midnight
-			currentDate = currentDate.withHour(0);
-
-			// Hmm, not sure how to get to the true latest date - perhaps better as a lazy
-			// treemap?
-			final ZonedDateTime end = getLatestTime();
-			while (currentDate.isBefore(end)) {
-
-				// We want to move anything after dayOfMonth to start of the next month
-				final int time = convertTime(currentDate);
-				// Set to start of current month *then* shift to the next month
-				final ZonedDateTime c = currentDate.withDayOfMonth(1).plusMonths(1);
-
-				final int startOfMonth = convertTime(c);
-				dateShiftCurve.setValueAfter(time, startOfMonth);
-
-				currentDate = currentDate.plusMonths(1);
-			}
-		}
-		return dateShiftCurve;
-	}
-
-	public ICurve createSplitMonthCurve(final @NonNull ModelEntityMap modelEntityMap, @NonNull SeriesParser parser, final String expression1, final String expression2, final int dayOfMonth) {
-
-		final ICurve o_curve1 = generateExpressionCurve(expression1, parser);
-		final ICurve o_curve2 = generateExpressionCurve(expression2, parser);
-
-		final ZonedDateTime earliestTime = getEarliestTime();
-		final ZonedDateTime earliestTimeUTC = earliestTime.withZoneSameInstant(ZoneId.of("UTC"));
-
-		final ZonedDateTime latestTime = getLatestTime();
-		final ZonedDateTime latestTimeUTC = latestTime.withZoneSameInstant(ZoneId.of("UTC"));
-
-		LocalDate start = earliestTimeUTC.toLocalDate().withDayOfMonth(1);
-		final LocalDate end = latestTimeUTC.toLocalDate();
-
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-		curve.setDefaultValue(0);
-		while (start.isBefore(end)) {
-			int month_1st = convertTime(YearMonth.from(start));
-			curve.setValueAfter(month_1st, o_curve1.getValueAtPoint(month_1st));
-			curve.setValueAfter(convertTime(start.withDayOfMonth(dayOfMonth)), o_curve2.getValueAtPoint(month_1st));
-
-			start = start.plusMonths(1);
-		}
-		return curve;
-	}
-
 	public Pair<ZonedDateTime, ZonedDateTime> getEarliestAndLatestTimes() {
 		return earliestAndLatestTimes;
 	}
 
+	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(SeriesParser seriesParser, final String priceExpression) {
+
+		return createCurveAndIntervals(seriesParser, priceExpression, this::generateExpressionCurve);
+	}
+	
+	public @NonNull Pair<ICurve, IIntegerIntervalCurve> createConstantCurveAndIntervals(int constant) {
+		
+		return Pair.of(new ConstantValueCurve(constant), monthIntervalsInHoursCurve);
+	}
+
+	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(SeriesParser seriesParser, final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
+
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return null;
+		}
+
+		final IIntegerIntervalCurve priceIntervals;
+		final ICurve curve;
+
+		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
+
+		if (expression.canEvaluate()) {
+			final ISeries parsed = expression.evaluate();
+
+			if (parsed.getChangePoints().length == 0) {
+				priceIntervals = monthIntervalsInHoursCurve;
+			} else {
+				priceIntervals = getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+			}
+
+			curve = curveFactory.apply(parsed);
+		} else {
+			final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(monthIntervalsInHoursCurve,
+					parsed -> getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
+			priceIntervals = lazyIntervalCurve;
+
+			final ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, curveFactory, lazyIntervalCurve::initialise);
+			curve = lazyCurve;
+			lazyExpressionMangerEditor.addLazyCurve(lazyCurve);
+			lazyExpressionMangerEditor.addLazyIntervalCurve(lazyIntervalCurve);
+		}
+		return Pair.of(curve, priceIntervals);
+	}
+
+	public ICurve generateShiftedCurve(final ISeries series, final UnaryOperator<ZonedDateTime> dateShifter) {
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (series.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0).doubleValue()));
+		} else {
+			curve.setDefaultValue(0);
+			for (final int i : series.getChangePoints()) {
+				ZonedDateTime date = getDateFromHours(i, "UTC");
+				date = dateShifter.apply(date);
+				final int time = convertTime(date);
+				curve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i).doubleValue()));
+			}
+		}
+		return curve;
+	}
+
+	public ICurve generateExpressionCurve(final ISeries parsed) {
+
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (parsed.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+		} else {
+			curve.setDefaultValue(0);
+			for (final int i : parsed.getChangePoints()) {
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+			}
+		}
+		return curve;
+	}
+
+	@SuppressWarnings("null")
+	@NonNull
+	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
+		final String timeZone = (tz == null) ? "UTC" : tz;
+		final ZonedDateTime rawDate = getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours);
+		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromDate(rawDate);
+		return rawDate.plusMinutes(offsetMinutes);
+	}
+
+	
+
+	@NonNull
+	public IIntegerIntervalCurve getMonthAlignedIntegerIntervalCurve(final int start, final int end, final int offsetInHours) {
+		final IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
+		int proposed = start;
+		while (proposed < end) {
+			proposed = getNextMonth(proposed);
+			intervals.add(proposed + offsetInHours);
+		}
+		intervals.add(end);
+		return intervals;
+	}
+ 
+
+	@NonNull
+	public IIntegerIntervalCurve getSplitMonthDatesForChangePoint(final int[] changePoints) {
+		final IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
+		intervals.addAll(Arrays.stream(changePoints).boxed().collect(Collectors.toList()));
+		return intervals;
+	}
+
+	/**
+	 * Get the date in hours of the first day of the next month
+	 * 
+	 * @param hours
+	 * @return
+	 */
+	@SuppressWarnings("null")
+	public int getNextMonth(final int hours) {
+		ZonedDateTime asDate = getDateFromHours(hours, "UTC");
+		asDate = asDate.plusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+		return convertTime(asDate);
+	}
+
+	/**
+	 * Get the date in hours of the first day of the previous month
+	 * 
+	 * @param hours
+	 * @return
+	 */
+	@SuppressWarnings("null")
+	public int getPreviousMonth(final int hours) {
+		ZonedDateTime asDate = getDateFromHours(hours, "UTC");
+		asDate = asDate.minusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+		return convertTime(asDate);
+	}
 }

@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
@@ -258,9 +258,9 @@ public class ScheduleSpecificationHelper {
 		this.extraInjectorService = extraInjectorService;
 	}
 
-	public synchronized void processExtraData_VesselAvailabilities(List<VesselAvailability> extraVesselAvailabilities) {
+	public synchronized void processExtraData_VesselCharters(List<VesselCharter> extraVesselAvailabilities) {
 		if (extraVesselAvailabilities != null) {
-			this.extraDataProvider.extraVesselAvailabilities.addAll(extraVesselAvailabilities);
+			this.extraDataProvider.extraVesselCharters.addAll(extraVesselAvailabilities);
 		}
 	}
 

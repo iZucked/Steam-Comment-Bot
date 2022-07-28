@@ -54,11 +54,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,15 +85,13 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
-import jdk.jfr.Enabled;
-
 /**
  * A dialog for editing scenario objects using the generated detail views.
  * 
  * @author hinton
  */
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
-	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DetailCompositeDialog.class);
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	private IDisplayComposite displayComposite;
@@ -453,34 +448,44 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 */
 	@Override
 	protected void doCreateFormContent() {
-		if (inputs.isEmpty()) {
-			if (displayComposite != null) {
-				displayComposite.getComposite().dispose();
-				displayComposite = null;
-			}
-			return;
-		}
-		final EObject selection = inputs.get(selectedObjectIndex);
-		final IScenarioEditingLocation sel = location;
-
-		String text = returnDuplicates ? "Duplicating " : "Editing ";
-		text += EditorUtils.unmangle(selection).toLowerCase() + " ";
-		if (selection instanceof NamedObject) {
-			final String name = ((NamedObject) selection).getName();
-			text += name != null ? "\"" + name + "\"" : "<unspecified>";
-		} else {
-			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
-			final String providedText = itemLabelProvider.getText(selection);
-			if (providedText != null && !"".equals(providedText)) {
-				text += "\"" + providedText + "\"";
-			}
-		}
-		getShell().setText(text);
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
+
+		if (inputs.isEmpty()) {
+			return;
+		}
+
+		final EObject selection = inputs.get(selectedObjectIndex);
+		final IScenarioEditingLocation sel = location;
+
+		String text = returnDuplicates ? "Duplicating " : "Editing ";
+		boolean foundOverride = false;
+		{
+
+			String lbl = displayCompositeFactory.getRenderingLabel(inputs);
+			if (lbl != null) {
+				text += lbl;
+				foundOverride = true;
+			}
+
+		}
+		if (!foundOverride) {
+			text += EditorUtils.unmangle(selection).toLowerCase() + " ";
+			if (selection instanceof NamedObject) {
+				final String name = ((NamedObject) selection).getName();
+				text += name != null ? "\"" + name + "\"" : "<unspecified>";
+			} else {
+				final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
+				final String providedText = itemLabelProvider.getText(selection);
+				if (providedText != null && !"".equals(providedText)) {
+					text += "\"" + providedText + "\"";
+				}
+			}
+		}
+		getShell().setText(text);
 
 		dialogContext = new DefaultDialogEditingContext(dialogController, location, false, true);
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), dialogContext, toolkit);
@@ -1000,7 +1005,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 
 				} else {
@@ -1033,7 +1038,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 				}
 			}

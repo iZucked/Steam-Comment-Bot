@@ -173,7 +173,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__BASE_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__OPTIONS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES);
 			childrenFeatures.add(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS);
 		}
@@ -231,7 +231,7 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__BASE_OPTION:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__OPTIONS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_EVENTS:
-			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES:
+			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__CHARTER_IN_MARKET_OVERRIDES:
 			case AnalyticsPackage.ABSTRACT_SOLUTION_SET__EXTRA_CHARTER_IN_MARKETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -313,8 +313,8 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_AVAILABILITIES,
-				 CargoFactory.eINSTANCE.createVesselAvailability()));
+				(AnalyticsPackage.Literals.ABSTRACT_SOLUTION_SET__EXTRA_VESSEL_CHARTERS,
+				 CargoFactory.eINSTANCE.createVesselCharter()));
 
 		newChildDescriptors.add
 			(createChildParameter

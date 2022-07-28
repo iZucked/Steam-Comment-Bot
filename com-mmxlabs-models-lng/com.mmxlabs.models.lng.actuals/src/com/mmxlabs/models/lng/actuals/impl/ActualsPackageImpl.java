@@ -25,9 +25,13 @@ import com.mmxlabs.models.lng.actuals.PenaltyType;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -113,7 +117,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ActualsPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -127,12 +131,21 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		if (isInited) return (ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(ActualsPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ActualsPackageImpl theActualsPackage = (ActualsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ActualsPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ActualsPackageImpl());
+		Object registeredActualsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ActualsPackageImpl theActualsPackage = registeredActualsPackage instanceof ActualsPackageImpl ? (ActualsPackageImpl)registeredActualsPackage : new ActualsPackageImpl();
 
 		isInited = true;
 
 		// Initialize simple dependencies
 		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theActualsPackage.createPackageContents();
@@ -143,7 +156,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		// Mark meta-data to indicate it can't be changed
 		theActualsPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ActualsPackage.eNS_URI, theActualsPackage);
 		return theActualsPackage;
@@ -254,6 +266,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotActuals_RouteOption() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(13);
 	}
@@ -892,138 +905,138 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
 		addAnnotation
-		  (getSlotActuals_VolumeInM3(), 
-		   source, 
+		  (getSlotActuals_VolumeInM3(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0.###"
-		   });	
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
 		addAnnotation
-		  (getSlotActuals_VolumeInMMBtu(), 
-		   source, 
+		  (getSlotActuals_VolumeInMMBtu(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu",
-			 "formatString", "##,###,##0.###"
-		   });	
+			   "unit", "mmBtu",
+			   "formatString", "##,###,##0.###"
+		   });
 		addAnnotation
-		  (getSlotActuals_PriceDOL(), 
-		   source, 
+		  (getSlotActuals_PriceDOL(),
+		   source,
 		   new String[] {
-			 "unit", "$/mmBtu",
-			 "formatString", "#0.###"
-		   });	
+			   "unit", "$/mmBtu",
+			   "formatString", "#0.###"
+		   });
 		addAnnotation
-		  (getSlotActuals_CV(), 
-		   source, 
+		  (getSlotActuals_CV(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.#####"
-		   });	
+			   "unit", "mmBtu/m\u00b3",
+			   "formatString", "#0.#####"
+		   });
 		addAnnotation
-		  (getSlotActuals_BaseFuelConsumption(), 
-		   source, 
+		  (getSlotActuals_BaseFuelConsumption(),
+		   source,
 		   new String[] {
-			 "unit", "MT",
-			 "formatString", "###,##0"
-		   });	
+			   "unit", "MT",
+			   "formatString", "###,##0"
+		   });
 		addAnnotation
-		  (getSlotActuals_PortBaseFuelConsumption(), 
-		   source, 
+		  (getSlotActuals_PortBaseFuelConsumption(),
+		   source,
 		   new String[] {
-			 "unit", "MT",
-			 "formatString", "###,##0"
-		   });	
+			   "unit", "MT",
+			   "formatString", "###,##0"
+		   });
 		addAnnotation
-		  (getSlotActuals_RouteCosts(), 
-		   source, 
+		  (getSlotActuals_RouteCosts(),
+		   source,
 		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,###,##0"
-		   });	
+			   "unit", "$",
+			   "formatString", "###,###,##0"
+		   });
 		addAnnotation
-		  (getSlotActuals_CrewBonus(), 
-		   source, 
+		  (getSlotActuals_CrewBonus(),
+		   source,
 		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,###,##0"
-		   });	
+			   "unit", "$",
+			   "formatString", "###,###,##0"
+		   });
 		addAnnotation
-		  (getSlotActuals_PortCharges(), 
-		   source, 
+		  (getSlotActuals_PortCharges(),
+		   source,
 		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,###,##0"
-		   });	
+			   "unit", "$",
+			   "formatString", "###,###,##0"
+		   });
 		addAnnotation
-		  (getSlotActuals_CapacityCharges(), 
-		   source, 
+		  (getSlotActuals_CapacityCharges(),
+		   source,
 		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,###,##0"
-		   });	
+			   "unit", "$",
+			   "formatString", "###,###,##0"
+		   });
 		addAnnotation
-		  (getCargoActuals_ContractYear(), 
-		   source, 
+		  (getCargoActuals_ContractYear(),
+		   source,
 		   new String[] {
-			 "formatString", "####"
-		   });	
+			   "formatString", "####"
+		   });
 		addAnnotation
-		  (getCargoActuals_CharterRatePerDay(), 
-		   source, 
+		  (getCargoActuals_CharterRatePerDay(),
+		   source,
 		   new String[] {
-			 "unit", "$/day",
-			 "formatString", "###,##0.##"
-		   });	
+			   "unit", "$/day",
+			   "formatString", "###,##0.##"
+		   });
 		addAnnotation
-		  (getCargoActuals_BaseFuelPrice(), 
-		   source, 
+		  (getCargoActuals_BaseFuelPrice(),
+		   source,
 		   new String[] {
-			 "unit", "MT/d",
-			 "formatString", "#,##0.###"
-		   });	
+			   "unit", "MT/d",
+			   "formatString", "#,##0.###"
+		   });
 		addAnnotation
-		  (getCargoActuals_InsurancePremium(), 
-		   source, 
+		  (getCargoActuals_InsurancePremium(),
+		   source,
 		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,###,##0"
-		   });	
+			   "unit", "$",
+			   "formatString", "###,###,##0"
+		   });
 		addAnnotation
-		  (getLoadActuals_StartingHeelM3(), 
-		   source, 
+		  (getLoadActuals_StartingHeelM3(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0.###"
-		   });	
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
 		addAnnotation
-		  (getLoadActuals_StartingHeelMMBTu(), 
-		   source, 
+		  (getLoadActuals_StartingHeelMMBTu(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu",
-			 "formatString", "##,###,##0.###"
-		   });	
+			   "unit", "mmBtu",
+			   "formatString", "##,###,##0.###"
+		   });
 		addAnnotation
-		  (getDischargeActuals_EndHeelM3(), 
-		   source, 
+		  (getDischargeActuals_EndHeelM3(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0.###"
-		   });	
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
 		addAnnotation
-		  (getDischargeActuals_EndHeelMMBTu(), 
-		   source, 
+		  (getDischargeActuals_EndHeelMMBTu(),
+		   source,
 		   new String[] {
-			 "unit", "mmBtu",
-			 "formatString", "##,###,##0.###"
-		   });	
+			   "unit", "mmBtu",
+			   "formatString", "##,###,##0.###"
+		   });
 		addAnnotation
-		  (getReturnActuals_EndHeelM3(), 
-		   source, 
+		  (getReturnActuals_EndHeelM3(),
+		   source,
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0.###"
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
 		   });
 	}
 

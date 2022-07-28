@@ -41,9 +41,7 @@ public final class ScheduledPlanInput {
 			return true;
 		}
 
-		if (obj instanceof ScheduledPlanInput) {
-			final ScheduledPlanInput other = (ScheduledPlanInput) obj;
-
+		if (obj instanceof ScheduledPlanInput other) {
 			return planStartTime == other.planStartTime //
 					&& vesselStartTime == other.vesselStartTime //
 					&& Objects.equals(previousHeelRecord, other.previousHeelRecord);

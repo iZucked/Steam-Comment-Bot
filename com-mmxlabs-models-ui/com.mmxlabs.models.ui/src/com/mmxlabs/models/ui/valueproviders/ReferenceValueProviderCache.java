@@ -28,7 +28,7 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 	private MMXRootObject rootObject;
 	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = new HashMap<>();
 
-	private static final Logger log = LoggerFactory.getLogger(ReferenceValueProviderCache.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReferenceValueProviderCache.class);
 
 	public ReferenceValueProviderCache(final MMXRootObject root, final IReferenceValueProviderFactoryRegistry registry) {
 		this.registry = registry;
@@ -54,7 +54,7 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 		final IReferenceValueProviderFactory factory = registry.getValueProviderFactory(owner, reference);
 		final IReferenceValueProvider provider = factory == null ? null : factory.createReferenceValueProvider(owner, reference, rootObject);
 		if (provider == null) {
-			log.warn("Could not find reference provider for " + owner.getName() + "." + reference.getName());
+			LOG.warn("Could not find reference provider for " + owner.getName() + "." + reference.getName());
 		}
 		cache.put(p, provider);
 

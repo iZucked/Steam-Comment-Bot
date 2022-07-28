@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -87,10 +87,10 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	private IVessel getVessel(IResource resource) {
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE && 
-				vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE) { 
-				vessel = vesselAvailability.getVessel();
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE && 
+				vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE) { 
+				vessel = vesselCharter.getVessel();
 			}
 		}
 		return vessel;

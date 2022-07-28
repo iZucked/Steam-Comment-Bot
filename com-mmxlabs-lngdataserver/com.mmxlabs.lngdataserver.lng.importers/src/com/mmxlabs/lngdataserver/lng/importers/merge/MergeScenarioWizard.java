@@ -26,7 +26,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class MergeScenarioWizard extends Wizard implements IExportWizard {
 
-	private static final Logger log = LoggerFactory.getLogger(MergeScenarioWizard.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MergeScenarioWizard.class);
 
 	private MergeScenarioWizardSourceSelectorPage sourceSelectorPage;
 	private MergeScenarioWizardDataMapperPage entitiesMapperPage;
@@ -114,7 +114,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		//TODO Port groups etc
 		
 		//Vessel charter page.
-		vesselCharterMapperPage = new MergeScenarioWizardVesselAvailabilityMapperPage("Map fleet charters to target");
+		vesselCharterMapperPage = new MergeScenarioWizardVesselChartersMapperPage("Map fleet charters to target");
 		
 		//Spot markets.
 		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 
@@ -218,7 +218,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		});
 
 		if (exceptions[0] != null) {
-			log.error("Unable to merge data into base case: " + exceptions[0]);
+			LOG.error("Unable to merge data into base case: " + exceptions[0]);
 			MessageDialog.openError(this.getContainer().getShell(), "Error merging", "An error occurred merging into the selected base case.");
 		}
 

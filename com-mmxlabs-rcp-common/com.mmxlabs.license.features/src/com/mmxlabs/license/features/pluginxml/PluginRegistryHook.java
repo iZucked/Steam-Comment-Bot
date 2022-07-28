@@ -24,7 +24,7 @@ import com.mmxlabs.license.features.internal.PluginXMLEnablementExtension;
 @SuppressWarnings("restriction")
 public class PluginRegistryHook {
 
-	private static final Logger log = LoggerFactory.getLogger(PluginRegistryHook.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PluginRegistryHook.class);
 
 	@Inject
 	private IExtensionRegistry extensionRegistry;
@@ -49,7 +49,7 @@ public class PluginRegistryHook {
 					try (InputStream is = bundle.getResource(ext.getPluginXML()).openStream()) {
 						extensionRegistry.addContribution(is, contributor, false, null, null, token);
 					} catch (final Exception e) {
-						log.error("Error opening " + ext.getPluginXML() + " " + e.getMessage(), e);
+						LOG.error("Error opening " + ext.getPluginXML() + " " + e.getMessage(), e);
 					}
 				}
 			}

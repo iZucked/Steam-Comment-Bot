@@ -86,6 +86,15 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		assert feature.getEType() == EcorePackage.Literals.EBOOLEAN;
 		return (Boolean) eGet(feature);
 	}
+	
+	@Override
+	public int getAttribAsInt(final String name) {
+		final EAttribute feature = (EAttribute) eClass().getEStructuralFeature(name);
+		assert feature != null;
+		assert !feature.isMany();
+		assert feature.getEType() == EcorePackage.Literals.EINT;
+		return (Integer) eGet(feature);
+	}
 
 	@Override
 	public double getAttribAsDouble(final String name) {

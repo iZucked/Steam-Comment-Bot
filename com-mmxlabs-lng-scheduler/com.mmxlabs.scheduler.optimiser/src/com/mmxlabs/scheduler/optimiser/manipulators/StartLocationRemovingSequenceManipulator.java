@@ -68,7 +68,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	@Inject
 	public void init(final IPhaseOptimisationData data) {
 		for (final IResource resource : data.getResources()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselCharter(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setShouldAlwaysRemoveStartLocation(resource, true);
 			} 

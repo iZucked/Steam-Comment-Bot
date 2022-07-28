@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -42,16 +42,16 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 
 		final AllowedVesselPermissionConstraintChecker checker = createChecker(vesselProvider, nominatedVesselProvider, allowedVesselProvider, portTypeProvider, portSlotProvider);
 
-		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
-		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
-		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+		Mockito.when(vesselProvider.getResource(vesselCharter)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselCharter(resource)).thenReturn(vesselCharter);
 
-		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselCharter.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
+		Mockito.when(vesselCharter.getVessel()).thenReturn(vessel);
 
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot2 = createSequenceElement(portSlotProvider);

@@ -107,6 +107,7 @@ public class MullSubprofileItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE);
+			childrenFeatures.add(ADPPackage.Literals.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES);
 		}
 		return childrenFeatures;
 	}
@@ -160,6 +161,7 @@ public class MullSubprofileItemProvider
 
 		switch (notification.getFeatureID(MullSubprofile.class)) {
 			case ADPPackage.MULL_SUBPROFILE__ENTITY_TABLE:
+			case ADPPackage.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -181,6 +183,11 @@ public class MullSubprofileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE,
 				 ADPFactory.eINSTANCE.createMullEntityRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.MULL_SUBPROFILE__ALLOWED_ARRIVAL_TIMES,
+				 ADPFactory.eINSTANCE.createAllowedArrivalTimeRecord()));
 	}
 
 	/**

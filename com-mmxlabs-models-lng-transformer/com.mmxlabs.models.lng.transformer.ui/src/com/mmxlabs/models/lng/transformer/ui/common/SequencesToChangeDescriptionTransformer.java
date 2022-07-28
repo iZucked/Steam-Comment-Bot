@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
@@ -53,7 +53,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
@@ -169,21 +169,21 @@ public class SequencesToChangeDescriptionTransformer {
 						// TODO: Record positional information and diff. - tricky! It is only a change if nothing else has changed. Position can change indirectly due to other cargoes moving about
 						if (p == null || p.getFirst() != r || !p.getSecond().equals(elementList)) {
 
-							final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(r);
-							final ISpotCharterInMarket o_spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
+							final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(r);
+							final ISpotCharterInMarket o_spotCharterInMarket = vesselCharter.getSpotCharterInMarket();
 							VesselAllocationDescriptor vesselDescriptor = null;
 							if (o_spotCharterInMarket != null) {
 								final MarketVesselAllocationDescriptor marketVesselDescriptor = AnalyticsFactory.eINSTANCE.createMarketVesselAllocationDescriptor();
 								// TODO: Check this is the correct string. Use
 								final CharterInMarket charterInMarket = dataTransformer.getModelEntityMap().getModelObject(o_spotCharterInMarket, CharterInMarket.class);
 								marketVesselDescriptor.setMarketName(charterInMarket.getName());
-								marketVesselDescriptor.setSpotIndex(vesselAvailability.getSpotIndex());
+								marketVesselDescriptor.setSpotIndex(vesselCharter.getSpotIndex());
 								vesselDescriptor = marketVesselDescriptor;
-							} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
+							} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
 								final FleetVesselAllocationDescriptor fleetVesselDescriptor = AnalyticsFactory.eINSTANCE.createFleetVesselAllocationDescriptor();
-								final VesselAvailability e_vesselAvailability = dataTransformer.getModelEntityMap().getModelObject(vesselAvailability, VesselAvailability.class);
-								fleetVesselDescriptor.setName(e_vesselAvailability.getVessel().getName());
-								fleetVesselDescriptor.setCharterIndex(e_vesselAvailability.getCharterNumber());
+								final VesselCharter e_vesselCharter = dataTransformer.getModelEntityMap().getModelObject(vesselCharter, VesselCharter.class);
+								fleetVesselDescriptor.setName(e_vesselCharter.getVessel().getName());
+								fleetVesselDescriptor.setCharterIndex(e_vesselCharter.getCharterNumber());
 								vesselDescriptor = fleetVesselDescriptor;
 							}
 

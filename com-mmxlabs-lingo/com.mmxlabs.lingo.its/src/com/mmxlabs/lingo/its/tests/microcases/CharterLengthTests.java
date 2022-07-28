@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -19,13 +21,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.lingo.its.util.ScheduleSequenceTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -43,6 +46,8 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -51,7 +56,9 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
@@ -105,7 +112,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 3, 1, 0, 0, 0)) //
 				.build();
@@ -169,7 +176,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -249,7 +256,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 5, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -337,7 +344,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		vessel.setSafetyHeel(500);
 		vessel.setPurgeTime(24);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 10, 1, 0, 0, 0)) //
 				.withCharterRate("80000") //
@@ -457,7 +464,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 1, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2019, 3, 1, 0, 0, 0)) //
 				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
@@ -516,11 +523,11 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel2 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
 		vessel2.setSafetyHeel(500);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withCharterRate("80000") //
 				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
 				.build();
-		final VesselAvailability charter_2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+		final VesselCharter charter_2 = cargoModelBuilder.makeVesselCharter(vessel2, entity) //
 				.withCharterRate("80000") //
 				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
 				.build();
@@ -657,20 +664,70 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 			final Schedule schedule = optimise(false, null, YearMonth.of(2020, 1));
 			Assertions.assertNotNull(schedule);
 			final CargoAllocation ca = findCargoAllocation(load2, schedule);
-			Assertions.assertSame(charter_1, ca.getSequence().getVesselAvailability());
+			Assertions.assertSame(charter_1, ca.getSequence().getVesselCharter());
 		}
 		// With charter length, cannot move
 		{
 			final Schedule schedule = optimise(true, null, YearMonth.of(2020, 1));
 			Assertions.assertNotNull(schedule);
 			final CargoAllocation ca = findCargoAllocation(load2, schedule);
-			Assertions.assertSame(charter_2, ca.getSequence().getVesselAvailability());
+			Assertions.assertSame(charter_2, ca.getSequence().getVesselCharter());
 
 		}
 
 		// Pull in all late cargoes
 		// OR charter length should NOT permit empty heel in this case.
 
+	}
+
+	/*
+	 * Checks that charter length works without any events present. Added to catch bug where scheduler would consider canals when travelling to/from anywhere.
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLoneCharterLengthEndCold() {
+		final Vessel mediumShip = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
+		final VesselCharter mediumShipVa = cargoModelBuilder.makeVesselCharter(mediumShip, entity) //
+				.withCharterRate("70000") //
+				.withStartHeel(0, 2000, 23, "3") //
+				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+				.withStartWindow(LocalDateTime.of(2022, 01, 15, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2022, 03, 15, 0, 0)) //
+				.build();
+		evaluate(true);
+
+		// Basic checks
+		final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		Assertions.assertNotNull(schedule);
+
+		final List<Sequence> sequences = schedule.getSequences();
+		Assertions.assertEquals(1, sequences.size());
+
+		final Sequence sequence = sequences.get(0);
+		Assertions.assertEquals(mediumShipVa, sequence.getVesselCharter());
+
+		@NonNull
+		final List<@NonNull Class<? extends Event>> expectedEventSequence = new ArrayList<>();
+		expectedEventSequence.add(StartEvent.class);
+		expectedEventSequence.add(Idle.class);
+		expectedEventSequence.add(CharterLengthEvent.class);
+		expectedEventSequence.add(Cooldown.class);
+		expectedEventSequence.add(EndEvent.class);
+
+		final List<Event> events = sequence.getEvents();
+		ScheduleSequenceTestUtil.checkSequenceEventOrder(expectedEventSequence, events);
+
+		// Check that idle event has zero length
+		
+		// Make sure that there is not an unexpected event
+		for (final Event event : events) {
+			if (event instanceof final Idle idleEvent) {
+				// idle time should be zero
+				Assertions.assertEquals(idleEvent.getStart(), idleEvent.getEnd());
+				// There should only be one idle event
+				break;
+			}
+		}
 	}
 
 	public static @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
@@ -834,7 +891,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(safetyHeel);
 
-		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter_1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2019, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2020, 1, 23, 0, 0, 0), LocalDateTime.of(2020, 2, 9, 0, 0, 0)) //
 				.withStartHeel(4_450, 5_000, 23, "") //

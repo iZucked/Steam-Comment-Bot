@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 
 /**
@@ -56,14 +56,14 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	public void testVesselEvent_Exact() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 12, 11, 0, 0, 0), LocalDateTime.of(2015, 12, 11, 0, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -88,14 +88,14 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	public void testVesselEvent_OneDay() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 12, 11, 0, 0, 0), LocalDateTime.of(2015, 12, 11, 23, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -120,14 +120,14 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	public void testVesselEvent_OneMonth() throws Exception {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2015, 11, 1, 0, 0, 0), LocalDateTime.of(2015, 11, 30, 23, 0, 0), dischargePort) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -159,7 +159,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -173,7 +173,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -215,7 +215,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8); //
@@ -253,7 +253,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -267,7 +267,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowSize(23, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -308,7 +308,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -324,7 +324,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowFlex(18, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -358,13 +358,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void testVesselAvailability_Specified() throws Exception {
+	public void testVesselCharter_Specified() throws Exception {
 
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 23, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 2, 1, 0, 0, 0), LocalDateTime.of(2016, 2, 1, 23, 0, 0)) //
 				.build();
@@ -378,15 +378,15 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 
-			final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+			final IVesselCharter o_vesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vesselCharter, IVesselCharter.class);
 
-			Assertions.assertEquals(0, o_vesselAvailability.getStartRequirement().getTimeWindow().getInclusiveStart());
-			Assertions.assertEquals(0, o_vesselAvailability.getStartRequirement().getTimeWindow().getExclusiveEndFlex());
-			Assertions.assertEquals(0 + 23 + 1, o_vesselAvailability.getStartRequirement().getTimeWindow().getExclusiveEnd());
+			Assertions.assertEquals(0, o_vesselCharter.getStartRequirement().getTimeWindow().getInclusiveStart());
+			Assertions.assertEquals(0, o_vesselCharter.getStartRequirement().getTimeWindow().getExclusiveEndFlex());
+			Assertions.assertEquals(0 + 23 + 1, o_vesselCharter.getStartRequirement().getTimeWindow().getExclusiveEnd());
 
-			Assertions.assertEquals(31 * 24, o_vesselAvailability.getEndRequirement().getTimeWindow().getInclusiveStart());
-			Assertions.assertEquals(0, o_vesselAvailability.getEndRequirement().getTimeWindow().getExclusiveEndFlex());
-			Assertions.assertEquals(31 * 24 + 23 + 1, o_vesselAvailability.getEndRequirement().getTimeWindow().getExclusiveEnd());
+			Assertions.assertEquals(31 * 24, o_vesselCharter.getEndRequirement().getTimeWindow().getInclusiveStart());
+			Assertions.assertEquals(0, o_vesselCharter.getEndRequirement().getTimeWindow().getExclusiveEndFlex());
+			Assertions.assertEquals(31 * 24 + 23 + 1, o_vesselCharter.getEndRequirement().getTimeWindow().getExclusiveEnd());
 		});
 	}
 
@@ -439,7 +439,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -456,7 +456,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -513,7 +513,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -530,7 +530,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -558,7 +558,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			@NonNull
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioToOptimiserBridge.getOptimiserScenario());
-			final VesselAvailability period_vesselAvailability = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter period_vesselCharter = cargoModel.getVesselCharters().get(0);
 			final LoadSlot period_loadSlot = cargoModel.getLoadSlots().get(0);
 			final DischargeSlot period_dischargeSlot = cargoModel.getDischargeSlots().get(0);
 
@@ -583,7 +583,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 					Assertions.assertEquals(0 + 744, o_spot.getTimeWindow().getExclusiveEnd());
 
 					// Make output windows are correct - still full month
-					final Schedule schedule = scenarioToOptimiserBridge.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), period_vesselAvailability, spot, period_dischargeSlot),
+					final Schedule schedule = scenarioToOptimiserBridge.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), period_vesselCharter, spot, period_dischargeSlot),
 							null);
 					Assertions.assertNotNull(schedule);
 					final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
@@ -605,7 +605,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		@NonNull
@@ -622,7 +622,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1)//
+				.withVesselAssignment(vesselCharter, 1)//
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -650,7 +650,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			@NonNull
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioToOptimiserBridge.getOptimiserScenario());
-			final VesselAvailability period_vesselAvailability = cargoModel.getVesselAvailabilities().get(0);
+			final VesselCharter period_vesselCharter = cargoModel.getVesselCharters().get(0);
 			final LoadSlot period_loadSlot = cargoModel.getLoadSlots().get(0);
 			final DischargeSlot period_dischargeSlot = cargoModel.getDischargeSlots().get(0);
 
@@ -671,7 +671,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			// Make output windows are correct
 			final Schedule schedule = scenarioToOptimiserBridge
-					.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), period_vesselAvailability, period_loadSlot, period_dischargeSlot), null);
+					.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), period_vesselCharter, period_loadSlot, period_dischargeSlot), null);
 			Assertions.assertNotNull(schedule);
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 			Assertions.assertEquals(1, cargoAllocation.getLoadAllocation().getSlot().getWindowSize());

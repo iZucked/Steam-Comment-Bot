@@ -14,14 +14,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
-import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityTopLevelComposite;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterTopLevelComposite;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
 /**
- * Factory for {@link VesselAvailabilityTopLevelComposite} application.
+ * Factory for {@link VesselCharterTopLevelComposite} application.
  * 
  * @author Simon Goodall
  * 
@@ -30,7 +30,7 @@ public class FullVesselCharterCompositeFactory extends DefaultDisplayCompositeFa
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return new VesselAvailabilityTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit) {
+		return new VesselCharterTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit) {
 			@Override
 			public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject object, Collection<EObject> range, EMFDataBindingContext dbc) {
 				// Unwrap child object

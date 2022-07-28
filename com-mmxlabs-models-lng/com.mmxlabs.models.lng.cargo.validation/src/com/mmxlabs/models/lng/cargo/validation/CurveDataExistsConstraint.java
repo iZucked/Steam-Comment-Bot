@@ -305,7 +305,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		else if (object instanceof Cargo) {
 			validateCargo((Cargo) object, ctx, extraContext, statuses);
 		}
-		// check vessel availability against charter curve data (if relevant)
+		// check vessel charter against charter curve data (if relevant)
 		else if (object instanceof Vessel) {
 
 		}

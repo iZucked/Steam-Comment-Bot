@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.time.ZonedDateTime;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -19,7 +19,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	 * 
 	 */
 	public final Vessel vessel;
-	public final VesselAvailability[] vesselAvailabilities;
+	public final VesselCharter[] vesselAvailabilities;
 
 	public final Port originPort;
 	public final Port loadPort;
@@ -51,11 +51,11 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		vessel = fleetCreator.createDefaultVessel(null);
 		// create two vessels in that class
 		vesselAvailabilities = fleetCreator.createMultipleDefaultVessels(vessel, 2, shippingEntity);
-		// final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
+		// final VesselCharter[] vesselAvailabilities = new VesselCharter[vessels.length];
 		// for (int i = 0; i < vessels.length; ++i) {
-		// for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
-		// if (vesselAvailability.getVessel() == vessels[i]) {
-		// vesselAvailabilities[i] = vesselAvailability;
+		// for (VesselCharter vesselCharter : scenario.getCargoModel().getVesselAvailabilities()) {
+		// if (vesselCharter.getVessel() == vessels[i]) {
+		// vesselAvailabilities[i] = vesselCharter;
 		// }
 		// }
 		// }

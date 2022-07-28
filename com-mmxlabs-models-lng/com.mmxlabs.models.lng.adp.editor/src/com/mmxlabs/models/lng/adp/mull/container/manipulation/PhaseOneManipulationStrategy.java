@@ -40,7 +40,7 @@ public class PhaseOneManipulationStrategy implements IMudContainerManipulationSt
 
 	@Override
 	public void dropFixedLoad(final Cargo cargo, final IMudContainer mudContainer) {
-		final Slot<?> loadSlot = cargo.getSlots().get(0);
+		final Slot<?> loadSlot = cargo.getSortedSlots().get(0);
 		if (mudContainer.getEntity().equals(loadSlot.getEntity())) {
 			final int expectedVolumeLoaded = loadSlot.getSlotOrDelegateMaxQuantity();
 			mudContainer.dropFixedLoad(expectedVolumeLoaded);

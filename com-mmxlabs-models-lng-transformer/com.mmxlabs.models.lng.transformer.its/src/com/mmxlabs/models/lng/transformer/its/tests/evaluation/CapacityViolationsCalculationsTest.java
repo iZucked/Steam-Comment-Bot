@@ -75,9 +75,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vessel.setSafetyHeel(0);
-		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		msc.vesselCharter.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -199,7 +199,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// Second cargo to force heel retention
 		Cargo cargo2 = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		msc.setDefaultVesselCharterTerms(msc.originPort, msc.originPort);
 
 		msc.vessel.setSafetyHeel(0);
 
@@ -321,11 +321,11 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
+		msc.vesselCharter.getStartHeel().setCvValue(21);
+		msc.vesselCharter.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
-		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
 		msc.vessel.setSafetyHeel(0);
 
@@ -418,11 +418,11 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
+		msc.vesselCharter.getStartHeel().setCvValue(21);
+		msc.vesselCharter.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
-		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
 		msc.vessel.setSafetyHeel(0);
 
@@ -485,15 +485,15 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
+		msc.vesselCharter.getStartHeel().setCvValue(21);
+		msc.vesselCharter.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
-		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselCharter.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
-		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(0);
-		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(0);
-		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
+		msc.vesselCharter.getEndHeel().setMinimumEndHeel(0);
+		msc.vesselCharter.getEndHeel().setMaximumEndHeel(0);
+		msc.vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 
 		msc.vessel.setSafetyHeel(0);
 
@@ -603,7 +603,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 				.withDurationInDays(1) //
 				.withAvailableHeelOptions(2000, 2000, 21.0, "1") //
 				.withHireRate(24) //
-				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.withVesselAssignment(msc.vesselCharter, 0) //
 				.build();
 
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
@@ -611,9 +611,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
-		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		msc.vesselCharter.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setMaximumEndHeel(2000);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -692,7 +692,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 				.withDurationInDays(1) //
 				.withAvailableHeelOptions(1000, 1000, 21.0, "1") //
 				.withHireRate(24) //
-				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.withVesselAssignment(msc.vesselCharter, 0) //
 				.build();
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
@@ -702,9 +702,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		msc.vesselCharter.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -775,9 +775,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.setupCooldown(30);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
-		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		msc.vesselCharter.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getSchedulingTimeWindow().getEnd().toLocalDateTime();
@@ -787,7 +787,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.scenarioModelBuilder.getPortModelBuilder().configureDrydockPort(msc.loadPort);
 		DryDockEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeDryDockEvent("DryDock", dryDockStartAfterDate, dryDockStartByDate, msc.loadPort) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.withVesselAssignment(msc.vesselCharter, 0) //
 				.build();
 		
 

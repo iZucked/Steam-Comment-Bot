@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -146,9 +146,9 @@ public class CargoMaker {
 		return slotMaker.withMarketFOBSale(name, market, windowStart, port);
 	}
 
-	public CargoMaker withVesselAssignment(@NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
+	public CargoMaker withVesselAssignment(@NonNull final VesselCharter vesselCharter, final int sequenceHint) {
 
-		cargoModelBuilder.configureCargoVesselAssignment(cargo, vesselAvailability, sequenceHint);
+		cargoModelBuilder.configureCargoVesselAssignment(cargo, vesselCharter, sequenceHint);
 
 		return this;
 	}

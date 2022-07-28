@@ -127,6 +127,7 @@ public class VesselClassSpeedConstraintTest {
 		// what's the target?
 		when(validationContext.getTarget()).thenReturn(vessel);
 
+		when(vessel.isMarker()).thenReturn(false);
 		when(vessel.getBallastAttributes()).thenReturn(ballast);
 		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
@@ -134,6 +135,7 @@ public class VesselClassSpeedConstraintTest {
 
 		constraint.validate(validationContext);
 
+		verify(vessel).isMarker();
 		verify(vessel).getBallastAttributes();
 		verify(vessel).getLadenAttributes();
 		verify(validationContext).createSuccessStatus();
@@ -167,6 +169,7 @@ public class VesselClassSpeedConstraintTest {
 
 		// what's the target?
 		when(validationContext.getTarget()).thenReturn(vessel);
+		when(vessel.isMarker()).thenReturn(false);
 		when(vessel.getBallastAttributes()).thenReturn(ballast);
 		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.getCurrentConstraintId()).thenReturn(ORDER_ID);
@@ -179,7 +182,7 @@ public class VesselClassSpeedConstraintTest {
 
 		constraint.validate(validationContext);
 
-		// what's the target?
+		verify(vessel).isMarker();
 		verify(vessel).getBallastAttributes();
 		verify(vessel).getLadenAttributes();
 		verify(vessel).getName();
@@ -216,6 +219,7 @@ public class VesselClassSpeedConstraintTest {
 
 		// what's the target?
 		when(validationContext.getTarget()).thenReturn(vessel);
+		when(vessel.isMarker()).thenReturn(false);
 		when(vessel.getBallastAttributes()).thenReturn(ballast);
 		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.getCurrentConstraintId()).thenReturn(ORDER_ID);
@@ -227,6 +231,7 @@ public class VesselClassSpeedConstraintTest {
 
 		constraint.validate(validationContext);
 
+		verify(vessel).isMarker();
 		verify(vessel).getBallastAttributes();
 		verify(vessel).getLadenAttributes();
 		verify(vessel).getVesselOrDelegateMinSpeed();

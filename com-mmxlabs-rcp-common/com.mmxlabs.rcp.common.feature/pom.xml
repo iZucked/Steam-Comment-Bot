@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.mmxlabs.rcp.common</groupId>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
-		<version>5.5.2-SNAPSHOT</version>
+		<version>5.7.4-SNAPSHOT</version>
 	</parent>
 
 	<build>

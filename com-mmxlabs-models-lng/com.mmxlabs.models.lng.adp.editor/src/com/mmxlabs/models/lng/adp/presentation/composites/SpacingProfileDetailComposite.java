@@ -316,7 +316,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(
 				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSpacingAllocation_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
-		eViewer.addTypicalColumn("Vessel", new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_Vessel(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler()));
+		eViewer.addTypicalColumn("Vessel", new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_VesselCharter(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler()));
 		eViewer.addTypicalColumn("Port", new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_Port(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler()));
 		eViewer.addColumn("Cargo Count", new ICellRenderer() {
 

@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
@@ -276,14 +276,14 @@ public class SequencesHitchHikerHelper {
 
 	private boolean isNominalResource(final IResource resource) {
 
-		final @NonNull IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final @NonNull IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		return vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 	}
 
 	private boolean isSpotCharterResource(final IResource resource) {
 
-		final @NonNull IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
+		final @NonNull IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		return vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
 	}
 
 	private boolean isSequencedResource(final IResource resource) {

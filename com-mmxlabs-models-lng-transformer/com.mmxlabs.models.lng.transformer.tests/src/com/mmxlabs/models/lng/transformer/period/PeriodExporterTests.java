@@ -122,10 +122,10 @@ public class PeriodExporterTests {
 //		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 //		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
 //
-//		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
-//		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
+//		final VesselCharter vesselCharter1 = PeriodTestUtils.createVesselCharter(originalScenario, vessel1);
+//		final VesselCharter vesselCharter2 = PeriodTestUtils.createVesselCharter(originalScenario, vessel2);
 //
-//		cargo1.setVesselAssignmentType(vesselAvailability1);
+//		cargo1.setVesselAssignmentType(vesselCharter1);
 //		cargo1.setSequenceHint(1);
 //
 //		// Create period copy
@@ -141,8 +141,8 @@ public class PeriodExporterTests {
 //		{
 //			final Cargo copyCargo1 = mapping.getCopyFromOriginal(cargo1);
 //			assert copyCargo1 != null;
-//			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
-//			copyCargo1.setVesselAssignmentType(copyVesselAvailability2);
+//			final VesselCharter copyVesselCharter2 = mapping.getCopyFromOriginal(vesselCharter2);
+//			copyCargo1.setVesselAssignmentType(copyVesselCharter2);
 //			copyCargo1.setSequenceHint(2);
 //		}
 //
@@ -154,7 +154,7 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assertions.assertSame(vesselAvailability2, cargo1.getVesselAssignmentType());
+//			Assertions.assertSame(vesselCharter2, cargo1.getVesselAssignmentType());
 //			Assertions.assertEquals(2, cargo1.getSequenceHint());
 //		}
 //	}
@@ -363,7 +363,7 @@ public class PeriodExporterTests {
 //		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
 //
 //		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
-//		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
+//		final VesselCharter vesselCharter1 = PeriodTestUtils.createVesselCharter(originalScenario, vessel1);
 //		// Create period copy
 //		{
 //			final Copier copier = new Copier();
@@ -383,8 +383,8 @@ public class PeriodExporterTests {
 //			// Create our new wiring
 //			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, copyLoad1, copyDischarge1);
 //
-//			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
-//			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
+//			final VesselCharter copyVesselCharter1 = mapping.getCopyFromOriginal(vesselCharter1);
+//			copyCargo.setVesselAssignmentType(copyVesselCharter1);
 //			copyCargo.setSequenceHint(2);
 //
 //		}
@@ -401,7 +401,7 @@ public class PeriodExporterTests {
 //			Assertions.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
 //			final Cargo newCargo = originalScenario.getCargoModel().getCargoes().get(0);
 //
-//			Assertions.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
+//			Assertions.assertSame(vesselCharter1, newCargo.getVesselAssignmentType());
 //
 //			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
 //			Assertions.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
@@ -431,7 +431,7 @@ public class PeriodExporterTests {
 //		load1.setPort(originalPort1);
 //
 //		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
-//		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
+//		final VesselCharter vesselCharter1 = PeriodTestUtils.createVesselCharter(originalScenario, vessel1);
 //		// Create period copy
 //		{
 //			final Copier copier = new Copier();
@@ -453,8 +453,8 @@ public class PeriodExporterTests {
 //			// Create our new wiring
 //			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, copyLoad1, copySpotDischarge1);
 //
-//			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
-//			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
+//			final VesselCharter copyVesselCharter1 = mapping.getCopyFromOriginal(vesselCharter1);
+//			copyCargo.setVesselAssignmentType(copyVesselCharter1);
 //			copyCargo.setSequenceHint(2);
 //
 //		}
@@ -475,7 +475,7 @@ public class PeriodExporterTests {
 //			final DischargeSlot newDischarge = originalScenario.getCargoModel().getDischargeSlots().get(0);
 //			Assertions.assertTrue(newDischarge instanceof SpotSlot);
 //
-//			Assertions.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
+//			Assertions.assertSame(vesselCharter1, newCargo.getVesselAssignmentType());
 //
 //			Assertions.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
 //
@@ -577,10 +577,10 @@ public class PeriodExporterTests {
 //		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 //		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
 //
-//		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
-//		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
+//		final VesselCharter vesselCharter1 = PeriodTestUtils.createVesselCharter(originalScenario, vessel1);
+//		final VesselCharter vesselCharter2 = PeriodTestUtils.createVesselCharter(originalScenario, vessel2);
 //
-//		event1.setVesselAssignmentType(vesselAvailability1);
+//		event1.setVesselAssignmentType(vesselCharter1);
 //		event1.setSequenceHint(1);
 //
 //		// Create period copy
@@ -597,10 +597,10 @@ public class PeriodExporterTests {
 //			final CharterOutEvent copyEvent1 = mapping.getCopyFromOriginal(event1);
 //			assert copyEvent1 != null;
 //
-//			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
-//			assert copyVesselAvailability2 != null;
+//			final VesselCharter copyVesselCharter2 = mapping.getCopyFromOriginal(vesselCharter2);
+//			assert copyVesselCharter2 != null;
 //
-//			copyEvent1.setVesselAssignmentType(copyVesselAvailability2);
+//			copyEvent1.setVesselAssignmentType(copyVesselCharter2);
 //			copyEvent1.setSequenceHint(2);
 //		}
 //
@@ -612,7 +612,7 @@ public class PeriodExporterTests {
 //
 //		// Check original scenario state
 //		{
-//			Assertions.assertSame(vesselAvailability2, event1.getVesselAssignmentType());
+//			Assertions.assertSame(vesselCharter2, event1.getVesselAssignmentType());
 //			Assertions.assertEquals(2, event1.getSequenceHint());
 //		}
 //	}

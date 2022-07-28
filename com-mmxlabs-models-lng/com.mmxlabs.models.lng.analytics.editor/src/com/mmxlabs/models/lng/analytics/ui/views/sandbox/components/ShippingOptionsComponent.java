@@ -55,7 +55,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescri
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
@@ -154,10 +154,10 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 						if (true) {
 							helper.addAction(new RunnableAction("Full Charter", () -> {
 								final FullVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createFullVesselCharterOption();
-								final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-								vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-								vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-								opt.setVesselCharter(vesselAvailability);
+								final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+								vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+								vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+								opt.setVesselCharter(vesselCharter);
 								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 										AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
@@ -170,7 +170,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 					if (portfolioMode) {
 						helper.addAction(new RunnableAction("Existing Charter", () -> {
 							final ExistingVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
-							// opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
+							// opt.setVesselCharter(CargoFactory.eINSTANCE.createVesselCharter());
 							// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),

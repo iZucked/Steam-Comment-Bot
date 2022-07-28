@@ -16,25 +16,26 @@ import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
 /**
- * Base class for cargo scheduler fitness components. Provides a name, a reference to the core, evaluated & accepted fitness tracking, and a discount curve usable via
- * {@link #getDiscountedValue(int, long)}.
+ * Base class for cargo scheduler fitness components. Provides a name, a
+ * reference to the core, evaluated & accepted fitness tracking, and a discount
+ * curve usable via {@link #getDiscountedValue(int, long)}.
  * 
  * @author hinton
  * 
  */
 public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedulerFitnessComponent {
-	@NonNull
-	private final IFitnessCore core;
 
-	@NonNull
-	private final String name;
+	private long lastEvaluatedFitness;
+	private long lastAcceptedFitness;
 
-	@NonNull
-	private ICurve discountCurve = new ConstantValueCurve(1);
+	private final @NonNull IFitnessCore core;
+
+	private final @NonNull String name;
+
+	private @NonNull ICurve discountCurve = new ConstantValueCurve(1);
 
 	@Inject(optional = true)
-	@Nullable
-	private IDiscountCurveProvider discountCurveProvider;
+	private @Nullable IDiscountCurveProvider discountCurveProvider;
 
 	protected AbstractSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super();
@@ -61,9 +62,6 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	public final IFitnessCore getFitnessCore() {
 		return core;
 	}
-
-	private long lastEvaluatedFitness;
-	private long lastAcceptedFitness;
 
 	/**
 	 * Convenience method for subclasses to set the fitness and return its value.
@@ -92,14 +90,10 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	}
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public void init(@NonNull final IPhaseOptimisationData data) {
-		IDiscountCurveProvider pDiscountCurveProvider = discountCurveProvider;
+		final IDiscountCurveProvider pDiscountCurveProvider = discountCurveProvider;
 		if (pDiscountCurveProvider != null) {
-			ICurve curve = pDiscountCurveProvider.getDiscountCurve(getName());
+			final ICurve curve = pDiscountCurveProvider.getDiscountCurve(getName());
 			if (curve != null) {
 				discountCurve = curve;
 			}

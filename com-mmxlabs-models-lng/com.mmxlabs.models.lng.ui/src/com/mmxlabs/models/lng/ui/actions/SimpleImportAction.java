@@ -36,7 +36,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
  */
 public class SimpleImportAction extends ImportAction {
 
-	private static final Logger log = LoggerFactory.getLogger(SimpleImportAction.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SimpleImportAction.class);
 	
 	/**
 	 */
@@ -129,7 +129,7 @@ public class SimpleImportAction extends ImportAction {
 			
 			importHooksProvider.getEditingDomain().getCommandStack().execute(cmd);
 		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		} finally {
 			try {
 				if (reader != null) {

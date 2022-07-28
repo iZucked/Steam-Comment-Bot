@@ -117,27 +117,27 @@ public class PricingRepositoryActionHandler implements IDataBrowserActionsHandle
 	@Override
 	public boolean refreshLocal() {
 		final List<DataVersion> versions = repository.getLocalVersions();
+		final String currentUUID = repository.getCurrentVersion();
 		RunnerHelper.asyncExec(() -> {
 			dataRoot.getChildren().clear();
 			if (versions != null) {
 				final boolean first = true;
 				// Only display the n most recent versions.
 				versions.stream() //
-						.filter(v -> !("initial_version".equals(v.getFullIdentifier()))) //
-						.sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) //
-						.limit(10)//
-						.forEach(v -> {
-							final Node version = BrowserFactory.eINSTANCE.createLeaf();
-							version.setParent(dataRoot);
-							version.setDisplayName(v.getFullIdentifier());
-							version.setVersionIdentifier(v.getIdentifier());
-							version.setPublished(v.isPublished());
-							// if (first) {
-							// dataRoot.setCurrent(version);
-							// }
-							// first = false;
-							dataRoot.getChildren().add(version);
-						});
+				.filter(v -> !("initial_version".equals(v.getFullIdentifier()))) //
+				.sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) //
+				.limit(10)//
+				.forEach(v -> {
+					final Node version = BrowserFactory.eINSTANCE.createLeaf();
+					version.setParent(dataRoot);
+					version.setDisplayName(v.getFullIdentifier());
+					version.setVersionIdentifier(v.getIdentifier());
+					version.setPublished(v.isPublished());
+					if (currentUUID != null && v.getIdentifier().equals(currentUUID)) {
+						dataRoot.setCurrent(version);
+					}
+					dataRoot.getChildren().add(version);
+				});
 			}
 		});
 		return true;

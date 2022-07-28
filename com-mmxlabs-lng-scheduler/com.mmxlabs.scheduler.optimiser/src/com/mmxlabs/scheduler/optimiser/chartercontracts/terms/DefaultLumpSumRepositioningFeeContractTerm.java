@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.RepositioningFeeCon
 import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumRepositioningFeeTermAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -30,21 +30,21 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 	}
 
 	@Override
-	public boolean match(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
+	public boolean match(final IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter) {
 		if (getStartPorts().isEmpty()) {
 			// Matches against anything
 			return true;
 		}
-		final IPort port = getFirstPort(vesselAvailability, portTimesRecord);
+		final IPort port = getFirstPort(vesselCharter, portTimesRecord);
 		if (port != null) {
 			return getStartPorts().contains(port);
 		}
 		return false;
 	}
 
-	protected @Nullable IPort getFirstPort(IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord) {
+	protected @Nullable IPort getFirstPort(IVesselCharter vesselCharter, final IPortTimesRecord portTimesRecord) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			return slot.getPort();
 		}
 		if (slot.getPortType() == PortType.Start) {
@@ -66,15 +66,15 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 	}
 
 	@Override
-	public long calculateCost(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
+	public long calculateCost(final IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter) {
 		return lumpSumCurve.getValueAtPoint(portTimesRecord.getFirstSlotTime());
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
+	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter) {
 		final LumpSumRepositioningFeeTermAnnotation annotation = new LumpSumRepositioningFeeTermAnnotation();
-		annotation.lumpSum = calculateCost(portTimesRecord, vesselAvailability);
-		annotation.matchingPort = getFirstPort(vesselAvailability, portTimesRecord);
+		annotation.lumpSum = calculateCost(portTimesRecord, vesselCharter);
+		annotation.matchingPort = getFirstPort(vesselCharter, portTimesRecord);
 
 		return annotation;
 	}

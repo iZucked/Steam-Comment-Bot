@@ -58,7 +58,6 @@ import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
-import org.eclipse.nebula.widgets.grid.internal.DefaultBottomLeftRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -74,8 +73,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -89,7 +86,6 @@ import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
@@ -994,30 +990,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				}
 			}
 		});
-	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		// Hook up our property sheet page
-		if (key.equals(IPropertySheetPage.class)) {
-			return (T) getPropertySheetPage();
-		} else {
-			return super.getAdapter(key);
-		}
-	}
-
-	/**
-	 * Create a new {@link PropertySheetPage} instance hooked up to the default EMF
-	 * adapter factory.
-	 * 
-	 * @return
-	 */
-	public IPropertySheetPage getPropertySheetPage() {
-		final PropertySheetPage propertySheetPage = new PropertySheetPage();
-
-		propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
-
-		return propertySheetPage;
 	}
 
 	private class SortModeAction extends SchedulerViewAction {

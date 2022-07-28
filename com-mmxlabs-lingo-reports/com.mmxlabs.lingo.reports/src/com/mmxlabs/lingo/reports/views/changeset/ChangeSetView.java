@@ -1630,42 +1630,41 @@ public class ChangeSetView extends ViewPart {
 			}
 
 			// Do something?
-			if (plan instanceof OptimisationResult) {
+			if (plan instanceof OptimisationResult result) {
 				setViewMode(ViewMode.GENERIC, false);
 				setNewDataData(target, (monitor, targetSlotId) -> {
 					final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
 					// Sorting by Group as the label provider uses the provided ordering for
 					// indexing
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, result, monitor, null), SortMode.BY_GROUP);
 					viewState.lastSolution = solution;
 					return viewState;
 				}, runAsync, slotId);
-			} else if (plan instanceof SandboxResult) {
-				setViewMode(ViewMode.SANDBOX, ((SandboxResult) plan).isHasDualModeSolutions());
+			} else if (plan instanceof SandboxResult result) {
+				setViewMode(ViewMode.SANDBOX, result.isHasDualModeSolutions());
 				setNewDataData(target, (monitor, targetSlotId) -> {
 					final SandboxResultPlanTransformer transformer = new SandboxResultPlanTransformer();
 					insertionPlanFilter.setMaxComplexity(100);
 
-					final SandboxResult sandboxResult = (SandboxResult) plan;
 					// Sorting by Group as the label provider uses the provided ordering for
 					// indexing
 
 					SortMode sortMode = SortMode.BY_PNL;
-					if (sandboxResult.isPortfolioBreakEvenMode()) {
+					if (result.isPortfolioBreakEvenMode()) {
 						sortMode = SortMode.BY_GROUP;
 					}
 
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, sandboxResult, monitor), sortMode);
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, result, monitor, null), sortMode);
 					viewState.lastSolution = solution;
 					viewState.allTargetElements.clear();
 					// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
 					return viewState;
 				}, runAsync, slotId);
-			} else if (plan instanceof ActionableSetPlan) {
+			} else if (plan instanceof ActionableSetPlan result) {
 				setViewMode(ViewMode.NEW_ACTION_SET, false);
 				setNewDataData(target, (monitor, targetSlotId) -> {
 					final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, result, monitor, null), SortMode.BY_GROUP);
 					viewState.lastSolution = solution;
 					return viewState;
 				}, runAsync, slotId);

@@ -71,7 +71,7 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Commodity Curves.csv")) {
 			sb.importCommodityCurves(is);
 		}
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Vessel Availability.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Vessel Charters.csv")) {
 			sb.importVesselCharters(is);
 		}
 //		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Spot Cargo Markets.csv")) {
@@ -175,9 +175,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		// Make changes to initial data
 		cargoModelFinder.findLoadSlot("PE_1").setWindowSizeUnits(TimePeriod.DAYS);
-		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
-		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
-		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+		cargoModelFinder.findVesselCharter(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselCharter(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselCharter(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		final UserSettings userSettings = createUserSettings();
 
@@ -257,9 +257,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		// Make changes to initial data
 		cargoModelFinder.findLoadSlot("PE_1").setWindowSizeUnits(TimePeriod.DAYS);
-		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
-		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
-		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+		cargoModelFinder.findVesselCharter(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselCharter(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselCharter(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().clear();
 		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel(SMALL_SHIP), entity, "21750", 1);
@@ -352,9 +352,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		p.setCvValue(22.7);
 		costModelBuilder.createPortCost(Collections.singleton(p), Collections.singleton(PortCapability.LOAD), 140000);
 
-		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
-		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
-		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+		cargoModelFinder.findVesselCharter(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
+		cargoModelFinder.findVesselCharter(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
+		cargoModelFinder.findVesselCharter(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
 
 		cargoModelFinder.findLoadSlot("S_3").setArriveCold(false);
 

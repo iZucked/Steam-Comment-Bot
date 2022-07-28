@@ -8,20 +8,14 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
-import com.mmxlabs.rcp.icons.lingo.CommonImages;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportView {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ScheduleSummaryReport.class);
 	
 	/**
 	 * The ID of the view as specified by the extension.

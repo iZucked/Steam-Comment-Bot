@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isFobSale <em>Fob Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getContract <em>Contract</em>}</li>
@@ -431,6 +432,55 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @generated
 	 */
 	void setWindowSizeUnits(TimePeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
+	 * @see #setName(String)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_Name()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	void unsetName();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Name</em>' attribute is set.
+	 * @see #unsetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	boolean isSetName();
 
 } // end of  SellOpportunity
 

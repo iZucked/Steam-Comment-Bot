@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.validation.VesselCapacityPortMinMaxVesselSizeValidator;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -53,11 +53,11 @@ public class VesselCapacityPortMinMaxVesselSizeValidatorTest {
 
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("getTestParameters")
-	public void testVesselAvailability(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheck) {
+	public void testVesselCharter(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheck) {
 		final Port port1 = createPort(port1MinVesselSize, port1MaxVesselSize);
 		final Port port2 = createPort(port2MinVesselSize, port2MaxVesselSize);
 		final Vessel vessel = createVessel(vesselCapacity);
-		VesselAvailability vat = createVesselAvailability(vessel);
+		VesselCharter vat = createVesselCharter(vessel);
 		final Cargo cargo = createCargo(port1, port2, vat);
 		checkValidator(cargo, expectedConstraintCheck);
 	}
@@ -97,8 +97,8 @@ public class VesselCapacityPortMinMaxVesselSizeValidatorTest {
 		return vat;
 	}
 	
-	private VesselAvailability createVesselAvailability(final Vessel vessel) {
-		VesselAvailability vat = CargoFactory.eINSTANCE.createVesselAvailability();
+	private VesselCharter createVesselCharter(final Vessel vessel) {
+		VesselCharter vat = CargoFactory.eINSTANCE.createVesselCharter();
 		vat.setVessel(vessel);
 		return vat;
 	}

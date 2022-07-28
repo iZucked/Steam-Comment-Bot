@@ -40,7 +40,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -346,8 +346,8 @@ public class ViabilitySanboxUnit {
 		final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
 		final IPortSlot b = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
 
-		if (vesselAssignment instanceof VesselAvailability) {
-			resource = SequenceHelper.getResource(dataTransformer, (VesselAvailability) vesselAssignment);
+		if (vesselAssignment instanceof VesselCharter) {
+			resource = SequenceHelper.getResource(dataTransformer, (VesselCharter) vesselAssignment);
 		} else if (vesselAssignment instanceof CharterInMarket) {
 			resource = SequenceHelper.getResource(dataTransformer, (CharterInMarket) vesselAssignment, vesselSpotIndex);
 		} else {

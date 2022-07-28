@@ -17,13 +17,13 @@ import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class ExtraDataProvider {
-	public final List<VesselAvailability> extraVesselAvailabilities;
+	public final List<VesselCharter> extraVesselCharters;
 	public final List<CharterInMarketOverride> extraCharterInMarketOverrides;
 	public final List<CharterInMarket> extraCharterInMarkets;
 
@@ -44,7 +44,7 @@ public class ExtraDataProvider {
 	public static final String EXTRA_PRICE_CURVES = "extra_price_curves";
 
 	public ExtraDataProvider() {
-		this.extraVesselAvailabilities = new LinkedList<>();
+		this.extraVesselCharters = new LinkedList<>();
 		this.extraCharterInMarkets = new LinkedList<>();
 		this.extraCharterInMarketOverrides = new LinkedList<>();
 		this.extraLoads = new LinkedList<>();
@@ -54,9 +54,9 @@ public class ExtraDataProvider {
 		this.extraPriceCurves = new LinkedList<>();
 	}
 
-	public ExtraDataProvider(List<VesselAvailability> newAvailabilities, List<CharterInMarket> newCharterInMarkets, List<CharterInMarketOverride> newCharterInMarketOverrides,
+	public ExtraDataProvider(List<VesselCharter> newAvailabilities, List<CharterInMarket> newCharterInMarkets, List<CharterInMarketOverride> newCharterInMarketOverrides,
 			List<LoadSlot> extraLoads, List<DischargeSlot> extraDischarges, List<VesselEvent> extraVesselEvents, List<SpotMarket> extraSpotCargoMarkets, List<CommodityCurveOverlay> extraCommodityCurves) {
-		this.extraVesselAvailabilities = newAvailabilities;
+		this.extraVesselCharters = newAvailabilities;
 		this.extraCharterInMarkets = newCharterInMarkets;
 		this.extraCharterInMarketOverrides = newCharterInMarketOverrides;
 		this.extraLoads = extraLoads;
@@ -71,7 +71,7 @@ public class ExtraDataProvider {
 			solutionSet.getExtraSlots().stream().filter(s -> s instanceof LoadSlot).forEach(s -> extraLoads.add((LoadSlot) s));
 			solutionSet.getExtraSlots().stream().filter(s -> s instanceof DischargeSlot).forEach(s -> extraDischarges.add((DischargeSlot) s));
 
-			extraVesselAvailabilities.addAll(solutionSet.getExtraVesselAvailabilities());
+			extraVesselCharters.addAll(solutionSet.getExtraVesselCharters());
 			extraCharterInMarkets.addAll(solutionSet.getExtraCharterInMarkets());
 			extraCharterInMarketOverrides.addAll(solutionSet.getCharterInMarketOverrides());
 			extraVesselEvents.addAll(solutionSet.getExtraVesselEvents());
@@ -82,8 +82,8 @@ public class ExtraDataProvider {
 	public synchronized void merge(ExtraDataProvider extraDataProvider) {
 
 		// Null Check
-		if (extraDataProvider.extraVesselAvailabilities != null) {
-			extraVesselAvailabilities.addAll(extraDataProvider.extraVesselAvailabilities);
+		if (extraDataProvider.extraVesselCharters != null) {
+			extraVesselCharters.addAll(extraDataProvider.extraVesselCharters);
 		}
 		if (extraDataProvider.extraCharterInMarkets != null) {
 			extraCharterInMarkets.addAll(extraDataProvider.extraCharterInMarkets);
@@ -117,8 +117,8 @@ public class ExtraDataProvider {
 
 			@Provides
 			@Named(EXTRA_VESSEL_AVAILABILITIES)
-			private List<VesselAvailability> provideExtraAvailabilities() {
-				return extraVesselAvailabilities;
+			private List<VesselCharter> provideExtraAvailabilities() {
+				return extraVesselCharters;
 			}
 
 			@Provides

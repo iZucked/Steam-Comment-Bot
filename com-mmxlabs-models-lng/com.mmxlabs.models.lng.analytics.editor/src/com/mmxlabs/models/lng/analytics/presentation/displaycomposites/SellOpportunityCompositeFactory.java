@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation.displaycomposites;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
@@ -20,8 +24,21 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
  * 
  */
 public class SellOpportunityCompositeFactory extends DefaultDisplayCompositeFactory {
-	public SellOpportunityCompositeFactory() {
-
+	 
+	@Override
+	public String getRenderingLabel(List<EObject> inputs) {
+		if (inputs.isEmpty()) {
+			return null;
+		}
+		
+		if (inputs.get(0) instanceof SellOpportunity op) {
+			if (inputs.size() == 1 && op.isSetName()) {
+				return "Sell Opportunity: " + op.getName();	
+			}
+			return "Sell Opportunit" + (inputs.size() == 1 ? "y" : "ies");
+		}
+		
+		return null;
 	}
 
 	@Override

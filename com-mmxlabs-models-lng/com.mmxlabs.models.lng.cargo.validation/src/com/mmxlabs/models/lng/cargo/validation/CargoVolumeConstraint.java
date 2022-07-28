@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -195,10 +195,10 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 		int capacity = -1;
 		double fillCapacity = 0.985;
-		if (vesselAssignmentType instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+		if (vesselAssignmentType instanceof VesselCharter) {
+			final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
 
-			final Vessel vessel = vesselAvailability.getVessel();
+			final Vessel vessel = vesselCharter.getVessel();
 			if (vessel != null) {
 				capacity = vessel.getVesselOrDelegateCapacity();
 				fillCapacity = vessel.getVesselOrDelegateFillCapacity();

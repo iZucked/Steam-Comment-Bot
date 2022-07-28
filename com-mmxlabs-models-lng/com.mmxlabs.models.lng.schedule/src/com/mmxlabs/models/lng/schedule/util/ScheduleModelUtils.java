@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -208,9 +208,9 @@ public class ScheduleModelUtils {
 	public static @Nullable Vessel getVessel(final @Nullable Sequence seq) {
 		if (seq == null)
 			return null;
-		final VesselAvailability vesselAvailability = seq.getVesselAvailability();
-		if (vesselAvailability != null) {
-			return vesselAvailability.getVessel();
+		final VesselCharter vesselCharter = seq.getVesselCharter();
+		if (vesselCharter != null) {
+			return vesselCharter.getVessel();
 		}
 		CharterInMarket charterInMarket = seq.getCharterInMarket();
 		if (charterInMarket != null) {
@@ -551,15 +551,15 @@ public class ScheduleModelUtils {
 		return result;
 	}
 
-	public static StartEvent getStartEvent(final VesselAvailability vesselAvailability, final Schedule schedule) {
-		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
+	public static StartEvent getStartEvent(final VesselCharter vesselCharter, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselCharter().equals(vesselCharter)).findFirst().get();
 		final Event event = sequence.getEvents().get(0);
 		assert event instanceof StartEvent;
 		return (StartEvent) event;
 	}
 
-	public static EndEvent getEndEvent(final VesselAvailability vesselAvailability, final Schedule schedule) {
-		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
+	public static EndEvent getEndEvent(final VesselCharter vesselCharter, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselCharter().equals(vesselCharter)).findFirst().get();
 		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
 		assert event instanceof EndEvent;
 		return (EndEvent) event;

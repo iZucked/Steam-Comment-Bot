@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -133,10 +133,10 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: {
-				VesselClassRouteParameters vesselClassRouteParameters = (VesselClassRouteParameters)theEObject;
-				T1 result = caseVesselClassRouteParameters(vesselClassRouteParameters);
-				if (result == null) result = caseMMXObject(vesselClassRouteParameters);
+			case FleetPackage.VESSEL_ROUTE_PARAMETERS: {
+				VesselRouteParameters vesselRouteParameters = (VesselRouteParameters)theEObject;
+				T1 result = caseVesselRouteParameters(vesselRouteParameters);
+				if (result == null) result = caseMMXObject(vesselRouteParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -220,17 +220,17 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Class Route Parameters</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Route Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Class Route Parameters</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Route Parameters</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseVesselClassRouteParameters(VesselClassRouteParameters object) {
+	public T1 caseVesselRouteParameters(VesselRouteParameters object) {
 		return null;
 	}
 

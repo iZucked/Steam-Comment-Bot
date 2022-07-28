@@ -62,8 +62,14 @@ public abstract class AbstractGenericDataRepository<T> implements IDataRepositor
 		listenForNewLocalVersions = false;
 	}
 
+	@Override
 	public void registerLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
+	}
+	
+	@Override
+	public void deregisterLocalVersionListener(final Runnable versionConsumer) {
+		newLocalVersionCallbacks.remove(versionConsumer);
 	}
 
 	protected boolean canWaitForNewLocalVersion() {
@@ -108,6 +114,7 @@ public abstract class AbstractGenericDataRepository<T> implements IDataRepositor
 		return false;
 	}
 
+	@Override
 	public List<DataVersion> getLocalVersions() {
 
 		ImmutableList<GenericDataRecord> records = GenericDataRepository.INSTANCE.getRecords(type);

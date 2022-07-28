@@ -329,7 +329,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (operationsStart: ");
 		result.append(operationsStart);
 		result.append(", endHeelM3: ");

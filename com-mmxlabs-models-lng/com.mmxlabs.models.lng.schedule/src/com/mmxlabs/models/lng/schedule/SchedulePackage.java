@@ -600,13 +600,31 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__REPOSITIONING_FEE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Is Heel Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__IS_HEEL_SOURCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Is Heel Sink</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__IS_HEEL_SINK = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1238,13 +1256,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Charter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL_AVAILABILITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SEQUENCE__VESSEL_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
@@ -8245,15 +8263,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Events();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter <em>Vessel Charter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability()
+	 * @return the meta object for the reference '<em>Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselCharter()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_VesselAvailability();
+	EReference getSequence_VesselCharter();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}'.
@@ -8894,6 +8912,28 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCargoAllocation_RepositioningFee();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSource <em>Is Heel Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Heel Source</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSource()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_IsHeelSource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSink <em>Is Heel Sink</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Heel Sink</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#isIsHeelSink()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_IsHeelSink();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getName() <em>Get Name</em>}' operation.
@@ -11145,12 +11185,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__EVENTS = eINSTANCE.getSequence_Events();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Charter</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__VESSEL_AVAILABILITY = eINSTANCE.getSequence_VesselAvailability();
+		EReference SEQUENCE__VESSEL_CHARTER = eINSTANCE.getSequence_VesselCharter();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Market</b></em>' reference feature.
@@ -11655,6 +11695,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ALLOCATION__REPOSITIONING_FEE = eINSTANCE.getCargoAllocation_RepositioningFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Heel Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__IS_HEEL_SOURCE = eINSTANCE.getCargoAllocation_IsHeelSource();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Heel Sink</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__IS_HEEL_SINK = eINSTANCE.getCargoAllocation_IsHeelSink();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.

@@ -104,8 +104,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			final Set<Port> ballastBonusReDeliverToPorts = new HashSet<>();
 			final Set<Port> ballastBonusReturnToPorts = new HashSet<>();
 
-			cargoModel.getVesselAvailabilities().forEach(va -> startPorts.addAll(SetUtils.getObjects(va.getStartAt())));
-			cargoModel.getVesselAvailabilities().forEach(va -> endPorts.addAll(SetUtils.getObjects(va.getEndAt())));
+			cargoModel.getVesselCharters().forEach(va -> startPorts.addAll(SetUtils.getObjects(va.getStartAt())));
+			cargoModel.getVesselCharters().forEach(va -> endPorts.addAll(SetUtils.getObjects(va.getEndAt())));
 
 			cargoModel.getLoadSlots().stream() //
 					.filter(s -> !s.isDESPurchase() || s.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) //
@@ -148,7 +148,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 			// Use lamba function against our different possible from/tos
 
-			cargoModel.getVesselAvailabilities().forEach(va -> {
+			cargoModel.getVesselCharters().forEach(va -> {
 
 				final Set<Port> vaLikelyEndPorts = new HashSet<>();
 				vaLikelyEndPorts.addAll(loadPorts);

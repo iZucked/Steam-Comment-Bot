@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
- * A Data provider to return permitted vessels and vessel classes for a port slot. A null result mean no restriction where as an empty result means nothing is permitted.
+ * A Data provider to return permitted vessels for a port slot. A null result mean no restriction where as an empty result means nothing is permitted.
  * 
  * @author Simon Goodall
  *

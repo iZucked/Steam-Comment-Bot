@@ -42,7 +42,7 @@ public class DefaultLongTermSequenceElementFilter implements ISequenceElementFil
 //			Collections.sort(entriesList, (a,b) -> a.getKey().getName().compareTo(b.getKey().getName()));
 //			List<@NonNull IModifiableSequence> virtualSequences = entriesList.stream()
 //				.filter(e -> vesselProvider
-//						.getVesselAvailability(e.getKey())
+//						.getVesselCharter(e.getKey())
 //						.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP)
 //				.map(e->e.getValue())
 //				.collect(Collectors.toList());

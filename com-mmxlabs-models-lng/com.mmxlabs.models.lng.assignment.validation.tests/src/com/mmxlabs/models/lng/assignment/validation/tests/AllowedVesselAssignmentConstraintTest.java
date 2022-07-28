@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -37,9 +37,9 @@ public class AllowedVesselAssignmentConstraintTest {
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		cargoModel.getCargoes().add(cargo);
@@ -62,9 +62,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Permitted!
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		cargoModel.getCargoes().add(cargo);
@@ -89,9 +89,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Not permitted!
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel2);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel2);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		cargoModel.getCargoes().add(cargo);
@@ -115,9 +115,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Permitted!
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		cargoModel.getCargoes().add(cargo);
@@ -142,9 +142,9 @@ public class AllowedVesselAssignmentConstraintTest {
 		loadSlot.setRestrictedVesselsOverride(true);
 
 		// Not permitted!
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		cargoModel.getCargoes().add(cargo);

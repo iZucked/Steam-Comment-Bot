@@ -90,7 +90,8 @@ public class HubTests {
 		// SWTBotPreferences.PLAYBACK_DELAY = 500;
 		// increase timeout to 10 seconds
 		SWTBotPreferences.TIMEOUT = 20000;
-		// keyboard layout necessary as we type text in tests: https://wiki.eclipse.org/SWTBot/Keyboard_Layouts
+		// keyboard layout necessary as we type text in tests:
+		// https://wiki.eclipse.org/SWTBot/Keyboard_Layouts
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 	}
 
@@ -112,7 +113,9 @@ public class HubTests {
 	}
 
 	/*
-	 * Got this setup & teardown example for the creator of SWTBot himself in his PhD thesis: https://www.theseus.fi/bitstream/handle/10024/7470/Mazurkiewicz_Milosz.pdf
+	 * Got this setup & teardown example for the creator of SWTBot himself in his
+	 * PhD thesis:
+	 * https://www.theseus.fi/bitstream/handle/10024/7470/Mazurkiewicz_Milosz.pdf
 	 */
 	@AfterAll
 	public static void afterAll() {
@@ -174,16 +177,16 @@ public class HubTests {
 
 	@Test
 	public void changingUrlWithoutApplyingDisablesLoginButton() throws InterruptedException {
-		
-		logger.info("Test executing on display thread? " + (Thread.currentThread() == Display.getDefault().getThread()));
-		
 		openDatahubPreferencePage();
 		// type backspace character to trigger change
 		Matcher<Widget> urlTextField = withText("&URL");
 		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
-		// FIXME typeText is supposed to notify event listeners...
-		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.TAB);
+
+		bot.textWithLabel("&URL").setFocus();
+		bot.textWithLabel("&URL").setText("anything").pressShortcut(Keystrokes.TAB);
+		bot.buttonWithId("login").setFocus();
+		
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));

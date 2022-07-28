@@ -361,6 +361,15 @@ public interface ADPFactory extends EFactory {
 	SpacingAllocation createSpacingAllocation();
 
 	/**
+	 * Returns a new object of class '<em>Allowed Arrival Time Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Allowed Arrival Time Record</em>'.
+	 * @generated
+	 */
+	AllowedArrivalTimeRecord createAllowedArrivalTimeRecord();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

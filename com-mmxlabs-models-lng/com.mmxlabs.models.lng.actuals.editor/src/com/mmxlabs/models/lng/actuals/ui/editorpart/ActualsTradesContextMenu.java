@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -160,9 +160,9 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				final CargoActuals cargoActuals = ActualsFactory.eINSTANCE.createCargoActuals();
 				cargoActuals.setCargo(cargo);
 				cargoActuals.setCargoReference(cargo.getLoadName());
-				if (cargo.getVesselAssignmentType() instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) cargo.getVesselAssignmentType();
-					cargoActuals.setVessel(vesselAvailability.getVessel());
+				if (cargo.getVesselAssignmentType() instanceof VesselCharter) {
+					final VesselCharter vesselCharter = (VesselCharter) cargo.getVesselAssignmentType();
+					cargoActuals.setVessel(vesselCharter.getVessel());
 				}
 
 				final Map<Slot, SlotActuals> slotActualMap = new HashMap<>();

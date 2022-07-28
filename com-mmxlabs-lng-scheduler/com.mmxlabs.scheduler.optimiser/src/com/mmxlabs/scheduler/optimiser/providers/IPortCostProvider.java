@@ -11,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
- * DCP which gives you the cost of visiting a given port in a given vessel class at a given time to perform a given activity
+ * DCP which gives you the cost of visiting a given port in a given vessel at a given time to perform a given activity
  * 
  * @author hinton
  * 
@@ -25,5 +25,5 @@ public interface IPortCostProvider extends IDataComponentProvider {
 	 * @param portType
 	 * @return
 	 */
-	public long getPortCost(final @NonNull IPort port, final @NonNull IVessel vessel, final @NonNull PortType portType);
+	long getPortCost(final @NonNull IPort port, final @NonNull IVessel vessel, final @NonNull PortType portType);
 }

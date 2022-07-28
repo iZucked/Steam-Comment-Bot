@@ -260,7 +260,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (deliveryType: ");
 		result.append(deliveryType);
 		result.append(", endHeelM3: ");

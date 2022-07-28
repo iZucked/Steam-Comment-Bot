@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -49,23 +49,22 @@ public final class ShippedVoyagePlanCacheKey {
 	private final int hash;
 	private int effectiveLastHeelPricePerMMBTU;
 	private int effectiveLastHeelCV;
-	public final IVesselAvailability vesselAvailability;
+	public final IVesselCharter vesselCharter;
 	public final ISequencesAttributesProvider sequencesAttributesProvider;
-
 	// Not part of cache
 	public final IResource resource;
 
-	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
+	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
 			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		this.sequencesAttributesProvider = sequencesAttributesProvider;
 		// Spot market vessels are equivalent
-		ISpotCharterInMarket spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
-		if (!keepDetails && spotCharterInMarket != null && vesselAvailability.getSpotIndex() >= 0) {
+		ISpotCharterInMarket spotCharterInMarket = vesselCharter.getSpotCharterInMarket();
+		if (!keepDetails && spotCharterInMarket != null && vesselCharter.getSpotIndex() >= 0) {
 			this.vesselKey = spotCharterInMarket;
 		} else {
-			this.vesselKey = vesselAvailability;
+			this.vesselKey = vesselCharter;
 		}
 		//
 		this.charterCostCalculator = charterCostCalculator;
@@ -101,7 +100,7 @@ public final class ShippedVoyagePlanCacheKey {
 				canalBookings, voyageKeys);
 
 		this.resource = resource;
-		this.vesselAvailability = vesselAvailability;
+		this.vesselCharter = vesselCharter;
 	}
 
 	private String getPortName(@Nullable final IPort port) {
@@ -149,7 +148,7 @@ public final class ShippedVoyagePlanCacheKey {
 			} else {
 				// With keep details, we need to ensure exact matches rather than just
 				// equivalence
-				if (vesselAvailability != other.vesselAvailability) {
+				if (vesselCharter != other.vesselCharter) {
 					return false;
 				}
 

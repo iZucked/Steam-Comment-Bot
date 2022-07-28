@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.util;
 
+import com.mmxlabs.models.lng.actuals.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -75,8 +76,8 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ActualsSwitch<@Nullable Adapter> modelSwitch =
-		new ActualsSwitch<@Nullable Adapter>() {
+	protected ActualsSwitch<Adapter> modelSwitch =
+		new ActualsSwitch<Adapter>() {
 			@Override
 			public Adapter caseActualsModel(ActualsModel object) {
 				return createActualsModelAdapter();

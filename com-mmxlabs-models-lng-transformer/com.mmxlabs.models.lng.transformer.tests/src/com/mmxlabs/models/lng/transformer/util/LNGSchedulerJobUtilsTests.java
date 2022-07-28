@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -37,7 +37,7 @@ public class LNGSchedulerJobUtilsTests {
 		final Schedule schedule;
 		final CargoModel cargoModel;
 
-		final VesselAvailability availability2;
+		final VesselCharter availability2;
 		final Cargo cargo;
 		// Build simple single cargo scenario
 		{
@@ -61,10 +61,10 @@ public class LNGSchedulerJobUtilsTests {
 			Vessel vessel2 = FleetFactory.eINSTANCE.createVessel();
 			vessel2.setName("VESSEL2");
 
-			final VesselAvailability availability1 = CargoFactory.eINSTANCE.createVesselAvailability();
+			final VesselCharter availability1 = CargoFactory.eINSTANCE.createVesselCharter();
 			availability1.setVessel(vessel1);
 
-			availability2 = CargoFactory.eINSTANCE.createVesselAvailability();
+			availability2 = CargoFactory.eINSTANCE.createVesselCharter();
 			availability2.setVessel(vessel2);
 
 			cargo.setVesselAssignmentType(availability1);
@@ -72,7 +72,7 @@ public class LNGSchedulerJobUtilsTests {
 			schedule = ScheduleFactory.eINSTANCE.createSchedule();
 
 			final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
-			sequence.setVesselAvailability(availability2);
+			sequence.setVesselCharter(availability2);
 			sequence.setSequenceType(SequenceType.VESSEL);
 			schedule.getSequences().add(sequence);
 

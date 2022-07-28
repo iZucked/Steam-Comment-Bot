@@ -41,7 +41,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  */
 
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
-	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReferenceInlineEditor.class);
 	/**
 	 */
 	protected Combo combo;
@@ -95,7 +95,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		} else {
 			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 			if (valueProvider == null) {
-				log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+				LOG.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
 			}
 		}
 		super.display(dialogContext, context, input, range);

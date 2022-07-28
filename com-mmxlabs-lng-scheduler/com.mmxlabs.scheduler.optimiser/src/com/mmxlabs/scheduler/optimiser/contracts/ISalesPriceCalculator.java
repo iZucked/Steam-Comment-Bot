@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -70,14 +70,14 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
 	 * decisions have been made.
 	 * 
-	 * @param vesselAvailability
+	 * @param vesselCharter
 	 * @param option
 	 * @param allocationAnnotation
 	 * @param voyagePlan
 	 * @param annotations
 	 * @return
 	 */
-	default public int calculateSalesUnitPrice(IVesselAvailability vesselAvailability, IDischargeOption option, IAllocationAnnotation allocationAnnotation, VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
+	default public int calculateSalesUnitPrice(IVesselCharter vesselCharter, IDischargeOption option, IAllocationAnnotation allocationAnnotation, VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
 		return calculateSalesUnitPrice(option, allocationAnnotation, annotations);
 	}
 
@@ -90,7 +90,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            TODO
 	 * @param slot
-	 * @deprecated Use version that passes in IVesselAvailability.
+	 * @deprecated Use version that passes in IVesselCharter.
 	 */
 	public int calculateSalesUnitPrice(IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 

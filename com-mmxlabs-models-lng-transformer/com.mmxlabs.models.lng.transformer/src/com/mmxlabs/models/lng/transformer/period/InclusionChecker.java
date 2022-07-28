@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -256,15 +256,15 @@ public class InclusionChecker {
 
 
 	@NonNull
-	public NonNullPair<InclusionType, Position> getVesselAvailabilityInclusionType(@NonNull final VesselAvailability vesselAvailability, @NonNull final PeriodRecord periodRecord) {
+	public NonNullPair<InclusionType, Position> getVesselCharterInclusionType(@NonNull final VesselCharter vesselCharter, @NonNull final PeriodRecord periodRecord) {
 
 		if (periodRecord.lowerCutoff != null) {
-			if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndByAsDateTime().isBefore(periodRecord.lowerCutoff)) {
+			if (vesselCharter.isSetEndBy() && vesselCharter.getEndByAsDateTime().isBefore(periodRecord.lowerCutoff)) {
 				return new NonNullPair<>(InclusionType.Out, Position.Before);
 			}
 		}
 		if (periodRecord.upperCutoff != null) {
-			if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
+			if (vesselCharter.isSetStartAfter() && vesselCharter.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
 				return new NonNullPair<>(InclusionType.Out, Position.After);
 			}
 		}
@@ -291,17 +291,17 @@ public class InclusionChecker {
 	}
 
 	@NonNull
-	public InclusionType getObjectInVesselAvailabilityRange(@NonNull final PortVisit portVisit, @NonNull final VesselAvailability vesselAvailability) {
+	public InclusionType getObjectInVesselCharterRange(@NonNull final PortVisit portVisit, @NonNull final VesselCharter vesselCharter) {
 
-		if (vesselAvailability.isSetEndBy()) {
-			if (portVisit.getStart().isAfter(vesselAvailability.getEndByAsDateTime())) {
+		if (vesselCharter.isSetEndBy()) {
+			if (portVisit.getStart().isAfter(vesselCharter.getEndByAsDateTime())) {
 				return InclusionType.Out;
 			}
 		}
-		if (vesselAvailability.isSetStartAfter())
+		if (vesselCharter.isSetStartAfter())
 
 		{
-			if (portVisit.getEnd().isBefore(vesselAvailability.getStartAfterAsDateTime())) {
+			if (portVisit.getEnd().isBefore(vesselCharter.getStartAfterAsDateTime())) {
 				return InclusionType.Out;
 			}
 		}

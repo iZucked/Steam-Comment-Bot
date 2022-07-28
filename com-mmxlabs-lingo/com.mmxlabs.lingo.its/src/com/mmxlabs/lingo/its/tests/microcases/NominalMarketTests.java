@@ -23,7 +23,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -366,7 +366,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -396,7 +396,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
@@ -424,7 +424,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		// Half the capacity! So will loose P&L by doing this.
 		vessel.setCapacity(70_000);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -465,7 +465,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assertions.assertTrue(beforePNL > afterPNL);
 
 			// Check correct cargoes remain and spot index has changed.
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
@@ -501,7 +501,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		// Half the capacity! So will loose P&L by doing this.
 		vessel.setCapacity(70_000);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -531,7 +531,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// Check correct cargoes remain and spot index has changed.
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
@@ -805,7 +805,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "10000", 0);
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("100000") // Much more costly than nominal
 				.build();
 
@@ -817,7 +817,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
 
@@ -831,7 +831,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
-			Assertions.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+			Assertions.assertEquals(vesselCharter1, optCargo1.getVesselAssignmentType());
 
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 

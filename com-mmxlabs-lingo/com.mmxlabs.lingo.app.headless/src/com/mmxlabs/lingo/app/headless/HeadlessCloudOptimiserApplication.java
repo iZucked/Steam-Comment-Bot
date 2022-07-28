@@ -67,6 +67,9 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		// check the license
 		doCheckLicense();
 
+		// log the user in and initialise related features
+		HeadlessUtils.initAccessControl();
+
 		IJobRunner runner;
 
 		final String jobType = commandLine.getOptionValue(JOB_TYPE);
@@ -78,9 +81,6 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		if (runner == null) {
 			throw new IllegalStateException("Unable to create job runner");
 		}
-
-		// log the user in and initialise related features
-		HeadlessUtils.initAccessControl();
 
 		final int numThreads = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
@@ -115,7 +115,6 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 			final CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
 
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-
 				runner.withScenario(scenarioDataProvider);
 
 				// Hack to get metadata
@@ -126,7 +125,8 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 
 				runner.withLogging(meta);
 
-				// final ScenarioMeta scenarioMeta = writeOptimisationMetrics(scenarioDataProvider);
+				// final ScenarioMeta scenarioMeta =
+				// writeOptimisationMetrics(scenarioDataProvider);
 				// runner.withLogging(scenarioMeta);
 				// end hack
 
@@ -134,11 +134,7 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 				if (result == null) {
 					throw new NullPointerException("Result is null");
 				}
-				// final File resultOutput = new File(outputScenarioFileName + ".xmi");
 				HeadlessUtils.saveResult(result, scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
-				//
-				// ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
-
 			}, scenarioCipherProvider);
 		} catch (final Exception e) {
 			throw new IOException("Error running job", e);
@@ -186,9 +182,11 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 
 		options.addOption(OptionBuilder.withLongOpt(INPUT_SCENARIO).withDescription("Input scenario file").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(PARAMS_FILE).withDescription("File listing a batch of jobs to run").hasArg().create());
-		// options.addOption(OptionBuilder.withLongOpt(EXTRA_CONFIG_FILE).withDescription("File listing a batch of jobs to run").hasArg().create());
+		// options.addOption(OptionBuilder.withLongOpt(EXTRA_CONFIG_FILE).withDescription("File
+		// listing a batch of jobs to run").hasArg().create());
 
-		// options.addOption(JSON, true, "JSON file containing parameters for algorithm being run");
+		// options.addOption(JSON, true, "JSON file containing parameters for algorithm
+		// being run");
 		//
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_SCENARIO).withDescription("Output scenario file").hasArg().create());
 		//
@@ -197,8 +195,10 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
 		//
 		//
-		// options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom information (using name=val syntax)").hasArg().create());
-		// options.addOption(OptionBuilder.withLongOpt(USE_CASE).withDescription("Use-case handle").hasArg().create());
+		// options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom
+		// information (using name=val syntax)").hasArg().create());
+		// options.addOption(OptionBuilder.withLongOpt(USE_CASE).withDescription("Use-case
+		// handle").hasArg().create());
 
 		// create the command line parser
 

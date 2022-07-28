@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 
 @NonNullByDefault
@@ -22,7 +22,7 @@ public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInM
 
 	private final Set<ISpotCharterInMarket> spotCharterInMarkets = new HashSet<>();
 	private final Map<ISpotCharterInMarket, Integer> spotCharterInMarketCount = new HashMap<>();
-	private final Map<Pair<ISpotCharterInMarket, Integer>, IVesselAvailability> spotCharterInMarketMap = new HashMap<>();
+	private final Map<Pair<ISpotCharterInMarket, Integer>, IVesselCharter> spotCharterInMarketMap = new HashMap<>();
 
 	@Override
 	public Collection<ISpotCharterInMarket> getSpotCharterInMarkets() {
@@ -35,13 +35,13 @@ public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInM
 	}
 
 	@Override
-	public IVesselAvailability getSpotMarketAvailability(final ISpotCharterInMarket market, final int spotIndex) {
+	public IVesselCharter getSpotMarketAvailability(final ISpotCharterInMarket market, final int spotIndex) {
 		return spotCharterInMarketMap.get(Pair.of(market, spotIndex));
 	}
 
 	@Override
-	public void addSpotMarketAvailability(final IVesselAvailability vesselAvailability, final ISpotCharterInMarket market, final int spotIndex) {
-		spotCharterInMarketMap.put(Pair.of(market, spotIndex), vesselAvailability);
+	public void addSpotMarketAvailability(final IVesselCharter vesselCharter, final ISpotCharterInMarket market, final int spotIndex) {
+		spotCharterInMarketMap.put(Pair.of(market, spotIndex), vesselCharter);
 		spotCharterInMarkets.add(market);
 
 		// If not a nominal option, update the highest option count.

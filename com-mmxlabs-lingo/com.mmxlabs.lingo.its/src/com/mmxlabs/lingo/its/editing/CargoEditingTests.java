@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.cargo.util.CargoUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -46,11 +46,11 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 				.build();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity).build();
 
-		helper.assignVesselEventToVesselAvailability("Assign event", vesselEvent, vesselAvailability);
+		helper.assignVesselEventToVesselCharter("Assign event", vesselEvent, vesselCharter);
 
-		Assertions.assertSame(vesselAvailability, vesselEvent.getVesselAssignmentType());
+		Assertions.assertSame(vesselCharter, vesselEvent.getVesselAssignmentType());
 	}
 
 	@Test
@@ -62,9 +62,9 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity).build();
 		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN))//
-				.withVesselAssignment(vesselAvailability, 0)//
+				.withVesselAssignment(vesselCharter, 0)//
 				.build();
 
 		helper.unassignVesselEventAssignment("Unassign event", vesselEvent);

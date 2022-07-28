@@ -111,12 +111,12 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
-                  id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselCharterConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselCharterConstraint"
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="Vessel Availability Constraint"
+                  name="Vessel Charter Constraint"
                   severity="ERROR"
                   statusCode="1">
                <message>
@@ -127,19 +127,19 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint"
-                  id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint"
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselCharterMinMaxConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselCharterMinMaxConstraint"
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="Vessel Availability Duration Constraint"
+                  name="Vessel Charter Duration Constraint"
                   severity="ERROR"
                   statusCode="1">
                <message>
                   {0}
                </message>
                <target
-                     class="VesselAvailability">
+                     class="VesselCharter">
                </target>
             </constraint>
             <constraint

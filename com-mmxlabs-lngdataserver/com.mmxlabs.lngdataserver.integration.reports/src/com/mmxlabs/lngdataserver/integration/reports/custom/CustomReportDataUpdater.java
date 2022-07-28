@@ -121,7 +121,7 @@ public class CustomReportDataUpdater {
 
 		private boolean downloadData(final CustomReportDataRecord record, final File f) {
 			final boolean[] ret = new boolean[1];
-			final Job background = new Job("Downloading reference data") {
+			final Job background = new Job("Downloading team report data") {
 
 				@Override
 				public IStatus run(final IProgressMonitor monitor) {
@@ -172,7 +172,7 @@ public class CustomReportDataUpdater {
 				e.printStackTrace();
 			}
 		}
-		updateThread = new Thread("GenericDataUpdaterThread") {
+		updateThread = new Thread("TeamReportUpdaterThread") {
 			@Override
 			public void run() {
 

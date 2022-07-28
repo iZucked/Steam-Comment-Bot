@@ -28,6 +28,10 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ValidationTestUtil {
+	
+	private ValidationTestUtil() {
+		
+	}
 
 	/**
 	 * Run the validation on the scenarios.

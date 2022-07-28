@@ -36,9 +36,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -91,7 +91,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbench;
@@ -216,7 +215,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
 
-	private static final int LineWrap = 40;
+	private static final int LINE_WRAP = 40;
 	private static String nl = System.getProperty("line.separator");
 
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
@@ -408,10 +407,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				Arrays.fill(sortedIndices, -1);
 				Arrays.fill(reverseSortedIndices, -1);
 
-				for (int i = 0; i < sortedChildren.length; ++i) {
-					final int rawIndex = rootData.getRows().indexOf(sortedChildren[i]);
-					sortedIndices[rawIndex] = i;
-					reverseSortedIndices[i] = rawIndex;
+				if (rootData != null) {
+					for (int i = 0; i < sortedChildren.length; ++i) {
+						final int rawIndex = rootData.getRows().indexOf(sortedChildren[i]);
+						sortedIndices[rawIndex] = i;
+						reverseSortedIndices[i] = rawIndex;
+					}
 				}
 				if (wiringDiagram != null) {
 					wiringDiagram.setSortOrder(rootData, sortedIndices, reverseSortedIndices);
@@ -444,7 +445,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public Object[] getChildren(final Object parentElement) {
+					public Object @Nullable [] getChildren(final Object parentElement) {
 						return null;
 					}
 
@@ -518,16 +519,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					@Override
 					protected void updateObject(final EObject object, final IStatus status, final boolean update) {
-						if (rootData == null) {
+						final RootData pRootData = rootData;
+						if (pRootData == null) {
 							return;
 						}
 						if (object == null) {
 							return;
 						}
-						final RootData pRootData = rootData;
-						if (pRootData == null) {
-							return;
-						}
+
 						int idx = -1;
 						if (pRootData.getLoadSlots().contains(object)) {
 							idx = pRootData.getLoadSlots().indexOf(object);
@@ -589,11 +588,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (lString.length() + dString.length() == 0) {
 					return null;
 				} else {
-					if (lString.length() > LineWrap) {
-						lString = wrapString(lString, LineWrap);
+					if (lString.length() > LINE_WRAP) {
+						lString = wrapString(lString, LINE_WRAP);
 					}
-					if (dString.length() > LineWrap) {
-						dString = wrapString(dString, LineWrap);
+					if (dString.length() > LINE_WRAP) {
+						dString = wrapString(dString, LINE_WRAP);
 					}
 					return (lString.length() > 0 ? lString : "") + (dString.length() > 0 ? nl + " --- " + nl + dString : "");
 				}
@@ -766,7 +765,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return Objects.equals(a, b);
 			}
 
-			private Set<Object> getObjectSet(final Object a) {
+			private @Nullable Set<Object> getObjectSet(final Object a) {
 				final Set<Object> aSet = new HashSet<>();
 				if (a instanceof final RowData rd) {
 					aSet.add(rd);
@@ -942,7 +941,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 */
 
 		final Action addAction = new AddAction("Add");
-		// addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		addAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		addAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
@@ -1059,7 +1057,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.LOAD);
-			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "L-ID", manipulator, assignmentPath);
+			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "ID", manipulator, assignmentPath);
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
@@ -1239,13 +1237,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), commandHandler), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
 				.setHeaderTooltip("in m³ or mmBtu");
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, commandHandler), new RowDataEMFPath(false, Type.DISCHARGE));
-		// addTradesColumn(dischargeColumns, "D-ID", new
-		// BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(),
-		// editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
-			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "D-ID", manipulator, assignmentPath);
+			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "ID", manipulator, assignmentPath);
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
@@ -1909,6 +1904,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @param newYPos
 	 */
 	protected void requestScrollTo(final int newXPos, final int newYPos) {
+		// No default behaviour
 	}
 
 	private GridViewerColumn addWiringColumn() {
@@ -2066,7 +2062,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath vesselPath1 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
-					CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+					CargoPackage.Literals.VESSEL_CHARTER__VESSEL);
 			final EMFPath vesselPath2 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 
 			final Action clearAction = new Action("Clear Filter") {
@@ -2282,7 +2278,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			// Get the labels to populate the menu from the source object in the EMF model
 			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
-			final List<NamedObject> copiedValues = new LinkedList(values);
+			final List<NamedObject> copiedValues = new LinkedList<>(values);
 			Collections.sort(copiedValues, (a, b) -> {
 				if (a != null && a.getName() != null && b != null) {
 					return a.getName().compareTo(b.getName());
@@ -2654,7 +2650,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		@Override
 		public void mouseDoubleClick(final MouseEvent e) {
-
+			// No double click action
 		}
 
 		@Override

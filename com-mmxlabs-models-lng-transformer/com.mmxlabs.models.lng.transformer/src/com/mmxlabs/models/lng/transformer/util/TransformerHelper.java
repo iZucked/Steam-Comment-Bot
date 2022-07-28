@@ -69,7 +69,7 @@ public class TransformerHelper {
 	 * @param builder
 	 *            the builder which is currently in use
 	 * @param vc
-	 *            the {@link IVesselClass} which the builder has constructed whose attributes we are setting
+	 *            the {@link IVessel} which the builder has constructed whose attributes we are setting
 	 * @param laden
 	 *            the {@link com.mmxlabs.scheduler.optimiser.components.VesselState} we are setting attributes for
 	 * @param ladenAttributes

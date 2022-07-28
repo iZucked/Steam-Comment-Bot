@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 @SuppressWarnings("unused")
@@ -54,7 +54,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testBasicCase() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		// Create the required basic elements
@@ -98,7 +98,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 			final LoadDischargePairValueCalculatorStep calculator = new LoadDischargePairValueCalculatorStep(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(),
 					constraintAndFitnessSettings, dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
 			final AtomicLong counter = new AtomicLong();
-			IVesselAvailability defaultVessel = SequenceHelper.findVesselAvailability(dataTransformer.getInjector(), charterInMarket_1, -1);
+			IVesselCharter defaultVessel = SequenceHelper.findVesselCharter(dataTransformer.getInjector(), charterInMarket_1, -1);
 			calculator.run(defaultVessel, new ProfitAndLossExtractor((load, discharge, value) -> {
 				System.out.printf("%s -> %s == %,d\n", load.getId(), discharge.getId(), value);
 				counter.getAndIncrement();

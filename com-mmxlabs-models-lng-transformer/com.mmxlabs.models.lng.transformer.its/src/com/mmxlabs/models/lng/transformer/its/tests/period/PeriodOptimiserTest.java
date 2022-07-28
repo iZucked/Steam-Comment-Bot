@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -221,7 +221,7 @@ public class PeriodOptimiserTest {
 		public Cargo cargoA1, cargoA2, cargoA3;
 		public Cargo cargoB1, cargoB2, cargoB3;
 
-		public final VesselAvailability[] vesselAvailabilities;
+		public final VesselCharter[] vesselAvailabilities;
 		public IScenarioDataProvider scenarioDataProvider;
 
 		public PeriodOptimiserScenarioTester() {
@@ -266,7 +266,7 @@ public class PeriodOptimiserTest {
 
 			// create a few vessels and add them to the list of vessels created.
 			// createVessels creates and adds the vessels to the scenario.
-			vesselAvailabilities = new VesselAvailability[2];
+			vesselAvailabilities = new VesselCharter[2];
 			vesselAvailabilities[0] = csc.addVesselSimple("classOne", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
 			vesselAvailabilities[1] = csc.addVesselSimple("classTwo", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
 

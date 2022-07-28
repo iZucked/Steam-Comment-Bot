@@ -88,13 +88,13 @@ public interface CargoFactory extends EFactory {
 	CargoGroup createCargoGroup();
 
 	/**
-	 * Returns a new object of class '<em>Vessel Availability</em>'.
+	 * Returns a new object of class '<em>Vessel Charter</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Availability</em>'.
+	 * @return a new object of class '<em>Vessel Charter</em>'.
 	 * @generated
 	 */
-	VesselAvailability createVesselAvailability();
+	VesselCharter createVesselCharter();
 
 	/**
 	 * Returns a new object of class '<em>Maintenance Event</em>'.

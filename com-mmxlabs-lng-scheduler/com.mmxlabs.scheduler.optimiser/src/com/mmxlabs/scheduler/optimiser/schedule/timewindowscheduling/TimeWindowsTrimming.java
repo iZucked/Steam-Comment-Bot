@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -182,14 +182,14 @@ public class TimeWindowsTrimming {
 		if (detailedEndSchedulingMode && end != null) {
 			// Not all end states need a more detailed look
 
-			final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			final IVesselCharter vesselCharter = schedulerCalculationUtils.getVesselCharterFromResource(resource);
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				// Disable for now, but maybe we could consider it
 				detailedEndSchedulingMode = false;
-			} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
+			} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
 				// Use new mode
 			} else {
-				assert vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER;
+				assert vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER;
 				final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
 				if (req.isMaxDurationSet() || req.isMinDurationSet()) {
 					// Use new mode, unless..
@@ -294,10 +294,10 @@ public class TimeWindowsTrimming {
 			final int vesselStartTime, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart) {
 		final ITimeWindow dischargeTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		assert dischargeTimeWindow != null;
-		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(resource);
+		final IVesselCharter vesselCharter = schedulerCalculationUtils.getVesselCharterFromResource(resource);
 
 		// get distances for end ballast journey
-		final TravelRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(),
+		final TravelRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(discharge.getPort(), endSlot.getPort(), vesselCharter.getVessel(),
 				Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE),
 				portTimeWindowsRecord.getSlotNextVoyageOptions(discharge), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(discharge),
 				portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(discharge), false);
@@ -315,7 +315,7 @@ public class TimeWindowsTrimming {
 		 * TODO: Refactor out vesselStartTime ? Always equals to 0
 		 **/
 		// choose the best time for end
-		final int[] times = findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(vesselAvailability, load, sortedCanalTimes, portTimeWindowsRecord.getSlotDuration(discharge),
+		final int[] times = findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(vesselCharter, load, sortedCanalTimes, portTimeWindowsRecord.getSlotDuration(discharge),
 				priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals), priceIntervalProviderHelper.getIntervalsBoundsAndPrices(boiloffPricingIntervals),
 				priceIntervalProviderHelper.getIntervalsBoundsAndPricesWithNoRange(endPriceIntervals), vesselStartTime);
 		return times;
@@ -488,7 +488,7 @@ public class TimeWindowsTrimming {
 				salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.travelTimeAtMaxSpeed, (int) bestCanalDetails.travelTimeAtNBOSpeed);
 	}
 
-	private int[] findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(final IVesselAvailability vesselAvailability, final ILoadOption load, final TravelRouteData[] sortedCanalTimes,
+	private int[] findBestUnboundBucketTimesWithRouteAndBoiloffConsiderations(final IVesselCharter vesselCharter, final ILoadOption load, final TravelRouteData[] sortedCanalTimes,
 			final int loadDuration, final IntervalData[] purchaseIntervals, final IntervalData[] boiloffIntervals, final IntervalData[] salesIntervals, final int vesselStartTime) {
 		assert purchaseIntervals.length > 0;
 
@@ -498,11 +498,11 @@ public class TimeWindowsTrimming {
 		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-					final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, purchaseIntervals[purchaseIndex].start);
+					final long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselCharter, purchaseIntervals[purchaseIndex].start);
 					final NonNullPair<TravelRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							salesIntervals[salesIndex], // D to E
-							loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getNBORate(VesselState.Ballast),
-							vesselAvailability.getVessel(), load.getCargoCVValue(), false);
+							loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselCharter.getVessel().getNBORate(VesselState.Ballast),
+							vesselCharter.getVessel(), load.getCargoCVValue(), false);
 					final long newMargin = totalEstimatedJourneyCostDetails.getSecond();
 					if (newMargin < bestMargin) {
 						bestMargin = newMargin;
@@ -671,7 +671,7 @@ public class TimeWindowsTrimming {
 	private void trimCargoAndLastReturnWithRouteChoice(final IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, ILoadOption load, final IDischargeOption discharge,
 			final IEndPortSlot endSlot, final IPortTimeWindowsRecord portTimeWindowsRecordStart, MinTravelTimeData travelTimeData, ISequencesAttributesProvider sequencesAttributesProvider) {
 
-		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(resource);
+		final IVesselCharter vesselCharter = schedulerCalculationUtils.getVesselCharterFromResource(resource);
 
 		// Get basic intervals (each item is time,price)
 		final List<int[]> loadPriceIntervalsIndependentOfDischarge = getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowsRecord, load);
@@ -684,12 +684,12 @@ public class TimeWindowsTrimming {
 		assert dischargeTimeWindow != null;
 
 		// get distances for laden journey
-		final TravelRouteData[] sortedLadenCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(load.getPort(), discharge.getPort(), vesselAvailability.getVessel(),
+		final TravelRouteData[] sortedLadenCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(load.getPort(), discharge.getPort(), vesselCharter.getVessel(),
 				Math.max((loadTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(load), IPortSlot.NO_PRICING_DATE), portTimeWindowsRecord.getSlotNextVoyageOptions(load),
 				portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(load), portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(load), true);
 
 		// get distances for end ballast journey
-		final TravelRouteData[] sortedBallastCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(),
+		final TravelRouteData[] sortedBallastCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(discharge.getPort(), endSlot.getPort(), vesselCharter.getVessel(),
 				Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE),
 				portTimeWindowsRecord.getSlotNextVoyageOptions(discharge), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(discharge),
 				portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(discharge), false);
@@ -786,8 +786,8 @@ public class TimeWindowsTrimming {
 					// Evaluate!
 					// Note: We assume the caching will take care of duplicated time sets rather
 					// than needing to manage this here.
-					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
-							vesselAvailability.getCharterCostCalculator(), //
+					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
+							vesselCharter.getCharterCostCalculator(), //
 							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, sequencesAttributesProvider, null);
 
 					// Is this the best solution found so far?

@@ -15,13 +15,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
 public class OptionalAvailabilityShippingOptionValueProviderFactory implements IReferenceValueProviderFactory {
 
-	public OptionalAvailabilityShippingOptionValueProviderFactory() {
-	}
-
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final PortModel pm = lngScenarioModel.getReferenceModel().getPortModel();
 			if (pm == null) {
 				return null;

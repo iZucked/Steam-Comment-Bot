@@ -90,6 +90,8 @@ import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
+import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartModeAction;
+import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartState;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
@@ -130,6 +132,10 @@ import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
+
+	public enum OverliftChartMode {
+		CUMULATIVE, NON_CUMULATIVE
+	}
 
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.InventoryReport";
 
@@ -172,6 +178,9 @@ public class InventoryReport extends ViewPart {
 
 	private ChartColourSchemeAction colourSchemeAction;
 	private ActionContributionItem colourSchemeActionContributionItem;
+
+	private OverliftChartModeAction overliftChartModeAction;
+	private ActionContributionItem overliftChartModeActionContributionItem;
 
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
@@ -460,7 +469,7 @@ public class InventoryReport extends ViewPart {
 					createMullCumulativeColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullCumulativeColumn("Reference Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullCumulativeColumn("Lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.lifted - m.monthlyRE), o -> generateSortValue(o, m -> m.lifted - m.monthlyRE));
+					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> -1 * m.getCumulativeDelta()), o -> generateSortValue(o, m -> -1 * m.getCumulativeDelta()));
 					createMullCumulativeColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullMonthlyCumulativeItem.setControl(mullMonthlyCumulativeTableViewer.getControl());
@@ -538,6 +547,10 @@ public class InventoryReport extends ViewPart {
 				mullMonthlyOverliftChart.getTitle().setVisible(false);
 				chartItem2.setControl(mullMonthlyOverliftChart);
 			}
+			overliftChartModeAction = new OverliftChartModeAction(mullMonthlyOverliftChart);
+			overliftChartModeActionContributionItem = new ActionContributionItem(overliftChartModeAction);
+			getViewSite().getActionBars().getToolBarManager().add(overliftChartModeActionContributionItem);
+			overliftChartModeActionContributionItem.setVisible(folder.getSelectionIndex() == 6);
 
 			final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
 			chartItem3.setText("# Cargo Chart");
@@ -581,6 +594,8 @@ public class InventoryReport extends ViewPart {
 						mullDailyTableFilterField.toggleVisibility();
 					}
 					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 5);
+
+					overliftChartModeActionContributionItem.setVisible(currentTabSelection == 6);
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
@@ -631,6 +646,7 @@ public class InventoryReport extends ViewPart {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
 			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
+			overliftChartModeAction.clear();
 		}
 
 		LocalDate minDate = null;
@@ -709,6 +725,7 @@ public class InventoryReport extends ViewPart {
 															nextCumulativeMullInformation.ym = currentMullInfo.getYM();
 															nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
 															nextCumulativeMullInformation.adpStart = adpStart;
+															nextCumulativeMullInformation.cumulativeDelta = currentMullInfo.cumulativeDelta;
 															nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
 															if (prevMullInfo == null) {
 																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
@@ -759,7 +776,10 @@ public class InventoryReport extends ViewPart {
 														}
 														for (final CargoAllocation alloc : sortedPinnedCargoAllocations) {
 															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
-															pinnedLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+															final BaseLegalEntity slotEntity = slotAlloc.getSlot().getEntity();
+															if (slotEntity != null) {
+																pinnedLiftingDates.get(slotEntity).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+															}
 														}
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterPinnedLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> pinnedNextLiftingDates = new HashMap<>();
@@ -812,6 +832,7 @@ public class InventoryReport extends ViewPart {
 																	nextCumulativeMullInformation.ym = currentMullInfo.getYM();
 																	nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
 																	nextCumulativeMullInformation.adpStart = adpStart;
+																	nextCumulativeMullInformation.cumulativeDelta = currentMullInfo.cumulativeDelta;
 																	nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
 																	if (prevMullInfo == null) {
 																		nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
@@ -867,8 +888,10 @@ public class InventoryReport extends ViewPart {
 																}
 																for (final CargoAllocation alloc : sortedOtherCargoAllocations) {
 																	final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
-																	otherLiftingDates.get(reverseEntityEntityMap.get(slotAlloc.getSlot().getEntity()))
-																			.add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																	final BaseLegalEntity slotEntity = slotAlloc.getSlot().getEntity();
+																	if (slotEntity != null) {
+																		otherLiftingDates.get(reverseEntityEntityMap.get(slotEntity)).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																	}
 																}
 																final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 																final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
@@ -975,6 +998,7 @@ public class InventoryReport extends ViewPart {
 															nextCumulativeMullInformation.ym = currentMullInfo.getYM();
 															nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
 															nextCumulativeMullInformation.adpStart = adpStart;
+															nextCumulativeMullInformation.cumulativeDelta = currentMullInfo.cumulativeDelta;
 															nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
 															if (prevMullInfo == null) {
 																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
@@ -1023,7 +1047,11 @@ public class InventoryReport extends ViewPart {
 														}
 														for (final CargoAllocation alloc : sortedOtherCargoAllocations) {
 															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
-															otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+															final BaseLegalEntity slotEntity = slotAlloc.getSlot().getEntity();
+															if (slotEntity != null) {
+																otherLiftingDates.get(slotEntity).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+															}
+//															otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
 														}
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
@@ -1064,7 +1092,13 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
+
+												final List<MullInformation> mullInformationList = pairedMullList.stream().map(Pair::getFirst).toList();
+												final OverliftChartState overliftChartState = new OverliftChartState(mullInformationList, entitiesOrdered, formattedMonthLabels,
+														mullChartColourSequence);
+												overliftChartModeAction.setState(overliftChartState);
+												overliftChartModeAction.updateChartData();
+//												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
 												// int axisId = mullMonthlyOverliftChart.getAxisSet().createXAxis();
 												// final IAxis xAxis2 = mullMonthlyOverliftChart.getAxisSet().getXAxis(axisId);
 												//// xAxis2.setPosition(Position.Primary);
@@ -1897,11 +1931,11 @@ public class InventoryReport extends ViewPart {
 			final YearMonth ymm = ym;
 			final double totalRE = sProfile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
 			sProfile.getEntityTable().stream().forEach(row -> {
-				if (ymm.equals(adpStart)) {
-					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
-				} else {
-					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
-				}
+//				if (ymm.equals(adpStart)) {
+//					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
+//				} else {
+				currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
+//				}
 			});
 		}
 		return monthlyRE;
@@ -2028,11 +2062,11 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 
-	private void calculateOverliftCF(final List<MullInformation> mullList, final YearMonth adpStart) {
+	private void calculateOverliftCF(final List<MullInformation> mullList, final YearMonth adpStart, final Map<BaseLegalEntity, Integer> initialAllocation) {
 		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
 		for (MullInformation curr : mullList) {
 			if (curr.ym.equals(adpStart)) {
-				curr.overliftCF = curr.overlift;
+				curr.overliftCF = curr.overlift - initialAllocation.get(curr.entity);
 			} else {
 				curr.overliftCF = curr.overlift - prev.get(curr.entity).monthEndEntitlement;
 			}
@@ -2040,7 +2074,7 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 
-	private void calculateCarriedEntitlement(List<MullInformation> mullList, YearMonth adpStart, Map<BaseLegalEntity, Integer> initialAllocation) {
+	private void calculateCarriedEntitlement(List<MullInformation> mullList, YearMonth adpStart, final Map<BaseLegalEntity, Integer> initialAllocation) {
 		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
 		for (MullInformation curr : mullList) {
 			if (curr.ym.equals(adpStart)) {
@@ -2052,11 +2086,11 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 
-	private void calculateCumulativeDelta(List<MullInformation> mullList, YearMonth adpStart, int fclValue) {
+	private void calculateCumulativeDelta(List<MullInformation> mullList, YearMonth adpStart, final Map<BaseLegalEntity, Integer> initialAllocation, int fclValue) {
 		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
 		for (MullInformation curr : mullList) {
 			if (curr.ym.equals(adpStart)) {
-				curr.cumulativeDelta = curr.getDelta();
+				curr.cumulativeDelta = curr.getDelta() + initialAllocation.get(curr.getEntity());
 			} else {
 				curr.cumulativeDelta = prev.get(curr.entity).getCumulativeDelta() + curr.getDelta();
 			}
@@ -2132,8 +2166,8 @@ public class InventoryReport extends ViewPart {
 				currRow.entity = entity;
 				currRow.ym = ym;
 				currRow.lifted = actualLift.get(ym).get(entityMirrorObject);
-				currRow.overlift = actualLift.get(ym).get(entityMirrorObject) - monthlyRE.get(ym).get(entityMirrorObject);
 				currRow.monthlyRE = monthlyRE.get(ym).get(entityMirrorObject);
+				currRow.overlift = currRow.lifted - currRow.monthlyRE;
 				currRow.cargoCount = cargoCount.get(ym).get(entityMirrorObject);
 				currRow.delta = currRow.monthlyRE - currRow.lifted;
 				currRow.deltaViolatesFCL = currRow.delta > fclValue || currRow.delta < -fclValue;
@@ -2141,8 +2175,8 @@ public class InventoryReport extends ViewPart {
 			}
 		}
 		calculateMonthEndEntitlement(list, adpStart);
-		calculateOverliftCF(list, adpStart);
-		calculateCumulativeDelta(list, adpStart, fclValue);
+		calculateOverliftCF(list, adpStart, initialAllocation);
+		calculateCumulativeDelta(list, adpStart, initialAllocation, fclValue);
 		final Map<BaseLegalEntity, Integer> mappedInitialAllocation = new HashMap<>();
 		entitiesOrdered.stream().forEach(e -> mappedInitialAllocation.put(e, initialAllocation.get(entityEntityMap.get(e))));
 		calculateCarriedEntitlement(list, adpStart, mappedInitialAllocation);

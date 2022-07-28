@@ -1921,7 +1921,8 @@
 				"country": "Pakistan",
 				"timeZone": "Asia/Karachi"
 			},
-			"upstreamID": "PK0021"
+			"upstreamID": "PK0021",
+			"fallbackUpstreamId": "PK0004"			
 		}, {
 			"mmxId": "L_CP_Colon",
 			"name": "Colon",

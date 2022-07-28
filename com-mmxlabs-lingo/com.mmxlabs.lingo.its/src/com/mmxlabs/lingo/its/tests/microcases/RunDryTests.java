@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -82,7 +82,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(1000, 1000, 20, "1") //
@@ -138,7 +138,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		//distanceModelBuilder.setPortToPortDistance(port1, port2, null, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0)) //
 				.withStartHeel(6000, 6000, 22.37, "0.01") //
@@ -158,7 +158,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -206,7 +206,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10500, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port2) //
 				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0)) //
 				.withStartHeel(4734, 4734, 25, "0.01") //
@@ -226,7 +226,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 				.withVolumeLimits(120_000, 145_000, VolumeUnits.M3) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -257,7 +257,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(500, 500, 20, "1") //
@@ -299,7 +299,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(500, 500, 20, "1") //
@@ -342,7 +342,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "1");
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(400, 400, 20, "50") // High heel price
@@ -380,7 +380,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(250, 250, 20, "1") //
@@ -419,7 +419,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 10 * 15 * 24, Integer.MAX_VALUE, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(1250, 1250, 20, "1") //
@@ -467,7 +467,7 @@ public class RunDryTests extends AbstractMicroTestCase {
 
 		distanceModelBuilder.setPortToPortDistance(port1, port2, 50 * 15 * 24, 10 * 15 * 24, Integer.MAX_VALUE, true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartPort(port1) //
 				.withStartWindow(LocalDateTime.of(2017, 11, 20, 0, 0)) //
 				.withStartHeel(50, 50, 20, "1") //

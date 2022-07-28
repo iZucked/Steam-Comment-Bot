@@ -24,24 +24,18 @@ import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
-public class SandboxResultPlanTransformer {
-	private static final Logger logger = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
+public class SandboxResultPlanTransformer extends AbstractSolutionSetTransformer<SandboxResult> {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
 
-	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final ScheduleModel scheduleModel) {
-		if (modelRecord != null) {
-			return new ScenarioResultImpl(modelRecord, scheduleModel);
-		} else {
-			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
-		}
-	}
-
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor) {
+	@Override
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable final ScenarioModelRecord modelRecord, final SandboxResult plan, final IProgressMonitor monitor,
+			@Nullable NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -86,14 +80,14 @@ public class SandboxResultPlanTransformer {
 					if (changeSet.getMetricsToDefaultBase() != null) {
 						changeSets.add(changeSet);
 					} else {
-						logger.error("Got null pointer when opening solution");
+						LOG.error("Got null pointer when opening solution");
 					}
 				} else {
 					final ChangeSet changeSet = transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null);
 					if (changeSet.getMetricsToDefaultBase() != null) {
 						changeSets.add(changeSet);
 					} else {
-						logger.error("Got null pointer when opening solution");
+						LOG.error("Got null pointer when opening solution");
 					}
 				}
 

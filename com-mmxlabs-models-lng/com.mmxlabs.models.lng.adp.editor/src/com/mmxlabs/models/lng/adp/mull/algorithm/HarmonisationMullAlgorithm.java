@@ -37,7 +37,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -60,7 +60,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 
 	public HarmonisationMullAlgorithm(final GlobalStatesContainer globalStatesContainer, final AlgorithmState algorithmState, final List<InventoryLocalState> inventoryLocalStates,
 			final HarmonisationMap harmonisationMap) {
-		super(globalStatesContainer, algorithmState, inventoryLocalStates);
+		super(globalStatesContainer, algorithmState, inventoryLocalStates, true);
 		this.harmonisationMap = harmonisationMap;
 	}
 
@@ -113,7 +113,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 				final SpotMarket spotMarket = spotDischargeSlot.getMarket();
 				if (spotMarket instanceof DESSalesMarket) {
 					final VesselAssignmentType vat = dischargeSlot.getCargo().getVesselAssignmentType();
-					if (vat instanceof final VesselAvailability va) {
+					if (vat instanceof final VesselCharter va) {
 						vesselToForwardUseTime.computeIfAbsent(va.getVessel(), k -> new LinkedList<>()).add(localDateTime);
 					}
 				} else {
@@ -121,7 +121,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 						vesselToForwardUseTime.computeIfAbsent(dischargeSlot.getNominatedVessel(), k -> new LinkedList<>()).add(localDateTime);
 					} else {
 						final VesselAssignmentType vat = dischargeSlot.getCargo().getVesselAssignmentType();
-						if (vat instanceof final VesselAvailability va) {
+						if (vat instanceof final VesselCharter va) {
 							vesselToForwardUseTime.computeIfAbsent(va.getVessel(), k -> new LinkedList<>()).add(localDateTime);
 						}
 					}
@@ -150,8 +150,8 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 			final Map<Pair<BaseLegalEntity, IMullDischargeWrapper>, Pair<IMudContainer, IAllocationTracker>> remappingTrackers = inventoryToRemappingTrackers.get(inventory);
 			final LinkedList<ICargoBlueprint> cargoBlueprintsToGenerate = inventoryLocalState.getCargoBlueprintsToGenerate();
 			final List<ICargoBlueprint> cargoBlueprintsToUndo = inventoryLocalState.getRollingLoadWindow().startFixedLoad(nextFixedCargo.getValue(), cargoBlueprintsToGenerate);
-			final LoadSlot loadSlot = (LoadSlot) nextFixedCargo.getValue().getSlots().get(0);
-			final DischargeSlot dischargeSlot = (DischargeSlot) nextFixedCargo.getValue().getSlots().get(1);
+			final LoadSlot loadSlot = (LoadSlot) nextFixedCargo.getValue().getSortedSlots().get(0);
+			final DischargeSlot dischargeSlot = (DischargeSlot) nextFixedCargo.getValue().getSortedSlots().get(1);
 			@Nullable
 			Vessel fixedCargoAssignedVessel = null;
 
@@ -166,7 +166,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 						remappedPair.getFirst().dropFixedLoad(expectedVolumeLoaded);
 						remappedPair.getSecond().dropFixedLoad(expectedVolumeLoaded);
 						final VesselAssignmentType vat = nextFixedCargo.getValue().getVesselAssignmentType();
-						if (vat instanceof final VesselAvailability va) {
+						if (vat instanceof final VesselCharter va) {
 							final Vessel vess = va.getVessel();
 							if (remappedPair.getSecond().getVessels().contains(vess)) {
 								fixedCargoAssignedVessel = vess;
@@ -202,7 +202,7 @@ public class HarmonisationMullAlgorithm extends MullAlgorithm {
 							remappedPair.getFirst().dropFixedLoad(expectedVolumeLoaded);
 							remappedPair.getSecond().dropFixedLoad(expectedVolumeLoaded);
 							final VesselAssignmentType vat = nextFixedCargo.getValue().getVesselAssignmentType();
-							if (vat instanceof final VesselAvailability va) {
+							if (vat instanceof final VesselCharter va) {
 								final Vessel vess = va.getVessel();
 								if (remappedPair.getSecond().getVessels().contains(vess)) {
 									fixedCargoAssignedVessel = vess;

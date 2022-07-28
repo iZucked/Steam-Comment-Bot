@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
@@ -43,16 +43,16 @@ public class LNGScenarioUtils {
 			allDates.add(event.getStartAfterAsDateTime());
 			assert !allDates.contains(null);
 		}
-		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			if (vesselAvailability.isSetStartBy())
-				allDates.add(vesselAvailability.getStartByAsDateTime());
-			if (vesselAvailability.isSetStartAfter())
-				allDates.add(vesselAvailability.getStartAfterAsDateTime());
+		for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
+			if (vesselCharter.isSetStartBy())
+				allDates.add(vesselCharter.getStartByAsDateTime());
+			if (vesselCharter.isSetStartAfter())
+				allDates.add(vesselCharter.getStartAfterAsDateTime());
 
-			if (vesselAvailability.isSetEndBy())
-				allDates.add(vesselAvailability.getEndByAsDateTime());
-			if (vesselAvailability.isSetEndAfter())
-				allDates.add(vesselAvailability.getEndAfterAsDateTime());
+			if (vesselCharter.isSetEndBy())
+				allDates.add(vesselCharter.getEndByAsDateTime());
+			if (vesselCharter.isSetEndAfter())
+				allDates.add(vesselCharter.getEndAfterAsDateTime());
 			
 			assert !allDates.contains(null);
 		}

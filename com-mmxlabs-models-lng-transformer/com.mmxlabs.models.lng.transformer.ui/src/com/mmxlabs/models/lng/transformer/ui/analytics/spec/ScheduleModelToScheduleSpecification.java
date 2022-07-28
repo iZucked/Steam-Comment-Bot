@@ -31,14 +31,14 @@ public class ScheduleModelToScheduleSpecification {
 
 		for (final Sequence sequence : schedule.getSequences()) {
 
-			if (sequence.getCharterInMarket() != null || sequence.getVesselAvailability() != null) {
+			if (sequence.getCharterInMarket() != null || sequence.getVesselCharter() != null) {
 				final VesselScheduleSpecification vesselSpec = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
 				if (sequence.getCharterInMarket() != null) {
 					// Nominals
 					vesselSpec.setVesselAllocation(sequence.getCharterInMarket());
 					vesselSpec.setSpotIndex(sequence.getSpotIndex());
-				} else if (sequence.getVesselAvailability() != null) {
-					vesselSpec.setVesselAllocation(sequence.getVesselAvailability());
+				} else if (sequence.getVesselCharter() != null) {
+					vesselSpec.setVesselAllocation(sequence.getVesselCharter());
 				}
 				scheduleSpecification.getVesselScheduleSpecifications().add(vesselSpec);
 

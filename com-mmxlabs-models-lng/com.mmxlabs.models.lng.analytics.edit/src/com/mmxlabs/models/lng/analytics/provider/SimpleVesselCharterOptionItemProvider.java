@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
-
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
@@ -162,14 +162,14 @@ public class SimpleVesselCharterOptionItemProvider extends UUIDObjectItemProvide
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SimpleVesselCharterOption)object).getUuid();
-		return label == null || label.length() == 0 ?
+		Vessel vessel = ((SimpleVesselCharterOption)object).getVessel();
+		return vessel == null ?
 			getString("_UI_SimpleVesselCharterOption_type") :
-			getString("_UI_SimpleVesselCharterOption_type") + " " + label;
+				vessel.getName();
 	}
 
 

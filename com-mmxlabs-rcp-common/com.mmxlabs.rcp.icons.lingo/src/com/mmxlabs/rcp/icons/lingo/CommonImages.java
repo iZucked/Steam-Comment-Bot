@@ -101,6 +101,8 @@ public final class CommonImages {
 		Error(16, "icons/legacy/16x16/error.gif"), //
 		Information(16, "icons/legacy/16x16/information.gif"), //
 		Warning(16, "icons/legacy/16x16/warning.gif"), //
+		
+		Read(16, "icons/legacy/16x16/read_obj.gif"),
 
 		// 24x24
 		Cloud_24(24, "icons/24x24/cloud.png"), //
@@ -120,6 +122,9 @@ public final class CommonImages {
 		Terminate(24, "icons/24x24/terminate.png"), //
 		ReEvaluate_24(24, "icons/24x24/reevaluate.png"), //
 //		Resume(24,"icons/24x24/terminate.png", true), //
+		
+		
+		RollForward_24(24, "icons/24x24/roll_forward.png")
 		;
 
 		private int size;

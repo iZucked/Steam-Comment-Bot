@@ -75,7 +75,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	public @Nullable IAllocationAnnotation allocate(final AllocationRecord allocationRecord, @Nullable IAnnotatedSolution annotatedSolution) {
 		final @NonNull List<@NonNull IPortSlot> slots = allocationRecord.slots;
 
-		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselAvailability.getVessel();
+		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselCharter.getVessel();
 
 		switch (allocationRecord.allocationMode) {
 		case Actuals:

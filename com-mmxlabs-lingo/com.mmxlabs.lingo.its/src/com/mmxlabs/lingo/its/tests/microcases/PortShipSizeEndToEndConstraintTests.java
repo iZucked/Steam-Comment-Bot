@@ -20,7 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -56,15 +56,15 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("getTestParameters")
-	public void testVesselAvailability(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheckResult) {
+	public void testVesselCharter(int port1MinVesselSize, int port1MaxVesselSize, int port2MinVesselSize, int port2MaxVesselSize, boolean expectedConstraintCheckResult) {
 		Port port1 = getPort(InternalDataConstants.PORT_POINT_FORTIN, port1MinVesselSize, port1MaxVesselSize);
 		Port port2 = getPort(InternalDataConstants.PORT_COVE_POINT, port2MinVesselSize, port2MaxVesselSize);
 		
 		Vessel vessel = createVessel(vesselCapacity);
 		
-		VesselAvailability vesselAvailability = createVesselAvailability(vessel);
+		VesselCharter vesselCharter = createVesselCharter(vessel);
 	
-		createCargo(port1, port2, vesselAvailability);		
+		createCargo(port1, port2, vesselCharter);		
 			
 		validateConstraintChecks(expectedConstraintCheckResult);
 	}
@@ -102,12 +102,12 @@ public class PortShipSizeEndToEndConstraintTests extends AbstractMicroTestCase {
 		return vessel;
 	}
 	
-	private VesselAvailability createVesselAvailability(Vessel vessel) {
-		VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity)
+	private VesselCharter createVesselCharter(Vessel vessel) {
+		VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel, entity)
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 8, 0, 0, 0))
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0))
 				.build();
-		return vesselAvailability1;
+		return vesselCharter1;
 	}
 
 	private CharterInMarket createCharterInMarket(final Vessel vessel) {

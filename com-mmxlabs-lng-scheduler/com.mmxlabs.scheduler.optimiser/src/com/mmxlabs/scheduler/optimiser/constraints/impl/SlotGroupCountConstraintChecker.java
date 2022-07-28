@@ -92,9 +92,9 @@ public class SlotGroupCountConstraintChecker implements IReducingConstraintCheck
 		// for (final IResource resource : sequences.getResources()) {
 		// assert resource != null;
 		// final ISequence sequence = sequences.getSequence(resource);
-		// final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		// final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		//
-		// final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+		// final boolean isVirtualVessel = vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 		// final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 		// if (checkSequence) {
 		// for (final ISequenceElement element : sequence) {
@@ -127,10 +127,10 @@ public class SlotGroupCountConstraintChecker implements IReducingConstraintCheck
 		// for (final IResource resource : sequences.getResources()) {
 		// assert resource != null;
 		// final ISequence sequence = sequences.getSequence(resource);
-		// final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		// final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		//
 		// // Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
-		// final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+		// final boolean isVirtualVessel = vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 		// final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 		// if (checkSequence) {
 		// for (final ISequenceElement element : sequence) {

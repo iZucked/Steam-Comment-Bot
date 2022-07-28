@@ -100,12 +100,12 @@ public class ScheduleDiffUtils {
 
 			if (checkAssignmentDifferences) {
 				// Check vessel
-				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
+				if ((ca.getSequence().getVesselCharter() == null) != (ref.getSequence().getVesselCharter() == null)) {
 					return true;
 				} else if ((ca.getSequence().getCharterInMarket() == null) != (ref.getSequence().getCharterInMarket() == null)) {
 					return true;
-				} else if (ca.getSequence().getVesselAvailability() != null
-						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+				} else if (ca.getSequence().getVesselCharter() != null
+						&& (!ca.getSequence().getVesselCharter().getVessel().getName().equals(ref.getSequence().getVesselCharter().getVessel().getName()))) {
 					return true;
 				} else if (ca.getSequence().getCharterInMarket() != null && (!ca.getSequence().getCharterInMarket().getName().equals(ref.getSequence().getCharterInMarket().getName()))) {
 					return true;
@@ -206,12 +206,12 @@ public class ScheduleDiffUtils {
 			ca = (SlotVisit) otherObject;
 			if (checkAssignmentDifferences) {
 
-				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
+				if ((ca.getSequence().getVesselCharter() == null) != (ref.getSequence().getVesselCharter() == null)) {
 					return true;
 				} else if ((ca.getSequence().getCharterInMarket() == null) != (ref.getSequence().getCharterInMarket() == null)) {
 					return true;
-				} else if (ca.getSequence().getVesselAvailability() != null
-						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+				} else if (ca.getSequence().getVesselCharter() != null
+						&& (!ca.getSequence().getVesselCharter().getVessel().getName().equals(ref.getSequence().getVesselCharter().getVessel().getName()))) {
 					return true;
 				} else if (ca.getSequence().getCharterInMarket() != null && (!ca.getSequence().getCharterInMarket().getName().equals(ref.getSequence().getCharterInMarket().getName()))) {
 					return true;

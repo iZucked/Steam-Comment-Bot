@@ -357,4 +357,24 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 	private void throwNotChangableException() {
 		throw new IllegalArgumentException("Should not be changing by this stage.");
 	}
+	
+	public IAllocationAnnotation getAllocationAnnotation() {
+		return allocationAnnotation;
+	}
+
+	public boolean isHeelCarrySource() {
+		return allocationAnnotation.isHeelCarrySource();
+	}
+
+	public void setHeelCarrySource(boolean isHeelCarrySource) {
+		throwNotChangableException();
+	}
+
+	public boolean isHeelCarrySink() {
+		return allocationAnnotation.isHeelCarrySink();
+	}
+
+	public void setHeelCarrySink(boolean isHeelCarrySink) {
+		throwNotChangableException();
+	}
 }

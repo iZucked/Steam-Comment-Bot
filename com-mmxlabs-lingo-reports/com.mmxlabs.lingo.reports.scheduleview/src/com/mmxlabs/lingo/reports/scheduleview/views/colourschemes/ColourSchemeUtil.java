@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
-import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -27,9 +26,14 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class ColourSchemeUtil {
 
+	private ColourSchemeUtil() {
+
+	}
+
 	/**
-	 * Checks to see if a journey is "tight", i.e. when idle time after the journey is taken into consideration, is there less than a specified amount of leeway travelling at a vessel-specified
-	 * "service speed"?
+	 * Checks to see if a journey is "tight", i.e. when idle time after the journey
+	 * is taken into consideration, is there less than a specified amount of leeway
+	 * travelling at a vessel-specified "service speed"?
 	 * 
 	 * @param journey
 	 * @return
@@ -55,7 +59,7 @@ public class ColourSchemeUtil {
 		}
 		// otherwise get it from the vessel allocation
 		if (vessel == null) {
-			final VesselAvailability avail = sequence.getVesselAvailability();
+			final VesselCharter avail = sequence.getVesselCharter();
 			if (avail == null) {
 				return false;
 			}
@@ -80,8 +84,7 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isOutsideTimeWindow(final Event ev) {
-		if (ev instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) ev;
+		if (ev instanceof final VesselEventVisit vesselEventVisit) {
 			if (LatenessUtils.isLateExcludingFlex(vesselEventVisit)) {
 				// Only highlight if over 24 hours
 				if (LatenessUtils.getLatenessInHours(vesselEventVisit) > 24) {
@@ -90,8 +93,7 @@ public class ColourSchemeUtil {
 			}
 		}
 
-		if (ev instanceof SlotVisit) {
-			final SlotVisit visit = (SlotVisit) ev;
+		if (ev instanceof final SlotVisit visit) {
 			final Slot<?> slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
 				if (visit.getStart().isAfter(slot.getSchedulingTimeWindow().getEnd())) {
@@ -102,7 +104,7 @@ public class ColourSchemeUtil {
 		return false;
 	}
 
-	public static boolean isLocked(final Event event, final GanttChartViewer viewer) {
+	public static boolean isLocked(final Event event) {
 		// Stage 1: Find the cargo
 		final Sequence sequence = event.getSequence();
 		if (sequence == null) {
@@ -112,11 +114,10 @@ public class ColourSchemeUtil {
 		Cargo cargo = null;
 		while (cargo == null && index >= 0) {
 			final Object obj = sequence.getEvents().get(index);
-			if (obj instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) obj;
+			if (obj instanceof final SlotVisit slotVisit) {
 				final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 				if (slotAllocation != null) {
-					Slot<?> slot = slotAllocation.getSlot();
+					final Slot<?> slot = slotAllocation.getSlot();
 					if (slot != null) {
 						cargo = slot.getCargo();
 					}
@@ -139,8 +140,8 @@ public class ColourSchemeUtil {
 		final int index = sequence.getEvents().indexOf(journey);
 		if (index != -1 && index + 1 < sequence.getEvents().size()) {
 			final Event event = sequence.getEvents().get(index + 1);
-			if (event instanceof Idle) {
-				return (Idle) event;
+			if (event instanceof final Idle idle) {
+				return idle;
 			}
 		}
 		return null;
@@ -151,19 +152,21 @@ public class ColourSchemeUtil {
 		final int index = sequence.getEvents().indexOf(idle);
 		if (index != -1 && index - 1 >= 0) {
 			final Event event = sequence.getEvents().get(index - 1);
-			if (event instanceof Journey) {
-				return (Journey) event;
+			if (event instanceof final Journey journey) {
+				return journey;
 			}
 		}
 		return null;
 	}
 
 	/*
-	 * static boolean isRiskyVoyage(final Journey journey, final Idle idle, float IdleRisk_speed, float IdleRisk_threshold) {
+	 * static boolean isRiskyVoyage(final Journey journey, final Idle idle, float
+	 * IdleRisk_speed, float IdleRisk_threshold) {
 	 * 
 	 * if (journey == null) { return false; }
 	 * 
-	 * final int distance = journey.getDistance(); int totalTime = journey.getDuration(); if (idle != null) { totalTime += idle.getDuration(); }
+	 * final int distance = journey.getDistance(); int totalTime =
+	 * journey.getDuration(); if (idle != null) { totalTime += idle.getDuration(); }
 	 * 
 	 * final int travelTime = Math.round(distance / IdleRisk_speed);
 	 * 
@@ -172,10 +175,7 @@ public class ColourSchemeUtil {
 
 	public static boolean isSpot(final SlotVisit visit) {
 		final Slot<?> slot = visit.getSlotAllocation().getSlot();
-		if (slot instanceof SpotSlot) {
-			return true;
-		}
-		return false;
+		return slot instanceof SpotSlot;
 	}
 
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
@@ -188,8 +188,8 @@ public class ColourSchemeUtil {
 				if (cargoAllocation != null) {
 					return cargoAllocation.getCargoType() == CargoType.FOB;
 				}
-			} else if (slot instanceof DischargeSlot) {
-				isFOB = ((DischargeSlot) slot).isFOBSale();
+			} else if (slot instanceof final DischargeSlot ds) {
+				isFOB = ds.isFOBSale();
 			}
 		}
 		return isFOB;
@@ -197,10 +197,10 @@ public class ColourSchemeUtil {
 
 	public static boolean isDESPurchaseCargo(final SlotVisit visit) {
 		final Slot<?> slot = visit.getSlotAllocation().getSlot();
-		if (slot instanceof LoadSlot) {
-			return ((LoadSlot) slot).isDESPurchase();
+		if (slot instanceof final LoadSlot ls) {
+			return ls.isDESPurchase();
 		} else {
-			CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+			final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
 			if (cargoAllocation != null) {
 				return cargoAllocation.getCargoType() == CargoType.DES;
 			}

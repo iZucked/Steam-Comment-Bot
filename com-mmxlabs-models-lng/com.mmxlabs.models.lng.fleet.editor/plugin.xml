@@ -132,7 +132,7 @@
           id="com.mmxlabs.models.lng.fleet.editor.editorfactories.routeCostInlineEditorFactory">
        <FeatureAnyOf>
           <EClassExtends
-                EClass="com.mmxlabs.models.lng.fleet.VesselClassRouteParameters">
+                EClass="com.mmxlabs.models.lng.fleet.VesselRouteParameters">
           </EClassExtends>
        </FeatureAnyOf>
        <OwnerAnyOf>

@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -30,7 +30,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	public final Port dischargePort2;
 
 	public final Cargo cargo;
-	private final VesselAvailability vesselAvailability;
+	private final VesselCharter vesselCharter;
 
 	/**
 	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
@@ -100,10 +100,10 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, RouteOption.DIRECT, (int) maxSpeed));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, RouteOption.DIRECT, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
+		this.vesselCharter = fleetCreator.setAllVesselCharterWindows(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
 				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 	}
 
 }

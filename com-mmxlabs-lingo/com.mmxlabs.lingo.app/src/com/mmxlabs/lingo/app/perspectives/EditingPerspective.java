@@ -47,6 +47,7 @@ public class EditingPerspective implements IPerspectiveFactory {
 
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, IPageLayout.ID_EDITOR_AREA);
 		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
+		miscFolder.addView("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView");
 
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.port.editor.views.PortView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView");

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -48,7 +48,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  */
 public class CustomScenarioCreator extends DefaultScenarioCreator {
 
-	private static final Logger log = LoggerFactory.getLogger(CustomScenarioCreator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CustomScenarioCreator.class);
 
 	public CustomScenarioCreator(final float dischargePrice) {
 		this(dischargePrice, "UTC");
@@ -87,7 +87,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	 * @param minHeelVolume
 	 *            The minimum heel volume
 	 */
-	public VesselAvailability[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
+	public VesselCharter[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
 			final int NBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		final float equivalenceFactor = 1;
@@ -100,7 +100,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public VesselAvailability[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor,
+	public VesselCharter[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor,
 			final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption,
 			final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed,
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
@@ -137,11 +137,11 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		}
 
 		// return a list of all vessels created.
-		final VesselAvailability created[] = new VesselAvailability[numOfVesselsToCreate];
+		final VesselCharter created[] = new VesselCharter[numOfVesselsToCreate];
 
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
-			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder().makeVesselAvailability(vessel, shippingEntity) //
+			final VesselCharter availability = scenarioModelBuilder.getCargoModelBuilder().makeVesselCharter(vessel, shippingEntity) //
 					.build();
 			if (isTimeChartered) {
 				availability.setTimeCharterRate("10");
@@ -220,11 +220,11 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		PortModel portModel = scenarioModelBuilder.getPortModelBuilder().getPortModel();
 
 		if (!portModel.getPorts().contains(loadPort)) {
-			log.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			LOG.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(loadPort);
 		}
 		if (!portModel.getPorts().contains(dischargePort)) {
-			log.warn("Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			LOG.warn("Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(dischargePort);
 		}
 

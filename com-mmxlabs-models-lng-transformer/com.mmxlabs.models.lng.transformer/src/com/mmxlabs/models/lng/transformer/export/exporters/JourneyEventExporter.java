@@ -108,7 +108,7 @@ public class JourneyEventExporter {
 		if (journey.getRouteOption() != RouteOption.DIRECT) {
 			if (journey.getRouteOption() == RouteOption.PANAMA) {
 				PanamaBookingPeriod exportPeriod = PanamaBookingPeriod.BEYOND;
-				if (vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource()).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+				if (vesselProvider.getVesselCharter(volumeAllocatedSequence.getResource()).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 					exportPeriod = PanamaBookingPeriod.NOMINAL;
 				} else {
 					//PanamaPeriod period = portTimesRecord.getSlotNextVoyagePanamaPeriod(voyageDetails.getOptions().getFromPortSlot());

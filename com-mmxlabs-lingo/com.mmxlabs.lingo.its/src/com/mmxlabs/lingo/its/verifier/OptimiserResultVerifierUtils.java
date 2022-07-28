@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -30,8 +30,8 @@ public class OptimiserResultVerifierUtils {
 		IVesselProvider vesselProvider = mapper.getDataTransformer().getInjector().getInstance(IVesselProvider.class);
 		for (IResource resource : sequences.getResources()) {
 			if (filterRoundTrips) {
-			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+				if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 					continue;
 				}
 			}

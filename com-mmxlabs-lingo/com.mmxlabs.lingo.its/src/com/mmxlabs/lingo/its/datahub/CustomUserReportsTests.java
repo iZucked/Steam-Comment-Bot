@@ -30,6 +30,7 @@ import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsManagerDialog;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 
 @Testcontainers
@@ -102,7 +103,7 @@ public class CustomUserReportsTests {
 
 	public void createReport(String name) {
 		bot.button("New").click();
-		bot.textWithLabel("Choose name for the new custom report.").setText(name);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(name);
 		bot.button("OK").click();
 		bot.button("Save").click();
 	}
@@ -110,7 +111,7 @@ public class CustomUserReportsTests {
 	public void renameReport(String from, String to) {
 		bot.table().select(from);
 		bot.button("Rename").click();
-		bot.textWithLabel("Choose a new name for the report.").setText(to);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(to);
 		bot.button("OK").click();
 	}
 
@@ -149,6 +150,7 @@ public class CustomUserReportsTests {
 		createReport(REPORT_NAME);
 		bot.table().select(REPORT_NAME);
 
+		
 		assertTrue(bot.button("Copy").isEnabled());
 		assertTrue(bot.button("Rename").isEnabled());
 		assertTrue(bot.button("Delete").isEnabled());
@@ -193,7 +195,7 @@ public class CustomUserReportsTests {
 		createReport(REPORT_NAME);
 		// create test report with exising name
 		bot.button("New").click();
-		bot.textWithLabel("Choose name for the new custom report.").setText(REPORT_NAME);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(REPORT_NAME);
 
 		assertFalse(bot.button("OK").isEnabled());
 	}
@@ -224,7 +226,7 @@ public class CustomUserReportsTests {
 		// rename test report to new user report
 		bot.table().select(newUserReportName);
 		bot.button("Rename").click();
-		bot.textWithLabel("Choose a new name for the report.").setText(REPORT_NAME);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(REPORT_NAME);
 
 		// verify that OK button is disabled
 		assertFalse(bot.button("OK").isEnabled());

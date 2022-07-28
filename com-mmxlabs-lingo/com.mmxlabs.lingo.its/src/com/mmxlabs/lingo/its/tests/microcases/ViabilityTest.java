@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.viability.ViabilitySandboxEvalu
 import com.mmxlabs.models.lng.analytics.ui.views.viability.ViabilityUtils;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -94,12 +94,12 @@ public class ViabilityTest extends AbstractMicroTestCase {
 
 			ViabilitySandboxEvaluator.evaluate(scenarioDataProvider, null, model, new NullProgressMonitor());
 
-			final Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>> checks = getResultingModel();
+			final Map<Pair<LoadSlot,VesselCharter>, List<ViabilityResult>> checks = getResultingModel();
 
 			for (ViabilityRow vr : model.getRows()) {
 				final ShippingOption so = vr.getShipping();
 				Assertions.assertNotNull(so);
-				VesselAvailability va = null;
+				VesselCharter va = null;
 
 				if (so instanceof ExistingVesselCharterOption) {
 					va = ((ExistingVesselCharterOption)so).getVesselCharter();
@@ -113,7 +113,7 @@ public class ViabilityTest extends AbstractMicroTestCase {
 					final LoadSlot ls = br.getSlot();
 					Assertions.assertNotNull(ls);
 
-					Pair<LoadSlot,VesselAvailability> one = new Pair<LoadSlot, VesselAvailability>(ls, va);
+					Pair<LoadSlot,VesselCharter> one = new Pair<LoadSlot, VesselCharter>(ls, va);
 
 					final List<ViabilityResult> actualResults = vr.getLhsResults();
 					final List<ViabilityResult> inputResults = checks.get(one);
@@ -154,13 +154,13 @@ public class ViabilityTest extends AbstractMicroTestCase {
 	/*
 	 * Creating results. Need shipping!
 	 */
-	private Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>>  getResultingModel(){
+	private Map<Pair<LoadSlot,VesselCharter>, List<ViabilityResult>>  getResultingModel(){
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		final SpotMarketsModel spotModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 		
 		List<ViabilityResult> vls = new ArrayList<ViabilityResult>();
-		final Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>> results2 = 
-				new HashMap<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>>();
+		final Map<Pair<LoadSlot,VesselCharter>, List<ViabilityResult>> results2 = 
+				new HashMap<Pair<LoadSlot,VesselCharter>, List<ViabilityResult>>();
 		
 		//PF_1
 		vls.add(createResult(findMarketByName(spotModel, "DES_Argentina"), //
@@ -192,8 +192,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				6.269977, 6.243184,
 				LocalDate.of(2017,5,30),LocalDate.of(2017,6,9)));
 		//PF_1
-		Pair<LoadSlot, VesselAvailability> one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "PF_1"),
-				findVesselAvailability(cargoModel, "TFDE A"));
+		Pair<LoadSlot, VesselCharter> one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "PF_1"),
+				findVesselCharter(cargoModel, "TFDE A"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -227,8 +227,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				6.269977, 6.243184,
 				LocalDate.of(2017,5,30),LocalDate.of(2017,6,9)));
 		//BO_2
-		one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "BO_2"),
-				findVesselAvailability(cargoModel, "TFDE A"));
+		one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "BO_2"),
+				findVesselCharter(cargoModel, "TFDE A"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -263,8 +263,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				5.285645, 5.774048,
 				LocalDate.of(2017,5,17),LocalDate.of(2017,6,9)));
 		//PF_1
-		one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "PF_1"),
-				findVesselAvailability(cargoModel, "Charter A"));
+		one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "PF_1"),
+				findVesselCharter(cargoModel, "Charter A"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -298,8 +298,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				5.285645, 5.774048,
 				LocalDate.of(2017,5,17),LocalDate.of(2017,6,9)));
 		//BO_2
-		one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "BO_2"),
-				findVesselAvailability(cargoModel, "Charter A"));
+		one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "BO_2"),
+				findVesselCharter(cargoModel, "Charter A"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -317,8 +317,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				5.804819, 5.914164,
 				LocalDate.of(2017,3,8),LocalDate.of(2017,3,26)));
 		//PF_1
-		one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "PF_1"),
-				findVesselAvailability(cargoModel, "TFDE B"));
+		one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "PF_1"),
+				findVesselCharter(cargoModel, "TFDE B"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -336,8 +336,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 				5.804819, 5.914164,
 				LocalDate.of(2017,3,8),LocalDate.of(2017,3,26)));
 		//BO_2
-		one = new Pair<LoadSlot, VesselAvailability>(findSlot(cargoModel, "BO_2"),
-				findVesselAvailability(cargoModel, "TFDE B"));
+		one = new Pair<LoadSlot, VesselCharter>(findSlot(cargoModel, "BO_2"),
+				findVesselCharter(cargoModel, "TFDE B"));
 		results2.put(one, vls);
 		vls.clear();
 		
@@ -362,8 +362,8 @@ public class ViabilityTest extends AbstractMicroTestCase {
 	 * find vessel availability slot by name
 	 * 
 	 */
-	private VesselAvailability findVesselAvailability(final CargoModel cargoModel, final @NonNull String name) {
-		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+	private VesselCharter findVesselCharter(final CargoModel cargoModel, final @NonNull String name) {
+		for (final VesselCharter va : cargoModel.getVesselCharters()) {
 			if (va == null) continue;
 			final Vessel v = va.getVessel();
 			if (v == null) continue;

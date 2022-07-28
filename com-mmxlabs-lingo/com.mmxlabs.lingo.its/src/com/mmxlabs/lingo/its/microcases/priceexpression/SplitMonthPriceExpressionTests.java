@@ -22,7 +22,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -61,12 +61,12 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 		return (days - 1) * 24;
 	}
 
-	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
+	private VesselCharter createTestVesselCharter(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		return cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(startStart, startEnd) //
 				.withEndWindow(endStart) //
@@ -86,7 +86,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	public void testSplitMonthExpressionSimpleConstant() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability = createTestVesselAvailability(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 8, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = createTestVesselCharter(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 8, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
@@ -100,7 +100,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2018, 6, 2), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, String.format("SPLITMONTH(1, 10, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.withVesselAssignment(vesselAvailability, 1).build();
+				.withVesselAssignment(vesselCharter, 1).build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
@@ -159,7 +159,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	public void testSplitMonthExpressionIndex() throws Exception {
 
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability = createTestVesselAvailability(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 8, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = createTestVesselCharter(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 8, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
@@ -176,7 +176,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 						String.format("SPLITMONTH(Henry_Hub, JCC, %d)", splitDay)) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.withVesselAssignment(vesselAvailability, 1).build();
+				.withVesselAssignment(vesselCharter, 1).build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
@@ -265,15 +265,15 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 	public void testNestedSplitMonth() throws Exception {
 		portModelBuilder.setAllExistingPortsToUTC();
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability = createTestVesselAvailability(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0),
+		final VesselCharter vesselCharter = createTestVesselCharter(LocalDateTime.of(2018, 6, 1, 0, 0, 0), LocalDateTime.of(2018, 6, 1, 0, 0, 0),
 				LocalDateTime.of(2018, 11, 1, 0, 0, 0));
-		vesselAvailability.getStartHeel().setCvValue(22.3);
-		vesselAvailability.getStartHeel().setPriceExpression("0");
-		vesselAvailability.getStartHeel().setMaxVolumeAvailable(100000);
-		vesselAvailability.getEndHeel().setPriceExpression("0");
-		vesselAvailability.getEndHeel().setMinimumEndHeel(300);
-		vesselAvailability.getEndHeel().setMaximumEndHeel(300);
-		vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		vesselCharter.getStartHeel().setCvValue(22.3);
+		vesselCharter.getStartHeel().setPriceExpression("0");
+		vesselCharter.getStartHeel().setMaxVolumeAvailable(100000);
+		vesselCharter.getEndHeel().setPriceExpression("0");
+		vesselCharter.getEndHeel().setMinimumEndHeel(300);
+		vesselCharter.getEndHeel().setMaximumEndHeel(300);
+		vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// Construct the cargo scenario
 		// Create cargo 1, cargo 2
@@ -295,7 +295,7 @@ public class SplitMonthPriceExpressionTests extends AbstractMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2018, 8, 1), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, expression) //
 				.withWindowStartTime(0) //
 				.withWindowSize(30, TimePeriod.DAYS).build() //
-				.withVesselAssignment(vesselAvailability, 1).build();
+				.withVesselAssignment(vesselCharter, 1).build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 

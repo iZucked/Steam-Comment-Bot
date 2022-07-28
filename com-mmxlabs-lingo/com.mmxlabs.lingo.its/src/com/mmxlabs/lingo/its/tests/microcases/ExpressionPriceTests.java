@@ -23,7 +23,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -185,7 +185,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	public void test1() {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 		// final CharterInMarket charterInMarket_1 =
 		// spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000",
@@ -209,7 +209,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.build() //
 				//
 				// .withVesselAssignment(charterInMarket_1, -1, 1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		Slot load = testCargo.getSlots().get(0);
@@ -267,7 +267,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
 
 		pricingModelBuilder.makeCommodityDataCurve("Test", "$", "mmBtu") //
@@ -305,7 +305,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.build() //
 				//
 				// .withVesselAssignment(charterInMarket_1, -1, 1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		Slot load = testCargo.getSlots().get(0);

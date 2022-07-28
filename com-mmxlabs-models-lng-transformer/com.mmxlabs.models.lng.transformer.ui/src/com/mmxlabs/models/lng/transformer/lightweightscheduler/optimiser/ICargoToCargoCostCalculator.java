@@ -7,12 +7,12 @@ package com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser;
 import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 
 public interface ICargoToCargoCostCalculator {
-	long[][][] createCargoToCargoCostMatrix(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
-	int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
-	int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
+	long[][][] createCargoToCargoCostMatrix(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
+	int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
+	int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
 	
 	/**
 	 * Calculates the cargo charter costs.
@@ -21,7 +21,7 @@ public interface ICargoToCargoCostCalculator {
 	 * @param vessels
 	 * @return
 	 */
-	long[][] getCargoCharterCostPerAvailability(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels);
+	long[][] getCargoCharterCostPerAvailability(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
 	int[] getCargoStartSlotDurations(List<List<IPortSlot>> cargoes);
 	
 	int[] getCargoEndSlotDurations(List<List<IPortSlot>> cargoes);

@@ -13,23 +13,14 @@ import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
-public class ActionableSetPlanTransformer {
+public class ActionableSetPlanTransformer extends AbstractSolutionSetTransformer<ActionableSetPlan> {
 
-	private ScenarioResultImpl make(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, ScheduleModel scheduleModel) {
-		if (modelRecord != null) {
-			return new ScenarioResultImpl(modelRecord, scheduleModel);
-		} else {
-			return new ScenarioResultImpl(scenarioInstance, scheduleModel);
-		}
-	}
-
-	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final ActionableSetPlan plan, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, @Nullable ScenarioModelRecord modelRecord, final ActionableSetPlan plan, final IProgressMonitor monitor, @Nullable NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -67,5 +58,4 @@ public class ActionableSetPlanTransformer {
 
 		return root;
 	}
-
 }

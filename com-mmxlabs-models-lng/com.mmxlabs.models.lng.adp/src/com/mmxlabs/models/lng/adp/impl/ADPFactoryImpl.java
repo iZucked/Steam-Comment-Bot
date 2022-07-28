@@ -100,6 +100,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.DES_SPACING_ALLOCATION: return createDesSpacingAllocation();
 			case ADPPackage.DES_SPACING_ROW: return createDesSpacingRow();
 			case ADPPackage.SPACING_ALLOCATION: return createSpacingAllocation();
+			case ADPPackage.ALLOWED_ARRIVAL_TIME_RECORD: return createAllowedArrivalTimeRecord();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -544,6 +545,17 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public SpacingAllocation createSpacingAllocation() {
 		SpacingAllocationImpl spacingAllocation = new SpacingAllocationImpl();
 		return spacingAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllowedArrivalTimeRecord createAllowedArrivalTimeRecord() {
+		AllowedArrivalTimeRecordImpl allowedArrivalTimeRecord = new AllowedArrivalTimeRecordImpl();
+		return allowedArrivalTimeRecord;
 	}
 
 	/**

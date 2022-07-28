@@ -129,7 +129,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				}
 			}
 		} else if (obj instanceof final Sequence s) {
-			String name = s.getVesselAvailability() == null ? s.getName() : s.getVesselAvailability().getVessel().getName();
+			String name = s.getVesselCharter() == null ? s.getName() : s.getVesselCharter().getVessel().getName();
 
 			if (s.getSequenceType() == SequenceType.ROUND_TRIP) {
 				// Add the event name to help sort order
@@ -152,8 +152,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			}
 		} else if (obj instanceof final Sequence s) {
 			Vessel vessel = null;
-			if (s.getVesselAvailability() != null) {
-				vessel = s.getVesselAvailability().getVessel();
+			if (s.getVesselCharter() != null) {
+				vessel = s.getVesselCharter().getVessel();
 			} else if (s.getCharterInMarket() != null) {
 				vessel = s.getCharterInMarket().getVessel();
 			}

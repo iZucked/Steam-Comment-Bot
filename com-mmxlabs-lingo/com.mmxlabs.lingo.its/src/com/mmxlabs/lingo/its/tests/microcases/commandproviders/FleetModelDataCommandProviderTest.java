@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
@@ -194,21 +194,21 @@ public class FleetModelDataCommandProviderTest extends AbstractMicroTestCase {
 		}
 
 		{
-			final VesselClassRouteParameters param = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+			final VesselRouteParameters param = FleetFactory.eINSTANCE.createVesselRouteParameters();
 			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(AddCommand.create(domain, vessel, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, param)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
 
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE, 1.0)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE, 1.0)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE, 1.0)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE, 1.0)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME, 1)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME, 1)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE, 1.0)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE, 1.0)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE, 1.0)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__LADEN_NBO_RATE, 1.0)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
-			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION, RouteOption.SUEZ)));
+			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, param, FleetPackage.Literals.VESSEL_ROUTE_PARAMETERS__ROUTE_OPTION, RouteOption.SUEZ)));
 			checkAndUpdate(fleetModel, currentVersion, ExpectedChange.FLEET);
 
 			RunnerHelper.syncExec(() -> domain.getCommandStack().execute(DeleteCommand.create(domain, param)));

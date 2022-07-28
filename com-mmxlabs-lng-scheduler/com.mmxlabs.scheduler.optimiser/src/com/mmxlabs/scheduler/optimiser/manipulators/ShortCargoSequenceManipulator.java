@@ -21,7 +21,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -61,8 +61,8 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 	public void manipulate(final IModifiableSequences sequences) {
 
 		for (final IResource resource : sequences.getResources()) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 
 				// Is there a specific port to return to?
@@ -130,7 +130,7 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, vesselProvider.getVesselAvailability(resource).getVessel());
+			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, vesselProvider.getVesselCharter(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
 			for (final DistanceMatrixEntry distanceOption : distanceValues) {
 				final int routeDistance = distanceOption.getDistance();

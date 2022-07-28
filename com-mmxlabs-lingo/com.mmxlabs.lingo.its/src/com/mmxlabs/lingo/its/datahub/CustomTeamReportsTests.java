@@ -31,6 +31,7 @@ import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
+import com.mmxlabs.lingo.reports.customizable.CustomReportsManagerDialog;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 
 @Testcontainers
@@ -163,7 +164,7 @@ public class CustomTeamReportsTests {
 	 */
 	public void createUserReport(String name) {
 		bot.button("New").click();
-		bot.textWithLabel("Choose name for the new custom report.").setText(name);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(name);
 		bot.button("OK").click();
 		bot.button("Save").click();
 	}
@@ -176,7 +177,7 @@ public class CustomTeamReportsTests {
 	 */
 	public void createCustomTeamReport(String name) {
 		bot.button("New").click();
-		bot.textWithLabel("Choose name for the new custom report.").setText(name);
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText(name);
 		bot.button("OK").click();
 		bot.button("Publish").click();
 	}
@@ -199,7 +200,7 @@ public class CustomTeamReportsTests {
 		// @formatter:on
 
 		// assertTrue(optionalTeamReport.isPresent());
-		assertTrue(bot.table().containsItem("test1"));
+		assertTrue(bot.table().containsItem("* test1"));
 	}
 
 	/**
@@ -212,15 +213,15 @@ public class CustomTeamReportsTests {
 	public void createUserReportThenAddToTeam() throws Exception {
 		openUserReportsManager();
 		createUserReport("test2");
-		bot.table().select("test2");
+		bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).select("test2");
 		bot.button("Save");
-		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		logger.info(Integer.toString(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).rowCount()));
 		bot.button("Add to Team").click();
 		bot.radio("Team reports").click();
-		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		logger.info(Integer.toString(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).rowCount()));
 		// Delay to allow UI to catch up before trying to find it.	
 		Thread.sleep(3000);
-		assertTrue(bot.tableWithId("customReportsViewer").containsItem("test2"));
+		assertTrue(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).containsItem("test2"));
 	}
 
 	/**
@@ -233,8 +234,7 @@ public class CustomTeamReportsTests {
 	public void copyTeamReport() throws IOException, InterruptedException {
 		openTeamReportsManager();
 		createCustomTeamReport("test3");
-		bot.table().select("test3");
-
+		bot.table().select("* test3"); // * prefix for unpublished state
 		bot.button("Copy").click();
 		bot.button("OK").click();
 		bot.button("Publish").click();
@@ -271,7 +271,7 @@ public class CustomTeamReportsTests {
 	public void copyRenameDeleteAndAddtoTeam_areEnabled_whenReportIsSelected() {
 		openTeamReportsManager();
 		createCustomTeamReport("test5");
-		bot.table().select("test5");
+		bot.table().select("* test5");
 		assertTrue(bot.button("Copy").isEnabled());
 		assertTrue(bot.button("Rename").isEnabled());
 		assertTrue(bot.button("Delete").isEnabled());
@@ -285,7 +285,7 @@ public class CustomTeamReportsTests {
 	public void revertAndPublish_areEnabled_whenRowIsChanged() {
 		openTeamReportsManager();
 		createCustomTeamReport("test6");
-		bot.table().select("test6");
+		bot.table().select("* test6");
 		bot.checkBox("Cargoes").click();
 		assertTrue(bot.button("Revert").isEnabled());
 		assertTrue(bot.button("Publish").isEnabled());
@@ -299,7 +299,7 @@ public class CustomTeamReportsTests {
 	public void revertAndPublish_areEnabled_whenDisabledColumnIsChanged() {
 		openTeamReportsManager();
 		createCustomTeamReport("test8");
-		bot.table().select("test8");
+		bot.table().select("* test8");
 		bot.tableWithLabel("Disabled Columns").select("Ballast Canal Date");
 		bot.button("Show").click();
 		assertTrue(bot.button("Revert").isEnabled());
@@ -314,7 +314,7 @@ public class CustomTeamReportsTests {
 	public void revertAndPublish_areEnabled_whenEnabledColumnIsChanged() {
 		openTeamReportsManager();
 		createCustomTeamReport("test10");
-		bot.table().select("test10");
+		bot.table().select("* test10");
 		bot.tableWithLabel("Enabled Columns").select("Type");
 		bot.button("Up").click();
 		assertTrue(bot.button("Revert").isEnabled());
@@ -331,9 +331,9 @@ public class CustomTeamReportsTests {
 	public void renameTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test11");
-		bot.table().select("test11");
+		bot.table().select("* test11");
 		bot.button("Rename").click();
-		bot.textWithLabel("Choose a new name for the report.").setText("test11.2");
+		bot.textWithId(CustomReportsManagerDialog.WIDGET_REPORT_NAME_TEXT).setText("test11.2");
 		bot.button("OK").click();
 
 		CustomReportsRegistry.getInstance().refreshTeamReports();
@@ -357,7 +357,7 @@ public class CustomTeamReportsTests {
 	public void deleteTeamReport() throws IOException {
 		openTeamReportsManager();
 		createCustomTeamReport("test12");
-		bot.table().select("test12");
+		bot.table().select("* test12");
 		bot.button("Delete").click();
 		bot.button("Yes").click();
 		CustomReportsRegistry.getInstance().refreshTeamReports();

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.license.features.NonLicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -31,7 +30,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -118,7 +117,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		return scenarioDataProvider;
 	}
 
-	private Cargo createFobDesCargo(final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
+	private Cargo createFobDesCargo(final VesselCharter vesselCharter, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {
 		return cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5") //
 				.withWindowStartTime(0) //
@@ -132,54 +131,54 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 	}
 
-	private VesselAvailability getDefaultVesselAvailability() {
+	private VesselCharter getDefaultVesselCharter() {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getDefaultVesselAvailabilityWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
+	private VesselCharter getDefaultVesselCharterWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getVesselAvailabilityWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
+	private VesselCharter getVesselCharterWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
-	private VesselAvailability getVesselAvailabilityWithoutTW(String vesselName) {
+	private VesselCharter getVesselCharterWithoutTW(String vesselName) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.build();
-		return vesselAvailability;
+		return vesselCharter;
 	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -213,12 +212,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationNoStartVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+		final VesselCharter vesselCharter = getDefaultVesselCharter();
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -232,7 +231,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 12), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -280,12 +279,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(3);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMinDuration(3);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -320,12 +319,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minDurationNoEndVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharter();
+		vesselCharter.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(90);
+		vesselCharter.setMinDuration(90);
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -339,7 +338,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 12), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -376,13 +375,13 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void minMaxDurationTrimmingEmptyVesselTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(20);
-		vesselAvailability.setMinDuration(3);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(20);
+		vesselCharter.setMinDuration(3);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -419,13 +418,13 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(30);
-		vesselAvailability.setMinDuration(3);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 10, 0, 0, 0));
+		vesselCharter.setMaxDuration(30);
+		vesselCharter.setMinDuration(3);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 10, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
@@ -439,7 +438,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 30), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -479,7 +478,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				Assertions.assertEquals(cargoReturnWindow.getInclusiveStart(), endFirstWindow.getInclusiveStart());
 				Assertions.assertEquals(cargoReturnWindow.getExclusiveEnd(), endFirstWindow.getExclusiveEnd());
 
-				int maxDurationInHours = 24 * (vesselAvailability.getMaxDuration());
+				int maxDurationInHours = 24 * (vesselCharter.getMaxDuration());
 				// This is false as we cannot meet the max duration.
 				Assertions.assertFalse(endFirstWindow.getInclusiveStart() <= maxDurationInHours);
 
@@ -496,13 +495,13 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		// Create vessel with a default availability
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharter();
+		vesselCharter.setStartAfter(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 		// Set vessel time constraints
-		vesselAvailability.setMaxDuration(90);
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.SEPTEMBER, 25, 0, 0, 0));
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.SEPTEMBER, 30, 0, 0, 0));
+		vesselCharter.setMaxDuration(90);
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.SEPTEMBER, 25, 0, 0, 0));
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.SEPTEMBER, 30, 0, 0, 0));
 
 		// Create cargo
 		@NonNull
@@ -514,9 +513,9 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
-		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+		final Cargo cargo = createFobDesCargo(vesselCharter, port1, port2, loadDate, dischargeDate);
 
-		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), vesselAvailability.getVessel());
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), vesselCharter.getVessel());
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -527,7 +526,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselAvailability, cargo));
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector(), vesselCharter, cargo));
 				// Time scheduler settings
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -564,16 +563,16 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Create first vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMaxDuration(25);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMaxDuration(25);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Create second vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability2 = getVesselAvailabilityWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		final VesselCharter vesselCharter2 = getVesselCharterWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		vesselCharter2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
@@ -587,7 +586,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -602,8 +601,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check the identity of the vessel
-			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselCharter, schedule.getSequences().get(0).getVesselCharter());
+			Assertions.assertEquals(vesselCharter2, schedule.getSequences().get(1).getVesselCharter());
 
 			// Check On which vessel the cargo is
 			Assertions.assertTrue(schedule.getSequences().get(1).getEvents().size() > 3);
@@ -617,18 +616,18 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		// Create first vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMinDuration(76);
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.AUGUST, 26, 0, 0, 0));
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.AUGUST, 27, 0, 0, 0));
-		vesselAvailability.setTimeCharterRate("500000");
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMinDuration(76);
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.AUGUST, 26, 0, 0, 0));
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.AUGUST, 27, 0, 0, 0));
+		vesselCharter.setTimeCharterRate("500000");
 
 		// Create second vessel
 		// Set the end requirement's time window and max duration
-		final VesselAvailability vesselAvailability2 = getVesselAvailabilityWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
-		vesselAvailability2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
-		vesselAvailability2.setTimeCharterRate("5000");
+		final VesselCharter vesselCharter2 = getVesselCharterWithTW("STEAM-145.8", LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter2.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		vesselCharter2.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
+		vesselCharter2.setTimeCharterRate("5000");
 
 		// Construct the cargo
 		@NonNull
@@ -642,7 +641,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability2, 1) //
+				.withVesselAssignment(vesselCharter2, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -657,8 +656,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the cargo moved from ship 1 to ship 2
-			Assertions.assertEquals(vesselAvailability, schedule.getSequences().get(0).getVesselAvailability());
-			Assertions.assertEquals(vesselAvailability2, schedule.getSequences().get(1).getVesselAvailability());
+			Assertions.assertEquals(vesselCharter, schedule.getSequences().get(0).getVesselCharter());
+			Assertions.assertEquals(vesselCharter2, schedule.getSequences().get(1).getVesselCharter());
 
 			Assertions.assertTrue(schedule.getSequences().get(0).getEvents().size() > 3);
 			Assertions.assertEquals(3, schedule.getSequences().get(1).getEvents().size());
@@ -671,18 +670,18 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
-		vesselAvailability.setMaxDuration(35);
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharter();
+		vesselCharter.setStartBy(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		vesselCharter.setMaxDuration(35);
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0));
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JULY, 10, 0, 0, 0));
 
 		@NonNull
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
 
 		final DryDockEvent event = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), LocalDateTime.of(2017, Month.JULY, 7, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -711,12 +710,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(26);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(26);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		optimiseWithLSOTest(scenarioRunner -> {
 
@@ -737,12 +736,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(27);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMinDuration(27);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		optimiseWithLSOTest(scenarioRunner -> {
 
@@ -763,12 +762,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(27);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMinDuration(27);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		optimiseWithLSOTest(scenarioRunner -> {
 
@@ -795,12 +794,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(27);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(27);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		optimiseWithLSOTest(scenarioRunner -> {
 
@@ -827,12 +826,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMinDuration(27);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMinDuration(27);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Construct the cargo
 		@NonNull
@@ -846,7 +845,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -863,7 +862,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		final long minDeltaInSeconds = endTimestamp - startTimestamp;
 		final long minDeltaInHours = (minDeltaInSeconds / 3600);
 
-		if (minDeltaInHours < (vesselAvailability.getMinDuration() * 24)) {
+		if (minDeltaInHours < (vesselCharter.getMinDuration() * 24)) {
 			Assertions.assertTrue(false);
 		}
 	}
@@ -874,12 +873,12 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+		final VesselCharter vesselCharter = getDefaultVesselCharterWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(33);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselCharter.setMaxDuration(33);
+		vesselCharter.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselCharter.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
 
 		// Construct the cargo
 		@NonNull
@@ -893,7 +892,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 26), port2, null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -910,7 +909,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		final long minDeltaInSeconds = endTimestamp - startTimestamp;
 		final long minDeltaInHours = (minDeltaInSeconds / 3600);
 
-		int maxDurationInHours = vesselAvailability.getMaxDuration() * 24;
+		int maxDurationInHours = vesselCharter.getMaxDuration() * 24;
 		if (minDeltaInHours > maxDurationInHours) {
 			Assertions.assertTrue(false);
 		}
@@ -926,17 +925,17 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setMaxSpeed(16.0);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 9, 11, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 10, 26, 23, 0, 0), LocalDateTime.of(2018, 1, 27, 23, 0, 0)) //
 				.build();
 
-		vesselAvailability.setMinDuration(46);
-		vesselAvailability.setMaxDuration(139);
+		vesselCharter.setMinDuration(46);
+		vesselCharter.setMaxDuration(139);
 		Port port_SP = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		Port port_HJ = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 
-		vesselAvailability.getEndAt().add(port_HJ);
+		vesselCharter.getEndAt().add(port_HJ);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.DECEMBER, 12), port_SP, null, entity, "7") //
@@ -947,7 +946,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withWindowStartTime(0) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
@@ -959,7 +958,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withWindowSize(1, TimePeriod.MONTHS)//
 				.withWindowStartTime(0) //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -1027,12 +1026,6 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
 
-		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
-			return; // This test is only applicable to old South-bound panama rules, as new
-					// south-bound idle rule allows existing panama voyages and flags as a warning
-					// in validation.
-		}
-
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -1044,7 +1037,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+		final VesselCharter vesselCharter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 12, 15, 0, 0)) //
 				.withMinDuration(60) //
 				.withMaxDuration(100) //
@@ -1071,7 +1064,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withVisitDuration(36) //
 
 				.build() //
-				.withVesselAssignment(vesselAvailability1, 1) //
+				.withVesselAssignment(vesselCharter1, 1) //
 				.build();
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 11, 10), LocalDate.of(2018, 2, 8));
@@ -1082,6 +1075,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 
@@ -1092,7 +1086,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 			boolean foundVessel1 = false;
 			for (Sequence sequence : schedule.getSequences()) {
-				if (sequence.getVesselAvailability() == vesselAvailability1) {
+				if (sequence.getVesselCharter() == vesselCharter1) {
 					foundVessel1 = true;
 				} else {
 					continue;
@@ -1215,6 +1209,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(canalTrimming)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 		return localOverrides;

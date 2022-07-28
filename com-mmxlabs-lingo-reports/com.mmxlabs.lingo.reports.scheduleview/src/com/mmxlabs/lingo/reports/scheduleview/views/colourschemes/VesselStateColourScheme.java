@@ -43,22 +43,19 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (element instanceof Journey) {
-			final Journey journey = (Journey) element;
+		if (element instanceof Journey journey) {
 			if (journey.isLaden()) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
 			} else {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
 			}
-		} else if (element instanceof Idle) {
-			final Idle idle = (Idle) element;
+		} else if (element instanceof Idle idle) {
 			if (idle.isLaden()) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background);
 			} else {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background);
 			}
-		} else if (element instanceof VesselEventVisit) {
-			VesselEventVisit vev = (VesselEventVisit) element;
+		} else if (element instanceof VesselEventVisit vev) {
 			if (isOutsideTimeWindow(vev)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, ColourElements.Background);
 			}
@@ -74,8 +71,7 @@ public class VesselStateColourScheme extends ColourScheme {
 		} else if (element instanceof CharterLengthEvent) {
 			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
 
-		} else if (element instanceof CanalJourneyEvent) {
-			CanalJourneyEvent canalBookingEvent = (CanalJourneyEvent) element;
+		} else if (element instanceof CanalJourneyEvent canalBookingEvent) {
 			final Journey journey = canalBookingEvent.getLinkedJourney();
 			if (journey.isLaden()) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
@@ -92,8 +88,7 @@ public class VesselStateColourScheme extends ColourScheme {
 		}
 
 		// else if (mode == Mode.Lateness) {
-		if (element instanceof SlotVisit) {
-			final SlotVisit visit = (SlotVisit) element;
+		if (element instanceof SlotVisit visit) {
 			if (isOutsideTimeWindow(visit)) {
 				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, ColourElements.Background);
@@ -117,7 +112,7 @@ public class VesselStateColourScheme extends ColourScheme {
 
 		int alpha = 255;
 		if (element instanceof Event) {
-			Event ev = (Event) (element);
+//			Event ev = (Event) (element);
 			// if(isLocked(ev, viewer) && !isOutsideTimeWindow(ev)) alpha = Faded_Alpha;
 		} else if (element instanceof GeneratedCharterOut) {
 			alpha -= 20;
@@ -128,20 +123,17 @@ public class VesselStateColourScheme extends ColourScheme {
 	@Override
 	public Color getBorderColour(final Object element) {
 
-		if (element instanceof Event) {
-			final Event event = (Event) element;
-			if (isLocked(event, viewer)) {
+		if (element instanceof Event event) {
+			if (isLocked(event)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Locked, ColourElements.Border);
 			}
-			if (event instanceof CanalJourneyEvent) {
-				CanalJourneyEvent canalBookingEvent = (CanalJourneyEvent) event;
+			if (event instanceof CanalJourneyEvent canalBookingEvent) {
 				Journey linkedJourney = canalBookingEvent.getLinkedJourney();
 				if (linkedJourney.getCanalBooking() == null) {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
-			if (event instanceof SlotVisit) {
-				SlotVisit sv = (SlotVisit) event;
+			if (event instanceof SlotVisit sv) {
 				if (ColourSchemeUtil.isFOBSaleCargo(sv)) {
 					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.FOB_Sale, ColourElements.Border);
 				} else if (ColourSchemeUtil.isDESPurchaseCargo(sv)) {
@@ -156,14 +148,14 @@ public class VesselStateColourScheme extends ColourScheme {
 	@Override
 	public int getBorderWidth(final Object element) {
 
-		if (element instanceof Event) {
-			final Event event = (Event) element;
-			if (event instanceof SlotVisit) {
-				SlotVisit sv = (SlotVisit) event;
-				if (ColourSchemeUtil.isFOBSaleCargo(sv) || ColourSchemeUtil.isDESPurchaseCargo(sv))
+		if (element instanceof Event event) {
+			if (event instanceof SlotVisit sv) {
+				if (ColourSchemeUtil.isFOBSaleCargo(sv) || ColourSchemeUtil.isDESPurchaseCargo(sv)) {
 					return 2;
-			} else if (isLocked(event, viewer))
+				}
+			} else if (isLocked(event)) {
 				return 1;
+			}
 		}
 		return 1;
 	}

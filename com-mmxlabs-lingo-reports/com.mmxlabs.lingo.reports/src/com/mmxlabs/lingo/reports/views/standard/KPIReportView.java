@@ -58,7 +58,7 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class KPIReportView extends ViewPart {
 
-	private static final Logger log = LoggerFactory.getLogger(KPIReportView.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KPIReportView.class);
 
 	private ScenarioComparisonService selectedScenariosService;
 
@@ -275,7 +275,7 @@ public class KPIReportView extends ViewPart {
 							try {
 								getSite().getPage().showView(viewId);
 							} catch (final PartInitException e) {
-								log.error(e.getMessage(), e);
+								LOG.error(e.getMessage(), e);
 							}
 						}
 

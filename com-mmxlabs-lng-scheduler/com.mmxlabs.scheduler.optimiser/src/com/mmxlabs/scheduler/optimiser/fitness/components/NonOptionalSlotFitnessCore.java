@@ -112,7 +112,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 				.count();
 
 		for (final IResource resource : sequences.getResources()) {
-			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			if (vesselProvider.getVesselCharter(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final ISequence sequence = sequences.getSequence(resource);
 				for (final ISequenceElement element : sequence) {
 					if (interestingElements.contains(element)) {

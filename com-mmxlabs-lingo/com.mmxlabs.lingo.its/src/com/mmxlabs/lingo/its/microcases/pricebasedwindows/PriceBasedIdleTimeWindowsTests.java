@@ -20,7 +20,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -44,12 +44,12 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 	}
 
-	private VesselAvailability createTestVesselAvailability_ForNBOLaden(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
+	private VesselCharter createTestVesselCharter_ForNBOLaden(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
 		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "70000", 0);
 
-		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		return cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("70000") //
 				.withStartWindow(startStart, startEnd) //
 				.withEndWindow(endStart) //
@@ -84,7 +84,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testScheduleProviderCreatesIdleTime_whenLadenOnNBO() throws Exception {
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
 				LocalDateTime.of(2018, 8, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -96,7 +96,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "7.46") //
 				.withWindowStartTime(0) //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 1, 1), LocalDate.of(2017, 3, 1));
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -129,7 +129,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testScheduleProviderCreatesIdleTime_whenLadenOnNBO_HighPortCV() throws Exception {
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
+		final VesselCharter vesselCharter1 = createTestVesselCharter_ForNBOLaden(LocalDateTime.of(2017, 1, 1, 0, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0, 0),
 				LocalDateTime.of(2018, 8, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
@@ -141,7 +141,7 @@ public class PriceBasedIdleTimeWindowsTests extends AbstractMicroTestCase {
 				.makeDESSale(dischargeName, LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_DRAGON), null, entity, "7.46") //
 				.withWindowStartTime(0) //
 				.withWindowSize(1, TimePeriod.MONTHS).build() //
-				.withVesselAssignment(vesselAvailability1, 1).build();
+				.withVesselAssignment(vesselCharter1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 1, 1), LocalDate.of(2017, 3, 1));
 
 		evaluateWithLSOTest(scenarioRunner -> {

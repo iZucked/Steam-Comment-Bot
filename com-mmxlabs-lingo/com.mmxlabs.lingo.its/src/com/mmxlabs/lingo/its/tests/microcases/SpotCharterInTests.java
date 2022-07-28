@@ -19,7 +19,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
@@ -82,7 +82,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 		market.setNominal(true);
 		market.setStartHeelCV(22.6);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -143,7 +143,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 		market.setNominal(true);
 		market.setStartHeelCV(22.6);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -222,7 +222,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 		market.setNominal(true);
 		market.setStartHeelCV(22.6); // To match vessel start safety heel
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -284,7 +284,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 		market.setNominal(true);
 		market.setStartHeelCV(22.6);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -359,7 +359,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 
 		market.setGenericCharterContract(charterContract);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -421,7 +421,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 				.build(true);
 		market.setGenericCharterContract(charterContract);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -491,7 +491,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 				.build(true);
 		market.setGenericCharterContract(charterContract);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date
@@ -586,7 +586,7 @@ public class SpotCharterInTests extends AbstractMicroTestCase {
 				.build(true);
 		market.setGenericCharterContract(charterContract);
 
-		final VesselAvailability charter = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withOptionality(true) //
 				.withCharterRate("80000") //
 				.withEndWindow(LocalDateTime.of(2015, 1, 1, 0, 0, 0), null) // Set an end after to override the optimiser derived end date

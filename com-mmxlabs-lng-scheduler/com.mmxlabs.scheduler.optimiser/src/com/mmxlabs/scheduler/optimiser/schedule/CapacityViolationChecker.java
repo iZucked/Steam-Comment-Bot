@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -88,19 +88,19 @@ public class CapacityViolationChecker {
 	 */
 	public void calculateCapacityViolations(final IResource resource, final @NonNull VoyagePlanRecord voyagePlanRecord) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 
 		// Determine vessel capacity
 		long vesselCapacityInM3 = Long.MAX_VALUE;
 		if (nominatedVessel != null) {
 			vesselCapacityInM3 = nominatedVessel.getCargoCapacity();
-		} else if (vesselAvailability != null) {
-			vesselCapacityInM3 = vesselAvailability.getVessel().getCargoCapacity();
+		} else if (vesselCharter != null) {
+			vesselCapacityInM3 = vesselCharter.getVessel().getCargoCapacity();
 		}
 
-		final boolean isShippedSequence = !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
+		final boolean isShippedSequence = !(vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
 
 		IPortTimesRecord portTimesRecord = voyagePlanRecord.getPortTimesRecord();
 		for (final IPortSlot portSlot : portTimesRecord.getSlots()) {
@@ -203,10 +203,7 @@ public class CapacityViolationChecker {
 	private void checkDischargeOptionLimits(final @NonNull IDischargeOption portSlot, final @NonNull VoyagePlanRecord voyagePlanRecord) {
 		final IAllocationAnnotation allocationAnnotation = voyagePlanRecord.getAllocationAnnotation();
 		assert allocationAnnotation != null;
-		// We use -1 for the CV as it does not matter - CV is used to convert between m3
-		// and mmbtu, but here we are checking type first so we know conversion will not
-		// happen.
-		final int cargoCV = -1;
+
 		if (portSlot.isVolumeSetInM3()) {
 			final long commercialVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
 			if (commercialVolumeInM3 > portSlot.getMaxDischargeVolume(-1)) {
@@ -215,6 +212,9 @@ public class CapacityViolationChecker {
 				addEntryToCapacityViolationAnnotation(portSlot, CapacityViolationType.MIN_DISCHARGE, portSlot.getMinDischargeVolume(-1) - commercialVolumeInM3, voyagePlanRecord);
 			}
 		} else {
+			// CV needed to convert mmbtu back to m3 
+			final int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
+			
 			final long commercialVolumeInMMBTu = allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
 			// input is set in MMBTu
 			if (commercialVolumeInMMBTu > portSlot.getMaxDischargeVolumeMMBTU(-1)) {

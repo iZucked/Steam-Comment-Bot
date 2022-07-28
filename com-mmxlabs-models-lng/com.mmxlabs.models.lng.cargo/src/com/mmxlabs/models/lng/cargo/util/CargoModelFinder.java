@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
@@ -136,12 +136,12 @@ public class CargoModelFinder {
 	}
 
 	@NonNull
-	public VesselAvailability findVesselAvailability(@NonNull final String vesselName) {
-		for (final VesselAvailability vesselAvailability : getCargoModel().getVesselAvailabilities()) {
-			final Vessel vessel = vesselAvailability.getVessel();
+	public VesselCharter findVesselCharter(@NonNull final String vesselName) {
+		for (final VesselCharter vesselCharter : getCargoModel().getVesselCharters()) {
+			final Vessel vessel = vesselCharter.getVessel();
 			if (vessel != null) {
 				if (vesselName.equals(vessel.getName())) {
-					return vesselAvailability;
+					return vesselCharter;
 				}
 			}
 		}

@@ -239,7 +239,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 						.filter(cargoWrapper -> cargoWrapper.getLoadSlot() == null //
 								|| cargoWrapper.getDischargeSlot() == null //
 								|| cargoWrapper.getLoadSlot().getCargo() == null //
-								|| cargoWrapper.getLoadSlot().getCargo().getSlots().get(1) != cargoWrapper.getDischargeSlot())//
+								|| cargoWrapper.getLoadSlot().getCargo().getSortedSlots().get(1) != cargoWrapper.getDischargeSlot())//
 						.toList();
 				if (!cargoWrappersToDelete.isEmpty()) {
 					final EditingDomain ed = dialogContext.getScenarioEditingLocation().getEditingDomain();

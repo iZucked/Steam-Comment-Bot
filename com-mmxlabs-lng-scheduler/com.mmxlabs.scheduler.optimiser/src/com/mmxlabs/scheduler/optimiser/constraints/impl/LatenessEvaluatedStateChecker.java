@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -12,18 +13,19 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.scheduler.optimiser.components.IMaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.LatenessRecord;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on weighted lateness.
+ * {@link IEvaluatedStateConstraintChecker} implementation to calculate a fitness
+ * based on weighted lateness.
  * 
  * @author Alex Churchill
  * 
@@ -58,14 +60,23 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 			IPortSlot lastPortSlot = null;
-			for (VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+			for (final VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
 				lastPortSlot = vpr.getPortTimesRecord().getFirstSlot();
+				// Unwrap the original slot from the generated slot
+				if (lastPortSlot instanceof final IMaintenanceVesselEventPortSlot e) {
+					lastPortSlot = e.getFormerPortSlot();
+				}
 
 				final Set<@NonNull IPortSlot> lateSlotsSet = vpr.getLateSlotsSet();
 				boolean newLateness = false;
 				for (final IPortSlot lateSlot : lateSlotsSet) {
-
-					if (lateSlots != null && !lateSlots.contains(lateSlot)) {
+					IPortSlot lateSlotForSet = lateSlot;
+					// Unwrap the original slot from the generated slot. The we need the original
+					// slot for the lateSlots check, but the generated one for the VPR calls.
+					if (lateSlot instanceof final IMaintenanceVesselEventPortSlot e) {
+						lateSlotForSet = e.getFormerPortSlot();
+					}
+					if (lateSlots != null && !lateSlots.contains(lateSlotForSet)) {
 						newLateness = true;
 					}
 					final Interval latenessInterval = vpr.getLatenessInterval(lateSlot);
@@ -83,10 +94,10 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 					}
 				}
 			}
-			
+
 			// Check end event
 			boolean newLateness = false;
-			LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
+			final LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
 			if (lastPortSlot != null && maxDurationLatenessRecord != null) {
 				if (lateSlots != null && !lateSlots.contains(lastPortSlot)) {
 					newLateness = true;
@@ -112,17 +123,25 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 			lateSlots = new HashSet<>();
 			for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 				IPortSlot lastPortSlot = null;
-				for (VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
+				for (final VoyagePlanRecord vpr : volumeAllocatedSequence.getVoyagePlanRecords()) {
 					lateSlots.addAll(vpr.getLateSlotsSet());
 					lastPortSlot = vpr.getPortTimesRecord().getFirstSlot();
 				}
-				LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
+				final LatenessRecord maxDurationLatenessRecord = volumeAllocatedSequence.getMaxDurationLatenessRecord();
 				if (lastPortSlot != null && maxDurationLatenessRecord != null) {
 					lateSlots.add(lastPortSlot);
 				}
 			}
 			initialPromptLateness = promptLateness;
 			initialTotalLateness = totalLateness;
+
+			// Make sure we have unwrapped the original slot
+			for (final var ps : new LinkedList<>(lateSlots)) {
+				if (ps instanceof final IMaintenanceVesselEventPortSlot e) {
+					lateSlots.remove(ps);
+					lateSlots.add(e.getFormerPortSlot());
+				}
+			}
 
 			return true;
 		}

@@ -41,7 +41,7 @@ import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
-import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityCharterContractIExtraModelImporter;
+import com.mmxlabs.models.lng.cargo.importer.VesselCharterContractIExtraModelImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.importer.CharterContractIExtraModelImporter;
@@ -168,12 +168,12 @@ public class CSVImporter {
 		dataMap.put(CargoModelImporter.PAPER_DEALS_KEY, createURI(uriRoot, "Paper Deals.csv"));
 		dataMap.put(CargoModelImporter.CARGO_GROUP_KEY, createURI(uriRoot, "Cargo Groups.csv"));
 		dataMap.put(CargoModelImporter.EVENTS_KEY, createURI(uriRoot, "Events.csv"));
-		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURI(uriRoot, "Vessel Availability.csv"));
+		dataMap.put(CargoModelImporter.VESSEL_CHARTERS_KEY, createURI(uriRoot, "Vessel Charters.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURI(uriRoot, "Assignments.csv"));
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURI(uriRoot, "Canal Bookings.csv"));
-		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_CHARTER_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_CHARTER_BALLAST_BONUS_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_CHARTER_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURI(uriRoot, "Inventories.csv"));
 	}
 
@@ -320,7 +320,7 @@ public class CSVImporter {
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 					extraModelImporters.add(new ActualsModelExtraImporter());
-					extraModelImporters.add(new VesselAvailabilityCharterContractIExtraModelImporter());
+					extraModelImporters.add(new VesselCharterContractIExtraModelImporter());
 					extraModelImporters.add(new CharterContractIExtraModelImporter());
 
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();

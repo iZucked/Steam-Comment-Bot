@@ -23,7 +23,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.common.csv.IDeferment;
@@ -35,7 +34,7 @@ import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class DefaultImportContext implements IMMXImportContext {
-	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultImportContext.class);
 
 	private final LinkedList<IDeferment> deferments = new LinkedList<>();
 	private final LinkedList<IDeferment> reschedule = new LinkedList<>();
@@ -57,7 +56,7 @@ public class DefaultImportContext implements IMMXImportContext {
 		final String lowerName = _name.toLowerCase();
 		final List<NamedObject> matches = namedObjects.get(lowerName);
 		if (matches == null) {
-			log.warn("No objects with name " + lowerName + " have been imported");
+			LOG.warn("No objects with name " + lowerName + " have been imported");
 			return null;
 		}
 		int match = Integer.MAX_VALUE;
@@ -77,7 +76,7 @@ public class DefaultImportContext implements IMMXImportContext {
 			for (final NamedObject o : matches) {
 				typeNames.add(o.eClass().getName());
 			}
-			log.warn("Could not locate instance of " + preferredType.getName() + " with name " + lowerName + ". " + "Objects with that name are of types " + typeNames);
+			LOG.warn("Could not locate instance of " + preferredType.getName() + " with name " + lowerName + ". " + "Objects with that name are of types " + typeNames);
 		}
 
 		return best;

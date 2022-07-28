@@ -7,10 +7,10 @@ package com.mmxlabs.scheduler.optimiser.scheduling;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -47,12 +47,13 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
+import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -66,7 +67,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 @NonNullByDefault
 public class PNLBasedWindowTrimmer {
 
-	private final Random randomForVerification = new Random(0);
+	private final Random randomForVerification = new Random(GeneralCacheSettings.RANDOM_VERIFICATION_SEED);
 
 	public static final int SIZE_OF_POOL = 80; // Maximum number of solutions to keep in the pool for the next iteration
 
@@ -152,10 +153,10 @@ public class PNLBasedWindowTrimmer {
 	}
 
 	public void trimWindows(final IResource resource, final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData,
-			ISequencesAttributesProvider sequencesAttributesProvider) {
+			final ISequencesAttributesProvider sequencesAttributesProvider) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			trimWindowsForRoundTrip(resource, trimmedWindows, travelTimeData, sequencesAttributesProvider);
 		} else {
 			trimWindowsForCharter(resource, trimmedWindows, travelTimeData, sequencesAttributesProvider);
@@ -163,18 +164,17 @@ public class PNLBasedWindowTrimmer {
 	}
 
 	public void trimWindowsForRoundTrip(final IResource resource, final List<IPortTimeWindowsRecord> trimmedWindowRecords, final MinTravelTimeData travelTimeData,
-			ISequencesAttributesProvider sequencesAttributesProvider) {
+			final ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		// Check non-empty sequence
 		if (trimmedWindowRecords.isEmpty()) {
 			return;
 		}
 
-
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 		final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap = trimmerUtils.computeDefaultIntervals(trimmedWindowRecords, resource, travelTimeData);
-		
+
 		IWriteLockable.writeLock(trimmedWindowRecords);
 
 		for (int idx = 0; idx < trimmedWindowRecords.size(); idx++) {
@@ -191,8 +191,7 @@ public class PNLBasedWindowTrimmer {
 			assert nextSlot != null;
 
 			// Round trip cargoes have no prior state.
-			final List<ScheduledVoyagePlanResult> results = evaluateRoundTripWithIntervals(resource, vesselAvailability, portTimeWindowsRecord, travelTimeData, intervalMap,
-					sequencesAttributesProvider);
+			final List<ScheduledVoyagePlanResult> results = evaluateRoundTripWithIntervals(resource, vesselCharter, portTimeWindowsRecord, travelTimeData, intervalMap, sequencesAttributesProvider);
 
 			Collections.sort(results, ScheduledVoyagePlanResult::compareTo);
 
@@ -216,21 +215,21 @@ public class PNLBasedWindowTrimmer {
 				final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(t, t + 1);
 				copy.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 			}
-			
+
 			final int t = newPrev.returnTime;
 			final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(t, t + 1);
 			copy.setSlotFeasibleTimeWindow(nextSlot, feasibleTimeWindow);
-			
+
 		}
 	}
 
 	public void trimWindowsForCharter(final IResource resource, final List<IPortTimeWindowsRecord> trimmedWindowRecords, final MinTravelTimeData travelTimeData,
-			ISequencesAttributesProvider sequencesAttributesProvider) {
+			final ISequencesAttributesProvider sequencesAttributesProvider) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 		if (trimmedWindowRecords.isEmpty() || // No records at all
-				(trimmedWindowRecords.size() < 2 && vesselAvailability.isOptional()) // Just start and end event. If optional, ignore
+				(trimmedWindowRecords.size() < 2 && vesselCharter.isOptional()) // Just start and end event. If optional, ignore
 		) {
 			return;
 		}
@@ -286,7 +285,7 @@ public class PNLBasedWindowTrimmer {
 			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindowRecords.get(idx);
 			final boolean lastPlan = idx == trimmedWindowRecords.size() - 1;
 
-			final List<ScheduledRecord> results = evaluateShippedWithIntervals(resource, vesselAvailability, lastPlan, portTimeWindowsRecord, travelTimeData, intervalMap, currentHeads,
+			final List<ScheduledRecord> results = evaluateShippedWithIntervals(resource, vesselCharter, lastPlan, portTimeWindowsRecord, travelTimeData, intervalMap, currentHeads,
 					sequencesAttributesProvider);
 
 			assert !results.isEmpty();
@@ -409,7 +408,7 @@ public class PNLBasedWindowTrimmer {
 		final IPortTimeWindowsRecord portTimeWindowsRecord = key.ptwr;
 
 		final IResource resource = key.resource;
-		final IVesselAvailability vesselAvailability = key.vesselAvailability;
+		final IVesselCharter vesselCharter = key.vesselCharter;
 
 		final boolean lastPlan = key.lastPlan;
 
@@ -423,8 +422,8 @@ public class PNLBasedWindowTrimmer {
 				previousHeelRecord = new PreviousHeelRecord(0, 0, 0, false);
 			}
 
-			final ImmutableList<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
-					vesselAvailability.getCharterCostCalculator(), //
+			final ImmutableList<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
+					vesselCharter.getCharterCostCalculator(), //
 					spi.getVesselStartTime(), //
 					key.firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan, //
 					returnAll, false, // Do not keep voyage plans
@@ -450,24 +449,46 @@ public class PNLBasedWindowTrimmer {
 			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
 			basePortTimesRecord.setSlotDuration(slot, visitDuration);
 
-			for (var type: ExplicitIdleTime.values()) {
+			for (final var type : ExplicitIdleTime.values()) {
 				final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot, type);
 				basePortTimesRecord.setSlotExtraIdleTime(slot, type, extraIdleTime);
 			}
 		}
 
 		basePortTimesRecord.setSlotTime(basePortTimesRecord.getFirstSlot(), key.spi.getPlanStartTime());
-		run(key.spi, key.intervalMap, vesselAvailability, basePortTimesRecord, portTimeWindowsRecord, evaluator, 1, key.minTimeData, key.spi.getPlanStartTime());
+		run(key.spi, key.intervalMap, vesselCharter, basePortTimesRecord, portTimeWindowsRecord, evaluator, 1, key.minTimeData, key.spi.getPlanStartTime());
+
+		// As we normally cache this output, we can do some pre-filtering of equivalent
+		// results before returning.
+		Collections.sort(evaluatorResults, (a, b) -> ScheduledVoyagePlanResult.compareTo(a.getSecond(), b.getSecond()));
+
+		// This should be out "best" result, so we can throw away anything with a worse
+		// set of violations
+		final var ref = evaluatorResults.get(0);
+		evaluatorResults.removeIf(other -> other.getSecond().metrics[MetricType.LATENESS.ordinal()] > ref.getSecond().metrics[MetricType.LATENESS.ordinal()]
+				|| other.getSecond().metrics[MetricType.CAPACITY.ordinal()] > ref.getSecond().metrics[MetricType.CAPACITY.ordinal()]);
+
+		// Next throw away anything with the same start and end conditions, but worse
+		// P&L
+		final Map<Triple<Integer, Integer, PreviousHeelRecord>, Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> best = new LinkedHashMap<>();
+		for (final var e : evaluatorResults) {
+			final int sequenceStartTime = e.getFirst().getVesselStartTime();
+			final int currentEndTime = e.getSecond().returnTime;
+			final PreviousHeelRecord prevHeel = e.getSecond().endHeelState;
+			final Triple<Integer, Integer, PreviousHeelRecord> p = new Triple<>(sequenceStartTime, currentEndTime, prevHeel);
+			best.putIfAbsent(p, e);
+
+		}
 
 		// This can be cached, so make immutable
-		return ImmutableList.copyOf(evaluatorResults);
+		return ImmutableList.copyOf(best.values());
 	}
 
 	public List<ScheduledRecord> evaluateShippedWithIntervals( //
-			final IResource resource, final IVesselAvailability vesselAvailability, //
+			final IResource resource, final IVesselCharter vesselCharter, //
 			final boolean lastPlan, final IPortTimeWindowsRecord portTimeWindowsRecord, //
 			final MinTravelTimeData minTimeData, //
-			final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final List<ScheduledRecord> previousStates, ISequencesAttributesProvider sequencesAttributesProvider) {
+			final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final List<ScheduledRecord> previousStates, final ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final List<ScheduledRecord> scheduledRecords = new LinkedList<>();
 
@@ -477,8 +498,8 @@ public class PNLBasedWindowTrimmer {
 		if (previousStates.isEmpty()) {
 			// This means we are in the first voyage of the sequence, so
 			for (final TimeChoice tc : intervalMap.get(portTimeWindowsRecord.getFirstSlot())) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap,
-						minTimeData, sequencesAttributesProvider);
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.forFirstRecord(tc.time, firstLoad, resource, vesselCharter, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData,
+						sequencesAttributesProvider);
 
 				final ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
 
@@ -504,7 +525,7 @@ public class PNLBasedWindowTrimmer {
 		} else {
 			// We have a previous voyage on the sequence to follow on from.
 			for (final ScheduledRecord r : previousStates) {
-				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, firstLoad, resource, vesselAvailability, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData,
+				final PNLTrimmerShippedCacheKey key = PNLTrimmerShippedCacheKey.from(r, firstLoad, resource, vesselCharter, portTimeWindowsRecord, lastPlan, intervalMap, minTimeData,
 						sequencesAttributesProvider);
 
 				final ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> evaluatorResults = computeVoyagePlanResults(key);
@@ -535,9 +556,9 @@ public class PNLBasedWindowTrimmer {
 		return earliestLoadPort;
 	}
 
-	public List<ScheduledVoyagePlanResult> evaluateRoundTripWithIntervals(final IResource resource, final IVesselAvailability vesselAvailability, //
+	public List<ScheduledVoyagePlanResult> evaluateRoundTripWithIntervals(final IResource resource, final IVesselCharter vesselCharter, //
 			final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData minTimeData, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap,
-			ISequencesAttributesProvider sequencesAttributesProvider) {
+			final ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final List<ScheduledVoyagePlanResult> results = new LinkedList<>();
 
@@ -545,8 +566,8 @@ public class PNLBasedWindowTrimmer {
 
 			final boolean returnAll = false;
 
-			final ImmutableList<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateRoundTrip(resource, vesselAvailability, //
-					vesselAvailability.getCharterCostCalculator(), //
+			final ImmutableList<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateRoundTrip(resource, vesselCharter, //
+					vesselCharter.getCharterCostCalculator(), //
 					portTimesRecord, returnAll, false, // Do not keep voyage plans
 					sequencesAttributesProvider, null);
 			results.addAll(result);
@@ -567,7 +588,7 @@ public class PNLBasedWindowTrimmer {
 			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
 			basePortTimesRecord.setSlotDuration(slot, visitDuration);
 
-			for (var type: ExplicitIdleTime.values()) {
+			for (final var type : ExplicitIdleTime.values()) {
 				final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot, type);
 				basePortTimesRecord.setSlotExtraIdleTime(slot, type, extraIdleTime);
 			}
@@ -576,7 +597,7 @@ public class PNLBasedWindowTrimmer {
 		for (final TimeChoice tc : intervalMap.get(portTimeWindowsRecord.getFirstSlot())) {
 			final ScheduledPlanInput spi = new ScheduledPlanInput(tc.time, tc.time, null);
 			basePortTimesRecord.setSlotTime(basePortTimesRecord.getFirstSlot(), tc.time);
-			run(spi, intervalMap, vesselAvailability, basePortTimesRecord, portTimeWindowsRecord, evaluator, 1, minTimeData, tc.time);
+			run(spi, intervalMap, vesselCharter, basePortTimesRecord, portTimeWindowsRecord, evaluator, 1, minTimeData, tc.time);
 		}
 
 		if (results.isEmpty()) {
@@ -586,7 +607,7 @@ public class PNLBasedWindowTrimmer {
 		return results;
 	}
 
-	private void run(final ScheduledPlanInput spi, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final IVesselAvailability vesselAvailability, final PortTimesRecord record,
+	private void run(final ScheduledPlanInput spi, final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap, final IVesselCharter vesselCharter, final PortTimesRecord record,
 			final IPortTimeWindowsRecord ptwr, final BiConsumer<ScheduledPlanInput, PortTimesRecord> evaluator, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime) {
 
 		// Slot idx 0 is a fixed input.
@@ -600,7 +621,7 @@ public class PNLBasedWindowTrimmer {
 		if (slotIdx == terminateIdx) {
 			// 3. Termination state
 			final PortTimesRecord recordCopy = record.copy();
-			PortTimesRecordMaker.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), ptwr, recordCopy);
+			PortTimesRecordMaker.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselCharter.getVessel(), ptwr, recordCopy);
 			evaluator.accept(spi, recordCopy);
 		} else {
 			final int vesselStartTime = spi.getVesselStartTime();
@@ -621,7 +642,7 @@ public class PNLBasedWindowTrimmer {
 				if (slotIdx == 0) {
 					// Use last time?
 				} else if (slotIdx > 0) {
-					trimmerUtils.computeIntervalsForSlot(returnSlot, vesselAvailability, vesselStartTime, record, ptwr, slots, slotIdx, minTimeData, lastSlotArrivalTime, times);
+					trimmerUtils.computeIntervalsForSlot(returnSlot, vesselCharter, vesselStartTime, record, ptwr, slots, slotIdx, minTimeData, lastSlotArrivalTime, times);
 				}
 
 				// 1. Main scheduling loop
@@ -641,7 +662,7 @@ public class PNLBasedWindowTrimmer {
 						}
 					}
 					record.setReturnSlotTime(returnSlot, time);
-					run(spi, intervalMap, vesselAvailability, record, ptwr, evaluator, slotIdx + 1, minTimeData, time);
+					run(spi, intervalMap, vesselCharter, record, ptwr, evaluator, slotIdx + 1, minTimeData, time);
 					lastT = time;
 				}
 			} else {
@@ -659,7 +680,7 @@ public class PNLBasedWindowTrimmer {
 					for (final TimeChoice t : basicIntervals) {
 						times.add(t);
 					}
-					trimmerUtils.computeIntervalsForSlot(slots.get(slotIdx), vesselAvailability, vesselStartTime, record, ptwr, slots, slotIdx, minTimeData, lastSlotArrivalTime, times);
+					trimmerUtils.computeIntervalsForSlot(slots.get(slotIdx), vesselCharter, vesselStartTime, record, ptwr, slots, slotIdx, minTimeData, lastSlotArrivalTime, times);
 				}
 
 				// 1. Main scheduling loop
@@ -680,7 +701,7 @@ public class PNLBasedWindowTrimmer {
 					}
 					// Adjust arrival time based on min travel time
 					record.setSlotTime(slots.get(slotIdx), time);
-					run(spi, intervalMap, vesselAvailability, record, ptwr, evaluator, slotIdx + 1, minTimeData, time);
+					run(spi, intervalMap, vesselCharter, record, ptwr, evaluator, slotIdx + 1, minTimeData, time);
 					lastT = time;
 				}
 			}

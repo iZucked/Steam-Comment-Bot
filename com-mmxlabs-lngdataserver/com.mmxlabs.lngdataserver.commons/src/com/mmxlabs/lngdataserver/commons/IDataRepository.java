@@ -6,15 +6,13 @@ package com.mmxlabs.lngdataserver.commons;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IDataRepository<T> {
 
 	boolean hasUpstreamVersion(String uuid);
 
 	boolean publishVersion(T version) throws Exception;
-
-//	void registerLocalVersionListener(Object object);
-
-	// List<DataVersion> getLocalVersions();
 	//
 	// List<DataVersion> getUpstreamVersions();
 	//
@@ -34,7 +32,9 @@ public interface IDataRepository<T> {
 	//
 	// void stopListeningForNewUpstreamVersions();
 	//
-	 void registerLocalVersionListener(final Runnable versionConsumer);
+	void registerLocalVersionListener(final Runnable versionConsumer);
+	 
+	void deregisterLocalVersionListener(final Runnable versionConsumer);
 	//
 	// void registerUpstreamVersionListener(final Runnable versionConsumer);
 	//
@@ -45,5 +45,10 @@ public interface IDataRepository<T> {
 	// boolean publishUpstreamVersion(String versionJSON) throws Exception;
 
 	List<DataVersion> getLocalVersions();
+
+	@Nullable
+	default String getCurrentVersion() {
+		return null;
+	}
 
 }

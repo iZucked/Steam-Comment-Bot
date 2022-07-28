@@ -88,13 +88,16 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	 * Implementing classes should set their constraints here, via setRange() calls.
 	 */
 	protected abstract void createConstraints();
+	
+	protected abstract boolean shouldValidateNonMarkerInitialVesselAttributes(EObject object, EStructuralFeature feature);
 
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-
+		
 		for (final EStructuralFeature feature : getConstrainedFeatures()) {
-			if (target.eIsSet(feature) && shouldValidateFeature(target, feature)) {
+			if (shouldValidateFeature(target, feature) && 
+					(target.eIsSet(feature) || shouldValidateNonMarkerInitialVesselAttributes(target, feature))) {
 				final String className = target.eClass().getName();
 				final String featureName = feature.getName();
 

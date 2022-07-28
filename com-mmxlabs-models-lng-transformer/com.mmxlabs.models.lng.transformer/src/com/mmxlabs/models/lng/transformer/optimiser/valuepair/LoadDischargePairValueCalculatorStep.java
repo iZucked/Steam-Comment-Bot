@@ -35,7 +35,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -82,7 +82,7 @@ public class LoadDischargePairValueCalculatorStep {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}
 
-	public void run(final @NonNull IVesselAvailability nominalMarketAvailability, //
+	public void run(final @NonNull IVesselCharter nominalMarketVesselCharter, //
 			final ProfitAndLossExtractor recorder, //
 			@NonNull final JobExecutorFactory jobExecutorFactory, //
 			@NonNull final IProgressMonitor monitor) {
@@ -92,16 +92,16 @@ public class LoadDischargePairValueCalculatorStep {
 
 		final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
 		final List<IDischargeOption> discharges = LoadDischargePairValueCalculator.findSales(optimisationData, portSlotProvider);
-		final List<IVesselAvailability> vessels = LoadDischargePairValueCalculator.findVessels(optimisationData, vesselProvider);
+		final List<IVesselCharter> vessels = LoadDischargePairValueCalculator.findVessels(optimisationData, vesselProvider);
 
-		run(nominalMarketAvailability, loads, discharges, recorder, jobExecutorFactory, monitor, vessels);
+		run(nominalMarketVesselCharter, loads, discharges, recorder, jobExecutorFactory, monitor, vessels);
 	}
 
-	public void run(final @NonNull IVesselAvailability nominalMarketAvailability, //
+	public void run(final @NonNull IVesselCharter nominalMarketVesselCharter, //
 			final List<ILoadOption> loads, final List<IDischargeOption> discharges, //
 			final ProfitAndLossExtractor recorder, //
 			@NonNull final JobExecutorFactory jobExecutorFactory, //
-			@NonNull final IProgressMonitor monitor, final List<IVesselAvailability> vessels) {
+			@NonNull final IProgressMonitor monitor, final List<IVesselCharter> vessels) {
 
 		final JobExecutorFactory subJobExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class);
@@ -121,7 +121,7 @@ public class LoadDischargePairValueCalculatorStep {
 						futures.add(jobExecutor.submit(() -> {
 							try {
 								final LoadDischargePairValueCalculator calculator = injector.getInstance(LoadDischargePairValueCalculator.class);
-								calculator.generate(loadOption, dischargeOption, nominalMarketAvailability, recorder, vessels);
+								calculator.generate(loadOption, dischargeOption, nominalMarketVesselCharter, recorder, vessels);
 							} finally {
 								monitor.worked(1);
 							}

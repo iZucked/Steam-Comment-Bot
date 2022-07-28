@@ -84,7 +84,7 @@ public class TraderBasedInsertionHelper {
 				final SolutionOptionMicroCase microCase = AnalyticsFactory.eINSTANCE.createSolutionOptionMicroCase();
 				microCase.setScheduleSpecification(t.getFirst().getFirst());
 				microCase.setScheduleModel(scheduleModel2);
-				microCase.getExtraVesselAvailabilities().addAll(t.getFirst().getSecond().extraVesselAvailabilities);
+				microCase.getExtraVesselCharters().addAll(t.getFirst().getSecond().extraVesselCharters);
 				microCase.getCharterInMarketOverrides().addAll(t.getFirst().getSecond().extraCharterInMarketOverrides);
 
 				scheduleModel2.setSchedule(base_schedule);
@@ -102,7 +102,7 @@ public class TraderBasedInsertionHelper {
 				final SolutionOptionMicroCase microCase = AnalyticsFactory.eINSTANCE.createSolutionOptionMicroCase();
 				microCase.setScheduleSpecification(t.getSecond().getFirst());
 				microCase.setScheduleModel(scheduleModel2);
-				microCase.getExtraVesselAvailabilities().addAll(t.getSecond().getSecond().extraVesselAvailabilities);
+				microCase.getExtraVesselCharters().addAll(t.getSecond().getSecond().extraVesselCharters);
 				microCase.getCharterInMarketOverrides().addAll(t.getSecond().getSecond().extraCharterInMarketOverrides);
 
 				commandSuppliers.add(() -> SetCommand.create(scenarioDataProvider.getEditingDomain(), option, AnalyticsPackage.Literals.DUAL_MODE_SOLUTION_OPTION__MICRO_TARGET_CASE, microCase));

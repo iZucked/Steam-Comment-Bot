@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.logger.internal;
 
+import java.util.Arrays;
+
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
@@ -19,10 +21,12 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	private boolean infoEnabled = false;
 	private boolean debugEnabled = false;
 
+	private boolean debugFlagEnabled = Arrays.stream(System.getProperty("eclipse.commands").split("\n")).anyMatch("-debug"::equalsIgnoreCase);
+
 	public ExtendedLogLogger(final String name) {
 		this.name = name;
 		// TODO: Hack to disable excess log messages from shiro. Build some better API
-		infoEnabled = !("org.apache.shiro.session.mgt.AbstractValidatingSessionManager".equals(name) 
+		infoEnabled = !("org.apache.shiro.session.mgt.AbstractValidatingSessionManager".equals(name)
 				|| "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping".equals(name) //
 				|| "org.springframework.web.servlet.handler.SimpleUrlHandlerMapping".equals(name) //
 				|| "org.springframework.core.annotation.AnnotationUtils".equals(name) //
@@ -39,37 +43,48 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	@Override
 	public boolean isTraceEnabled() {
-		return false;
+		return Platform.inDebugMode();
 	}
 
 	@Override
 	public void trace(final String msg) {
-
+		if (isTraceEnabled()) {
+			doLog(IStatus.INFO, msg, null);
+		}
 	}
 
 	@Override
 	public void trace(final String format, final Object arg) {
-
+		if (isTraceEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg), null);
+		}
 	}
 
 	@Override
 	public void trace(final String format, final Object arg1, final Object arg2) {
-
+		if (isTraceEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg1, arg2), null);
+		}
 	}
 
 	@Override
 	public void trace(final String format, final Object... argArray) {
-
+		if (isTraceEnabled()) {
+			doLog(IStatus.INFO, String.format(format, argArray), null);
+		}
 	}
 
 	@Override
 	public void trace(final String msg, final Throwable t) {
 
+		if (isTraceEnabled()) {
+			doLog(IStatus.INFO, msg, t);
+		}
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
-		return Platform.inDebugMode() && debugEnabled;
+		return debugFlagEnabled && debugEnabled;
 	}
 
 	@Override
@@ -219,31 +234,29 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	private ILog getLogger() {
 		try {
-		return Platform.getLog(Platform.getBundle("org.slf4j.api"));
+			return Platform.getLog(Platform.getBundle("org.slf4j.api"));
 		} catch (NullPointerException e) {
 			// This can happen during workbench shutdown.
 			return new ILog() {
-				
+
 				@Override
 				public void removeLogListener(ILogListener listener) {
-					
+
 				}
-				
+
 				@Override
 				public void log(IStatus status) {
 					System.err.printf("[Fallback logger]%s", status.getMessage());
 				}
-				
+
 				@Override
 				public Bundle getBundle() {
-					// TODO Auto-generated method stub
 					return null;
 				}
-				
+
 				@Override
 				public void addLogListener(ILogListener listener) {
-					// TODO Auto-generated method stub
-					
+
 				}
 			};
 		}

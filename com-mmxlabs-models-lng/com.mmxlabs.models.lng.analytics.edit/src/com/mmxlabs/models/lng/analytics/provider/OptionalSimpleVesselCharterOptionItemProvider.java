@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
+import com.mmxlabs.models.lng.fleet.Vessel;
 
 import java.util.Collection;
 import java.util.List;
@@ -206,14 +207,14 @@ public class OptionalSimpleVesselCharterOptionItemProvider extends SimpleVesselC
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((OptionalSimpleVesselCharterOption)object).getUuid();
-		return label == null || label.length() == 0 ?
+		Vessel vessel = ((OptionalSimpleVesselCharterOption)object).getVessel();
+		return vessel == null ?
 			getString("_UI_OptionalSimpleVesselCharterOption_type") :
-			getString("_UI_OptionalSimpleVesselCharterOption_type") + " " + label;
+			vessel.getName();
 	}
 
 

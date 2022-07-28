@@ -24,22 +24,29 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * Simple text based {@link ISequences} serialiser. Given an equivalent {@link IOptimisationData} instance, use the uniquely identified resources and element names to save & load the sequences. Data
- * is stored simple as line pairs, resource name, followed by element name. A special constant is used for the unused elements. The text file order is the element order.
+ * Simple text based {@link ISequences} serialiser. Given an equivalent
+ * {@link IOptimisationData} instance, use the uniquely identified resources and
+ * element names to save & load the sequences. Data is stored simple as line
+ * pairs, resource name, followed by element name. A special constant is used
+ * for the unused elements. The text file order is the element order.
  * 
  * @author Simon Goodall
  *
  */
 public final class SequencesSerialiser {
 
+	private SequencesSerialiser() {
+
+	}
+
 	private static final @NonNull String UNUSED = "UNUSED";
 
-	public static void save(final @NonNull IOptimisationData optimisationData, final @NonNull ISequences rawSequences, final @NonNull OutputStream out) throws Exception {
+	public static void save(final @NonNull IOptimisationData optimisationData, final @NonNull ISequences rawSequences, final @NonNull OutputStream out) {
 		try (PrintWriter pw = new PrintWriter(out)) {
 
 			// Used for sanity checking uniqueness
-			Set<String> seenResources = new HashSet<>();
-			Set<String> seenElements = new HashSet<>();
+			final Set<String> seenResources = new HashSet<>();
+			final Set<String> seenElements = new HashSet<>();
 
 			for (final IResource resource : optimisationData.getResources()) {
 				assert seenResources.add(resource.getName());
@@ -73,7 +80,8 @@ public final class SequencesSerialiser {
 				resourceMap.put(r.getName(), r);
 			}
 
-			// Note: This does not include generated charter out elements, but this should be ok
+			// Note: This does not include generated charter out elements, but this should
+			// be ok
 			for (final ISequenceElement e : optimisationData.getSequenceElements()) {
 				sequenceElementMap.put(e.getName(), e);
 			}

@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -60,10 +60,10 @@ public class Mapper implements IMapperClass {
 	private Set<LoadSlot> extraLoads = new LinkedHashSet<>();
 	private Set<DischargeSlot> extraDischarges = new LinkedHashSet<>();
 	private Set<CharterInMarket> extraCharterInMarkets = new LinkedHashSet<>();
-	private Set<VesselAvailability> extraVesselAvailabilities = new LinkedHashSet<>();
+	private Set<VesselCharter> extraVesselAvailabilities = new LinkedHashSet<>();
 	private Set<CommodityCurveOverlay> extraPriceCurves = new LinkedHashSet<>();
 
-	Map<ShippingOption, VesselAvailability> fleetOptionMap = new HashMap<>();
+	Map<ShippingOption, VesselCharter> fleetOptionMap = new HashMap<>();
 	Map<RoundTripShippingOption, CharterInMarket> roundTripOptionMap = new HashMap<>();
 	Map<ExistingCharterMarketOption, CharterInMarket> charterMarketOptionMap = new HashMap<>();
 
@@ -248,7 +248,7 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public VesselAvailability get(SimpleVesselCharterOption fleetShippingOption) {
+	public VesselCharter get(SimpleVesselCharterOption fleetShippingOption) {
 		return fleetOptionMap.get(fleetShippingOption);
 	}
 
@@ -261,32 +261,32 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
-	public void addMapping(SimpleVesselCharterOption fleetShippingOption, VesselAvailability vesselAvailability) {
-		assert vesselAvailability != null;
+	public void addMapping(SimpleVesselCharterOption fleetShippingOption, VesselCharter vesselCharter) {
+		assert vesselCharter != null;
 
-		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
-			extraVesselAvailabilities.add(vesselAvailability);
+		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselCharters().contains(vesselCharter)) {
+			extraVesselAvailabilities.add(vesselCharter);
 		}
-		fleetOptionMap.put(fleetShippingOption, vesselAvailability);
+		fleetOptionMap.put(fleetShippingOption, vesselCharter);
 	}
 
 	@Override
-	public void addMapping(ExistingVesselCharterOption shippingOption, VesselAvailability vesselAvailability) {
-		assert vesselAvailability != null;
+	public void addMapping(ExistingVesselCharterOption shippingOption, VesselCharter vesselCharter) {
+		assert vesselCharter != null;
 
-		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
-			extraVesselAvailabilities.add(vesselAvailability);
+		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselCharters().contains(vesselCharter)) {
+			extraVesselAvailabilities.add(vesselCharter);
 		}
-		fleetOptionMap.put(shippingOption, vesselAvailability);
+		fleetOptionMap.put(shippingOption, vesselCharter);
 	}
 
 	@Override
-	public void addMapping(FullVesselCharterOption shippingOption, VesselAvailability vesselAvailability) {
-		assert vesselAvailability != null;
-		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselAvailabilities().contains(vesselAvailability)) {
-			extraVesselAvailabilities.add(vesselAvailability);
+	public void addMapping(FullVesselCharterOption shippingOption, VesselCharter vesselCharter) {
+		assert vesselCharter != null;
+		if (!ScenarioModelUtil.getCargoModel(scenarioModel).getVesselCharters().contains(vesselCharter)) {
+			extraVesselAvailabilities.add(vesselCharter);
 		}
-		fleetOptionMap.put(shippingOption, vesselAvailability);
+		fleetOptionMap.put(shippingOption, vesselCharter);
 	}
 
 	@Override

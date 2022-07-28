@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -79,9 +79,9 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 		boolean valid = true;
 		for (final IResource resource : loopResources) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 			// Ignore compatibility on non-shipped cargoes
-			if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
+			if (vesselCharter.getVesselInstanceType().isNonShipped()) {
 				continue;
 			}
 			final ISequence sequence = sequences.getSequence(resource);
@@ -115,14 +115,14 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 
 		IVessel vessel = null;
 
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
-			vessel = vesselAvailability.getVessel();
-		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-			vessel = vesselAvailability.getVessel();
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
+			vessel = vesselCharter.getVessel();
+		} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			vessel = vesselCharter.getVessel();
 			final PortType type = portTypeProvider.getPortType(element);
 			// Vessel events should not be moved onto spot charters
 			if (type == PortType.DryDock //
@@ -133,7 +133,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 					messages.add(String.format("%s : Vessel %s is a spot charter and should not have %s in the schedule!", this.name, vessel != null ? vessel.getName() : "unknown vessel", type.toString()));
 				return false;
 			}
-		} else if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
+		} else if (vesselCharter.getVesselInstanceType().isNonShipped()) {
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		}
 		final boolean result = allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);

@@ -27,7 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
@@ -49,7 +49,7 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite implements IDisplayComposite {
 	private static final String MONTHLY = "Monthly";
 	private static final String NOTIONAL_JOURNEY = "Notional journey";
-	private VesselAvailability oldVesselAvailability = null;
+	private VesselCharter oldVesselCharter = null;
 	private Composite owner = this;
 
 	private Combo ballastBonusCombobox;
@@ -122,7 +122,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 	
 	private boolean checkEObject(final EObject object) {
-		if (object instanceof VesselAvailability va) {
+		if (object instanceof VesselCharter va) {
 			if (va.getContainedCharterContract() != null) {
 				return true;
 			}
@@ -133,7 +133,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected boolean changeBallastBonusType() {
-		return changeBallastBonusType(getCharterContract(oldVesselAvailability));
+		return changeBallastBonusType(getCharterContract(oldVesselCharter));
 	}
 	
 	protected boolean changeBallastBonusType(GenericCharterContract charterContract) {
@@ -158,24 +158,24 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		return true;
 	}
 	
-	private GenericCharterContract getCharterContract(VesselAvailability va) {
+	private GenericCharterContract getCharterContract(VesselCharter va) {
 		GenericCharterContract charterContract = null;
 		if (va.getContainedCharterContract() == null) {
 			charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
 			charterContract.setName(validateOrOfferName("ballast_bonus_terms", va));
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, //
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,//
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+					CargoPackage.Literals.VESSEL_CHARTER__CONTAINED_CHARTER_CONTRACT, charterContract), va,//
+					CargoPackage.Literals.VESSEL_CHARTER__CONTAINED_CHARTER_CONTRACT);
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, //
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,//
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+					CargoPackage.Literals.VESSEL_CHARTER__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,//
+					CargoPackage.Literals.VESSEL_CHARTER__CHARTER_CONTRACT_OVERRIDE);
 		} else {
 			charterContract = va.getContainedCharterContract();
 		}
 		return charterContract;
 	}
 
-	private String validateOrOfferName(final String type, final VesselAvailability va) {
+	private String validateOrOfferName(final String type, final VesselCharter va) {
 		if (va.getVessel() == null) {
 			return String.format("%s_%s", type, va.getUuid());
 		}
@@ -211,11 +211,11 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	@Override
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc) {
 		this.dialogContext = dialogContext;
-		oldVesselAvailability = (VesselAvailability) value;
-		final GenericCharterContract gcc = oldVesselAvailability.getContainedCharterContract();
+		oldVesselCharter = (VesselCharter) value;
+		final GenericCharterContract gcc = oldVesselCharter.getContainedCharterContract();
 		
-		if (oldVesselAvailability != null) {
-			createDefaultChildCompositeSection(dialogContext, root, oldVesselAvailability, range, dbc, oldVesselAvailability.eClass(), endHeelComposite);
+		if (oldVesselCharter != null) {
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), endHeelComposite);
 		}
 		doDisplay(dialogContext, root, dbc, gcc);
 	}
@@ -245,8 +245,8 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	void removeAdapter() {
-		if (oldVesselAvailability != null) {
-			oldVesselAvailability = null;
+		if (oldVesselCharter != null) {
+			oldVesselCharter = null;
 		}
 	}
 
@@ -259,7 +259,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract()
-				&& ref != CargoPackage.eINSTANCE.getVesselAvailability_StartHeel();
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartHeel();
 	}
 }

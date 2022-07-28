@@ -69,6 +69,11 @@ public final class VoyagePlan extends AbstractWriteLockable {
 	public VoyagePlan() {
 		ignoreEnd = true;
 	}
+	
+	public static VoyagePlan from(VoyagePlan vp) {
+		VoyagePlan result = new VoyagePlan(vp.sequence, vp.lngFuelVolume, vp.voyagePlanMetrics, vp.ignoreEnd, vp.startingHeelInM3, vp.remainingHeelInM3);
+		return result;
+	}
 
 	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final long[] voyagePlanMetrics, final boolean ignoreEnd, final long startingHeelInM3,
 			final long remainingHeelInM3) {
@@ -271,7 +276,7 @@ public final class VoyagePlan extends AbstractWriteLockable {
 	}
 
 	/**
-	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class safety heel.
+	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel safety heel.
 	 * 
 	 * @param remainingHeelInM3
 	 */

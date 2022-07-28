@@ -27,7 +27,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -301,9 +301,9 @@ public class ScheduleReportTransformer {
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
 			equivalents.addAll(startEvent.getEvents());
-			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
-			if (vesselAvailability != null) {
-				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
+			final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
+			if (vesselCharter != null) {
+				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselCharter.getVessel()));
 			}
 		} else if (a instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) a;

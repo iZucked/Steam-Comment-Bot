@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -186,7 +185,9 @@ public class VesselsToScenarioCopier {
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY, upstreamVessel.getHasReliqCapacity());
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, upstreamVessel.getIsReference());
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_REFERENCE, upstreamVessel.getMmxReference());
+		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__MARKER, upstreamVessel.getIsMarker());
 
+		
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__BASE_FUEL, upstreamVessel.getTravelBaseFuel(), context);
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL, upstreamVessel.getIdleBaseFuel(), context);
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__PILOT_LIGHT_BASE_FUEL, upstreamVessel.getPilotLightBaseFuel(), context);
@@ -306,6 +307,7 @@ public class VesselsToScenarioCopier {
 
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, upstreamVessel.getIsReference());
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_REFERENCE, upstreamVessel.getMmxReference());
+		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MARKER, upstreamVessel.getIsMarker());
 
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__BASE_FUEL, upstreamVessel.getTravelBaseFuel(), baseFuels, fleetModel);
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL, upstreamVessel.getIdleBaseFuel(), baseFuels, fleetModel);
@@ -436,9 +438,9 @@ public class VesselsToScenarioCopier {
 			cc.append(RemoveCommand.create(editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS, vesselToUpdate.getRouteParameters()));
 		}
 		if (routeParameters.isPresent()) {
-			final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
+			final List<com.mmxlabs.models.lng.fleet.VesselRouteParameters> newParameters = new LinkedList<>();
 			for (final VesselRouteParameters upstreamFC : routeParameters.get()) {
-				final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters newFC = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				final com.mmxlabs.models.lng.fleet.VesselRouteParameters newFC = FleetFactory.eINSTANCE.createVesselRouteParameters();
 				newFC.setRouteOption(RouteOption.valueOf(upstreamFC.getRoute()));
 				newFC.setExtraTransitTime(upstreamFC.getExtraTransitTimeInHours());
 				newFC.setLadenNBORate(upstreamFC.getLadenNBORate());
@@ -462,9 +464,9 @@ public class VesselsToScenarioCopier {
 			vesselToUpdate.getRouteParameters().clear();
 		}
 		if (routeParameters.isPresent()) {
-			final List<VesselClassRouteParameters> newParameters = new LinkedList<>();
+			final List<com.mmxlabs.models.lng.fleet.VesselRouteParameters> newParameters = new LinkedList<>();
 			for (final VesselRouteParameters upstreamFC : routeParameters.get()) {
-				final com.mmxlabs.models.lng.fleet.VesselClassRouteParameters newFC = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				final com.mmxlabs.models.lng.fleet.VesselRouteParameters newFC = FleetFactory.eINSTANCE.createVesselRouteParameters();
 				newFC.setRouteOption(RouteOption.valueOf(upstreamFC.getRoute()));
 				newFC.setExtraTransitTime(upstreamFC.getExtraTransitTimeInHours());
 				newFC.setLadenNBORate(upstreamFC.getLadenNBORate());

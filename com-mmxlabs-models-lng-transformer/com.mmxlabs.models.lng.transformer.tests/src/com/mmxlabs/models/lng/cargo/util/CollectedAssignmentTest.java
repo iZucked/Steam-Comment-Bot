@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
@@ -46,7 +46,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testSimpleCargoOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -62,9 +62,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 		assignments.add(cargo2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -75,7 +75,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testSimpleActualsOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -115,9 +115,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 		assignments.add(cargo2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, dateProvider);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, dateProvider);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -128,7 +128,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testSequenceHintCargoOrdering() {
 
-		final @NonNull VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final @NonNull VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -147,9 +147,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo2);
 		for (@NonNull
 		final List<@NonNull AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -160,7 +160,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testSimpleEventOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -176,9 +176,9 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 		assignments.add(event2);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -189,7 +189,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testSimpleCargoAndEventOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -205,9 +205,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 		assignments.add(event1);
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -218,7 +218,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoAndEventOrdering_1() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -238,9 +238,9 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -251,7 +251,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoAndEventOrdering_2() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -269,9 +269,9 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -282,7 +282,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoAndEventOrdering_3() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -306,14 +306,14 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			if (!expectedSortOrder.equals(collectedAssignment.getAssignedObjects())) {
 
-				new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+				new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			}
 			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
@@ -322,7 +322,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoAndEventOrdering_EventDuration() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -340,9 +340,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -353,7 +353,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -373,9 +373,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo3);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -386,7 +386,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoOrdering2() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -406,9 +406,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo3);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -419,7 +419,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testMoreComplicatedOverlappingCargoOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -452,9 +452,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo7);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
@@ -464,7 +464,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testMoreComplicatedOverlappingCargoOrdering2() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 
 		final Location loadlocation = PortFactory.eINSTANCE.createLocation();
 		loadlocation.setTimeZone("America/Chicago");
@@ -508,9 +508,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo7);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
@@ -520,7 +520,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testAmbiguousCargoOrdering() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -558,9 +558,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo9);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			Assertions.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
@@ -650,7 +650,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoOrdering_Lateness() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -674,9 +674,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo4);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -687,7 +687,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoOrdering_Lateness2() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -713,9 +713,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo5);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 
@@ -726,7 +726,7 @@ public class CollectedAssignmentTest {
 	@Test
 	public void testOverlappingCargoOrdering_Lateness3() {
 
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
 		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setTimeZone("UTC");
 		final Port port = PortFactory.eINSTANCE.createPort();
@@ -743,9 +743,9 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo4);
 
 		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null, null);
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselCharter, null, null, null);
 			Assertions.assertNotNull(collectedAssignment);
-			Assertions.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assertions.assertSame(vesselCharter, collectedAssignment.getVesselCharter());
 			Assertions.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 

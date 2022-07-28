@@ -5,7 +5,8 @@
             "name": "Aamira",
             "imo": "9443401",
             "referenceVessel": "Q-max",
-            "capacity": 260912
+            "capacity": 260912,
+            "isMarker": "true"
         },
         {
             "name": "Abadi",
@@ -29,7 +30,8 @@
             "name": "Al Aamriya",
             "imo": "9338266",
             "referenceVessel": "Q-flex",
-            "capacity": 206958
+            "capacity": 206958,
+            "isMarker": "true"
         },
         {
             "name": "Al Areesh",
@@ -41,7 +43,8 @@
             "name": "Al Bahiya",
             "imo": "9431147",
             "referenceVessel": "Q-flex",
-            "capacity": 205981
+            "capacity": 205981,
+            "isMarker": "true"
         },
         {
             "name": "Al Bidda",
@@ -59,7 +62,8 @@
             "name": "Al Dafna",
             "imo": "9443683",
             "referenceVessel": "Q-max",
-            "capacity": 261988
+            "capacity": 261988,
+            "isMarker": "true"
         },
         {
             "name": "Al Deebel",
@@ -71,37 +75,43 @@
             "name": "Al Gattara",
             "imo": "9337705",
             "referenceVessel": "Q-flex",
-            "capacity": 216200
+            "capacity": 216200,
+            "isMarker": "true"
         },
         {
             "name": "Al Ghariya",
             "imo": "9337987",
             "referenceVessel": "Q-flex",
-            "capacity": 205941
+            "capacity": 205941,
+            "isMarker": "true"
         },
         {
             "name": "Al Gharrafa",
             "imo": "9337717",
             "referenceVessel": "Q-flex",
-            "capacity": 216200
+            "capacity": 216200,
+            "isMarker": "true"
         },
         {
             "name": "Al Ghashamiya",
             "imo": "9397286",
             "referenceVessel": "Q-flex",
-            "capacity": 211885
+            "capacity": 211885,
+            "isMarker": "true"
         },
         {
             "name": "Al Ghuwairiya",
             "imo": "9372743",
             "referenceVessel": "Q-max",
-            "capacity": 257984
+            "capacity": 257984,
+            "isMarker": "true"
         },
         {
             "name": "Al Hamla",
             "imo": "9337743",
             "referenceVessel": "Q-flex",
-            "capacity": 211862
+            "capacity": 211862,
+            "isMarker": "true"
         },
         {
             "name": "Al Hamra",
@@ -113,7 +123,8 @@
             "name": "Al Huwaila",
             "imo": "9360879",
             "referenceVessel": "Q-flex",
-            "capacity": 214176
+            "capacity": 214176,
+            "isMarker": "true"
         },
         {
             "name": "Al Jasra",
@@ -131,25 +142,29 @@
             "name": "Al Karaana",
             "imo": "9431123",
             "referenceVessel": "Q-flex",
-            "capacity": 205988
+            "capacity": 205988,
+            "isMarker": "true"
         },
         {
             "name": "Al Kharaitiyat",
             "imo": "9397327",
             "referenceVessel": "Q-flex",
-            "capacity": 211986
+            "capacity": 211986,
+            "isMarker": "true"
         },
         {
             "name": "Al Kharsaah",
             "imo": "9360881",
             "referenceVessel": "Q-flex",
-            "capacity": 211885
+            "capacity": 211885,
+            "isMarker": "true"
         },
         {
             "name": "Al Khattiya",
             "imo": "9431111",
             "referenceVessel": "Q-flex",
-            "capacity": 205993
+            "capacity": 205993,
+            "isMarker": "true"
         },
         {
             "name": "Al Khaznah",
@@ -167,13 +182,15 @@
             "name": "Al Khuwair",
             "imo": "9360908",
             "referenceVessel": "Q-flex",
-            "capacity": 211885
+            "capacity": 211885,
+            "isMarker": "true"
         },
         {
             "name": "Al Mafyar",
             "imo": "9397315",
             "referenceVessel": "Q-max",
-            "capacity": 261043
+            "capacity": 261043,
+            "isMarker": "true"
         },
         {
             "name": "Al Marrouna",
@@ -185,19 +202,22 @@
             "name": "Al Mayeda",
             "imo": "9397298",
             "referenceVessel": "Q-max",
-            "capacity": 261157
+            "capacity": 261157,
+            "isMarker": "true"
         },
         {
             "name": "Al Nuaman",
             "imo": "9431135",
             "referenceVessel": "Q-flex",
-            "capacity": 205981
+            "capacity": 205981,
+            "isMarker": "true"
         },
         {
             "name": "Al Oraiq",
             "imo": "9360790",
             "referenceVessel": "Q-flex",
-            "capacity": 205994
+            "capacity": 205994,
+            "isMarker": "true"
         },
         {
             "name": "Al Rayyan",
@@ -209,49 +229,57 @@
             "name": "Al Rekayyat",
             "imo": "9397339",
             "referenceVessel": "Q-flex",
-            "capacity": 211986
+            "capacity": 211986,
+            "isMarker": "true"
         },
         {
             "name": "Al Ruwais",
             "imo": "9337951",
             "referenceVessel": "Q-flex",
-            "capacity": 205941
+            "capacity": 205941,
+            "isMarker": "true"
         },
         {
             "name": "Al Sadd",
             "imo": "9397341",
             "referenceVessel": "Q-flex",
-            "capacity": 205963
+            "capacity": 205963,
+            "isMarker": "true"
         },
         {
             "name": "Al Safliya",
             "imo": "9337963",
             "referenceVessel": "Q-flex",
-            "capacity": 210100
+            "capacity": 210100,
+            "isMarker": "true"
         },
         {
             "name": "Al Sahla",
             "imo": "9360855",
             "referenceVessel": "Q-flex",
-            "capacity": 211842
+            "capacity": 211842,
+            "isMarker": "true"
         },
         {
             "name": "Al Samriya",
             "imo": "9388821",
             "referenceVessel": "Q-max",
-            "capacity": 258054
+            "capacity": 258054,
+            "isMarker": "true"
         },
         {
             "name": "Al Shamal",
             "imo": "9360893",
             "referenceVessel": "Q-flex",
-            "capacity": 213536
+            "capacity": 213536,
+            "isMarker": "true"
         },
         {
             "name": "Al Sheehaniya",
             "imo": "9360831",
             "referenceVessel": "Q-flex",
-            "capacity": 205963
+            "capacity": 205963,
+            "isMarker": "true"
         },
         {
             "name": "Al Thakhira",
@@ -263,13 +291,15 @@
             "name": "Al Thumama",
             "imo": "9360843",
             "referenceVessel": "Q-flex",
-            "capacity": 216235
+            "capacity": 216235,
+            "isMarker": "true"
         },
         {
             "name": "Al Utouriya",
             "imo": "9360867",
             "referenceVessel": "Q-flex",
-            "capacity": 211879
+            "capacity": 211879,
+            "isMarker": "true"
         },
         {
             "name": "Al Wajbah",
@@ -651,7 +681,8 @@
             "name": "Bu Samra",
             "imo": "9388833",
             "referenceVessel": "Q-max",
-            "capacity": 260928
+            "capacity": 260928,
+            "isMarker": "true"
         },
         {
             "name": "Bushu Maru",
@@ -915,7 +946,8 @@
             "name": "Duhail",
             "imo": "9337975",
             "referenceVessel": "Q-flex",
-            "capacity": 210100
+            "capacity": 210100,
+            "isMarker": "true"
         },
         {
             "name": "Dukhan",
@@ -1185,7 +1217,8 @@
             "name": "Fraiha",
             "imo": "9360817",
             "referenceVessel": "Q-flex",
-            "capacity": 205950
+            "capacity": 205950,
+            "isMarker": "true"
         },
         {
             "name": "Fsru Toscana",
@@ -1781,7 +1814,8 @@
             "name": "Kumul",
             "imo": "9613161",
             "referenceVessel": "Q-flex",
-            "capacity": 169147
+            "capacity": 169147,
+            "isMarker": "true"
         },
         {
             "name": "LNG Alliance",
@@ -1877,7 +1911,8 @@
             "name": "Lijmiliya",
             "imo": "9388819",
             "referenceVessel": "Q-max",
-            "capacity": 258019
+            "capacity": 258019,
+            "isMarker": "true"
         },
         {
             "name": "Lng Abalamabie",
@@ -2285,7 +2320,8 @@
             "name": "Maran Gas Leto",
             "imo": "9682576",
             "referenceVessel": "Q-flex",
-            "capacity": 174000
+            "capacity": 174000,
+            "isMarker": "true"
         },
         {
             "name": "Maran Gas Lindos",
@@ -2434,7 +2470,8 @@
             "name": "Mekaines",
             "imo": "9397303",
             "referenceVessel": "Q-max",
-            "capacity": 261137
+            "capacity": 261137,
+            "isMarker": "true"
         },
         {
             "name": "Merchant",
@@ -2452,7 +2489,8 @@
             "name": "Mesaimeer",
             "imo": "9337729",
             "referenceVessel": "Q-flex",
-            "capacity": 211986
+            "capacity": 211986,
+            "isMarker": "true"
         },
         {
             "name": "Methane Alison Victoria",
@@ -2578,7 +2616,8 @@
             "name": "Mozah",
             "imo": "9337755",
             "referenceVessel": "Q-max",
-            "capacity": 261988
+            "capacity": 261988,
+            "isMarker": "true"
         },
         {
             "name": "Mraweh",
@@ -2602,7 +2641,8 @@
             "name": "Murwab",
             "imo": "9360805",
             "referenceVessel": "Q-flex",
-            "capacity": 205971
+            "capacity": 205971,
+            "isMarker": "true"
         },
         {
             "name": "Myrina",
@@ -2728,7 +2768,8 @@
             "name": "Onaiza",
             "imo": "9397353",
             "referenceVessel": "Q-flex",
-            "capacity": 205963
+            "capacity": 205963,
+            "isMarker": "true"
         },
         {
             "name": "Ougarta",
@@ -2824,7 +2865,8 @@
             "name": "Pflng Satu",
             "imo": "9665085",
             "referenceVessel": "Q-flex",
-            "capacity": 167341
+            "capacity": 167341,
+            "isMarker": "true"
         },
         {
             "name": "Pgn Fsru Lampung",
@@ -2962,7 +3004,8 @@
             "name": "Rasheeda",
             "imo": "9443413",
             "referenceVessel": "Q-max",
-            "capacity": 260912
+            "capacity": 260912,
+            "isMarker": "true"
         },
         {
             "name": "Rias Baixas Knutsen",
@@ -3184,7 +3227,8 @@
             "name": "Shagra",
             "imo": "9418365",
             "referenceVessel": "Q-max",
-            "capacity": 261988
+            "capacity": 261988,
+            "isMarker": "true"
         },
         {
             "name": "Shahamah",
@@ -3412,7 +3456,8 @@
             "name": "Tembek",
             "imo": "9337731",
             "referenceVessel": "Q-flex",
-            "capacity": 211885
+            "capacity": 211885,
+            "isMarker": "true"
         },
         {
             "name": "Tenaga Empat",
@@ -3477,7 +3522,8 @@
             "name": "Umm Al Amad",
             "imo": "9360829",
             "referenceVessel": "Q-flex",
-            "capacity": 206958
+            "capacity": 206958,
+            "isMarker": "true"
         },
         {
             "name": "Umm Al Ashtan",
@@ -3495,7 +3541,8 @@
             "name": "Umm Slal",
             "imo": "9372731",
             "referenceVessel": "Q-max",
-            "capacity": 260928
+            "capacity": 260928,
+            "isMarker": "true"
         },
         {
             "name": "VIVIT Americas LNG",
@@ -3639,7 +3686,8 @@
             "name": "Zarga",
             "imo": "9431214",
             "referenceVessel": "Q-max",
-            "capacity": 261104
+            "capacity": 261104,
+            "isMarker": "true"
         },
         {
             "name": "Zekreet",

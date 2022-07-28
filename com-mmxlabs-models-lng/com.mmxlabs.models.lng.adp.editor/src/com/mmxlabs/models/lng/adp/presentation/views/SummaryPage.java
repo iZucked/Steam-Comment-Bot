@@ -649,19 +649,6 @@ public class SummaryPage extends ADPComposite {
 		super.dispose();
 	}
 
-	// private void updateDetailPaneInput(final EObject object) {
-	// EObject target = null;
-	// if (editorData.getAdpModel() != null) {
-	// target = editorData.getAdpModel().getSpotMarketsProfile();
-	// //
-	// previewViewer.setInput(editorData.getAdpModel().getFleetProfile().getVesselAvailabilities());
-	// previewViewer.setInput(null);
-	// }
-	//
-	// detailComposite.setInput(target);
-	//
-	// }
-
 	private void createColumn(final GridTableViewer viewer, final String name, final Function<ContractProfile<?, ?>, String> labelProvider) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
 		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());

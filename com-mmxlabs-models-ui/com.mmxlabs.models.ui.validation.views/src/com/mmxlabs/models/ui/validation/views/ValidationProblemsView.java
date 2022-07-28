@@ -57,7 +57,7 @@ import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class ValidationProblemsView extends ViewPart {
 
-	private static final Logger log = LoggerFactory.getLogger(ValidationProblemsView.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ValidationProblemsView.class);
 
 	public static final String VIEW_ID = "com.mmxlabs.models.ui.validation.views.ValidationProblemsView";
 
@@ -337,13 +337,13 @@ public class ValidationProblemsView extends ViewPart {
 							}
 							monitor.worked(1);
 						} catch (final PartInitException e) {
-							log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 						} finally {
 							monitor.done();
 						}
 					});
 				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}

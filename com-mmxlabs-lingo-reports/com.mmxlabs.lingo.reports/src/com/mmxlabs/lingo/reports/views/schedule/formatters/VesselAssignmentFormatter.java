@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports.views.schedule.formatters;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -92,9 +92,9 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			} else {
 				return AssignmentLabelProvider.getLabelFor(charterInMarket, false);
 			}
-		} else if (sequence.isSetVesselAvailability()) {
-			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);
+		} else if (sequence.isSetVesselCharter()) {
+			final VesselCharter vesselCharter = sequence.getVesselCharter();
+			return AssignmentLabelProvider.getLabelFor(vesselCharter, !useShortenedNames);
 		}
 		return sequence.getName();
 	}

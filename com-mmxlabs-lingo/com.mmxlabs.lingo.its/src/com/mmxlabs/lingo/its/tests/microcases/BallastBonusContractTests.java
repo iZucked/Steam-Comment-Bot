@@ -24,7 +24,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
@@ -79,11 +79,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLumpSumBallastBonusOff() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -95,11 +95,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -111,7 +111,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			Assertions.assertEquals(0, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -121,11 +121,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLumpSumBallastBonusOn_Matching() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -136,17 +136,17 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		createCharterPriceCurve();
 
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI),
 				TEST_CHARTER_CURVE_NAME);
-		vesselAvailability.setGenericCharterContract(ballastBonusContract);
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -159,7 +159,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			final long endEventPNL = -1_000_000;
 			Assertions.assertEquals(-endEventPNL, end.getBallastBonusFee());
 			
@@ -177,11 +177,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testLumpSumBallastBonusOn_NotMatching() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -192,14 +192,14 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "1000000");
-		vesselAvailability.setGenericCharterContract(ballastBonusContract);
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -212,7 +212,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			Assertions.assertEquals(0, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -222,7 +222,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNotionalJourneyBallastBonusOn_Matching() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -245,7 +245,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		fuelConsumption.add(fc3);
 		vessel.setMaxSpeed(20);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -256,16 +256,16 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
-		vesselAvailability.setGenericCharterContract(ballastBonusContract);
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -278,7 +278,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			long endEventPNL = -62_499;
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -289,7 +289,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNotionalJourneyBallastBonusOn_SuezCanal() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -324,7 +324,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		this.fleetModelBuilder.setRouteParameters(vessel, RouteOption.PANAMA, 90, 90, 90, 90, 36);
 		vessel.setRouteParametersOverride(true);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -335,21 +335,21 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", false, true,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
 
-		vesselAvailability.setGenericCharterContract(ballastBonusContract);
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 
 			for (GeneralPNLDetails details : end.getGeneralPNLDetails()) {
 				if (details instanceof CharterContractFeeDetails bbDetails) {
@@ -380,7 +380,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testNotionalJourneyBallastBonusOn_Matching_FindBestOption() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -402,7 +402,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		fuelConsumption.add(fc2);
 		fuelConsumption.add(fc3);
 		vessel.setMaxSpeed(20);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -413,16 +413,16 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)));
-		vesselAvailability.setGenericCharterContract(ballastBonusContract);
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -435,7 +435,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			long endEventPNL = -62_499;
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -446,7 +446,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotMarketsLumpSumBallastBonusOn_Matching() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -491,7 +491,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testSpotMarketsLumpSumBallastBonusOn_NotMatching() throws Exception {
 
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
@@ -536,11 +536,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterContractLumpSumBallastBonusOn_Matching() throws Exception {
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -549,16 +549,16 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
-		vesselAvailability.setGenericCharterContract(s);
+		vesselCharter.setGenericCharterContract(s);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -571,7 +571,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			long endEventPNL = -2_000_000;
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -581,11 +581,11 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCharterContractLumpSumBallastBonusOn_NotMatching() throws Exception {
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
@@ -594,15 +594,15 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8).build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
 
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 		@NonNull
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
-		cargo.setVesselAssignmentType(vesselAvailability);
+		cargo.setVesselAssignmentType(vesselCharter);
 
 		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
-		vesselAvailability.setGenericCharterContract(s);
+		vesselCharter.setGenericCharterContract(s);
 
 		evaluateTest(null, null, scenarioRunner -> {
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -614,7 +614,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
+			final EndEvent end = getEndEvent(vesselCharter);
 			Assertions.assertEquals(0L, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -628,7 +628,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void sanityCheckTestCharterContractOptimises() throws Exception {
-		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
@@ -651,12 +651,12 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		});
 	}
 
-	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
-		return ScheduleModelUtils.getStartEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
+	private StartEvent getStartEvent(final VesselCharter vesselCharter) {
+		return ScheduleModelUtils.getStartEvent(vesselCharter, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
-	protected EndEvent getEndEvent(final VesselAvailability vesselAvailability) {
-		return ScheduleModelUtils.getEndEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
+	protected EndEvent getEndEvent(final VesselCharter vesselCharter) {
+		return ScheduleModelUtils.getEndEvent(vesselCharter, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
 	private EndEvent getEndEvent(final CharterInMarket charterInMarket, int spotIndex) {

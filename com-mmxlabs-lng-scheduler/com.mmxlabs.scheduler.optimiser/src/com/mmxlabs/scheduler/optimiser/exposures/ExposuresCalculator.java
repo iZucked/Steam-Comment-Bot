@@ -82,39 +82,36 @@ public class ExposuresCalculator {
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
-	
+
 	@Inject
 	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
 	private boolean individualExposures;
-	
+
 	@Inject
 	private IExternalDateProvider externalDateProvider;
-	
+
 	@Inject
 	private PricingEventHelper pricingEventHelper;
-	
+
 	@Inject
 	private IExposureDataProvider exposureDataProvider;
-	
+
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
-	
+
 	final long HighScaleFactor = 1_000_000;
 	final int ScaleFactor = 1_000;
-	
+
 	public List<BasicExposureRecord> calculateExposures(final ICargoValueAnnotation cargoValueAnnotation, final IPortSlot portSlot) {
 		if (exposuresEnabled) {
-			//only support one load and one discharge
-			assert cargoValueAnnotation.getSlots().size() == 2;
-			final IPortSlot dischargeOption = cargoValueAnnotation.getSlots().get(1);
 
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
 
 			if (individualExposures && !lookupData.slotsToInclude.contains(portSlot.getId())) {
 				return Collections.emptyList();
 			}
-			
+
 			boolean isLong = false;
 			if (portSlot.getPortType() == PortType.Load) {
 				isLong = true;
@@ -129,7 +126,17 @@ public class ExposuresCalculator {
 			final String priceExpression = exposureDataProvider.getPriceExpression(portSlot);
 			int pricingTime = 0;
 			if (isLong) {
-				pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, (IDischargeOption) dischargeOption, cargoValueAnnotation);
+
+				// Pricing event assumes first discharge in the case of an LDD cargo
+				IDischargeOption firstDischarge = null;
+				for (IPortSlot ps : cargoValueAnnotation.getSlots()) {
+					if (ps instanceof IDischargeOption dOpt) {
+						firstDischarge = dOpt;
+						break;
+					}
+				}
+				assert firstDischarge != null;
+				pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, firstDischarge, cargoValueAnnotation);
 			} else {
 				pricingTime = pricingEventHelper.getDischargePricingDate((IDischargeOption) portSlot, cargoValueAnnotation);
 			}
@@ -143,18 +150,19 @@ public class ExposuresCalculator {
 
 		return Collections.emptyList();
 	}
-	
-	private List<BasicExposureRecord> calculateExposures(final String name, final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
-			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
-		
+
+	private List<BasicExposureRecord> calculateExposures(final String name, final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, final LocalDate pricingDate,
+			final boolean isLong, final ExposuresLookupData lookupData) {
+
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		result.add(calculatePhysicalExposure(volumeMMBTU, pricePerMMBTU, pricingDate, isLong));
 		result.addAll(calculateFinancialExposures(name, priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
 		return result;
 	}
-	
+
 	/**
 	 * For unit test use only
+	 * 
 	 * @param volumeMMBTU
 	 * @param priceExpression
 	 * @param pricingDate
@@ -162,16 +170,16 @@ public class ExposuresCalculator {
 	 * @param lookupData
 	 * @return
 	 */
-	public List<BasicExposureRecord> calculateExposuresForITS(final long volumeMMBTU, final String priceExpression, 
-			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
-		
+	public List<BasicExposureRecord> calculateExposuresForITS(final long volumeMMBTU, final String priceExpression, final LocalDate pricingDate, final boolean isLong,
+			final ExposuresLookupData lookupData) {
+
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		result.addAll(calculateFinancialExposures("", priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
 		return result;
 	}
-	
+
 	private BasicExposureRecord calculatePhysicalExposure(final long volumeMMBTU, final int pricePerMMBTU, final LocalDate arrivalTime, final boolean isLong) {
-		
+
 		final BasicExposureRecord physical = new BasicExposureRecord();
 		long volumeValue = Calculator.costFromVolume(volumeMMBTU, pricePerMMBTU);
 
@@ -186,12 +194,12 @@ public class ExposuresCalculator {
 
 		return physical;
 	}
-	
+
 	private List<BasicExposureRecord> calculateFinancialExposures(final String name, final String priceExpression, final long volumeMMBTU, final LocalDate pricingDate, //
-			final boolean isLong, final ExposuresLookupData lookupData){
+			final boolean isLong, final ExposuresLookupData lookupData) {
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		if (lookupData != null) {
-		final MarkedUpNode node = getExposureCoefficient(priceExpression, lookupData);
+			final MarkedUpNode node = getExposureCoefficient(priceExpression, lookupData);
 			if (node != null) {
 				final Collection<BasicExposureRecord> records = createOptimiserExposureRecord(name, node, pricingDate, volumeMMBTU, isLong, lookupData, priceExpression);
 				if (!records.isEmpty()) {
@@ -203,7 +211,8 @@ public class ExposuresCalculator {
 	}
 
 	/**
-	 * Determines the amount of exposure to a particular index which is created by a specific contract.
+	 * Determines the amount of exposure to a particular index which is created by a
+	 * specific contract.
 	 * 
 	 * @param priceExpression
 	 * @param lookupData
@@ -228,8 +237,8 @@ public class ExposuresCalculator {
 		return null;
 	}
 
-	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull MarkedUpNode node,
-			final LocalDate pricingDate, final long volumeInMMBtu, final boolean isLong, final ExposuresLookupData lookupData, final String priceExpression) {
+	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull MarkedUpNode node, final LocalDate pricingDate, final long volumeInMMBtu,
+			final boolean isLong, final ExposuresLookupData lookupData, final String priceExpression) {
 		final List<BasicExposureRecord> results = new LinkedList<>();
 
 		final InputRecord inputRecord = new InputRecord();
@@ -238,7 +247,7 @@ public class ExposuresCalculator {
 		if (enode instanceof ExposureRecords) {
 			final ExposureRecords exposureRecords = (ExposureRecords) enode;
 			for (final ExposureRecord record : exposureRecords.records) {
-				
+
 				final BasicExposureRecord exposure = new BasicExposureRecord();
 
 				exposure.setPortSlotName(name);
@@ -247,9 +256,9 @@ public class ExposuresCalculator {
 				exposure.setVolumeUnit(record.volumeUnit);
 				exposure.setTime(record.date);
 				exposure.setUnitPrice(record.unitPrice);
-				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume /10: record.mmbtuVolume/10);
-				exposure.setVolumeNative(isLong ? -record.nativeVolume /10: record.nativeVolume/10);
-				exposure.setVolumeValueNative(isLong ? -record.nativeValue /10: record.nativeValue/10);
+				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume / 10 : record.mmbtuVolume / 10);
+				exposure.setVolumeNative(isLong ? -record.nativeVolume / 10 : record.nativeVolume / 10);
+				exposure.setVolumeValueNative(isLong ? -record.nativeValue / 10 : record.nativeValue / 10);
 
 				final BasicHolidayCalendar holidays = lookupData.holidayCalendars.get(record.curveName);
 				final BasicPricingCalendar pricingCalendar = lookupData.pricingCalendars.get(record.curveName);
@@ -308,8 +317,7 @@ public class ExposuresCalculator {
 		LocalDate date;
 		String volumeUnit;
 
-		ExposureRecord(final String curveName, final String currencyUnit, final int unitPrice, final long nativeVolume, 
-				final long nativeValue, final long mmbtuVolume, final LocalDate date,
+		ExposureRecord(final String curveName, final String currencyUnit, final int unitPrice, final long nativeVolume, final long nativeValue, final long mmbtuVolume, final LocalDate date,
 				final String volumeUnit) {
 			this.curveName = curveName;
 			this.currencyUnit = currencyUnit;
@@ -326,8 +334,7 @@ public class ExposuresCalculator {
 		long volumeInMMBTU;
 	}
 
-	private @NonNull Pair<Integer, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, 
-			final LocalDate date, final ExposuresLookupData lookupData) {
+	private @NonNull Pair<Integer, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final LocalDate date, final ExposuresLookupData lookupData) {
 		final int dayOfMonth = date.getDayOfMonth();
 		if (node instanceof ShiftNode) {
 			final ShiftNode shiftNode = (ShiftNode) node;
@@ -344,13 +351,12 @@ public class ExposuresCalculator {
 			final ExposureRecords records = new ExposureRecords();
 			int price = 0;
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
-				final Pair<Integer, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), 
-						lookupData);
+				final Pair<Integer, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
 				if (p.getSecond() instanceof ExposureRecords) {
 					ExposureRecords result = (ExposureRecords) p.getSecond();
 					price += p.getFirst();
-					result = modify(result, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, c.nativeVolume / months, 
-							c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
+					result = modify(result,
+							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
 					records.records.addAll(result.records);
 				} else if (p.getSecond() instanceof Constant) {
 					return new Pair<>(p.getFirst(), p.getSecond());
@@ -364,7 +370,7 @@ public class ExposuresCalculator {
 			final Pair<Integer, IExposureNode> baseNodeData = getExposureNode(inputRecord, scurveNode.getBase(), date, lookupData);
 
 			double timesValue;
-			double foo = baseNodeData.getFirst() / (double)HighScaleFactor;
+			double foo = baseNodeData.getFirst() / (double) HighScaleFactor;
 			if (foo < scurveNode.getFirstThreshold()) {
 				timesValue = scurveNode.getA1();
 			} else if (foo > scurveNode.getSecondThreshold()) {
@@ -389,7 +395,7 @@ public class ExposuresCalculator {
 		} else if (node instanceof SplitNode) {
 			final SplitNode splitNode = (SplitNode) node;
 			if (node.getChildren().size() != 3) {
-				throw new IllegalStateException();	
+				throw new IllegalStateException();
 			}
 
 			final Pair<Integer, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
@@ -422,8 +428,8 @@ public class ExposuresCalculator {
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					return new Pair<>(pc0.getFirst() + pc1.getFirst(), c1);
 				} else {
-					return new Pair<>(pc0.getFirst() + pc1.getFirst(), merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit, c_0.unitPrice,
-							c_0.nativeVolume + c_1.nativeVolume, c_0.nativeValue + c_1.nativeValue, c_0.mmbtuVolume + c_1.mmbtuVolume, c_0.date, c_0.volumeUnit)));
+					return new Pair<>(pc0.getFirst() + pc1.getFirst(), merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit,
+							c_0.unitPrice, c_0.nativeVolume + c_1.nativeVolume, c_0.nativeValue + c_1.nativeValue, c_0.mmbtuVolume + c_1.mmbtuVolume, c_0.date, c_0.volumeUnit)));
 				}
 			} else if (operator.equals("-")) {
 				if (c0 instanceof Constant && c1 instanceof Constant) {
@@ -434,35 +440,40 @@ public class ExposuresCalculator {
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(),
 							modify((ExposureRecords) c1, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date, c.volumeUnit)));
 				} else {
-					final ExposureRecords newC1 = modify((ExposureRecords) c1, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date, c.volumeUnit));
+					final ExposureRecords newC1 = modify((ExposureRecords) c1,
+							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date, c.volumeUnit));
 					return new Pair<>(pc0.getFirst() - pc1.getFirst(), merge((ExposureRecords) c0, newC1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit, c_0.unitPrice,
 							c_0.nativeVolume + c_1.nativeVolume, c_0.nativeValue + c_1.nativeValue, c_0.mmbtuVolume + c_1.mmbtuVolume, c_0.date, c_0.volumeUnit)));
 				}
 			} else if (operator.equals("*")) {
 				if (c0 instanceof Constant && c1 instanceof Constant) {
-					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), new Constant((int) multiplyConstantByConstant(((Constant) c0).getConstant(), ((Constant) c1).getConstant()), ""));
+					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()),
+							new Constant((int) multiplyConstantByConstant(((Constant) c0).getConstant(), ((Constant) c1).getConstant()), ""));
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
 					final Constant const_c1 = (Constant) c1;
 					final int constant = const_c1.getConstant();
-					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), modify((ExposureRecords) c0,
-							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
+					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()),
+							modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant),
+									multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					final Constant const_c0 = (Constant) c0;
 					final int constant = ((Constant) c0).getConstant();
-					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), modify((ExposureRecords) c1,
-							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
+					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()),
+							modify((ExposureRecords) c1, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant),
+									multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
 				} else {
-					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()), merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit, c_0.unitPrice,
-							(c_0.nativeVolume * c_1.nativeVolume)/10, (c_0.nativeValue * c_1.nativeValue)/10, (c_0.mmbtuVolume * c_1.mmbtuVolume)/10, c_0.date, c_0.volumeUnit)));
+					return new Pair<>((int) multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()),
+							merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.curveName, c_0.currencyUnit, c_0.unitPrice,
+									(c_0.nativeVolume * c_1.nativeVolume) / 10, (c_0.nativeValue * c_1.nativeValue) / 10, (c_0.mmbtuVolume * c_1.mmbtuVolume) / 10, c_0.date, c_0.volumeUnit)));
 				}
 			} else if (operator.equals("/")) {
-				
+
 				if (c0 instanceof Constant && c1 instanceof Constant) {
 					final int value = (int) (pc1.getFirst() == 0 ? 0 : divideConstantByConstant(pc0.getFirst(), pc1.getFirst()));
 					final Constant const_c0 = (Constant) c0;
 					final Constant const_c1 = (Constant) c1;
 					final int newConstant = (int) (const_c1.getConstant() == 0 ? 0 : divideConstantByConstant(const_c0.getConstant(), const_c1.getConstant()));
-					
+
 					return new Pair<>(value, new Constant(newConstant, ""));
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
 					final int value = pc1.getFirst() == 0 ? 0 : (int) divideVolumeByConstant(pc0.getFirst(), pc1.getFirst());
@@ -473,11 +484,11 @@ public class ExposuresCalculator {
 						return new Pair<>(value, modify((ExposureRecords) c0, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, 0, 0, 0, c.date, c.volumeUnit)));
 					} else {
 						return new Pair<>(value, modify((ExposureRecords) c0, c -> {
-									final long nativeVolume = divideVolumeByConstant(c.nativeVolume, constant);
-									final long nativeValue = divideVolumeByConstant(c.nativeValue, constant);
-									final long mmbtuVolume = divideVolumeByConstant(c.mmbtuVolume, constant);
-									return new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, nativeVolume, nativeValue, mmbtuVolume, c.date, c.volumeUnit);
-								}));
+							final long nativeVolume = divideVolumeByConstant(c.nativeVolume, constant);
+							final long nativeValue = divideVolumeByConstant(c.nativeValue, constant);
+							final long mmbtuVolume = divideVolumeByConstant(c.mmbtuVolume, constant);
+							return new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, nativeVolume, nativeValue, mmbtuVolume, c.date, c.volumeUnit);
+						}));
 					}
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					final int value = (int) (pc1.getFirst() == 0 ? 0 : divideConstantByVolume(pc0.getFirst(), pc1.getFirst()));
@@ -506,8 +517,8 @@ public class ExposuresCalculator {
 			} else if (operator.equals("%")) {
 
 				if (c0 instanceof Constant && c1 instanceof Constant) {
-					return new Pair<>((int)(multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) /100), //
-							new Constant((int)(multiplyConstantByConstant(((Constant) c0).getConstant(), ((Constant) c1).getConstant()) /100), ""));
+					return new Pair<>((int) (multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100), //
+							new Constant((int) (multiplyConstantByConstant(((Constant) c0).getConstant(), ((Constant) c1).getConstant()) / 100), ""));
 				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
 					assert false;
 					throw new UnsupportedOperationException();
@@ -515,8 +526,9 @@ public class ExposuresCalculator {
 					// c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
 				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
 					final int constant = ((Constant) c0).getConstant() / 100;
-					return new Pair<>((int)(multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) /100), modify((ExposureRecords) c1,
-							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
+					return new Pair<>((int) (multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100),
+							modify((ExposureRecords) c1, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, multiplyVolumeByConstant(c.nativeVolume, constant),
+									multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
 				} else {
 					// return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new
 					// ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume - c_1.nativeVolume,
@@ -545,7 +557,8 @@ public class ExposuresCalculator {
 				if (factor.getTo().equalsIgnoreCase(MMBTU)) {
 					if (factor.getFrom().equalsIgnoreCase(commodityNode.getVolumeUnit())) {
 						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION)) {
-							// If we are in this situation, that means, that volume is *ACTUALLY* in native units
+							// If we are in this situation, that means, that volume is *ACTUALLY* in native
+							// units
 							volumeInMMBTU /= factor.getFactor();
 						} else {
 							nativeVolume *= factor.getFactor();
@@ -555,9 +568,8 @@ public class ExposuresCalculator {
 				}
 			}
 
-			final ExposureRecord record = new ExposureRecord(commodityNode.getName(), commodityNode.getCurrencyUnit(), 
-					unitPrice, nativeVolume, Calculator.costFromVolume(nativeVolume, unitPrice), volumeInMMBTU, date,
-					commodityNode.getVolumeUnit());
+			final ExposureRecord record = new ExposureRecord(commodityNode.getName(), commodityNode.getCurrencyUnit(), unitPrice, nativeVolume, Calculator.costFromVolume(nativeVolume, unitPrice),
+					volumeInMMBTU, date, commodityNode.getVolumeUnit());
 			return new Pair<>(unitPrice, new ExposureRecords(record));
 		} else if (node instanceof CurrencyNode) {
 
@@ -568,13 +580,13 @@ public class ExposuresCalculator {
 			final ISeries series = currencyIndices.getSeries(currencyNode.getName()).get();
 			final Number evaluate = series.evaluate(Hours.between(externalDateProvider.getEarliestTime().toLocalDate(), date));
 
-			final int unitPrice =  OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
+			final int unitPrice = OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 
 			return new Pair<>(unitPrice, new Constant(1_000_000, ""));
 		} else if (node instanceof ConversionNode) {
 			final ConversionNode conversionNode = (ConversionNode) node;
-			//Check first part!
-			return new Pair<>((int)(conversionNode.getFactor().getFactor() * HighScaleFactor), new Constant(1_000_000, conversionNode.getToUnits()));
+			// Check first part!
+			return new Pair<>((int) (conversionNode.getFactor().getFactor() * HighScaleFactor), new Constant(1_000_000, conversionNode.getToUnits()));
 		} else if (node instanceof MaxFunctionNode) {
 			if (node.getChildren().size() == 0) {
 				throw new IllegalStateException();
@@ -639,31 +651,31 @@ public class ExposuresCalculator {
 		}
 		return n;
 	}
-	
+
 	private long multiplyVolumeByConstant(final long volume, final long constant) {
 		return Calculator.costFromVolume(volume, constant);
 	}
-	
+
 	private long divideVolumeByConstant(final long volume, final long constant) {
-		return (volume * HighScaleFactor) / constant ;
+		return (volume * HighScaleFactor) / constant;
 	}
-	
+
 	private long divideConstantByVolume(final long constant, final long volume) {
 		return (constant * ScaleFactor) / volume;
 	}
-	
+
 	private long divideVolumeByVolume(final long volumeA, final long volumeB) {
 		return (volumeA * ScaleFactor) / volumeB;
 	}
-	
+
 	private long divideConstantByConstant(final int constantA, final int constantB) {
-		return (constantA * HighScaleFactor) /constantB;
+		return (constantA * HighScaleFactor) / constantB;
 	}
-	
+
 	private long multiplyConstantByConstant(final long constantA, final long constantB) {
 		return (constantA * constantB) / HighScaleFactor;
 	}
-	
+
 	private void applyProRataCorrection(final BasicPricingCalendar pricingCalendar, final BasicHolidayCalendar holidays, final BasicExposureRecord exposure) {
 		if (pricingCalendar == null && holidays == null) {
 			return;
@@ -685,7 +697,7 @@ public class ExposuresCalculator {
 			exposure.setVolumeValueNative(multiplyVolumeByConstant(exposure.getVolumeValueNative(), correction));
 		}
 	}
-	
+
 	private double getProRataCoefficient(final BasicPricingCalendarEntry pricingCalendarEntry, final BasicHolidayCalendar holidays, final LocalDate cutoff) {
 		double i = 1.0;
 		double k = 1.0;
@@ -724,4 +736,3 @@ public class ExposuresCalculator {
 		return i / k;
 	}
 }
-

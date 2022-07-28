@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
@@ -41,11 +41,11 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 		Cargo cargo;
 	}
 
-	private CargoModel buildCargoModel(final List<VesselAvailability> vesselAvailabilities) {
+	private CargoModel buildCargoModel(final List<VesselCharter> vesselAvailabilities) {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
-		final EList<VesselAvailability> cargoModelVesselAvailabilities = cargoModel.getVesselAvailabilities();
-		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-			cargoModelVesselAvailabilities.add(vesselAvailability);
+		final EList<VesselCharter> cargoModelVesselAvailabilities = cargoModel.getVesselCharters();
+		for (final VesselCharter vesselCharter : vesselAvailabilities) {
+			cargoModelVesselAvailabilities.add(vesselCharter);
 		}
 		return cargoModel;
 	}
@@ -61,16 +61,16 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 		return lngScenarioModel;
 	}
 
-	private VesselAvailability buildVesselAvailability(final Vessel vessel) {
-		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		vesselAvailability.setVessel(vessel);
-		return vesselAvailability;
+	private VesselCharter buildVesselCharter(final Vessel vessel) {
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setVessel(vessel);
+		return vesselCharter;
 	}
 
-	private List<VesselAvailability> buildVesselAvailabilities(final String[] names) {
-		final List<VesselAvailability> vesselAvailabilities = new ArrayList<>();
+	private List<VesselCharter> buildVesselAvailabilities(final String[] names) {
+		final List<VesselCharter> vesselAvailabilities = new ArrayList<>();
 		for (final String name : names) {
-			vesselAvailabilities.add(buildVesselAvailability(buildVessel(name)));
+			vesselAvailabilities.add(buildVesselCharter(buildVessel(name)));
 		}
 		return vesselAvailabilities;
 	}
@@ -84,7 +84,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	private MinimalScenario createDefaultMinimalScenario() {
 		final MinimalScenario minimalScenario = new MinimalScenario();
 		final String[] vesselNames = new String[] { "Vessel 1", "Vessel 2", "Vessel 3" };
-		final List<VesselAvailability> vesselAvailabilities = buildVesselAvailabilities(vesselNames);
+		final List<VesselCharter> vesselAvailabilities = buildVesselAvailabilities(vesselNames);
 		minimalScenario.cargoModel = buildCargoModel(vesselAvailabilities);
 
 		minimalScenario.spotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
@@ -103,18 +103,18 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	}
 
 	private void changeVesselName(final LNGScenarioModel model, final int index, final String name) {
-		final List<VesselAvailability> vessels = model.getCargoModel().getVesselAvailabilities();
+		final List<VesselCharter> vessels = model.getCargoModel().getVesselCharters();
 		vessels.get(index).getVessel().setName(name);
 	}
 
 	private void removeVessel(final LNGScenarioModel model, final int index) {
-		final List<VesselAvailability> vessels = model.getCargoModel().getVesselAvailabilities();
+		final List<VesselCharter> vessels = model.getCargoModel().getVesselCharters();
 		vessels.remove(index);
 	}
 
-	private void addVesselAvailability(final LNGScenarioModel model, final Vessel vessel) {
-		final List<VesselAvailability> vesselAvailabilities = model.getCargoModel().getVesselAvailabilities();
-		vesselAvailabilities.add(buildVesselAvailability(vessel));
+	private void addVesselCharter(final LNGScenarioModel model, final Vessel vessel) {
+		final List<VesselCharter> vesselAvailabilities = model.getCargoModel().getVesselCharters();
+		vesselAvailabilities.add(buildVesselCharter(vessel));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	}
 
 	@Test
-	public void testRemoveVesselAvailability() {
+	public void testRemoveVesselCharter() {
 		final MinimalScenario minimalScenario = createDefaultMinimalScenario();
 		// test removed vessel is picked up
 		removeVessel(minimalScenario.scenarioModel, 0);
@@ -133,10 +133,10 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	}
 
 	@Test
-	public void testAddVesselAvailability() {
+	public void testAddVesselCharter() {
 		final MinimalScenario minimalScenario = createDefaultMinimalScenario();
 		// test removed vessel is picked up
-		addVesselAvailability(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
+		addVesselCharter(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 	}
 
@@ -168,7 +168,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 		changeVesselName(minimalScenario.scenarioModel, 0, "Vessel 1 Changed 2");
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
-		addVesselAvailability(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
+		addVesselCharter(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		changeVesselName(minimalScenario.scenarioModel, 0, "Vessel 1 Changed 3");
@@ -188,19 +188,19 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		// add a vessel availability
-		addVesselAvailability(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
+		addVesselCharter(minimalScenario.scenarioModel, buildVessel("Vessel 4"));
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		// add a null vessel availability
-		addVesselAvailability(minimalScenario.scenarioModel, null);
+		addVesselCharter(minimalScenario.scenarioModel, null);
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		// add a vessel availability
-		addVesselAvailability(minimalScenario.scenarioModel, buildVessel("Vessel 5"));
+		addVesselCharter(minimalScenario.scenarioModel, buildVessel("Vessel 5"));
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		// add a vessel availability
-		addVesselAvailability(minimalScenario.scenarioModel, buildVessel("Vessel 6"));
+		addVesselCharter(minimalScenario.scenarioModel, buildVessel("Vessel 6"));
 		testNamesInValueProvider(minimalScenario.cargoModel, minimalScenario.cargo, minimalScenario.referenceValueProvider);
 
 		// remove a vessel availability
@@ -211,14 +211,14 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	private void testNamesInValueProvider(final CargoModel cargoModel, final Cargo cargo, final IReferenceValueProvider valueProvider) {
 		final List<Pair<String, EObject>> t = valueProvider.getAllowedValues(cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 		for (final Pair<String, EObject> p : t) {
-			Assertions.assertTrue(getNamesFromModel(cargoModel.getVesselAvailabilities()).contains(p.getFirst()));
+			Assertions.assertTrue(getNamesFromModel(cargoModel.getVesselCharters()).contains(p.getFirst()));
 		}
 	}
 
-	private Set<String> getNamesFromModel(final EList<VesselAvailability> objects) {
+	private Set<String> getNamesFromModel(final EList<VesselCharter> objects) {
 		final Set<String> s = new HashSet<String>();
 		s.add("<Unassigned>");
-		for (final VesselAvailability object : objects) {
+		for (final VesselCharter object : objects) {
 			final Vessel vessel = object.getVessel();
 			if (vessel != null) {
 				s.add(vessel.getName());

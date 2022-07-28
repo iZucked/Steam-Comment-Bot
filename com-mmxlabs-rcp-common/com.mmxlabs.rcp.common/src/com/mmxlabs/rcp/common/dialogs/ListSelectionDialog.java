@@ -17,10 +17,13 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -47,11 +50,14 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.mmxlabs.common.Pair;
 
 /**
- * A list picking dialog which is a bit more flexible than the RCP-provided default
+ * A list picking dialog which is a bit more flexible than the RCP-provided
+ * default
  * 
- * Additional features include having extra columns, tree support, and having a quick filter of the list.
+ * Additional features include having extra columns, tree support, and having a
+ * quick filter of the list.
  * 
- * TODO selection management, filtering, sensible size on opening, collapse unneeded groups.
+ * TODO selection management, filtering, sensible size on opening, collapse
+ * unneeded groups.
  * 
  * @author hinton
  * 
@@ -59,7 +65,7 @@ import com.mmxlabs.common.Pair;
 public class ListSelectionDialog extends Dialog {
 	private String title = "Select elements";
 	private String message = "Choose some elements";
-	private CheckboxTreeViewer viewer;
+	private TreeViewer viewer;
 	private final ILabelProvider labelProvider;
 	private final GroupedElementProvider contentProvider;
 	private final Object input;
@@ -68,6 +74,7 @@ public class ListSelectionDialog extends Dialog {
 	private final HashSet<Object> filteredElements = new HashSet<>();
 	private Object[] initialSelection = new Object[0];
 	private Object[] dialogResult;
+	protected boolean multiSelect = true;
 
 	public ColumnLabelProvider wrapColumnLabelProvider(final ColumnLabelProvider clp, final boolean isFirstColumn) {
 		return new WrappedColumnLabelProvider(clp, isFirstColumn);
@@ -118,18 +125,28 @@ public class ListSelectionDialog extends Dialog {
 					}
 				}
 
-				// remove from allSelectedElements everything which is still showing
-				// in the viewer
-				allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
-				// add to allSelectedElements everything showing and selected in the viewer
-				allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
-				// re-filter the viewer
-				viewer.refresh();
-				// and select only those elements which are in allSelectedElements
-				viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
+				if (viewer instanceof CheckboxTreeViewer treeViewer) {
+
+					// remove from allSelectedElements everything which is still showing
+					// in the viewer
+					allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
+					// add to allSelectedElements everything showing and selected in the viewer
+					allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(treeViewer.getCheckedElements())));
+					// re-filter the viewer
+					treeViewer.refresh();
+					// and select only those elements which are in allSelectedElements
+					treeViewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
+				}
 			}
 		});
-		viewer = new CheckboxTreeViewer(inner, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
+
+		int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL;
+		if (multiSelect) {
+			style |= SWT.MULTI | SWT.CHECK;
+			viewer = new CheckboxTreeViewer(inner, style);
+		} else {
+			viewer = new TreeViewer(inner, style);
+		}
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(labelProvider);
 		viewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -186,14 +203,24 @@ public class ListSelectionDialog extends Dialog {
 
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
 		viewer.setInput(input);
-		viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
-		viewer.addCheckStateListener(new ICheckStateListener() {
-			@Override
-			public void checkStateChanged(final CheckStateChangedEvent event) {
-				// propagate check marks
-			}
-		});
 
+		if (multiSelect && viewer instanceof CheckboxTreeViewer treeViewer) {
+			treeViewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
+			treeViewer.addCheckStateListener(new ICheckStateListener() {
+				@Override
+				public void checkStateChanged(final CheckStateChangedEvent event) {
+					// propagate check marks
+				}
+			});
+		} else {
+			viewer.addDoubleClickListener(new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					okPressed();
+				}
+			});
+		}
 		viewer.expandAll();
 		for (final TreeColumn column : viewer.getTree().getColumns()) {
 			column.pack();
@@ -204,13 +231,18 @@ public class ListSelectionDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		// Remove everything shown in the viewer from allSelectedElements
-		allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
-		// Add everything selected in the viewer from allSelectedElements
-		allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
+		if (multiSelect && viewer instanceof CheckboxTreeViewer treeViewer) {
 
-		// Return the contents of allSelectedElements, sorted alphabetically
-		dialogResult = allSelectedElements.toArray();
+			// Remove everything shown in the viewer from allSelectedElements
+			allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
+			// Add everything selected in the viewer from allSelectedElements
+			allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(treeViewer.getCheckedElements())));
+
+			// Return the contents of allSelectedElements, sorted alphabetically
+			dialogResult = allSelectedElements.toArray();
+		} else {
+			dialogResult = contentProvider.getInputElements(viewer.getStructuredSelection().toArray());
+		}
 
 		final Comparator<Object> c = new Comparator<Object>() {
 
@@ -240,8 +272,9 @@ public class ListSelectionDialog extends Dialog {
 	}
 
 	/**
-	 * Add a grouping to any hierarchy displayed; the given label provider will be used to get a string for each input object; all inputs with the same string will be grouped under a "virtual" element
-	 * with that name
+	 * Add a grouping to any hierarchy displayed; the given label provider will be
+	 * used to get a string for each input object; all inputs with the same string
+	 * will be grouped under a "virtual" element with that name
 	 * 
 	 * @param labelProvider
 	 */
@@ -287,8 +320,9 @@ public class ListSelectionDialog extends Dialog {
 	}
 
 	/**
-	 * Returns the text which the filter box searches through per display row element. Search is done on a trimmed string, so concatenating fields with whitespace will allow multiple fields to be
-	 * searched.
+	 * Returns the text which the filter box searches through per display row
+	 * element. Search is done on a trimmed string, so concatenating fields with
+	 * whitespace will allow multiple fields to be searched.
 	 * 
 	 * @param element
 	 * @return
@@ -299,8 +333,10 @@ public class ListSelectionDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(final Composite parent) {
-		createButton(parent, IDialogConstants.SELECT_ALL_ID, "Select All", false);
-		createButton(parent, IDialogConstants.DESELECT_ALL_ID, "Select None", false);
+		if (multiSelect) {
+			createButton(parent, IDialogConstants.SELECT_ALL_ID, "Select All", false);
+			createButton(parent, IDialogConstants.DESELECT_ALL_ID, "Select None", false);
+		}
 		super.createButtonsForButtonBar(parent);
 
 	}
@@ -317,18 +353,22 @@ public class ListSelectionDialog extends Dialog {
 	}
 
 	private void deselectAll() {
-		final TreeItem[] items = viewer.getTree().getItems();
-		for (int i = 0; i < items.length; i++) {
-			final Object element = items[i].getData();
-			viewer.setSubtreeChecked(element, false);
+		if (viewer instanceof CheckboxTreeViewer treeViewer) {
+			final TreeItem[] items = treeViewer.getTree().getItems();
+			for (int i = 0; i < items.length; i++) {
+				final Object element = items[i].getData();
+				treeViewer.setSubtreeChecked(element, false);
+			}
 		}
 	}
 
 	private void selectAll() {
-		final TreeItem[] items = viewer.getTree().getItems();
-		for (int i = 0; i < items.length; i++) {
-			final Object element = items[i].getData();
-			viewer.setSubtreeChecked(element, true);
+		if (viewer instanceof CheckboxTreeViewer treeViewer) {
+			final TreeItem[] items = treeViewer.getTree().getItems();
+			for (int i = 0; i < items.length; i++) {
+				final Object element = items[i].getData();
+				treeViewer.setSubtreeChecked(element, true);
+			}
 		}
 	}
 

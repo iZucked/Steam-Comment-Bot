@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -168,10 +168,10 @@ public class CargoAllocationUtils {
 			return "";
 		}
 
-		if (sequence.isSetVesselAvailability()) {
-			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			if (vesselAvailability != null) {
-				final Vessel vessel = vesselAvailability.getVessel();
+		if (sequence.isSetVesselCharter()) {
+			final VesselCharter vesselCharter = sequence.getVesselCharter();
+			if (vesselCharter != null) {
+				final Vessel vessel = vesselCharter.getVessel();
 				if (vessel != null) {
 					return vessel.getName();
 				}

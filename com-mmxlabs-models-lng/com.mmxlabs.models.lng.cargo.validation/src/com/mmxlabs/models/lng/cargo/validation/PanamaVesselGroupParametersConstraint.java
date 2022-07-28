@@ -141,7 +141,7 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 	private void checkDefaultVesselGroupPresent(final IValidationContext ctx, final List<IStatus> statuses, @NonNull final CanalBookings canalBookings,
 			final List<VesselGroupCanalParameters> vesselGroupParameters) {
 		if (!isDefaultVesselGroupPresent(vesselGroupParameters)) {
-			addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP, "A default booking code with no vessels must be defined.");
+			addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, "A default booking code with no vessels must be defined.");
 		}
 	}
 

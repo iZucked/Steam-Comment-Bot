@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -355,7 +355,7 @@ public class CargoImporter extends DefaultClassImporter {
 						if (rootObject instanceof LNGScenarioModel) {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 							final CargoModel cargoModel = scenarioModel.getCargoModel();
-							for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+							for (final VesselCharter va : cargoModel.getVesselCharters()) {
 								// Only use charter index of 1.
 								if (va.getCharterNumber() == 1) {
 									final Vessel vessel = va.getVessel();

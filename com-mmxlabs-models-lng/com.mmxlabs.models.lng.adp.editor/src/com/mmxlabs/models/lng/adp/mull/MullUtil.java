@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
@@ -27,10 +28,15 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.AllowedArrivalTimeRecord;
 import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.mull.algorithm.AdpGlobalState;
 import com.mmxlabs.models.lng.adp.mull.algorithm.AlgorithmState;
+import com.mmxlabs.models.lng.adp.mull.algorithm.AnyTimeSpecifier;
+import com.mmxlabs.models.lng.adp.mull.algorithm.DateTimeConstrainedLiftTimeSpecifier;
+import com.mmxlabs.models.lng.adp.mull.algorithm.SingleTimeSetLiftTimeSpecifier;
 import com.mmxlabs.models.lng.adp.mull.algorithm.GlobalStatesContainer;
+import com.mmxlabs.models.lng.adp.mull.algorithm.ILiftTimeSpecifier;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IMullAlgorithm;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IMullDischargeWrapper;
 import com.mmxlabs.models.lng.adp.mull.algorithm.IRollingWindow;
@@ -63,7 +69,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -137,7 +143,8 @@ public class MullUtil {
 		return new AdpGlobalState(adpStart, adpEnd, nominalMarket);
 	}
 
-	public static InventoryGlobalState buildInventoryGlobalState(final Inventory inventory, final AdpGlobalState adpGlobalState, final LNGScenarioModel sm) {
+	public static InventoryGlobalState buildInventoryGlobalState(final Inventory inventory, final List<AllowedArrivalTimeRecord> allowedArrivalTimes, final AdpGlobalState adpGlobalState,
+			final LNGScenarioModel sm) {
 		if (inventory.getPort() == null) {
 			throw new IllegalStateException("Inventory must be at a port");
 		}
@@ -149,10 +156,29 @@ public class MullUtil {
 			throw new IllegalStateException("Inventory must correspond to purchase contract");
 		}
 		final PurchaseContract inventoryPurchaseContract = optInventoryPurchaseContract.get();
-		return new InventoryGlobalState(inventory, inventoryPurchaseContract, adpGlobalState.getStartDateTime(), adpGlobalState.getEndDateTimeExclusive());
+		final ILiftTimeSpecifier liftTimeSpecifier = createLiftTimeSpecifier(allowedArrivalTimes, adpGlobalState);
+		return new InventoryGlobalState(inventory, inventoryPurchaseContract, adpGlobalState.getStartDateTime(), adpGlobalState.getEndDateTimeExclusive(), liftTimeSpecifier);
 	}
 
-	public static MullGlobalState buildMullGlobalState(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final LNGScenarioModel sm) {
+	private static ILiftTimeSpecifier createLiftTimeSpecifier(final List<AllowedArrivalTimeRecord> allowedArrivalTimes, final AdpGlobalState adpGlobalState) {
+		if (allowedArrivalTimes.isEmpty()) {
+			return new AnyTimeSpecifier();
+		} else if (allowedArrivalTimes.size() == 1) {
+			final AllowedArrivalTimeRecord allowedArrivalTimeRecord = allowedArrivalTimes.get(0);
+
+			if (!allowedArrivalTimeRecord.getPeriodStart().isAfter(adpGlobalState.getStartDate())) {
+				final List<Integer> allowedTimes = allowedArrivalTimeRecord.getAllowedTimes();
+				if (allowedTimes.size() == 24) {
+					return new AnyTimeSpecifier();
+				} else {
+					return new SingleTimeSetLiftTimeSpecifier(allowedTimes);
+				}
+			}
+		}
+		return new DateTimeConstrainedLiftTimeSpecifier(allowedArrivalTimes);
+	}
+
+	public static MullGlobalState buildMullGlobalState(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final LNGScenarioModel sm, final Predicate<BaseLegalEntity> isFirstPartyEntity) {
 		final int loadWindowInDays = mullProfile.getWindowSize();
 		final int volumeFlex = mullProfile.getVolumeFlex();
 		final int fullCargoLotValue = mullProfile.getFullCargoLotValue();
@@ -164,16 +190,14 @@ public class MullUtil {
 			}
 			cargoesToKeep.add(mullCargoWrapper);
 		}
-		final Set<BaseLegalEntity> firstPartyEntities = new HashSet<>();
-		for (final BaseLegalEntity entity : ScenarioModelUtil.getCommercialModel(sm).getEntities()) {
-			if (!entity.isThirdParty()) {
-				firstPartyEntities.add(entity);
-			}
-		}
+
+		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
+				.filter(isFirstPartyEntity) //
+				.collect(Collectors.toSet());
 		return new MullGlobalState(loadWindowInDays, volumeFlex, fullCargoLotValue, cargoVolume, cargoesToKeep, firstPartyEntities);
 	}
 
-	public static GlobalStatesContainer buildDefaultGlobalStates(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final ADPModel adpModel, final LNGScenarioModel sm) {
+	public static GlobalStatesContainer buildDefaultGlobalStates(final com.mmxlabs.models.lng.adp.MullProfile mullProfile, final ADPModel adpModel, final LNGScenarioModel sm, final Predicate<BaseLegalEntity> isFirstPartyEntity) {
 		final AdpGlobalState adpGlobalState = MullUtil.buildAdpGlobalState(adpModel);
 		final List<InventoryGlobalState> inventoryGlobalStates = new ArrayList<>(mullProfile.getInventories().size());
 		for (final com.mmxlabs.models.lng.adp.MullSubprofile subprofile : mullProfile.getInventories()) {
@@ -181,9 +205,9 @@ public class MullUtil {
 			if (inventory == null) {
 				throw new IllegalStateException("Mull subprofile must be associated with an inventory");
 			}
-			inventoryGlobalStates.add(MullUtil.buildInventoryGlobalState(inventory, adpGlobalState, sm));
+			inventoryGlobalStates.add(MullUtil.buildInventoryGlobalState(inventory, subprofile.getAllowedArrivalTimes(), adpGlobalState, sm));
 		}
-		final MullGlobalState mullGlobalState = MullUtil.buildMullGlobalState(mullProfile, sm);
+		final MullGlobalState mullGlobalState = MullUtil.buildMullGlobalState(mullProfile, sm, isFirstPartyEntity);
 		return new GlobalStatesContainer(adpGlobalState, inventoryGlobalStates, mullGlobalState);
 	}
 
@@ -269,8 +293,8 @@ public class MullUtil {
 
 	private static void addCargoCreationCommands(final GlobalStatesContainer globalStates, final IMullAlgorithm finalAlgorithm, final CargoEditingCommands cec, final IScenarioDataProvider sdp,
 			final EditingDomain editingDomain, final CompoundCommand cmd) {
-		final Map<Vessel, VesselAvailability> vesselToVa = ScenarioModelUtil.getCargoModel(sdp).getVesselAvailabilities().stream() //
-				.collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
+		final Map<Vessel, VesselCharter> vesselToVa = ScenarioModelUtil.getCargoModel(sdp).getVesselCharters().stream() //
+				.collect(Collectors.toMap(VesselCharter::getVessel, Function.identity()));
 
 		final List<Command> commands = new ArrayList<>();
 		for (final InventoryLocalState inventoryLocalState : finalAlgorithm.getInventoryLocalStates()) {
@@ -281,10 +305,11 @@ public class MullUtil {
 				final Cargo cargo = CargoEditingCommands.createNewCargo(editingDomain, commands, ScenarioModelUtil.getCargoModel(sdp), null, 0);
 				loadSlot.setCargo(cargo);
 				dischargeSlot.setCargo(cargo);
-				cargo.setAllowRewiring(!cargoBlueprint.getMudContainer().getEntity().isThirdParty());
+				final boolean isFirstParty = globalStates.getMullGlobalState().getFirstPartyEntities().contains(cargoBlueprint.getMudContainer().getEntity());
+				cargo.setAllowRewiring(isFirstParty);
 				final Vessel vessel = cargoBlueprint.getVessel();
 				if (!dischargeSlot.isFOBSale() && vessel != null) {
-					final VesselAvailability va = vesselToVa.get(vessel);
+					final VesselCharter va = vesselToVa.get(vessel);
 					if (va != null) {
 						cargo.setVesselAssignmentType(va);
 					}
@@ -305,7 +330,7 @@ public class MullUtil {
 	}
 
 	private static DischargeSlot createDischargeSlot(final ICargoBlueprint cargoBlueprint, final CargoEditingCommands cec, final List<Command> commands, final GlobalStatesContainer globalStates,
-			final int loadIndex, final LoadSlot loadSlot, IScenarioDataProvider sdp, final Map<Vessel, @Nullable VesselAvailability> vesselToVa) {
+			final int loadIndex, final LoadSlot loadSlot, IScenarioDataProvider sdp, final Map<Vessel, @Nullable VesselCharter> vesselToVa) {
 		final IAllocationTracker allocationTracker = cargoBlueprint.getAllocationTracker();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		if (allocationTracker instanceof final SalesContractTracker salesContractTracker) {
@@ -401,15 +426,15 @@ public class MullUtil {
 		if (globalStates.getMullGlobalState().getCargoesToKeep().isEmpty()) {
 			cargoesToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes().stream() //
 					.filter(c -> {
-						final YearMonth loadYm = YearMonth.from(((LoadSlot) c.getSlots().get(0)).getWindowStart());
+						final YearMonth loadYm = YearMonth.from(((LoadSlot) c.getSortedSlots().get(0)).getWindowStart());
 						return !loadYm.isBefore(adpStart) && loadYm.isBefore(adpEndExc);
 					}) //
 					.toList();
 			loadSlotsToDelete = cargoesToDelete.stream() //
-					.map(c -> (LoadSlot) c.getSlots().get(0)) //
+					.map(c -> (LoadSlot) c.getSortedSlots().get(0)) //
 					.toList();
 			dischargeSlotsToDelete = cargoesToDelete.stream() //
-					.map(c -> (DischargeSlot) c.getSlots().get(1)) //
+					.map(c -> (DischargeSlot) c.getSortedSlots().get(1)) //
 					.toList();
 		} else {
 			final Set<Cargo> cargoesToKeepSet = globalStates.getMullGlobalState().getCargoesToKeep().stream() //
@@ -421,12 +446,12 @@ public class MullUtil {
 			cargoesToDelete = new ArrayList<>(numSlotsToDelete);
 			for (final Cargo cargo : ScenarioModelUtil.getCargoModel(sdp).getCargoes()) {
 				if (!cargoesToKeepSet.contains(cargo)) {
-					final LoadSlot loadSlot = (LoadSlot) cargo.getSlots().get(0);
+					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 					final YearMonth loadYm = YearMonth.from(loadSlot.getWindowStart());
 					if (!loadYm.isBefore(adpStart) && loadYm.isBefore(adpEndExc)) {
 						cargoesToDelete.add(cargo);
 						loadSlotsToDelete.add(loadSlot);
-						dischargeSlotsToDelete.add((DischargeSlot) cargo.getSlots().get(1));
+						dischargeSlotsToDelete.add((DischargeSlot) cargo.getSortedSlots().get(1));
 					}
 				}
 			}

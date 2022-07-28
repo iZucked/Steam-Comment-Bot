@@ -36,7 +36,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	}
 
 	/**
-	 * Returns the in port NBO rate associated with the vessel class of the vessel provided.
+	 * Returns the in port NBO rate associated with the vessel of the vessel provided.
 	 */
 	@Override
 	public long getNBORate(IVessel vessel, PortType portStatus) {

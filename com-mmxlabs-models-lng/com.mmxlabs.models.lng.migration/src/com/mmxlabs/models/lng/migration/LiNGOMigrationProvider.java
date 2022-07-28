@@ -24,7 +24,7 @@ public class LiNGOMigrationProvider implements IMigrationProvider {
 	 * reflective class loader to work.
 	 */
 
-	private static final int CURRENT_VERSION = 156;
+	private static final int CURRENT_VERSION = 163;
 
 	@Override
 	public int priority() {
@@ -41,7 +41,7 @@ public class LiNGOMigrationProvider implements IMigrationProvider {
 			final String clsName = String.format("com.mmxlabs.models.lng.migration.units.MigrateToV%d", i);
 			try {
 				final Class<?> unit = Class.forName(clsName);
-				entries.add(Pair.of(ModelsLNGMigrationConstants.getMigrationUnitID(i), (IMigrationUnit) unit.newInstance()));
+				entries.add(Pair.of(ModelsLNGMigrationConstants.getMigrationUnitID(i), (IMigrationUnit) unit.getDeclaredConstructor().newInstance()));
 			} catch (final Exception e) {
 				throw new RuntimeException("Unable to load migration unit class", e);
 			}

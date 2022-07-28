@@ -14,34 +14,41 @@ public interface IColumnInfoProvider {
 	 * 
 	 * @param columnObj
 	 */
-	public int getColumnIndex(Object columnObj);
+	int getColumnIndex(ColumnBlock columnObj);
 
 	/**
 	 * Get the width of the column
 	 * 
 	 * @param columnObj
 	 */
-	public int getColumnWidth(Object columnObj);
+	default int getColumnWidth(ColumnBlock columnObj) {
+		return 0;
+	}
 
 	/**
 	 * Returns true if the column represented by parameters is showing in the viewer
 	 * 
 	 * @param columnObj
 	 */
-	public boolean isColumnVisible(Object columnObj);
+	boolean isColumnVisible(ColumnBlock columnObj);
 
 	/**
 	 * Returns true if the column represented by parameters is configured as movable
 	 * 
 	 * @param columnObj
 	 */
-	public boolean isColumnMovable(Object columnObj);
+	default boolean isColumnMovable(ColumnBlock columnObj) {
+		return true;
+	}
 
 	/**
-	 * Returns true if the column represented by parameters is configured as resizable
+	 * Returns true if the column represented by parameters is configured as
+	 * resizable
 	 * 
 	 * @param columnObj
 	 */
-	public boolean isColumnResizable(Object columnObj);
+	default boolean isColumnResizable(ColumnBlock columnObj) {
+		return false;
+	}
 
 }

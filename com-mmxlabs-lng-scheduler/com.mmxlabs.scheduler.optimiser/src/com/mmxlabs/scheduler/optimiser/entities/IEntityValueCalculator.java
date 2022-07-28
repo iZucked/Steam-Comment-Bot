@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.SlotHeelVolumeRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
@@ -38,7 +38,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	Pair<CargoValueAnnotation, Long> evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVesselAvailability vesselAvailability,
+	Pair<CargoValueAnnotation, Long> evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVesselCharter vesselCharter,
 			@Nullable ProfitAndLossSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
@@ -52,7 +52,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(VoyagePlan plan, IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, 
+	Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(VoyagePlan plan, IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, 
 			int vesselStartTime, int planStartTime, @Nullable IPort firstLoadPort, 
 			int lastHeelPricePerMMBTU, Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable IAnnotatedSolution annotatedSolution);
 

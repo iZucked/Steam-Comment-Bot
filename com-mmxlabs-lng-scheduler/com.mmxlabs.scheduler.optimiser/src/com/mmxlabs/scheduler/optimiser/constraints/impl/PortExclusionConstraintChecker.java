@@ -20,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
@@ -68,8 +68,8 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			vessel = vesselAvailability.getVessel();
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			vessel = vesselCharter.getVessel();
 		}
 		assert vessel != null;
 
@@ -82,7 +82,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 			IPort portForElement = portProvider.getPortForElement(sequence.get(j));
 			if (excludedPorts.contains(portForElement)) {
 				if (messages != null)
-					messages.add(this.name + ": Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port "
+					messages.add(this.name + ": Vessel " + vesselProvider.getVesselCharter(resource).getVessel().getName() + " is excluded from port "
 						+ (portForElement == null ? "(unknown port)" : portForElement.getName()));
 				return false;
 			}
@@ -120,8 +120,8 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			vessel = vesselAvailability.getVessel();
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			vessel = vesselCharter.getVessel();
 		}
 		assert vessel != null;
 

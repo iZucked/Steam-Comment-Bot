@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Optional Availability Shipping Option</b></em>'.
+ * A representation of the model object '<em><b>Optional Charter Shipping Option</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -187,4 +187,4 @@ public interface OptionalSimpleVesselCharterOption extends SimpleVesselCharterOp
 	 */
 	void setEndPort(Port value);
 
-} // OptionalAvailabilityShippingOption
+} // OptionalSimpleVesselCharterOption

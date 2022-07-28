@@ -83,7 +83,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -128,7 +128,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public final class SharedScenarioDataUtils {
-	private static final Logger log = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
 
 	private SharedScenarioDataUtils() {
 
@@ -242,7 +242,7 @@ public final class SharedScenarioDataUtils {
 										}
 									}
 									if (!command.canExecute()) {
-										log.error("Update command failed for scenario " + destModelRecord.getName());
+										LOG.error("Update command failed for scenario " + destModelRecord.getName());
 										throw new RuntimeException("Unable to execute command");
 									}
 									RunnerHelper.syncExecDisplayOptional(() -> target.getCommandStack().execute(command));
@@ -250,12 +250,12 @@ public final class SharedScenarioDataUtils {
 										try {
 											target.getModelReference().save();
 										} catch (final IOException e) {
-											log.error("Unable to auto save " + destModelRecord.getName(), e);
+											LOG.error("Unable to auto save " + destModelRecord.getName(), e);
 										}
 									}
 								});
 								if (!ranUpdate) {
-									log.error("Unable to update scenario " + destModelRecord.getName());
+									LOG.error("Unable to update scenario " + destModelRecord.getName());
 								}
 							}
 							monitor.worked(1);
@@ -337,7 +337,7 @@ public final class SharedScenarioDataUtils {
 			};
 		}
 
-		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createVesselAvailabilitiesUpdater(final String json) {
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createVesselChartersUpdater(final String json) {
 
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
@@ -371,7 +371,7 @@ public final class SharedScenarioDataUtils {
 						final Map<EObject, EObject> mapOldToNew = new HashMap<>();
 
 						try {
-							updateVesselAvailabilities(target, this, mapper, json, mapOldToNew);
+							updateVesselCharters(target, this, mapper, json, mapOldToNew);
 							ctx.runDeferredActions();
 						} catch (final Exception e1) {
 							// TODO Auto-generated catch block
@@ -1087,18 +1087,18 @@ public final class SharedScenarioDataUtils {
 		}
 	}
 
-	private static void updateVesselAvailabilities(final IScenarioDataProvider target, final CompoundCommand cmd, final ObjectMapper mapper, final String json, final Map<EObject, EObject> mapOldToNew)
+	private static void updateVesselCharters(final IScenarioDataProvider target, final CompoundCommand cmd, final ObjectMapper mapper, final String json, final Map<EObject, EObject> mapOldToNew)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		final CargoModel oldCM = ScenarioModelUtil.getCargoModel(target);
-		final List<VesselAvailability> newAvailabilities = mapper.readValue(json, new TypeReference<List<VesselAvailability>>() {
+		final List<VesselCharter> newCharters = mapper.readValue(json, new TypeReference<List<VesselCharter>>() {
 		});
 
 		final List<EObject> newData = new LinkedList<>();
-		for (final VesselAvailability newVA : newAvailabilities) {
+		for (final VesselCharter newVA : newCharters) {
 			boolean found = false;
 
-			for (final VesselAvailability oldVA : oldCM.getVesselAvailabilities()) {
+			for (final VesselCharter oldVA : oldCM.getVesselCharters()) {
 				if (Objects.equals(newVA.getVessel(), oldVA.getVessel())) {
 					if (newVA.getCharterNumber() == oldVA.getCharterNumber()) {
 						found = true;
@@ -1111,7 +1111,7 @@ public final class SharedScenarioDataUtils {
 				newData.add(newVA);
 			}
 		}
-		cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES, newData));
+		cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CargoPackage.Literals.CARGO_MODEL__VESSEL_CHARTERS, newData));
 	}
 
 	private static void updateCharterInMarkets(final IScenarioDataProvider target, final CompoundCommand cmd, final ObjectMapper mapper, final String json, final Map<EObject, EObject> mapOldToNew)
@@ -1397,7 +1397,7 @@ public final class SharedScenarioDataUtils {
 					cgm.getLoadSlots().forEach(ctx::registerType);
 					cgm.getDischargeSlots().forEach(ctx::registerType);
 					cgm.getVesselEvents().forEach(ctx::registerType);
-					cgm.getVesselAvailabilities().forEach(ctx::registerType);
+					cgm.getVesselCharters().forEach(ctx::registerType);
 
 					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
 					mapper.registerModule(new EMFJacksonModule());
@@ -1492,7 +1492,7 @@ public final class SharedScenarioDataUtils {
 					cgm.getLoadSlots().forEach(ctx::registerType);
 					cgm.getDischargeSlots().forEach(ctx::registerType);
 					cgm.getVesselEvents().forEach(ctx::registerType);
-					cgm.getVesselAvailabilities().forEach(ctx::registerType);
+					cgm.getVesselCharters().forEach(ctx::registerType);
 
 					final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
 					mapper.registerModule(new EMFJacksonModule());

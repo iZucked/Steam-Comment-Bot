@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -26,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 /**
  * Class which maps model entities to classes; the LNGScenarioTransformer should
  * populate one of these, which maps every PortSlot to the URI of a Slot in the
- * EMF, and similarly for vessels, vessel classes, etc etc.
+ * EMF, and similarly for vessels, etc etc.
  * 
  * @author hinton
  * 
@@ -118,10 +117,7 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 	@SuppressWarnings("null")
 	@NonNull
 	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
-		final String timeZone = (tz == null) ? "UTC" : tz;
-		final ZonedDateTime rawDate = dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours);
-		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromDate(rawDate);
-		return rawDate.plusMinutes(offsetMinutes);
+		return dateHelper.getDateFromHours(hours, tz);
 	}
 
 	/**

@@ -24,7 +24,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -56,7 +56,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 29, 0, 0, 0)) //
@@ -69,7 +69,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withHireRate(500_000) //
 				.withDurationInDays(10) //
 				.withOptional(false) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -106,7 +106,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 29, 0, 0, 0)) //
@@ -119,7 +119,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withHireRate(5_000_000) //
 				.withOptional(true) //
 				.withDurationInDays(10) //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -158,7 +158,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 29, 0, 0, 0)) //
@@ -210,7 +210,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -223,7 +223,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withHireRate(5_000_000) //
 				.withDurationInDays(10) //
 				.withOptional(false) //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		// Construct the cargoes
@@ -232,7 +232,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -272,7 +272,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 31, 0, 0, 0)) //
@@ -296,7 +296,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -336,7 +336,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 31, 0, 0, 0)) //
@@ -349,7 +349,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withHireRate(5_000_000) //
 				.withDurationInDays(5) //
 				.withOptional(true) //
-				.withVesselAssignment(vesselAvailability, 2) //
+				.withVesselAssignment(vesselCharter, 2) //
 				.build();
 
 		portModelBuilder.configureDischargePort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), 24, null, null);
@@ -360,7 +360,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -397,7 +397,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(0);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -461,7 +461,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setSafetyHeel(500);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 12, 30, 0, 0, 0)) //
@@ -483,7 +483,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 12, 30), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
 				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
+				.withVesselAssignment(vesselCharter, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
 
@@ -517,7 +517,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2018, 12, 1, 0, 0, 0)) //
@@ -575,7 +575,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 
 		// Construct the vessel
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2018, 12, 1, 0, 0, 0)) //

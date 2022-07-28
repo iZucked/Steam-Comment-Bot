@@ -892,7 +892,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (contractYear: ");
 		result.append(contractYear);
 		result.append(", operationNumber: ");

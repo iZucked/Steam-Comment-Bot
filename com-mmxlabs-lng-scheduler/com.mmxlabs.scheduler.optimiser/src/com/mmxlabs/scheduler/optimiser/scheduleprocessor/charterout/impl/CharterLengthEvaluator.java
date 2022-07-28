@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -86,13 +86,13 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	private static final boolean SPLIT_ON_RUNDRY = false;
 
 	@Override
-	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselCharter vesselCharter, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Only apply to "real" vessels. Exclude nominal/round-trip vessels.
-		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
@@ -139,7 +139,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 		// We have a candidate voyage plan with enough time, pass into the method to
 		// split into two plans and recompute values.
-		final List<Pair<VoyagePlan, IPortTimesRecord>> r = generateNewVoyagePlansWithCharterLength(vesselAvailability, vp, portTimesRecord, currentSequence, ballastIdx, ballastStartTime,
+		final List<Pair<VoyagePlan, IPortTimesRecord>> r = generateNewVoyagePlansWithCharterLength(vesselCharter, vp, portTimesRecord, currentSequence, ballastIdx, ballastStartTime,
 				annotatedSolution);
 
 		// Sanity checking of heel info
@@ -180,10 +180,10 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	 * event inserted after the final ballast travel to replace the idle time.
 	 * 
 	 */
-	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlansWithCharterLength(final IVesselAvailability vesselAvailability, final VoyagePlan originalPlan,
+	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlansWithCharterLength(final IVesselCharter vesselCharter, final VoyagePlan originalPlan,
 			final IPortTimesRecord originalPortTimesRecord, final Object[] currentSequence, final int ballastIdx, final int ballastStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 
-		final IVessel vessel = vesselAvailability.getVessel();
+		final IVessel vessel = vesselCharter.getVessel();
 		final int[] baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, originalPortTimesRecord);
 
 		// Grab the target ballast leg we want to convert.
@@ -471,7 +471,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setIgnoreEnd(true);
 
 			// Calculate voyage plan
-			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
 					portTimesRecord1, partialSequenceUpToCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != null;
 
@@ -481,7 +481,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setRemainingHeelInM3(charterLengthHeelInM3);
 
 			// Recompute the volume (and P&L) for the reduced voyage plan
-			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselAvailability, currentPlan, portTimesRecord1, annotatedSolution);
+			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselCharter, currentPlan, portTimesRecord1, annotatedSolution);
 			if (allocation != null) {
 				charterPlans.add(Pair.of(currentPlan, allocation));
 
@@ -532,7 +532,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
 			// Calculate voyage plan
-			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
 					portTimesRecord2, partialSequenceFromCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != null;
 

@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -42,6 +43,7 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
 	protected IBaseCaseChanged listener;
+	private Runnable versionChangeRunnable;
 	private final Activator plugin = Activator.getDefault();
 	private final Image circleOrange = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
 	private final Image circleGreen = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
@@ -62,8 +64,7 @@ public class ReferenceDataStatusTrimContribution {
 	protected Control createControl(Composite parent) {
 		
 		final int minHeight = 36;
-		final Composite control = new Composite(parent, SWT.NONE)
-		{
+		final Composite control = new Composite(parent, SWT.NONE){
 			@Override
 			protected void checkSubclass() {
 			}
@@ -129,6 +130,8 @@ public class ReferenceDataStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.addChangedListener(pListener);
 		}
+		versionChangeRunnable = this::versionChanged;
+		PricingRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
 		control.redraw();
 		return control;
 	}
@@ -146,18 +149,28 @@ public class ReferenceDataStatusTrimContribution {
 					final String cV = currentRecords.typeVersion.get(type);
 					final String nV = newRecords.typeVersion.get(type);
 					if (nV != null && (cV == null || !cV.equalsIgnoreCase(nV))) {
+						currentRecords = newRecords;
 						versionChanged = true;
 						break;
 					}
 				}
 				if (versionChanged) {
-					currentRecords = newRecords;
 					saveRecord(currentRecords);
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	private void versionChanged() {
+		final String cV = currentRecords.typeVersion.get(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+		final String nV = PricingRepository.INSTANCE.getCurrentVersion();
+		if (nV != null && (cV == null || !cV.equals(nV))) {
+			currentRecords.typeVersion.remove(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+			currentRecords.typeVersion.put(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), nV);
+			saveRecord(currentRecords);
+		}
 	}
 	
 	private void dismissNotification(final Label myLabel) {
@@ -192,9 +205,13 @@ public class ReferenceDataStatusTrimContribution {
 			}
 			mainLabel.dispose();
 		}
+		if (versionChangeRunnable != null) {
+			PricingRepository.INSTANCE.deregisterLocalVersionListener(versionChangeRunnable);
+		}
 	}
 	
 	private void saveRecord(final RDSRecords myRecord) {
+		myRecord.isDismissed = false;
 		final File recordsFile = getRecordFile();
 		final ObjectMapper mapper = new ObjectMapper();
 		try {

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -64,10 +64,10 @@ public class VesselEventConstraintCheckTest {
 	private final int numOfClassTwo = 4;
 	private final int numOfClassThree = 5;
 	private final int numOfClassFour = 6;
-	private List<VesselAvailability> vesselsOfClassOne;
-	private List<VesselAvailability> vesselsOfClassTwo;
-	private List<VesselAvailability> vesselsOfClassThree;
-	private List<VesselAvailability> vesselsOfClassFour;
+	private List<VesselCharter> vesselsOfClassOne;
+	private List<VesselCharter> vesselsOfClassTwo;
+	private List<VesselCharter> vesselsOfClassThree;
+	private List<VesselCharter> vesselsOfClassFour;
 
 	/**
 	 * This is called before each test is run.
@@ -123,7 +123,7 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testDrydockVessel() {
 
-		final VesselAvailability allowedDrydockVessel = vesselsOfClassOne.get(0);
+		final VesselCharter allowedDrydockVessel = vesselsOfClassOne.get(0);
 
 		addVesselEventsAndRunTest(Collections.singleton(allowedDrydockVessel.getVessel()), Collections.emptySet());
 	}
@@ -134,7 +134,7 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testCharterOutVessel() {
 
-		final VesselAvailability allowedCharterOutVessel = vesselsOfClassOne.get(0);
+		final VesselCharter allowedCharterOutVessel = vesselsOfClassOne.get(0);
 
 		addVesselEventsAndRunTest(Collections.emptySet(), Collections.singleton(allowedCharterOutVessel.getVessel()));
 	}
@@ -222,7 +222,7 @@ public class VesselEventConstraintCheckTest {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 					final VesselEvent ve = vev.getVesselEvent();
 
-					final Vessel usedVessel = seq.getVesselAvailability().getVessel();
+					final Vessel usedVessel = seq.getVesselCharter().getVessel();
 
 					if (ve instanceof CharterOutEvent) {
 						Assertions.assertTrue(isUsedVesselValid(usedVessel, allowedCharterOutVessel), "Charter out uses allowed vessel or vessel of allowed VesselClass");

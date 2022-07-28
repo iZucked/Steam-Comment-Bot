@@ -97,7 +97,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -153,7 +153,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified. 
@@ -210,7 +210,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -265,7 +265,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(3, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -345,7 +345,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(3, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -437,7 +437,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -492,7 +492,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -547,7 +547,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -602,7 +602,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(2, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(0, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.
@@ -674,7 +674,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 		Assertions.assertEquals(2, result.getExtraSlots().size());
 		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
-		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
 
 		// Expecting options in same order as routes were specified.

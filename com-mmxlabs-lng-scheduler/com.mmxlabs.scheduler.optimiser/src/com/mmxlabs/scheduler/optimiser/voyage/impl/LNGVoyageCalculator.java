@@ -1717,7 +1717,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 *         Populate a PortDetails object with correct fuel costs based on a
 	 *         PortOptions object.
 	 * 
-	 * @param options The PortOptions to use, specifying vessel class, vessel state
+	 * @param options The PortOptions to use, specifying vessel, vessel state
 	 *                and port visit duration.
 	 * @param details The PortDetails to set the correct fuel consumption for.
 	 */

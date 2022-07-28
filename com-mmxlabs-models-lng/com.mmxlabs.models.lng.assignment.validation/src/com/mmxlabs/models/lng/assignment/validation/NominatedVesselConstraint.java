@@ -39,6 +39,11 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible DES Purchase|%s needs a nominated vessel", slot.getName())));
 					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 					failures.add(failure);
+				} else if (slot.getNominatedVessel().isMarker()) {
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible DES Purchase|%s needs a nominated non-marker vessel", slot.getName())));
+					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+					failures.add(failure);
 				}
 			}
 		}
@@ -50,6 +55,11 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 				if (slot.getNominatedVessel() == null) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible FOB Sale|%s needs a nominated vessel", slot.getName())));
+					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+					failures.add(failure);
+				} else if (slot.getNominatedVessel().isMarker()) {
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("Divertible FOB Sale|%s needs a nominated non-marker vessel", slot.getName())));
 					failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 					failures.add(failure);
 				}

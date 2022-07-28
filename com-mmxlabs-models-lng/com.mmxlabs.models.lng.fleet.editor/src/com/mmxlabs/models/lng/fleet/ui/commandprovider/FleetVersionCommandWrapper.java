@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -62,7 +62,7 @@ public class FleetVersionCommandWrapper extends AbstractVersionCommandWrapper {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof VesselStateAttributes) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof VesselClassRouteParameters) {
+				} else if (notification.getNotifier() instanceof VesselRouteParameters) {
 					changedRef[0] = true;
 				} else if (notification.getNotifier() instanceof FuelConsumption) {
 					changedRef[0] = true;
@@ -106,7 +106,7 @@ public class FleetVersionCommandWrapper extends AbstractVersionCommandWrapper {
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof Vessel || target instanceof FuelConsumption || target instanceof VesselStateAttributes || target instanceof VesselClassRouteParameters) {
+				} else if (target instanceof Vessel || target instanceof FuelConsumption || target instanceof VesselStateAttributes || target instanceof VesselRouteParameters) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -130,7 +130,7 @@ public class FleetVersionCommandWrapper extends AbstractVersionCommandWrapper {
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof Vessel || target instanceof FuelConsumption || target instanceof VesselStateAttributes || target instanceof VesselClassRouteParameters) {
+				} else if (target instanceof Vessel || target instanceof FuelConsumption || target instanceof VesselStateAttributes || target instanceof VesselRouteParameters) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);

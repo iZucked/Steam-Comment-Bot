@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -84,8 +84,8 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 
 					final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-					if (vesselAssignmentType instanceof VesselAvailability vesselAvailability) {
-						final Vessel vessel = vesselAvailability.getVessel();
+					if (vesselAssignmentType instanceof VesselCharter vesselCharter) {
+						final Vessel vessel = vesselCharter.getVessel();
 
 						if (vessel != null && !vessel.equals(cargoActuals.getVessel())) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));

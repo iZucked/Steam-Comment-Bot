@@ -1,7 +1,0 @@
-*.orig
-*.rej
-*.swp
-bin/
-target/
-*~
-

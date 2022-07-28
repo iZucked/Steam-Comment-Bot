@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -48,9 +48,9 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					final SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
 					Sequence seq = allocation.getCargoAllocation().getSequence();
 					String tmp = "";
-					if (seq.isSetVesselAvailability() && seq.getVesselAvailability() != null) {
-						tmp = seq.getVesselAvailability().getVessel().getName();
-						tmp = AssignmentLabelProvider.getLabelFor(seq.getVesselAvailability().getVessel(), false);
+					if (seq.isSetVesselCharter() && seq.getVesselCharter() != null) {
+						tmp = seq.getVesselCharter().getVessel().getName();
+						tmp = AssignmentLabelProvider.getLabelFor(seq.getVesselCharter().getVessel(), false);
 					} else if (seq.isSetCharterInMarket() && seq.getCharterInMarket() != null) {
 						CharterInMarket cim = seq.getCharterInMarket();
 						tmp = AssignmentLabelProvider.getLabelFor(cim, seq.getSpotIndex(), false);
@@ -70,10 +70,10 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					feature = CargoPackage.Literals.VESSEL_EVENT__START_BY;
 				} else if (target instanceof EndEvent) {
 					final EndEvent event = (EndEvent) target;
-					obj = event.getSequence().getVesselAvailability();
-					if (obj instanceof VesselAvailability && ((VesselAvailability) obj).getVessel() != null) {
-						String vesselName = ((VesselAvailability) obj).getVessel().getName();
-						feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
+					obj = event.getSequence().getVesselCharter();
+					if (obj instanceof VesselCharter && ((VesselCharter) obj).getVessel() != null) {
+						String vesselName = ((VesselCharter) obj).getVessel().getName();
+						feature = CargoPackage.Literals.VESSEL_CHARTER__END_BY;
 						message = (vesselName != null ? "'" + vesselName + "'" : "Vessel") + " is travelling after it is no longer available.";
 					} else
 						message = "Vessel in schedule is travelling after it is no longer available";
@@ -112,8 +112,8 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 //				} else if (target instanceof VesselEventVisit) {
 //					final VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
 //					VesselAssignmentType vat = ve.getVesselAssignmentType();
-//					if (vat instanceof VesselAvailability) {
-//						VesselAvailability va = (VesselAvailability) vat;
+//					if (vat instanceof VesselCharter) {
+//						VesselCharter va = (VesselCharter) vat;
 //						vessel = va.getVessel().getName();
 //					}
 //					message = String.format("%s reaches '%s' late.", vessel, ve.getName());
@@ -123,8 +123,8 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 //					final EndEvent event = (EndEvent) target;
 //					vessel = getVesselNamefromSequence(vessel, event.getSequence());
 //					message = String.format("%s is travelling after it is no longer available.", vessel);
-//					obj = event.getSequence().getVesselAvailability();
-//					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
+//					obj = event.getSequence().getVesselCharter();
+//					feature = CargoPackage.Literals.VESSEL_CHARTER__END_BY;
 //				} else {
 //					message = "Late arrival in schedule.";
 //				}
