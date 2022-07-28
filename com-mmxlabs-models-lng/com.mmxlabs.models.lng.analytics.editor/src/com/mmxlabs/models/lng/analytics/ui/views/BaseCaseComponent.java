@@ -105,7 +105,6 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
-		
 		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
 		optioniseCol.getColumn().setAlignment(SWT.CENTER);
 		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
@@ -113,7 +112,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
 		optioniseCol.getColumn().setWidth(30);
 		optioniseCol.getColumn().setVisible(false);
-		
+
 		// Buy col
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(baseCaseViewer, SWT.CENTER | SWT.WRAP);
@@ -160,21 +159,18 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
-		
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
-			// Mode specific columns
-			optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);
+		// Mode specific columns
+		optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);
 
-			// freezeCol = createColumn(baseCaseViewer, "Lock", new
-			// FreezeDescriptionFormatter(), false);
-			// freezeCol.getColumn().setWidth(40);
+		// freezeCol = createColumn(baseCaseViewer, "Lock", new
+		// FreezeDescriptionFormatter(), false);
+		// freezeCol.getColumn().setWidth(40);
 
-			// Hide by default
-			optionsCol.getColumn().setVisible(false);
-			// 122 is precalculated width of the rendered image. 8px is padding
-			optionsCol.getColumn().setWidth(122 + 8);
-			// freezeCol.getColumn().setVisible(false);
-		}
+		// Hide by default
+		optionsCol.getColumn().setVisible(false);
+		// 122 is precalculated width of the rendered image. 8px is padding
+		optionsCol.getColumn().setWidth(122 + 8);
+		// freezeCol.getColumn().setVisible(false);
 
 		baseCaseViewer.getGrid().setCellSelectionEnabled(true);
 
@@ -227,20 +223,18 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 		optioniseCol.getColumn().setVisible(mode == SandboxModeConstants.MODE_OPTIONISE);
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
-			if (mode == SandboxModeConstants.MODE_DERIVE) {
-				optionsCol.getColumn().setVisible(true);
-				// freezeCol.getColumn().setVisible(false);
-			} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
-				optionsCol.getColumn().setVisible(false);
-				// freezeCol.getColumn().setVisible(true);
-			} else if (mode == SandboxModeConstants.MODE_OPTIONISE) {
-				optionsCol.getColumn().setVisible(false);
-				// freezeCol.getColumn().setVisible(true);
-			} else {
-				optionsCol.getColumn().setVisible(false);
-				// freezeCol.getColumn().setVisible(false);
-			}
+		if (mode == SandboxModeConstants.MODE_DERIVE) {
+			optionsCol.getColumn().setVisible(true);
+			// freezeCol.getColumn().setVisible(false);
+		} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
+			optionsCol.getColumn().setVisible(false);
+			// freezeCol.getColumn().setVisible(true);
+		} else if (mode == SandboxModeConstants.MODE_OPTIONISE) {
+			optionsCol.getColumn().setVisible(false);
+			// freezeCol.getColumn().setVisible(true);
+		} else {
+			optionsCol.getColumn().setVisible(false);
+			// freezeCol.getColumn().setVisible(false);
 		}
 	}
 
