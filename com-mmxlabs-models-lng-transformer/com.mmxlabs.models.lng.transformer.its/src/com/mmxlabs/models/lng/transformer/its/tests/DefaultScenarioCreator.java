@@ -93,7 +93,7 @@ import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
  */
 public class DefaultScenarioCreator {
 
-	private static final Logger log = LoggerFactory.getLogger(DefaultScenarioCreator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultScenarioCreator.class);
 	public double dischargePrice = 1d;
 	public double purchasePrice = 0.5d;
 
@@ -691,7 +691,7 @@ public class DefaultScenarioCreator {
 
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 		if (!portModel.getPorts().contains(startPort)) {
-			log.warn("Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			LOG.warn("Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(startPort);
 		}
 

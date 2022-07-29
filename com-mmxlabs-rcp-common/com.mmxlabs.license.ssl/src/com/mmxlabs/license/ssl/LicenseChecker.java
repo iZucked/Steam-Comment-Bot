@@ -53,7 +53,7 @@ public final class LicenseChecker {
 	public static class InvalidLicenseException extends Exception {
 	}
 
-	private static final Logger log = LoggerFactory.getLogger(LicenseChecker.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LicenseChecker.class);
 
 	/**
 	 */
@@ -185,7 +185,7 @@ public final class LicenseChecker {
 		} catch (final CertificateNotYetValidException e) {
 			return LicenseState.NotYetValid;
 		} catch (final Exception e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			return LicenseState.Unknown;
 		}
 	}
@@ -284,7 +284,7 @@ public final class LicenseChecker {
 				licenseKeystore = getUserDataLicense();
 			}
 		} catch (CertificateException e) {
-			log.error("failed to get certificate from license keystore: {0}", e.getMessage());
+			LOG.error("failed to get certificate from license keystore: {0}", e.getMessage());
 		}
 		return licenseKeystore;
 	}
@@ -419,7 +419,7 @@ public final class LicenseChecker {
 							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
 							keystore.setCertificateEntry(certFile.getName(), cert);
 						} catch (final Exception e) {
-							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+							LOG.error("Unable to import certificate " + f.getAbsolutePath(), e);
 						}
 					}
 				}
@@ -441,7 +441,7 @@ public final class LicenseChecker {
 							final X509Certificate cert = (X509Certificate) factory.generateCertificate(inStream);
 							keystore.setCertificateEntry(certFile.getName(), cert);
 						} catch (final Exception e) {
-							log.error("Unable to import certificate " + f.getAbsolutePath(), e);
+							LOG.error("Unable to import certificate " + f.getAbsolutePath(), e);
 						}
 					}
 				}

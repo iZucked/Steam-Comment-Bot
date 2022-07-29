@@ -40,7 +40,7 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
  */
 public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 
-	private static final Logger log = LoggerFactory.getLogger(DBCAttributeInlineEditor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DBCAttributeInlineEditor.class);
 
 	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<IInlineEditorExternalNotificationListener>();
 
@@ -509,7 +509,7 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 			try {
 				l.postDisplay(this, dialogContext, context, input, range);
 			} catch (final Exception e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 			}
 		}
 	}

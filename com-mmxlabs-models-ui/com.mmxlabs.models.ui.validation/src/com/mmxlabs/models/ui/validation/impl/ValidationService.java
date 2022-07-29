@@ -32,7 +32,7 @@ import com.mmxlabs.models.ui.validation.IValidationService;
  * 
  */
 public class ValidationService implements IValidationService {
-	private static final Logger log = LoggerFactory.getLogger(ValidationService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ValidationService.class);
 
 	private final ValidationInputService validationInputService = new ValidationInputService();
 
@@ -87,10 +87,10 @@ public class ValidationService implements IValidationService {
 			// Block until there is a result to return
 			return validationTask.get();
 		} catch (final InterruptedException e) {
-			log.error("Interrupted validating " + targets, e);
+			LOG.error("Interrupted validating " + targets, e);
 			return null;
 		} catch (final ExecutionException e) {
-			log.error("Error excuting validation on " + targets, e);
+			LOG.error("Error excuting validation on " + targets, e);
 			return null;
 		} finally {
 			// Force executor shutdown

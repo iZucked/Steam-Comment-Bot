@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class CompareScenariosHandler extends AbstractHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(CompareScenariosHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CompareScenariosHandler.class);
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -72,7 +72,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 									try {
 										PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_COMPARE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 									} catch (final WorkbenchException e) {
-										log.error("Unable to open compare perspective", e);
+										LOG.error("Unable to open compare perspective", e);
 									}
 								}
 								{

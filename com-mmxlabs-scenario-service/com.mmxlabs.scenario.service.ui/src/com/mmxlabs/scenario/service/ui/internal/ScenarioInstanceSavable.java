@@ -33,7 +33,7 @@ import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
  * 
  */
 public class ScenarioInstanceSavable extends Saveable {
-	private static final Logger log = LoggerFactory.getLogger(ScenarioInstanceSavable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioInstanceSavable.class);
 
 	private final @NonNull ScenarioInstance scenarioInstance;
 
@@ -76,7 +76,7 @@ public class ScenarioInstanceSavable extends Saveable {
 						}
 						monitor.worked(1);
 					} catch (final IOException e) {
-						log.error("IO Error during save", e);
+						LOG.error("IO Error during save", e);
 					} finally {
 						monitor.done();
 					}
@@ -84,7 +84,7 @@ public class ScenarioInstanceSavable extends Saveable {
 
 			}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
 		} catch (final CoreException e) {
-			log.error("Error during save", e);
+			LOG.error("Error during save", e);
 		}
 	}
 

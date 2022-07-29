@@ -91,7 +91,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * @author hinton
  */
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
-	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DetailCompositeDialog.class);
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	private IDisplayComposite displayComposite;
@@ -1005,7 +1005,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 
 				} else {
@@ -1038,7 +1038,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
-						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
+						LOG.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 				}
 			}

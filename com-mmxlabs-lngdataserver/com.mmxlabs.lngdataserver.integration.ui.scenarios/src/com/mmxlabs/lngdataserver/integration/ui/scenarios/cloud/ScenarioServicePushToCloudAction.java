@@ -40,11 +40,14 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationPushException.Type;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -85,7 +88,6 @@ public class ScenarioServicePushToCloudAction {
 
 	private ScenarioServicePushToCloudAction() {
 	}
-  
 
 	public static File encryptScenarioWithCloudKey(final SubMonitor progressMonitor, IScenarioDataProvider copyScenarioDataProvider, File anonymisationMap, KeyData keyData) {
 		File tmpEncryptedScenarioFile = null;
@@ -106,6 +108,14 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void stripScenario(final String problemType, final LNGScenarioModel copyScenarioModel, final @Nullable String sandboxUUID) {
+
+		// Nominations are not currently used in the optimisation
+		if (copyScenarioModel.getNominationsModel() != null) {
+			copyScenarioModel.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
+		}
+
+		// Clear base schedule model
+		copyScenarioModel.getScheduleModel().setSchedule(null);
 
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(copyScenarioModel);
 		if (!Objects.equals(problemType, "sandbox")) {
@@ -138,13 +148,13 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
- 
-	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain) throws IOException {
+	public static File anonymiseScenario(final String scenarioUUID, final SubMonitor progressMonitor, final LNGScenarioModel scenarioModel, final EditingDomain editingDomain, boolean stripComments)
+			throws IOException {
 		progressMonitor.subTask("Anonymising scenario");
 
 		final File anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioUUID, ".amap").toFile();
 
-		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
+		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap, stripComments);
 		if (cmd != null && !cmd.isEmpty()) {
 			editingDomain.getCommandStack().execute(cmd);
 		}
@@ -167,8 +177,6 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	 
- 
 	public static void cleanup(final File anonyMap, final KeyData keyData, File tmpEncryptedScenarioFile, File zipToUpload) {
 		deleteFile(anonyMap);
 		if (keyData != null) {
@@ -181,7 +189,11 @@ public class ScenarioServicePushToCloudAction {
 
 	public static void deleteFile(final File file) {
 		if (file != null && file.exists()) {
-			file.delete();
+			try {
+				FileDeleter.delete(file, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
+			} catch (Exception e) {
+				LOG.error("Error deleting file " + file.getAbsolutePath() + ". " + e.getMessage(), e);
+			}
 		}
 	}
 
@@ -232,7 +244,7 @@ public class ScenarioServicePushToCloudAction {
 			zos.closeEntry();
 		}
 	}
- 
+
 	public static String createManifest(final String scenarioName, @NonNull final String problemType, final String keyUUID) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;

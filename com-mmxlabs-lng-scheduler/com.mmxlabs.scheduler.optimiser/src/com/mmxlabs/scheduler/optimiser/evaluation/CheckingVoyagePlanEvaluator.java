@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
-	private static final Logger log = LoggerFactory.getLogger(CheckingVoyagePlanEvaluator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CheckingVoyagePlanEvaluator.class);
 
 	private final @NonNull IVoyagePlanEvaluator reference;
 	private final @NonNull IVoyagePlanEvaluator delegate;
@@ -81,9 +81,9 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		check();
 
 		if (value_d.size() != value_r.size()) {
-			log.error("Checking VPE Error: (Result list size differs)");
-			log.error("   reference value:" + value_r.size());
-			log.error("    delegate value:" + value_d.size());
+			LOG.error("Checking VPE Error: (Result list size differs)");
+			LOG.error("   reference value:" + value_r.size());
+			LOG.error("    delegate value:" + value_d.size());
 			throw new RuntimeException("Cache consistency failure");
 		} else {
 			Iterator<ScheduledVoyagePlanResult> itr_r = value_r.iterator();
@@ -94,7 +94,7 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				ScheduledVoyagePlanResult v_r = itr_r.next();
 
 				if (!v_d.isEqual(v_r)) {
-					log.error("Checking VPE Error: (ScheduledVoyagePlanResult differs)");
+					LOG.error("Checking VPE Error: (ScheduledVoyagePlanResult differs)");
 					throw new RuntimeException("Cache consistency failure");
 
 				}
@@ -119,7 +119,7 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		check();
 
 		if (!value_d.isEqual(value_r)) {
-			log.error("Checking VPE Error: (ScheduledVoyagePlanResult differs)");
+			LOG.error("Checking VPE Error: (ScheduledVoyagePlanResult differs)");
 			throw new RuntimeException("Cache consistency failure");
 
 		}

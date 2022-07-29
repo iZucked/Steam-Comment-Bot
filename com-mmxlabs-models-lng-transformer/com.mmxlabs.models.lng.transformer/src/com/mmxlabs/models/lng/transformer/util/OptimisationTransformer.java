@@ -57,13 +57,15 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 /**
- * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much just what was in TestUtils.
+ * Utility for taking an OptimisationSettings from the EMF and starting an
+ * optimiser accordingly. At the moment, it's pretty much just what was in
+ * TestUtils.
  * 
  * @author hinton
  * 
  */
 public class OptimisationTransformer implements IOptimisationTransformer {
-	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OptimisationTransformer.class);
 
 	@Inject
 	@NonNull
@@ -101,32 +103,31 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	@NonNull
 	public ISequences createInitialSequences(@NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap mem) {
 		/**
-		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
-		 * reordered
+		 * This sequences is passed into the initial sequence builder as a starting
+		 * point. Extra elements may be added to the sequence in any position, but the
+		 * existing elements will not be removed or reordered
 		 */
-		log.debug("Creating advice for sequence builder");
-		
 		// Heads now contains the head of every chunk that has to go together.
-				// We need to pull out all the chunks and sort out their rules
-				final List<@NonNull IResource> resources = new ArrayList<>(data.getResources());
-				Collections.sort(resources, (o1, o2) -> {
-					final IVesselCharter vesselCharter1 = vesselProvider.getVesselCharter(o1);
-					final IVesselCharter vesselCharter2 = vesselProvider.getVesselCharter(o2);
-					final VesselInstanceType vit1 = vesselCharter1.getVesselInstanceType();
-					final VesselInstanceType vit2 = vesselCharter2.getVesselInstanceType();
+		// We need to pull out all the chunks and sort out their rules
+		final List<@NonNull IResource> resources = new ArrayList<>(data.getResources());
+		Collections.sort(resources, (o1, o2) -> {
+			final IVesselCharter vesselCharter1 = vesselProvider.getVesselCharter(o1);
+			final IVesselCharter vesselCharter2 = vesselProvider.getVesselCharter(o2);
+			final VesselInstanceType vit1 = vesselCharter1.getVesselInstanceType();
+			final VesselInstanceType vit2 = vesselCharter2.getVesselInstanceType();
 
-					int x = vit1.compareTo(vit2);
-					if (x == 0) {
-						x = ((Integer) vesselCharter1.getVessel().getMaxSpeed()).compareTo(vesselCharter2.getVessel().getMaxSpeed());
-					}
-					return x;
-				});
+			int x = vit1.compareTo(vit2);
+			if (x == 0) {
+				x = ((Integer) vesselCharter1.getVessel().getMaxSpeed()).compareTo(vesselCharter2.getVessel().getMaxSpeed());
+			}
+			return x;
+		});
 
-		
 		final IModifiableSequences advice = new ModifiableSequences(resources);
 
 		/**
-		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
+		 * This map will be used to try and place elements which aren't in the advice
+		 * above onto particular resources, if possible.
 		 */
 		final Map<@NonNull ISequenceElement, @NonNull IResource> resourceAdvice = new HashMap<>();
 
@@ -138,10 +139,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		final Collection<@NonNull Slot<?>> modelSlots = mem.getAllModelObjects(Slot.class);
 
 		final Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<>();
-		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct
+		// their sequences
 		for (final Slot<?> slot : modelSlots) {
-			if (slot instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) slot;
+			if (slot instanceof LoadSlot loadSlot) {
 				final Cargo cargo = loadSlot.getCargo();
 				if (cargo != null) {
 					final EList<Slot<?>> slots = cargo.getSortedSlots();
@@ -162,10 +163,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 		}
 
-		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct
+		// their sequences
 		for (final Slot<?> slot : modelSlots) {
-			if (slot instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) slot;
+			if (slot instanceof LoadSlot loadSlot) {
 				// Note: We assume a DES Purchase is at most two slots to the cargo
 				if (loadSlot.isDESPurchase()) {
 
@@ -189,8 +190,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						}
 					}
 				}
-			} else if (slot instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			} else if (slot instanceof DischargeSlot dischargeSlot) {
 				// Note: We assume a FOB Sale is at most two slots to the cargo
 				if (dischargeSlot.isFOBSale()) {
 
@@ -306,16 +306,14 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	/**
 	 */
 	protected ISequenceElement[] getElements(@NonNull final AssignableElement modelObject, @NonNull final IPortSlotProvider psp, @NonNull final ModelEntityMap modelEntityMap) {
-		if (modelObject instanceof VesselEvent) {
-			final VesselEvent event = (VesselEvent) modelObject;
+		if (modelObject instanceof VesselEvent event) {
 			final IVesselEventPortSlot eventSlot = modelEntityMap.getOptimiserObject(event, IVesselEventPortSlot.class);
 			if (eventSlot != null) {
 				@NonNull
 				final List<@NonNull ISequenceElement> eventSequenceElements = eventSlot.getEventSequenceElements();
 				return eventSequenceElements.toArray(new ISequenceElement[eventSequenceElements.size()]);
 			}
-		} else if (modelObject instanceof Cargo) {
-			final Cargo cargo = (Cargo) modelObject;
+		} else if (modelObject instanceof Cargo cargo) {
 
 			final List<ISequenceElement> elements = new ArrayList<>(cargo.getSortedSlots().size());
 			for (final Slot<?> slot : cargo.getSortedSlots()) {
@@ -325,8 +323,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				elements.add(psp.getElement(portSlot));
 			}
 			return elements.toArray(new ISequenceElement[elements.size()]);
-		} else if (modelObject instanceof Slot) {
-			final Slot<?> slot = (Slot<?>) modelObject;
+		} else if (modelObject instanceof Slot<?> slot) {
 			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				return new ISequenceElement[] { psp.getElement(portSlot) };

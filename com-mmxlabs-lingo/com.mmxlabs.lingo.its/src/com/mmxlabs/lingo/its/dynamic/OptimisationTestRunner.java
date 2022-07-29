@@ -219,11 +219,11 @@ public class OptimisationTestRunner {
 
 							// Run anonymisation
 							RunnerHelper.syncExecDisplayOptional(
-									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap).execute());
+									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap, true).execute());
 
 							// Prepare de-anonymisation cmd
 							final Consumer<AbstractSolutionSet> preCompareAction = result -> RunnerHelper.syncExecDisplayOptional(
-									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap).execute());
+									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap, true).execute());
 
 							OptimisationTestRunner.runOptimisation(modelRecord, scenarioDataProvider, paramsFile, existingState, existingCompare, saver, preCompareAction);
 						} finally {
@@ -365,11 +365,11 @@ public class OptimisationTestRunner {
 
 							// Run anonymisation
 							RunnerHelper.syncExecDisplayOptional(
-									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap).execute());
+									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap, true).execute());
 
 							// Prepare de-anonymisation cmd
 							final Consumer<AbstractSolutionSet> preCompareAction = result -> RunnerHelper.syncExecDisplayOptional(
-									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap).execute());
+									() -> AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap, true).execute());
 
 							OptimisationTestRunner.runSandbox(modelRecord, scenarioDataProvider, paramsFile, existingCompare, saver, preCompareAction);
 						} finally {

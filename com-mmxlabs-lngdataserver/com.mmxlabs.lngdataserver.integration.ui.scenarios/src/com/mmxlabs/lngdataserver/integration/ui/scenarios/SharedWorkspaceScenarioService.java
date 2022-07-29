@@ -46,7 +46,7 @@ import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 
-	private static final Logger log = LoggerFactory.getLogger(SharedWorkspaceScenarioService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SharedWorkspaceScenarioService.class);
 
 	public SharedWorkspaceScenarioService() {
 		super("Team");
@@ -90,7 +90,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			} catch (IOException e) {
 				RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error copying  scenario",
 						"Unable to copy a scenario into team folder. See error log for more details"));
-				log.error("Error copying scenario into team folder " + e.getMessage(), e);
+				LOG.error("Error copying scenario into team folder " + e.getMessage(), e);
 			} finally {
 				updater.resume();
 				if (f != null) {
@@ -235,7 +235,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 		} catch (final Exception e) {
 			RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error moving scenarios",
 					"Unable to rename one or more scenarios due to name conflict. See error log for more details"));
-			log.error("Error moving scenarios " + e.getMessage(), e);
+			LOG.error("Error moving scenarios " + e.getMessage(), e);
 		}
 		try {
 			updater.refresh();
@@ -353,7 +353,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 			try {
 				client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(basePath, newName));
 			} catch (final IOException e) {
-				log.error("Error renaming scenario " + e.getMessage(), e);
+				LOG.error("Error renaming scenario " + e.getMessage(), e);
 				error = true;
 			}
 		}
@@ -371,7 +371,7 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 				try {
 					client.rename(scenarioInstance.getExternalID(), SharedWorkspacePathUtils.addChildSegment(newBasePath, c.getName()));
 				} catch (final IOException e) {
-					log.error("Error renaming scenario " + e.getMessage(), e);
+					LOG.error("Error renaming scenario " + e.getMessage(), e);
 					error = true;
 				}
 			}

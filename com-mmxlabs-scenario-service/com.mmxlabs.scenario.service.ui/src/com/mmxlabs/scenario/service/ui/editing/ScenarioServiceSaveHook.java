@@ -46,7 +46,7 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
  */
 public class ScenarioServiceSaveHook {
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceSaveHook.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServiceSaveHook.class);
 
 	public static List<ScenarioInstance> gatherDirtyScenarios() {
 		final Map<String, WeakReference<IScenarioService>> scenarioServices = Activator.getDefault().getScenarioServices();
@@ -232,7 +232,7 @@ public class ScenarioServiceSaveHook {
 
 						success[0] = true;
 					} catch (final Exception e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 						success[0] = false;
 					} finally {
 						monitor.done();
@@ -242,9 +242,9 @@ public class ScenarioServiceSaveHook {
 
 			p.run(true, false, runnable);
 		} catch (final InvocationTargetException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 
 		return success[0];

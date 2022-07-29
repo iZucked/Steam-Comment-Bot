@@ -21,8 +21,6 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_REENCRYPT = "features:reencrypt";
 
-	public static final String FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS = "features:sandbox-voyage-opts";
-
 	/**
 	 * Enable parallelisation in optimiser
 	 */
@@ -88,9 +86,9 @@ public final class KnownFeatures {
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
 
 	public static final String FEATURE_MTM_OLD = "features:mtm-old";
-	
+
 	public static final String FEATURE_MTM = "features:mtm";
-	
+
 	public static final String FEATURE_HEEL_RETENTION = "features:heel-retention";
 
 	/**

@@ -53,6 +53,12 @@
                   oldViewID="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView">
             </ViewPartRewrite>
          </extension>
+         <extension
+               point="com.mmxlabs.rcp.common.DebugOptionsProvider">
+            <DebugOptionsProvider
+                  cls="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugOptionsProvider">
+            </DebugOptionsProvider>
+         </extension>
    
    
 </plugin>

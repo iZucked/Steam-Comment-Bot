@@ -38,7 +38,7 @@ public class DesMarketTracker extends AbstractAllocationTracker {
 
 	@Override
 	public boolean matches(final Cargo cargo) {
-		return (cargo.getSlots().get(1) instanceof final SpotDischargeSlot spotDischargeSlot) && this.salesMarket.equals(spotDischargeSlot.getMarket());
+		return (cargo.getSortedSlots().get(1) instanceof final SpotDischargeSlot spotDischargeSlot) && this.salesMarket.equals(spotDischargeSlot.getMarket());
 	}
 
 	@Override

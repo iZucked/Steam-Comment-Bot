@@ -8,8 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
@@ -18,8 +16,6 @@ import com.mmxlabs.models.lng.transformer.ui.jobrunners.actionableplan.Actionabl
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class CreateActionableSetPlanContextMenuExtension implements ITradesTableContextMenuExtension {
-
-	private static final Logger log = LoggerFactory.getLogger(CreateActionableSetPlanContextMenuExtension.class);
 
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {

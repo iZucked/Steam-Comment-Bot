@@ -48,7 +48,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  */
 
 public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
-	private static final Logger log = LoggerFactory.getLogger(TextualReferenceInlineEditor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TextualReferenceInlineEditor.class);
 	/**
 	 */
 	protected Text editor;
@@ -100,7 +100,7 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 		} else {
 			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 			if (valueProvider == null) {
-				log.error("Could not get a value provider for " + input.eClass().getName() + "." + typedElement.getName());
+				LOG.error("Could not get a value provider for " + input.eClass().getName() + "." + typedElement.getName());
 			}
 		}
 		super.display(dialogContext, context, input, range);
@@ -137,7 +137,7 @@ public class TextualReferenceInlineEditor extends UnsettableInlineEditor {
 		toolkit.adapt(editor, true, true);
 
 		if (typedElement instanceof EStructuralFeature feature) {
-		editor.setEnabled(feature.isChangeable() && isEditorEnabled());
+			editor.setEnabled(feature.isChangeable() && isEditorEnabled());
 		} else {
 			editor.setEnabled(false);
 		}

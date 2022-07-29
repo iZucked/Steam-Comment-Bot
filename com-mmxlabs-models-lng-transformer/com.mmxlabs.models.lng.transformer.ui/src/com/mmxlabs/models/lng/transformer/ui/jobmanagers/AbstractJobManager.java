@@ -31,7 +31,7 @@ import com.mmxlabs.scenario.service.ui.IProgressProvider;
 
 public abstract class AbstractJobManager implements IJobManager, IProgressProvider {
 
-	private static final Logger logger = LoggerFactory.getLogger(AbstractJobManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractJobManager.class);
 
 	protected final List<Task> localTasks = new LinkedList<>();
 
@@ -117,7 +117,7 @@ public abstract class AbstractJobManager implements IJobManager, IProgressProvid
 
 			}
 		} catch (final Exception e) {
-			logger.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 
 	}
@@ -126,7 +126,7 @@ public abstract class AbstractJobManager implements IJobManager, IProgressProvid
 		try {
 			RunnerHelper.asyncExec(() -> progressListeners.forEach(IProgressChanged::listChanged));
 		} catch (final Exception e) {
-			logger.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractJobManager implements IJobManager, IProgressProvid
 			}
 		}
 
-		logger.error(msg, ex);
+		LOG.error(msg, ex);
 		if (task != null) {
 			updateTaskStatus(task, TaskStatus.failed("Failed, see Error Log for more details"));
 		}

@@ -45,7 +45,7 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public abstract class ScenarioViewerPane extends EMFViewerPane {
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioViewerPane.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioViewerPane.class);
 
 	protected static final String VIEW_GROUP = "view";
 	protected static final String ADD_REMOVE_GROUP = "addremove";
@@ -92,7 +92,7 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 						try {
 							viewer.setSelection(selection, true);
 						} catch (final Exception e) {
-							log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 						}
 					}
 				} finally {

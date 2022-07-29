@@ -74,7 +74,7 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 			@SuppressWarnings("unchecked")
 			@Override
 			public String getText(final Object element) {
-				return ScenarioElementNameHelper.getName(((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getCargo().getSlots().get(1), UNKNOWN_NAME_DEFAULT_VALUE);
+				return ScenarioElementNameHelper.getName(((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getCargo().getSortedSlots().get(1), UNKNOWN_NAME_DEFAULT_VALUE);
 			}
 		});
 	}
@@ -134,7 +134,7 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 				final MullCargoWrapper mullCargoWrapper = ADPFactory.eINSTANCE.createMullCargoWrapper();
 				final LoadSlot loadSlot = ((Pair<String, LoadSlot>) object).getSecond();
 				mullCargoWrapper.setLoadSlot(loadSlot);
-				mullCargoWrapper.setDischargeSlot((DischargeSlot) loadSlot.getCargo().getSlots().get(1));
+				mullCargoWrapper.setDischargeSlot((DischargeSlot) loadSlot.getCargo().getSortedSlots().get(1));
 				mullCargoWrappers.add(mullCargoWrapper);
 			}
 			return mullCargoWrappers;

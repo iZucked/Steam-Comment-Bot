@@ -185,7 +185,9 @@ public class VesselsToScenarioCopier {
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY, upstreamVessel.getHasReliqCapacity());
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, upstreamVessel.getIsReference());
 		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_REFERENCE, upstreamVessel.getMmxReference());
+		directSet(vesselToUpdate, FleetPackage.Literals.VESSEL__MARKER, upstreamVessel.getIsMarker());
 
+		
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__BASE_FUEL, upstreamVessel.getTravelBaseFuel(), context);
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL, upstreamVessel.getIdleBaseFuel(), context);
 		deferSetFuel(vesselToUpdate, FleetPackage.Literals.VESSEL__PILOT_LIGHT_BASE_FUEL, upstreamVessel.getPilotLightBaseFuel(), context);
@@ -305,6 +307,7 @@ public class VesselsToScenarioCopier {
 
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, upstreamVessel.getIsReference());
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_REFERENCE, upstreamVessel.getMmxReference());
+		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MARKER, upstreamVessel.getIsMarker());
 
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__BASE_FUEL, upstreamVessel.getTravelBaseFuel(), baseFuels, fleetModel);
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL, upstreamVessel.getIdleBaseFuel(), baseFuels, fleetModel);

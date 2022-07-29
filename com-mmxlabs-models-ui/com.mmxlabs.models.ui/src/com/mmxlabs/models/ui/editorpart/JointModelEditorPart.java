@@ -118,7 +118,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	 */
 	private static final boolean DEBUG = false;
 
-	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JointModelEditorPart.class);
 
 	private Throwable initException = null;
 
@@ -277,7 +277,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 							modelReference.save();
 							monitor.worked(1);
 						} catch (final IOException e) {
-							log.error("IO Error during save", e);
+							LOG.error("IO Error during save", e);
 						} finally {
 							monitor.done();
 							saving = false;
@@ -287,7 +287,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 				}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
 			} catch (final CoreException e) {
-				log.error("Error during save", e);
+				LOG.error("Error during save", e);
 			}
 		});
 	}

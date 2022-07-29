@@ -36,7 +36,7 @@ import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
  */
 public class OpenScenarioUtils {
 
-	private static final Logger log = LoggerFactory.getLogger(OpenScenarioUtils.class);
+	private static final Logger LOG = LoggerFactory.getLogger(OpenScenarioUtils.class);
 
 	public static void openScenarioInstance(final ScenarioInstance model) throws PartInitException {
 
@@ -113,7 +113,7 @@ public class OpenScenarioUtils {
 								editorRef[0] = openEditorPart;
 								monitor.worked(1);
 							} catch (final PartInitException e) {
-								log.error(e.getMessage(), e);
+								LOG.error(e.getMessage(), e);
 							} finally {
 								monitor.done();
 							}
@@ -121,9 +121,9 @@ public class OpenScenarioUtils {
 					});
 					return editorRef[0];
 				} catch (final InvocationTargetException e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				} catch (final InterruptedException e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 
 			}

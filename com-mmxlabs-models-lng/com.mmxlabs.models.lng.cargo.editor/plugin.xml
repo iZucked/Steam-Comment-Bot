@@ -145,6 +145,18 @@
           referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselMarkerValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterVesselMarkerValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselCharter"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CharterInVesselMarkerValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CharterInVesselMarkerValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint"

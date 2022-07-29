@@ -83,7 +83,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	private static final String DELIMITER_KEY = "lastDelimiter";
 	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
 
-	private static final Logger log = LoggerFactory.getLogger(ImportCSVFilesPage.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ImportCSVFilesPage.class);
 
 	private abstract class Chunk {
 		public final Map<String, String> keys;
@@ -398,21 +398,21 @@ public class ImportCSVFilesPage extends WizardPage {
 						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)), delimiter);
 						readers.put(key, r);
 					} catch (final IOException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 					}
 				}
 				try {
 					final EObject subModel = c.importer.importModel(readers, context);
 					setSubModel(scenarioModel, subModel);
 				} catch (final Throwable th) {
-					log.error(th.getMessage(), th);
+					LOG.error(th.getMessage(), th);
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {
 					try {
 						r.close();
 					} catch (final IOException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -426,20 +426,20 @@ public class ImportCSVFilesPage extends WizardPage {
 						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)));
 						readers.put(key, r);
 					} catch (final IOException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 					}
 				}
 				try {
 					c.importer.importModel(scenarioModel, readers, context);
 				} catch (final Throwable th) {
-					log.error(th.getMessage(), th);
+					LOG.error(th.getMessage(), th);
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {
 					try {
 						r.close();
 					} catch (final IOException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 					}
 				}
 			}
@@ -482,7 +482,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		} else if (subModel instanceof final NominationsModel scheduleModel) {
 			scenarioModel.setNominationsModel(scheduleModel);
 		} else {
-			log.error("Unknown sub model type: " + subModel.eClass().getName());
+			LOG.error("Unknown sub model type: " + subModel.eClass().getName());
 		}
 	}
 
@@ -522,7 +522,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							} catch (final Exception e) {
 								// NOTE: in Java SE 7 we can incorporate this into the previous
 								// exception block as catch(final IllegalArgumentException|IOException e)
-								log.error(e.getMessage(), e);
+								LOG.error(e.getMessage(), e);
 								setErrorMessage(e.getMessage());
 							}
 						}
@@ -532,7 +532,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 			});
 		} catch (final Exception e) {
-			log.error(e.getMessage());
+			LOG.error(e.getMessage());
 			return null;
 		}
 

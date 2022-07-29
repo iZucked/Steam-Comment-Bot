@@ -47,7 +47,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstraint {
 
-	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
 
 	@Override
 	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -137,7 +137,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					final CharterInMarket charterInMarket = charterInMarketOverride.getCharterInMarket();
 					vesselAssignment = charterInMarket.getVessel();
 				} else {
-					log.error("Assignment is not a VesselCharter or CharterInMarket - unable to validate");
+					LOG.error("Assignment is not a VesselCharter or CharterInMarket - unable to validate");
 					return;
 				}
 

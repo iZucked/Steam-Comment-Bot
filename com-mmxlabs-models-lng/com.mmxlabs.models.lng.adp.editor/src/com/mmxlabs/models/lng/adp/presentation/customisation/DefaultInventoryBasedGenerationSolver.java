@@ -38,7 +38,7 @@ public class DefaultInventoryBasedGenerationSolver implements IInventoryBasedGen
 		final LNGScenarioModel sm = ADPModelUtil.getNullCheckedScenarioModel(editorData);
 		final ADPModel adpModel = ADPModelUtil.getNullCheckedAdpModel(editorData);
 		
-		final GlobalStatesContainer globalStates = MullUtil.buildDefaultGlobalStates(eMullProfile, adpModel, sm);
+		final GlobalStatesContainer globalStates = MullUtil.buildDefaultGlobalStates(eMullProfile, adpModel, sm, e -> !e.isThirdParty());
 
 		final IMullProfile mullProfile = MullUtil.createDefaultInternalMullProfile(eMullProfile);
 

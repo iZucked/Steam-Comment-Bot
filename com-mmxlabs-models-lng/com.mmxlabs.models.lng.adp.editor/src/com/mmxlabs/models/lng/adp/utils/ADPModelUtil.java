@@ -76,7 +76,7 @@ import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 
 public class ADPModelUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(ADPModelUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ADPModelUtil.class);
 	
 	public static ADPModel createADPModel(final LNGScenarioModel scenarioModel) {
 		final ADPModel adpModel = ADPFactory.eINSTANCE.createADPModel();
@@ -199,10 +199,10 @@ public class ADPModelUtil {
 		}
 		catch (final UserFeedbackException ex) {
 			MessageDialog.openError(null, "Error", ex.getMessage());
-			logger.error(ex.getMessage(), ex);
+			LOG.error(ex.getMessage(), ex);
 		}
 		catch (final InvalidSyntaxException e) {
-			logger.error("Invalid syntax: ", e);
+			LOG.error("Invalid syntax: ", e);
 		}
 		return null;
 	}

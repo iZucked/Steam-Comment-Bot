@@ -27,13 +27,13 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ChangeSetViewCreatorService {
 
-	private static final Logger log = LoggerFactory.getLogger(ChangeSetViewCreatorService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ChangeSetViewCreatorService.class);
 	private final EventHandler openEventHandler = event -> {
 		try {
 			final AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
 			openView(solution, false);
 		} catch (final Exception e) {
-			log.error("Error handling create change set view event", e);
+			LOG.error("Error handling create change set view event", e);
 		}
 	};
 	private final EventHandler openAndSwitchEventHandler = event -> {
@@ -41,7 +41,7 @@ public class ChangeSetViewCreatorService {
 			final AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
 			openView(solution, true);
 		} catch (final Exception e) {
-			log.error("Error handling create change set view event", e);
+			LOG.error("Error handling create change set view event", e);
 		}
 	};
 
@@ -56,7 +56,7 @@ public class ChangeSetViewCreatorService {
 					try {
 						Thread.sleep(1_000);
 					} catch (final InterruptedException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 						Thread.currentThread().interrupt();
 					}
 				}
@@ -108,7 +108,7 @@ public class ChangeSetViewCreatorService {
 					try {
 						PlatformUI.getWorkbench().showPerspective(ReportsConstants.PERSPECTIVE_COMPARE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 					} catch (final WorkbenchException e) {
-						log.error("Unable to open compare perspective", e);
+						LOG.error("Unable to open compare perspective", e);
 					}
 				}
 			}
@@ -125,7 +125,7 @@ public class ChangeSetViewCreatorService {
 					}
 					return;
 				} catch (final PartInitException e) {
-					log.error(e.getMessage(), e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		});

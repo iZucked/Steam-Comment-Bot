@@ -63,6 +63,11 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 						.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
 						.withMessage("Vessel must be specified.") //
 						.make(ctx));
+			} else if (vessel.isMarker()) {
+				statuses.add(baseFactory.copyName() //
+						.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
+						.withMessage("Vessel must not be a marker vessel.") //
+						.make(ctx));
 			}
 			if (vesselCharter.getCharterOrDelegateEntity() == null) {
 				statuses.add(baseFactory.copyName() //

@@ -83,6 +83,7 @@ public class VesselItemProvider
 			addMmxIdPropertyDescriptor(object);
 			addReferenceVesselPropertyDescriptor(object);
 			addMmxReferencePropertyDescriptor(object);
+			addMarkerPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -660,6 +661,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Marker feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarkerPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_marker_feature"),
+				 getString("_UI_Vessel_marker_description"),
+				 FleetPackage.Literals.VESSEL__MARKER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Scnt feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -908,6 +931,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__MMX_ID:
 			case FleetPackage.VESSEL__REFERENCE_VESSEL:
 			case FleetPackage.VESSEL__MMX_REFERENCE:
+			case FleetPackage.VESSEL__MARKER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:

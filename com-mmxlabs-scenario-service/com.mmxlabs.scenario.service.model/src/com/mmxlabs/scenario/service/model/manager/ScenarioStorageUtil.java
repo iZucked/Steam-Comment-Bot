@@ -98,7 +98,7 @@ public class ScenarioStorageUtil {
 	public static final @NonNull String PATH_ROOT_OBJECT = "rootObject.xmi";
 	public static final @NonNull String PATH_MANIFEST_OBJECT = "MANIFEST.xmi";
 
-	private static final Logger log = LoggerFactory.getLogger(ScenarioStorageUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ScenarioStorageUtil.class);
 
 	static final ScenarioStorageUtil INSTANCE = new ScenarioStorageUtil();
 	protected Path storageDirectory;
@@ -111,7 +111,7 @@ public class ScenarioStorageUtil {
 			storageDirectory = workspaceLocation.append("temp").toFile().toPath();
 			if (!storageDirectory.toFile().exists()) {
 				if (!storageDirectory.toFile().mkdirs()) {
-					log.error("Unable to create temporary directory: " + storageDirectory.toString());
+					LOG.error("Unable to create temporary directory: " + storageDirectory.toString());
 				}
 			}
 			// there is a race here; the only way to really avoid it is to use
@@ -166,7 +166,7 @@ public class ScenarioStorageUtil {
 					try {
 						Files.deleteIfExists(storageDirectory);
 					} catch (final IOException e) {
-						log.error(e.getMessage(), e);
+						LOG.error(e.getMessage(), e);
 					}
 				}
 			});
@@ -218,7 +218,7 @@ public class ScenarioStorageUtil {
 			}
 		} catch (final Exception e) {
 			if (e.getCause() instanceof MigrationForbiddenException) {
-				log.error(e.getMessage());
+				LOG.error(e.getMessage());
 				throw new UserFeedbackException("Can't copy file since it requires prior migration to the latest version. Please drag and drop scenario into the workspace and try again.");
 			}
 		}
@@ -342,7 +342,7 @@ public class ScenarioStorageUtil {
 		try {
 			return loadInstanceFromURIChecked(archiveURI, copyToTemp, allowSave, allowMigration, scenarioCipherProvider);
 		} catch (final Exception e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -534,20 +534,12 @@ public class ScenarioStorageUtil {
 					archiveURI = originalArchiveURI;
 				}
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" +
-				// scenarioInstance.getUuid() + ") needs loading");
-
 				if (migrationCallback != null) {
 					migrationCallback.accept(modelRecord, archiveURI, monitor);
 				}
 				monitor.setTaskName("Loading scenario");
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" +
-				// scenarioInstance.getUuid() + ") needs loading");
-
 				// acquire sub models
-				log.debug("Loading rootObject from " + archiveURI);
-
 				final URI rootObjectURI = createArtifactURI(archiveURI, path);
 				final Resource resource = ResourceHelper.loadResource(resourceSet, rootObjectURI);
 
@@ -709,7 +701,7 @@ public class ScenarioStorageUtil {
 									}
 								}
 							} catch (final Exception e) {
-								log.error("Error saving debug scenario data " + e.getMessage(), e);
+								LOG.error("Error saving debug scenario data " + e.getMessage(), e);
 							}
 						});
 						throw new ModelInconsistentException(
@@ -870,13 +862,13 @@ public class ScenarioStorageUtil {
 			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
 			if (resource.getContents().size() == 1) {
 				final EObject top = resource.getContents().get(0);
-				if (top instanceof Manifest) {
-					return (Manifest) top;
+				if (top instanceof Manifest manifest) {
+					return manifest;
 				}
 			}
 		} catch (final Exception e) {
 			// Unable to parse file for some reason
-			log.debug("Unable to find manifest for " + scenarioFile, e);
+			LOG.warn("Unable to find manifest for " + scenarioFile, e);
 		}
 		return null;
 	}

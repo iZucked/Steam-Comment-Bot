@@ -29,8 +29,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -83,7 +81,6 @@ public final class UserSettingsHelper {
 
 	public static final String BREAK_EVEN_MARKER = "?";
 
-	private static final Logger log = LoggerFactory.getLogger(UserSettingsHelper.class);
 
 	// Note: SWTBOT ids are linked to the display string for radio buttons
 	public static final String SWTBOT_SHIPPING_ONLY_PREFIX = "swtbot.shippingonly";
@@ -738,7 +735,7 @@ public final class UserSettingsHelper {
 		// Check period optimisation is permitted
 
 		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "From (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
 				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {

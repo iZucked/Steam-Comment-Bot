@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMmxId <em>Mmx Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMarker <em>Marker</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1098,6 +1099,28 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setMmxReference(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Marker</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Marker</em>' attribute.
+	 * @see #setMarker(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Marker()
+	 * @model
+	 * @generated
+	 */
+	boolean isMarker();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isMarker <em>Marker</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Marker</em>' attribute.
+	 * @see #isMarker()
+	 * @generated
+	 */
+	void setMarker(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

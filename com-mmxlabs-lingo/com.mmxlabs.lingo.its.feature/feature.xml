@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="5.7.2.qualifier"
+      version="5.7.4.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -47,7 +47,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
- 
+
    <plugin
          id="com.mmxlabs.lngdataserver.data.distances"
          download-size="0"
@@ -105,13 +105,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.poi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.sun.jna.platform"
          download-size="0"
          install-size="0"
@@ -120,13 +113,6 @@
 
    <plugin
          id="com.sun.jna"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.slf4j.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -154,7 +140,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.google.guava.failureaccess"
+         id="org.apache.log4j"
          download-size="0"
          install-size="0"
          version="0.0.0"

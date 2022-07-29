@@ -220,7 +220,7 @@ public class RollingLoadWindow implements IRollingWindow {
 		}
 
 		// Start fixed load
-		final LoadSlot loadSlot = (LoadSlot) cargo.getSlots().get(0);
+		final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
 		final int expectedLoadAmount = loadSlot.getMaxQuantity();
 		final int duration = loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryGlobalState.getLoadDuration();
 		startLoad(expectedLoadAmount, duration);

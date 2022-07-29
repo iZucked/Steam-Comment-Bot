@@ -63,7 +63,7 @@ public class HarmonisationMap {
 		for (final IMullSubprofile mullSubprofile : this.originalMullProfile.getMullSubprofiles()) {
 			final HarmonisationTransformationState transformationState = new HarmonisationTransformationState(mullSubprofile);
 			harmonisationTransformationStates.put(mullSubprofile.getInventory(), transformationState);
-			populateNewCombinations(mullSubprofile, transformationState);
+			populateNewCombinations(mullSubprofile, transformationState, globalStates);
 			rearrangeSubprofile(mullSubprofile, globalStates, transformationState);
 			final IMullSubprofile harmonisedMullSubprofile = buildMullSubprofile(mullSubprofile.getInventory(), transformationState);
 			mullSubprofiles.add(harmonisedMullSubprofile);
@@ -213,11 +213,12 @@ public class HarmonisationMap {
 		}
 	}
 
-	private void populateNewCombinations(final IMullSubprofile mullSubprofile, final HarmonisationTransformationState harmonisationTransformationState) {
+	private void populateNewCombinations(final IMullSubprofile mullSubprofile, final HarmonisationTransformationState harmonisationTransformationState, final GlobalStatesContainer globalStates) {
 		final Map<Pair<BaseLegalEntity, IMullDischargeWrapper>, List<Pair<BaseLegalEntity, IMullDischargeWrapper>>> newCombinations = harmonisationTransformationState.getNewCombinations();
 		// Handle first party
-		final List<IEntityRow> firstParties = mullSubprofile.getEntityRows().stream().filter(row -> !row.getEntity().isThirdParty()).toList();
-		if (firstParties.isEmpty()) {
+		final Set<BaseLegalEntity> firstPartyEntities = globalStates.getMullGlobalState().getFirstPartyEntities();
+		final List<IEntityRow> firstParties = mullSubprofile.getEntityRows().stream().filter(row -> firstPartyEntities.contains(row.getEntity())).toList();
+		if (globalStates.getMullGlobalState().getFirstPartyEntities().isEmpty()) {
 			throw new IllegalStateException("Subprofile should contain a first party entry");
 		} else if (firstParties.size() != 1) {
 			throw new IllegalStateException("Subprofile should only contain a single first party entry");
@@ -232,7 +233,8 @@ public class HarmonisationMap {
 		});
 		// Handle third parties
 		for (final IEntityRow thirdPartyRow : mullSubprofile.getEntityRows()) {
-			if (!thirdPartyRow.getEntity().isThirdParty()) {
+			final boolean isThirdParty = !globalStates.getMullGlobalState().getFirstPartyEntities().contains(thirdPartyRow.getEntity());
+			if (!isThirdParty) {
 				continue;
 			}
 			final BaseLegalEntity thirdPartyEntity = thirdPartyRow.getEntity();

@@ -29,15 +29,15 @@ public class AnonymisationUtils {
 	}
 
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
-			final List<AnonymisationRecord> records, final boolean anonymise) {
+			final List<AnonymisationRecord> records, final boolean anonymise, boolean stripNotes) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
-		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile);
+		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile, stripNotes);
 	}
 
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
-			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
+			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap, boolean stripNotes) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
-		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, anonyMap);
+		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, anonyMap, stripNotes);
 	}
 
 	public static Command rename(final AnonymisationEntry entry) {

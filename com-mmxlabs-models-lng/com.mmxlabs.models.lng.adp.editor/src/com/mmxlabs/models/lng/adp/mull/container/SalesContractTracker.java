@@ -39,7 +39,7 @@ public class SalesContractTracker extends AbstractAllocationTracker {
 
 	@Override
 	public boolean matches(final Cargo cargo) {
-		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		final Slot<?> dischargeSlot = cargo.getSortedSlots().get(1);
 		return !(dischargeSlot instanceof SpotDischargeSlot) && this.salesContract == dischargeSlot.getContract();
 	}
 

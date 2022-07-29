@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fleet" nsURI="http://www.mmxlabs.com/models/lng/fleet/1/" nsPrefix="lng.fleet">
-  <eClassifiers xsi:type="ecore:EClass" name="FleetModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="FleetModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="#//Vessel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuels" upperBound="-1"
         eType="#//BaseFuel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
         eType="#//VesselGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetVersionRecord" eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetVersionRecord" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroupVersionRecord"
-        eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="bunkerFuelsVersionRecord"
-        eType="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="MMXVesselDBVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -31,7 +31,7 @@
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride" references="#//Vessel/reference"/>
     <eOperations name="getShortenedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getVesselOrDelegateInaccessiblePorts" upperBound="-1">
-      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eOperations>
@@ -161,7 +161,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessiblePortsOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1">
-      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
@@ -195,7 +195,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceVessel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxReference" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marker" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
       <eTypeArguments eClassifier="#//Vessel"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -205,11 +206,11 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="#//Vessel"/>
-    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
       <eTypeArguments eClassifier="#//Vessel"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselStateAttributes" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselStateAttributes" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverrideByContainer"
         references="#//Vessel/reference"/>
     <eOperations name="getVesselOrDelegateNBORate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

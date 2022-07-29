@@ -73,7 +73,7 @@ import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class FileScenarioService extends AbstractScenarioService {
 
-	private static final Logger log = LoggerFactory.getLogger(FileScenarioService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FileScenarioService.class);
 
 	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
 
@@ -171,7 +171,7 @@ public class FileScenarioService extends AbstractScenarioService {
 					try {
 						new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
 					} catch (final Exception e) {
-						log.error("Error archiving scenario data: " + e.getMessage(), e);
+						LOG.error("Error archiving scenario data: " + e.getMessage(), e);
 						return Status.CANCEL_STATUS;
 					} finally {
 						// Release the lock
@@ -204,7 +204,7 @@ public class FileScenarioService extends AbstractScenarioService {
 							final File destFile = new File(destinationLocation + "/" + targetName);
 							moveLocalArchive(localArchive, destFile, monitor.split(10));
 						} catch (final IOException e) {
-							log.error("Error moving archive to remote " + e.getMessage(), e);
+							LOG.error("Error moving archive to remote " + e.getMessage(), e);
 						} finally {
 							monitor.done();
 						}
@@ -220,7 +220,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				moveJob.setRule(rule);
 				moveJob.schedule(0);
 			} else {
-				log.error("Error moving backup archive, remote directory does not exist " + dest);
+				LOG.error("Error moving backup archive, remote directory does not exist " + dest);
 			}
 		}
 	}
@@ -296,7 +296,7 @@ public class FileScenarioService extends AbstractScenarioService {
 							moveLocalArchive(localArchive, destFile, monitor.split(10));
 						}
 					} catch (final Exception e) {
-						log.error("Error performing backup: " + e.getMessage(), e);
+						LOG.error("Error performing backup: " + e.getMessage(), e);
 					} finally {
 						monitor.done();
 					}
@@ -305,7 +305,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				p.setOpenOnRun(true);
 				p.run(true, false, runnable);
 			} catch (final InvocationTargetException | InterruptedException e) {
-				log.error("Error performing backup: " + e.getMessage(), e);
+				LOG.error("Error performing backup: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -317,7 +317,7 @@ public class FileScenarioService extends AbstractScenarioService {
 					resource.save(options);
 				}
 			} catch (final Throwable e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -383,14 +383,14 @@ public class FileScenarioService extends AbstractScenarioService {
 				try {
 					FileDeleter.delete(mainFile, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 				} catch (final IOException e) {
-					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario " + mainFile, e);
+					LOG.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario " + mainFile, e);
 				}
 			}
 			if (backupFile.exists()) {
 				try {
 					FileDeleter.delete(backupFile, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 				} catch (final IOException e) {
-					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario backup " + backupFile, e);
+					LOG.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario backup " + backupFile, e);
 				}
 			}
 
@@ -573,7 +573,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			if (backupURI.isFile() && !new File(backupURI.toFileString()).exists()) {
 				backupFileExists = false;
 				if (mainFileExists) {
-					log.error("Error reading main scenario service models.", ex);
+					LOG.error("Error reading main scenario service models.", ex);
 				}
 			} else {
 				// Assume it exists
@@ -584,12 +584,12 @@ public class FileScenarioService extends AbstractScenarioService {
 				try {
 					resource.load(options);
 					resourceExisted = true;
-					log.warn("Scenario service model restored from backup.");
+					LOG.warn("Scenario service model restored from backup.");
 				} catch (final IOException ex2) {
 					if (mainFileExists) {
-						log.error("Error reading both main and backup scenario service models.", ex2);
+						LOG.error("Error reading both main and backup scenario service models.", ex2);
 					} else if (!mainFileExists) {
-						log.error("Error reading backup scenario service models.", ex2);
+						LOG.error("Error reading backup scenario service models.", ex2);
 					}
 				} finally {
 					// Restore original URI for saves later on
@@ -610,7 +610,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 		} else if (attemptBackup) {
 			// back-up resource
-			log.debug("Backing up " + storeURI);
+			LOG.info("Backing up " + storeURI);
 			try (final InputStream inputStream = resourceSet.getURIConverter().createInputStream(storeURI)) {
 				try (final OutputStream outputStream = resourceSet.getURIConverter().createOutputStream(backupURI)) {
 					int x;

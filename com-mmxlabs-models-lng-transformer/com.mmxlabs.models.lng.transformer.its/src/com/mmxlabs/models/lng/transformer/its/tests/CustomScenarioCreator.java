@@ -48,7 +48,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  */
 public class CustomScenarioCreator extends DefaultScenarioCreator {
 
-	private static final Logger log = LoggerFactory.getLogger(CustomScenarioCreator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CustomScenarioCreator.class);
 
 	public CustomScenarioCreator(final float dischargePrice) {
 		this(dischargePrice, "UTC");
@@ -220,11 +220,11 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		PortModel portModel = scenarioModelBuilder.getPortModelBuilder().getPortModel();
 
 		if (!portModel.getPorts().contains(loadPort)) {
-			log.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			LOG.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(loadPort);
 		}
 		if (!portModel.getPorts().contains(dischargePort)) {
-			log.warn("Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
+			LOG.warn("Scenario does not contain discharge port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
 			portModel.getPorts().add(dischargePort);
 		}
 

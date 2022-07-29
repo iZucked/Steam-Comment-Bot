@@ -60,7 +60,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
  */
 public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implements IInlineEditor {
 
-	private static final Logger log = LoggerFactory.getLogger(BasicAttributeInlineEditor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(BasicAttributeInlineEditor.class);
 
 	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<>();
 
@@ -432,7 +432,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			try {
 				return input.eInvoke(operation, null);
 			} catch (InvocationTargetException e) {
-				log.error(e.getMessage());
+				LOG.error(e.getMessage());
 			}
 		}
 		return null;
@@ -588,7 +588,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			try {
 				l.postDisplay(this, dialogContext, context, input, range);
 			} catch (final Exception e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 			}
 		}
 	}

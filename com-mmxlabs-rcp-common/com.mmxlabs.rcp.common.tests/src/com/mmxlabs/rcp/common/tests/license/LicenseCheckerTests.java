@@ -26,7 +26,7 @@ import com.mmxlabs.rcp.common.tests.internal.Activator;
 
 class LicenseCheckerTests {
 
-	private static final Logger log = LoggerFactory.getLogger(LicenseCheckerTests.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LicenseCheckerTests.class);
 
 	@Test
 	void loadFromURIWithSpaces() throws Exception {
@@ -57,7 +57,7 @@ class LicenseCheckerTests {
 
 				Assertions.assertNotNull(keystore.getCertificate("cert.pem"));
 			} catch (NoSuchAlgorithmException | IOException e) {
-				log.error("failed to load test license: " + e.getMessage());
+				LOG.error("failed to load test license: " + e.getMessage());
 			}
 		}
 	}
@@ -102,7 +102,7 @@ class LicenseCheckerTests {
 				Assertions.assertNotNull(keyStoreFile);
 				Assertions.assertNotNull(trustStoreFile);
 			} catch (NoSuchAlgorithmException | IOException | CertificateException | KeyStoreException e) {
-				log.error("failed to load test license: " + e.getMessage());
+				LOG.error("failed to load test license: " + e.getMessage());
 			}
 		}
 	}

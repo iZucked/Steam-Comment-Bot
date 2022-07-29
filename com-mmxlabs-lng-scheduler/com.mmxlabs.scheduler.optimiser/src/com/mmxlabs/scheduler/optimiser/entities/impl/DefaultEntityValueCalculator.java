@@ -249,9 +249,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Calculate additional P&L
 		idx = 0;
 		for (final IPortSlot slot : slots) {
-			if (slot instanceof ILoadOption) {
+			if (slot instanceof ILoadOption loadOption) {
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
-				final ILoadOption loadOption = (ILoadOption) slot;
 
 				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselCharter,
 						plan, volumeAllocatedSequences, portSlotDetails);
@@ -300,23 +299,23 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		{
-			IPortSlot returnSlot = currentAllocation.getReturnSlot();
+			final IPortSlot returnSlot = currentAllocation.getReturnSlot();
 			if (returnSlot != null) {
 
 				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
-					IPortSlot firstPortSlot = currentAllocation.getFirstSlot();
-					int vesselStartTime = currentAllocation.getFirstSlotTime();
+					final IPortSlot firstPortSlot = currentAllocation.getFirstSlot();
+					final int vesselStartTime = currentAllocation.getFirstSlotTime();
 					// Repos
-					long additionalCost1 = shippingCostHelper.calculateRFRevenue(currentAllocation, firstPortSlot, vesselCharter);
+					final long additionalCost1 = shippingCostHelper.calculateRFRevenue(currentAllocation, firstPortSlot, vesselCharter);
 					// Ballast
-					long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, vesselStartTime, returnSlot.getPort());
+					final long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, vesselStartTime, returnSlot.getPort());
 
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost1);
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost2);
 
 					if (annotatedSolution != null) {
 
-						DetailTree shippingDetails = shippingDetails = new DetailTree();
+						final DetailTree shippingDetails = new DetailTree();
 						entityBookDetailTreeMap.put(baseEntity.getTradingBook(), shippingDetails);
 						// Add in positioning costs
 						shippingCostHelper.annotateRF(currentAllocation, shippingDetails, firstPortSlot, vesselCharter);
@@ -848,17 +847,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					continue;
 				}
 
-				if (e instanceof PortDetails portDetails) {
+				if (e instanceof final PortDetails portDetails) {
 					final IPortSlot slot = portDetails.getOptions().getPortSlot();
 
 					if (!portTimesRecord.getSlots().contains(slot)) {
 						continue;
 					}
 
-					if (slot instanceof IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot) {
+					if (slot instanceof final IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot) {
 						final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
 						long currentHeelInM3 = heelRecords.get(slot).portHeelRecord.getHeelAtStartInM3();
-						if (portTimesRecord instanceof IAllocationAnnotation iAllocationAnnotation) {
+						if (portTimesRecord instanceof final IAllocationAnnotation iAllocationAnnotation) {
 							currentHeelInM3 = iAllocationAnnotation.getStartHeelVolumeInM3();
 						}
 
@@ -877,7 +876,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 					}
 
-					if (slot instanceof IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
+					if (slot instanceof final IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
 						final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
 
 						// This is wrong! should be vp.getStarintHeel in this case.
@@ -885,7 +884,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						// long currentHeelInM3 = vp.getRemainingHeelInM3();
 
-						if (portTimesRecord instanceof IAllocationAnnotation iAllocationAnnotation) {
+						if (portTimesRecord instanceof final IAllocationAnnotation iAllocationAnnotation) {
 							currentHeelInM3 = iAllocationAnnotation.getRemainingHeelVolumeInM3();
 						}
 						final int heelTime = portTimesRecord.getSlotTime(slot) + portTimesRecord.getSlotDuration(slot);

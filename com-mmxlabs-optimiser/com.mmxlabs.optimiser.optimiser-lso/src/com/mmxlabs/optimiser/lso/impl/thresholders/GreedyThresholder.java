@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.optimiser.lso.impl.thresholders;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.optimiser.lso.IThresholder;
 
 /**
@@ -15,7 +12,6 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  * @author achurchill
  */
 public class GreedyThresholder implements IThresholder {
-	private static final Logger log = LoggerFactory.getLogger(GreedyThresholder.class);
 
 	@Override
 	public boolean accept(final long delta) {

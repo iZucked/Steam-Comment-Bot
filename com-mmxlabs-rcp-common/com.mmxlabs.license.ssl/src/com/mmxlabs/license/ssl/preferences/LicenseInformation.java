@@ -27,7 +27,7 @@ import com.mmxlabs.license.ssl.LicenseChecker;
 
 public class LicenseInformation extends PreferencePage implements IWorkbenchPreferencePage {
 
-	private static final Logger log = LoggerFactory.getLogger(LicenseInformation.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LicenseInformation.class);
 
 	public LicenseInformation() {
 		super();
@@ -49,7 +49,7 @@ public class LicenseInformation extends PreferencePage implements IWorkbenchPref
 		try {
 			cert = LicenseChecker.getClientLicense();
 		} catch (final Exception e) {
-			log.error("Unable to load license: " + e.getMessage(), e);
+			LOG.error("Unable to load license: " + e.getMessage(), e);
 		}
 
 		{

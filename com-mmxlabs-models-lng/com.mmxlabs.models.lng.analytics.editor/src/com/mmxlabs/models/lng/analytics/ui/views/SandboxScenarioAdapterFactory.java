@@ -27,8 +27,7 @@ public class SandboxScenarioAdapterFactory implements IAdapterFactory {
 	private IScenarioFragmentOpenHandler openSolution() {
 		return (fragment, scenarioInstance) -> {
 			final Object object = fragment.getFragment();
-			if (object instanceof OptionAnalysisModel) {
-				final OptionAnalysisModel model = (OptionAnalysisModel) object;
+			if (object instanceof OptionAnalysisModel model) {
 				SandboxScenario.open(scenarioInstance, model);
 			}
 		};

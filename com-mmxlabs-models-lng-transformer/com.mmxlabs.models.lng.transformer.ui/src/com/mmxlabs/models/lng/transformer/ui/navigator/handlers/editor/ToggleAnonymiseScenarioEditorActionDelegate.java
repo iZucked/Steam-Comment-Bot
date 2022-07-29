@@ -72,8 +72,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 
 		if (this.targetEditor != null) {
 			final IEditorInput editorInput = targetEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+			if (editorInput instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
@@ -134,17 +133,10 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		for (final AnonymisationRecord r : records) {
 			usedIDStrings.add(r.newName);
 		}
-		
-		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, !currentModel.isAnonymised());
+
+		final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, !currentModel.isAnonymised(), false /* Strip notes */);
 		if (!cmd.isEmpty())
 			ed.getCommandStack().execute(cmd);
 	}
-	
-	
-
-	
-
-	
-
 
 }

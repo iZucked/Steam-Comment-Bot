@@ -31,7 +31,7 @@ public class TradesTablePreferencesPage extends FieldEditorPreferencePage implem
 		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(2, 1).hint(200, SWT.DEFAULT);
 		{
 			final Label label = new Label(getFieldEditorParent(), SWT.WRAP);
-			label.setText("Contract to consider as open when computing Long/Shorts.For multiple names, separate with a comma");
+			label.setText("Contracts to consider as open when computing Long/Shorts. For multiple names, separate with a comma");
 			label.setLayoutData(labelLayoutData.create());
 			final StringFieldEditor leeway = new StringFieldEditor(PreferenceConstants.P_CONTRACTS_TO_CONSIDER_OPEN, "&Open contract names:", getFieldEditorParent());
 			addField(leeway);

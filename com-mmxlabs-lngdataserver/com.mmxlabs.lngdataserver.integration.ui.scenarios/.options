@@ -1,0 +1,3 @@
+com.mmxlabs.lngdataserver.integration.ui.scenarios/debug/cloud/resultdownload=false
+com.mmxlabs.lngdataserver.integration.ui.scenarios/debug/cloud/resultimport=false
+com.mmxlabs.lngdataserver.integration.ui.scenarios/debug/cloud/polling=false

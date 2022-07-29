@@ -19,7 +19,9 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  * @author hinton
  */
 public class GeometricThresholder implements IThresholder {
-	private static final Logger log = LoggerFactory.getLogger(GeometricThresholder.class);
+	
+	private static final Logger LOG = LoggerFactory.getLogger(GeometricThresholder.class);
+	
 	private final double fractionPerEpoch;
 	private final int epochLength;
 	private int ticks;
@@ -77,7 +79,7 @@ public class GeometricThresholder implements IThresholder {
 		if (ticks >= epochLength) {
 			ticks = 0;
 			temperature *= fractionPerEpoch;
-			log.debug("Next epoch, temperature = " + temperature);
+			LOG.debug("Next epoch, temperature = " + temperature);
 		}
 	}
 

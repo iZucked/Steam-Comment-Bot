@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GanttChartViewer extends StructuredViewer {
 
-	private static final Logger log = LoggerFactory.getLogger(GanttChartViewer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(GanttChartViewer.class);
 
 	protected final GanttChart ganttChart;
 
@@ -378,7 +378,7 @@ public class GanttChartViewer extends StructuredViewer {
 				}
 
 			} catch (final Exception ex) {
-				log.error(ex.getMessage(), ex);
+				LOG.error(ex.getMessage(), ex);
 			}
 		} else {
 			throw new IllegalArgumentException("ContentProvider should be an instance of " + ITreeContentProvider.class.getCanonicalName());

@@ -31,7 +31,7 @@ public class PhaseTwoAllocationTrackerManipulationStrategy implements IAllocatio
 	@Override
 	public void dropFixedLoad(final Cargo cargo, final IAllocationTracker allocationTracker) {
 		if (allocationTracker.matches(cargo)) {
-			final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+			final int expectedVolumeLoaded = cargo.getSortedSlots().get(0).getSlotOrDelegateMaxQuantity();
 			allocationTracker.decreaseRunningAllocation(expectedVolumeLoaded);
 		}
 	}

@@ -13,8 +13,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -30,8 +28,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
  */
 
 public class ExportCSVWizard extends Wizard implements IExportWizard {
-
-	private static final Logger log = LoggerFactory.getLogger(ExportCSVWizard.class);
 
 	private ExportCSVWizardPage exportPage;
 	

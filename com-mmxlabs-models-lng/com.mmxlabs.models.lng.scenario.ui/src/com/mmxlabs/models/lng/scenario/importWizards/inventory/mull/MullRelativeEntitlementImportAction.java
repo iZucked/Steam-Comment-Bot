@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class MullRelativeEntitlementImportAction extends ImportAction {
-	private static final Logger log = LoggerFactory.getLogger(SimpleImportAction.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SimpleImportAction.class);
 
 	@NonNull
 	private final CommercialModel commercialModel;
@@ -113,7 +113,7 @@ public class MullRelativeEntitlementImportAction extends ImportAction {
 				importHooksProvider.getEditingDomain().getCommandStack().execute(cmd);
 			}
 		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 }

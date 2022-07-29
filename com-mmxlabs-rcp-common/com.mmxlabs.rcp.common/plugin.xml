@@ -10,6 +10,7 @@
    <extension-point id="ReplaceableViewFactory" name="ReplaceableViewFactory" schema="schema/ReplaceableViewFactory.exsd"/>
    <extension-point id="ReplaceableView" name="ReplaceableView" schema="schema/ReplaceableView.exsd"/>
    <extension-point id="ViewPartRewrite" name="ViewPartRewrite" schema="schema/ViewPartRewrite.exsd"/>
+   <extension-point id="DebugOptionsProvider" name="DebugOptionsProvider" schema="schema/DebugOptionsProvider.exsd"/>
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
@@ -76,6 +77,11 @@
             id="com.mmxlabs.rcp.common.os.MachineInformation"
             name="Machine Information">
       </page>
+      <page
+            class="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
+            id="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
+            name="Debug logging options">
+      </page>      
    </extension>
 
 </plugin>

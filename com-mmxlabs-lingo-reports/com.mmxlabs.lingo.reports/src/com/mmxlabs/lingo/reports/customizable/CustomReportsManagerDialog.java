@@ -95,7 +95,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	private final List<CustomReportStatus> teamReportDefinitions = new LinkedList<>();
 
-	private final StoreType currentStoreType = StoreType.USER;
+	private StoreType currentStoreType = StoreType.USER;
 
 	private @Nullable CustomReportStatus current;
 
@@ -976,7 +976,9 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.renameBtn.setEnabled(false);
 		this.discardBtn.setEnabled(false);
 		this.refreshBtn.setVisible(false);
+		this.currentStoreType = StoreType.USER;
 		disableEditingControls();
+		
 	}
 
 	private void disableEditingControls() {
@@ -1001,6 +1003,8 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		this.renameBtn.setEnabled(false);
 		this.discardBtn.setEnabled(false);
 		this.refreshBtn.setVisible(true);
+		this.currentStoreType = StoreType.TEAM;
+
 		disableEditingControls();
 	}
 
