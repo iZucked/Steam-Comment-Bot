@@ -25,7 +25,7 @@ public class CargoTransferUtil {
 	
 	private static boolean isSlotTransferred(final Slot<?> slot, final List<TransferRecord> records) {
 		for(final TransferRecord tr: records) {
-			if (tr.getLhs().equals(slot)) {
+			if (slot.equals(tr.getLhs())) {
 				return true;
 			}
 		}

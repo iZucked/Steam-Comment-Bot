@@ -403,14 +403,21 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.adp/model/adp-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_ADPModel);
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.nominations/model/nominations-v%d.ecore", n), true),
 				ModelsLNGMigrationConstants.PKG_DATA_NominationsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.transfers/model/transfers-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_TransfersModel);
-		
+
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
 				loader.loadEPackage(e.getKey(), e.getValue());
 			}
 		}
 		EcoreUtil.resolveAll(loader.getResourceSet());
+		return loader;
+	}
+	
+	public static MetamodelLoader createVNLoaderTemplate164Onwards(final int n, final Map<URI, PackageData> extraPackages) {
+
+		final MetamodelLoader loader = createVNLoaderTemplate109Onwards(n, extraPackages);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.transfers/model/transfers-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_TransfersModel);
+		
 		return loader;
 	}
 
@@ -425,8 +432,10 @@ public class MetamodelVersionsUtil {
 			return createVNLoaderTemplate64Onwards(version, extraPackages);
 		} else if (version < 109) {
 			return createVNLoaderTemplate74Onwards(version, extraPackages);
-		} else {
+		} else if (version < 164){
 			return createVNLoaderTemplate109Onwards(version, extraPackages);
+		} else {
+			return createVNLoaderTemplate164Onwards(version, extraPackages);
 		}
 	}
 }
