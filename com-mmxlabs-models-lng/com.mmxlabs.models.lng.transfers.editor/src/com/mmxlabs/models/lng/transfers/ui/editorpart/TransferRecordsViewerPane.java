@@ -2,8 +2,10 @@ package com.mmxlabs.models.lng.transfers.ui.editorpart;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -16,12 +18,14 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -54,8 +58,8 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		//final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		//service.addPostSelectionListener(selectionListener);
+		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		service.addPostSelectionListener(selectionListener);
 	}
 
 	@Override
@@ -114,54 +118,84 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 		return null;
 	}
 	
-//	@Override
-//	public void dispose() {
-//		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-//		service.removePostSelectionListener(selectionListener);
-//
-//		super.dispose();
-//	}
-//	
-//	private final ISelectionListener selectionListener = new ISelectionListener() {
-//
-//		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
-//
-//		@Override
-//		public void selectionChanged(final MPart part, final Object selectedObject) {
-//
-//			{
-//				final IWorkbenchPart view = SelectionHelper.getE3Part(part);
-//
-//				if (view == TransferRecordsViewerPane.this.part) {
-//					return;
-//				}
-//				if (view instanceof PropertySheet) {
-//					return;
-//				}
-//			}
-//
-//			// Convert selection
-//			final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-//
-//			// Avoid re-entrant selection changes.
-//			if (inSelectionChanged.compareAndSet(false, true)) {
-//				try {
-//					// Avoid cyclic selection changes
-//					if (TransferRecordsViewerPane.this.page == null || TransferRecordsViewerPane.this.page.getActivePart() == TransferRecordsViewerPane.this.part) {
-//						return;
-//					}
-//					if (viewer != null) {
-//						try {
-//							viewer.setSelection(selection, true);
-//						} catch (final Exception e) {
-//							//log.error(e.getMessage(), e);
-//						}
-//					}
-//				} finally {
-//					inSelectionChanged.set(false);
-//				}
-//			}
-//		}
-//
-//	};
+	@Override
+	public void dispose() {
+		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		service.removePostSelectionListener(selectionListener);
+
+		super.dispose();
+	}
+	
+	private final ISelectionListener selectionListener = new ISelectionListener() {
+
+		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
+
+		@Override
+		public void selectionChanged(final MPart part, final Object selectedObject) {
+
+			{
+				final IWorkbenchPart view = SelectionHelper.getE3Part(part);
+
+				if (view == TransferRecordsViewerPane.this.part) {
+					return;
+				}
+				if (view instanceof PropertySheet) {
+					return;
+				}
+			}
+
+			// Convert selection
+			
+			final ISelection selection = handleSelection(selectedObject);
+
+			// Avoid re-entrant selection changes.
+			if (inSelectionChanged.compareAndSet(false, true)) {
+				try {
+					// Avoid cyclic selection changes
+					if (TransferRecordsViewerPane.this.page == null || TransferRecordsViewerPane.this.page.getActivePart() == TransferRecordsViewerPane.this.part) {
+						return;
+					}
+					if (viewer != null) {
+						try {
+							viewer.setSelection(selection, true);
+						} catch (final Exception e) {
+							//log.error(e.getMessage(), e);
+						}
+					}
+				} finally {
+					inSelectionChanged.set(false);
+				}
+			}
+		}
+		
+		private ISelection handleSelection(final Object selectedObject){
+			final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
+			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
+			if (selection instanceof IStructuredSelection sel) {
+				final List<Object> newSelection = new LinkedList<>();
+				for (final Object obj : sel.toList()) {
+					if (obj instanceof Slot<?> slot) {
+						newSelection.addAll(getTransferRecordsForSlot(slot, scenarioModel));
+					}
+				}
+				return SelectionHelper.adaptSelection(newSelection);
+			}
+			return selection;
+		}
+		
+		private List<TransferRecord> getTransferRecordsForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel){
+			return getTransferRecords(scenarioModel).stream().filter(tr -> slot.equals(tr.getLhs())).collect(Collectors.toList());
+		}
+		
+		private List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){
+			if (scenarioModel != null) {
+				final TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
+				if (tm != null) {
+					return tm.getTransferRecords();
+				}
+			}
+			return Collections.emptyList();
+		}
+	};
 }
