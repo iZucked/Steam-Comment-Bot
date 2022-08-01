@@ -8,6 +8,6 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.transformer.ui.ScenarioInstanceEvaluator" immediate="true">
    <implementation class="com.mmxlabs.models.lng.transformer.ui.ScenarioInstanceEvaluator"/>
    <service>
-   	<provide interface="com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator" />
+   	<provide interface="com.mmxlabs.scenario.service.model.manager.IScenarioInstanceEvaluator" />
    </service>
 </scr:component>
