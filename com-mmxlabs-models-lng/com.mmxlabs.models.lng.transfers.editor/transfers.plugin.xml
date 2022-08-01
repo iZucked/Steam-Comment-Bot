@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.lngdataserver.views.dataserver"
+          class="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          id="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
+          icon="icons/full/obj16/small_transfers.png"
+          name="Transfer Records"
+          restorable="true">
+    </view>
+   </extension>
+   <extension point="com.mmxlabs.models.common.modelcommandprovider">
+    	<ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.transfers.ui.commands.TransferRecordLHSUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.transfers.ui.commands.TransferRecordLHSUpdatingCommandProvider">
+    	</ModelCommandProvider>
+    </extension>
+</plugin>

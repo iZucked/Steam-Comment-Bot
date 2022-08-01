@@ -15,17 +15,6 @@
 -->
 <plugin>
 <extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.lngdataserver.views.dataserver"
-          class="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
-          id="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
-          icon="icons/full/obj16/small_transfers.png"
-          name="Transfer Records"
-          restorable="true">
-    </view>
-</extension>
-<extension
          point="com.mmxlabs.models.ui.displaycompositefactories">
       <displayCompositeFactory
             eClass="com.mmxlabs.models.lng.transfers.TransferAgreement"
@@ -107,10 +96,11 @@
             inheritable="false"
             modelClass="com.mmxlabs.models.lng.transfers.TransferAgreement"/>
     </extension>  
-    <extension point="com.mmxlabs.models.common.modelcommandprovider">
-    	<ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.transfers.ui.commands.TransferRecordLHSUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.transfers.ui.commands.TransferRecordLHSUpdatingCommandProvider">
-    	</ModelCommandProvider>
-    </extension>
+    <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="transfer-model"
+            plugin.xml="transfers.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 </plugin>
