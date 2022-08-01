@@ -101,6 +101,11 @@
             id="com.mmxlabs.models.lng.transfers.presentation.composites.TransferRecordComponentHelper"
             inheritable="false"
             modelClass="com.mmxlabs.models.lng.transfers.TransferRecord"/>
+      <componentHelper
+            helperClass="com.mmxlabs.models.lng.transfers.presentation.composites.TransferAgreementComponentHelper"
+            id="com.mmxlabs.models.lng.transfers.presentation.composites.TransferAgreementComponentHelper"
+            inheritable="false"
+            modelClass="com.mmxlabs.models.lng.transfers.TransferAgreement"/>
     </extension>  
     <extension point="com.mmxlabs.models.common.modelcommandprovider">
     	<ModelCommandProvider
