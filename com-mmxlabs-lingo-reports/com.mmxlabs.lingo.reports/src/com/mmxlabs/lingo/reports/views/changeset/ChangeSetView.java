@@ -1004,6 +1004,26 @@ public class ChangeSetView extends ViewPart {
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
+			final Action collapseAll = new Action("Collapse All") {
+				@Override
+				public void run() {
+					viewer.collapseAll();
+				}
+			};
+			final Action expandAll = new Action("Expand All") {
+				@Override
+				public void run() {
+					viewer.expandAll();
+				}
+			};
+			
+			CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
+			CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
+			
+			getViewSite().getActionBars().getToolBarManager().add(collapseAll);
+			getViewSite().getActionBars().getToolBarManager().add(expandAll);
+		}
+		{
 
 			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
 
