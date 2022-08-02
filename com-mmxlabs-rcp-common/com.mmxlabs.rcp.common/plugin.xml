@@ -81,7 +81,13 @@
             class="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             id="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             name="Debug logging options">
-      </page>      
+      </page>
+      <page
+            name="General"
+            class="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
+            id="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
+            category="General">
+      </page>
    </extension>
 
 </plugin>
