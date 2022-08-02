@@ -78,6 +78,7 @@ public final class CommonImages {
 		Lateness(16, "icons/16x16/lateness.png"), //
 		Local(16, "icons/16x16/local.png"), //
 		Nominations(16, "icons/16x16/nominations.png"), //
+		NominationSpecifications(16, "icons/16x16/nomination_specifications.png"), //
 		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
 		Pack(16, "icons/16x16/pack.png"), //
 		Paste(16, "icons/16x16/paste.png"), //
