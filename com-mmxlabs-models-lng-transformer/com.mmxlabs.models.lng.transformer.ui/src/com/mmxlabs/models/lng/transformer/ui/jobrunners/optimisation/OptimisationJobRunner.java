@@ -37,6 +37,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -326,6 +327,8 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			return options;
 		} catch (final OperationCanceledException e) {
 			return null;
+		} catch (final UserFeedbackException e) {
+			throw e;
 		} catch (final Exception e) {
 			throw new RuntimeException("Error during optimisation", e);
 		}
