@@ -80,7 +80,7 @@
       <page
             class="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             id="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
-            name="Debug logging options">
+            name="Debug Logging">
       </page>      
    </extension>
 
