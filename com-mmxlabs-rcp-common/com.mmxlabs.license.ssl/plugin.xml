@@ -12,7 +12,8 @@
       <page
             class="com.mmxlabs.license.ssl.preferences.LicenseInformation"
             id="com.mmxlabs.license.ssl.preferences.LicenseInformation"
-            name="License Information">
+            name="License"
+            category="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage">
       </page>
    </extension>
    <extension

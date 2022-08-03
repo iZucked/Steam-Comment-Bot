@@ -20,7 +20,8 @@
       <page
             class="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
             id="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
-            name="Market Model Contracts">
+            name="Market Model Contracts"
+            category="com.mmxlabs.lingo.app.preferences.AppPreferencesPage">
       </page>
    </extension>
 </plugin>
