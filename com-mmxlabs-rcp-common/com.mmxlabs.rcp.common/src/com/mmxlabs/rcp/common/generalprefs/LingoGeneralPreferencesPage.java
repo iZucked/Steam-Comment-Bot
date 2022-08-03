@@ -29,7 +29,7 @@ public class LingoGeneralPreferencesPage extends FieldEditorPreferencePage imple
 
 	@Override
 	protected void createFieldEditors() {
-		final IntegerFieldEditor maxOpenedEditors = new IntegerFieldEditor("REUSE_OPEN_EDITORS", "&Number of opened editors before closing:", getFieldEditorParent());
+		final IntegerFieldEditor maxOpenedEditors = new IntegerFieldEditor("REUSE_OPEN_EDITORS", "&Max open scenarios:", getFieldEditorParent());
 		addField(maxOpenedEditors);
 	}
 
