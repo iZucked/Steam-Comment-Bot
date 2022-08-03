@@ -642,16 +642,11 @@
       </initializer>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
-            id="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
-            name="Filtering">
-      </page>
-   </extension>
-
-   <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="market-model-contracts"
+            plugin.xml="market-model-contracts.xml">
+      </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="risk"
             plugin.xml="risk.plugin.xml">

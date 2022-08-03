@@ -59,7 +59,8 @@
       <page
             class="com.mmxlabs.scenario.service.model.util.encryption.ui.preferences.KeyfileInformation"
             id="com.mmxlabs.scenario.service.model.util.encryption.ui.preferences.KeyfileInformation"
-            name="Encryption Info">
+            name="Encryption"
+            category="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage">
       </page>
    </extension>
 </plugin>

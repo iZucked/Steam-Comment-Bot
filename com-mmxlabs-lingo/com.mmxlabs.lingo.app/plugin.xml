@@ -161,7 +161,19 @@
             context="com.mmxlabs.lingo">
       </DefaultMigrationContext>
    </extension>
-   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+       <page
+            class="com.mmxlabs.lingo.app.preferences.AppPreferencesPage"
+            id="com.mmxlabs.lingo.app.preferences.AppPreferencesPage"
+            name="App">
+       </page>
+       <page
+            class="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage"
+            id="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage"
+            name="Info">
+       </page>
+   </extension>
    
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
