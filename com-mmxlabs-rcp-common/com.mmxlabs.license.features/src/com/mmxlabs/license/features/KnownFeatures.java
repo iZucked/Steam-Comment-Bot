@@ -133,6 +133,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_PRICE_SENSITIVITY = "features:price-sensitivity";
 
+	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
+
 	/**
 	 * Scenario repair features
 	 */
