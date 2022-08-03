@@ -70,14 +70,15 @@ public final class ResourceHelper {
 
 	public static Resource loadResource(@NonNull final ResourceSet resourceSet, @NonNull final URI uri) throws IOException {
 
-		// Check for existing resource before creating otherwise we can get multiple resources for the same URI
+		// Check for existing resource before creating otherwise we can get multiple
+		// resources for the same URI
 		Resource resource = resourceSet.getResource(uri, false);
 		if (resource == null) {
 			resource = resourceSet.createResource(uri);
-			if (resource instanceof ResourceImpl) {
+			if (resource instanceof ResourceImpl resourceImpl) {
 				// This helps speed up model loading
 				final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<>();
-				((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+				resourceImpl.setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 			}
 		}
 		Map<Object, Object> loadOptions = new HashMap<>(resourceSet.getLoadOptions());
@@ -91,7 +92,8 @@ public final class ResourceHelper {
 				break;
 			} catch (IOWrappedException ee) {
 				if (ee.getCause() instanceof IllegalValueException) {
-					// This can be triggered by multiple entries for the same object instance in a unique list
+					// This can be triggered by multiple entries for the same object instance in a
+					// unique list
 					if (!disabledIDMap) {
 						disabledIDMap = true;
 						loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.FALSE);
@@ -108,8 +110,7 @@ public final class ResourceHelper {
 						continue;
 					}
 				}
-				if (ee.getCause() instanceof org.xml.sax.SAXParseException) {
-					org.xml.sax.SAXParseException saxParseException = (org.xml.sax.SAXParseException) ee.getCause();
+				if (ee.getCause() instanceof org.xml.sax.SAXParseException saxParseException) {
 					if (saxParseException.getMessage().equals("Content is not allowed in prolog.")) {
 						URIConverterImpl uc = new URIConverterImpl();
 						byte[] keyID = new byte[0];
@@ -141,16 +142,16 @@ public final class ResourceHelper {
 	}
 
 	public static void saveResource(@NonNull final Resource resource) throws IOException {
-		assert resource.getContents().size() > 0;
+		assert !resource.getContents().isEmpty();
 		resource.save(null);
 	}
 
 	public static Resource createResource(final ResourceSet resourceSet, final URI uri) {
 		final Resource resource = resourceSet.createResource(uri);
-		if (resource instanceof ResourceImpl) {
+		if (resource instanceof ResourceImpl resourceImpl) {
 			// This helps speed up model loading
-			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
-			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<>();
+			resourceImpl.setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 		}
 		return resource;
 	}
