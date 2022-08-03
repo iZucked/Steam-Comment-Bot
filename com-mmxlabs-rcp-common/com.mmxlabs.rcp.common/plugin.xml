@@ -85,8 +85,7 @@
       <page
             name="General"
             class="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
-            id="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
-            category="General">
+            id="org.eclipse.ui.preferencePages.Workbench">
       </page>
    </extension>
 
