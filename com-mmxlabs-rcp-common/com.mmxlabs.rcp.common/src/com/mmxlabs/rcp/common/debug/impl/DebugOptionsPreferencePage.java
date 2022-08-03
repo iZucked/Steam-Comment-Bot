@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.rcp.common.debug.impl;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.PreferencePage;
@@ -84,7 +82,7 @@ public class DebugOptionsPreferencePage extends PreferencePage implements IWorkb
 
 		{
 			final Label descLabel = new Label(c, SWT.NONE);
-			descLabel.setText("This page shows various debug logging options for LiNGO. These should normally be disabled and set to Off unless requested by Minimax Labs.");
+			descLabel.setText("These should normally be disabled and set to Off unless requested by Minimax Labs.");
 			descLabel.setLayoutData(GridDataFactory.fillDefaults().create());
 
 			// Just for inserting some space
@@ -97,7 +95,7 @@ public class DebugOptionsPreferencePage extends PreferencePage implements IWorkb
 			g.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
 
 			final Label l = new Label(g, SWT.NONE);
-			l.setText("Enable debug logging?");
+			l.setText("Enable");
 
 			final Button btn = new Button(g, SWT.CHECK);
 			debugEnabled = debugOptions.isDebugEnabled();
