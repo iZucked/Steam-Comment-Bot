@@ -82,7 +82,12 @@
             class="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             id="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             name="Debug Logging">
-      </page>      
+      </page>
+      <page
+            name="General"
+            class="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
+            id="org.eclipse.ui.preferencePages.Workbench">
+      </page>
    </extension>
 
 </plugin>
