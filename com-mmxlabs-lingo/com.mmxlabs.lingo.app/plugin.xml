@@ -174,4 +174,14 @@
             plugin.xml="actuals.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.mmxlabs.lingo.app.bugreport.SubmitBugReportHandler"
+            id="com.mmxlabs.rcp.common.submitbugreport"
+            name="Submit Bug Report">
+      </command>
+   </extension>
 </plugin>

@@ -32,13 +32,16 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore,
  com.mmxlabs.hub;bundle-version="5.7.4",
  com.googlecode.json-simple;bundle-version="1.1.1",
- com.mmxlabs.rcp.icons.lingo;bundle-version="5.7.4";visibility:=reexport
+ com.mmxlabs.rcp.icons.lingo;bundle-version="5.7.4";visibility:=reexport,
+ com.sun.mail.javax.mail;bundle-version="1.6.2",
+ javax.activation;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.actions,
  com.mmxlabs.rcp.common.application,
  com.mmxlabs.rcp.common.appversion,
+ com.mmxlabs.rcp.common.bugreporting,
  com.mmxlabs.rcp.common.celleditors,
  com.mmxlabs.rcp.common.controls,
  com.mmxlabs.rcp.common.debug,
@@ -54,6 +57,7 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.validation,
  com.mmxlabs.rcp.common.versions,
  com.mmxlabs.rcp.common.viewfactory,
+ com.mmxlabs.rcp.common.widgets,
  com.mmxlabs.rcp.common.wizards
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
