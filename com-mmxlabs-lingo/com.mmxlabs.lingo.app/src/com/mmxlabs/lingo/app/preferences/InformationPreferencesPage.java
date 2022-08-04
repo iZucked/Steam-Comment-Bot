@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.app.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
