@@ -19,8 +19,6 @@ public final class KnownFeatures {
 
 	}
 
-	public static final String FEATURE_REENCRYPT = "features:reencrypt";
-
 	/**
 	 * Enable parallelisation in optimiser
 	 */

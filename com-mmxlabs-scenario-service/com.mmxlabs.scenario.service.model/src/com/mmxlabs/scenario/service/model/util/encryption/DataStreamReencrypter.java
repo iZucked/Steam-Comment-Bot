@@ -31,7 +31,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
 public class DataStreamReencrypter {
 
 	// Temporary flag to enable or disable this code before making it live
-	public static boolean ENABLED = false;
+	public static final boolean ENABLED = true;
 
 	public static final String GENERIC_DATA_KEY = "content";
 
