@@ -56,8 +56,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 	
-	private static final String NONE = "<None>";
-	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
@@ -76,18 +74,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 		
 		addNameManipulator("Name");
 		addTypicalColumn("Agreement", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement(), //
-				getReferenceValueProviderCache(), getCommandHandler()){
-			@Override
-			public String render(final Object object) {
-				String result = super.render(object);
-				
-				if (result == null) {
-					result = NONE;
-				}
-				
-				return result;
-			}
-		});
+				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Deal", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Next transfer", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Rhs(), //
