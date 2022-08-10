@@ -16,8 +16,8 @@ public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity to
 	
 	@Override
 	public boolean equals(@Nullable Object object) {
-		if (object == null) {
-			return false;
+		if (object == this) {
+			return true;
 		} else if (object instanceof BasicTransferAgreement otherAgreement) {
 			if (otherAgreement.name().equalsIgnoreCase(name)//
 					&& otherAgreement.fromEntity() == fromEntity//
