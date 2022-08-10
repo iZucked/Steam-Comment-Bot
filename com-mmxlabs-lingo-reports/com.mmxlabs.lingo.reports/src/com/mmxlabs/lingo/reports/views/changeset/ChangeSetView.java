@@ -171,7 +171,8 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected
+	 * ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -899,15 +900,12 @@ public class ChangeSetView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
 
 		{
-			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
-				columnHelper.setTextualVesselMarkers(true);
-				ViewerHelper.refresh(viewer, true);
-			}, () -> {
-				columnHelper.setTextualVesselMarkers(false);
-				ViewerHelper.refresh(viewer, true);
-			});
-			getViewSite().getActionBars().getToolBarManager().add(copyAction);
+
+			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+
+			getViewSite().getActionBars().getToolBarManager().add(packAction);
 		}
+
 		{
 			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
 			toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
@@ -920,6 +918,58 @@ public class ChangeSetView extends ViewPart {
 			}
 			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
 
+		}
+
+		{
+			final Action collapseAll = new Action("Collapse All") {
+				@Override
+				public void run() {
+					viewer.collapseAll();
+				}
+			};
+			final Action expandAll = new Action("Expand All") {
+				@Override
+				public void run() {
+					viewer.expandAll();
+				}
+			};
+
+			CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
+			CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
+
+			getViewSite().getActionBars().getToolBarManager().add(collapseAll);
+			getViewSite().getActionBars().getToolBarManager().add(expandAll);
+		}
+
+		{
+			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
+				columnHelper.setTextualVesselMarkers(true);
+				ViewerHelper.refresh(viewer, true);
+			}, () -> {
+				columnHelper.setTextualVesselMarkers(false);
+				ViewerHelper.refresh(viewer, true);
+			});
+			getViewSite().getActionBars().getToolBarManager().add(copyAction);
+		}
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
+			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
+				final AnalyticsSolution solution = currentViewState.lastSolution;
+				// solution.
+				if (solution != null) {
+					final UUIDObject object = solution.getSolution();
+					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
+						final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(solution.getScenarioInstance());
+						EvaluateSolutionSetHelper.recomputeSolution(record, solution.getScenarioInstance(), abstractSolutionSet, //
+								false, // Generate from specification model only
+								true // Open once complete
+						);
+					}
+				}
+			});
+			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate_16);
+			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
+			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
 
 		{
@@ -1002,32 +1052,6 @@ public class ChangeSetView extends ViewPart {
 			filterMenu.setToolTipText("Change filters");
 			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
-		}
-		{
-
-			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-
-			getViewSite().getActionBars().getToolBarManager().add(packAction);
-		}
-
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
-			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
-				final AnalyticsSolution solution = currentViewState.lastSolution;
-				// solution.
-				if (solution != null) {
-					final UUIDObject object = solution.getSolution();
-					if (object instanceof AbstractSolutionSet abstractSolutionSet) {
-						final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(solution.getScenarioInstance());
-						EvaluateSolutionSetHelper.recomputeSolution(record, solution.getScenarioInstance(), abstractSolutionSet, //
-								false, // Generate from specification model only
-								true // Open once complete
-						);
-					}
-				}
-			});
-			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate_16);
-			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
-			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
 
 		getViewSite().getActionBars().getToolBarManager().update(true);

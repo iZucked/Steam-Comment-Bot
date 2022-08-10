@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.migration.feature"
       label="Model Migration Feature"
-      version="5.7.4.qualifier"
+      version="5.8.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin

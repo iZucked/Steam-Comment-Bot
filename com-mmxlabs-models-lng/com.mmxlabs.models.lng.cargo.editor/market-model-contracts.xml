@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
+            id="com.mmxlabs.models.lng.cargo.editor.TradesTablePreferencesPage"
+            name="Market Model Contracts"
+            category="com.mmxlabs.lingo.app.preferences.AppPreferencesPage">
+      </page>
+   </extension>
+</plugin>

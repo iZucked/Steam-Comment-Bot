@@ -13,7 +13,7 @@
       <page
             class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferencePage"
             id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferencePage"
-            name="Cloud Optimiser">
+            name="Cloud Optimisation">
       </page>
    </extension>
    <extension
