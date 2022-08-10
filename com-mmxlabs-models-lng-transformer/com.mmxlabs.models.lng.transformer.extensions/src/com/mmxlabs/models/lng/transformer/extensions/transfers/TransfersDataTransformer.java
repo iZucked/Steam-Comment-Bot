@@ -159,7 +159,7 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					if (pricingOverride) {
 						curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
 					} else {
-						curve = basicTA.getPricingSeries();
+						curve = basicTA.pricingSeries();
 					}
 					final BasicTransferRecord basicTR = new BasicTransferRecord(tr.getName(), basicTA,
 							pricingOverride, curve, priceExpression, dateAndCurveHelper.convertTime(tr.getPricingDate()), //

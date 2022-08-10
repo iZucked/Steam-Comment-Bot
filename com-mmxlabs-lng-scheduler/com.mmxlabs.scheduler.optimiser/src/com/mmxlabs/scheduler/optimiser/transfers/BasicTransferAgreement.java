@@ -1,5 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.transfers;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
@@ -8,36 +11,22 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  * @author FM
  *
  */
-public class BasicTransferAgreement implements ITransferAgreement{
-	private String name;
-	private IEntity fromEntity;
-	private IEntity toEntity;
-	private ICurve pricingSeries;
-	private String priceExpression;
+@NonNullByDefault
+public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, ICurve pricingSeries, String priceExpression) implements ITransferAgreement{
 	
-	public BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, ICurve pricingSeries, String priceExpression) {
-		super();
-		this.name = name;
-		this.fromEntity = fromEntity;
-		this.toEntity = toEntity;
-		this.pricingSeries = pricingSeries;
-		this.priceExpression = priceExpression;
+	@Override
+	public boolean equals(@Nullable Object object) {
+		if (object == null) {
+			return false;
+		} else if (object instanceof BasicTransferAgreement otherAgreement) {
+			if (otherAgreement.name().equalsIgnoreCase(name)//
+					&& otherAgreement.fromEntity() == fromEntity//
+					&& otherAgreement.toEntity() == toEntity//
+					&& otherAgreement.pricingSeries() == pricingSeries//
+					&& otherAgreement.priceExpression.equalsIgnoreCase(priceExpression)) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
-	public String getName() {
-		return name;
-	}
-	public IEntity getFromEntity() {
-		return fromEntity;
-	}
-	public IEntity getToEntity() {
-		return toEntity;
-	}
-	public ICurve getPricingSeries() {
-		return pricingSeries;
-	}
-	public String getPriceExpression() {
-		return priceExpression;
-	}
-	
 }

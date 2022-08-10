@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -35,7 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class TransferModelImpl extends EObjectImpl implements TransferModel {
+public class TransferModelImpl extends UUIDObjectImpl implements TransferModel {
 	/**
 	 * The cached value of the '{@link #getTransferAgreements() <em>Transfer Agreements</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
