@@ -60,7 +60,7 @@ public class OAuthTests {
 	@Container
 	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.10.2-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -73,13 +73,7 @@ public class OAuthTests {
 	.withEnv("AZURE_CLIENT_ID", "e52d83a9-40c0-42ae-aae3-d5054ef24919")
 	.withEnv("AZURE_TENANT_ID", "dceff11f-6e74-436e-b9a0-65f9697b8472")
 	.withEnv("AZURE_CLIENT_SECRET", "n-LV4_3vPJ3s1v.9MWwLy1.ZO-1oz17u54")
-	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase")
-	.withEnv("AZURE_BASECASE_GROUP_ID", "452fe6d8-7360-47fd-b5b5-8cd8108d9233")
-	.withEnv("AZURE_BASECASE_GROUP_NAME", "MinimaxBasecase")
-	.withEnv("AZURE_LINGO_GROUP_ID", "80a34e39-50d3-405d-88b0-3522307dfed8")
-	.withEnv("AZURE_LINGO_GROUP_NAME", "MinimaxLingo")
-	.withEnv("AZURE_USERS_GROUP_ID", "287686ff-d399-4875-b86d-1dd9426973d6")
-	.withEnv("AZURE_USERS_GROUP_NAME", "MinimaxUsers")
+	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
 	.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
 	// @formatter:on
 
@@ -93,8 +87,8 @@ public class OAuthTests {
 		enableOAuth();
 		// slow down tests' playback speed to 500ms
 		SWTBotPreferences.PLAYBACK_DELAY = 500;
-		// increase timeout to 10 seconds
-		SWTBotPreferences.TIMEOUT = 10000;
+		// increase timeout to 20 seconds
+		SWTBotPreferences.TIMEOUT = 20000;
 		// force trigger refresh
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
@@ -173,7 +167,6 @@ public class OAuthTests {
 			bot.buttonWithId("login").click();
 			Thread.sleep(2000);
 		}
-		bot.buttonWithId("login").click();
 
 		logger.info(Boolean.toString(datahubServiceProvider.isLoggedIn()));
 
