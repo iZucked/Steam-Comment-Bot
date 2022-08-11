@@ -14,10 +14,20 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
+import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
+import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
+import software.amazon.awssdk.services.secretsmanager.model.SecretsManagerException;
 
 public class HubTestHelper {
 
@@ -122,9 +132,9 @@ public class HubTestHelper {
 	public static String noButtonId = "idBtn_Back";
 
 	// test credentials
-	public static String email = "test@minimaxlabs.com";
+	public static String email = "test@mmxlabstest.onmicrosoft.com";
 	// TODO update
-	public static String password = "xUPffZ76Ef^X28YqQQC%ZyVr#";
+	public static String password = getSecret();
 	// javascript actions executed in the browser - tested in IE and Firefox
 	public static String clickUserAnotherAccount = "document.getElementById('" + otherTile + "').click();";
 	public static String fillEmail = "document.getElementsByName('" + emailInputName + "')[0].value = '" + email + "';";
@@ -139,4 +149,54 @@ public class HubTestHelper {
 	public static String userIsSignedIn = "document.querySelector('div[data-test-id=" + email + "]') !== null ? document.querySelector('div[data-test-id=" + email + "]').click() : false;";
 	public static String clickSignedIn = "document.querySelector('div[data-test-id=" + email + "]').click();";
 	public static String clickNo = "document.getElementById('" + noButtonId + "').click();";
+
+	// Use this code snippet in your app.
+	// If you need more information about configurations or implementing the sample code, visit the AWS docs:
+	// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-samples.html#prerequisites
+
+	public static String getSecret() {
+		String secretName = "lingo/hub-test";
+		Region region = Region.of("eu-west-2");
+
+		// Create a Secrets Manager client
+		// Can't use okhttp unfortunatly, limitied to http clients described here:
+		// https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
+		SecretsManagerClient client = SecretsManagerClient.builder() //
+				.region(region) //
+				.httpClient(ApacheHttpClient.create()) //
+				.build();
+
+		String secret;
+		GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
+				.secretId(secretName) //
+				.build();
+		GetSecretValueResponse getSecretValueResponse = null;
+
+		try {
+			getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
+		} catch (SecretsManagerException e) {
+			logger.error(e.awsErrorDetails().errorMessage());
+			System.exit(1);
+		}
+
+		// Decrypts secret using the associated KMS key.
+		// Depending on whether the secret is a string or binary, one of these fields will be populated.
+		if (getSecretValueResponse.secretString() != null) {
+			secret = getSecretValueResponse.secretString();
+			AWSSecret awsSecret;
+			try {
+				awsSecret = new ObjectMapper().readValue(secret, AWSSecret.class);
+				return awsSecret.password;
+			} catch (JsonProcessingException e) {
+				logger.error(e.getLocalizedMessage());
+			}
+		}
+
+		throw new RuntimeException("Coudn't get secret from AWS");
+	}
+
+	static class AWSSecret {
+		@JsonProperty
+		String password;
+	}
 }
