@@ -38,6 +38,7 @@ import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
@@ -56,11 +57,13 @@ public class OAuthTests {
 	static String datahubHost;
 	static String upstreamUrl;
 
+	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
+
 	// @formatter:off
 	@Container
 	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.10.2-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer(CONTAINER)
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))

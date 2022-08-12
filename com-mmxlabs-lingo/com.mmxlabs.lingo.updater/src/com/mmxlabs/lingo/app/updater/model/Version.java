@@ -70,14 +70,20 @@ public class Version implements Comparable<Version> {
 		}
 
 		if (c == 0) {
-			c = getQualifier().compareTo(o.getQualifier());
+			if (getQualifier().equals(o.getQualifier())) {
+				c = 0;
+			} else if ("RELEASE".equals(getQualifier())) {
+				c = 1;
+			} else {
+				c = -1;
+			}
 		}
 
 		return c;
 	}
 
 	public static Version fromString(String str) {
-		Pattern p = Pattern.compile("([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.(.+)"); // the pattern to search for
+		Pattern p = Pattern.compile("([0-9]+)\\.([0-9]+)\\.([0-9]+)(\\.|\\-)(.+)"); // the pattern to search for
 		Matcher m = p.matcher(str);
 
 		// if we find a match, get the group
@@ -86,7 +92,7 @@ public class Version implements Comparable<Version> {
 			String majorStr = m.group(1);
 			String minorStr = m.group(2);
 			String incrementStr = m.group(3);
-			String qualifierStr = m.group(4);
+			String qualifierStr = m.group(5);
 
 			Version v = new Version();
 			v.setMajor(Integer.parseInt(majorStr));
@@ -104,7 +110,11 @@ public class Version implements Comparable<Version> {
 
 	@Override
 	public @NonNull String toString() {
-		return String.format("%d.%d.%d.%s", major, minor, increment, qualifier);
+		if ("SNAPSHOT".equals(qualifier)) {
+			return String.format("%d.%d.%d-%s", major, minor, increment, qualifier);
+		} else {
+			return String.format("%d.%d.%d.%s", major, minor, increment, qualifier);
+		}
 	}
 
 	public static void main(String[] args) {

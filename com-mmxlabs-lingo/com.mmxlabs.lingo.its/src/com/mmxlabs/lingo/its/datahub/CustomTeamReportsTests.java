@@ -33,6 +33,7 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsManagerDialog;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
@@ -54,9 +55,11 @@ public class CustomTeamReportsTests {
 	static String datahubHost;
 	static String upstreamUrl;
 
+	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
+
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.10.2-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer(CONTAINER)
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))

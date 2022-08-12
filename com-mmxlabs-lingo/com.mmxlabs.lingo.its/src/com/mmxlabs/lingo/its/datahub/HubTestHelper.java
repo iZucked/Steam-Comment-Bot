@@ -8,19 +8,33 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.lingo.app.updater.model.Version;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
@@ -33,6 +47,15 @@ public class HubTestHelper {
 
 	static final Logger logger = LoggerFactory.getLogger(HubTestHelper.class);
 	public static final String HOST = "localhost";
+
+	public static final String DYNAMODB_TABLE_NAME = "datahub_versions";
+	public static final String DYNAMODB_KEY = "client";
+
+	// initialise http client with small connection timeout
+	private static final int CONNECTION_TIMEOUT_IN_SECONDS = 5;
+	private static final int READ_TIMEOUT_IN_SECONDS = 1;
+	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
+	private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
 
 	public static void configureHub(String url, boolean enableBaseCase, boolean enableTeam) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, url);
@@ -120,6 +143,142 @@ public class HubTestHelper {
 		} catch (IOException ex) {
 			logger.info(String.format("socket of port %s is already bound", port));
 			return false;
+		}
+	}
+
+
+	public static String getContainerString(String client) {
+		// in case we're running ITS (non-client)
+		if (client == null) {
+			client = "v";
+		}
+		try {
+			return HubTestHelper.buildDatahubContainerString(client);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			System.exit(-1);
+		}
+		return "";
+	}
+
+
+	public static String buildDatahubContainerString(String client) throws IOException, Exception {
+		String version;
+		if (isReleaseTest()) {
+			version = getVersionFromDynamodb(client);
+			version = version.concat(".RELEASE");
+		} else {
+			version = getLatestVersionFromContainerRegistry(client);
+		}
+		if (version != null) {
+			return String.format("docker.mmxlabs.com/datahub-%s:%s", client, version);
+		} else {
+			throw new Exception("Failed to get DataHub version from go server");
+		}
+	}
+
+	public static String getVersionFromDynamodb(String client) throws IOException {
+		HashMap<String,AttributeValue> keyToGet = new HashMap<String,AttributeValue>();
+		String version = "";
+
+		DynamoDbClient ddb = DynamoDbClient.builder() //
+				.httpClient(ApacheHttpClient.create()) //
+				.build();
+
+		keyToGet.put(DYNAMODB_KEY, AttributeValue.builder()
+				.s(client).build());
+
+		GetItemRequest request = GetItemRequest.builder()
+				.key(keyToGet)
+				.tableName(DYNAMODB_TABLE_NAME)
+				.build();
+
+		try {
+			Map<String,AttributeValue> returnedItem = ddb.getItem(request).item();
+
+			if (returnedItem != null) {
+				Set<String> keys = returnedItem.keySet();
+				logger.info("Amazon DynamoDB table attributes: \n");
+
+				for (String key1 : keys) {
+					logger.info("%s: %s\n", key1, returnedItem.get(key1).toString());
+					if ("version".equals(key1)) {
+						// TODO fallback on go server value?
+						version = returnedItem.get(key1).s();
+					}
+					version = returnedItem.get(key1).toString();
+				}
+			} else {
+				logger.info("No item found with the key %s!\n", DYNAMODB_KEY);
+			}
+		} catch (DynamoDbException e) {
+			logger.error(e.getMessage());
+			System.exit(1);
+		}
+		return version;
+	}
+
+	public static String getLatestVersionFromContainerRegistry(String client) {
+		List<Version> versions = getAvailableContainerVersionsFromRegistry(client);
+		// sort the versions
+		Collections.sort(versions);
+		versions.stream().forEach(System.out::print);
+		if (versions.size() > 1) {
+			return versions.get(versions.size() - 1).toString();
+		} else {
+			logger.error(String.format("There are no versions for client %s", client));
+			System.exit(1);
+		}
+		return null;
+	}
+
+	public static List<Version> getAvailableContainerVersionsFromRegistry(String client) {
+
+		try {
+			String url = String.format("https://docker.mmxlabs.com/v2/datahub-%s/tags/list", client);
+			Request request = new Request.Builder() //
+					.url(url) //
+					.build();
+
+			try (Response response = httpClient.newCall(request).execute()) {
+				if (response.isSuccessful()) {
+					ObjectMapper objectMapper = new ObjectMapper();
+					DockerVersions versions = objectMapper.readValue(response.body().string(), DockerVersions.class);
+					return versions.tags;
+				} else {
+					logger.error("request to docker.mmxlabs.com failed");
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return new ArrayList<Version>();
+	}
+
+	public static boolean isReleaseTest() {
+		String releaseVersion = System.getenv("RELEASE_VERSION");
+		return (releaseVersion != null && !releaseVersion.isBlank());
+	}
+
+	static class DockerVersions {
+		public String name;
+		ArrayList<Version> tags = new ArrayList<Version>();
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public ArrayList<Version> getTags() {
+			return tags;
+		}
+
+		public void setTags(ArrayList<Version> tags) {
+			this.tags = tags;
 		}
 	}
 
