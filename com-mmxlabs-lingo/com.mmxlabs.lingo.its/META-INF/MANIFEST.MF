@@ -104,10 +104,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  wrapped.software.amazon.awssdk.json-utils;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.third-party-jackson-core;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.metrics-spi;bundle-version="2.17.233",
- reactive-streams;bundle-version="1.0.4"
+ reactive-streams;bundle-version="1.0.4",
+ wrapped.software.amazon.awssdk.dynamodb;bundle-version="2.17.233"
 Bundle-ClassPath: data/,
  .
-Import-Package: com.sun.jna;version="4.5.1",
+Import-Package: com.mmxlabs.lingo.app.updater.model,
+ com.sun.jna;version="4.5.1",
  com.sun.jna.platform;version="4.5.1";resolution:=optional,
  com.sun.jna.platform.win32;version="4.5.1";resolution:=optional,
  javax.inject;version="1.0.0",

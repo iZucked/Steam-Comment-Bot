@@ -53,6 +53,7 @@ import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.license.LicenseManager;
 import com.mmxlabs.lingo.its.datahub.HubTestHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 import okhttp3.Credentials;
 import okhttp3.MultipartBody;
@@ -79,9 +80,11 @@ class LicenseTests {
 	static String datahubHost;
 	static String upstreamUrl;
 
+	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
+
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.10.2-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer(CONTAINER)
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
