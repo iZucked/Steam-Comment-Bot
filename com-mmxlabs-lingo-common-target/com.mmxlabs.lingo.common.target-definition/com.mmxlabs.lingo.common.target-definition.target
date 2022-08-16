@@ -528,13 +528,13 @@
                 <version>2.17.233</version>
                 <type>jar</type>
             </dependency>
-        </dependencies>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>dynamodb</artifactId>
             <version>2.17.233</version>
             <type>jar</type>
         </dependency>
+        </dependencies>        
     </location>
 </locations>
 	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
