@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.entities.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -536,7 +535,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (prevAnnotation != null && previousRecord != null) {
 				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
 			} else {
-				//throw new Exception
+				throw new IllegalStateException(String.format("Load %s and Discharge %s pair annotated with transfer record but that seems to be missing", //
+						loadOption.getKey(), dischargeOption.getKey()));
 			}
 		}
 	}
@@ -570,7 +570,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			return unsorted;
 		}
 		
-		List<BasicTransferRecord> sorted = new ArrayList<>(unsorted.size());
+		final List<BasicTransferRecord> sorted = new ArrayList<>(unsorted.size());
 		IEntity toEntity = loadEntity;
 		for (int i = 0; i < unsorted.size(); i++) {
 			for (final BasicTransferRecord r : unsorted) {

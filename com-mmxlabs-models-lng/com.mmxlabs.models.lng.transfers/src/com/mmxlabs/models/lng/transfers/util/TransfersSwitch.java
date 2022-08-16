@@ -74,6 +74,8 @@ public class TransfersSwitch<@Nullable T> extends Switch<T> {
 			case TransfersPackage.TRANSFER_MODEL: {
 				TransferModel transferModel = (TransferModel)theEObject;
 				T result = caseTransferModel(transferModel);
+				if (result == null) result = caseUUIDObject(transferModel);
+				if (result == null) result = caseMMXObject(transferModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

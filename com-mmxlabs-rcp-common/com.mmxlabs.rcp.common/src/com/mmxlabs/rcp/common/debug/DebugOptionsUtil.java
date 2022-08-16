@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.rcp.common.debug;
 
 import static org.ops4j.peaberry.Peaberry.service;

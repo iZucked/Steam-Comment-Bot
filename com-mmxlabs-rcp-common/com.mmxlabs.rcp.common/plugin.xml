@@ -75,13 +75,18 @@
       <page
             class="com.mmxlabs.rcp.common.os.MachineInformation"
             id="com.mmxlabs.rcp.common.os.MachineInformation"
-            name="Machine Information">
+            name="Machine"
+            category="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage">
       </page>
       <page
             class="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
             id="com.mmxlabs.rcp.common.debug.impl.DebugOptionsPreferencePage"
-            name="Debug logging options">
-      </page>      
+            name="Debug Logging">
+      </page>
+      <page
+            name="General"
+            class="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
+            id="org.eclipse.ui.preferencePages.Workbench">
+      </page>
    </extension>
-
 </plugin>

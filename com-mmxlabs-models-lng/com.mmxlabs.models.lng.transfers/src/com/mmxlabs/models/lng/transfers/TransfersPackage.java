@@ -69,13 +69,31 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_MODEL = 0;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Transfer Agreements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_MODEL__TRANSFER_AGREEMENTS = 0;
+	int TRANSFER_MODEL__TRANSFER_AGREEMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Transfer Records</b></em>' containment reference list.
@@ -84,7 +102,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_MODEL__TRANSFER_RECORDS = 1;
+	int TRANSFER_MODEL__TRANSFER_RECORDS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Transfer Model</em>' class.
@@ -93,7 +111,34 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_MODEL_FEATURE_COUNT = 2;
+	int TRANSFER_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Transfer Model</em>' class.
@@ -102,7 +147,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_MODEL_OPERATION_COUNT = 0;
+	int TRANSFER_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl <em>Transfer Agreement</em>}' class.

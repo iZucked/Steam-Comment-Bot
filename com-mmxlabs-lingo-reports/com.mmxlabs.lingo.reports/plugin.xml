@@ -26,7 +26,8 @@
       <page
             name="Reports"
             class="com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage"
-            id="com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage">
+            id="com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage"
+            category="com.mmxlabs.lingo.app.preferences.AppPreferencesPage">
       </page>
    </extension>
    <extension

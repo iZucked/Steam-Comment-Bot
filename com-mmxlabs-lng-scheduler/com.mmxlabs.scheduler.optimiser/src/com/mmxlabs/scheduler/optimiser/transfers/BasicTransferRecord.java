@@ -10,16 +10,17 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 public class BasicTransferRecord {
-	private String name;
-	private ITransferAgreement agreement;
+	private final String name;
+	private final ITransferAgreement agreement;
 	
-	private ICurve pricingSeries;
-	private String priceExpression;
-	private int pricingDate;
+	private final ICurve pricingSeries;
+	private final String priceExpression;
+	private final int pricingDate;
 	
-	// reference the IPortSlot instead
-	private IPortSlot slot;
-	// reference the BasicTransferRecord
+	private final IPortSlot slot;
+	// reference the BasicTransferRecord (in future)
+	// Currently (August 2022) does not seem to be necessary
+	// as is can be easily inferred
 	private String nextTransferName;
 	
 	/**
@@ -41,8 +42,8 @@ public class BasicTransferRecord {
 			this.pricingSeries = pricingSeries;
 			this.priceExpression = priceExpression;
 		} else {
-			this.pricingSeries = agreement.getPricingSeries();
-			this.priceExpression = agreement.getPriceExpression();
+			this.pricingSeries = agreement.pricingSeries();
+			this.priceExpression = agreement.priceExpression();
 		}
 		this.pricingDate = pricingDate;
 		this.slot = slot;
@@ -53,10 +54,10 @@ public class BasicTransferRecord {
 		return name;
 	}
 	public IEntity getFromEntity() {
-		return this.agreement.getFromEntity();
+		return this.agreement.fromEntity();
 	}
 	public IEntity getToEntity() {
-		return this.agreement.getToEntity();
+		return this.agreement.toEntity();
 	}
 	public ICurve getPricingSeries() {
 		return pricingSeries;
@@ -67,10 +68,6 @@ public class BasicTransferRecord {
 	public int getPricingDate() {
 		return pricingDate;
 	}
-	/**
-	 * Must return internal slot name with "FP", "DP", "FS" or "DS" prefixes
-	 * @return
-	 */
 	public IPortSlot getSlot() {
 		return slot;
 	}

@@ -89,12 +89,12 @@ public class TransfersAdapterFactory extends AdapterFactoryImpl {
 				return createMMXObjectAdapter();
 			}
 			@Override
-			public Adapter caseNamedObject(NamedObject object) {
-				return createNamedObjectAdapter();
-			}
-			@Override
 			public Adapter caseUUIDObject(UUIDObject object) {
 				return createUUIDObjectAdapter();
+			}
+			@Override
+			public Adapter caseNamedObject(NamedObject object) {
+				return createNamedObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {

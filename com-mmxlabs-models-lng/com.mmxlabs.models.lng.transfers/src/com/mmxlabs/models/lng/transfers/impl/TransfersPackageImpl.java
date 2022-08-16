@@ -529,6 +529,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		transferModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		transferAgreementEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		transferRecordEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		transferRecordEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
