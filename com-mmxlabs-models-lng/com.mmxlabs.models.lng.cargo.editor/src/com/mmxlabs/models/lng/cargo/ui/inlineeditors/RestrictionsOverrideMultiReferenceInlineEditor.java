@@ -354,7 +354,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 	@Override
 	protected Object getValue() {
 
-		if (input != null && typedElement instanceof EStructuralFeature feature){
+		if (input != null && getFeature() instanceof EStructuralFeature feature){
 			if (!canOverride()) {
 				return ((MMXObject) input).getUnsetValue(feature);
 			} else if (input.eIsSet(feature)) {
@@ -389,7 +389,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 	}
 
 	protected boolean valueIsSet() {
-		if (input != null && typedElement instanceof EStructuralFeature feature){
+		if (input != null && getFeature() instanceof EStructuralFeature feature){
 			return input.eIsSet(feature);
 		}
 		return false;

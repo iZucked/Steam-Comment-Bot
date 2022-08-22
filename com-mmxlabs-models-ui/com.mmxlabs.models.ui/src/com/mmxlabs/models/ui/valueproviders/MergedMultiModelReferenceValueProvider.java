@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -36,7 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
  * 
  */
 public class MergedMultiModelReferenceValueProvider extends BaseReferenceValueProvider {
-
+	private static final Logger LOG = LoggerFactory.getLogger(MergedMultiModelReferenceValueProvider.class);
 	private final List<Pair<EObject, ETypedElement>> validReferences = new LinkedList<Pair<EObject, ETypedElement>>();
 
 	private List<Pair<String, EObject>> cachedValues;
@@ -134,8 +136,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 				try {
 					result = p.getFirst().eInvoke(operation, null);
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOG.error(e.getMessage());
 				}
 			}
 			if (result instanceof Collection<?>) {

@@ -19,7 +19,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
  *
  */
 public class ComponentHelperUtils {
-	private static final Logger log = LoggerFactory.getLogger(ComponentHelperUtils.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ComponentHelperUtils.class);
 	/**
 	 * Add an editor to the given detail composite
 	 * 
@@ -29,7 +29,7 @@ public class ComponentHelperUtils {
 	public static IInlineEditor createDefaultEditor(final EClass owner, final ETypedElement typedElement) {
 		final IInlineEditorFactory factory = Activator.getDefault().getEditorFactoryRegistry().getEditorFactory(owner, typedElement);
 		if (factory == null) {
-			log.warn("Unable to find an editor factory for " + owner.getName() + "." + typedElement.getName());
+			LOG.warn("Unable to find an editor factory for " + owner.getName() + "." + typedElement.getName());
 			return null;
 		} else {
 			return factory.createEditor(owner, typedElement);

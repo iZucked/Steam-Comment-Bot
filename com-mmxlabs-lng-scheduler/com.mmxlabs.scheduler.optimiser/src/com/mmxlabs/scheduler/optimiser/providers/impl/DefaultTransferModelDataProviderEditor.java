@@ -18,12 +18,12 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	private Map<IPortSlot, List<BasicTransferRecord>> slotsToTransferRecords = new HashMap<>();
 
 	@Override
-	public boolean isSlotTransferred(IPortSlot slot) {
+	public boolean isSlotTransferred(final IPortSlot slot) {
 		return (slotsToTransferRecords.containsKey(slot));
 	}
 
 	@Override
-	public List<BasicTransferRecord> getTransferRecordsForSlot(IPortSlot slot) {
+	public List<BasicTransferRecord> getTransferRecordsForSlot(final IPortSlot slot) {
 		return slotsToTransferRecords.getOrDefault(slot, Collections.emptyList());
 	}
 
@@ -36,9 +36,9 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	 * Do NOT call before look up data is set!
 	 */
 	@Override
-	public void reconsileIPortSlotWithLookupData(IPortSlot slot) {
+	public void reconsileIPortSlotWithLookupData(final IPortSlot slot) {
 		if (this.lookupData != null) {
-			List<BasicTransferRecord> temp = new ArrayList<>();
+			final List<BasicTransferRecord> temp = new ArrayList<>();
 			for(final BasicTransferRecord record : lookupData.records) {
 				if (record.getSlot().equals(slot)) {
 					temp.add(record);

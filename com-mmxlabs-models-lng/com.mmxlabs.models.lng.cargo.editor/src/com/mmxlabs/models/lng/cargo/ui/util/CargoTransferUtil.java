@@ -19,17 +19,12 @@ import com.mmxlabs.models.ui.Activator;
 
 public class CargoTransferUtil {
 
-	public static boolean isSlotTransferred(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
-		return isSlotTransferred(slot, getTransferRecords(scenarioModel));
+	public static boolean isSlotReferencedByTransferRecord(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		return isSlotReferencedByTransferRecord(slot, getTransferRecords(scenarioModel));
 	}
 	
-	private static boolean isSlotTransferred(final Slot<?> slot, final List<TransferRecord> records) {
-		for(final TransferRecord tr: records) {
-			if (slot == tr.getLhs()) {
-				return true;
-			}
-		}
-		return false;
+	private static boolean isSlotReferencedByTransferRecord(final Slot<?> slot, final List<TransferRecord> records) {
+		return records.stream().anyMatch(tr -> tr.getLhs() == slot);
 	}
 	
 	private static List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){
