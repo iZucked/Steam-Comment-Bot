@@ -49,7 +49,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -92,12 +91,15 @@ import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer
 public class LNGSchedulerJobUtils {
 
 	/**
-	 * Label used to prefix optimisation update commands so they can be undone later if possible to avoid a history of commands for each report interval.
+	 * Label used to prefix optimisation update commands so they can be undone later
+	 * if possible to avoid a history of commands for each report interval.
 	 */
 	private static final String LABEL_PREFIX = "Optimised: ";
 
 	/**
-	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new
+	 * {@link Schedule} and update the related models ( the {@link CargoModel} and
+	 * {@link AssignmentModel})
 	 * 
 	 * @param injector
 	 * @param scenario
@@ -239,7 +241,9 @@ public class LNGSchedulerJobUtils {
 	}
 
 	/**
-	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link AssignmentModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
+	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the
+	 * {@link AssignmentModel} for assignment changes. Back link the
+	 * {@link CargoModel} to the {@link Schedule}
 	 * 
 	 * @param domain
 	 * @param scenario
@@ -277,14 +281,16 @@ public class LNGSchedulerJobUtils {
 
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 
-				final Slot<?> slot = slotAllocation.getSlot();
+				final Slot slot = slotAllocation.getSlot();
 				// Slots created in the builder have no container so add it the container now as
 				// it is used.
-				if (slot instanceof final LoadSlot loadSlot) {
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (slot.eContainer() == null) {
 						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 					}
-				} else if (slot instanceof final DischargeSlot dischargeSlot) {
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.eContainer() == null) {
 						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 					}
@@ -300,11 +306,13 @@ public class LNGSchedulerJobUtils {
 			final Slot<?> slot = slotAllocation.getSlot();
 			// Slots created in the builder have no container so add it the container now as
 			// it is used.
-			if (slot instanceof final LoadSlot loadSlot) {
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (slot.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 				}
-			} else if (slot instanceof final DischargeSlot dischargeSlot) {
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 				if (dischargeSlot.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 				}
@@ -344,7 +352,9 @@ public class LNGSchedulerJobUtils {
 
 				// Slots created in the builder have no container so add it the container now as
 				// it is used.
-				if (slot instanceof final LoadSlot loadSlot) {
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+
 					if (firstLoad) {
 						// Found our first load slot to define the cargo
 						if (loadSlot.getCargo() == null) {
@@ -372,7 +382,8 @@ public class LNGSchedulerJobUtils {
 					if (loadSlot.isDESPurchase()) {
 						desPurchaseSlot = loadSlot;
 					}
-				} else if (slot instanceof final DischargeSlot dischargeSlot) {
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					// Record different cargoes as possibly unused cargoes and remove the reference
 					if (dischargeSlot.getCargo() != loadCargo) {
 						possibleUnusedCargoes.add(dischargeSlot.getCargo());
@@ -451,11 +462,12 @@ public class LNGSchedulerJobUtils {
 
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
-			if (eObj instanceof final LoadSlot loadSlot && loadSlot.getCargo() != null) {
-				final Cargo c = loadSlot.getCargo();
-				possibleUnusedCargoes.remove(c);
+			if (eObj instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) eObj;
+				if (loadSlot.getCargo() != null) {
+					final Cargo c = loadSlot.getCargo();
+					possibleUnusedCargoes.remove(c);
 
-				if (!isThirdParty(c)) {
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
@@ -472,7 +484,8 @@ public class LNGSchedulerJobUtils {
 
 				}
 			}
-			if (eObj instanceof final SpotSlot spotSlot) {
+			if (eObj instanceof SpotSlot) {
+				final SpotSlot spotSlot = (SpotSlot) eObj;
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
@@ -490,7 +503,9 @@ public class LNGSchedulerJobUtils {
 
 				}
 			}
-			if (eObj instanceof final CharterOutEvent charterOutEvent) {
+			if (eObj instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) eObj;
+
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
@@ -502,9 +517,10 @@ public class LNGSchedulerJobUtils {
 		{
 			// For slots which are no longer used, remove the cargo
 			for (final Cargo c : possibleUnusedCargoes) {
-				for (final Slot<?> slot : c.getSlots()) {
+				for (final Slot slot : c.getSlots()) {
 
-					if (slot instanceof final SpotSlot spotSlot) {
+					if (slot instanceof SpotSlot) {
+						final SpotSlot spotSlot = (SpotSlot) slot;
 						// Market slot, we can remove it.
 						if (spotSlot.getMarket() != null && slot.eContainer() != null) {
 							// Remove rather than full delete as we may wish to re-use the object later
@@ -557,17 +573,18 @@ public class LNGSchedulerJobUtils {
 			int index = 1;
 			for (final Event event : sequence.getEvents()) {
 				AssignableElement object = null;
-				if (event instanceof final SlotVisit slotVisit) {
-					final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
+				if (event instanceof SlotVisit) {
+					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
-					if (slot instanceof final LoadSlot loadSlot) {
+					if (slot instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) slot;
 						object = slotToCargoMap.get(loadSlot);
 						if (object == null) {
 							object = loadSlot.getCargo();
 						}
 					}
-				} else if (event instanceof final VesselEventVisit vesselEventVisit) {
-					object = vesselEventVisit.getVesselEvent();
+				} else if (event instanceof VesselEventVisit) {
+					object = ((VesselEventVisit) event).getVesselEvent();
 				}
 
 				if (object != null) {
@@ -599,18 +616,6 @@ public class LNGSchedulerJobUtils {
 
 		return cmd;
 
-	}
-
-	private static boolean isThirdParty(final Cargo cargo) {
-		if (cargo.getSlots().size() == 2) {
-			Slot<?> slot1 = cargo.getSlots().get(0);
-			Slot<?> slot2 = cargo.getSlots().get(1);
-			if (!(slot1 instanceof SpotSlot) && !(slot2 instanceof SpotSlot)) {
-				final BaseLegalEntity slot1Entity = slot1.getSlotOrDelegateEntity();
-				return slot1Entity != null && slot1Entity.isThirdParty() && slot1Entity == slot2.getSlotOrDelegateEntity();
-			}
-		}
-		return false;
 	}
 
 	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {
@@ -663,11 +668,11 @@ public class LNGSchedulerJobUtils {
 		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 
 		final ILazyExpressionManagerContainer lazyExpressionManagerContainer = injector.getInstance(ILazyExpressionManagerContainer.class);
-		try (ILazyExpressionManager manager = lazyExpressionManagerContainer.getExpressionManager()) {
+		try(ILazyExpressionManager manager = lazyExpressionManagerContainer.getExpressionManager()) {
 			manager.initialiseAllPricingData();
 			process.annotate(mSequences, state, solution);
 		} catch (Exception e) {
-
+			
 		}
 		return new Pair<>(solution, state);
 	}
