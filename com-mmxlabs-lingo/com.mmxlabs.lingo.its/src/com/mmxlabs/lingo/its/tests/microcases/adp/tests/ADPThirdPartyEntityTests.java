@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.TestMode;
@@ -45,6 +46,7 @@ public class ADPThirdPartyEntityTests extends AbstractADPAndLightWeightTests {
 
 	private static final String THIRD_PARTY_ENTITY_NAME = "ThirdPartyEntity";
 
+	@Disabled
 	@Test
 	public void testThirdPartyCargoesStayPairedFeasible() {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
