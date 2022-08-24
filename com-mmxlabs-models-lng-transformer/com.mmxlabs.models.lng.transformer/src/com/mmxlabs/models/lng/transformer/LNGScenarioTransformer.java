@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
@@ -215,6 +217,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IThirdPartyCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.PriceCurveKey;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -440,6 +443,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private ICounterPartyWindowProviderEditor counterPartyWindowProviderEditor;
+
+	@Inject
+	private IThirdPartyCargoProviderEditor thirdPartyCargoProviderEditor;
 
 	@Inject
 	@Named(LIMIT_SPOT_SLOT_CREATION)
@@ -1230,74 +1236,109 @@ public class LNGScenarioTransformer {
 		final CargoModel cargoModel = rootObject.getCargoModel();
 		final Map<Slot<?>, IPortSlot> transferSlotMap = new HashMap<>();
 
-		// Do not process cargoes for ADP optimisations
+		final List<Predicate<Cargo>> cargoFilterFunctions = new ArrayList<>();
+		final List<Consumer<List<@NonNull IPortSlot>>> slotConsumers = new ArrayList<>();
+
+		// Is this check needed now? What was it supposed to do?
+		// latest time should be derived from this data anyway...
+		cargoFilterFunctions.add(c -> !c.getSortedSlots().get(0).getSchedulingTimeWindow().getStart().isAfter(latestDate));
+
+		// ADP optimisations only keep third-party cargoes
 		final ADPModel adpModel = rootObject.getAdpModel();
-		if (adpModel == null || userSettings.getMode() != OptimisationMode.ADP) {
-			for (final Cargo eCargo : cargoModel.getCargoes()) {
+		if (adpModel != null && userSettings.getMode() == OptimisationMode.ADP) {
+			cargoFilterFunctions.add(c -> c.getSlots().size() == 2);
 
-				// Is this check needed now? What was it supposed to do?
-				// latest time should be derived from this data anyway...
-				if (eCargo.getSortedSlots().get(0).getSchedulingTimeWindow().getStart().isAfter(latestDate)) {
-					continue;
-				}
-
-				final List<@NonNull ILoadOption> loadOptions = new LinkedList<>();
-				final List<@NonNull IDischargeOption> dischargeOptions = new LinkedList<>();
-				final List<@NonNull IPortSlot> slots = new ArrayList<>(eCargo.getSortedSlots().size());
-				final Map<Slot<?>, IPortSlot> slotMap = new HashMap<>();
-				for (final Slot<?> slot : eCargo.getSortedSlots()) {
-					if (slot instanceof final LoadSlot loadSlot) {
-						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
-						usedLoadSlots.add(loadSlot);
-						loadOptions.add(load);
-						slotMap.put(loadSlot, load);
-						slots.add(load);
-					} else if (slot instanceof final DischargeSlot dischargeSlot) {
-						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
-						usedDischargeSlots.add(dischargeSlot);
-						dischargeOptions.add(discharge);
-						slotMap.put(dischargeSlot, discharge);
-						slots.add(discharge);
-					} else {
-						throw new IllegalArgumentException("Unexpected Slot type");
+			final Predicate<Cargo> thirdPartyCheck = cargo -> {
+				final List<Slot<?>> slots = cargo.getSortedSlots();
+				final Slot<?> loadSlot = slots.get(0);
+				final Slot<?> dischargeSlot = slots.get(1);
+				final BaseLegalEntity loadSlotEntity = loadSlot.getSlotOrDelegateEntity();
+				if (loadSlotEntity != null && loadSlotEntity.isThirdParty()) {
+					if (dischargeSlot.getSlotOrDelegateEntity() != loadSlotEntity) {
+						throw new IllegalStateException("Third-party cargoes must use the same entity");
 					}
-				}
-
-				final boolean isSoftRequired = false;
-				for (final Slot<?> slot : eCargo.getSortedSlots()) {
-					boolean isTransfer = false;
-
-					if (slot instanceof final LoadSlot loadSlot) {
-						// Bind FOB/DES slots to resource
-						final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
-						assert loadSlot != null;
-						configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
-						isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
-						if (isSoftRequired) {
-							setSlotAsSoftRequired(builder, slot, load);
-						}
-					} else if (slot instanceof final DischargeSlot dischargeSlot) {
-						final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
-						assert discharge != null;
-						configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
-						isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
-						if (isSoftRequired) {
-							setSlotAsSoftRequired(builder, slot, discharge);
-						}
+					if (cargo.isAllowRewiring()) {
+						throw new IllegalStateException("Third-party cargoes must not allow rewiring");
 					}
-
-					// remember any slots which were part of a ship-to-ship transfer
-					// but don't do anything with them yet, because we need to wait until all slots
-					// have been processed
-					if (isTransfer) {
-						transferSlotMap.put(slot, slotMap.get(slot));
-					}
+					return true;
 				}
+				final BaseLegalEntity dischargeSlotEntity = dischargeSlot.getSlotOrDelegateEntity();
+				if (dischargeSlotEntity != null && dischargeSlotEntity.isThirdParty()) {
+					throw new IllegalStateException("Third-party cargoes must use the same entity");
+				}
+				return false;
+			};
 
-				final ICargo cargo = builder.createCargo(slots, shippingOnly ? false : eCargo.isAllowRewiring());
-				modelEntityMap.addModelObject(eCargo, cargo);
-			}
+			cargoFilterFunctions.add(thirdPartyCheck);
+			slotConsumers.add(slots -> {
+				assert slots.size() == 2;
+				final ILoadOption load = (ILoadOption) slots.get(0);
+				final IDischargeOption discharge = (IDischargeOption) slots.get(1);
+				thirdPartyCargoProviderEditor.addThirdPartyCargo(load, discharge);
+			});
 		}
+
+		cargoModel.getCargoes().stream() //
+				.filter(c -> cargoFilterFunctions.stream().allMatch(fun -> fun.test(c))) //
+				.forEach(eCargo -> {
+					final List<@NonNull ILoadOption> loadOptions = new LinkedList<>();
+					final List<@NonNull IDischargeOption> dischargeOptions = new LinkedList<>();
+					final List<@NonNull IPortSlot> slots = new ArrayList<>(eCargo.getSortedSlots().size());
+					final Map<Slot<?>, IPortSlot> slotMap = new HashMap<>();
+					for (final Slot<?> slot : eCargo.getSortedSlots()) {
+						if (slot instanceof final LoadSlot loadSlot) {
+							final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
+							usedLoadSlots.add(loadSlot);
+							loadOptions.add(load);
+							slotMap.put(loadSlot, load);
+							slots.add(load);
+						} else if (slot instanceof final DischargeSlot dischargeSlot) {
+							final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
+							usedDischargeSlots.add(dischargeSlot);
+							dischargeOptions.add(discharge);
+							slotMap.put(dischargeSlot, discharge);
+							slots.add(discharge);
+						} else {
+							throw new IllegalArgumentException("Unexpected Slot type");
+						}
+					}
+
+					final boolean isSoftRequired = false;
+					for (final Slot<?> slot : eCargo.getSortedSlots()) {
+						boolean isTransfer = false;
+
+						if (slot instanceof final LoadSlot loadSlot) {
+							// Bind FOB/DES slots to resource
+							final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
+							assert loadSlot != null;
+							configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+							isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
+							if (isSoftRequired) {
+								setSlotAsSoftRequired(builder, slot, load);
+							}
+						} else if (slot instanceof final DischargeSlot dischargeSlot) {
+							final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
+							assert discharge != null;
+							configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
+							isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
+							if (isSoftRequired) {
+								setSlotAsSoftRequired(builder, slot, discharge);
+							}
+						}
+
+						// remember any slots which were part of a ship-to-ship transfer
+						// but don't do anything with them yet, because we need to wait until all slots
+						// have been processed
+						if (isTransfer) {
+							transferSlotMap.put(slot, slotMap.get(slot));
+						}
+					}
+
+					final ICargo cargo = builder.createCargo(slots, shippingOnly ? false : eCargo.isAllowRewiring());
+					modelEntityMap.addModelObject(eCargo, cargo);
+
+					slotConsumers.forEach(consumer -> consumer.accept(slots));
+				});
 
 		// register ship-to-ship transfers with the relevant data component provider
 		for (final Entry<Slot<?>, IPortSlot> entry : transferSlotMap.entrySet()) {
@@ -3137,11 +3178,11 @@ public class LNGScenarioTransformer {
 			// TODO: TEMPORARY FIX: Populate fleet data with default values for additional
 			// fuel types.
 			final IVessel oVessel;
-			
-			if(eVessel.isMarker() && (builder instanceof SchedulerBuilder sBuilder)) {
+
+			if (eVessel.isMarker() && (builder instanceof SchedulerBuilder sBuilder)) {
 				long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
 
-				oVessel =  sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
+				oVessel = sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
 			} else {
 				final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
 				IBaseFuel oIdleBaseFuel = null;
@@ -3165,9 +3206,9 @@ public class LNGScenarioTransformer {
 				} else {
 					oPilotLightBaseFuel = oTravelBaseFuel;
 				}
-	
+
 				oVessel = TransformerHelper.buildIVessel(builder, eVessel, oTravelBaseFuel, oIdleBaseFuel, oInPortBaseFuel, oPilotLightBaseFuel);
-	
+
 				/*
 				 * set up inaccessible ports by applying resource allocation constraints
 				 */
@@ -3175,7 +3216,7 @@ public class LNGScenarioTransformer {
 				for (final Port ePort : SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts())) {
 					oInaccessiblePorts.add(portAssociation.lookup(ePort));
 				}
-	
+
 				if (!oInaccessiblePorts.isEmpty()) {
 					builder.setVesselInaccessiblePorts(oVessel, oInaccessiblePorts);
 				}
