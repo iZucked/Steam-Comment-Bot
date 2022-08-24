@@ -15,18 +15,12 @@ public class CompanyStatusInlineEditor extends SimpleOperationInlineEditor {
 	@Override
 	protected void updateDisplay(Object value) {
 		if (value instanceof CompanyStatus status) {
-			switch (status) {
-			case INTRA: {
-				text.setText("Intra-company");
-				break;
-			}
-			case INTER: {
-				text.setText("Inter-company");
-				break;
-			}
-			default:
-				text.setText(status.getLiteral());
-			}
+			text.setText(
+					switch (status) {
+					case INTRA -> "Intra-company";
+					case INTER -> "Inter-company";
+					default -> status.getLiteral();
+					});
 		} else {
 			super.updateDisplay(value);
 		}

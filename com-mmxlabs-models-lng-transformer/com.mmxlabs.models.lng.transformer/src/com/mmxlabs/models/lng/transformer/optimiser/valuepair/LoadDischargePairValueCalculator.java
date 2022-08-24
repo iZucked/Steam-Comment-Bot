@@ -42,9 +42,12 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IThirdPartyCargoProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
@@ -65,6 +68,12 @@ public class LoadDischargePairValueCalculator {
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	@Inject
+	private IEntityProvider entityProvider;
+
+	@Inject 
+	private IThirdPartyCargoProvider thirdPartyCargoProvider;
 
 	@Inject
 	private Injector injector;
@@ -116,6 +125,14 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
+		final IEntity loadEntity = entityProvider.getEntityForSlot(load);
+		final IEntity dischargeEntity = entityProvider.getEntityForSlot(discharge);
+		if (loadEntity.isThirdparty()) {
+			return loadEntity == dischargeEntity && thirdPartyCargoProvider.isThirdPartyCargo(load, discharge);
+		} else if (dischargeEntity.isThirdparty()) {
+			return false;
+		}
+
 		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();

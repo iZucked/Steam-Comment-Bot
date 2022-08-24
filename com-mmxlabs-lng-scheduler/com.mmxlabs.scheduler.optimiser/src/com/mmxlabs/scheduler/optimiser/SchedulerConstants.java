@@ -101,4 +101,8 @@ public final class SchedulerConstants {
 	 * Ignore small capacity violations e.g. 5 units (which would be 5_000).
 	 */
 	public static final long CAPACITY_VIOLATION_THRESHOLD = 0L;
+	/**
+	 * Threshold for the complex "LDD" cargoes
+	 */
+	public static final int COMPLEX_CARGO_SLOTS_THRESHOLD = 2;
 }

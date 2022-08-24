@@ -47,6 +47,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -66,6 +68,7 @@ public class CurveInlineEditor extends AbstractTableInlineEditor {
 	private EObject originalInput = null;
 	private final EClassifier indexRawType;
 	private EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
+	private static final Logger LOG = LoggerFactory.getLogger(CurveInlineEditor.class);
 
 	/**
 	 * Creates a curve inline editor for Index<clazz> objects. We need to know what class it was instantiated for, and Java generics don't provide enough introspection to do so.
@@ -275,8 +278,7 @@ public class CurveInlineEditor extends AbstractTableInlineEditor {
 						try {
 							field = originalInput.eInvoke(operation, null);
 						} catch (InvocationTargetException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							LOG.error(e1.getMessage());
 						}
 					}
 					if (field instanceof DataIndex) {

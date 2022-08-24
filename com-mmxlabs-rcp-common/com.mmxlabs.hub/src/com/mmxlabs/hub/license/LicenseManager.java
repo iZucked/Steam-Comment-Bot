@@ -33,20 +33,43 @@ public final class LicenseManager {
 	private static final String LICENSE_FOLDER = "license";
 
 	/**
-	 * Gets the currently selected license from the DataHub and overwrites the license in the user's home
+	 * Gets the currently selected license from the DataHub and overwrites the
+	 * license in the user's home
 	 *
 	 * @return the license keystore
 	 * @throws IOException
 	 */
 	public static KeyStore getLicenseFromDatahub() throws IOException {
-		KeyStore licenseKeystore = null;
+
+		// Prepare folders
+		String licenseFolderPath;
+
+		if (isDevEnvironment()) {
+			licenseFolderPath = System.getProperty(LicenseChecker.USER_HOME_PROPERTY);
+		} else {
+			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+			licenseFolderPath = workspaceLocation.toOSString() + IPath.SEPARATOR + LICENSE_FOLDER;
+		}
+
+		// try save response to file
+		final var licenseFile = new File(licenseFolderPath + File.separator + LicenseChecker.DATAHUB_LICENSE_KEYSTORE);
 
 		final var requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LicenseChecker.LICENSE_ENDPOINT);
 		if (requestBuilder == null) {
+			// Try to load an offline copy
+			try (var inStream = new FileInputStream(licenseFile)) {
+				final var instance = KeyStore.getInstance(LicenseChecker.PKCS12);
+				final String password = LicenseChecker.getPassword();
+				instance.load(inStream, password.toCharArray());
+				return instance;
+			} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
+				LOG.error("failed to read license file in user's home: " + e.getMessage());
+			}
+
 			return null;
 		}
 
-		var request = requestBuilder.build();
+		final var request = requestBuilder.build();
 
 		try (var response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
@@ -58,26 +81,25 @@ public final class LicenseManager {
 					LOG.error("unable to retrieve license from DataHub, unexpected code: " + response);
 				}
 
+				// 4xx codes generally mean the server responded properly but the user can't
+				// have a license. Maybe the license has been removed or the lingo permission
+				// has been revoked. Other error code (e.g. 5xx) may just be temporary failures
+				// such as a DataHub restart.
+				if (response.code() >= 400 && response.code() < 500) {
+					if (licenseFile.exists()) {
+						licenseFile.delete();
+					}
+				}
+
 				return null;
 			}
 
+			// create license folder if necessary
+			final var licenseFolder = new File(licenseFolderPath);
+			licenseFolder.mkdir();
+
 			try (var bufferedSource = response.body().source()) {
 
-				String licenseFolderPath;
-
-				if (isDevEnvironment()) {
-					licenseFolderPath = System.getProperty(LicenseChecker.USER_HOME_PROPERTY);
-				} else {
-					final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-					licenseFolderPath = workspaceLocation.toOSString() + IPath.SEPARATOR + LICENSE_FOLDER;
-				}
-
-				// create license folder if necessary
-				var licenseFolder = new File(licenseFolderPath);
-				licenseFolder.mkdir();
-
-				// try save response to file
-				final var licenseFile = new File(licenseFolderPath + File.separator + LicenseChecker.DATAHUB_LICENSE_KEYSTORE);
 				try (var bufferedSink = Okio.buffer(Okio.sink(licenseFile))) {
 					bufferedSink.writeAll(bufferedSource);
 				}
@@ -87,18 +109,21 @@ public final class LicenseManager {
 					final var instance = KeyStore.getInstance(LicenseChecker.PKCS12);
 					final String password = LicenseChecker.getPassword();
 					instance.load(inStream, password.toCharArray());
-					licenseKeystore = instance;
+					return instance;
 				} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
 					LOG.error("failed to read from newly written license file in user's home: " + e.getMessage());
 				}
 			}
 		}
-		return licenseKeystore;
+		return null;
 	}
 
 	/**
-	 * Checks if the license.folder program argument is set. Creates the directory if it does not already exist. LiNGO will save the license in this folder to avoid using a different license per LiNGO
-	 * instance. The argument must be the full path to the license folder i.e. -license.folder C:\Users\Username\mmxlabs\license
+	 * Checks if the license.folder program argument is set. Creates the directory
+	 * if it does not already exist. LiNGO will save the license in this folder to
+	 * avoid using a different license per LiNGO instance. The argument must be the
+	 * full path to the license folder i.e. -license.folder
+	 * C:\Users\Username\mmxlabs\license
 	 *
 	 * @return true if license.folder is set, false otherwise
 	 */

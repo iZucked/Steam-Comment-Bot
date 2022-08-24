@@ -458,7 +458,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
 			final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
-		if (cargoPNLData.getSlots().size() > 2) {
+		if (cargoPNLData.getSlots().size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
 			throw new RuntimeException("Complex cargoes not supported");
 		}
 
@@ -536,7 +536,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
 			} else {
 				throw new IllegalStateException(String.format("Load %s and Discharge %s pair annotated with transfer record but that seems to be missing", //
-						loadOption.getKey(), dischargeOption.getKey()));
+						loadOption.getId(), dischargeOption.getId()));
 			}
 		}
 	}
@@ -577,11 +577,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				if (toEntity.equals(r.getFromEntity())) {
 					sorted.add(r);
 					toEntity = r.getToEntity();
+					break;
 				}
 			}
 		}
 		if (!sorted.get(unsorted.size() - 1).getToEntity().equals(dischargeEntity)) {
-			// something is wrong!
+			// something might have gone wrong
+			// according to K, nothing is wrong
+			// according to P, should be a chain of entities
 			// throw new IllegalStateException
 		}
 				

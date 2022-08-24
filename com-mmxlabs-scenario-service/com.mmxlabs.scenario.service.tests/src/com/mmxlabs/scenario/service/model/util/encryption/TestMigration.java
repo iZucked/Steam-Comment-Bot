@@ -31,8 +31,7 @@ public class TestMigration {
 	@BeforeAll
 	public static void initialiseData() throws Exception {
 
-		DataStreamReencrypter.ENABLED = true;
-
+		// DataStreamReencrypter.ENABLED = true;
 		keyFiles = new TestKeyFileUtil();
 	}
 

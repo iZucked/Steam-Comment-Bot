@@ -53,6 +53,7 @@ import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.license.LicenseManager;
 import com.mmxlabs.lingo.its.datahub.HubTestHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 import okhttp3.Credentials;
 import okhttp3.MultipartBody;
@@ -79,9 +80,11 @@ class LicenseTests {
 	static String datahubHost;
 	static String upstreamUrl;
 
+	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
+
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.3-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer(CONTAINER)
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -94,13 +97,7 @@ class LicenseTests {
 	.withEnv("AZURE_CLIENT_ID", "e52d83a9-40c0-42ae-aae3-d5054ef24919")
 	.withEnv("AZURE_TENANT_ID", "dceff11f-6e74-436e-b9a0-65f9697b8472")
 	.withEnv("AZURE_CLIENT_SECRET", "n-LV4_3vPJ3s1v.9MWwLy1.ZO-1oz17u54")
-	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase")
-	.withEnv("AZURE_BASECASE_GROUP_ID", "452fe6d8-7360-47fd-b5b5-8cd8108d9233")
-	.withEnv("AZURE_BASECASE_GROUP_NAME", "MinimaxBasecase")
-	.withEnv("AZURE_LINGO_GROUP_ID", "80a34e39-50d3-405d-88b0-3522307dfed8")
-	.withEnv("AZURE_LINGO_GROUP_NAME", "MinimaxLingo")
-	.withEnv("AZURE_USERS_GROUP_ID", "287686ff-d399-4875-b86d-1dd9426973d6")
-	.withEnv("AZURE_USERS_GROUP_NAME", "MinimaxUsers")
+	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
 	.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
 	// @formatter:on
 

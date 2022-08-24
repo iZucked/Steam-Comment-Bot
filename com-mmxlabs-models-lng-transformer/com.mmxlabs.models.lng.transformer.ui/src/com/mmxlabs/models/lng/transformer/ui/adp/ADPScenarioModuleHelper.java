@@ -2,10 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
-/**
-	 * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
+
 package com.mmxlabs.models.lng.transformer.ui.adp;
 
 import java.util.HashMap;
@@ -23,10 +20,18 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
@@ -36,7 +41,9 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class ADPScenarioModuleHelper {
@@ -81,6 +88,9 @@ public class ADPScenarioModuleHelper {
 			@Named(KEY_EMPTY_SOLUTION)
 			private ISequences provideSequences(final Injector injector, final ModelEntityMap modelEntityMap, final IScenarioDataProvider scenarioDataProvider, final IOptimisationData data) {
 				final IModifiableSequences initialSequences = SequenceHelper.createEmptySequences(injector, data.getResources());
+
+				populateThirdPartyCargoes(initialSequences, injector, modelEntityMap, scenarioDataProvider, data);
+
 				// Ensure they are cleared
 				initialSequences.getModifiableUnusedElements().clear();
 
@@ -96,6 +106,52 @@ public class ADPScenarioModuleHelper {
 				initialSequences.getModifiableUnusedElements().addAll(allSequenceElements);
 
 				return initialSequences;
+			}
+
+			private void populateThirdPartyCargoes(@NonNull final IModifiableSequences initialSequences, final Injector injector, final ModelEntityMap modelEntityMap,
+					final IScenarioDataProvider scenarioDataProvider, final IOptimisationData data) {
+				final LNGScenarioModel lngScenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
+				final List<@NonNull Pair<@NonNull LoadSlot, @NonNull DischargeSlot>> thirdPartyCargoes = lngScenarioModel.getCargoModel().getCargoes().stream() //
+						.filter(c -> {
+							final List<Slot<?>> slots = c.getSlots();
+							if (slots.size() == 2) {
+								final BaseLegalEntity firstSlotEntity = slots.get(0).getSlotOrDelegateEntity();
+								return firstSlotEntity != null && firstSlotEntity.isThirdParty();
+							}
+							return false;
+						}) //
+						.map(c -> {
+							final List<Slot<?>> sortedSlots = c.getSortedSlots();
+							final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
+							final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
+							return Pair.of(loadSlot, dischargeSlot);
+						}) //
+						.toList();
+
+				if (!thirdPartyCargoes.isEmpty()) {
+					final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+					for (final @NonNull Pair<@NonNull LoadSlot, @NonNull DischargeSlot> thirdPartyCargo : thirdPartyCargoes) {
+						final LoadSlot loadSlot = thirdPartyCargo.getFirst();
+						final DischargeSlot dischargeSlot = thirdPartyCargo.getSecond();
+						final Slot<?> resourceDefiningSlot;
+						if (loadSlot.isDESPurchase()) {
+							resourceDefiningSlot = loadSlot;
+						} else if (dischargeSlot.isFOBSale()) {
+							resourceDefiningSlot = dischargeSlot;
+						} else {
+							throw new IllegalStateException("Third-party cargoes should be non-shipped");
+						}
+						final IResource oResource = SequenceHelper.getResource(modelEntityMap, injector, resourceDefiningSlot);
+						final IPortSlot oLoadSlot = modelEntityMap.getOptimiserObjectNullChecked(loadSlot, IPortSlot.class);
+						final IPortSlot oDischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(dischargeSlot, IPortSlot.class);
+						final ISequenceElement loadSlotSequenceElement = portSlotProvider.getElement(oLoadSlot);
+						final ISequenceElement dischargeSlotSequenceElement = portSlotProvider.getElement(oDischargeSlot);
+						final IModifiableSequence resourceSequence = initialSequences.getModifiableSequence(oResource);
+						assert resourceSequence.size() == 2;
+						resourceSequence.insert(1, dischargeSlotSequenceElement);
+						resourceSequence.insert(1, loadSlotSequenceElement);
+					}
+				}
 			}
 
 			@Provides

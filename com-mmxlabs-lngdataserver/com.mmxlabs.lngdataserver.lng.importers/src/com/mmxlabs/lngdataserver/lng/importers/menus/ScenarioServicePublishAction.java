@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
@@ -78,7 +79,7 @@ public class ScenarioServicePublishAction {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
 			final InputDialog dialog = new InputDialog(activeShell, "Confirm base case publish", String.format("Publish scenario %s as base case? Please enter notes.", scenarioInstance.getName()), "",
 					null);
-			doPublish = dialog.open() == InputDialog.OK;
+			doPublish = dialog.open() == Window.OK;
 			if (doPublish) {
 				notes = dialog.getValue();
 			}
@@ -98,8 +99,7 @@ public class ScenarioServicePublishAction {
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
-			if (cause instanceof PublishBasecaseException) {
-				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
+			if (cause instanceof PublishBasecaseException publishBasecaseException) {
 				String message = e.getMessage();
 				if (publishBasecaseException.getMessage() != null) {
 					message = publishBasecaseException.getMessage();
@@ -235,8 +235,7 @@ public class ScenarioServicePublishAction {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_EVALUATE);
 				}
 			} catch (final RuntimeException e) {
-				if (e.getCause() instanceof ScenarioMigrationException) {
-					final ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
+				if (e.getCause() instanceof ScenarioMigrationException ee ) {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_MIGRATE, ee);
 				}
 				throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_UNKNOWN_ERROR, e);

@@ -20,4 +20,10 @@
             plugin.xml="updater-plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   <extension
+         point="com.mmxlabs.rcp.common.DebugOptionsProvider">
+      <DebugOptionsProvider
+            cls="com.mmxlabs.lingo.app.updater.internal.LiNGOUpdaterDebugOptionsProvider">
+      </DebugOptionsProvider>
+   </extension>
 </plugin>

@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.transfers;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -9,6 +10,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
+@NonNullByDefault
 public class BasicTransferRecord {
 	private final String name;
 	private final ITransferAgreement agreement;
@@ -21,7 +23,7 @@ public class BasicTransferRecord {
 	// reference the BasicTransferRecord (in future)
 	// Currently (August 2022) does not seem to be necessary
 	// as is can be easily inferred
-	private String nextTransferName;
+	private @Nullable String nextTransferName;
 	
 	/**
 	 * @param name
@@ -33,18 +35,25 @@ public class BasicTransferRecord {
 	 * @param slot
 	 * @param nextTransferName
 	 */
-	public BasicTransferRecord(String name, ITransferAgreement agreement, boolean pricingOverride, @Nullable ICurve  pricingSeries, @Nullable String priceExpression, //
+	public BasicTransferRecord(String name, ITransferAgreement agreement, //
 			int pricingDate, IPortSlot slot, String nextTransferName) {
 		super();
 		this.name = name;
 		this.agreement = agreement;
-		if (pricingOverride) {
-			this.pricingSeries = pricingSeries;
-			this.priceExpression = priceExpression;
-		} else {
-			this.pricingSeries = agreement.pricingSeries();
-			this.priceExpression = agreement.priceExpression();
-		}
+		this.pricingSeries = agreement.pricingSeries();
+		this.priceExpression = agreement.priceExpression();
+		this.pricingDate = pricingDate;
+		this.slot = slot;
+		this.nextTransferName = nextTransferName;
+	}
+	
+	public BasicTransferRecord(String name, ITransferAgreement agreement, ICurve  pricingSeries, String priceExpression, //
+			int pricingDate, IPortSlot slot, String nextTransferName) {
+		super();
+		this.name = name;
+		this.agreement = agreement;
+		this.pricingSeries = pricingSeries;
+		this.priceExpression = priceExpression;
 		this.pricingDate = pricingDate;
 		this.slot = slot;
 		this.nextTransferName = nextTransferName;
@@ -71,6 +80,7 @@ public class BasicTransferRecord {
 	public IPortSlot getSlot() {
 		return slot;
 	}
+	@Nullable
 	public String getNextTransferName() {
 		return nextTransferName;
 	}

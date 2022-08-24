@@ -110,6 +110,7 @@ public class TransfersDataTransformer implements ISlotTransformer {
 				final String priceExpression = ta.getPriceExpression();
 				if (priceExpression != null && !priceExpression.isEmpty()) {
 					final ICurve curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
+					assert curve != null;
 					final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
 					final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
 					final BasicTransferAgreement basicTA = new BasicTransferAgreement(ta.getName(), fromEntity, //
@@ -139,13 +140,12 @@ public class TransfersDataTransformer implements ISlotTransformer {
 			if (tr.getStatus() != TransferStatus.CANCELLED) {
 				final TransferAgreement ta = tr.getTransferAgreement();
 				final boolean pricingOverride;
-				final String priceExpression;
+				String priceExpression = "";
 				if (tr.getPriceExpression() != null && !tr.getPriceExpression().isEmpty()) {
 					pricingOverride = true;
 					priceExpression = tr.getPriceExpression();
 				} else if (ta.getPriceExpression() != null && !ta.getPriceExpression().isEmpty()) {
 					pricingOverride = false;
-					priceExpression = ta.getPriceExpression();
 				} else {
 					throw new IllegalStateException(String.format("Transfer record %s is missing the pricing expression", tr.getName()));
 				}
@@ -155,15 +155,21 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					final BasicTransferAgreement basicTA = modelEntityMap.getOptimiserObjectNullChecked(ta, BasicTransferAgreement.class);
 					final Slot<?> slot = tr.getLhs();
 					final IPortSlot portSlot = modelToOptimiserSlots.get(slot);
-					final ICurve curve;
+					ICurve curve = null;
 					if (pricingOverride) {
 						curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, commodityParser);
-					} else {
-						curve = basicTA.pricingSeries();
 					}
-					final BasicTransferRecord basicTR = new BasicTransferRecord(tr.getName(), basicTA,
-							pricingOverride, curve, priceExpression, dateAndCurveHelper.convertTime(tr.getPricingDate()), //
-							portSlot, tr.getRhs() == null ? "" : tr.getRhs().getName());
+					if (curve == null) {
+						throw new IllegalStateException(String.format("Transfer record %s is missing the pricing expression", tr.getName()));
+					}
+					final int pricingDate = dateAndCurveHelper.convertTime(tr.getPricingDate());
+					final String nextTransferName = tr.getRhs() == null ? "" : tr.getRhs().getName();
+					final BasicTransferRecord basicTR;
+					if (pricingOverride) {
+						basicTR = new BasicTransferRecord(tr.getName(), basicTA, curve, priceExpression, pricingDate, portSlot, nextTransferName);
+					} else {
+						basicTR = new BasicTransferRecord(tr.getName(), basicTA, pricingDate, portSlot, nextTransferName);
+					}
 					records.add(basicTR);
 					modelEntityMap.addModelObject(tr, basicTR);
 
