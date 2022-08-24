@@ -83,7 +83,8 @@ public class Application implements IApplication {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app. IApplicationContext)
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
+	 * IApplicationContext)
 	 */
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
@@ -131,7 +132,9 @@ public class Application implements IApplication {
 				displayProgressMonitor(display);
 
 				if (applicationExitCode == ApplicationCode.CONTINUE) {
-					// Old Experimental code to handle .lingo file associations in windows and automatically import into LiNGO. This pre-dates the current scenario service and does not currently do
+					// Old Experimental code to handle .lingo file associations in windows and
+					// automatically import into LiNGO. This pre-dates the current scenario service
+					// and does not currently do
 					// anything.
 					final var processor = new DelayedOpenFileProcessor(display);
 					final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
@@ -153,11 +156,14 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Runs the 5 following startup tasks and monitors their progress with the IProgressMonitor: login, permission check, license check, p2 cleanup, (optional) re-encryption
+	 * Runs the 5 following startup tasks and monitors their progress with the
+	 * IProgressMonitor: login, permission check, license check, p2 cleanup,
+	 * (optional) re-encryption
 	 *
 	 * @param display
 	 * @param monitor
-	 * @return an CONTINUE {@see com.mmxlabs.lingo.app.intro.ApplicationCode} or IApplication.EXIT_OK
+	 * @return an CONTINUE {@see com.mmxlabs.lingo.app.intro.ApplicationCode} or
+	 *         IApplication.EXIT_OK
 	 * @throws Exception
 	 */
 	public Object startupTasks(Display display, IProgressMonitor monitor) throws Exception {
@@ -212,33 +218,16 @@ public class Application implements IApplication {
 		var encryptionMonitor = SubMonitor.convert(monitor, 1);
 		encryptionMonitor.setTaskName("Checking if encryption migration is needed");
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_REENCRYPT)) {
-
-			DataStreamReencrypter.ENABLED = true;
-
+		{
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
 				if (p != null) {
 					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher) {
-						final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
-
+					if (sharedCipher instanceof DelegatingEMFCipher cipher) {
 						final var reencrypter = new WorkspaceReencrypter();
 						// Add in standard paths.
 						reencrypter.addDefaultPaths();
 
 						reencrypter.migrateWorkspaceEncryption(display.getActiveShell(), cipher);
-					}
-				}
-			});
-		} else {
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
-				if (p != null) {
-					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher) {
-						final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
-						final var reencrypter = new WorkspaceReencrypter();
-
-						reencrypter.writeCurrentKeyToStateFile(cipher);
 					}
 				}
 			});
@@ -249,7 +238,8 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Checks whether a valid license keystore exists in one of the pre-defined locations. See {@link LicenseChecker#doCheckLicense(KeyStore)} for more info
+	 * Checks whether a valid license keystore exists in one of the pre-defined
+	 * locations. See {@link LicenseChecker#doCheckLicense(KeyStore)} for more info
 	 *
 	 * @return true if there is a valid license, false other
 	 * @throws IOException
@@ -275,7 +265,8 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Check if the DataHub is online. If it is, start the authentication prompt then re-check the online status
+	 * Check if the DataHub is online. If it is, start the authentication prompt
+	 * then re-check the online status
 	 */
 	private void datahubLogin(IProgressMonitor monitor) {
 		var loginMonitor = SubMonitor.convert(monitor, 1);
@@ -440,7 +431,8 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Wait up to 30 seconds for the hub to come online. Tries to connect once every second
+	 * Wait up to 30 seconds for the hub to come online. Tries to connect once every
+	 * second
 	 *
 	 * @param display
 	 */
@@ -550,7 +542,9 @@ public class Application implements IApplication {
 	/**
 	 * Reconstruct command line arguments and modify to suit
 	 *
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds, not from within eclipse.
+	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This
+	 * required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds,
+	 * not from within eclipse.
 	 *
 	 *
 	 */

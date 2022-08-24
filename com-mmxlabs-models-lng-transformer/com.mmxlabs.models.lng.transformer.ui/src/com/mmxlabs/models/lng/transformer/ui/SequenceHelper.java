@@ -338,20 +338,17 @@ public class SequenceHelper {
 
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 		for (final EObject modelObject : modelObjects) {
-			if (modelObject instanceof Cargo) {
-				final Cargo cargo = (Cargo) modelObject;
-				for (final Slot slot : cargo.getSlots()) {
+			if (modelObject instanceof final Cargo cargo) {
+				for (final Slot<?> slot : cargo.getSlots()) {
 					final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 					final ISequenceElement element = portSlotProvider.getElement(o_slot);
 					elements.add(element);
 				}
-			} else if (modelObject instanceof Slot) {
-				final Slot slot = (Slot) modelObject;
+			} else if (modelObject instanceof final Slot<?> slot) {
 				final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 				final ISequenceElement element = portSlotProvider.getElement(o_slot);
 				elements.add(element);
-			} else if (modelObject instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) modelObject;
+			} else if (modelObject instanceof final VesselEvent vesselEvent) {
 				final IVesselEventPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(vesselEvent, IVesselEventPortSlot.class);
 				for (final ISequenceElement e : o_slot.getEventSequenceElements()) {
 					elements.add(e);
@@ -372,20 +369,17 @@ public class SequenceHelper {
 
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 		for (final EObject modelObject : modelObjects) {
-			if (modelObject instanceof Cargo) {
-				final Cargo cargo = (Cargo) modelObject;
-				for (final Slot slot : cargo.getSlots()) {
+			if (modelObject instanceof final Cargo cargo) {
+				for (final Slot<?> slot : cargo.getSlots()) {
 					final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 					final ISequenceElement element = portSlotProvider.getElement(o_slot);
 					elements.add(element);
 				}
-			} else if (modelObject instanceof Slot) {
-				final Slot slot = (Slot) modelObject;
+			} else if (modelObject instanceof final Slot<?> slot) {
 				final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 				final ISequenceElement element = portSlotProvider.getElement(o_slot);
 				elements.add(element);
-			} else if (modelObject instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) modelObject;
+			} else if (modelObject instanceof final VesselEvent vesselEvent) {
 				final IVesselEventPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(vesselEvent, IVesselEventPortSlot.class);
 				for (final ISequenceElement e : o_slot.getEventSequenceElements()) {
 					elements.add(e);
@@ -446,9 +440,6 @@ public class SequenceHelper {
 	}
 
 	public static @NonNull ISequences createJustFOBDESSequences(final @NonNull Injector injector, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-		@NonNull
-		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-
 		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
 
@@ -541,9 +532,6 @@ public class SequenceHelper {
 
 	public static @NonNull Pair<IResource, IModifiableSequence> createFOBDESSequence(final @NonNull Injector injector, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		@NonNull
-		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-
-		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
 
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
@@ -586,28 +574,25 @@ public class SequenceHelper {
 		return new Pair<>(o_resource, modifiableSequence);
 	}
 
-	public static @NonNull IResource getResource(final @NonNull LNGDataTransformer dataTransformer, final Slot fobDesSlot) {
-		@NonNull
-		final IOptimisationData optimisationData = dataTransformer.getOptimisationData();
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
-
+	public static @NonNull IResource getResource(final @NonNull LNGDataTransformer dataTransformer, final Slot<?> fobDesSlot) {
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+		final Injector injector = dataTransformer.getInjector();
+		return getResource(modelEntityMap, injector, fobDesSlot);
+	}
 
-		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
-		final IVirtualVesselSlotProvider virtualVesselSlotProvider = dataTransformer.getInjector().getInstance(IVirtualVesselSlotProvider.class);
-		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
-		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
+	public static @NonNull IResource getResource(@NonNull final ModelEntityMap modelEntityMap, final Injector injector, final Slot<?> fobDesSlot) {
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
-		IResource o_resource = null;
-		final IPortSlot o_slot = modelEntityMap.getOptimiserObjectNullChecked(fobDesSlot, IPortSlot.class);
-		final ISequenceElement element = portSlotProvider.getElement(o_slot);
+		final IPortSlot oSlot = modelEntityMap.getOptimiserObjectNullChecked(fobDesSlot, IPortSlot.class);
+		final ISequenceElement element = portSlotProvider.getElement(oSlot);
 		final IVesselCharter vesselCharter = virtualVesselSlotProvider.getVesselCharterForElement(element);
-		o_resource = vesselProvider.getResource(vesselCharter);
+		final IResource oResource =  vesselProvider.getResource(vesselCharter);
 
-		assert o_resource != null;
-
-		return o_resource;
+		assert oResource != null;
+		return oResource;
 	}
 
 	public static IResource getResource(final @NonNull LNGDataTransformer dataTransformer, VesselCharter vesselCharter) {

@@ -47,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPerm
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultTransferModelDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultThirdPartyCargoProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
@@ -381,6 +382,11 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultCounterPartyWindowProvider.class).in(Singleton.class);
 		bind(ICounterPartyWindowProvider.class).to(DefaultCounterPartyWindowProvider.class);
 		bind(ICounterPartyWindowProviderEditor.class).to(DefaultCounterPartyWindowProvider.class);
+
+		// Third-party cargo provider
+		bind(DefaultThirdPartyCargoProvider.class).in(Singleton.class);
+		bind(IThirdPartyCargoProvider.class).to(DefaultThirdPartyCargoProvider.class);
+		bind(IThirdPartyCargoProviderEditor.class).to(DefaultThirdPartyCargoProvider.class);
 
 		// Grouped slots constraints provider
 		bind(DefaultGroupedSlotsConstraintDataProviderEditor.class).in(Singleton.class);

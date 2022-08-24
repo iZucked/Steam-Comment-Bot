@@ -1921,8 +1921,7 @@
 				"country": "Pakistan",
 				"timeZone": "Asia/Karachi"
 			},
-			"upstreamID": "PK0021",
-			"fallbackUpstreamId": "PK0004"			
+			"upstreamID": "PK0021"
 		}, {
 			"mmxId": "L_CP_Colon",
 			"name": "Colon",
@@ -2855,7 +2854,31 @@
         "timeZone": "Asia/Tokyo"
       },
       "upstreamID": "JP0205"
-    }  
+    },
+    {
+     "mmxId": "L_MY_PFLNG1",
+     "name": "PFLNG 1",
+     "aliases": ["PFLNG Satu Terminal"],
+     "geographicPoint": {
+       "lat": 6.443333333333333,
+       "lon": 115.43666666666667,
+       "country": "Malaysia",
+       "timeZone": "Asia/Kuala_Lumpur"
+      },
+      "upstreamID": "MY0189"
+    },
+     {
+     "mmxId": "L_MY_PFLNG2",
+     "name": "PFLNG 2",
+     "aliases": ["PFLNG DUA"],
+     "geographicPoint": {
+       "lat": 6.443333333333333,
+       "lon": 115.43666666666667,
+       "country": "Malaysia",
+       "timeZone": "Asia/Kuala_Lumpur"
+      },
+      "upstreamID": "MY0189"
+    }
 	],
 	"routingPoints": [{
 		"identifier": "SUZ",
