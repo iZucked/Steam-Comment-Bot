@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>5.8.2.RELEASE</version>
+		<version>5.8.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.liveevaluator</artifactId>
 	<packaging>eclipse-plugin</packaging>
