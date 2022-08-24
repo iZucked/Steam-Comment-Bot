@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -154,6 +155,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		items.add(new Pair<>(PricingPackage.Literals.BUNKER_FUEL_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CHARTER_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES)));
+		items.add(new Pair<>(PricingPackage.Literals.PRICING_BASIS, getAddContext(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES)));
 
 		return AddModelAction.create(items, actions);
 	}
@@ -632,6 +634,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 			return DataType.Charter;
 		} else if (element instanceof CurrencyCurve) {
 			return DataType.Currency;
+		} else if (element instanceof PricingBasis) {
+			return DataType.PricingBasis;
 		}
 		return null;
 

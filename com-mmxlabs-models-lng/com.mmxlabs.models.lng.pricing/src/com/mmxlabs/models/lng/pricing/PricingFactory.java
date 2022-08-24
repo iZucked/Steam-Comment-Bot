@@ -322,6 +322,15 @@ public interface PricingFactory extends EFactory {
 	SettleStrategy createSettleStrategy();
 
 	/**
+	 * Returns a new object of class '<em>Basis</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Basis</em>'.
+	 * @generated
+	 */
+	PricingBasis createPricingBasis();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

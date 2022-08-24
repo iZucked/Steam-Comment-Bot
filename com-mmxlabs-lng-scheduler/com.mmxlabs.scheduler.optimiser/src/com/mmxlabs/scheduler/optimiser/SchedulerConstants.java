@@ -29,6 +29,7 @@ public final class SchedulerConstants {
 	public static final String Parser_BaseFuel = "BaseFuel";
 	public static final String Parser_Charter = "Charter";
 	public static final String Parser_Currency = "Currency";
+	public static final String Parser_PricingBasis = "PricingBasis";
 
 	public static final String MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE = "MidnightAlignedIntegerCurve";
 

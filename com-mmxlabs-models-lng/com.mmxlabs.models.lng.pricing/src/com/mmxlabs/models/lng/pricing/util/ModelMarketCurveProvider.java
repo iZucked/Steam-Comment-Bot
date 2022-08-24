@@ -111,6 +111,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		cacheObj.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
 		cacheObj.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
 		cacheObj.put(PriceIndexType.CURRENCY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CURRENCY));
+		cacheObj.put(PriceIndexType.PRICING_BASIS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.PRICING_BASIS));
 
 		return cacheObj;
 	}
@@ -167,6 +168,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		pricingModel.getCharterCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getBunkerFuelCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getCurrencyCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getPricingBases().forEach(c -> cacheObj.put(c, finder.apply(c)));
 
 		return cacheObj;
 	}
@@ -432,6 +434,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			return lookupData.commodityMap.get(name.toLowerCase());
 		case CURRENCY:
 			return lookupData.currencyMap.get(name.toLowerCase());
+		case PRICING_BASIS:
+			return lookupData.pricingBases.get(name.toLowerCase());
 		default:
 			break;
 

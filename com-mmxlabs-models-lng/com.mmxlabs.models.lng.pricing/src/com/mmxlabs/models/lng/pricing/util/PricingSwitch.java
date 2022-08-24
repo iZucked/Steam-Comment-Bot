@@ -41,7 +41,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.pricing.PricingPackage
  * @generated
  */
-public class PricingSwitch<T> extends Switch<T> {
+public class PricingSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -343,6 +343,17 @@ public class PricingSwitch<T> extends Switch<T> {
 				T result = caseSettleStrategy(settleStrategy);
 				if (result == null) result = caseNamedObject(settleStrategy);
 				if (result == null) result = caseMMXObject(settleStrategy);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PRICING_BASIS: {
+				PricingBasis pricingBasis = (PricingBasis)theEObject;
+				T result = casePricingBasis(pricingBasis);
+				if (result == null) result = caseAbstractYearMonthCurve(pricingBasis);
+				if (result == null) result = caseYearMonthPointContainer(pricingBasis);
+				if (result == null) result = caseUUIDObject(pricingBasis);
+				if (result == null) result = caseNamedObject(pricingBasis);
+				if (result == null) result = caseMMXObject(pricingBasis);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -872,6 +883,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSettleStrategy(SettleStrategy object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePricingBasis(PricingBasis object) {
 		return null;
 	}
 

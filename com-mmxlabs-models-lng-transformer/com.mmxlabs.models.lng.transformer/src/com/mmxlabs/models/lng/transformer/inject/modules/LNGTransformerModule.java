@@ -395,6 +395,13 @@ public class LNGTransformerModule extends AbstractModule {
 	private SeriesParser provideCurrencyParser(final SeriesParserData seriesParserData) {
 		return new SeriesParser(seriesParserData);
 	}
+	
+	@Provides
+	@Named(SchedulerConstants.Parser_PricingBasis)
+	@Singleton
+	private SeriesParser providePricingBasisParser(final SeriesParserData seriesParserData) {
+		return new SeriesParser(seriesParserData);
+	}
 
 	@Provides
 	@Singleton

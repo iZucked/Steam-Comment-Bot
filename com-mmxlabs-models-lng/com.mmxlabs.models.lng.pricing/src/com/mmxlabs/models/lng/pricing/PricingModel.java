@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.VersionRecord;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getPricingCalendars <em>Pricing Calendars</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getPricingBases <em>Pricing Bases</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel()
@@ -243,6 +244,18 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<PricingCalendar> getPricingCalendars();
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Bases</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.PricingBasis}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Bases</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_PricingBases()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PricingBasis> getPricingBases();
 
 } // end of  PricingModel
 

@@ -35,7 +35,8 @@ public class IndexTreeTransformer {
 	public enum DataType {
 		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, true, PriceIndexType.COMMODITY), BaseFuel("Base Fuel", false,
 				PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, false, PriceIndexType.BUNKERS), Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, false,
-						PriceIndexType.CHARTER), Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, false, PriceIndexType.CURRENCY);
+						PriceIndexType.CHARTER), Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, false, PriceIndexType.CURRENCY),
+		PricingBasis("Pricing Bases", false, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES, true, PriceIndexType.PRICING_BASIS);
 
 		private final String name;
 		private final EReference containerFeature;

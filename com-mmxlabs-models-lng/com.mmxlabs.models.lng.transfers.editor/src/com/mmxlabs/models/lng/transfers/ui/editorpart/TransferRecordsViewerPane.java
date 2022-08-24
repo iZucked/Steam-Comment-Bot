@@ -24,6 +24,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -55,6 +57,8 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  *
  */
 public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
+	
+	private final static Logger LOG = LoggerFactory.getLogger(TransferRecordsViewerPane.class);
 	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -159,7 +163,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 						try {
 							viewer.setSelection(selection, true);
 						} catch (final Exception e) {
-							//log.error(e.getMessage(), e);
+							LOG.error(e.getMessage(), e);
 						}
 					}
 				} finally {

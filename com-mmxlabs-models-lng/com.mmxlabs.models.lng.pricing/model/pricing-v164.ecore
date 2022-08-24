@@ -29,6 +29,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendars" upperBound="-1"
         eType="#//PricingCalendar" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingBases" upperBound="-1"
+        eType="#//PricingBasis" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -405,4 +407,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="settleStartMonthsPrior"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PricingBasis" eSuperTypes="#//AbstractYearMonthCurve"/>
 </ecore:EPackage>
