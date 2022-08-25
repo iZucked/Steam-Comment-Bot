@@ -17,6 +17,8 @@ public class BasicTransferRecord {
 	
 	private final ICurve pricingSeries;
 	private final String priceExpression;
+	private final boolean isBasis;
+
 	private final int pricingDate;
 	
 	private final IPortSlot slot;
@@ -42,18 +44,20 @@ public class BasicTransferRecord {
 		this.agreement = agreement;
 		this.pricingSeries = agreement.pricingSeries();
 		this.priceExpression = agreement.priceExpression();
+		this.isBasis = agreement.isBasis();
 		this.pricingDate = pricingDate;
 		this.slot = slot;
 		this.nextTransferName = nextTransferName;
 	}
 	
-	public BasicTransferRecord(String name, ITransferAgreement agreement, ICurve  pricingSeries, String priceExpression, //
-			int pricingDate, IPortSlot slot, String nextTransferName) {
+	public BasicTransferRecord(String name, ITransferAgreement agreement, ICurve pricingSeries, String priceExpression, //
+			int pricingDate, IPortSlot slot, String nextTransferName, boolean isBasis) {
 		super();
 		this.name = name;
 		this.agreement = agreement;
 		this.pricingSeries = pricingSeries;
 		this.priceExpression = priceExpression;
+		this.isBasis = isBasis;
 		this.pricingDate = pricingDate;
 		this.slot = slot;
 		this.nextTransferName = nextTransferName;
@@ -79,6 +83,9 @@ public class BasicTransferRecord {
 	}
 	public IPortSlot getSlot() {
 		return slot;
+	}
+	public boolean isBasis() {
+		return isBasis;
 	}
 	@Nullable
 	public String getNextTransferName() {

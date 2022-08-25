@@ -46,7 +46,9 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS, //
 				
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION,//
-				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE
+				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,//
+				
+				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE				
 		);
 
 		// Reverse the list so that we can move the editors to the head of the list
@@ -87,7 +89,7 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS) //
 				.makeRow() //
 				//
 				.withRow() //

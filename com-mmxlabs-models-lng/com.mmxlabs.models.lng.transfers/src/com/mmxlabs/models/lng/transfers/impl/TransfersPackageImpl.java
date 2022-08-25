@@ -248,6 +248,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransferAgreement_PricingBasis() {
+		return (EAttribute)transferAgreementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTransferRecord() {
 		return transferRecordEClass;
 	}
@@ -358,6 +368,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransferRecord_PricingBasis() {
+		return (EAttribute)transferRecordEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getTransferRecord__GetFromEntity() {
 		return transferRecordEClass.getEOperations().get(0);
 	}
@@ -400,6 +420,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	@Override
 	public EOperation getTransferRecord__GetRecordOrDelegateIncoterm() {
 		return transferRecordEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferRecord__GetRecordOrDelegatePricingBasis() {
+		return transferRecordEClass.getEOperations().get(5);
 	}
 
 	/**
@@ -471,6 +501,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__PRICE_EXPRESSION);
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__INCOTERM);
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__COMPANY_STATUS);
+		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__PRICING_BASIS);
 
 		transferRecordEClass = createEClass(TRANSFER_RECORD);
 		createEReference(transferRecordEClass, TRANSFER_RECORD__TRANSFER_AGREEMENT);
@@ -483,11 +514,13 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__STATUS);
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__NOTES);
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__STALE);
+		createEAttribute(transferRecordEClass, TRANSFER_RECORD__PRICING_BASIS);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_FROM_ENTITY);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_TO_ENTITY);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_COMPANY_STATUS);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICE_EXPRESSION);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS);
 
 		// Create enums
 		transferIncotermEEnum = createEEnum(TRANSFER_INCOTERM);
@@ -545,6 +578,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferAgreement_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_Incoterm(), this.getTransferIncoterm(), "incoterm", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_CompanyStatus(), this.getCompanyStatus(), "companyStatus", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferAgreement_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(transferRecordEClass, TransferRecord.class, "TransferRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferRecord_TransferAgreement(), this.getTransferAgreement(), null, "transferAgreement", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -560,6 +594,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferRecord_Status(), this.getTransferStatus(), "status", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecord_Stale(), ecorePackage.getEBoolean(), "stale", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecord_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getTransferRecord__GetFromEntity(), theCommercialPackage.getBaseLegalEntity(), "getFromEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -570,6 +605,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEOperation(getTransferRecord__GetRecordOrDelegatePriceExpression(), ecorePackage.getEString(), "getRecordOrDelegatePriceExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getTransferRecord__GetRecordOrDelegateIncoterm(), this.getTransferIncoterm(), "getRecordOrDelegateIncoterm", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getTransferRecord__GetRecordOrDelegatePricingBasis(), ecorePackage.getEString(), "getRecordOrDelegatePricingBasis", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(transferIncotermEEnum, TransferIncoterm.class, "TransferIncoterm");
@@ -609,10 +646,22 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 			   "type", "commodity"
 		   });
 		addAnnotation
+		  (getTransferAgreement_PricingBasis(),
+		   source,
+		   new String[] {
+			   "type", "pricingBasis"
+		   });
+		addAnnotation
 		  (getTransferRecord_PriceExpression(),
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getTransferRecord_PricingBasis(),
+		   source,
+		   new String[] {
+			   "type", "pricingBasis"
 		   });
 	}
 

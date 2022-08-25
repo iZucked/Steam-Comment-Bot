@@ -85,6 +85,8 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
 				getCommandHandler()));
+		addTypicalColumn("Basis", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PricingBasis(), //
+				getCommandHandler()));
 		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
 				getCommandHandler()));
 		addTypicalColumn("Status", new TransferStatusEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Status(), //

@@ -60,6 +60,7 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			addStatusPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addStalePropertyDescriptor(object);
+			addPricingBasisPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -307,6 +308,28 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Basis feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingBasisPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecord_pricingBasis_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecord_pricingBasis_feature", "_UI_TransferRecord_type"),
+				 TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns TransferRecord.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -352,6 +375,7 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_RECORD__STATUS:
 			case TransfersPackage.TRANSFER_RECORD__NOTES:
 			case TransfersPackage.TRANSFER_RECORD__STALE:
+			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

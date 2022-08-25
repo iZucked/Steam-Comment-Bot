@@ -45,6 +45,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getStatus <em>Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#isStale <em>Stale</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  * </ul>
  *
  * @generated
@@ -284,6 +285,35 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @ordered
 	 */
 	protected boolean stale = STALE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRICING_BASIS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
+
+	/**
+	 * This is true if the Pricing Basis attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pricingBasisESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -745,6 +775,56 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getPricingBasis() {
+		return pricingBasis;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingBasis(String newPricingBasis) {
+		String oldPricingBasis = pricingBasis;
+		pricingBasis = newPricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasisESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__PRICING_BASIS, oldPricingBasis, pricingBasis, !oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPricingBasis() {
+		String oldPricingBasis = pricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasis = PRICING_BASIS_EDEFAULT;
+		pricingBasisESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_RECORD__PRICING_BASIS, oldPricingBasis, PRICING_BASIS_EDEFAULT, oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPricingBasis() {
+		return pricingBasisESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -804,6 +884,16 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String getRecordOrDelegatePricingBasis() {
+		return (String) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -834,6 +924,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return getNotes();
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 				return isStale();
+			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+				return getPricingBasis();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -878,6 +970,9 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return;
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 				setStale((Boolean)newValue);
+				return;
+			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+				setPricingBasis((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -924,6 +1019,9 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 				setStale(STALE_EDEFAULT);
 				return;
+			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+				unsetPricingBasis();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -958,6 +1056,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 				return stale != STALE_EDEFAULT;
+			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+				return isSetPricingBasis();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1012,6 +1112,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return getRecordOrDelegatePriceExpression();
 			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM:
 				return getRecordOrDelegateIncoterm();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS:
+				return getRecordOrDelegatePricingBasis();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1042,6 +1144,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 		result.append(notes);
 		result.append(", stale: ");
 		result.append(stale);
+		result.append(", pricingBasis: ");
+		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -1053,6 +1157,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PriceExpression(),"");
 		} else if (transferPackage.getTransferRecord_Incoterm() == feature) {
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
+		} else if (transferPackage.getTransferRecord_PricingBasis() == feature) {
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PricingBasis(),"");
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

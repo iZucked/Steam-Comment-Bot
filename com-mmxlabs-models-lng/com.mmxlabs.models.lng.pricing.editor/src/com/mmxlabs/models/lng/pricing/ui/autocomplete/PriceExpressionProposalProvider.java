@@ -113,6 +113,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				break;
 			case PRICING_BASIS:
 				curves.addAll(pricingModel.getPricingBases());
+				break;
 			default:
 				return new IContentProposal[0];
 			}

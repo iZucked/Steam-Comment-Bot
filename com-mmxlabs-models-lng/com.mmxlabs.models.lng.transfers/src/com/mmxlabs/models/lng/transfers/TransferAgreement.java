@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getIncoterm <em>Incoterm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCompanyStatus <em>Company Status</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement()
@@ -142,5 +143,27 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	void setCompanyStatus(CompanyStatus value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #setPricingBasis(String)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PricingBasis()
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='pricingBasis'"
+	 * @generated
+	 */
+	String getPricingBasis();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #getPricingBasis()
+	 * @generated
+	 */
+	void setPricingBasis(String value);
 
 } // TransferAgreement

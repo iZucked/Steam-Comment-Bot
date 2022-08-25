@@ -45,18 +45,38 @@ public class TransferAgreementConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY);
 					statuses.add(dsd);
 				}
-				if (transferAgreement.getPriceExpression() == null) {
-					final String failureMessage = String.format("[%s]: price expression must be set.", name);
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-					dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION);
-					statuses.add(dsd);
-				} else {
-					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx,transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,
-							transferAgreement.getPriceExpression(), PriceIndexType.COMMODITY);
-					if (!result.isOk()) {
-						final String message = String.format("[%s]: %s", name, result.getErrorDetails());
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				if (transferAgreement.getPricingBasis() == null || transferAgreement.getPricingBasis().isBlank()) {
+					if (transferAgreement.getPriceExpression() == null || transferAgreement.getPriceExpression().isBlank()) {
+						final String failureMessage = String.format("[%s]: price expression or pricing basis must be set.", name);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
 						dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION);
+						dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS);
+						statuses.add(dsd);
+					} else {
+						final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,
+								transferAgreement.getPriceExpression(), PriceIndexType.COMMODITY);
+						if (!result.isOk()) {
+							final String message = String.format("[%s]: %s", name, result.getErrorDetails());
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION);
+							statuses.add(dsd);
+						}
+					}
+				} else {
+					if (transferAgreement.getPriceExpression() == null || transferAgreement.getPriceExpression().isBlank()) {
+						final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
+								transferAgreement.getPricingBasis(), PriceIndexType.PRICING_BASIS);
+						if (!result.isOk()) {
+							final String message = String.format("[%s]: %s", name, result.getErrorDetails());
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS);
+							statuses.add(dsd);
+						}
+					} else {
+						final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, must be set.", name);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+						dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION);
+						dsd.addEObjectAndFeature(transferAgreement, TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS);
 						statuses.add(dsd);
 					}
 				}
