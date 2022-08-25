@@ -168,6 +168,7 @@ public class ExportCSVBundleUtil {
 		subModels.add(ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 
 		subModels.add(ScenarioModelUtil.getNominationsModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getTransferModel(scenarioDataProvider));
 
 		// Remove any null references
 		while (subModels.remove(null))
