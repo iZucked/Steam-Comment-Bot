@@ -21,6 +21,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -67,6 +69,8 @@ public class IndexTreeTransformer {
 			return priceIndexType;
 		}
 	}
+	
+	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
 
 	private final EPackage modelPackage;
 	private final EClass nodeClass;
@@ -113,6 +117,9 @@ public class IndexTreeTransformer {
 
 			final List<EObject> nodes = new LinkedList<EObject>();
 			for (final DataType dt : DataType.values()) {
+				if (dt == DataType.PricingBasis && !isPricingBasesEnabled) {
+					continue;
+				}
 				final EObject n = modelPackage.getEFactoryInstance().create(nodeClass);
 				n.eSet(nameAttribute, dt.getName());
 				n.eSet(expandAttribute, dt.isExpandedByDefault());
