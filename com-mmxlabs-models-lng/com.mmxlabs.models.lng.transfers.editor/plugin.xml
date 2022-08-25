@@ -103,4 +103,12 @@
             plugin.xml="transfers.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.transfers.editor.transferModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.transfers.TransferModel"
+          subModelImporterClass="com.mmxlabs.models.lng.transfers.importers.TransferModelImporter">
+    </submodelImporter>
+    </extension>
 </plugin>
