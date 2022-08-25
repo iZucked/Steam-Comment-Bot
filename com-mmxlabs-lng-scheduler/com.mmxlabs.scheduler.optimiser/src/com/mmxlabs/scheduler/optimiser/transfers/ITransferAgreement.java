@@ -11,4 +11,5 @@ public interface ITransferAgreement {
 	ICurve pricingSeries();
 	IEntity fromEntity();
 	IEntity toEntity();
+	boolean isBasis();
 }

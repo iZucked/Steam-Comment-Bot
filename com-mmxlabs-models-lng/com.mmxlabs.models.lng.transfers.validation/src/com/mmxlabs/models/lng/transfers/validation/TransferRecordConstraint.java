@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -38,23 +39,39 @@ public class TransferRecordConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM);
 					statuses.add(dsd);
 				}
-				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
-					if (transferRecord.getPriceExpression() == null) {
-						final String failureMessage = String.format("[%s]: price expression must be set.", name);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-						dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
-						statuses.add(dsd);
-					} else {
-						final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx,transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION,
-								transferRecord.getPriceExpression(), PriceIndexType.COMMODITY);
-						if (!result.isOk()) {
-							final String message = String.format("[%s]: %s", name, result.getErrorDetails());
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-							dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
-							statuses.add(dsd);
-						}
-					}
+				
+				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS) &&
+						transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
+					final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, should be set", name);
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
+					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS);
+					statuses.add(dsd);
 				}
+				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS)) {
+					validatePrice(ctx, statuses, transferRecord.getPricingBasis(), PriceIndexType.PRICING_BASIS, name, transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS);
+				}
+				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
+					validatePrice(ctx, statuses, transferRecord.getPriceExpression(), PriceIndexType.COMMODITY, name, transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
+				}
+			}
+		}
+	}
+	
+	private void validatePrice(final IValidationContext ctx, final List<IStatus> statuses, final String price, final PriceIndexType type, final String targetName, //
+			final EObject target, final EStructuralFeature feature) {
+		if (price == null || price.isBlank()) {
+			final String failureMessage = String.format("[%s]: price must be set.", targetName);
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+			dsd.addEObjectAndFeature(target, feature);
+			statuses.add(dsd);
+		} else {
+			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, feature, price, type);
+			if (!result.isOk()) {
+				final String message = String.format("[%s]: %s", targetName, result.getErrorDetails());
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dsd.addEObjectAndFeature(target, feature);
+				statuses.add(dsd);
 			}
 		}
 	}

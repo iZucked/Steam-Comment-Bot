@@ -223,13 +223,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_AGREEMENT__COMPANY_STATUS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT__PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Transfer Agreement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -395,13 +404,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD__STALE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD__PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Transfer Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int TRANSFER_RECORD_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -476,13 +494,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Record Or Delegate Pricing Basis</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
+
+	/**
 	 * The number of operations of the '<em>Transfer Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
+	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
@@ -613,6 +640,17 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferAgreement_CompanyStatus();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis()
+	 * @see #getTransferAgreement()
+	 * @generated
+	 */
+	EAttribute getTransferAgreement_PricingBasis();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.transfers.TransferRecord <em>Transfer Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -733,6 +771,17 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferRecord_Stale();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis()
+	 * @see #getTransferRecord()
+	 * @generated
+	 */
+	EAttribute getTransferRecord_PricingBasis();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromEntity() <em>Get From Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -781,6 +830,16 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getTransferRecord__GetRecordOrDelegateIncoterm();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingBasis() <em>Get Record Or Delegate Pricing Basis</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Record Or Delegate Pricing Basis</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingBasis()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetRecordOrDelegatePricingBasis();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}'.
@@ -902,6 +961,13 @@ public interface TransfersPackage extends EPackage {
 		 */
 		EAttribute TRANSFER_AGREEMENT__COMPANY_STATUS = eINSTANCE.getTransferAgreement_CompanyStatus();
 		/**
+		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_AGREEMENT__PRICING_BASIS = eINSTANCE.getTransferAgreement_PricingBasis();
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl <em>Transfer Record</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -981,6 +1047,13 @@ public interface TransfersPackage extends EPackage {
 		 */
 		EAttribute TRANSFER_RECORD__STALE = eINSTANCE.getTransferRecord_Stale();
 		/**
+		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD__PRICING_BASIS = eINSTANCE.getTransferRecord_PricingBasis();
+		/**
 		 * The meta object literal for the '<em><b>Get From Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1015,6 +1088,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = eINSTANCE.getTransferRecord__GetRecordOrDelegateIncoterm();
+		/**
+		 * The meta object literal for the '<em><b>Get Record Or Delegate Pricing Basis</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS = eINSTANCE.getTransferRecord__GetRecordOrDelegatePricingBasis();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
 		 * <!-- begin-user-doc -->

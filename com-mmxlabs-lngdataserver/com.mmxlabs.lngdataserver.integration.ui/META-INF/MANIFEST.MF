@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Web Navigator UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.ui;singleton:=true
-Bundle-Version: 5.8.2.qualifier
+Bundle-Version: 5.8.3.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jetty.io;bundle-version="9.3.9",
  org.eclipse.jetty.security;bundle-version="9.3.9",
@@ -15,9 +15,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.swt,
  org.eclipse.ui;bundle-version="3.108.1",
- com.mmxlabs.lngdataserver.server;bundle-version="5.8.2",
+ com.mmxlabs.lngdataserver.server;bundle-version="5.8.3",
  com.mmxlabs.lngdataserver.browser,
- com.mmxlabs.models.lng.port;bundle-version="5.8.2",
+ com.mmxlabs.models.lng.port;bundle-version="5.8.3",
  com.mmxlabs.models.ui,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.lngdataserver.integration.distances,

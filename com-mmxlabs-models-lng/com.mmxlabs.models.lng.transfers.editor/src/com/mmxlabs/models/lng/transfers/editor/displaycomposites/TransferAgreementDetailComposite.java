@@ -40,6 +40,7 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,//
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM
 				
 		);
@@ -73,7 +74,7 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS) //
 				.makeRow() //
 				.make() //
 		;

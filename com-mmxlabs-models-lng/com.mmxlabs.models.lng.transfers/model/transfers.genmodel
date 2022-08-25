@@ -37,6 +37,7 @@
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/incoterm"/>
       <genFeatures createChild="false" propertyDescription="Type of the agreement"
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/companyStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/pricingBasis"/>
     </genClasses>
     <genClasses ecoreClass="transfers.ecore#//TransferRecord">
       <genFeatures notify="false" createChild="false" propertyDescription="Underlying agreement"
@@ -53,11 +54,13 @@
       <genFeatures createChild="false" propertyDescription="Status" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/status"/>
       <genFeatures createChild="false" propertyDescription="Notes" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/notes"/>
       <genFeatures createChild="false" propertyDescription="Stale" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/stale"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/pricingBasis"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getFromEntity"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getToEntity"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getCompanyStatus"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePriceExpression"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateIncoterm"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePricingBasis"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

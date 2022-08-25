@@ -52,6 +52,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			addPriceExpressionPropertyDescriptor(object);
 			addIncotermPropertyDescriptor(object);
 			addCompanyStatusPropertyDescriptor(object);
+			addPricingBasisPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -167,6 +168,28 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Basis feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingBasisPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferAgreement_pricingBasis_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferAgreement_pricingBasis_feature", "_UI_TransferAgreement_type"),
+				 TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns TransferAgreement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -207,6 +230,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICE_EXPRESSION:
 			case TransfersPackage.TRANSFER_AGREEMENT__INCOTERM:
 			case TransfersPackage.TRANSFER_AGREEMENT__COMPANY_STATUS:
+			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

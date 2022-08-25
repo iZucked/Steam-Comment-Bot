@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  *
  */
 @NonNullByDefault
-public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, ICurve pricingSeries, String priceExpression) implements ITransferAgreement{
+public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, ICurve pricingSeries, String priceExpression, boolean isBasis) implements ITransferAgreement{
 	
 	@Override
 	public boolean equals(@Nullable Object object) {
@@ -23,7 +23,8 @@ public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity to
 					&& otherAgreement.fromEntity() == fromEntity//
 					&& otherAgreement.toEntity() == toEntity//
 					&& otherAgreement.pricingSeries() == pricingSeries//
-					&& otherAgreement.priceExpression.equalsIgnoreCase(priceExpression)) {
+					&& otherAgreement.priceExpression.equalsIgnoreCase(priceExpression)
+					&& otherAgreement.isBasis == isBasis) {
 				return true;
 			}
 		}

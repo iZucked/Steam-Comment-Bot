@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getStatus <em>Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#isStale <em>Stale</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord()
@@ -403,6 +404,56 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	void setStale(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #isSetPricingBasis()
+	 * @see #unsetPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_PricingBasis()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='pricingBasis'"
+	 * @generated
+	 */
+	String getPricingBasis();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #isSetPricingBasis()
+	 * @see #unsetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @generated
+	 */
+	void setPricingBasis(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @generated
+	 */
+	void unsetPricingBasis();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pricing Basis</em>' attribute is set.
+	 * @see #unsetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @generated
+	 */
+	boolean isSetPricingBasis();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -441,5 +492,13 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	TransferIncoterm getRecordOrDelegateIncoterm();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getRecordOrDelegatePricingBasis();
 
 } // TransferRecord

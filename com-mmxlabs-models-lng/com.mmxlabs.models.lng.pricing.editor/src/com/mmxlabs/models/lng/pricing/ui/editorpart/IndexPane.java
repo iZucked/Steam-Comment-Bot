@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -55,11 +56,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -96,6 +100,8 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
+	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
+	
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
 
@@ -154,6 +160,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 		items.add(new Pair<>(PricingPackage.Literals.BUNKER_FUEL_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CHARTER_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES)));
+		if (isPricingBasesEnabled) {
+			items.add(new Pair<>(PricingPackage.Literals.PRICING_BASIS, getAddContext(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES)));
+		}
 
 		return AddModelAction.create(items, actions);
 	}
@@ -163,6 +172,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// Add in Check for Tree
 		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
+		result.addFilter(new ViewerFilter() {
+			
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				// if pricing bases feature is not enabled - do not show the pricing basis!
+				return !(element instanceof PricingBasis && !isPricingBasesEnabled);
+			}
+		});
 		return result;
 	}
 
@@ -445,7 +462,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 								cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getYearMonthPoint_Value(), value);
 							}
 							if (!cmd.canExecute()) {
-								throw new RuntimeException("Unable to execute index set command");
+								throw new RuntimeException("Unable to execute curve set command");
 							}
 							getEditingDomain().getCommandStack().execute(cmd);
 
@@ -458,7 +475,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						p.setValue(value);
 						final Command cmd = AddCommand.create(getEditingDomain(), curve, PricingPackage.eINSTANCE.getYearMonthPointContainer_Points(), p);
 						if (!cmd.canExecute()) {
-							throw new RuntimeException("Unable to execute index add command");
+							throw new RuntimeException("Unable to execute curve add command");
 						}
 						getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -632,6 +649,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 			return DataType.Charter;
 		} else if (element instanceof CurrencyCurve) {
 			return DataType.Currency;
+		} else if (element instanceof PricingBasis) {
+			return DataType.PricingBasis;
 		}
 		return null;
 

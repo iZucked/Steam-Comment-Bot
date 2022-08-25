@@ -45,6 +45,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.CurrencyCurveCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>    
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.PricingBasis"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.PricingBasisCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
 </extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
@@ -117,6 +123,11 @@
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingBasisReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingBasisReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.PricingBasis">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -180,6 +191,12 @@
            factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Commodity Curve"
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.pricingBasisFactory"
+           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Pricing Basis"
+          targetEClass="com.mmxlabs.models.lng.pricing.PricingBasis">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"

@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPricingCalendars <em>Pricing Calendars</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPricingBases <em>Pricing Bases</em>}</li>
  * </ul>
  *
  * @generated
@@ -173,6 +175,16 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected EList<PricingCalendar> pricingCalendars;
+
+	/**
+	 * The cached value of the '{@link #getPricingBases() <em>Pricing Bases</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBases()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PricingBasis> pricingBases;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -419,6 +431,19 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 */
 	@Override
+	public EList<PricingBasis> getPricingBases() {
+		if (pricingBases == null) {
+			pricingBases = new EObjectContainmentEList<PricingBasis>(PricingBasis.class, this, PricingPackage.PRICING_MODEL__PRICING_BASES);
+		}
+		return pricingBases;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PricingPackage.PRICING_MODEL__CURRENCY_CURVES:
@@ -445,6 +470,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return basicSetSettledPricesVersionRecord(null, msgs);
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return ((InternalEList<?>)getPricingCalendars()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+				return ((InternalEList<?>)getPricingBases()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -481,6 +508,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getSettledPricesVersionRecord();
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return getPricingCalendars();
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+				return getPricingBases();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -540,6 +569,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getPricingCalendars().clear();
 				getPricingCalendars().addAll((Collection<? extends PricingCalendar>)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+				getPricingBases().clear();
+				getPricingBases().addAll((Collection<? extends PricingBasis>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -588,6 +621,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				getPricingCalendars().clear();
 				return;
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+				getPricingBases().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -624,6 +660,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return settledPricesVersionRecord != null;
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return pricingCalendars != null && !pricingCalendars.isEmpty();
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+				return pricingBases != null && !pricingBases.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

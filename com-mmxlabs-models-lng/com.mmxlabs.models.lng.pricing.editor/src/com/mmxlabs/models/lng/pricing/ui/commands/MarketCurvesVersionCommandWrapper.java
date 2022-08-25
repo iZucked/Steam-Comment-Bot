@@ -75,6 +75,8 @@ public class MarketCurvesVersionCommandWrapper extends AbstractVersionCommandWra
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES) {
 					changedRef[0] = true;
+				}else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__PRICING_BASES) {
+					changedRef[0] = true;
 				}
 
 				// Reset!
