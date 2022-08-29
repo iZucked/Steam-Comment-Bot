@@ -118,7 +118,7 @@ public class ExportCSVBundleUtil {
 	}
 	
 	public static void exportAllCurves(final IScenarioDataProvider scenarioDataProvider, final char delimiter, final char decimalSeparator, final String baseURL) {
-		final String[] toExport = {"PRICE_CURVES","CHARTER_CURVES","BF_PRICING", "CURRENCY_CURVES"};
+		final String[] toExport = {"PRICE_CURVES","CHARTER_CURVES","BF_PRICING", "CURRENCY_CURVES", "PRICING_BASES"};
 		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMMXExportContext context = new DefaultExportContext(scenarioModel, scenarioDataProvider, decimalSeparator);
 

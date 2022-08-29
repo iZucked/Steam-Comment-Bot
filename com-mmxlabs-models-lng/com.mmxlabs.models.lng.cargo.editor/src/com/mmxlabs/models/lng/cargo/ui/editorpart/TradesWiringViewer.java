@@ -1259,8 +1259,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof DischargeSlot ds) {
 
+							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) // 
+									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ds, getScenarioModel());
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
+								if (slotTransferred) {
+									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+								}
 								return notesImage;
+							}
+							if (slotTransferred) {
+								return transferImage;
 							}
 						}
 					}
