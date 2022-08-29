@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -22,6 +23,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -31,6 +33,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -40,6 +43,8 @@ import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 public class CargoEditingHelper {
 
@@ -656,6 +661,18 @@ public class CargoEditingHelper {
 			editingDomain.getCommandStack().execute(cc);
 
 			verifyModel();
+		}
+	}
+	
+	public void transferCargoBetweenEntities(final IScenarioEditingLocation scenarioEditingLocation, //
+			@NonNull final String description, final Slot<?> slot, final EObject transferAgreement) {
+		final Pair<CompoundCommand, EObject> pair = CargoTransferUtil.createTransferRecord(description, scenarioModel, //
+				editingDomain, slot, transferAgreement);
+		
+		if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
+			final CommandStack commandStack = editingDomain.getCommandStack();
+			commandStack.execute(pair.getFirst());
+			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(scenarioEditingLocation, pair.getSecond(), commandStack.getMostRecentCommand());
 		}
 	}
 }

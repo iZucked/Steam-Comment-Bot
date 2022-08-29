@@ -1,8 +1,15 @@
 package com.mmxlabs.models.lng.cargo.ui.util;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -10,11 +17,17 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
+import com.mmxlabs.models.lng.transfers.TransfersFactory;
+import com.mmxlabs.models.lng.transfers.TransfersPackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 
 public class CargoTransferUtil {
@@ -35,6 +48,46 @@ public class CargoTransferUtil {
 			}
 		}
 		return Collections.emptyList();
+	}
+	
+	public static List<NamedObject> getTransferAgreementsForMenu(final LNGScenarioModel scenarioModel){
+		if (scenarioModel != null) {
+			final TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
+			if (tm != null) {
+				return tm.getTransferAgreements().stream().collect(Collectors.toList());
+			}
+		}
+		return Collections.emptyList();
+	}
+	
+	public static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
+			final EditingDomain editingDomain, final Slot<?> slot, final EObject transferAgreement) {
+		final CompoundCommand cc = new CompoundCommand(description);
+		
+		final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
+		tr.setCargoReleaseDate(LocalDate.now());
+		if (slot.getPricingDate() != null) {
+			tr.setPricingDate(slot.getPricingDate());
+		} else if (slot.getSchedulingTimeWindow() != null && slot.getSchedulingTimeWindow().getStart() != null) {
+			tr.setPricingDate(slot.getSchedulingTimeWindow().getStart().toLocalDate());
+		} else {
+			tr.setPricingDate(slot.getWindowStart());
+		}
+		tr.setLhs(slot);
+		if (transferAgreement instanceof TransferAgreement ta) {
+			tr.setTransferAgreement(ta);
+		}
+		TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
+		if (tm == null) {
+			tm = TransfersFactory.eINSTANCE.createTransferModel();
+			tm.getTransferRecords().add(tr);
+			cc.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(), tm));
+		} else {
+			cc.append(AddCommand.create(editingDomain, tm,
+					TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_RECORDS, Collections.singleton(tr)));
+		}
+		
+		return new Pair(cc, tr);
 	}
 	
 	public static Image joinImages(final String name, final @NonNull Image first, final @NonNull Image second) {

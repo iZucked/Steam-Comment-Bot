@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
+import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
@@ -82,6 +83,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -151,6 +153,26 @@ public class CargoEditorMenuHelper {
 
 			if (target instanceof Cargo) {
 				editLDDCargo((Cargo) target, false);
+			}
+
+		}
+	}
+	
+	private final class CreateTransferRecordAction extends Action {
+		private final Slot<?> slot;
+		private final EObject transferAgreement;
+
+		private CreateTransferRecordAction(final String text, final Slot<?> slot, final EObject transferAgreement) {
+			super(text);
+			this.slot = slot;
+			this.transferAgreement = transferAgreement;
+		}
+
+		@Override
+		public void run() {
+
+			if (slot != null) {
+				helper.transferCargoBetweenEntities(scenarioEditingLocation, "Create transfer record", slot, transferAgreement);
 			}
 
 		}
@@ -273,6 +295,7 @@ public class CargoEditorMenuHelper {
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
+				createTransferMenu(newMenuManager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
 //					createPanamaAssignmentMenus(manager, dischargeSlot);
@@ -708,6 +731,9 @@ public class CargoEditorMenuHelper {
 
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
+			
+			createTransferMenu(manager, loadSlot);
+			
 			if (loadSlot.isDESPurchase()) {
 				createAssignmentMenus(manager, loadSlot);
 //				createPanamaAssignmentMenus(manager, loadSlot);
@@ -747,6 +773,17 @@ public class CargoEditorMenuHelper {
 			}
 
 		};
+	}
+
+	private void createTransferMenu(IMenuManager manager, final Slot<?> slot) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL)) {
+			manager.add(new Separator());
+			final MenuManager transferMenuManager = new MenuManager("Transfer...", null);
+			for (final NamedObject ta : CargoTransferUtil.getTransferAgreementsForMenu(scenarioModel)) {
+				transferMenuManager.add(new CreateTransferRecordAction(ta.getName(), slot, ta));
+			}
+			manager.add(transferMenuManager);
+		}
 	}
 
 	/**

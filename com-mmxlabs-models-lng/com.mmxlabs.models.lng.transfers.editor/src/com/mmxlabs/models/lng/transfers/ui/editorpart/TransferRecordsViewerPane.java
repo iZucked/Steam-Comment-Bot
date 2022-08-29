@@ -109,7 +109,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				tm.getTransferRecords().add(tr);
 				cmd.append(SetCommand.create(getEditingDomain(), scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(), tm));
 			} else {
-				cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getTransferModel(getScenarioEditingLocation().getScenarioDataProvider()),
+				cmd.append(AddCommand.create(getEditingDomain(), tm,
 						TransfersPackage.Literals.TRANSFER_MODEL__TRANSFER_RECORDS, Collections.singleton(tr)));
 			}
 			final CommandStack commandStack = getEditingDomain().getCommandStack();
