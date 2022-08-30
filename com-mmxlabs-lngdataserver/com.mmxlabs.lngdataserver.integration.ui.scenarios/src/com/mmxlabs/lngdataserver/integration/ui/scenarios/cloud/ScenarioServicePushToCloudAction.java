@@ -272,6 +272,8 @@ public class ScenarioServicePushToCloudAction {
 			throw new CloudOptimisationPushException("Unable to determine key uuid", Type.FAILED_MISSING_KEY_UUID, new IOException());
 		}
 
+		md.batchSize = 1;
+		
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			final String json = objectMapper.writeValueAsString(md);

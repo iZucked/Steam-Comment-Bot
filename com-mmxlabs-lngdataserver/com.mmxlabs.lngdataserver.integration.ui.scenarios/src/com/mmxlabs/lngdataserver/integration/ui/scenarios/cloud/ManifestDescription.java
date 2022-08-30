@@ -13,4 +13,5 @@ public class ManifestDescription {
 	public String clientCode;
 	public Boolean dev;
 	public String keyUUID;
+	public Integer batchSize; 
 }
