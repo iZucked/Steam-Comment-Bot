@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.cargo.ui.util;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -38,6 +39,18 @@ public class CargoTransferUtil {
 	
 	private static boolean isSlotReferencedByTransferRecord(final Slot<?> slot, final List<TransferRecord> records) {
 		return records.stream().anyMatch(tr -> tr.getLhs() == slot);
+	}
+	
+	public static EObject getTransferRecordForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		final Optional<TransferRecord> optionalTransferRecord = getOptionalTransferRecordForSlot(slot, scenarioModel);
+		if (optionalTransferRecord.isPresent()) {
+			return optionalTransferRecord.get();
+		}
+		return null;
+	}
+	
+	private static Optional<TransferRecord> getOptionalTransferRecordForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		return getTransferRecords(scenarioModel).stream().filter(tr -> tr.getLhs() == slot).findFirst();
 	}
 	
 	private static List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){

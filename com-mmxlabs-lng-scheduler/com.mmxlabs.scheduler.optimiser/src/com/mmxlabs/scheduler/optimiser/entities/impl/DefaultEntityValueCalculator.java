@@ -564,7 +564,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 	
 	private List<BasicTransferRecord> getSortedTransferRecords(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IEntity loadEntity, final IEntity dischargeEntity){
-		final List<BasicTransferRecord> unsorted = transferModelDataProvider.getTransferRecordsForSlot(loadOption);
+		final List<BasicTransferRecord> unsorted = new ArrayList<>();
+		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(loadOption));
 		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(dischargeOption));
 		if (unsorted.size() <= 1 ) {
 			return unsorted;
@@ -581,11 +582,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 			}
 		}
-		if (!sorted.get(unsorted.size() - 1).getToEntity().equals(dischargeEntity)) {
-			// something might have gone wrong
-			// according to K, nothing is wrong
-			// according to P, should be a chain of entities
-			// throw new IllegalStateException
+		if (sorted.size() == unsorted.size()) {
+			if (!sorted.get(unsorted.size() - 1).getToEntity().equals(dischargeEntity)) {
+				// something might have gone wrong
+				// according to K, nothing is wrong
+				// according to P, should be a chain of entities
+				// throw new IllegalStateException
+			}
 		}
 				
 		return sorted;

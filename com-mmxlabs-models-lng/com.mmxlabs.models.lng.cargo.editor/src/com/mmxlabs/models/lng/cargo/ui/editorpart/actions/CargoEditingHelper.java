@@ -675,4 +675,12 @@ public class CargoEditingHelper {
 			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(scenarioEditingLocation, pair.getSecond(), commandStack.getMostRecentCommand());
 		}
 	}
+	
+	public void editTransferRecord(final IScenarioEditingLocation scenarioEditingLocation, final Slot<?> slot) {
+		
+		final EObject tr = CargoTransferUtil.getTransferRecordForSlot(slot, scenarioModel);
+		if (tr != null) {
+			DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, tr);
+		}
+	}
 }
