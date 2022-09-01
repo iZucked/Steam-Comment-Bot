@@ -496,6 +496,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long loadPurchaseCost = cargoPNLData.getSlotValue(loadOption);
 			final long dischargeSaleRevenue = cargoPNLData.getSlotValue(dischargeOption);
 			
+			// Negate the original cost and revenue from the trading book
+			// Since these are already added in evaluateCargoPnL for the corresponding slots
+			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), loadPurchaseCost);
+			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), -dischargeSaleRevenue);
+			
 			BasicTransferRecord previousRecord = null;
 			TranferRecordAnnotation prevAnnotation = null;
 			for(final BasicTransferRecord currentRecord : records) {

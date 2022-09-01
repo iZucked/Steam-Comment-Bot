@@ -79,17 +79,20 @@ public class CargoTransferUtil {
 		
 		final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
 		tr.setCargoReleaseDate(LocalDate.now());
-		if (slot.getPricingDate() != null) {
-			tr.setPricingDate(slot.getPricingDate());
-		} else if (slot.getSchedulingTimeWindow() != null && slot.getSchedulingTimeWindow().getStart() != null) {
-			tr.setPricingDate(slot.getSchedulingTimeWindow().getStart().toLocalDate());
-		} else {
-			tr.setPricingDate(slot.getWindowStart());
-		}
-		tr.setLhs(slot);
+		int bufferDays = 0;
 		if (transferAgreement instanceof TransferAgreement ta) {
 			tr.setTransferAgreement(ta);
+			bufferDays = getBufferDays(ta);
 		}
+		if (slot.getPricingDate() != null) {
+			tr.setPricingDate(slot.getPricingDate().plusDays(bufferDays));
+		} else if (slot.getSchedulingTimeWindow() != null && slot.getSchedulingTimeWindow().getStart() != null) {
+			tr.setPricingDate(slot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays));
+		} else {
+			tr.setPricingDate(slot.getWindowStart().plusDays(bufferDays));
+		}
+		tr.setLhs(slot);
+		
 		TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
 		if (tm == null) {
 			tm = TransfersFactory.eINSTANCE.createTransferModel();
@@ -101,6 +104,14 @@ public class CargoTransferUtil {
 		}
 		
 		return new Pair(cc, tr);
+	}
+	
+	private static int getBufferDays(final TransferAgreement transferAgreement) {
+		int bufferDays = 0;
+		if (transferAgreement.isSetBufferDays()) {
+			bufferDays = transferAgreement.getBufferDays();
+		}
+		return bufferDays;
 	}
 	
 	public static Image joinImages(final String name, final @NonNull Image first, final @NonNull Image second) {

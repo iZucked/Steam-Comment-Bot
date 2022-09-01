@@ -258,6 +258,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransferAgreement_BufferDays() {
+		return (EAttribute)transferAgreementEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTransferRecord() {
 		return transferRecordEClass;
 	}
@@ -502,6 +512,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__INCOTERM);
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__COMPANY_STATUS);
 		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__PRICING_BASIS);
+		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__BUFFER_DAYS);
 
 		transferRecordEClass = createEClass(TRANSFER_RECORD);
 		createEReference(transferRecordEClass, TRANSFER_RECORD__TRANSFER_AGREEMENT);
@@ -579,6 +590,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferAgreement_Incoterm(), this.getTransferIncoterm(), "incoterm", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_CompanyStatus(), this.getCompanyStatus(), "companyStatus", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferAgreement_BufferDays(), ecorePackage.getEInt(), "bufferDays", "0", 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(transferRecordEClass, TransferRecord.class, "TransferRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferRecord_TransferAgreement(), this.getTransferAgreement(), null, "transferAgreement", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

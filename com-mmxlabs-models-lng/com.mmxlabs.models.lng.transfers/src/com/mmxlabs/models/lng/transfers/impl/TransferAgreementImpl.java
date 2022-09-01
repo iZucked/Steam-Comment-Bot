@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getIncoterm <em>Incoterm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getCompanyStatus <em>Company Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getBufferDays <em>Buffer Days</em>}</li>
  * </ul>
  *
  * @generated
@@ -136,6 +137,35 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @ordered
 	 */
 	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBufferDays() <em>Buffer Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBufferDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BUFFER_DAYS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getBufferDays() <em>Buffer Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBufferDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected int bufferDays = BUFFER_DAYS_EDEFAULT;
+
+	/**
+	 * This is true if the Buffer Days attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean bufferDaysESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -334,6 +364,56 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @generated
 	 */
 	@Override
+	public int getBufferDays() {
+		return bufferDays;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBufferDays(int newBufferDays) {
+		int oldBufferDays = bufferDays;
+		bufferDays = newBufferDays;
+		boolean oldBufferDaysESet = bufferDaysESet;
+		bufferDaysESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS, oldBufferDays, bufferDays, !oldBufferDaysESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBufferDays() {
+		int oldBufferDays = bufferDays;
+		boolean oldBufferDaysESet = bufferDaysESet;
+		bufferDays = BUFFER_DAYS_EDEFAULT;
+		bufferDaysESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS, oldBufferDays, BUFFER_DAYS_EDEFAULT, oldBufferDaysESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBufferDays() {
+		return bufferDaysESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TransfersPackage.TRANSFER_AGREEMENT__FROM_ENTITY:
@@ -350,6 +430,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return getCompanyStatus();
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 				return getPricingBasis();
+			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
+				return getBufferDays();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -379,6 +461,9 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return;
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 				setPricingBasis((String)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
+				setBufferDays((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -410,6 +495,9 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 				setPricingBasis(PRICING_BASIS_EDEFAULT);
 				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
+				unsetBufferDays();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -434,6 +522,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return companyStatus != COMPANY_STATUS_EDEFAULT;
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 				return PRICING_BASIS_EDEFAULT == null ? pricingBasis != null : !PRICING_BASIS_EDEFAULT.equals(pricingBasis);
+			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
+				return isSetBufferDays();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -456,6 +546,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 		result.append(companyStatus);
 		result.append(", pricingBasis: ");
 		result.append(pricingBasis);
+		result.append(", bufferDays: ");
+		if (bufferDaysESet) result.append(bufferDays); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

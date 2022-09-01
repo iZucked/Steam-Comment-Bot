@@ -38,6 +38,7 @@
       <genFeatures createChild="false" propertyDescription="Type of the agreement"
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/companyStatus"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/pricingBasis"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/bufferDays"/>
     </genClasses>
     <genClasses ecoreClass="transfers.ecore#//TransferRecord">
       <genFeatures notify="false" createChild="false" propertyDescription="Underlying agreement"

@@ -40,7 +40,8 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,//
-				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS, //
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__BUFFER_DAYS, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM
 				
 		);

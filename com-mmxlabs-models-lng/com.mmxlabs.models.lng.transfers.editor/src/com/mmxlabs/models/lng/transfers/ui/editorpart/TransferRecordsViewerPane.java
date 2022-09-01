@@ -58,7 +58,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 	
-	private final static Logger LOG = LoggerFactory.getLogger(TransferRecordsViewerPane.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TransferRecordsViewerPane.class);
 	
 	public TransferRecordsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -159,6 +159,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				try {
 					// Avoid cyclic selection changes
 					if (TransferRecordsViewerPane.this.page == null || TransferRecordsViewerPane.this.page.getActivePart() == TransferRecordsViewerPane.this.part) {
+						
 						return;
 					}
 					if (viewer != null) {

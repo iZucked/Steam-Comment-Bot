@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getIncoterm <em>Incoterm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCompanyStatus <em>Company Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement()
@@ -165,5 +166,55 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	void setPricingBasis(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Buffer Days</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Buffer Days</em>' attribute.
+	 * @see #isSetBufferDays()
+	 * @see #unsetBufferDays()
+	 * @see #setBufferDays(int)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_BufferDays()
+	 * @model default="0" unsettable="true"
+	 * @generated
+	 */
+	int getBufferDays();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Buffer Days</em>' attribute.
+	 * @see #isSetBufferDays()
+	 * @see #unsetBufferDays()
+	 * @see #getBufferDays()
+	 * @generated
+	 */
+	void setBufferDays(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBufferDays()
+	 * @see #getBufferDays()
+	 * @see #setBufferDays(int)
+	 * @generated
+	 */
+	void unsetBufferDays();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Buffer Days</em>' attribute is set.
+	 * @see #unsetBufferDays()
+	 * @see #getBufferDays()
+	 * @see #setBufferDays(int)
+	 * @generated
+	 */
+	boolean isSetBufferDays();
 
 } // TransferAgreement

@@ -232,13 +232,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_AGREEMENT__PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Buffer Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT__BUFFER_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Transfer Agreement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -651,6 +660,17 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferAgreement_PricingBasis();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Buffer Days</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays()
+	 * @see #getTransferAgreement()
+	 * @generated
+	 */
+	EAttribute getTransferAgreement_BufferDays();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.transfers.TransferRecord <em>Transfer Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -967,6 +987,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSFER_AGREEMENT__PRICING_BASIS = eINSTANCE.getTransferAgreement_PricingBasis();
+		/**
+		 * The meta object literal for the '<em><b>Buffer Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_AGREEMENT__BUFFER_DAYS = eINSTANCE.getTransferAgreement_BufferDays();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl <em>Transfer Record</em>}' class.
 		 * <!-- begin-user-doc -->
