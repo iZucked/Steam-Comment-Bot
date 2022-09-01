@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.cargo.ui.util;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -40,6 +41,18 @@ public class CargoTransferUtil {
 		return records.stream().anyMatch(tr -> tr.getLhs() == slot);
 	}
 	
+	public static EObject getTransferRecordForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		final Optional<TransferRecord> optionalTransferRecord = getOptionalTransferRecordForSlot(slot, scenarioModel);
+		if (optionalTransferRecord.isPresent()) {
+			return optionalTransferRecord.get();
+		}
+		return null;
+	}
+	
+	private static Optional<TransferRecord> getOptionalTransferRecordForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		return getTransferRecords(scenarioModel).stream().filter(tr -> tr.getLhs() == slot).findFirst();
+	}
+	
 	private static List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){
 		if (scenarioModel != null) {
 			final TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
@@ -66,17 +79,20 @@ public class CargoTransferUtil {
 		
 		final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
 		tr.setCargoReleaseDate(LocalDate.now());
-		if (slot.getPricingDate() != null) {
-			tr.setPricingDate(slot.getPricingDate());
-		} else if (slot.getSchedulingTimeWindow() != null && slot.getSchedulingTimeWindow().getStart() != null) {
-			tr.setPricingDate(slot.getSchedulingTimeWindow().getStart().toLocalDate());
-		} else {
-			tr.setPricingDate(slot.getWindowStart());
-		}
-		tr.setLhs(slot);
+		int bufferDays = 0;
 		if (transferAgreement instanceof TransferAgreement ta) {
 			tr.setTransferAgreement(ta);
+			bufferDays = getBufferDays(ta);
 		}
+		if (slot.getPricingDate() != null) {
+			tr.setPricingDate(slot.getPricingDate().plusDays(bufferDays));
+		} else if (slot.getSchedulingTimeWindow() != null && slot.getSchedulingTimeWindow().getStart() != null) {
+			tr.setPricingDate(slot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays));
+		} else {
+			tr.setPricingDate(slot.getWindowStart().plusDays(bufferDays));
+		}
+		tr.setLhs(slot);
+		
 		TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
 		if (tm == null) {
 			tm = TransfersFactory.eINSTANCE.createTransferModel();
@@ -88,6 +104,14 @@ public class CargoTransferUtil {
 		}
 		
 		return new Pair(cc, tr);
+	}
+	
+	private static int getBufferDays(final TransferAgreement transferAgreement) {
+		int bufferDays = 0;
+		if (transferAgreement.isSetBufferDays()) {
+			bufferDays = transferAgreement.getBufferDays();
+		}
+		return bufferDays;
 	}
 	
 	public static Image joinImages(final String name, final @NonNull Image first, final @NonNull Image second) {

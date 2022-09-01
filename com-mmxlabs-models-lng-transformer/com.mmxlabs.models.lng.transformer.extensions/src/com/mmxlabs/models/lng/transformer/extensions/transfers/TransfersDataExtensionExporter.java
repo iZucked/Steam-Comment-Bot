@@ -83,7 +83,6 @@ public class TransfersDataExtensionExporter implements IExporterExtension {
 								details.setToEntityCost(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityCost));
 								details.setToEntityRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(annotation.toEntityRevenue));
 
-								//ExporterExtensionUtils.addEntityPNLDetails(profitAndLossContainer, modelEntity, details);
 								profitAndLossContainer.getGeneralPNLDetails().add(details);
 							}
 

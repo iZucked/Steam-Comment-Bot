@@ -158,11 +158,17 @@ public class CargoEditorMenuHelper {
 		}
 	}
 	
-	private final class CreateTransferRecordAction extends Action {
+	/**
+	 * For a given transfer agreement creates an action
+	 * which allows creation of the new transfer record
+	 * @author FM
+	 *
+	 */
+	private final class CreateAddTransferRecordAction extends Action {
 		private final Slot<?> slot;
 		private final EObject transferAgreement;
 
-		private CreateTransferRecordAction(final String text, final Slot<?> slot, final EObject transferAgreement) {
+		private CreateAddTransferRecordAction(final String text, final Slot<?> slot, final EObject transferAgreement) {
 			super(text);
 			this.slot = slot;
 			this.transferAgreement = transferAgreement;
@@ -173,6 +179,24 @@ public class CargoEditorMenuHelper {
 
 			if (slot != null) {
 				helper.transferCargoBetweenEntities(scenarioEditingLocation, "Create transfer record", slot, transferAgreement);
+			}
+
+		}
+	}
+	
+	private final class CreateEditTransferRecordAction extends Action {
+		private final Slot<?> slot;
+
+		private CreateEditTransferRecordAction(final Slot<?> slot) {
+			super("Edit transfer record");
+			this.slot = slot;
+		}
+
+		@Override
+		public void run() {
+
+			if (slot != null) {
+				helper.editTransferRecord(scenarioEditingLocation, slot);
 			}
 
 		}
@@ -295,7 +319,9 @@ public class CargoEditorMenuHelper {
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
-				createTransferMenu(newMenuManager, dischargeSlot);
+				
+				createAddTransferRecordMenu(manager, dischargeSlot);
+				createEditTransferRecordMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
 //					createPanamaAssignmentMenus(manager, dischargeSlot);
@@ -732,7 +758,8 @@ public class CargoEditorMenuHelper {
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
 			
-			createTransferMenu(manager, loadSlot);
+			createAddTransferRecordMenu(manager, loadSlot);
+			createEditTransferRecordMenu(manager, loadSlot);
 			
 			if (loadSlot.isDESPurchase()) {
 				createAssignmentMenus(manager, loadSlot);
@@ -775,14 +802,21 @@ public class CargoEditorMenuHelper {
 		};
 	}
 
-	private void createTransferMenu(IMenuManager manager, final Slot<?> slot) {
+	private void createAddTransferRecordMenu(IMenuManager manager, final Slot<?> slot) {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL)) {
 			manager.add(new Separator());
 			final MenuManager transferMenuManager = new MenuManager("Transfer...", null);
 			for (final NamedObject ta : CargoTransferUtil.getTransferAgreementsForMenu(scenarioModel)) {
-				transferMenuManager.add(new CreateTransferRecordAction(ta.getName(), slot, ta));
+				transferMenuManager.add(new CreateAddTransferRecordAction(ta.getName(), slot, ta));
 			}
 			manager.add(transferMenuManager);
+		}
+	}
+	
+	private void createEditTransferRecordMenu(IMenuManager manager, final Slot<?> slot) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) && //
+				CargoTransferUtil.isSlotReferencedByTransferRecord(slot, scenarioModel)) {
+			manager.add(new CreateEditTransferRecordAction(slot));
 		}
 	}
 
