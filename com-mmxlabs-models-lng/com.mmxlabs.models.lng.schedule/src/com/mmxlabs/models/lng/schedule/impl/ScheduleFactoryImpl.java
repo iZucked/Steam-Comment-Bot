@@ -152,6 +152,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS: return createNotionalJourneyDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS: return createNotionalJourneyBallastBonusTermDetails();
 			case SchedulePackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS: return createOriginPortRepositioningFeeTermDetails();
+			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS: return createTransferRecordPNLDetails();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -803,6 +804,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public OriginPortRepositioningFeeTermDetails createOriginPortRepositioningFeeTermDetails() {
 		OriginPortRepositioningFeeTermDetailsImpl originPortRepositioningFeeTermDetails = new OriginPortRepositioningFeeTermDetailsImpl();
 		return originPortRepositioningFeeTermDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TransferRecordPNLDetails createTransferRecordPNLDetails() {
+		TransferRecordPNLDetailsImpl transferRecordPNLDetails = new TransferRecordPNLDetailsImpl();
+		return transferRecordPNLDetails;
 	}
 
 	/**

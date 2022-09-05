@@ -15,8 +15,10 @@ import java.util.List;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -41,7 +43,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  */
 
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
-	private static final Logger LOG = LoggerFactory.getLogger(ReferenceInlineEditor.class);
+	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
 	/**
 	 */
 	protected Combo combo;
@@ -60,30 +62,32 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	 */
 	protected IItemPropertyDescriptor propertyDescriptor = null;
 
-	public ReferenceInlineEditor(final EStructuralFeature feature) {
-		super(feature);
+	public ReferenceInlineEditor(final ETypedElement typedElement) {
+		super(typedElement);
 	}
 
 	@Override
 	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(feature.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}
@@ -93,9 +97,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (input == null) {
 			valueProvider = null;
 		} else {
-			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 			if (valueProvider == null) {
-				LOG.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+				log.error("Could not get a value provider for " + input.eClass().getName() + "." + typedElement.getName());
 			}
 		}
 		super.display(dialogContext, context, input, range);
@@ -132,7 +136,11 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		// this.combo = toolkit.createCombo(parent, SWT.READ_ONLY);
 		toolkit.adapt(combo, true, true);
 
-		combo.setEnabled(feature.isChangeable() && isEditorEnabled());
+		if (typedElement instanceof EOperation) {
+			combo.setEnabled(false);
+		} else if (typedElement instanceof EStructuralFeature feature) {
+			combo.setEnabled(feature.isChangeable() && isEditorEnabled());
+		}
 
 		combo.addSelectionListener(new SelectionListener() {
 			{
@@ -164,7 +172,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	protected List<Pair<String, EObject>> getValues() {
-		return valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
+		return valueProvider != null ? valueProvider.getAllowedValues(input, typedElement) : Collections.<Pair<String, EObject>> emptyList();
 	}
 
 	@Override

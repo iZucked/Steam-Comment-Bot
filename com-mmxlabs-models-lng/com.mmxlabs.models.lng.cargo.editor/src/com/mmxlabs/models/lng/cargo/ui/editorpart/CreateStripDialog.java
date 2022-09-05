@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -154,7 +155,7 @@ public class CreateStripDialog extends FormDialog {
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, ETypedElement, Boolean> visibilityMap = new PairKeyedMap<>();
 
 		@Override
 		public void validate() {
@@ -175,13 +176,13 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		@Override
-		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
+		public void setEditorVisibility(final EObject object, final ETypedElement feature, final boolean visible) {
 			visibilityMap.put(object, feature, visible);
 
 		}
 
 		@Override
-		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
+		public boolean getEditorVisibility(final EObject object, final ETypedElement feature) {
 			if (visibilityMap.contains(object, feature)) {
 				return visibilityMap.get(object, feature).booleanValue();
 			}
@@ -806,7 +807,7 @@ public class CreateStripDialog extends FormDialog {
 		final ICommandHandler commandHandler = new ICommandHandler() {
 
 			@Override
-			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+			public void handleCommand(final Command command, final EObject target, final ETypedElement typedElement) {
 				command.execute();
 				// Activator.getDefault().getCommandProviderTracker().
 				refreshPreview();

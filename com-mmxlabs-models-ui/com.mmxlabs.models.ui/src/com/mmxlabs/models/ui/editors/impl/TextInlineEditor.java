@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -20,8 +20,8 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
 	protected final int style;
 
-	public TextInlineEditor(final EStructuralFeature feature) {
-		this(feature, SWT.BORDER);
+	public TextInlineEditor(final ETypedElement typedElement) {
+		this(typedElement, SWT.BORDER);
 	}
 
 	/**
@@ -31,8 +31,8 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	 * @param commandProcessor
 	 * @param i
 	 */
-	public TextInlineEditor(final EStructuralFeature feature, final int style) {
-		super(feature);
+	public TextInlineEditor(final ETypedElement typedElement, final int style) {
+		super(typedElement);
 		this.style = style;
 	}
 
@@ -94,10 +94,8 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	}
 
 	protected Text createText(final Composite parent) {
-
-		// final Text text = new Text(parent, style);
 		final Text text = toolkit.createText(parent, "", style);
-		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text, feature);
+		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text, typedElement);
 		return text;
 	}
 }

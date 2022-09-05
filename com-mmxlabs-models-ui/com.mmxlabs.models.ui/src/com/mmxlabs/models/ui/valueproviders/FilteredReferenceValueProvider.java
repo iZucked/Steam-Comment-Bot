@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 
@@ -23,7 +23,7 @@ public abstract class FilteredReferenceValueProvider implements IReferenceValueP
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(EObject target,EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 		List<Pair<String, EObject>> allowedValues = delegate.getAllowedValues(target, field);
 		final ArrayList<Pair<String, EObject>> filtered = new ArrayList<Pair<String, EObject>>(allowedValues.size());
 		
@@ -56,5 +56,5 @@ public abstract class FilteredReferenceValueProvider implements IReferenceValueP
 		delegate.dispose();
 	}
 	
-	protected abstract boolean isAllowedValue(final EObject target, final EStructuralFeature field, final Pair<String, EObject> value);
+	protected abstract boolean isAllowedValue(final EObject target, final ETypedElement field, final Pair<String, EObject> value);
 }

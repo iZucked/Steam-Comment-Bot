@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @NonNullByDefault

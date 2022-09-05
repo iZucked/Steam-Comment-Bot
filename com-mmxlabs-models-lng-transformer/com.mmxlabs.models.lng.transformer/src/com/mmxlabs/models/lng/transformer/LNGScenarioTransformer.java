@@ -108,6 +108,7 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
@@ -308,6 +309,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
+	
+	@Inject
+	@Named(SchedulerConstants.Parser_PricingBasis)
+	private SeriesParser pricingBases;
 
 	@Inject(optional = true)
 	@Nullable
@@ -591,13 +596,16 @@ public class LNGScenarioTransformer {
 			final String name = commodityIndex.getName();
 			assert name != null;
 			registerCommodityIndex(name, commodityIndex, commodityIndices);
-			// registerIndex(name, commodityIndex, commodityIndices);
+			registerCommodityIndex(name, commodityIndex, pricingBases);
 		}
 		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
 			registerIndex(baseFuelIndex.getName(), baseFuelIndex, baseFuelIndices);
 		}
 		for (final CharterCurve charterIndex : pricingModel.getCharterCurves()) {
 			registerIndex(charterIndex.getName(), charterIndex, charterIndices);
+		}
+		for (final PricingBasis pricingBasis : pricingModel.getPricingBases()) {
+			registerIndex(pricingBasis.getName(), pricingBasis, pricingBases);
 		}
 
 		// Currency is added to all the options
@@ -608,11 +616,12 @@ public class LNGScenarioTransformer {
 				registerIndex(name, currencyIndex, baseFuelIndices);
 				registerIndex(name, currencyIndex, charterIndices);
 				registerIndex(name, currencyIndex, currencyIndices);
+				registerIndex(name, currencyIndex, pricingBases);
 			}
 		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
-			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices);
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices, pricingBases);
 		}
 
 		// Now pre-compute our various curve data objects...

@@ -29,6 +29,8 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.transfers.TransfersDataExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.transfers.TransfersDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.vesselcharters.VesselCharterEntityTransformerExtensionFactory;
 
 /**
@@ -54,6 +56,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new PaperDealDataModule());
 		install(new CounterPartyVolumeDataModule());
 		install(new HeelCarryDataModule());
+		install(new TransfersDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(CharterContractTransformerFactory.class).export();
@@ -62,6 +65,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(TradingExporterExtensionFactory.class).export();
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 		bindService(CharterContractExporterExtensionFactory.class).export();
+		bindService(TransfersDataExporterExtensionFactory.class).export();
 
 		bindService(ExposuresExporterExtensionFactory.class).export();
 		bindService(PaperDealsExporterExtensionFactory.class).export();

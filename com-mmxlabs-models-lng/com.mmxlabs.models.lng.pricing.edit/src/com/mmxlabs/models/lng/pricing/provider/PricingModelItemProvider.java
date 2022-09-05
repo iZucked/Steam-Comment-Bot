@@ -77,6 +77,7 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES);
 		}
 		return childrenFeatures;
 	}
@@ -143,6 +144,7 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
+			case PricingPackage.PRICING_MODEL__PRICING_BASES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -219,6 +221,11 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS,
 				 PricingFactory.eINSTANCE.createPricingCalendar()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES,
+				 PricingFactory.eINSTANCE.createPricingBasis()));
 	}
 
 	/**

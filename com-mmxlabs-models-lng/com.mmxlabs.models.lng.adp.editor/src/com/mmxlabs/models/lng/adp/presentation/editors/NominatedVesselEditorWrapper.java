@@ -9,7 +9,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -83,7 +82,7 @@ public class NominatedVesselEditorWrapper extends IInlineEditorEnablementWrapper
 		this.range = range;
 
 		enabled = true; // FIXME: Notifications do not work, so always enable. We need to make the wizard more compliant with dialog API. Currently lots of "fake" implementations.
-		final EStructuralFeature feature = wrapped.getFeature();
+		final var feature = wrapped.getFeature();
 		if (object instanceof SubContractProfile<?, ?>) {
 			SubContractProfile<?, ?> subContractProfile = (SubContractProfile<?, ?>) object;
 			if (subContractProfile.getContractType() == ContractType.DES && subContractProfile.eContainer() instanceof PurchaseContractProfile) {

@@ -10,6 +10,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -41,7 +42,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	protected EStructuralFeature overrideToggleFeature;
 	private EStructuralFeature classOverrideFeature;
 
-	public UnsettableInlineEditor(final EStructuralFeature feature) {
+	public UnsettableInlineEditor(final ETypedElement feature) {
 		super(feature);
 	}
 
@@ -80,8 +81,12 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		this.toolkit = toolkit;
 		final Control c;
 
-		final boolean isUnsettable = feature.isUnsettable();
-		EAnnotation annotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		boolean isUnsettable = false;
+		EAnnotation annotation = null;
+		if (typedElement instanceof EStructuralFeature feature) {
+			isUnsettable = feature.isUnsettable();
+			annotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		}
 		if (annotation != null) {
 			for (EObject o : annotation.getReferences()) {
 				if (o instanceof EStructuralFeature) {
@@ -144,7 +149,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 								commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.TRUE), input, overrideToggleFeature);
 							}
 							// Apply a set command otherwise the display value may not be the value stored in eobject
-							commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, feature, getValue()), input, feature);
+							commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, getValue()), input, typedElement);
 							setControlEnabled(inner, true);
 						} else {
 							unsetValue();
@@ -193,7 +198,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	protected Command createSetCommand(final Object value) {
 		if (value == SetCommand.UNSET_VALUE) {
 			final CompoundCommand cmd = new CompoundCommand();
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			if (overrideToggleFeature != null) {
 				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
 			}
@@ -209,38 +214,41 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input == null) {
 			return null;
 		}
-		if (isOverridableWithButton) {
-			if (!canOverride()) {
-				return super.getValue();
-			} else if (input.eIsSet(feature)) {
-				return super.getValue();
-			} else {
-				if (input instanceof MMXObject) {
-					return ((MMXObject) input).getUnsetValue(getFeature());
+		if (typedElement instanceof EStructuralFeature feature) {
+			if (isOverridableWithButton) {
+				if (!canOverride()) {
+					return super.getValue();
+				} else if (input.eIsSet(feature)) {
+					return super.getValue();
+				} else {
+					if (input instanceof MMXObject mmxObject) {
+						return mmxObject.getUnsetValue(feature);
+					} else {
+						return null;
+					}
+				}
+			} else if (isOverridable) {
+				// For e.g. numeric inline editor
+				if (!feature.isUnsettable() || input.eIsSet(feature)) {
+					return super.getValue();
 				} else {
 					return null;
 				}
-			}
-		} else if (isOverridable) {
-			// For e.g. numeric inline editor
-			if (!feature.isUnsettable() || input.eIsSet(feature)) {
-				return super.getValue();
 			} else {
-				return null;
+				// Original code path
+				if (!feature.isUnsettable() || input.eIsSet(feature)) {
+					return super.getValue();
+				} else {
+					if (input instanceof MMXObject mmxObject) {
+						return mmxObject.getUnsetValue(feature);
+					} else {
+						return null;
+					}
+				}
 			}
 		} else {
-			// Original code path
-			if (!feature.isUnsettable() || input.eIsSet(feature)) {
-				return super.getValue();
-			} else {
-				if (input instanceof MMXObject) {
-					return ((MMXObject) input).getUnsetValue(getFeature());
-				} else {
-					return null;
-				}
-			}
+			return null;
 		}
-
 	}
 
 	@Override
@@ -262,10 +270,10 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected boolean valueIsSet() {
-		if (input == null) {
-			return false;
+		if (input != null && getFeature() instanceof EStructuralFeature feature) {
+			return input.eIsSet(feature);
 		}
-		return input.eIsSet(getFeature());
+		return false;
 	}
 
 	@Override
@@ -341,8 +349,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		if (input instanceof MMXObject) {
-			final MMXObject mmxinput = (MMXObject) input;
+		if (input instanceof MMXObject mmxinput && typedElement instanceof EStructuralFeature feature) {
 			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
 			if (di != null && di.delegatesTo(changedFeature)) {
 				return true;
@@ -356,8 +363,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected boolean canOverride() {
-		if (input instanceof MMXObject) {
-			final MMXObject mmxinput = (MMXObject) input;
+		if (input instanceof MMXObject mmxinput && typedElement instanceof EStructuralFeature feature) {
 			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
 			if (di != null) {
 				if (classOverrideFeature != null) {

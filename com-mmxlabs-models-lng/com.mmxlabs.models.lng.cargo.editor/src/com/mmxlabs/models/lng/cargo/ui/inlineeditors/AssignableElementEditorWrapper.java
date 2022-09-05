@@ -80,7 +80,7 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 		this.range = range;
 
 		enabled = false;
-		final EStructuralFeature feature = wrapped.getFeature();
+		final var feature = wrapped.getFeature();
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			if (cargo.getCargoType() == CargoType.FLEET) {

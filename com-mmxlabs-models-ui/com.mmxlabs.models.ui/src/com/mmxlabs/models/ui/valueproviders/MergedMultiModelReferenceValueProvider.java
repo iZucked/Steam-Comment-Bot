@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.valueproviders;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,9 +17,13 @@ import java.util.Set;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -33,8 +38,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
  * 
  */
 public class MergedMultiModelReferenceValueProvider extends BaseReferenceValueProvider {
-
-	private final List<Pair<EObject, EStructuralFeature>> validReferences = new LinkedList<Pair<EObject, EStructuralFeature>>();
+	private static final Logger LOG = LoggerFactory.getLogger(MergedMultiModelReferenceValueProvider.class);
+	private final List<Pair<EObject, ETypedElement>> validReferences = new LinkedList<Pair<EObject, ETypedElement>>();
 
 	private List<Pair<String, EObject>> cachedValues;
 
@@ -58,7 +63,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 		public void reallyNotifyChanged(final Notification notification) {
 			final Object notifier = notification.getNotifier();
 
-			for (final Pair<EObject, EStructuralFeature> p : validReferences) {
+			for (final Pair<EObject, ETypedElement> p : validReferences) {
 				if (p.getFirst() == notifier && p.getSecond() == notification.getFeature()) {
 					cachedValues = null;
 					clearAdapterReferences();
@@ -81,7 +86,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 		for (final EReference ref : rootObject.eClass().getEAllContainments()) {
 			if (ref.isMany() && targetType.isSuperTypeOf(ref.getEReferenceType())) {
-				validReferences.add(new Pair<EObject, EStructuralFeature>(rootObject, ref));
+				validReferences.add(new Pair<EObject, ETypedElement>(rootObject, ref));
 				rootObject.eAdapters().add(adapter);
 			}
 		}
@@ -89,7 +94,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 	@Override
 	protected boolean isRelevantTarget(final Object target, final Object feature) {
-		for (final Pair<EObject, EStructuralFeature> p : validReferences) {
+		for (final Pair<EObject, ETypedElement> p : validReferences) {
 			if (p.getFirst() == target && p.getSecond() == feature) {
 				return true;
 			}
@@ -98,7 +103,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 		if (cachedValues == null) {
 			cacheValues();
 		}
@@ -108,7 +113,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 	@Override
 	public void dispose() {
 
-		for (final Pair<EObject, EStructuralFeature> p : validReferences) {
+		for (final Pair<EObject, ETypedElement> p : validReferences) {
 			p.getFirst().eAdapters().remove(adapter);
 		}
 
@@ -123,8 +128,17 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 		cachedValues = new ArrayList<Pair<String, EObject>>();
 
-		for (final Pair<EObject, EStructuralFeature> p : validReferences) {
-			final Object result = p.getFirst().eGet(p.getSecond());
+		for (final Pair<EObject, ETypedElement> p : validReferences) {
+			Object result = null;
+			if (p.getSecond() instanceof EStructuralFeature feature) {
+				result = p.getFirst().eGet(feature);
+			} else if (p.getSecond() instanceof EOperation operation) {
+				try {
+					result = p.getFirst().eInvoke(operation, null);
+				} catch (InvocationTargetException e) {
+					LOG.error(e.getMessage());
+				}
+			}
 			if (result instanceof Collection<?>) {
 				final Collection<?> collection = (Collection<?>) result;
 				for (final Object obj : collection) {

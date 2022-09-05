@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.transfers/src" editorDirectory=""
+    modelPluginID="com.mmxlabs.models.lng.transfers" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
+    dynamicTemplates="true" modelName="Transfers" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="16.0" copyrightFields="false" runtimeVersion="2.27" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    operationReflection="true">
+  <foreignModel>transfers.ecore</foreignModel>
+  <genPackages prefix="Transfers" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="transfers.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="transfers.ecore#//TransferIncoterm">
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferIncoterm/Both"/>
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferIncoterm/FOB"/>
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferIncoterm/DES"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="transfers.ecore#//TransferStatus">
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferStatus/Confirmed"/>
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferStatus/Draft"/>
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//TransferStatus/Cancelled"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="transfers.ecore#//CompanyStatus">
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//CompanyStatus/Intra"/>
+      <genEnumLiterals ecoreEnumLiteral="transfers.ecore#//CompanyStatus/Inter"/>
+    </genEnums>
+    <genClasses ecoreClass="transfers.ecore#//TransferModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferModel/transferAgreements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferModel/transferRecords"/>
+    </genClasses>
+    <genClasses ecoreClass="transfers.ecore#//TransferAgreement">
+      <genFeatures notify="false" createChild="false" propertyDescription="Source entity"
+          propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/fromEntity"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Receiving entity"
+          propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/toEntity"/>
+      <genFeatures createChild="false" propertyDescription="Price" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/priceExpression"/>
+      <genFeatures createChild="false" propertyDescription="Incoterm of the transfer"
+          ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/incoterm"/>
+      <genFeatures createChild="false" propertyDescription="Type of the agreement"
+          ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/companyStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/pricingBasis"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/bufferDays"/>
+    </genClasses>
+    <genClasses ecoreClass="transfers.ecore#//TransferRecord">
+      <genFeatures notify="false" createChild="false" propertyDescription="Underlying agreement"
+          propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/transferAgreement"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Deal" propertySortChoices="true"
+          ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/lhs"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Next transfer"
+          propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/rhs"/>
+      <genFeatures createChild="false" propertyDescription="Transfer date" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/cargoReleaseDate"/>
+      <genFeatures createChild="false" propertyDescription="Price" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/priceExpression"/>
+      <genFeatures createChild="false" propertyDescription="Pricing date" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/pricingDate"/>
+      <genFeatures createChild="false" propertyDescription="Incoterm of the transfer"
+          ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/incoterm"/>
+      <genFeatures createChild="false" propertyDescription="Status" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/status"/>
+      <genFeatures createChild="false" propertyDescription="Notes" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/notes"/>
+      <genFeatures createChild="false" propertyDescription="Stale" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/stale"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/pricingBasis"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getFromEntity"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getToEntity"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getCompanyStatus"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePriceExpression"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateIncoterm"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePricingBasis"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

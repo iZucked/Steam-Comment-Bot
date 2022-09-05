@@ -9,7 +9,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.impl.BasicEObjectImpl;
 
 import com.mmxlabs.common.Pair;
@@ -35,7 +35,7 @@ public interface IReferenceValueProvider {
 	 * @return
 	 */
 	public List<Pair<String, EObject>> getAllowedValues(final EObject target,
-			final EStructuralFeature field);
+			final ETypedElement field);
 
 	/**
 	 * Get the display name for a value if it were set to the given feature of

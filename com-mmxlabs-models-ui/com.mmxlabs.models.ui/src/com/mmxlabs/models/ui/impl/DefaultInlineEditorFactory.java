@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
@@ -46,27 +47,25 @@ import com.mmxlabs.models.ui.editors.impl.YesNoInlineEditor;
 public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 	
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
-		if (feature instanceof EReference) {
-			final EReference reference = (EReference) feature;
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement typedElement) {
+		if (typedElement instanceof EReference reference) {
 			final EClass referenceClass = reference.getEReferenceType();
 			if (reference.isContainment()) return null; // containment references are weird, and ought to be being handled by another extension.
 			if (reference.isMany()) {
-				return new MultiReferenceInlineEditor(feature);
+				return new MultiReferenceInlineEditor(typedElement);
 			} else {
-				return new ReferenceInlineEditor(feature);
+				return new ReferenceInlineEditor(typedElement);
 			}
-		} else if (feature instanceof EAttribute) {
+		} else if (typedElement instanceof EAttribute attribute) {
 			final EcorePackage ecore = EcorePackage.eINSTANCE;
-			final EAttribute attribute = (EAttribute) feature;
 			final EDataType attributeType = attribute.getEAttributeType();
 			if (attributeType == ecore.getEInt() ||
 				attributeType == ecore.getELong()||
 				attributeType == ecore.getEDouble()||
 				attributeType == ecore.getEFloat()) {
-				return new NumberInlineEditor(feature);
+				return new NumberInlineEditor(typedElement);
 			} else if (attributeType == ecore.getEBoolean()) {
-				if (feature.isUnsettable()) {
+				if (typedElement instanceof EStructuralFeature feature && feature.isUnsettable()) {
 					/* 
 					 * an unsettable boolean needs to be a "yes / no" list
 					 * because the check box determines whether it is set or not
@@ -75,7 +74,7 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 				}
 				else {
 					/* regular boolean can just be a check box */
-					return new BooleanInlineEditor(feature);
+					return new BooleanInlineEditor(typedElement);
 				}					
 			} else if (attributeType == ecore.getEChar()) {
 				return null;
@@ -83,20 +82,20 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 				return null;
 			} else if (attributeType == ecore.getEEnumerator()) {
 				if (attribute.isMany()) {
-					return new MultiEnumInlineEditor(feature);
+					return new MultiEnumInlineEditor(typedElement);
 				} else {
 					return new EENumInlineEditor(attribute);
 				}
 			} else if (attributeType == ecore.getEString()) {
-				return new TextInlineEditor(feature);
+				return new TextInlineEditor(typedElement);
 			} else if (attributeType == DateTimePackage.Literals.YEAR_MONTH) {
-				return new YearMonthInlineEditor(feature);
+				return new YearMonthInlineEditor(typedElement);
 			} else if (attributeType == DateTimePackage.Literals.DATE_TIME) {
 //				return new DateTimeInlineEditor(feature);
 			} else if (attributeType == DateTimePackage.Literals.LOCAL_DATE) {
-				return new LocalDateInlineEditor(feature);
+				return new LocalDateInlineEditor(typedElement);
 			} else if (attributeType == DateTimePackage.Literals.LOCAL_DATE_TIME) {
-				return new LocalDateTimeInlineEditor(feature);
+				return new LocalDateTimeInlineEditor(typedElement);
 			}
 		}
 		return null;

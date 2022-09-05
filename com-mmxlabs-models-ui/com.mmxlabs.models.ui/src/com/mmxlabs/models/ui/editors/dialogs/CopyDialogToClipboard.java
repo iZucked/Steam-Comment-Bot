@@ -4,11 +4,13 @@
  */
 package com.mmxlabs.models.ui.editors.dialogs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.swt.dnd.Clipboard;
@@ -62,13 +64,24 @@ public class CopyDialogToClipboard implements IInlineEditorWrapper {
 			}
 			final Label label = editor.getLabel();
 			final EObject editorTarget = editor.getEditorTarget();
-			final EStructuralFeature feature = editor.getFeature();
-			if (feature == null) {
+			final var typedElement = editor.getFeature();
+			if (typedElement == null) {
 				continue;
 			}
 			sb.append(label.getText());
 			sb.append(separator);
-			final Object value = editorTarget.eGet(feature);
+			Object value = null;
+			if (typedElement instanceof EStructuralFeature feature) {
+				value = editorTarget.eGet(feature);
+			} else if(typedElement instanceof EOperation operation) {
+				try {
+					value = editorTarget.eInvoke(operation, null);
+				} catch (InvocationTargetException e) {
+					//e.printStackTrace();
+					//TODO: catch silently for now
+				} 
+			}
+			
 			if (value != null) {
 
 				if (value instanceof EObject) {

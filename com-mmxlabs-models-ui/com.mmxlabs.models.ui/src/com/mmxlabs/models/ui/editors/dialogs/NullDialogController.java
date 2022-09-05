@@ -5,7 +5,7 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 /**
  * Default implementation of {@link IDialogController} which does nothing at all.
@@ -26,12 +26,12 @@ public class NullDialogController implements IDialogController {
 	}
 
 	@Override
-	public void setEditorVisibility(EObject target, EStructuralFeature feature, boolean visible) {
+	public void setEditorVisibility(EObject target, final ETypedElement typedElement, boolean visible) {
 
 	}
 
 	@Override
-	public boolean getEditorVisibility(EObject target, EStructuralFeature feature) {
+	public boolean getEditorVisibility(EObject target, final ETypedElement typedElement) {
 		return true;
 	}
 

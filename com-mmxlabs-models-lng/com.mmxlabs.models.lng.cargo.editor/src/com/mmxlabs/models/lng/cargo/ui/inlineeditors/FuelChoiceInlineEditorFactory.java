@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 public class FuelChoiceInlineEditorFactory implements IInlineEditorFactory {
 
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement feature) {
 
 		final ArrayList<Object> objectsList = new ArrayList<>();
 		for (final FuelChoice fuelChoice : FuelChoice.values()) {

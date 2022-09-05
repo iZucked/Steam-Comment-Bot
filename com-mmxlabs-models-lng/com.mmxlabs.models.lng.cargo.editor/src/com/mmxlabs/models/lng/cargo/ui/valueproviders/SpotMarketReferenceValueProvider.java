@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -40,7 +41,7 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 
 		if (rootObject instanceof LNGScenarioModel) {
 			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;

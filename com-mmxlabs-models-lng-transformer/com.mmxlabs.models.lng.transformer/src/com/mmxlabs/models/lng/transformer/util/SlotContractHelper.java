@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -91,6 +94,26 @@ public final class SlotContractHelper {
 			}
 		}
 		return null;
+	}
+	
+	@Nullable
+	public static <T> List<T> findAllDetailsAnnotation(@Nullable final IProfitAndLossAnnotation annotation, @NonNull final String annotationKey, @NonNull final Class<T> cls) {
+		List<T> results = new LinkedList<>();
+		if (annotation != null) {
+			for (final IProfitAndLossEntry e : annotation.getEntries()) {
+				final IDetailTree detailTree = e.getDetails();
+				if (detailTree != null) {
+					for (final IDetailTree child : detailTree.getChildren()) {
+						if (child.getKey().equals(annotationKey)) {
+							if (cls.isInstance(child.getValue())) {
+								results.add(cls.cast(child.getValue()));
+							}
+						}
+					}
+				}
+			}
+		}
+		return results;
 	}
 
 	public static IEntity findDetailsAnnotationEntity(@NonNull final IProfitAndLossAnnotation annotation, final String annotationKey) {

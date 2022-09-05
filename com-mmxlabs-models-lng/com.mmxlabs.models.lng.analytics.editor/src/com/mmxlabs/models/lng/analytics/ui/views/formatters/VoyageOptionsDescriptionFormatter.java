@@ -231,6 +231,7 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		for (int x = 0; x < dashWidth; x++) {
 			for (int y = 7; y < 9; y++) {
 				final int destPos = width * y + xpos + x;
+				//+3 here is because we are looking at alpha byte as in : RGBA
 				final byte b = d[destPos * 4 + 3];
 				destArray[destPos] = b;
 			}

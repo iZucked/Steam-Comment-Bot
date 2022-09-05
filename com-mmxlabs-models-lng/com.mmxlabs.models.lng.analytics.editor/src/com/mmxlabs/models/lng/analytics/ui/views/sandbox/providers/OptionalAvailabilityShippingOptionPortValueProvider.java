@@ -9,7 +9,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
@@ -27,7 +27,7 @@ public class OptionalAvailabilityShippingOptionPortValueProvider extends SimpleR
 	
 	@Override
 	public List<Pair<String, EObject>> getAllowedValues(EObject target,
-			EStructuralFeature field) {
+			ETypedElement field) {
 		if (cachedValues == null) {
 			cacheValues();
 		}

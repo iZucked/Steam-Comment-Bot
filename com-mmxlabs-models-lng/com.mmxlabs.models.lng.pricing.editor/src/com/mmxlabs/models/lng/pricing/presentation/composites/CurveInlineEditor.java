@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Collection;
@@ -12,7 +13,9 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -44,6 +47,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -63,6 +68,7 @@ public class CurveInlineEditor extends AbstractTableInlineEditor {
 	private EObject originalInput = null;
 	private final EClassifier indexRawType;
 	private EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
+	private static final Logger LOG = LoggerFactory.getLogger(CurveInlineEditor.class);
 
 	/**
 	 * Creates a curve inline editor for Index<clazz> objects. We need to know what class it was instantiated for, and Java generics don't provide enough introspection to do so.
@@ -70,7 +76,7 @@ public class CurveInlineEditor extends AbstractTableInlineEditor {
 	 * @param feature
 	 * @param clazz
 	 */
-	public CurveInlineEditor(final EStructuralFeature feature) {
+	public CurveInlineEditor(final ETypedElement feature) {
 		super(feature);
 		// infer the class from the EMF feature object, whose etype should be a parameterised DataIndex
 		indexRawType = feature.getEGenericType().getETypeArguments().get(0).getERawType();
@@ -265,7 +271,16 @@ public class CurveInlineEditor extends AbstractTableInlineEditor {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				if (originalInput != null) {
-					final Object field = originalInput.eGet(feature);
+					Object field = null;
+					if (typedElement instanceof EStructuralFeature feature) {
+						field = originalInput.eGet(feature);
+					} else if (typedElement instanceof EOperation operation) {
+						try {
+							field = originalInput.eInvoke(operation, null);
+						} catch (InvocationTargetException e1) {
+							LOG.error(e1.getMessage());
+						}
+					}
 					if (field instanceof DataIndex) {
 						final DataIndex<?> index = (DataIndex<?>) field;
 						final IndexPoint<?> newPoint;

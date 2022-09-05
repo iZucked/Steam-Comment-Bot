@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 

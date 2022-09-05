@@ -5,7 +5,7 @@
 package com.mmxlabs.models.ui.registries;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
@@ -15,10 +15,10 @@ public interface IEditorFactoryRegistry {
 	 * Search for an editor factory in the extensions list
 	 * 
 	 * @param owner
-	 * @param feature
+	 * @param typedElement
 	 * @return
 	 */
 	public abstract IInlineEditorFactory getEditorFactory(final EClass owner,
-			final EStructuralFeature feature);
+			final ETypedElement typedElement);
 
 }

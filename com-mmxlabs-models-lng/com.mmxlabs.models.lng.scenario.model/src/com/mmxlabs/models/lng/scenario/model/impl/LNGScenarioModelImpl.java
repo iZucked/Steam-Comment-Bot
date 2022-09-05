@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
 
 /**
@@ -49,6 +50,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#isAnonymised <em>Anonymised</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getSensitivityModel <em>Sensitivity Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getTransferModel <em>Transfer Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -252,6 +254,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected SensitivityModel sensitivityModel;
+
+	/**
+	 * The cached value of the '{@link #getTransferModel() <em>Transfer Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTransferModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected TransferModel transferModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1032,6 +1044,74 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @generated
 	 */
 	@Override
+	public TransferModel getTransferModel() {
+		if (transferModel != null && transferModel.eIsProxy()) {
+			InternalEObject oldTransferModel = (InternalEObject)transferModel;
+			transferModel = (TransferModel)eResolveProxy(oldTransferModel);
+			if (transferModel != oldTransferModel) {
+				InternalEObject newTransferModel = (InternalEObject)transferModel;
+				NotificationChain msgs = oldTransferModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, null, null);
+				if (newTransferModel.eInternalContainer() == null) {
+					msgs = newTransferModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, oldTransferModel, transferModel));
+			}
+		}
+		return transferModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TransferModel basicGetTransferModel() {
+		return transferModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTransferModel(TransferModel newTransferModel, NotificationChain msgs) {
+		TransferModel oldTransferModel = transferModel;
+		transferModel = newTransferModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, oldTransferModel, newTransferModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTransferModel(TransferModel newTransferModel) {
+		if (newTransferModel != transferModel) {
+			NotificationChain msgs = null;
+			if (transferModel != null)
+				msgs = ((InternalEObject)transferModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, null, msgs);
+			if (newTransferModel != null)
+				msgs = ((InternalEObject)newTransferModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, null, msgs);
+			msgs = basicSetTransferModel(newTransferModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL, newTransferModel, newTransferModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
@@ -1052,6 +1132,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetNominationsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
 				return basicSetSensitivityModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
+				return basicSetTransferModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1101,6 +1183,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
 				if (resolve) return getSensitivityModel();
 				return basicGetSensitivityModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
+				if (resolve) return getTransferModel();
+				return basicGetTransferModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1156,6 +1241,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
 				setSensitivityModel((SensitivityModel)newValue);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
+				setTransferModel((TransferModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1210,6 +1298,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
 				setSensitivityModel((SensitivityModel)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
+				setTransferModel((TransferModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1250,6 +1341,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return anonymised != ANONYMISED_EDEFAULT;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SENSITIVITY_MODEL:
 				return sensitivityModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__TRANSFER_MODEL:
+				return transferModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

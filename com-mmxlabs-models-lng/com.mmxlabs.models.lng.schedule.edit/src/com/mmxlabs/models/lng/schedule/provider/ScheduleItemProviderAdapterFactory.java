@@ -1307,6 +1307,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TransferRecordPNLDetailsItemProvider transferRecordPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTransferRecordPNLDetailsAdapter() {
+		if (transferRecordPNLDetailsItemProvider == null) {
+			transferRecordPNLDetailsItemProvider = new TransferRecordPNLDetailsItemProvider(this);
+		}
+
+		return transferRecordPNLDetailsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1491,6 +1514,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (notionalJourneyDetailsItemProvider != null) notionalJourneyDetailsItemProvider.dispose();
 		if (notionalJourneyBallastBonusTermDetailsItemProvider != null) notionalJourneyBallastBonusTermDetailsItemProvider.dispose();
 		if (originPortRepositioningFeeTermDetailsItemProvider != null) originPortRepositioningFeeTermDetailsItemProvider.dispose();
+		if (transferRecordPNLDetailsItemProvider != null) transferRecordPNLDetailsItemProvider.dispose();
 	}
 
 }

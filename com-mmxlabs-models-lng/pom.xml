@@ -61,6 +61,11 @@
 		<module>com.mmxlabs.models.lng.spotmarkets.edit</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.editor</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.validation</module>
+		
+		<module>com.mmxlabs.models.lng.transfers</module>
+		<module>com.mmxlabs.models.lng.transfers.edit</module>
+		<module>com.mmxlabs.models.lng.transfers.editor</module>
+		<module>com.mmxlabs.models.lng.transfers.validation</module>
 
 		<module>com.mmxlabs.models.lng.analytics</module>
 		<module>com.mmxlabs.models.lng.analytics.edit</module>

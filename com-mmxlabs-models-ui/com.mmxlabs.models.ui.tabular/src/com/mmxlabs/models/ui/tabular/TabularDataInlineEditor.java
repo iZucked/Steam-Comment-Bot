@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -549,7 +550,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 		if (builder.changeHeaderColourWithValidation && lblControl != null && status != null) {
 
-			final int severity = checkStatus(status, IStatus.OK, input, feature);
+			final int severity = checkStatus(status, IStatus.OK, input, typedElement);
 
 			switch (severity) {
 			case IStatus.ERROR -> lblControl.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
@@ -561,7 +562,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		super.processValidation(status);
 	}
 
-	protected int checkStatus(final IStatus status, int currentSeverity, final EObject input, final EStructuralFeature attribute) {
+	protected int checkStatus(final IStatus status, int currentSeverity, final EObject input, final ETypedElement attribute) {
 		if (status.isMultiStatus()) {
 			final IStatus[] children = status.getChildren();
 			for (final IStatus element : children) {

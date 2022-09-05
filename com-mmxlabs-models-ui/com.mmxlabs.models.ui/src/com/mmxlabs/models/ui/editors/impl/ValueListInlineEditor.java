@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -54,7 +55,7 @@ public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 	protected final ArrayList<String> names;
 	protected final ArrayList<T> values;
 
-	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, T>> values) {
+	public ValueListInlineEditor(final ETypedElement feature, final List<Pair<String, T>> values) {
 		super(feature);
 		this.names = new ArrayList<>(values.size());
 		this.values = new ArrayList<>(values.size());
@@ -68,25 +69,27 @@ public class ValueListInlineEditor<T> extends UnsettableInlineEditor {
 	@Override
 	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		
-		if (eAnnotation != null) {		
-			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+
+			if (eAnnotation != null) {		
+				for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(typedElement.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+						break;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
-					break;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}

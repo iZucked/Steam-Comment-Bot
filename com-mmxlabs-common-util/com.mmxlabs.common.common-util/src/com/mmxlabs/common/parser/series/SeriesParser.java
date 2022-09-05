@@ -46,7 +46,7 @@ public class SeriesParser {
 			evaluatedSeries.put(lowercaseName, ser);
 			return ser;
 		} else {
-			throw new UnknownSeriesException("No series with name " + name + "defined");
+			throw new UnknownSeriesException("No series with name " + name + " defined");
 		}
 		
 	}

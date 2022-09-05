@@ -23,6 +23,7 @@ import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -41,7 +42,7 @@ public class PriceIndexUtils {
 	public static final @NonNull LocalDateTime dateTimeZero = LocalDateTime.of(dateZero.getYear(), dateZero.getMonthValue(), 1, 0, 0);
 
 	public enum PriceIndexType {
-		COMMODITY, CHARTER, BUNKERS, CURRENCY;
+		COMMODITY, CHARTER, BUNKERS, CURRENCY, PRICING_BASIS;
 	}
 
 	/**
@@ -113,6 +114,19 @@ public class PriceIndexUtils {
 				}
 			}
 		}
+		if (reference == PricingPackage.Literals.PRICING_MODEL__PRICING_BASES) {
+			final List<CommodityCurve> curves = pricingModel.getCommodityCurves();
+			for (final AbstractYearMonthCurve curve : curves) {
+				if (curve.getName() == null) {
+					continue;
+				}
+				if (curve.isSetExpression()) {
+					indices.addSeriesExpression(curve.getName(), curve.getExpression());
+				} else {
+					addSeriesDataFromDataIndex(indices, curve.getName(), dateZero, curve);
+				}
+			}
+		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
 			final String name = createConversionFactorName(factor);
@@ -144,6 +158,8 @@ public class PriceIndexUtils {
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
 		case CURRENCY:
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
+		case PRICING_BASIS:
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES);
 		default:
 			throw new IllegalArgumentException();
 		}

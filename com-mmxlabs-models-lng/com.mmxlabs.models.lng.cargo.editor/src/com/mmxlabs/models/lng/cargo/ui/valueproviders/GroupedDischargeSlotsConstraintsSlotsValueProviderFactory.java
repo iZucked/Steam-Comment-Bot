@@ -13,7 +13,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
@@ -59,7 +59,7 @@ public class GroupedDischargeSlotsConstraintsSlotsValueProviderFactory implement
 				}
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 					if (target instanceof GroupedDischargeSlotsConstraint groupedDischageSlotsConstraint) {
 						final Set<DischargeSlot> selectedSlots = new HashSet<>(groupedDischageSlotsConstraint.getSlots());

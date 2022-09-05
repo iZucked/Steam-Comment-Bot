@@ -5,11 +5,12 @@
 package com.mmxlabs.models.lng.commercial.ui.valueproviders;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -38,12 +39,12 @@ public class PreferredPortProviderFactory implements IReferenceValueProviderFact
 		return new AllowedFieldFilteredReferenceValueProvider<Port>(delegate) {
 
 			@Override
-			protected Collection<Port> getAllowedValuesFromField(EObject target, EStructuralFeature field) {
+			protected Collection<Port> getAllowedValuesFromField(EObject target, ETypedElement field) {
 				return SetUtils.getObjects(((Contract) target).getAllowedPorts());
 			}
 
 			@Override
-			protected Port getCurrentValue(EObject target, EStructuralFeature field) {
+			protected Port getCurrentValue(EObject target, ETypedElement field) {
 				return ((Contract) target).getPreferredPort();
 			}
 

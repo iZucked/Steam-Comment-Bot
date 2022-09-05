@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.port.ui.editors;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultInlineEditorFactory;
@@ -17,7 +17,7 @@ public class PortInlineEditorFactory extends DefaultInlineEditorFactory {
 	}
 
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement feature) {
 		if (feature.isMany()) {
 			return new PortMultiReferenceInlineEditor(feature);
 		}

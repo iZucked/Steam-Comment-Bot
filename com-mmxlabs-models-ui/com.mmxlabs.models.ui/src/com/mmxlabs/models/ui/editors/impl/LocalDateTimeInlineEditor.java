@@ -6,7 +6,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.time.LocalDateTime;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.widgets.Composite;
@@ -19,13 +19,13 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
 	private LocalDateTimeTextFormatter dateFormatter;
 
-	public LocalDateTimeInlineEditor(final EStructuralFeature feature, final LocalDateTimeTextFormatter formatter) {
-		super(feature);
+	public LocalDateTimeInlineEditor(final ETypedElement typedElement, final LocalDateTimeTextFormatter formatter) {
+		super(typedElement);
 		this.dateFormatter = formatter;
 	}
 
-	public LocalDateTimeInlineEditor(final EStructuralFeature feature) {
-		this(feature, new LocalDateTimeTextFormatter());
+	public LocalDateTimeInlineEditor(final ETypedElement typedElement) {
+		this(typedElement, new LocalDateTimeTextFormatter());
 	}
 
 	@Override

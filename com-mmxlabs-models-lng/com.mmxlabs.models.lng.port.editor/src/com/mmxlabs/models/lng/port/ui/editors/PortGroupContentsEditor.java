@@ -13,7 +13,7 @@ import java.util.Set;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -52,7 +52,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	private PortModel portModel = null;
 	private GroupedElementProvider gep;
 
-	public PortGroupContentsEditor(final EStructuralFeature feature) {
+	public PortGroupContentsEditor(final ETypedElement feature) {
 		super(feature);
 	}
 
@@ -196,7 +196,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected Command createSetCommand(final Object value) {
-		return CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+		return CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, typedElement, (Collection<?>) value);
 	}
 
 	@Override

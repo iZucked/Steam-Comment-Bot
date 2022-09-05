@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
@@ -34,7 +34,7 @@ public class PortSetValueProvider extends BaseReferenceValueProvider {
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 		if (cachedValues == null) {
 			cacheValues();
 		}
