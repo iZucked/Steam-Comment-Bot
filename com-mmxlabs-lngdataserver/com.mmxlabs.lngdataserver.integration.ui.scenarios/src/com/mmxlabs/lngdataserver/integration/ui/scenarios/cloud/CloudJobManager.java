@@ -472,7 +472,7 @@ public class CloudJobManager extends AbstractJobManager {
 			// Link up the result
 			task.job.setResultUUID(res.getUuid());
 
-			// Fire the sucess handler which should attach result to the datamodel
+			// Fire the success handler which should attach result to the datamodel
 			task.successHandler.accept(sdp, res);
 
 			return true;

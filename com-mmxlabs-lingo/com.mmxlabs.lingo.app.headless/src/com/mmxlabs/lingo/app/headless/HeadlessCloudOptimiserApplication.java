@@ -45,6 +45,9 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 	protected static final String OUTPUT_SCENARIO = "outputScenario";
 	protected static final String OUTPUT_FOLDER = "outputFolder";
 	protected static final String PARAMS_FILE = "params";
+	protected static final String SUBJOBID = "subjobid";
+	protected static final String JOB_BUNDLE = "jobbundle";
+	protected static final String JOB_JSON = "jobsqs";
 
 	@Override
 	public Object start(final IApplicationContext context) throws IOException {
@@ -193,6 +196,11 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
+		
+		// Options to take optimiser gateway data directly.  
+		options.addOption(OptionBuilder.withLongOpt(SUBJOBID).withDescription("The subjob id the run").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(JOB_BUNDLE).withDescription("The archive with all job data").hasArg().create());
+		options.addOption(OptionBuilder.withLongOpt(JOB_JSON).withDescription("The SQS message triggering the job").hasArg().create());
 		//
 		//
 		// options.addOption(OptionBuilder.withLongOpt(CUSTOM_INFO).withDescription("Custom

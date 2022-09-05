@@ -181,6 +181,8 @@ public class CloudOptimisationDataServiceClient {
 		// Check the response
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
+				// 400 - missing data or data filename in request
+				// 415 - archive was not a zip file 
 				throw new IOException("Unexpected code " + response);
 			}
 			return response.body().string();
