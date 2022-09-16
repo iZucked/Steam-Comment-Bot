@@ -41,6 +41,8 @@ public class JobDataRecord {
 
 	// UUID of component e.g. sandbox
 	private String componentUUID;
+	
+	private int batchSize = 1;
 
 	@JsonIgnore
 	private ScenarioInstance scenarioInstance;
@@ -115,5 +117,13 @@ public class JobDataRecord {
 
 	public void setTaskParameters(final String taskParameters) {
 		this.taskParameters = taskParameters;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 }

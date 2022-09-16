@@ -245,7 +245,7 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	public static String createManifest(final String scenarioName, @NonNull final String problemType, final String keyUUID) {
+	public static String createManifest(final String scenarioName, @NonNull final String problemType, final String keyUUID, int batchSize) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
 		md.type = problemType;
@@ -272,7 +272,7 @@ public class ScenarioServicePushToCloudAction {
 			throw new CloudOptimisationPushException("Unable to determine key uuid", Type.FAILED_MISSING_KEY_UUID, new IOException());
 		}
 
-		md.batchSize = 1;
+		md.batchSize = batchSize;
 		
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {

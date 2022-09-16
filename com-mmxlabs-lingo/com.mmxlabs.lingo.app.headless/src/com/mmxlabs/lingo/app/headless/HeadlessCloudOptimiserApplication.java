@@ -87,6 +87,18 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 
 		final int numThreads = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
+		final String subJobIdStr = commandLine.getOptionValue(SUBJOBID);
+		if (subJobIdStr != null && !subJobIdStr.isBlank()) {
+			try {
+				int subJobId = Integer.parseInt(subJobIdStr);
+				runner.withSubJobId(subJobId);
+			} catch (Exception e) {
+				// TODO: Send to logger
+				e.printStackTrace();
+			}
+
+		}
+
 		{
 			final String paramsFile = commandLine.getOptionValue(PARAMS_FILE);
 			final File f = new File(paramsFile);
@@ -196,8 +208,8 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT_FOLDER).withDescription("Path to directory for output files").hasArg().create());
 
 		options.addOption(OptionBuilder.withLongOpt(JOB_TYPE).withDescription("The type of job to run").hasArg().create());
-		
-		// Options to take optimiser gateway data directly.  
+
+		// Options to take optimiser gateway data directly.
 		options.addOption(OptionBuilder.withLongOpt(SUBJOBID).withDescription("The subjob id the run").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(JOB_BUNDLE).withDescription("The archive with all job data").hasArg().create());
 		options.addOption(OptionBuilder.withLongOpt(JOB_JSON).withDescription("The SQS message triggering the job").hasArg().create());

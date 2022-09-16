@@ -9,7 +9,6 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.JobDataRecord;
 
@@ -19,57 +18,24 @@ public class CloudOptimisationDataResultRecord {
 	// * UUID of original scenario
 	// */
 	private String uuid;
-	// /**
-	// * Display name of original scenario
-	// */
-	// private String originalName;
-	//
-	// /**
-	// * The optimisation result name as this is not passed to the cloud and back
-	// */
-	// private String resultName;
-	//
-	// /**
-	// * The UUID of the resulting optimisation (not needed for a sandbox) once
-	// * saved..
-	// */
-	// private String resultUUID;
 
 	private String jobid;
-	//
-	// private String creator;
-	//
-	// private Instant creationDate;
 
 	private String anonyMapFileName;
 
 	// // Type of optimisation
 	private String type;
-	// private String subType;
-	//
-	// // UUID of component e.g. sandbox
-	// private String componentUUID;
 
-	// private boolean remote;
-	// private boolean deleted;
 	private boolean complete;
-
-	// private boolean hasError;
-	//
-	// private long localRuntime;
-	// private long cloudRuntime;
-	//
-	// private boolean localJob;
 
 	@JsonIgnore
 	public Task task;
-	
+
+	private int batchSize;
+
 	public JobDataRecord job;
 
 	private @NonNull ResultStatus status = ResultStatus.notfound();
-	//
-	// @JsonIgnore
-	// private ScenarioInstance scenarioInstance;
 
 	public String getUuid() {
 		return uuid;
@@ -80,22 +46,6 @@ public class CloudOptimisationDataResultRecord {
 		this.uuid = uuid;
 	}
 
-	// public String getCreator() {
-	// return creator;
-	// }
-	//
-	// public void setCreator(String creator) {
-	// this.creator = creator;
-	// }
-	//
-	// public Instant getCreationDate() {
-	// return creationDate;
-	// }
-	//
-	// public void setCreationDate(Instant creationDate) {
-	// this.creationDate = creationDate;
-	// }
-
 	public String getAnonyMapFileName() {
 		return this.anonyMapFileName;
 	}
@@ -103,14 +53,6 @@ public class CloudOptimisationDataResultRecord {
 	public void setAnonyMapFileName(String anonyMapFileName) {
 		this.anonyMapFileName = anonyMapFileName;
 	}
-	//
-	// public String getOriginalName() {
-	// return originalName;
-	// }
-	//
-	// public void setOriginalName(String originalName) {
-	// this.originalName = originalName;
-	// }
 
 	public String getJobid() {
 		return jobid;
@@ -143,39 +85,6 @@ public class CloudOptimisationDataResultRecord {
 	public void setStatus(@NonNull ResultStatus status) {
 		this.status = status;
 	}
-	//
-	// public boolean isRemote() {
-	// return remote;
-	// }
-	//
-	// public void setRemote(boolean remote) {
-	// this.remote = remote;
-	// }
-
-	// public boolean isDeleted() {
-	// return deleted;
-	// }
-	//
-	// public void setDeleted(boolean deleted) {
-	// this.deleted = deleted;
-	// }
-	//
-	// public void setLocalRuntime(long l) {
-	// this.localRuntime = l;
-	//
-	// }
-	//
-	// public long getLocalRuntime() {
-	// return localRuntime;
-	// }
-	//
-	// public long getCloudRuntime() {
-	// return cloudRuntime;
-	// }
-	//
-	// public void setCloudRuntime(long cloudRuntime) {
-	// this.cloudRuntime = cloudRuntime;
-	// }
 
 	/**
 	 * Returns true if the tasks has been submitted or is currently running
@@ -194,62 +103,6 @@ public class CloudOptimisationDataResultRecord {
 	public void setType(String type) {
 		this.type = type;
 	}
-	//
-	// public String getComponentUUID() {
-	// return componentUUID;
-	// }
-	//
-	// public void setComponentUUID(String componentUUID) {
-	// this.componentUUID = componentUUID;
-	// }
-	//
-	// public String getResultName() {
-	// return resultName;
-	// }
-	//
-	// public void setResultName(String resultName) {
-	// this.resultName = resultName;
-	// }
-	//
-	// public String getResultUUID() {
-	// return resultUUID;
-	// }
-	//
-	// public void setResultUUID(String resultUUID) {
-	// this.resultUUID = resultUUID;
-	// }
-	//
-	// public boolean isLocalJob() {
-	// return localJob;
-	// }
-	//
-	// public void setLocalJob(boolean localJob) {
-	// this.localJob = localJob;
-	// }
-
-	// public ScenarioInstance getScenarioInstance() {
-	// return scenarioInstance;
-	// }
-	//
-	// public void setScenarioInstance(ScenarioInstance scenarioInstance) {
-	// this.scenarioInstance = scenarioInstance;
-	// }
-	//
-	// public String getSubType() {
-	// return subType;
-	// }
-	//
-	// public void setSubType(String subType) {
-	// this.subType = subType;
-	// }
-	//
-	// public boolean isHasError() {
-	// return hasError;
-	// }
-	//
-	// public void setHasError(boolean hasError) {
-	// this.hasError = hasError;
-	// }
 
 	public boolean isComplete() {
 		return complete;
@@ -257,6 +110,14 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setComplete(boolean complete) {
 		this.complete = complete;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 
 }

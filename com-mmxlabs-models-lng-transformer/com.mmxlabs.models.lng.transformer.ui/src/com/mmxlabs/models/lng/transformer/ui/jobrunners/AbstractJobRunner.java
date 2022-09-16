@@ -25,6 +25,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @NonNullByDefault
 public abstract class AbstractJobRunner implements IJobRunner {
 
+	protected int subJobId = 0;
 	protected boolean enableLogging = false;
 	protected @Nullable Meta meta;
 
@@ -66,6 +67,11 @@ public abstract class AbstractJobRunner implements IJobRunner {
 	@Override
 	public void withScenario(final IScenarioDataProvider sdp) {
 		this.sdp = sdp;
+	}
+
+	@Override
+	public void withSubJobId(int subJobId) {
+		this.subJobId = subJobId;
 	}
 
 }
