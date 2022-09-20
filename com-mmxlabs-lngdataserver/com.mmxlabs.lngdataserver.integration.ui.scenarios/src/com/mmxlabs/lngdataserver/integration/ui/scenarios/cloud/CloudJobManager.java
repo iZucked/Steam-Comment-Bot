@@ -187,8 +187,9 @@ public class CloudJobManager extends AbstractJobManager {
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
 			// Add the manifest entry
-			filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MANIFEST_NAME,
-					ScenarioServicePushToCloudAction.createManifest(ScenarioServicePushToCloudAction.MF_SCENARIO_NAME, task.job.getType(), Base64.getEncoder().encodeToString(keyData.keyUUID()))));
+			final int batchSize = task.job.getBatchSize();
+			filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MANIFEST_NAME, ScenarioServicePushToCloudAction.createManifest(ScenarioServicePushToCloudAction.MF_SCENARIO_NAME,
+					task.job.getType(), Base64.getEncoder().encodeToString(keyData.keyUUID()), batchSize)));
 
 			// Add the scenario
 			filesToZip.add(Pair.of(ScenarioServicePushToCloudAction.MF_SCENARIO_NAME, tmpEncryptedScenarioFile));
@@ -235,6 +236,7 @@ public class CloudJobManager extends AbstractJobManager {
 				System.out.println(jobid);
 				if (jobid != null) {
 					cRecord.setJobid(jobid);
+					cRecord.setBatchSize(batchSize);
 					anonymisationMap.renameTo(new File(ScenarioServicePushToCloudAction.CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".amap"));
 					keyData.keyStore().renameTo(new File(ScenarioServicePushToCloudAction.CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".key" + ".p12"));
 				} else {
@@ -416,7 +418,7 @@ public class CloudJobManager extends AbstractJobManager {
 		}
 	}
 
-	public boolean solutionReady(final Task task, final File solutionFile) {
+	public boolean solutionReady(final Task task, final File[] solutionFile) {
 
 		// TODO - handle error better!
 		// Make sure we are not stuck in a lock etc.
@@ -427,54 +429,54 @@ public class CloudJobManager extends AbstractJobManager {
 		Resource rr = null;
 		final URI rootModelURI = URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI);
 		try {
-
-			// Find the root object and create a URI mapping to the real URI so the result
-			// xmi can resolve
-			for (final var r : ed.getResourceSet().getResources()) {
-				if (!r.getContents().isEmpty() && r.getContents().get(0) instanceof LNGScenarioModel) {
-					ed.getResourceSet().getURIConverter().getURIMap().put(rootModelURI, r.getURI());
+			for (int i = 0; i < solutionFile.length; ++i) {
+				// Find the root object and create a URI mapping to the real URI so the result
+				// xmi can resolve
+				for (final var r : ed.getResourceSet().getResources()) {
+					if (!r.getContents().isEmpty() && r.getContents().get(0) instanceof LNGScenarioModel) {
+						ed.getResourceSet().getURIConverter().getURIMap().put(rootModelURI, r.getURI());
+					}
 				}
+
+				// Create a resource to load the result into
+				rr = ed.getResourceSet().createResource(URI.createFileURI(solutionFile[i].getAbsolutePath()));
+				final Resource pRR = rr;
+
+				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+					LOG.trace("Import Result (%s): Loading result from %s", task.remoteJobID, rr.getURI().toString());
+				}
+
+				// Load in the result.
+				ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
+					final Map<String, URIConverter.Cipher> options = new HashMap<>();
+					options.put(Resource.OPTION_CIPHER, cipherProvider.getSharedCipher());
+					pRR.load(options);
+				});
+
+				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+					LOG.trace("Import Result (%s): Loaded result from %s", task.remoteJobID, rr.getURI().toString());
+				}
+
+				final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
+				assert res != null;
+
+				// "Resolve" the references. The result references to the main scenario may be
+				// "proxy" objects
+				EcoreUtil.resolveAll(ed.getResourceSet());
+
+				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
+					LOG.trace("Import Result (%s): Resolved cross-references", task.remoteJobID);
+				}
+
+				// Remove result from it's resource
+				rr.getContents().clear();
+
+				// Link up the result
+				task.job.setResultUUID(res.getUuid());
+
+				// Fire the success handler which should attach result to the datamodel
+				task.successHandler.accept(sdp, res);
 			}
-
-			// Create a resource to load the result into
-			rr = ed.getResourceSet().createResource(URI.createFileURI(solutionFile.getAbsolutePath()));
-			final Resource pRR = rr;
-
-			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
-				LOG.trace("Import Result (%s): Loading result from %s", task.remoteJobID, rr.getURI().toString());
-			}
-
-			// Load in the result.
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
-				final Map<String, URIConverter.Cipher> options = new HashMap<>();
-				options.put(Resource.OPTION_CIPHER, cipherProvider.getSharedCipher());
-				pRR.load(options);
-			});
-
-			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
-				LOG.trace("Import Result (%s): Loaded result from %s", task.remoteJobID, rr.getURI().toString());
-			}
-
-			final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
-			assert res != null;
-
-			// "Resolve" the references. The result references to the main scenario may be
-			// "proxy" objects
-			EcoreUtil.resolveAll(ed.getResourceSet());
-
-			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_IMPORT)) {
-				LOG.trace("Import Result (%s): Resolved cross-references", task.remoteJobID);
-			}
-
-			// Remove result from it's resource
-			rr.getContents().clear();
-
-			// Link up the result
-			task.job.setResultUUID(res.getUuid());
-
-			// Fire the success handler which should attach result to the datamodel
-			task.successHandler.accept(sdp, res);
-
 			return true;
 		} catch (final Exception e) {
 

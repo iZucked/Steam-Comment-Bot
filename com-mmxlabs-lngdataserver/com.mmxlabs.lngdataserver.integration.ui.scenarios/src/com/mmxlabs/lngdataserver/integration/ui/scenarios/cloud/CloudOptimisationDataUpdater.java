@@ -121,137 +121,144 @@ class CloudOptimisationDataUpdater {
 				return;
 			}
 
+			int batchSize = cRecord.getBatchSize() == 0 ? 1 : cRecord.getBatchSize();
 			// References so the finally block can clean up
-			File temp = null;
-			File solutionFile = null;
+			File[] temp = new File[batchSize];
+			File[] solutionFile = new File[batchSize];
 			try {
 
-				// Put this in the temp folder as delete() doesn't always seem to it
-				temp = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), cRecord.getJobid(), ".solution").toFile();
+				for (int i = 0; i < batchSize; ++i) {
 
-				final IGatewayResponse downloadResult = downloadData(cRecord, temp);
-				if (downloadResult == null) {
-					// Failed, probably offline, we can try again
+					// Put this in the temp folder as delete() doesn't always seem to it
+					temp[i] = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), cRecord.getJobid(), ".solution").toFile();
 
-					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-						LOG.trace("Download Result (%s): Null gateway response", cRecord.getJobid());
-					}
-
-					return;
-				} else if (!downloadResult.isResultDownloaded()) {
-					// Download failed, but we got a response from our gateway.
-					// Should we try again? Some errors are temporary issues, some are permanent
-					if (!downloadResult.shouldPollAgain()) {
-						// Mark record as complete as we will not attempt anything further
-						cRecord.setComplete(true);
-						// Record the failure state
-						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to download result"));
+					final IGatewayResponse downloadResult = downloadData(cRecord, temp[i], i);
+					if (downloadResult == null) {
+						// Failed, probably offline, we can try again
 
 						if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-							LOG.trace("Download Result (%s): Download failed - no further retries", cRecord.getJobid());
+							LOG.trace("Download Result (%s): Null gateway response", cRecord.getJobid());
 						}
-					}
-					return;
 
-				} else {
+						return;
+					} else if (!downloadResult.isResultDownloaded()) {
+						// Download failed, but we got a response from our gateway.
+						// Should we try again? Some errors are temporary issues, some are permanent
+						if (!downloadResult.shouldPollAgain()) {
+							// Mark record as complete as we will not attempt anything further
+							cRecord.setComplete(true);
+							// Record the failure state
+							mgr.updateTaskStatus(task, TaskStatus.failed("Unable to download result"));
 
-					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-						LOG.trace("Download Result (%s): Result downloaded to %s", cRecord.getJobid(), temp.getAbsolutePath());
-					}
-
-					// Successful download. Now we need to de-crypt the result and import it.
-					final File keyfileFile = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
-					if (!keyfileFile.exists()) {
-						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to find decryption key"));
-						cRecord.setComplete(true);
-						throw new RuntimeException(String.format("Failed to get the result decryption key for job %s", cRecord.getJobid()));
-					}
-					final KeyFileV2 keyfilev2 = KeyFileLoader.loadKeyFile(keyfileFile);
-					if (keyfilev2 == null) {
-						mgr.updateTaskStatus(task, TaskStatus.failed("Unable to load decryption key"));
-						cRecord.setComplete(true);
-						throw new RuntimeException(String.format("Failed to load keyfile from key store for job %s", cRecord.getJobid()));
-					}
-
-					final CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfilev2);
-					final Cipher cloudCipher = scenarioCipherProvider.getSharedCipher();
-
-					// Target file to save into
-					solutionFile = new File(String.format("%s/%s.xmi", basePath, cRecord.getJobid()));
-
-					File pSolutionFile = solutionFile;
-					File pTempFile = temp;
-
-					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-						try (final FileInputStream fin = new FileInputStream(pTempFile)) {
-							final byte[] initialBytes;
-							try {
-								initialBytes = fin.readNBytes(CloudOptiDebugContants.NUM_TEMP_FILE_BYTES_TO_PRINT);
-								final String initialString = new String(initialBytes);
-								LOG.trace("Download Result (%s): reading solution into LiNGO. Initial characters: %s", cRecord.getJobid(), initialString);
-							} catch (final IOException e) {
-								LOG.trace("Download Result (%s): Failed to read solution file", cRecord.getJobid());
-							} catch (final Exception e) {
-								LOG.trace("Download Result (%s): Could not print initial solution file contents", cRecord.getJobid());
+							if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+								LOG.trace("Download Result (%s): Download failed - no further retries", cRecord.getJobid());
 							}
-							
 						}
-					}
-					// Re-encrypt the results file.
-					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
-						final Cipher localCipher = cipherProvider.getSharedCipher();
-						try (FileOutputStream fout = new FileOutputStream(pSolutionFile)) {
-							try (FileInputStream fin = new FileInputStream(pTempFile)) {
-								// Data needs to be decrypted then encrypted
-								try (InputStream is = cloudCipher.decrypt(fin)) {
-									try (OutputStream os = localCipher.encrypt(fout)) {
-										ByteStreams.copy(is, os);
+						return;
+
+					} else {
+
+						if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+							LOG.trace("Download Result (%s): Result downloaded to %s", cRecord.getJobid(), temp[i].getAbsolutePath());
+						}
+
+						// Successful download. Now we need to de-crypt the result and import it.
+						final File keyfileFile = new File(String.format("%s/%s.key.p12", basePath, cRecord.getJobid()));
+						if (!keyfileFile.exists()) {
+							mgr.updateTaskStatus(task, TaskStatus.failed("Unable to find decryption key"));
+							cRecord.setComplete(true);
+							throw new RuntimeException(String.format("Failed to get the result decryption key for job %s", cRecord.getJobid()));
+						}
+						final KeyFileV2 keyfilev2 = KeyFileLoader.loadKeyFile(keyfileFile);
+						if (keyfilev2 == null) {
+							mgr.updateTaskStatus(task, TaskStatus.failed("Unable to load decryption key"));
+							cRecord.setComplete(true);
+							throw new RuntimeException(String.format("Failed to load keyfile from key store for job %s", cRecord.getJobid()));
+						}
+
+						final CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfilev2);
+						final Cipher cloudCipher = scenarioCipherProvider.getSharedCipher();
+
+						// Target file to save into
+						solutionFile[i] = new File(String.format("%s/%s-%d.xmi", basePath, cRecord.getJobid(), i));
+
+						File pSolutionFile = solutionFile[i];
+						File pTempFile = temp[i];
+
+						if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+							try (final FileInputStream fin = new FileInputStream(pTempFile)) {
+								final byte[] initialBytes;
+								try {
+									initialBytes = fin.readNBytes(CloudOptiDebugContants.NUM_TEMP_FILE_BYTES_TO_PRINT);
+									final String initialString = new String(initialBytes);
+									LOG.trace("Download Result (%s): reading solution into LiNGO. Initial characters: %s", cRecord.getJobid(), initialString);
+								} catch (final IOException e) {
+									LOG.trace("Download Result (%s): Failed to read solution file", cRecord.getJobid());
+								} catch (final Exception e) {
+									LOG.trace("Download Result (%s): Could not print initial solution file contents", cRecord.getJobid());
+								}
+
+							}
+						}
+						// Re-encrypt the results file.
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, cipherProvider -> {
+							final Cipher localCipher = cipherProvider.getSharedCipher();
+							try (FileOutputStream fout = new FileOutputStream(pSolutionFile)) {
+								try (FileInputStream fin = new FileInputStream(pTempFile)) {
+									// Data needs to be decrypted then encrypted
+									try (InputStream is = cloudCipher.decrypt(fin)) {
+										try (OutputStream os = localCipher.encrypt(fout)) {
+											ByteStreams.copy(is, os);
+										}
 									}
 								}
 							}
-						}
-					});
+						});
 
-					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-						LOG.trace("Download Result (%s): Result re-encrypted to %s", cRecord.getJobid(), solutionFile.getAbsolutePath());
 					}
-
-					// Nothing further for this task to do regarding upstream.
-					cRecord.setComplete(true);
-					deleteRecord(cRecord);
-
-					boolean success = mgr.solutionReady(task, solutionFile);
-
-					if (success) {
-						mgr.updateTaskStatus(task, TaskStatus.complete());
-					} else {
-						mgr.updateTaskStatus(task, TaskStatus.failed("Solution import failed"));
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Result re-encrypted to %s", cRecord.getJobid(), solutionFile[i].getAbsolutePath());
 					}
 				}
+
+				// Nothing further for this task to do regarding upstream.
+				cRecord.setComplete(true);
+				deleteRecord(cRecord);
+
+				boolean success = mgr.solutionReady(task, solutionFile);
+
+				if (success) {
+					mgr.updateTaskStatus(task, TaskStatus.complete());
+				} else {
+					mgr.updateTaskStatus(task, TaskStatus.failed("Solution import failed"));
+				}
+
 			} catch (final Exception e) {
 				task.errorHandler.accept("Error importing solution " + e.getMessage(), e);
 				mgr.updateTaskStatus(task, TaskStatus.failed(e.getMessage()));
 			} finally {
 				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-					if (solutionFile != null && solutionFile.exists()) {
-						solutionFile.delete();
-					}
-					if (temp != null && temp.exists()) {
-						temp.delete();
+					for (int i = 0; i < batchSize; ++i) {
+						if (solutionFile[i] != null && solutionFile[i].exists()) {
+							solutionFile[i].delete();
+						}
+						if (temp[i] != null && temp[i].exists()) {
+							temp[i].delete();
+						}
 					}
 				}
 			}
 
 		}
 
-		private IGatewayResponse downloadData(final CloudOptimisationDataResultRecord rtd, final File f) {
+		private IGatewayResponse downloadData(final CloudOptimisationDataResultRecord rtd, final File f, int resultIdx) {
 			final IGatewayResponse[] ret = new IGatewayResponse[1];
 			final Job background = new Job("Downloading scenario") {
 
 				@Override
 				public IStatus run(final IProgressMonitor monitor) {
 					try {
-						ret[0] = client.downloadTo(rtd.getJobid(), f, WrappedProgressMonitor.wrapMonitor(monitor));
+						ret[0] = client.downloadTo(rtd.getJobid(), resultIdx, f, WrappedProgressMonitor.wrapMonitor(monitor));
 					} catch (final Exception e) {
 						LOG.error("Unable to read/write to user id file in cloud-opti folder", e);
 						// return Status.
