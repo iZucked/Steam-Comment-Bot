@@ -19,4 +19,6 @@ public interface ITransferModelDataProvider extends IDataComponentProvider {
 	List<BasicTransferRecord> getTransferRecordsForSlot(IPortSlot slot);
 	
 	TransfersLookupData getTransferLookupData();
+	
+	int getTransferPrice(String priceExpression, int pricingDate, int internalSalesPrice, boolean isBasis);
 }

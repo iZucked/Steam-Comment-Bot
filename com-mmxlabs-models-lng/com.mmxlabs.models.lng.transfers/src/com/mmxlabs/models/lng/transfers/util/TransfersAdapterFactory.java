@@ -70,8 +70,8 @@ public class TransfersAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TransfersSwitch<@Nullable Adapter> modelSwitch =
-		new TransfersSwitch<@Nullable Adapter>() {
+	protected TransfersSwitch<Adapter> modelSwitch =
+		new TransfersSwitch<Adapter>() {
 			@Override
 			public Adapter caseTransferModel(TransferModel object) {
 				return createTransferModelAdapter();

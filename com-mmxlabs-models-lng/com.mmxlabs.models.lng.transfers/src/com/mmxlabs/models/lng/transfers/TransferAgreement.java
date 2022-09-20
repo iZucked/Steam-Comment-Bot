@@ -80,7 +80,7 @@ public interface TransferAgreement extends NamedObject {
 	 * @return the value of the '<em>Price Expression</em>' attribute.
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PriceExpression()
-	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity' parameters='salesprice'"
 	 * @generated
 	 */
 	String getPriceExpression();

@@ -194,21 +194,37 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
+		
+		// adds support for the custom parameters
+		String localPriceExpression = priceExpression;
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.PARAMETERS_KEY);
+			if (value != null) {
+				final String[] values = value.split(",");
+				for (int i = 0; i < values.length; i++) {
+					if (values[i].equalsIgnoreCase(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE)) {
+						localPriceExpression = localPriceExpression.toLowerCase().replace(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE, "(1)"); 
+					}
+				}
+			}
+		}
+		
 		// Check for illegal characters
 		{
-			final Matcher matcher = pattern.matcher(priceExpression);
+			final Matcher matcher = pattern.matcher(localPriceExpression);
 			if (matcher.find()) {
-				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
+				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", localPriceExpression, matcher.group(1));
 				return ValidationResult.createErrorStatus(message);
 			}
 		}
 		// Test SHIFT function use
 		{
-			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			final Matcher matcherA = shiftDetectPattern.matcher(localPriceExpression);
 			if (matcherA.find()) {
-				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				final Matcher matcherB = shiftUsePattern.matcher(localPriceExpression);
 				if (!matcherB.find()) {
-					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
+					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", localPriceExpression);
 					return ValidationResult.createErrorStatus(message);
 				}
 			}
@@ -218,7 +234,7 @@ public class PriceExpressionUtils {
 			ISeries parsed = null;
 			String hints = "";
 			try {
-				final IExpression<ISeries> expression = parser.parse(priceExpression);
+				final IExpression<ISeries> expression = parser.parse(localPriceExpression);
 				parsed = expression.evaluate();
 
 			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
@@ -239,7 +255,7 @@ public class PriceExpressionUtils {
 		}
 		{
 			try {
-				final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
+				final IExpression<Node> parse = new RawTreeParser().parse(localPriceExpression);
 				parse.evaluate();
 			} catch (final EmptyStackException e) {
 				return ValidationResult.createErrorStatus("Unable to parse: the price expression has an empty argument");

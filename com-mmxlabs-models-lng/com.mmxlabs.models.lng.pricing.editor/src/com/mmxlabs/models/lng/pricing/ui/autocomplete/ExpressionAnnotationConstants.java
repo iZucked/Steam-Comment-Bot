@@ -12,4 +12,6 @@ public class ExpressionAnnotationConstants {
 	public static final String TYPE_BASE_FUEL = "basefuel";
 	public static final String TYPE_CURRENCY = "currency";
 	public static final String TYPE_PRICING_BASIS = "pricingBasis";
+	public static final String PARAMETERS_KEY = "parameters";
+	public static final String PARAMETER_SALES_PRICE = "salesprice";
 }

@@ -655,7 +655,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		  (getTransferAgreement_PriceExpression(),
 		   source,
 		   new String[] {
-			   "type", "commodity"
+			   "type", "commodity",
+			   "parameters", "salesprice"
 		   });
 		addAnnotation
 		  (getTransferAgreement_PricingBasis(),
@@ -667,7 +668,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		  (getTransferRecord_PriceExpression(),
 		   source,
 		   new String[] {
-			   "type", "commodity"
+			   "type", "commodity",
+			   "parameters", "salesprice"
 		   });
 		addAnnotation
 		  (getTransferRecord_PricingBasis(),

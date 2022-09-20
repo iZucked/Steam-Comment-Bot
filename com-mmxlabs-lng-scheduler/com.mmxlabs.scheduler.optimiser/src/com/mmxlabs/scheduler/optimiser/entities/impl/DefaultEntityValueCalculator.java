@@ -495,6 +495,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long volumeInMMBTu = cargoPNLData.getCommercialSlotVolumeInMMBTu(loadOption);
 			final long loadPurchaseCost = cargoPNLData.getSlotValue(loadOption);
 			final long dischargeSaleRevenue = cargoPNLData.getSlotValue(dischargeOption);
+			final int internalSalesPrice = cargoPNLData.getSlotPricePerMMBTu(dischargeOption);
 			
 			// Negate the original cost and revenue from the trading book
 			// Since these are already added in evaluateCargoPnL for the corresponding slots
@@ -505,7 +506,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			TranferRecordAnnotation prevAnnotation = null;
 			for(final BasicTransferRecord currentRecord : records) {
 				
-				int tpPrice = getTransferPrice(currentRecord);
+				int tpPrice = getTransferPrice(currentRecord, internalSalesPrice);
 				
 				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
 				annotation.transferRecord = currentRecord;
@@ -551,8 +552,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param record
 	 * @return
 	 */
-	protected int getTransferPrice(final BasicTransferRecord record) {
-		return record.getPricingSeries().getValueAtPoint(record.getPricingDate());
+	protected int getTransferPrice(final BasicTransferRecord record, int internalSalesPrice) {
+		return transferModelDataProvider.getTransferPrice(record.getPriceExpression(), record.getPricingDate(), internalSalesPrice, record.isBasis());
 	}
 	
 	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,

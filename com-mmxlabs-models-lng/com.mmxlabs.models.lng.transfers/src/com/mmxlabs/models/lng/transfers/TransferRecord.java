@@ -193,7 +193,7 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_PriceExpression()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity' parameters='salesprice'"
 	 * @generated
 	 */
 	String getPriceExpression();

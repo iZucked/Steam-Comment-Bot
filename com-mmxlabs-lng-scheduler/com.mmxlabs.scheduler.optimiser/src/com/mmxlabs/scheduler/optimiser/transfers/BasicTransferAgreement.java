@@ -3,7 +3,6 @@ package com.mmxlabs.scheduler.optimiser.transfers;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
@@ -12,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  *
  */
 @NonNullByDefault
-public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, ICurve pricingSeries, String priceExpression, boolean isBasis) implements ITransferAgreement{
+public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity toEntity, String priceExpression, boolean isBasis) implements ITransferAgreement{
 	
 	@Override
 	public boolean equals(@Nullable Object object) {
@@ -22,7 +21,6 @@ public record BasicTransferAgreement(String name, IEntity fromEntity, IEntity to
 			if (otherAgreement.name().equalsIgnoreCase(name)//
 					&& otherAgreement.fromEntity() == fromEntity//
 					&& otherAgreement.toEntity() == toEntity//
-					&& otherAgreement.pricingSeries() == pricingSeries//
 					&& otherAgreement.priceExpression.equalsIgnoreCase(priceExpression)
 					&& otherAgreement.isBasis == isBasis) {
 				return true;

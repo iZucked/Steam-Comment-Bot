@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.transfers.TransfersLookupData;
 
@@ -12,4 +13,6 @@ public interface ITransferModelDataProviderEditor extends ITransferModelDataProv
 	void reconsileIPortSlotWithLookupData(IPortSlot slot);
 	
 	void setLookupData(TransfersLookupData lookupdata);
+	
+	void setSeriesParsers(SeriesParser commodityParser, SeriesParser pricingBasisParser);
 }
