@@ -114,20 +114,28 @@ public class LocationsToScenarioCopier {
 							});
 							steps.add(step2);
 						}
-						
-						if (!Objects.equals(oldPort.getLocation().getCountry(), geographicPoint.getCountry()) ) {
-							UpdateStep step = new UpdateStep( "Update country)",   cmd -> {
-								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(),  PortPackage.Literals.LOCATION__COUNTRY, geographicPoint.getCountry()));
+
+						if (!Objects.equals(oldPort.getLocation().getCountry(), geographicPoint.getCountry())) {
+							UpdateStep step = new UpdateStep("Update country", cmd -> {
+								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__COUNTRY, geographicPoint.getCountry()));
 							});
 							steps.add(step);
 						}
-						if (!Objects.equals(oldPort.getLocation().getName(), versionLocation.getName()) ) {
-							UpdateStep step = new UpdateStep( "Update location name)",   cmd -> {
-								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(),  MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
+						if (!Objects.equals(oldPort.getLocation().getName(), versionLocation.getName())) {
+							UpdateStep step = new UpdateStep("Update location name", cmd -> {
+								cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, versionLocation.getName()));
 							});
 							steps.add(step);
 						}
-						 
+
+						if (versionLocation.getLocode() != null && !versionLocation.getLocode().isBlank()) {
+							if (!Objects.equals(oldPort.getLocation().getLocode(), versionLocation.getLocode())) {
+								UpdateStep step = new UpdateStep("Update locode", cmd -> {
+									cmd.append(SetCommand.create(editingDomain, oldPort.getLocation(), PortPackage.Literals.LOCATION__LOCODE, versionLocation.getLocode()));
+								});
+								steps.add(step);
+							}
+						}
 
 						if ((Math.abs(portLocation.getLat() - geographicPoint.getLat()) > 0.001) || (Math.abs(portLocation.getLon() - geographicPoint.getLon()) > 0.001)) {
 
@@ -150,6 +158,10 @@ public class LocationsToScenarioCopier {
 
 					if (versionLocation.getAliases() != null && !versionLocation.getAliases().isEmpty()) {
 						oldPort.getLocation().getOtherNames().addAll(versionLocation.getAliases());
+					}
+
+					if (versionLocation.getLocode() != null && !versionLocation.getLocode().isBlank()) {
+						oldPort.getLocation().setLocode(versionLocation.getLocode());
 					}
 
 					oldPort.setDefaultWindowSize(1);
