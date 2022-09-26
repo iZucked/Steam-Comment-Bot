@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>5.9.2-SNAPSHOT</version>
+		<version>5.9.2.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.pricing</artifactId>

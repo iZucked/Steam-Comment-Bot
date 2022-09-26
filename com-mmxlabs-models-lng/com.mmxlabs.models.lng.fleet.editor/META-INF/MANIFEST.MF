@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fleet Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.fleet.editor
-Bundle-Version: 5.9.2.qualifier
+Bundle-Version: 5.9.2.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
