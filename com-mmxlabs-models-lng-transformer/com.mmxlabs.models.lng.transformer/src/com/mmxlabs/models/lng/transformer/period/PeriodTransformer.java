@@ -1475,7 +1475,7 @@ public class PeriodTransformer {
 	 */
 	private void trimCopiedScenario(@NonNull LNGScenarioModel copiedScenario) {
 		// Period transformer should not depend on ADP data
-		if (copiedScenario.getAdpModel() == null) {
+		if (copiedScenario.getAdpModel() != null) {
 			copiedScenario.setAdpModel(null);
 		}
 	}
