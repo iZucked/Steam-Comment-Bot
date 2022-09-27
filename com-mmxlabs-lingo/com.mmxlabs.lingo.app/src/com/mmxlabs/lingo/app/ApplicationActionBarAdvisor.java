@@ -755,8 +755,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			menu.add(new CommandContributionItem(parm));
 
 		}
-		// Check for updates (needs an icon)
-		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
+		if (!LicenseFeatures.isPermitted("features:lingo-updater")) {
+			// Check for updates (needs an icon)
+			menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
+		}
 		// Bug report
 		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "com.mmxlabs.rcp.common.submitbugreport", CommandContributionItem.STYLE_PUSH)));
 		// About menu
