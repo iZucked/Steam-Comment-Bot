@@ -314,8 +314,14 @@ public class RollForwardDialog extends Dialog {
 
 				}
 
-				if (charterOutStart != null) {
+				if (promptStart != null && promptEnd != null && charterOutStart != null && charterOutEnd != null) {
 					final Period increment = Period.of(0, 1, 0);
+					final LocalDate ldCOS = getLocalDateFromDateTimeField(charterOutStart);
+					final LocalDate ldCOE = getLocalDateFromDateTimeField(charterOutEnd);
+					final Period charterOutPeriod = Period.between(ldCOS, ldCOE);
+					
+					final LocalDate newldCOS = getLocalDateFromDateTimeField(promptStart).plus(increment);
+					final LocalDate newldCOE = newldCOS.plus(charterOutPeriod);
 
 					toolkit.createLabel(row, ""); // empty label for empty grid cell
 
@@ -325,8 +331,8 @@ public class RollForwardDialog extends Dialog {
 
 						@Override
 						public void widgetSelected(final SelectionEvent e) {
-							final LocalDate newDate = getLocalDateFromDateTimeField(charterOutStart).plus(increment);
-							setDateTimeFieldFromLocalDate(charterOutStart, newDate);
+							setDateTimeFieldFromLocalDate(charterOutStart, newldCOS);
+							setDateTimeFieldFromLocalDate(charterOutEnd, newldCOE);
 							refreshPreview();
 						}
 					});

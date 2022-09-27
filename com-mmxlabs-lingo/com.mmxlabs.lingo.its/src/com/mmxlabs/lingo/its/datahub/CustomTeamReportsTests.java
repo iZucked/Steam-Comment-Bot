@@ -21,9 +21,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.FixedHostPortGenericContainer;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -38,7 +36,8 @@ import com.mmxlabs.rcp.common.appversion.VersionHelper;
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
 public class CustomTeamReportsTests {
-	// Team reports require the lingo user to be authenticated. We can use either basic auth or oauth. We arbitrarily decide to use basic
+	// Team reports require the lingo user to be authenticated. We can use either
+	// basic auth or oauth. We arbitrarily decide to use basic
 	private static BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
 	static final Logger logger = LoggerFactory.getLogger(CustomTeamReportsTests.class);
 
@@ -57,24 +56,8 @@ public class CustomTeamReportsTests {
 
 	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
 
-	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer(CONTAINER)
-	.withFixedExposedPort(availablePort, DATAHUB_PORT)
-	.withExposedPorts(DATAHUB_PORT)
-	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
-	.withEnv("PROTOCOL", "http")
-	.withEnv("HOSTNAME", "localhost")
-	.withEnv("AUTHENTICATION_SCHEME", "basic")
-	.withEnv("INSTANCE_TAG", "docker")
-	.withEnv("DB_HOST", "0.0.0.0")
-	.withEnv("DB_PORT", "27000")
-	.withEnv("AZURE_CLIENT_ID", "e52d83a9-40c0-42ae-aae3-d5054ef24919")
-	.withEnv("AZURE_TENANT_ID", "dceff11f-6e74-436e-b9a0-65f9697b8472")
-	.withEnv("AZURE_CLIENT_SECRET", "@t:1uqW2cYN1iH7S]RQqBiHgchhvEr/[")
-	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
-	.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
-	// @formatter:on
+	public static GenericContainer datahubContainer = HubTestHelper.createDataHubContainer(CONTAINER, availablePort, DATAHUB_PORT, false);
 
 	@BeforeAll
 	private static void beforeAll() {
@@ -156,8 +139,7 @@ public class CustomTeamReportsTests {
 	/**
 	 * Helper function to create a user report
 	 *
-	 * @param name,
-	 *            the name of the user report
+	 * @param name, the name of the user report
 	 */
 	public void createUserReport(String name) {
 		bot.button("New").click();
@@ -169,8 +151,7 @@ public class CustomTeamReportsTests {
 	/**
 	 * Helper function to create a custom team report
 	 *
-	 * @param name,
-	 *            the name of the team report
+	 * @param name, the name of the team report
 	 */
 	public void createCustomTeamReport(String name) {
 		bot.button("New").click();
@@ -180,7 +161,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report then refresh the team reports and check if the table contains the new report
+	 * Create a team report then refresh the team reports and check if the table
+	 * contains the new report
 	 *
 	 * @throws IOException
 	 */
@@ -216,7 +198,7 @@ public class CustomTeamReportsTests {
 		bot.button("Add to Team").click();
 		bot.radio("Team reports").click();
 		logger.info(Integer.toString(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).rowCount()));
-		// Delay to allow UI to catch up before trying to find it.	
+		// Delay to allow UI to catch up before trying to find it.
 		Thread.sleep(3000);
 		assertTrue(bot.tableWithId(CustomReportsManagerDialog.WIDGET_CUSTOM_REPORTS_VIEWER).containsItem("test2"));
 	}
@@ -239,7 +221,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report if then logout from the datahub and check if report is still available
+	 * Create a team report if then logout from the datahub and check if report is
+	 * still available
 	 *
 	 * @throws IOException
 	 */
@@ -262,7 +245,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report, select it and check that the copy, rename and delete buttons are enabled
+	 * Create a team report, select it and check that the copy, rename and delete
+	 * buttons are enabled
 	 */
 	@Test
 	public void copyRenameDeleteAndAddtoTeam_areEnabled_whenReportIsSelected() {
@@ -276,7 +260,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report. make a change to the rows and check if the revert and publish buttons are enabled
+	 * Create a team report. make a change to the rows and check if the revert and
+	 * publish buttons are enabled
 	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenRowIsChanged() {
@@ -290,7 +275,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report, make a change to a disabled column and check if the revert and publish buttons are enabled
+	 * Create a team report, make a change to a disabled column and check if the
+	 * revert and publish buttons are enabled
 	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenDisabledColumnIsChanged() {
@@ -305,7 +291,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report, make a change to an enabled column and check if the rever and publish buttons are enabled
+	 * Create a team report, make a change to an enabled column and check if the
+	 * rever and publish buttons are enabled
 	 */
 	@Test
 	public void revertAndPublish_areEnabled_whenEnabledColumnIsChanged() {
@@ -320,7 +307,8 @@ public class CustomTeamReportsTests {
 	}
 
 	/**
-	 * Create a team report, rename it and check if the new name appears in the report table
+	 * Create a team report, rename it and check if the new name appears in the
+	 * report table
 	 *
 	 * @throws IOException
 	 */

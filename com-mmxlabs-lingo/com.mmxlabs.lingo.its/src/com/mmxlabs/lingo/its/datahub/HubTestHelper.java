@@ -18,6 +18,10 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.FixedHostPortGenericContainer;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,7 +95,8 @@ public class HubTestHelper {
 	}
 
 	/**
-	 * Wait until a port from the portPool is available and return it. If no ports are available before the timeout duration is reached return -1
+	 * Wait until a port from the portPool is available and return it. If no ports
+	 * are available before the timeout duration is reached return -1
 	 *
 	 * @param portPool
 	 * @param timeout
@@ -130,11 +135,13 @@ public class HubTestHelper {
 	}
 
 	/**
-	 * Check to see if a tcp port is available by trying to open it. Note: this is vulnerable to race conditions.
+	 * Check to see if a tcp port is available by trying to open it. Note: this is
+	 * vulnerable to race conditions.
 	 *
 	 * @param host
 	 * @param port
-	 * @return true if the port is available and false otherwise. Could also return false if the bind operation fails
+	 * @return true if the port is available and false otherwise. Could also return
+	 *         false if the bind operation fails
 	 */
 	public static boolean isTcpPortAvailable(String host, int port) {
 		try (ServerSocket socket = new ServerSocket()) {
@@ -145,7 +152,6 @@ public class HubTestHelper {
 			return false;
 		}
 	}
-
 
 	public static String getContainerString(String client) {
 		// in case we're running ITS (non-client)
@@ -160,7 +166,6 @@ public class HubTestHelper {
 		}
 		return "";
 	}
-
 
 	public static String buildDatahubContainerString(String client) throws IOException, Exception {
 		String version;
@@ -178,23 +183,19 @@ public class HubTestHelper {
 	}
 
 	public static String getVersionFromDynamodb(String client) throws IOException {
-		HashMap<String,AttributeValue> keyToGet = new HashMap<String,AttributeValue>();
+		HashMap<String, AttributeValue> keyToGet = new HashMap<String, AttributeValue>();
 		String version = "";
 
 		DynamoDbClient ddb = DynamoDbClient.builder() //
 				.httpClient(ApacheHttpClient.create()) //
 				.build();
 
-		keyToGet.put(DYNAMODB_KEY, AttributeValue.builder()
-				.s(client).build());
+		keyToGet.put(DYNAMODB_KEY, AttributeValue.builder().s(client).build());
 
-		GetItemRequest request = GetItemRequest.builder()
-				.key(keyToGet)
-				.tableName(DYNAMODB_TABLE_NAME)
-				.build();
+		GetItemRequest request = GetItemRequest.builder().key(keyToGet).tableName(DYNAMODB_TABLE_NAME).build();
 
 		try {
-			Map<String,AttributeValue> returnedItem = ddb.getItem(request).item();
+			Map<String, AttributeValue> returnedItem = ddb.getItem(request).item();
 
 			if (returnedItem != null) {
 				Set<String> keys = returnedItem.keySet();
@@ -282,7 +283,6 @@ public class HubTestHelper {
 		}
 	}
 
-
 	// various html element names
 	public static String otherTile = "otherTile";
 	public static String emailInputName = "loginfmt";
@@ -291,7 +291,7 @@ public class HubTestHelper {
 	public static String noButtonId = "idBtn_Back";
 
 	// test credentials
-	public static String email = "test@mmxlabstest.onmicrosoft.com";
+	public static String email = "Testy@testminimaxlabs.onmicrosoft.com";
 	// TODO update
 	public static String password = getSecret();
 	// javascript actions executed in the browser - tested in IE and Firefox
@@ -310,7 +310,8 @@ public class HubTestHelper {
 	public static String clickNo = "document.getElementById('" + noButtonId + "').click();";
 
 	// Use this code snippet in your app.
-	// If you need more information about configurations or implementing the sample code, visit the AWS docs:
+	// If you need more information about configurations or implementing the sample
+	// code, visit the AWS docs:
 	// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-samples.html#prerequisites
 
 	public static String getSecret() {
@@ -339,7 +340,8 @@ public class HubTestHelper {
 		}
 
 		// Decrypts secret using the associated KMS key.
-		// Depending on whether the secret is a string or binary, one of these fields will be populated.
+		// Depending on whether the secret is a string or binary, one of these fields
+		// will be populated.
 		if (getSecretValueResponse.secretString() != null) {
 			secret = getSecretValueResponse.secretString();
 			AWSSecret awsSecret;
@@ -353,9 +355,81 @@ public class HubTestHelper {
 
 		throw new RuntimeException("Coudn't get secret from AWS");
 	}
+	public static AWSSecret getSecrets() {
+		String secretName = "lingo/hub-test";
+		Region region = Region.of("eu-west-2");
+		
+		// Create a Secrets Manager client
+		// Can't use okhttp unfortunatly, limitied to http clients described here:
+		// https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
+		SecretsManagerClient client = SecretsManagerClient.builder() //
+				.region(region) //
+				.httpClient(ApacheHttpClient.create()) //
+				.build();
+		
+		String secret;
+		GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
+				.secretId(secretName) //
+				.build();
+		GetSecretValueResponse getSecretValueResponse = null;
+		
+		try {
+			getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
+		} catch (SecretsManagerException e) {
+			logger.error(e.awsErrorDetails().errorMessage());
+			System.exit(1);
+		}
+		
+		// Decrypts secret using the associated KMS key.
+		// Depending on whether the secret is a string or binary, one of these fields
+		// will be populated.
+		if (getSecretValueResponse.secretString() != null) {
+			secret = getSecretValueResponse.secretString();
+			AWSSecret awsSecret;
+			try {
+				awsSecret = new ObjectMapper().readValue(secret, AWSSecret.class);
+				return awsSecret;
+			} catch (JsonProcessingException e) {
+				logger.error(e.getLocalizedMessage());
+			}
+		}
+		
+		throw new RuntimeException("Coudn't get secret from AWS");
+	}
 
 	static class AWSSecret {
 		@JsonProperty
 		String password;
+		@JsonProperty
+		String secret_id;
+		@JsonProperty
+		String client_id;
+		@JsonProperty
+		String tenant_id;
 	}
+
+	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
+	// AD has port 8090 - 8099 set for testing purposes
+	public static GenericContainer createDataHubContainer( String CONTAINER, int availablePort, int DATAHUB_PORT, boolean oauth) {
+		
+		AWSSecret secrets = getSecrets();
+		
+		// @formatter:off
+	return new FixedHostPortGenericContainer(CONTAINER)
+		.withFixedExposedPort(availablePort, DATAHUB_PORT)
+		.withExposedPorts(DATAHUB_PORT)
+		.withEnv("PORT", Integer.toString(DATAHUB_PORT))
+		.withEnv("PROTOCOL", "http")
+		.withEnv("HOSTNAME", "localhost")
+		.withEnv("AUTHENTICATION_SCHEME", oauth ? "oauth" : "basic")
+		.withEnv("INSTANCE_TAG", "docker")
+		.withEnv("DB_HOST", "0.0.0.0")
+		.withEnv("DB_PORT", "27000")
+		.withEnv("AZURE_CLIENT_ID", secrets.client_id)
+		.withEnv("AZURE_TENANT_ID", secrets.tenant_id)
+		.withEnv("AZURE_CLIENT_SECRET", secrets.secret_id)
+		.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
+		.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
+			// @formatter:on
+		}
 }

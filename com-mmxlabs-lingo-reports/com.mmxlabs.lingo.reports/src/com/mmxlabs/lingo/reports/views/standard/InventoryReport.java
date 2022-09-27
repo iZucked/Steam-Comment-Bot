@@ -1049,9 +1049,11 @@ public class InventoryReport extends ViewPart {
 															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
 															final BaseLegalEntity slotEntity = slotAlloc.getSlot().getEntity();
 															if (slotEntity != null) {
-																otherLiftingDates.get(slotEntity).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																final List<LocalDate> entityLiftingDates = otherLiftingDates.get(slotEntity);
+																if (entityLiftingDates != null) {
+																	entityLiftingDates.add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																}
 															}
-//															otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
 														}
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
