@@ -62,16 +62,24 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 		
 		addNameManipulator("Name");
 		addTypicalColumn("From", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
+				getReferenceValueProviderCache(), getCommandHandler())).setEditingSupport(null);
 		addTypicalColumn("To", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
+				getReferenceValueProviderCache(), getCommandHandler())).setEditingSupport(null);
 		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
-				getCommandHandler()));
-		addTypicalColumn("Basis", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PricingBasis(), //
-				getCommandHandler()));
-		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
-				getCommandHandler()));
-
+				getCommandHandler()) {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof TransferAgreement ta) {
+					if (ta.getPriceExpression() == null && ta.getPricingBasis() != null) {
+						return ta.getPricingBasis();
+					}
+					if (ta.getPricingBasis() == null && ta.getPriceExpression() != null) {
+						return ta.getPriceExpression();
+					}
+				}
+				return null;
+			}
+		}).setEditingSupport(null);;
 	}
 
 	private Action createAddAction() {

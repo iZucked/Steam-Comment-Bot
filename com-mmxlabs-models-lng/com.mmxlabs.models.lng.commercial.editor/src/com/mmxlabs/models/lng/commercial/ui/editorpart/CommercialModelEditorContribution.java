@@ -48,6 +48,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 	@Override
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
+		
 
 		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
@@ -57,9 +58,13 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 
 		purchaseContractEditorPane.createControl(sash);
 		salesContractEditorPane.createControl(sash);
+		charterMarketEditorPane.createControl(sash);
+		
+		final SashForm entitySash = new SashForm(sash, SWT.VERTICAL);
+		entityEditorPane.createControl(entitySash);
 		if (processTransferModel) {
 			transferAgreementsEditorPane = new TransferAgreementsViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			transferAgreementsEditorPane.createControl(sash);
+			transferAgreementsEditorPane.createControl(entitySash);
 			final EditingDomain domain = editorPart.getEditingDomain();
 			if (domain != null) {
 				transferAgreementsEditorPane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(),
@@ -68,8 +73,6 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			}
 		}
 		
-		entityEditorPane.createControl(sash);
-		charterMarketEditorPane.createControl(sash);
 
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());

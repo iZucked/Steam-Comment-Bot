@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -41,6 +43,8 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportCont
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherRegistry;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.commands.BaseCasePrePublishCommandExtensionUtil;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.commands.IBaseCasePrePublishCommandExtension;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -54,6 +58,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisat
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -203,9 +208,13 @@ public class ScenarioServicePublishAction {
 			IScenarioDataProvider scenarioDataProvider = null;
 			LNGScenarioModel scenarioModel = null;
 
-			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			try (final IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
+				
+				
+				processPrePublishCommands(progressMonitor, o_scenarioDataProvider);
+				
 				final EcoreUtil.Copier copier = new Copier();
 				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
 
@@ -384,6 +393,34 @@ public class ScenarioServicePublishAction {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	private static void processPrePublishCommands(final SubMonitor progressMonitor, final IScenarioDataProvider o_scenarioDataProvider) {
+		final Iterable<IBaseCasePrePublishCommandExtension> prePublishCommandExtensions = BaseCasePrePublishCommandExtensionUtil.getCommandExtensions();
+		final ArrayList<IBaseCasePrePublishCommandExtension> prePublishCommandExtensionsList = Lists.newArrayList(prePublishCommandExtensions);
+
+		final SubMonitor publishersMonitor = progressMonitor.split(300);
+		String lastCommandDescription = "";
+		try {
+			publishersMonitor.beginTask("Execute pre-publish commands", prePublishCommandExtensionsList.size());
+			final CompoundCommand prePublishCommand = new CompoundCommand();
+			for (final IBaseCasePrePublishCommandExtension commandExtension : prePublishCommandExtensionsList) {
+				lastCommandDescription = commandExtension.getCommandDescription();
+				final Command command = commandExtension.createPrePublishCommand(o_scenarioDataProvider);
+				if (command != null) {
+					prePublishCommand.append(command);
+				}
+			}
+			if (!prePublishCommand.isEmpty()) {
+				RunnerHelper.syncExecDisplayOptional(()->{
+					o_scenarioDataProvider.getCommandStack().execute(prePublishCommand);
+				});
+			}
+		} catch (Exception e) {
+			throw new PublishBasecaseException("Error executing pre publish command: " + lastCommandDescription, Type.FAILED_TO_EXECUTE_PRE_PUBLISH_COMMAND);
+		} finally {
+			publishersMonitor.done();
 		}
 	}
 

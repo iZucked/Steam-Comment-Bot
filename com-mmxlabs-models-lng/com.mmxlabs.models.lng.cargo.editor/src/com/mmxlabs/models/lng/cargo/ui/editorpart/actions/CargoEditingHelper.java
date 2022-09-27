@@ -676,6 +676,20 @@ public class CargoEditingHelper {
 		}
 	}
 	
+	public void transferCargoesBetweenEntities(final IScenarioEditingLocation scenarioEditingLocation, //
+			@NonNull final String description, final List<Slot<?>> slots, final EObject transferAgreement) {
+		final List<Pair<CompoundCommand, EObject>> pairs = CargoTransferUtil.createTransferRecords(description, scenarioModel, //
+				editingDomain, slots, transferAgreement);
+		
+		for(Pair<CompoundCommand, EObject> pair : pairs) {
+			if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
+				final CommandStack commandStack = editingDomain.getCommandStack();
+				commandStack.execute(pair.getFirst());
+				DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(scenarioEditingLocation, pair.getSecond(), commandStack.getMostRecentCommand());
+			}
+		}
+	}
+	
 	public void editTransferRecord(final IScenarioEditingLocation scenarioEditingLocation, final Slot<?> slot) {
 		
 		final EObject tr = CargoTransferUtil.getTransferRecordForSlot(slot, scenarioModel);

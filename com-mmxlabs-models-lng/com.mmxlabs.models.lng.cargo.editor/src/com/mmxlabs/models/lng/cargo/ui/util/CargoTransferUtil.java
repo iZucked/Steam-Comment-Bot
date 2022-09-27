@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.util;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,6 +78,20 @@ public class CargoTransferUtil {
 		return Collections.emptyList();
 	}
 	
+	public static List<Pair<CompoundCommand, EObject>> createTransferRecords(final String description, final LNGScenarioModel scenarioModel, //
+			final EditingDomain editingDomain, final List<Slot<?>> slots, final EObject transferAgreement) {
+		final List<Pair<CompoundCommand, EObject>> result = new LinkedList<>();
+		
+		for (final Slot<?> slot : slots) {
+			Pair<CompoundCommand, EObject> pair = createTransferRecord(description, scenarioModel, editingDomain, slot, transferAgreement);
+			if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
+				result.add(pair);
+			}
+		}
+		
+		return result;
+	}
+	
 	public static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
 			final EditingDomain editingDomain, final Slot<?> slot, final EObject transferAgreement) {
 		final CompoundCommand cc = new CompoundCommand(description);
@@ -87,6 +102,7 @@ public class CargoTransferUtil {
 		if (transferAgreement instanceof TransferAgreement ta) {
 			tr.setTransferAgreement(ta);
 			bufferDays = getBufferDays(ta);
+			tr.setName(String.format("%s_%s", slot.getName(), ta.getName()));
 		}
 		if (slot.getPricingDate() != null) {
 			tr.setPricingDate(slot.getPricingDate().plusDays(bufferDays));
