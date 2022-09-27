@@ -39,11 +39,7 @@
 							<artifactId>ch.qos.logback.classic</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
+
 						<dependency>
 							<type>eclipse-plugin</type>
 							<artifactId>com.mmxlabs.models.lng.transformer.ui</artifactId>
