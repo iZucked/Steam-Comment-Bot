@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>5.9.2-SNAPSHOT</version>
+		<version>5.9.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.lingo.extensions</artifactId>
