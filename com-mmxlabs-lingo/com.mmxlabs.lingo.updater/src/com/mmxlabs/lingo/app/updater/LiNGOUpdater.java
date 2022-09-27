@@ -201,6 +201,10 @@ public class LiNGOUpdater {
 				updateVersion = getVersion(url);
 			} else {
 				final List<URL> updateSites = getUpdateSites();
+				if (updateSites.isEmpty()) {
+					Display.getDefault().asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", "No enabled update sites found"));
+					return;
+				}
 				for (final URL u : updateSites) {
 					final UpdateVersion version = getVersion(u);
 					if (version != null) {
@@ -591,8 +595,9 @@ public class LiNGOUpdater {
 
 //			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
 
-			operation.getProvisioningContext().setArtifactRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
-			operation.getProvisioningContext().setMetadataRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
+			final URI updateSiteURI = new URI(UPDATE_SITE_URL);
+			operation.getProvisioningContext().setArtifactRepositories(updateSiteURI);
+			operation.getProvisioningContext().setMetadataRepositories(updateSiteURI);
 
 			final IStatus status = operation.resolveModal(progress.split(10));
 
