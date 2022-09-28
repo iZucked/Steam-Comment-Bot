@@ -272,36 +272,37 @@ public class ScheduleCalculatorTest {
 		when(markToMarketProvider.getMarketForElement(element5)).thenReturn(market5);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot1)), ArgumentMatchers.<IPortTimesRecord> any(), ArgumentMatchers.any()))
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter>any(), argThat(new VoyagePlanMatcher(portSlot1)), ArgumentMatchers.<IPortTimesRecord>any(), ArgumentMatchers.any()))
 				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot2)), ArgumentMatchers.<IPortTimesRecord> any(), ArgumentMatchers.any()))
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter>any(), argThat(new VoyagePlanMatcher(portSlot2)), ArgumentMatchers.<IPortTimesRecord>any(), ArgumentMatchers.any()))
 				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot3)), ArgumentMatchers.<IPortTimesRecord> any(), ArgumentMatchers.any()))
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter>any(), argThat(new VoyagePlanMatcher(portSlot3)), ArgumentMatchers.<IPortTimesRecord>any(), ArgumentMatchers.any()))
 				.thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot4)), ArgumentMatchers.<IPortTimesRecord> any(), ArgumentMatchers.any()))
+		when(volumeAllocator.allocate(ArgumentMatchers.<IVesselCharter>any(), argThat(new VoyagePlanMatcher(portSlot4)), ArgumentMatchers.<IPortTimesRecord>any(), ArgumentMatchers.any()))
 				.thenReturn(allocationAnnotation);
 
 		profitAndLossCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 
 		// Verify that our slots were correctly matched against MTM slots
-		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot1)), argThat(new PortTimesRecordMatcher(portSlot1, 10)),
+		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.any(IVesselCharter.class), argThat(new VoyagePlanMatcher(portSlot1)), argThat(new PortTimesRecordMatcher(portSlot1, 10)),
 				ArgumentMatchers.any());
-		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot2)), argThat(new PortTimesRecordMatcher(portSlot2, 10)),
+		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.any(IVesselCharter.class), argThat(new VoyagePlanMatcher(portSlot2)), argThat(new PortTimesRecordMatcher(portSlot2, 10)),
 				ArgumentMatchers.any());
-		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot3)), argThat(new PortTimesRecordMatcher(portSlot3, 10)),
+		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.any(IVesselCharter.class), argThat(new VoyagePlanMatcher(portSlot3)), argThat(new PortTimesRecordMatcher(portSlot3, 10)),
 				ArgumentMatchers.any());
-		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.<IVesselCharter> any(), argThat(new VoyagePlanMatcher(portSlot4)), argThat(new PortTimesRecordMatcher(portSlot4, 10)),
+		verify(volumeAllocator, times(1)).allocate(ArgumentMatchers.any(IVesselCharter.class), argThat(new VoyagePlanMatcher(portSlot4)), argThat(new PortTimesRecordMatcher(portSlot4, 10)),
 				ArgumentMatchers.any());
 
-		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
-		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.<IElementAnnotation> anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.any(IElementAnnotation.class));
+		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.any(IElementAnnotation.class));
+		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.any(IElementAnnotation.class));
+		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.any(IElementAnnotation.class));
+		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), ArgumentMatchers.any(IElementAnnotation.class));
 	}
 
 	/**
-	 * Matcher implementation to check that the real and generated MTM slots are as expected in the VoyagePlan.
+	 * Matcher implementation to check that the real and generated MTM slots are as
+	 * expected in the VoyagePlan.
 	 * 
 	 */
 	class PortTimesRecordMatcher implements org.mockito.ArgumentMatcher<IPortTimesRecord> {
@@ -324,7 +325,8 @@ public class ScheduleCalculatorTest {
 	}
 
 	/**
-	 * Matcher implementation to check that the real and generated MTM slots are as expected in the VoyagePlan.
+	 * Matcher implementation to check that the real and generated MTM slots are as
+	 * expected in the VoyagePlan.
 	 * 
 	 */
 	class VoyagePlanMatcher implements org.mockito.ArgumentMatcher<VoyagePlan> {
