@@ -118,7 +118,6 @@ public class OAuthDialog extends Window {
 		// see
 		// https://developer.microsoft.com/en-us/microsoft-edge/webview2/#webview-title
 		// (SG used the Evergreen Bootstrapper)
-		System.out.println(preferEdgeBrowser);
 		if (preferEdgeBrowser && tryEdge) {
 			try {
 				browser = new Browser(oauthComposite, SWT.EDGE);
