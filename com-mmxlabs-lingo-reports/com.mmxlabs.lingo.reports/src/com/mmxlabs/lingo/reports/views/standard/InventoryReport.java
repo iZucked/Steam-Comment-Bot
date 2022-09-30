@@ -145,7 +145,7 @@ public class InventoryReport extends ViewPart {
 	private Chart inventoryDailyChartViewer;
 	private Chart mullMonthlyOverliftChart;
 	private Chart mullMonthlyCargoCountChart;
-
+	
 	private GridTableViewer inventoryTableViewer;
 
 	private GridTableViewer mullMonthlyTableViewer;
@@ -469,7 +469,7 @@ public class InventoryReport extends ViewPart {
 					createMullCumulativeColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullCumulativeColumn("Reference Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullCumulativeColumn("Lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> -1* m.getCumulativeDelta()), o -> generateSortValue(o, m -> -1* m.getCumulativeDelta()));
+					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> -1 * m.getCumulativeDelta()), o -> generateSortValue(o, m -> -1 * m.getCumulativeDelta()));
 					createMullCumulativeColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullMonthlyCumulativeItem.setControl(mullMonthlyCumulativeTableViewer.getControl());
@@ -601,6 +601,12 @@ public class InventoryReport extends ViewPart {
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
+		
+		folder.addListener(SWT.Dispose, e -> {
+			inventoryInsAndOutChart.dispose();
+			inventoryDailyChartViewer.dispose();
+			mullMonthlyOverliftChart.dispose();
+			mullMonthlyCargoCountChart.dispose();});
 	}
 
 	public void setCargoVisibilityInInventoryChart(final boolean isVisible) {
@@ -1085,7 +1091,8 @@ public class InventoryReport extends ViewPart {
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
 
 												final List<MullInformation> mullInformationList = pairedMullList.stream().map(Pair::getFirst).toList();
-												final OverliftChartState overliftChartState = new OverliftChartState(mullInformationList, entitiesOrdered, formattedMonthLabels, mullChartColourSequence);
+												final OverliftChartState overliftChartState = new OverliftChartState(mullInformationList, entitiesOrdered, formattedMonthLabels,
+														mullChartColourSequence);
 												overliftChartModeAction.setState(overliftChartState);
 												overliftChartModeAction.updateChartData();
 //												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
@@ -1924,7 +1931,7 @@ public class InventoryReport extends ViewPart {
 //				if (ymm.equals(adpStart)) {
 //					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
 //				} else {
-					currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
+				currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
 //				}
 			});
 		}
