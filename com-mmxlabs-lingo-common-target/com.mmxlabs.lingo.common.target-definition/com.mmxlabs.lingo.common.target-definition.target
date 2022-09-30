@@ -532,6 +532,16 @@
         </dependencies>        
     </location>
     <location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+        <dependencies>
+          <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.0.0</version>
+            <type>jar</type>
+          </dependency>
+        </dependencies>
+    </location>
+    <location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
       <dependencies>
         <dependency>
            <groupId>ch.qos.logback</groupId>
