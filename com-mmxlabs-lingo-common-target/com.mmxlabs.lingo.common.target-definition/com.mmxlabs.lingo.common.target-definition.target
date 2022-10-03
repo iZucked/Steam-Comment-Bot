@@ -364,13 +364,13 @@
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
-                <version>3.14.2</version>
+                <version>3.14.9</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>com.squareup.okio</groupId>
                 <artifactId>okio</artifactId>
-                <version>1.17.4</version>
+                <version>1.17.5</version>
                 <type>jar</type>
             </dependency>
         </dependencies>
