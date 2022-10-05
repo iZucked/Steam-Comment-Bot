@@ -21,6 +21,7 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLon <em>Lon</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Location#getLocode <em>Locode</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getLocation()
@@ -157,6 +158,28 @@ public interface Location extends NamedObject, OtherNamesObject {
 	 * @generated
 	 */
 	void setLon(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Locode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locode</em>' attribute.
+	 * @see #setLocode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_Locode()
+	 * @model
+	 * @generated
+	 */
+	String getLocode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Location#getLocode <em>Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Locode</em>' attribute.
+	 * @see #getLocode()
+	 * @generated
+	 */
+	void setLocode(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

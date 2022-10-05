@@ -58,4 +58,18 @@ public class StepwiseLongCurve implements ILongCurve {
 		final Map.Entry<Integer, Long> value = intervals.lowerEntry(pointInt + 1);
 		return value == null ? defaultValue : value.getValue().longValue();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof StepwiseLongCurve other) {
+			return defaultValue == other.defaultValue && //
+					intervals.equals(other.intervals);
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return intervals.hashCode();
+	}
 }

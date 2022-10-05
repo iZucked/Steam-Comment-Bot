@@ -31,6 +31,7 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLon <em>Lon</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLocode <em>Locode</em>}</li>
  * </ul>
  *
  * @generated
@@ -145,6 +146,26 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	 * @ordered
 	 */
 	protected double lon = LON_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLocode() <em>Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String LOCODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLocode() <em>Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String locode = LOCODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -296,6 +317,29 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getLocode() {
+		return locode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLocode(String newLocode) {
+		String oldLocode = locode;
+		locode = newLocode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.LOCATION__LOCODE, oldLocode, locode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZoneId getZoneId() {
@@ -326,6 +370,8 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 				return getLat();
 			case PortPackage.LOCATION__LON:
 				return getLon();
+			case PortPackage.LOCATION__LOCODE:
+				return getLocode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -358,6 +404,9 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 			case PortPackage.LOCATION__LON:
 				setLon((Double)newValue);
 				return;
+			case PortPackage.LOCATION__LOCODE:
+				setLocode((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -388,6 +437,9 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 			case PortPackage.LOCATION__LON:
 				setLon(LON_EDEFAULT);
 				return;
+			case PortPackage.LOCATION__LOCODE:
+				setLocode(LOCODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -412,6 +464,8 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 				return lat != LAT_EDEFAULT;
 			case PortPackage.LOCATION__LON:
 				return lon != LON_EDEFAULT;
+			case PortPackage.LOCATION__LOCODE:
+				return LOCODE_EDEFAULT == null ? locode != null : !LOCODE_EDEFAULT.equals(locode);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -484,6 +538,8 @@ public class LocationImpl extends NamedObjectImpl implements Location {
 		result.append(lat);
 		result.append(", lon: ");
 		result.append(lon);
+		result.append(", locode: ");
+		result.append(locode);
 		result.append(')');
 		return result.toString();
 	}

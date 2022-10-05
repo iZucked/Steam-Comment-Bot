@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -16,8 +17,10 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.tabular.SimpleCellRenderer;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,57 +39,43 @@ import org.eclipse.jface.viewers.ViewerComparator;
  * @generated
  */
 public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+	protected List<IComponentHelper> superClassesHelpers = new ArrayList<>();
 
-	/**
-	 * Construct a new instance, using the platform adapter manager
-	 *
-	 * @generated
-	 */
-	public PanamaCanalTariffComponentHelper() {
-		this(Platform.getAdapterManager());
-	}
-
-	/**
-	 * Construct a new instance of this helper
-	 *
-	 * @generated
-	 */
-	public PanamaCanalTariffComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-	}
-	
 	/**
 	 * add editors to a composite, using PanamaCanalTariff as the supertype
 	 *
 	 * @generated
 	 */
-	 @Override
+	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PANAMA_CANAL_TARIFF);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PANAMA_CANAL_TARIFF);
 	}
-	
+
 	/**
-	 * Create the editors for features on this class directly, and superclass' features.
+	 * Create the editors for features on this class directly, and superclass'
+	 * features.
 	 *
 	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_bandsEditor(detailComposite, topClass);
+		add_annualTariffEditor(detailComposite, topClass);
 		add_markupRateEditor(detailComposite, topClass);
 	}
+
 	/**
 	 * Create the editor for the bands feature on PanamaCanalTariff
 	 *
 	 * @generated NOT
 	 */
 	protected void add_bandsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		
+
 		TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 		b.withShowHeaders(true);
-		b.withLabel("Pricing bands per m³ of capacity");
+		b.withLabel("Pricing bands per m³ of capacity (before Jan 2023)");
 		b.withContentProvider(new ArrayContentProvider());
 
 		b.withComparator(new ViewerComparator() {
@@ -108,8 +97,7 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 			@Override
 			public @Nullable String render(Object element) {
 				String label = "";
-				if (element instanceof PanamaCanalTariffBand) {
-					final PanamaCanalTariffBand band = (PanamaCanalTariffBand) element;
+				if (element instanceof PanamaCanalTariffBand band) {
 					if (!band.isSetBandStart()) {
 						label = String.format("First %,d", band.getBandEnd());
 					} else if (!band.isSetBandEnd()) {
@@ -141,6 +129,57 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 				.build();
 
 		detailComposite.addInlineEditor(b.build(PricingPackage.Literals.PANAMA_CANAL_TARIFF__BANDS));
+	}
+
+	/**
+	 * Create the editor for the new 2023+ fee structure feature on
+	 * PanamaCanalTariff
+	 *
+	 * @generated NOT
+	 */
+	protected void add_annualTariffEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+
+		TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
+		b.withShowHeaders(true);
+		b.withLabel("Annual pricing per m³ of capacity (after Jan 2023)\nUse \"Reset Canal Costs\" from the \"Data > LiNGO DB\" menus to import data");
+		b.withContentProvider(new ArrayContentProvider());
+
+		b.withComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+
+				final PanamaTariffV2 b1 = (PanamaTariffV2) e1;
+				final PanamaTariffV2 b2 = (PanamaTariffV2) e2;
+
+				final LocalDate v1 = b1.getEffectiveFrom();
+				final LocalDate v2 = b2.getEffectiveFrom();
+
+				if (v1 == null) {
+					return -1;
+				}
+				if (v2 == null) {
+					return 1;
+				}
+				return v1.compareTo(v2);
+			}
+		});
+
+		b.buildColumn("Effective from", PricingPackage.Literals.PANAMA_TARIFF_V2__EFFECTIVE_FROM) //
+				.withWidth(100) //
+				.withRMMaker((ed, rvp) -> new LocalDateAttributeManipulator(PricingPackage.Literals.PANAMA_TARIFF_V2__EFFECTIVE_FROM, ed)) //
+				.build();
+
+		b.buildColumn("Fixed Fee", PricingPackage.Literals.PANAMA_TARIFF_V2__FIXED_FEE) //
+				.withWidth(75) //
+				.withRMMaker((ed, rvp) -> new NumericAttributeManipulator(PricingPackage.Literals.PANAMA_TARIFF_V2__FIXED_FEE, ed)) //
+				.build();
+
+		b.buildColumn("Capacity Tariff", PricingPackage.Literals.PANAMA_TARIFF_V2__CAPACITY_TARIFF) //
+				.withWidth(100) //
+				.withRMMaker((ed, rvp) -> new NumericAttributeManipulator(PricingPackage.Literals.PANAMA_TARIFF_V2__CAPACITY_TARIFF, ed)) //
+				.build();
+
+		detailComposite.addInlineEditor(b.build(PricingPackage.Literals.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS));
 	}
 
 	/**

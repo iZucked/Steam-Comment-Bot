@@ -94,6 +94,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/country"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lat"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lon"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/locode"/>
       <genOperations ecoreOperation="port.ecore#//Location/getZoneId"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortCountryGroup"/>

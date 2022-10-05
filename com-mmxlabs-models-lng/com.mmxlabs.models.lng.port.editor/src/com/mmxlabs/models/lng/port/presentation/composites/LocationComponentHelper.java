@@ -40,6 +40,7 @@ public class LocationComponentHelper extends DefaultComponentHelper {
 		super(PortPackage.Literals.LOCATION);
 
 		ignoreFeatures.add(PortPackage.Literals.LOCATION__MMX_ID);
+		ignoreFeatures.add(PortPackage.Literals.LOCATION__LOCODE);
 
 		addEditor(PortPackage.Literals.LOCATION__TIME_ZONE, createTimeZoneEditor());
 

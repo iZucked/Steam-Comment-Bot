@@ -1,14 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import java.util.Collection;
@@ -18,8 +13,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
@@ -34,12 +27,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PanamaCanalTariffItemProvider 
+public class PanamaTariffV2ItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -53,7 +46,7 @@ public class PanamaCanalTariffItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PanamaCanalTariffItemProvider(AdapterFactory adapterFactory) {
+	public PanamaTariffV2ItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -68,26 +61,27 @@ public class PanamaCanalTariffItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMarkupRatePropertyDescriptor(object);
-			addAnnualTariffsPropertyDescriptor(object);
+			addFixedFeePropertyDescriptor(object);
+			addCapacityTariffPropertyDescriptor(object);
+			addEffectiveFromPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Markup Rate feature.
+	 * This adds a property descriptor for the Fixed Fee feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarkupRatePropertyDescriptor(Object object) {
+	protected void addFixedFeePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PanamaCanalTariff_markupRate_feature"),
-				 getString("_UI_PanamaCanalTariff_markupRate_description"),
-				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__MARKUP_RATE,
+				 getString("_UI_PanamaTariffV2_fixedFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaTariffV2_fixedFee_feature", "_UI_PanamaTariffV2_type"),
+				 PricingPackage.Literals.PANAMA_TARIFF_V2__FIXED_FEE,
 				 true,
 				 false,
 				 false,
@@ -97,66 +91,58 @@ public class PanamaCanalTariffItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Annual Tariffs feature.
+	 * This adds a property descriptor for the Capacity Tariff feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAnnualTariffsPropertyDescriptor(Object object) {
+	protected void addCapacityTariffPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PanamaCanalTariff_annualTariffs_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_annualTariffs_feature", "_UI_PanamaCanalTariff_type"),
-				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS,
+				 getString("_UI_PanamaTariffV2_capacityTariff_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaTariffV2_capacityTariff_feature", "_UI_PanamaTariffV2_type"),
+				 PricingPackage.Literals.PANAMA_TARIFF_V2__CAPACITY_TARIFF,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Effective From feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PANAMA_CANAL_TARIFF__BANDS);
-		}
-		return childrenFeatures;
+	protected void addEffectiveFromPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PanamaTariffV2_effectiveFrom_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaTariffV2_effectiveFrom_feature", "_UI_PanamaTariffV2_type"),
+				 PricingPackage.Literals.PANAMA_TARIFF_V2__EFFECTIVE_FROM,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns PanamaCanalTariff.gif.
+	 * This returns PanamaTariffV2.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PanamaCanalTariff"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PanamaTariffV2"));
 	}
 
 	/**
@@ -167,10 +153,10 @@ public class PanamaCanalTariffItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		PanamaCanalTariff panamaCanalTariff = (PanamaCanalTariff)object;
-		return getString("_UI_PanamaCanalTariff_type") + " " + panamaCanalTariff.getMarkupRate();
+		PanamaTariffV2 panamaTariffV2 = (PanamaTariffV2)object;
+		return getString("_UI_PanamaTariffV2_type") + " " + panamaTariffV2.getFixedFee();
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -183,12 +169,11 @@ public class PanamaCanalTariffItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PanamaCanalTariff.class)) {
-			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
+		switch (notification.getFeatureID(PanamaTariffV2.class)) {
+			case PricingPackage.PANAMA_TARIFF_V2__FIXED_FEE:
+			case PricingPackage.PANAMA_TARIFF_V2__CAPACITY_TARIFF:
+			case PricingPackage.PANAMA_TARIFF_V2__EFFECTIVE_FROM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -204,11 +189,6 @@ public class PanamaCanalTariffItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PANAMA_CANAL_TARIFF__BANDS,
-				 PricingFactory.eINSTANCE.createPanamaCanalTariffBand()));
 	}
 
 	/**

@@ -14,8 +14,7 @@ public class BaseCaseFlagsPropertyTester extends PropertyTester {
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 
 		if (property.equals("isservice")) {
-			if (receiver instanceof ScenarioService) {
-				ScenarioService ss = (ScenarioService) receiver;
+			if (receiver instanceof ScenarioService ss) {
 				if (ss.getServiceID().startsWith("base-case-")) {
 					return true;
 				}

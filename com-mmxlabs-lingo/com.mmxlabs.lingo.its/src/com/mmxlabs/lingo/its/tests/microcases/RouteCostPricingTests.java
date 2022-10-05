@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
 import com.mmxlabs.lingo.its.ExpectedLongValue;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.validation.ValidationTestUtil;
@@ -23,6 +25,9 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
@@ -35,7 +40,10 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.rcp.common.json.EMFDeserializationContext;
+import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -51,7 +59,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 public class RouteCostPricingTests extends AbstractMicroTestCase {
 
 	/**
-	 * Test the port cost implicit/explicit pricing. Testing order does not matter. In this test generic case then specific
+	 * Test the port cost implicit/explicit pricing. Testing order does not matter.
+	 * In this test generic case then specific
 	 * 
 	 * @throws Exception
 	 */
@@ -237,6 +246,87 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
+	public void testPanamaV2Tariff() throws Exception {
+
+		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel1, null);
+		final VesselGroup vesselGroup = scenarioModelBuilder.getFleetModelBuilder().makeVesselGroup("all-vessels", scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels());
+
+		final Port port1 = portModelBuilder.createPort("FromPort", "L_FROM", "UTC", 0, 0);
+		final Port port2 = portModelBuilder.createPort("ToPort", "L_TO", "UTC", 0, 0);
+
+		// Remove all existing costs
+		scenarioModelBuilder.getCostModelBuilder().getCostModel().getRouteCosts().clear();
+
+		final PanamaCanalTariff baseTariff = scenarioModelBuilder.getCostModelBuilder().createSimplePanamaCanalTariff(5_000);
+
+		// Add 20%
+		baseTariff.setMarkupRate(0.2);
+
+		final ExpectedLongValue panamaCost = ExpectedLongValue.forRoundedFixedCost(1.2 * 5_000);
+
+		ExpectedLongValue panama2023Laden;
+		ExpectedLongValue panama2023Ballast;
+		ExpectedLongValue panama2024Laden;
+		ExpectedLongValue panama2024Ballast;
+		{
+			final PanamaTariffV2 band = PricingFactory.eINSTANCE.createPanamaTariffV2();
+			band.setFixedFee(50_000);
+			band.setCapacityTariff(2.0);
+			band.setEffectiveFrom(LocalDate.of(2023, 1, 1));
+			baseTariff.getAnnualTariffs().add(band);
+			panama2023Laden = ExpectedLongValue.forRoundedFixedCost(1.2 * (50_000 + 2 * vessel1.getVesselOrDelegateCapacity()));
+			panama2023Ballast = ExpectedLongValue.forRoundedFixedCost(1.2 * (0.85 * (50_000.0 + 2.0 * vessel1.getVesselOrDelegateCapacity())));
+		}
+		{
+			final PanamaTariffV2 band = PricingFactory.eINSTANCE.createPanamaTariffV2();
+			band.setFixedFee(70_000);
+			band.setCapacityTariff(3.0);
+			band.setEffectiveFrom(LocalDate.of(2024, 1, 1));
+			baseTariff.getAnnualTariffs().add(band);
+			panama2024Laden = ExpectedLongValue.forRoundedFixedCost(1.2 * (70_000 + 3 * vessel1.getVesselOrDelegateCapacity()));
+			panama2024Ballast = ExpectedLongValue.forRoundedFixedCost(1.2 * (0.85 * (70_000.0 + 3.0 * vessel1.getVesselOrDelegateCapacity())));
+		}
+
+		evaluateTest(null, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final IRouteCostProvider routeCostProvider = dataTransformer.getInjector().getInstance(IRouteCostProvider.class);
+
+			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+			final DateAndCurveHelper dateHelper = dataTransformer.getInjector().getInstance(DateAndCurveHelper.class);
+
+			final IVessel oVessel1 = modelEntityMap.getOptimiserObjectNullChecked(vessel1, IVessel.class);
+
+			final IPort oPort1 = modelEntityMap.getOptimiserObjectNullChecked(port1, IPort.class);
+			final IPort oPort2 = modelEntityMap.getOptimiserObjectNullChecked(port2, IPort.class);
+
+			// Check old style still applies
+			Assertions.assertEquals(panamaCost.output(), routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, 0, CostType.Laden)); // Specific cost
+			Assertions.assertEquals(panamaCost.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2022, 12, 31)), CostType.Laden)); // Specific cost
+
+			// Check newer bands kick in after required dates
+			Assertions.assertEquals(panama2023Laden.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2023, 1, 1)), CostType.Laden)); // Generic cost
+			Assertions.assertEquals(panama2023Ballast.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2023, 1, 1)), CostType.Ballast)); // Generic cost
+			Assertions.assertEquals(panama2023Ballast.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2023, 1, 1)), CostType.RoundTripBallast)); // Generic cost
+
+			Assertions.assertEquals(panama2024Laden.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2024, 1, 1)), CostType.Laden)); // Generic cost
+			Assertions.assertEquals(panama2024Ballast.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2024, 1, 1)), CostType.Ballast)); // Generic cost
+			Assertions.assertEquals(panama2024Ballast.output(),
+					routeCostProvider.getRouteCost(ERouteOption.PANAMA, oPort1, oPort2, oVessel1, dateHelper.convertTime(LocalDate.of(2024, 1, 1)), CostType.RoundTripBallast)); // Generic cost
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
 	public void testPanamaRouteCostOrder2() throws Exception {
 
 		final Vessel vessel1 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -358,7 +448,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 			final IPort oPort3 = modelEntityMap.getOptimiserObjectNullChecked(port3, IPort.class);
 			final IPort oPort4 = modelEntityMap.getOptimiserObjectNullChecked(port4, IPort.class);
 
-			// Is 25% of the cost taken off the original value? (Input is treated as bi-directional and applies to both laden and ballast voyages)
+			// Is 25% of the cost taken off the original value? (Input is treated as
+			// bi-directional and applies to both laden and ballast voyages)
 			// Test the fixed cost inputs
 			Assertions.assertEquals(ladenCost.output() * 3 / 4, routeCostProvider.getRouteCost(ERouteOption.SUEZ, oPort1, oPort2, oVessel2, 0, CostType.Laden)); // Generic cost
 			Assertions.assertEquals(ballastCost.output() * 3 / 4, routeCostProvider.getRouteCost(ERouteOption.SUEZ, oPort1, oPort2, oVessel2, 0, CostType.Ballast)); // Generic cost
@@ -386,7 +477,9 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test suez route rebates (low level). Definition is US -> Group A, US -> Group B and US -> Group C. Make sure the same ports can work on the US side in multiple entries
+	 * Test suez route rebates (low level). Definition is US -> Group A, US -> Group
+	 * B and US -> Group C. Make sure the same ports can work on the US side in
+	 * multiple entries
 	 * 
 	 * @throws Exception
 	 */
@@ -478,7 +571,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test suez route rebates passes through to an exported ballast leg. This is a simple test using a single ballast leg and fixed canal cost override object.
+	 * Test suez route rebates passes through to an exported ballast leg. This is a
+	 * simple test using a single ballast leg and fixed canal cost override object.
 	 * 
 	 * @throws Exception
 	 */
@@ -510,7 +604,7 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		// Generic flat rate
 		scenarioModelBuilder.getCostModelBuilder().createRouteCost(vessel1, RouteOption.SUEZ, 8_000, 8_000);
 
-		VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
+		final VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity) //
 				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withEndPort(portFinder.findPortById(InternalDataConstants.PORT_QALHAT)) //
 				.build();
@@ -518,14 +612,14 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		evaluateTest(null, null, scenarioRunner -> {
 		});
 
-		Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(schedule);
 
 		Assertions.assertEquals(1, schedule.getSequences().size());
 
-		Sequence seq = schedule.getSequences().get(0);
+		final Sequence seq = schedule.getSequences().get(0);
 
-		Journey journey = (Journey) seq.getEvents().get(1);
+		final Journey journey = (Journey) seq.getEvents().get(1);
 
 		Assertions.assertEquals(RouteOption.SUEZ, journey.getRouteOption());
 		Assertions.assertEquals(8_000 * (1.0 - rebate.getRebate()), journey.getToll());
@@ -578,7 +672,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
 		Assertions.assertNotNull(statusOrig);
 
-		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		// Clear out other validation errors, e.g. validation constraints may fail and
+		// get disabled, so do not abort this test.
 		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 		// Check there are no relevant validation issues
 		{
@@ -642,7 +737,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
 		Assertions.assertNotNull(statusOrig);
 
-		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		// Clear out other validation errors, e.g. validation constraints may fail and
+		// get disabled, so do not abort this test.
 		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 
 		final List<DetailConstraintStatusDecorator> children = ValidationTestUtil.findStatus(status, SuezTariffConstraint.KEY_REBATE_PORT_ON_BOTH_SIDES);
@@ -702,7 +798,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
 		Assertions.assertNotNull(statusOrig);
 
-		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		// Clear out other validation errors, e.g. validation constraints may fail and
+		// get disabled, so do not abort this test.
 		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 
 		final List<DetailConstraintStatusDecorator> children = ValidationTestUtil.findStatus(status, SuezTariffConstraint.KEY_REBATE_DUPLICATE_ENTRY);
@@ -718,9 +815,9 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 
 		Assertions.assertTrue(foundL1);
 		Assertions.assertTrue(foundL2);
- 
+
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testValidationFailsBadPercentage() {
@@ -767,7 +864,8 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
 		Assertions.assertNotNull(statusOrig);
 
-		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		// Clear out other validation errors, e.g. validation constraints may fail and
+		// get disabled, so do not abort this test.
 		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 
 		final List<DetailConstraintStatusDecorator> children = ValidationTestUtil.findStatus(status, SuezTariffConstraint.KEY_REBATE_FACTOR);
@@ -780,6 +878,6 @@ public class RouteCostPricingTests extends AbstractMicroTestCase {
 		}
 
 		Assertions.assertTrue(foundL1);
- 
+
 	}
 }
