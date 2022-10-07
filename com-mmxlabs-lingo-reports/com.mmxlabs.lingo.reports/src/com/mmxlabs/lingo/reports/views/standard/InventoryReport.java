@@ -29,8 +29,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.LongAccumulator;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
@@ -103,6 +106,7 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -112,6 +116,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
@@ -1137,7 +1142,7 @@ public class InventoryReport extends ViewPart {
 						boolean cargoIn = inventory.getFacilityType() != InventoryFacilityType.UPSTREAM;
 
 						// Find the date of the latest position/cargo
-						final Optional<LocalDateTime> latestLoad = inventoryEvents.getEvents().stream() //
+						final Optional<LocalDateTime> latestSlotDate = inventoryEvents.getEvents().stream() //
 								.filter(evt -> evt.getSlotAllocation() != null || evt.getOpenSlotAllocation() != null) //
 								.map(InventoryChangeEvent::getDate) //
 								.reduce((a, b) -> a.isAfter(b) ? a : b);
@@ -1150,6 +1155,17 @@ public class InventoryReport extends ViewPart {
 
 						{
 							final Optional<InventoryChangeEvent> firstInventoryDataFinal = firstInventoryData;
+							final Predicate<Entry<LocalDateTime, Integer>> filterFunction;
+							if (latestSlotDate.isPresent() && firstInventoryDataFinal.isPresent()) {
+								final LocalDateTime dateTime = latestSlotDate.get();
+								final LocalDateTime firstInventoryDate = firstInventoryDataFinal.get().getDate();
+								filterFunction = entry -> {
+									final LocalDateTime entryDate = entry.getKey();
+									return !entryDate.isAfter(dateTime) && entryDate.isAfter(firstInventoryDate);
+								};
+							} else {
+								filterFunction = entry -> false;
+							}
 							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
 									.collect(Collectors.toMap( //
 											InventoryChangeEvent::getDate, //
@@ -1157,12 +1173,7 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
-									.filter(x -> {
-										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
-											return !x.getKey().isAfter(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
-										}
-										return false;
-									})//
+									.filter(filterFunction) //
 									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
@@ -1198,26 +1209,24 @@ public class InventoryReport extends ViewPart {
 											}
 										}
 									} else if (event.getSlotAllocation() != null) {
-										final SlotAllocation loadAllocation = event.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(0);
-										final int volumeLoaded = loadAllocation.getVolumeTransferred();
-										final LocalDateTime loadStart = loadAllocation.getSlotVisit().getStart().toLocalDateTime();
-										if (((DischargeSlot) event.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(1).getSlot()).isFOBSale()) {
-											final int loadDuration = loadAllocation.getPort().getLoadDuration();
-											final int delta = volumeLoaded / loadDuration;
-											final int firstAmount = delta + (volumeLoaded % loadDuration);
-											LocalDateTime currentDateTime = loadStart;
-											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
-											for (int hour = 1; hour < loadDuration; ++hour) {
+										final SlotAllocation slotAllocation = event.getSlotAllocation();
+										final int slotDuration = getSlotDuration(slotAllocation);
+										final int volumeTransferred = slotAllocation.getVolumeTransferred();
+										final int delta = volumeTransferred / slotDuration;
+										final int firstAmount = delta + (volumeTransferred % slotDuration);
+										LocalDateTime currentDateTime = slotAllocation.getSlotVisit().getStart().toLocalDateTime();
+										if (cargoIn) {
+//											if (slot.getName().equalsIgnoreCase("DES Japan-2022-11-1") || slot.getName().equalsIgnoreCase("22-NEGISHI-05")) {
+//												int i = 0;
+//											}
+											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
+											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
-												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
+												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
 											}
 										} else {
-											final int duration = loadAllocation.getSlotVisit().getDuration();
-											final int delta = volumeLoaded / duration;
-											final int firstAmount = delta + (volumeLoaded % duration);
-											LocalDateTime currentDateTime = loadStart;
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
-											for (int hour = 1; hour < duration; ++hour) {
+											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
 											}
@@ -1515,6 +1524,38 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyCumulativeTableViewer.setInput(pairedCumulativeMullList);
 			mullDailyTableViewer.setInput(pairedDailyMullList);
 		}
+	}
+
+	private int getSlotDuration(final SlotAllocation slotAllocation) {
+		final List<Slot<?>> sortedSlots = slotAllocation.getSlot().getCargo().getSortedSlots();
+		if (sortedSlots.size() == 2) {
+			final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
+			final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
+			if (loadSlot.isDESPurchase()) {
+				return dischargeSlot.getSchedulingTimeWindow().getDuration();
+			} else if (dischargeSlot.isFOBSale()) {
+				return loadSlot.getSchedulingTimeWindow().getDuration();
+			}
+		}
+		// LDDs assumed to be shipped
+		return slotAllocation.getSlotVisit().getDuration();
+	}
+
+	private boolean isNonShipped(final SlotAllocation slotAllocation) {
+		final List<Slot<?>> sortedSlots = slotAllocation.getSlot().getCargo().getSortedSlots();
+		if (sortedSlots.size() == 2) {
+			final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
+			if (loadSlot.isDESPurchase()) {
+				return true;
+			} else {
+				final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
+				if (dischargeSlot.isFOBSale()) {
+					return true;
+				}
+			}
+		}
+		// LDDs assumed to be shipped
+		return false;
 	}
 
 	private Map<LocalDate, Map<BaseLegalEntity, Integer>> calculateDailyAllocatedEntitlement(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
