@@ -29,9 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.LongAccumulator;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -116,7 +114,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
@@ -1536,23 +1533,6 @@ public class InventoryReport extends ViewPart {
 		}
 		// LDDs assumed to be shipped
 		return slotAllocation.getSlotVisit().getDuration();
-	}
-
-	private boolean isNonShipped(final SlotAllocation slotAllocation) {
-		final List<Slot<?>> sortedSlots = slotAllocation.getSlot().getCargo().getSortedSlots();
-		if (sortedSlots.size() == 2) {
-			final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
-			if (loadSlot.isDESPurchase()) {
-				return true;
-			} else {
-				final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
-				if (dischargeSlot.isFOBSale()) {
-					return true;
-				}
-			}
-		}
-		// LDDs assumed to be shipped
-		return false;
 	}
 
 	private Map<LocalDate, Map<BaseLegalEntity, Integer>> calculateDailyAllocatedEntitlement(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
