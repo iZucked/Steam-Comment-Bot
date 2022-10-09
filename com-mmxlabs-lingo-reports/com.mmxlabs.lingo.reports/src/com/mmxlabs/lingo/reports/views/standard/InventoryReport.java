@@ -1216,9 +1216,6 @@ public class InventoryReport extends ViewPart {
 										final int firstAmount = delta + (volumeTransferred % slotDuration);
 										LocalDateTime currentDateTime = slotAllocation.getSlotVisit().getStart().toLocalDateTime();
 										if (cargoIn) {
-//											if (slot.getName().equalsIgnoreCase("DES Japan-2022-11-1") || slot.getName().equalsIgnoreCase("22-NEGISHI-05")) {
-//												int i = 0;
-//											}
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
 											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
