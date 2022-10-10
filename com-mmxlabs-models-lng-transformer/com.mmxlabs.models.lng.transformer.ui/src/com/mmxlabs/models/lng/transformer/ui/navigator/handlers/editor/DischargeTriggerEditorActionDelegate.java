@@ -18,11 +18,11 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerDialog;
+import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerHelper;
 import com.mmxlabs.models.lng.transformer.ui.inventory.InventoryFileName;
-import com.mmxlabs.models.lng.transformer.ui.inventory.LoadTriggerDialog;
-import com.mmxlabs.models.lng.transformer.ui.inventory.LoadTriggerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2{
+public class DischargeTriggerEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2{
 	private IEditorPart editor;
 	
 	@Override
@@ -53,7 +53,7 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 						final
 						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 						final LNGScenarioModel scenarioModel;
-						try (final ModelReference scenarioRef = modelRecord.aquireReference("LoadTrigger:1")) {
+						try (final ModelReference scenarioRef = modelRecord.aquireReference("DischargeTrigger:1")) {
 							scenarioModel = (LNGScenarioModel) (scenarioRef.getInstance());
 							copyScenario = EcoreUtil.copy(scenarioModel);
 						} catch (Exception e) {
@@ -62,18 +62,18 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 						}
 						
 						if (copyScenario != null) {
-							final LoadTriggerDialog dialog = new LoadTriggerDialog(Display.getDefault().getActiveShell(), copyScenario, copyScenario.getPromptPeriodStart());
+							DischargeTriggerDialog dialog = new DischargeTriggerDialog(Display.getDefault().getActiveShell(), copyScenario, copyScenario.getPromptPeriodStart());
 							dialog.open();
-							final Integer globalLoadTrigger = dialog.getGlobalLoadTrigger();
+							final Integer globalDischargeTrigger = dialog.getGlobalDischargeTrigger();
 							final Integer cargoVolume = dialog.getCargoVolume();
 							final LocalDate startDate = dialog.getSelectedDate();
-							final Inventory selectedInventory = dialog.getSelectedInventory();
-							final PurchaseContract purchaseContract = dialog.getSelectedContract();
+							final SalesContract salesContract = dialog.getSelectedContract();
+							final Inventory inventory = dialog.getSelectedInventory();
 							if (dialog.getReturnCode() == 0 && cargoVolume != null && startDate != null) {
-								LoadTriggerHelper loadTriggerHelper = new LoadTriggerHelper(selectedInventory, purchaseContract);
-								loadTriggerHelper.doMatchAndMoveLoadTrigger(copyScenario, globalLoadTrigger, cargoVolume, startDate);
+								DischargeTriggerHelper dischargeTriggerHelper = new DischargeTriggerHelper(salesContract, inventory);
+								dischargeTriggerHelper.doMatchAndMoveDischargeTrigger(copyScenario, globalDischargeTrigger, cargoVolume, startDate);
 								try {
-									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_load_trigger");
+									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_discharge_trigger");
 									final IScenarioDataProvider scenarioDataProvider =  SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), copyScenario);
 									scenarioService.copyInto(scenarioInstance, scenarioDataProvider, name, new NullProgressMonitor());
 								} catch (final Exception e) {
@@ -82,7 +82,7 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 							}
 						}
 					} catch (final Exception e) {
-						throw new RuntimeException("Unable to perform load trigger", e);
+						throw new RuntimeException("Unable to perform discharge trigger", e);
 					}
 				}
 			}

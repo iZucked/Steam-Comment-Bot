@@ -36,32 +36,34 @@ import org.eclipse.swt.widgets.Text;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.PortCapability;
 
-public class LoadTriggerDialog extends TitleAreaDialog {
-	public static final int DEFAULT_GLOBAL_LOAD_TRIGGER = 200_000;
+public class DischargeTriggerDialog extends TitleAreaDialog {
+	public static final int DEFAULT_GLOBAL_DISCHARGE_TRIGGER = 30_000;
 	public static final int DEFAULT_VOLUME = 158_000;
 	private LocalDate selectedDate = LocalDate.now();
-	private Integer globalLoadTrigger = DEFAULT_GLOBAL_LOAD_TRIGGER;
+	private Integer globalDischargeTrigger = DEFAULT_GLOBAL_DISCHARGE_TRIGGER;
 	private Integer cargoVolume = DEFAULT_VOLUME;
 	private LNGScenarioModel model;
 	private ComboViewer contractsCombo = null;
-	private PurchaseContract selectedContract = null;
+	private SalesContract selectedContract = null;
 	private ComboViewer inventoriesCombo = null;
 	private Inventory selectedInventory = null;
+	private LocalDate promptStart;
 	
-	public LoadTriggerDialog(Shell shell, LNGScenarioModel model, LocalDate promptStart) {
+	public DischargeTriggerDialog(Shell shell, LNGScenarioModel model, LocalDate promptStart) {
 		super(shell);
 		this.model = model;
+		this.promptStart = promptStart;
 	}
 	
     @Override
     public void create() {
         super.create();
-        setTitle("Load trigger");
+        setTitle("Discharge trigger");
     }
 
 	@Override
@@ -108,6 +110,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				selectedDate = LocalDate.of(importStartEditor.getYear(), importStartEditor.getMonth() + 1, importStartEditor.getDay());
+				processModelChanges();
 			}
 
 			@Override
@@ -125,10 +128,10 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		gdDate.horizontalSpan = 2;
 		importingDate.setLayoutData(gdDate);
 		
-		new Label(importingDate, SWT.NONE).setText("Global load trigger (m³)");
+		new Label(importingDate, SWT.NONE).setText("Global discharge trigger (m³)");
 	    Text loadTriggerText = new Text(importingDate, SWT.FILL | SWT.BORDER);
 	    loadTriggerText.setLayoutData(GridDataFactory.swtDefaults().minSize(10000, -1).create());
-	    loadTriggerText.setText(String.valueOf(DEFAULT_GLOBAL_LOAD_TRIGGER));
+	    loadTriggerText.setText(String.valueOf(DEFAULT_GLOBAL_DISCHARGE_TRIGGER));
 	    loadTriggerText.addListener(SWT.Verify, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -150,7 +153,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 			public void modifyText(ModifyEvent e) {
 				String text = loadTriggerText.getText();
 				if (text.matches("[0-9]+")) {
-					setGlobalLoadTrigger(Integer.valueOf(text));
+					setGlobalDischargeTrigger(Integer.valueOf(text));
 				}
 			}
 		});
@@ -182,20 +185,21 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 				String text = cargoVolText.getText();
 				if (text.matches("[0-9]+")) {
 					setCargoVolume(Integer.valueOf(text));
+					processModelChanges();
 				}
 			}
 		});
 		
-		new Label(importingDate, SWT.NONE).setText("Purchase contract");
+		new Label(importingDate, SWT.NONE).setText("Sales contract");
 		this.contractsCombo = new ComboViewer(importingDate);
 		this.contractsCombo.setContentProvider(new ArrayContentProvider());
 		this.contractsCombo.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return ((PurchaseContract) element).getName();
+				return ((SalesContract) element).getName();
 			}
 		});
-		this.contractsCombo.setInput(getPurchaseContracts(this.model));
+		this.contractsCombo.setInput(getSalesContracts(this.model));
 		if (contractsComboSelectionChangedListener != null) {
 			this.contractsCombo.addSelectionChangedListener(this.contractsComboSelectionChangedListener);
 		}
@@ -221,38 +225,45 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		}
 	}
 	
-	private List<String> checkModel(LNGScenarioModel model) {
+	private List<String> checkModel(final LNGScenarioModel model) {
 		List<String> errors = new LinkedList<>();
+		if (this.promptStart.isAfter(getSelectedDate())) {
+			errors.add("start date must be after prompt start date");
+		}
 		if (model.getScheduleModel() == null || model.getScheduleModel().getSchedule() == null) {
 			errors.add("scenario not evaluated");
 		}
 		if (getInventories(model).isEmpty()) {
-			errors.add("inventory not set up");
+			errors.add("inventory not set up or no hub or downstream inventories are present");
 		} else {
 			if (selectedInventory != null) {
-				if (selectedInventory.getFacilityType() == InventoryFacilityType.DOWNSTREAM) {
+				if (selectedInventory.getFacilityType() == InventoryFacilityType.UPSTREAM) {
 					errors.add(String.format("inventory at %s must be hub or downstream", selectedInventory.getPort().getName()));
 				}
-				if (selectedInventory.getFeeds().isEmpty()) {
-					errors.add(String.format("inventory at %s must have feeds", selectedInventory.getPort().getName()));
+				if (selectedInventory.getOfftakes().isEmpty()) {
+					errors.add(String.format("inventory at %s must have off-takes", selectedInventory.getPort().getName()));
 				}
-				if (!selectedInventory.getPort().getCapabilities().contains(PortCapability.LOAD)) {
-					errors.add(String.format("inventory %s is at the port %s which does not allow load", selectedInventory.getName(), selectedInventory.getPort().getName()));
+				if (!selectedInventory.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+					errors.add(String.format("inventory %s is at the port %s which does not allow discharge", selectedInventory.getName(), selectedInventory.getPort().getName()));
 				}
 			} else {
 				errors.add("please select an inventory");
 			}
 		}
-		long missingWindows = model.getCargoModel().getLoadSlots().stream()
+		long missingWindows = model.getCargoModel().getDischargeSlots().stream()
 				.filter(l->l.getWindowStart() == null).count();
 		if (missingWindows > 0) {
-			errors.add("all load slots must have windows");
+			errors.add("all discharge slots must have windows");
 		}
-		if (getPurchaseContracts(model).isEmpty()) {
-			errors.add("at least one off-take purchase contract must be present");
+		if (getSalesContracts(model).isEmpty()) {
+			errors.add("at least one feed-in sales contract must be present");
 		} else {
 			if (selectedContract == null) {
-				errors.add("please select an off-take purchase contract");
+				errors.add("please select a feed-in sales contract");
+			} else {
+				if (cargoVolume > selectedContract.getMaxQuantity()) {
+					errors.add("cargo volume should be less than the contract max quantity");
+				}
 			}
 		}
 		return errors;
@@ -262,7 +273,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		return this.selectedInventory;
 	}
 	
-	public PurchaseContract getSelectedContract() {
+	public SalesContract getSelectedContract() {
 		return this.selectedContract;
 	}
 
@@ -282,12 +293,12 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		this.cargoVolume = cargoVolume;
 	}
 
-	public Integer getGlobalLoadTrigger() {
-		return globalLoadTrigger;
+	public Integer getGlobalDischargeTrigger() {
+		return globalDischargeTrigger;
 	}
 
-	public void setGlobalLoadTrigger(Integer globalLoadTrigger) {
-		this.globalLoadTrigger = globalLoadTrigger;
+	public void setGlobalDischargeTrigger(Integer globalDischargeTrigger) {
+		this.globalDischargeTrigger = globalDischargeTrigger;
 	}
 	
 	@Override
@@ -301,11 +312,11 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		return super.close();
 	}
 	
-	private List<PurchaseContract> getPurchaseContracts(final LNGScenarioModel model){
-		final List<PurchaseContract> result = new ArrayList();
+	private List<SalesContract> getSalesContracts(final LNGScenarioModel model){
+		final List<SalesContract> result = new ArrayList();
 		if (model != null) {
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(model);
-			result.addAll(commercialModel.getPurchaseContracts());
+			result.addAll(commercialModel.getSalesContracts());
 		}
 		return result;
 	}
@@ -316,8 +327,8 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		public void selectionChanged(SelectionChangedEvent event) {
 			if (contractsCombo != null) {
 				final IStructuredSelection iss = contractsCombo.getStructuredSelection();
-				if (iss != null && iss.getFirstElement() instanceof PurchaseContract pc) {
-					selectedContract = pc;
+				if (iss != null && iss.getFirstElement() instanceof SalesContract sc) {
+					selectedContract = sc;
 				}
 				processModelChanges();
 			}
@@ -328,7 +339,7 @@ public class LoadTriggerDialog extends TitleAreaDialog {
 		final List<Inventory> result = new ArrayList();
 		if (model != null) {
 			for(final Inventory inventory : model.getCargoModel().getInventoryModels()) {
-				if (inventory.getFacilityType() != InventoryFacilityType.DOWNSTREAM) {
+				if (inventory.getFacilityType() != InventoryFacilityType.UPSTREAM) {
 					result.add(inventory);
 				}
 			}
