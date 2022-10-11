@@ -24,8 +24,10 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
+import com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 
 public class CommercialModelBuilder {
@@ -94,6 +96,46 @@ public class CommercialModelBuilder {
 
 		commercialModel.getPurchaseContracts().add(contract);
 
+		return contract;
+	}
+	
+	public @NonNull PurchaseContract makeVolumeTierPurchaseContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, //
+			@NonNull final String lowExpression, @NonNull final String highExpression,
+			double threshold, VolumeUnits units) {
+		final PurchaseContract contract = CommercialFactory.eINSTANCE.createPurchaseContract();
+		contract.setName(name);
+		contract.setEntity(entity);
+		
+		final VolumeTierPriceParameters params = CommercialFactory.eINSTANCE.createVolumeTierPriceParameters();
+		params.setLowExpression(lowExpression);
+		params.setHighExpression(highExpression);
+		params.setThreshold(threshold);
+		params.setVolumeLimitsUnit(units);
+		
+		contract.setPriceInfo(params);
+		
+		commercialModel.getPurchaseContracts().add(contract);
+		
+		return contract;
+	}
+	
+	public @NonNull SalesContract makeVolumeTierSalesContract(@NonNull final String name, @NonNull final BaseLegalEntity entity, //
+			@NonNull final String lowExpression, @NonNull final String highExpression,
+			double threshold, VolumeUnits units) {
+		final SalesContract contract = CommercialFactory.eINSTANCE.createSalesContract();
+		contract.setName(name);
+		contract.setEntity(entity);
+		
+		final VolumeTierPriceParameters params = CommercialFactory.eINSTANCE.createVolumeTierPriceParameters();
+		params.setLowExpression(lowExpression);
+		params.setHighExpression(highExpression);
+		params.setThreshold(threshold);
+		params.setVolumeLimitsUnit(units);
+		
+		contract.setPriceInfo(params);
+		
+		commercialModel.getSalesContracts().add(contract);
+		
 		return contract;
 	}
 

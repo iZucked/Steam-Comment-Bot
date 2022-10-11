@@ -116,6 +116,12 @@ public class PriceExpressionUtils {
 		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
 	}
 
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, @Nullable String constraintKey, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		final PriceIndexType priceIndexType = getPriceIndexType(feature);
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, constraintKey, otherFeatures);
+	}
+
 	public static @NonNull PriceIndexType getPriceIndexType(final EAttribute feature) {
 		PriceIndexType priceIndexType = null;
 		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
@@ -140,7 +146,14 @@ public class PriceExpressionUtils {
 	}
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
-			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk,
+			final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, null, otherFeatures);
+	}
+
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk, @Nullable String key,
+			final Pair<EObject, EStructuralFeature>... otherFeatures) {
 		final String expression = (String) target.eGet(feature);
 		if (expression == null || expression.isEmpty()) {
 			if (!missingIsOk) {
@@ -148,6 +161,7 @@ public class PriceExpressionUtils {
 						.withMessage("Missing price expression") //
 						.withObjectAndFeature(target, feature) //
 						.withObjectAndFeatures(otherFeatures) //
+						.withConstraintKey(key) //
 						.make(ctx, failures);
 			}
 		} else {
@@ -157,6 +171,7 @@ public class PriceExpressionUtils {
 						.withMessage(result.getErrorDetails()) //
 						.withObjectAndFeature(target, feature) //
 						.withObjectAndFeatures(otherFeatures) //
+						.withConstraintKey(key) //
 						.make(ctx, failures);
 			}
 		}
@@ -429,7 +444,8 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature, final List<IStatus> failures) {
+	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
+			final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
 		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
 
@@ -474,9 +490,9 @@ public class PriceExpressionUtils {
 
 		return node;
 	}
-	
-	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, EObject target, String contractName, final LNGPriceCalculatorParameters pricingParams, EAttribute priceExprAttribute,
-			String priceExpr) {
+
+	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, EObject target, String contractName, final LNGPriceCalculatorParameters pricingParams,
+			EAttribute priceExprAttribute, String priceExpr) {
 		if (priceExpr == null || priceExpr.isEmpty()) {
 			addToFailures(ctx, failures, target, String.format("Contract %s| Missing price expression ", contractName), pricingParams, priceExprAttribute);
 		} else {

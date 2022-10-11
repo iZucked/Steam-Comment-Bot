@@ -274,6 +274,38 @@
                         class="Contract">
                   </target>
                </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.commercial.validation.VolumeTierSlotParamsConstraint"
+                     id="com.mmxlabs.models.lng.commercial.validation.VolumeTierSlotParamsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="VolumeTierSlotParamsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="VolumeTierSlotParams">
+                  </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.commercial.validation.VolumeTierContractConstraint"
+                     id="com.mmxlabs.models.lng.commercial.validation.VolumeTierContractConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="VolumeTierContractConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="VolumeTierPriceParameters">
+                  </target>
+               </constraint>
          </constraints>
       </constraintProvider>
    </extension>

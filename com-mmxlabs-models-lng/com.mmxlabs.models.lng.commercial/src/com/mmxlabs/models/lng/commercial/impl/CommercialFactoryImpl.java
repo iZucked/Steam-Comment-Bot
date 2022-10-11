@@ -77,6 +77,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
+			case CommercialPackage.VOLUME_TIER_PRICE_PARAMETERS: return createVolumeTierPriceParameters();
+			case CommercialPackage.VOLUME_TIER_SLOT_PARAMS: return createVolumeTierSlotParams();
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
@@ -216,6 +218,28 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public ExpressionPriceParameters createExpressionPriceParameters() {
 		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
 		return expressionPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VolumeTierPriceParameters createVolumeTierPriceParameters() {
+		VolumeTierPriceParametersImpl volumeTierPriceParameters = new VolumeTierPriceParametersImpl();
+		return volumeTierPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VolumeTierSlotParams createVolumeTierSlotParams() {
+		VolumeTierSlotParamsImpl volumeTierSlotParams = new VolumeTierSlotParamsImpl();
+		return volumeTierSlotParams;
 	}
 
 	/**

@@ -155,6 +155,47 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VolumeTierPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
+    <eAnnotations source="http://minimaxlabs.com/models/commercial/slot/parameters"
+        references="#//VolumeTierSlotParams"/>
+    <eAnnotations source="http://minimaxlabs.com/models/commercial/slot/expression">
+      <details key="allowExpressionOverride" value="false"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowExpression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="highExpression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLimitsUnit" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VolumeTierSlotParams" eSuperTypes="#//SlotContractParams">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowExpression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="highExpression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLimitsUnit" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="overrideContract" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ContractType">
     <eLiterals name="BOTH"/>
     <eLiterals name="FOB" value="1"/>

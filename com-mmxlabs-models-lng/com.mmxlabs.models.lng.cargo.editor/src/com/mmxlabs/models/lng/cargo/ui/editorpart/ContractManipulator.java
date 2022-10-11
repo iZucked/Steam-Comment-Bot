@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -45,7 +46,8 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 /**
  * A column manipulator for setting a {@link Contract} or a price expression.
  * 
- * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values from an {@link IReferenceValueProvider}.
+ * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values
+ * from an {@link IReferenceValueProvider}.
  * 
  * @author Simon Goodall
  * 
@@ -68,14 +70,13 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	private Object parent;
 
 	/**
-	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
+	 * Create a manipulator for the given field in the target object, taking values
+	 * from the given valueProvider and creating set commands in the provided
+	 * editingDomain.
 	 * 
-	 * @param field
-	 *            the field to set
-	 * @param valueProvider
-	 *            provides the names & values for the field
-	 * @param editingDomain
-	 *            editing domain for setting
+	 * @param field         the field to set
+	 * @param valueProvider provides the names & values for the field
+	 * @param editingDomain editing domain for setting
 	 */
 	public ContractManipulator(final IReferenceValueProviderProvider valueProvider, final ICommandHandler commandHandler) {
 
@@ -90,8 +91,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 					return NONE;
 				}
 
-				if (element instanceof NamedObject) {
-					return ((NamedObject) element).getName();
+				if (element instanceof NamedObject namedObject) {
+					return namedObject.getName();
 				}
 				return super.getText(element);
 			}
@@ -162,7 +163,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			}
 
 			/**
-			 * Override doGetValue to also return the custom string if a valid selection has not been made.
+			 * Override doGetValue to also return the custom string if a valid selection has
+			 * not been made.
 			 */
 			@Override
 			protected Object doGetValue() {
@@ -188,7 +190,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 		final EObject eObject = (EObject) object;
 
-		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
+		if (eObject instanceof Slot<?> slot && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression()) && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
 			return eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
 		} else if (CargoPackage.Literals.SPOT_SLOT.isInstance(eObject)) {
 			return eObject.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
@@ -208,24 +210,26 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		return true;
 	}
 
-	private void setEditorValues(final ComboBoxViewerCellEditor editor, final EObject slot) {
+	private void setEditorValues(final ComboBoxViewerCellEditor editor, final EObject eObject) {
 
-		final List<Object> valueList = new ArrayList<Object>();
-		if (CargoPackage.Literals.SPOT_SLOT.isInstance(slot)) {
-			final EObject market = (EObject) slot.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
-			if (market != null) {
-				valueList.add(market);
+		final List<Object> valueList = new ArrayList<>();
+		if (eObject instanceof Slot<?> slot) {
+			if (CargoPackage.Literals.SPOT_SLOT.isInstance(eObject)) {
+				final EObject market = (EObject) slot.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
+				if (market != null) {
+					valueList.add(market);
+				}
+			} else {
+				final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
+				for (final Pair<String, EObject> value : values) {
+					valueList.add(value.getSecond());
+				}
 			}
-		} else {
-			final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-			for (final Pair<String, EObject> value : values) {
-				valueList.add(value.getSecond());
-			}
-		}
 
-		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
-			final Object priceExpression = slot.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
-			valueList.add(0, priceExpression);
+			if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression()) && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
+				final Object priceExpression = eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
+				valueList.add(0, priceExpression);
+			}
 		}
 		// Add our "null" element
 		valueList.add(NONE);
@@ -243,8 +247,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 
 		final Object value = reallyGetValue(object);
-		if (value instanceof EObject) {
-			return valueProvider.getNotifiers((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) value);
+		if (value instanceof Slot<?> slot) {
+			return valueProvider.getNotifiers(slot, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) value);
 		} else {
 			return Collections.emptySet();
 		}
@@ -260,8 +264,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 	@Override
 	public boolean isValueUnset(Object object) {
-		if (object instanceof Slot) {
-			Slot slot = (Slot) object;
+		if (object instanceof Slot<?> slot) {
 			return !slot.isSetContract() && !slot.isSetPriceExpression();
 		}
 		return false;

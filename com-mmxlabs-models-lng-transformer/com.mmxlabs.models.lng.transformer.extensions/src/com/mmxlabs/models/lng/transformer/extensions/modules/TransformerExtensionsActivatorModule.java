@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.Restrict
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.VolumeTierContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.transfers.TransfersDataExporterExtensionFactory;
@@ -60,6 +61,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new TransfersDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
+		bindService(VolumeTierContractTransformerFactory.class).export();
 		bindService(RegasContractTransformerFactory.class).export();
 		bindService(CharterContractTransformerFactory.class).export();
 

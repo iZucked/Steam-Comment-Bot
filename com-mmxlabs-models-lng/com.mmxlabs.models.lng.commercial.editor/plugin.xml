@@ -106,6 +106,14 @@
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
+    <factory
+          licensedFeature="features:volume-tier-contracts"
+          ID="com.mmxlabs.models.lng.commercial.editor.VolumeTierPurchaseFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Volume Tier Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
     <!-- Sales Contract Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.expressionSalesFactory"
@@ -114,6 +122,14 @@
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
+    <factory
+          licensedFeature="features:volume-tier-contracts"
+          ID="com.mmxlabs.models.lng.commercial.editor.VolumeTierSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Volume Tier Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>    
 	<!-- Other Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
@@ -177,6 +193,12 @@
           eClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters"
           factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.DateShiftExpressionCompositeFactory"
           id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.DateShiftExpressionCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.VolumeTierCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.VolumeTierCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>
