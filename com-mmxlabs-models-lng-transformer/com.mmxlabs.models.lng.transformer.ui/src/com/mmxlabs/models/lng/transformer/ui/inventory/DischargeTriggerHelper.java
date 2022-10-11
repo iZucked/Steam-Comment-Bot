@@ -345,7 +345,7 @@ public class DischargeTriggerHelper {
 			assert port.getCapabilities().contains(PortCapability.DISCHARGE) == true;
 			final SlotMaker<DischargeSlot> dischargeMaker = new SlotMaker<>(builder);
 			dischargeMaker.withDESSale(String.format("%d-%s-%s-%s", slotDate.getYear(), this.selectedContract.getName().toUpperCase(), "discharge-trigger", ++i), slotDate, port, this.selectedContract, this.selectedContract.getEntity(), null);
-			dischargeMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
+			dischargeMaker.withVolumeLimits(this.selectedContract.getMinQuantity(), this.selectedContract.getMaxQuantity(), this.selectedContract.getVolumeLimitsUnit());
 			dischargeMaker.withWindowSize(0, TimePeriod.DAYS);
 			dischargeMaker.build();
 		}
