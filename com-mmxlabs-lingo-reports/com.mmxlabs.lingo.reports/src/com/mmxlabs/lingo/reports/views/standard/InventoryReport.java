@@ -97,6 +97,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -105,6 +106,7 @@ import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -1521,14 +1523,19 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private int getSlotDuration(final SlotAllocation slotAllocation) {
-		final List<Slot<?>> sortedSlots = slotAllocation.getSlot().getCargo().getSortedSlots();
-		if (sortedSlots.size() == 2) {
-			final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
-			final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
-			if (loadSlot.isDESPurchase()) {
-				return dischargeSlot.getSchedulingTimeWindow().getDuration();
-			} else if (dischargeSlot.isFOBSale()) {
-				return loadSlot.getSchedulingTimeWindow().getDuration();
+		final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+		if (cargoAllocation != null) {
+			final List<SlotAllocation> cargoSlotAllocations = cargoAllocation.getSlotAllocations();
+			if (cargoSlotAllocations.size() == 2) {
+				final List<Slot<?>> slots = cargoSlotAllocations.stream().<Slot<?>>map(SlotAllocation::getSlot).toList();
+				final List<Slot<?>> sortedSlots = CargoSlotSorter.sortedSlots(slots);
+				final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
+				final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
+				if (loadSlot.isDESPurchase()) {
+					return dischargeSlot.getSchedulingTimeWindow().getDuration();
+				} else if (dischargeSlot.isFOBSale()) {
+					return loadSlot.getSchedulingTimeWindow().getDuration();
+				}
 			}
 		}
 		// LDDs assumed to be shipped
