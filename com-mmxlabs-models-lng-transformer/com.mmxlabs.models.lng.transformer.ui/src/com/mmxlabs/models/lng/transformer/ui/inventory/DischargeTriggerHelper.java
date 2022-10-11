@@ -188,6 +188,7 @@ public class DischargeTriggerHelper {
 					slot.setWindowStart(ld);
 					iter.remove();
 					dsIter.remove();
+					break;
 				}
 			}
 		}
