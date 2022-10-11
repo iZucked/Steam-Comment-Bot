@@ -196,13 +196,14 @@ public class DischargeTriggerHelper {
 		// Afterwards create more discharges if any discharge dates left
 		// Case A: Not enough supply
 		// Create remaining one
-		if (dischargeDates.size() > sortedSlots.size()) {
+		if (!dischargeDates.isEmpty()) {
 			createDischargeSlots(model, port, dischargeDates, cargoVolume, start, false);
 		}
+		// seems like an obsolete case
 		// Case B: Too many deliveries
-		else {
-			clearDischargeSlots(sortedSlots.subList(dischargeDates.size(), sortedSlots.size()), model.getCargoModel(), model);
-		}
+//		else {
+//			clearDischargeSlots(sortedSlots.subList(dischargeDates.size(), sortedSlots.size()), model.getCargoModel(), model);
+//		}
 	}
 	
 	private boolean isWithinRange(final LocalDate date, final LocalDate rangeMid, int rangeDays) {
@@ -343,7 +344,7 @@ public class DischargeTriggerHelper {
 			assert port != null;
 			assert port.getCapabilities().contains(PortCapability.DISCHARGE) == true;
 			final SlotMaker<DischargeSlot> dischargeMaker = new SlotMaker<>(builder);
-			dischargeMaker.withDESSale(String.format("%s_%s", "discharge", ++i), slotDate, port, this.selectedContract, scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null);
+			dischargeMaker.withDESSale(String.format("%d-%s-%s-%s", slotDate.getYear(), this.selectedContract.getName().toUpperCase(), "discharge-trigger", ++i), slotDate, port, this.selectedContract, this.selectedContract.getEntity(), null);
 			dischargeMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
 			dischargeMaker.withWindowSize(0, TimePeriod.DAYS);
 			dischargeMaker.build();
