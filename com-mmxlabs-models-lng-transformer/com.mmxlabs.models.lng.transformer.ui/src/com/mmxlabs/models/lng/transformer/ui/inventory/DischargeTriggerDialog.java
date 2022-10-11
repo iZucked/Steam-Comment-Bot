@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 
 public class DischargeTriggerDialog extends TitleAreaDialog {
 	public static final int DEFAULT_GLOBAL_DISCHARGE_TRIGGER = 30_000;
+	public static final int DEFAULT_MATCHING_FLEXIBILITY_DAYS = 2;
 	public static final int DEFAULT_VOLUME = 158_000;
 	private LocalDate selectedDate = LocalDate.now();
 	private Integer globalDischargeTrigger = DEFAULT_GLOBAL_DISCHARGE_TRIGGER;
@@ -53,6 +54,7 @@ public class DischargeTriggerDialog extends TitleAreaDialog {
 	private ComboViewer inventoriesCombo = null;
 	private Inventory selectedInventory = null;
 	private LocalDate promptStart;
+	private Integer matchingFlexibilityDays = DEFAULT_MATCHING_FLEXIBILITY_DAYS;
 	
 	public DischargeTriggerDialog(Shell shell, LNGScenarioModel model, LocalDate promptStart) {
 		super(shell);
@@ -73,7 +75,7 @@ public class DischargeTriggerDialog extends TitleAreaDialog {
 		final Composite importingDate = new Composite(container, SWT.ALL);
 		
 		final GridLayout gridLayoutImportingDateRadios = new GridLayout(2, false);
-		gridLayoutImportingDateRadios.marginLeft -= 5;
+		//gridLayoutImportingDateRadios.marginLeft -= 5;
 		importingDate.setLayout(gridLayoutImportingDateRadios);
 		final GridData gdDate = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 		gdDate.horizontalSpan = 2;
@@ -154,6 +156,36 @@ public class DischargeTriggerDialog extends TitleAreaDialog {
 				String text = loadTriggerText.getText();
 				if (text.matches("[0-9]+")) {
 					setGlobalDischargeTrigger(Integer.valueOf(text));
+				}
+			}
+		});
+	    
+	    new Label(importingDate, SWT.NONE).setText("Matching flexibility (days)");
+	    Text matchingFlexibilityText = new Text(importingDate, SWT.FILL | SWT.BORDER);
+	    matchingFlexibilityText.setLayoutData(GridDataFactory.swtDefaults().minSize(10000, -1).create());
+	    matchingFlexibilityText.setText(String.valueOf(DEFAULT_MATCHING_FLEXIBILITY_DAYS));
+	    matchingFlexibilityText.addListener(SWT.Verify, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				String string = e.text;
+				char[] chars = new char[string.length()];
+				string.getChars(0, chars.length, chars, 0);
+				for (int i = 0; i < chars.length; i++) {
+					if (!('0' <= chars[i] && chars[i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+		
+	    matchingFlexibilityText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String text = matchingFlexibilityText.getText();
+				if (text.matches("[0-9]+")) {
+					setMatchingFlexibilityDays(Integer.valueOf(text));
 				}
 			}
 		});
@@ -299,6 +331,14 @@ public class DischargeTriggerDialog extends TitleAreaDialog {
 
 	public void setGlobalDischargeTrigger(Integer globalDischargeTrigger) {
 		this.globalDischargeTrigger = globalDischargeTrigger;
+	}
+	
+	public Integer getMatchingFlexibilityDays() {
+		return matchingFlexibilityDays;
+	}
+
+	public void setMatchingFlexibilityDays(Integer matchingFlexibilityDays) {
+		this.matchingFlexibilityDays = matchingFlexibilityDays;
 	}
 	
 	@Override

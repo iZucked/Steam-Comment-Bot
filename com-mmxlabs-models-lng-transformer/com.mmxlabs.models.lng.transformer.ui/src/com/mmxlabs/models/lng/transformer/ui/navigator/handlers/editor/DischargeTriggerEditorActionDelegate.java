@@ -66,11 +66,12 @@ public class DischargeTriggerEditorActionDelegate implements IEditorActionDelega
 							dialog.open();
 							final Integer globalDischargeTrigger = dialog.getGlobalDischargeTrigger();
 							final Integer cargoVolume = dialog.getCargoVolume();
+							final Integer matchingFlexibilityDays = dialog.getMatchingFlexibilityDays();
 							final LocalDate startDate = dialog.getSelectedDate();
 							final SalesContract salesContract = dialog.getSelectedContract();
 							final Inventory inventory = dialog.getSelectedInventory();
 							if (dialog.getReturnCode() == 0 && cargoVolume != null && startDate != null) {
-								DischargeTriggerHelper dischargeTriggerHelper = new DischargeTriggerHelper(salesContract, inventory);
+								DischargeTriggerHelper dischargeTriggerHelper = new DischargeTriggerHelper(salesContract, inventory, matchingFlexibilityDays);
 								dischargeTriggerHelper.doMatchAndMoveDischargeTrigger(copyScenario, globalDischargeTrigger, cargoVolume, startDate);
 								try {
 									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_discharge_trigger");

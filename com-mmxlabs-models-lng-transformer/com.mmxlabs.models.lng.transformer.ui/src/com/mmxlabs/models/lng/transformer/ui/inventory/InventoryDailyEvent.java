@@ -12,13 +12,15 @@ class InventoryDailyEvent {
 	int netVolumeOut = 0;
 	int minVolume = 0;
 	int maxVolume = 0;
+	boolean level;
 	
 	public InventoryDailyEvent() {
 	}
 	
-	public void setVolume(int volume) {
-		this.netVolumeIn = volume;
-		this.netVolumeOut = volume;
+	public void setLevelVolume(int volume) {
+		netVolumeIn = volume;
+		netVolumeOut = 0;
+		level = true;
 	}
 	
 	public void addVolume(int volume) {
@@ -27,5 +29,9 @@ class InventoryDailyEvent {
 	
 	public void subtractVolume(int volume) {
 		netVolumeOut -= volume;
+	}
+	
+	public boolean isLevel() {
+		return level;
 	}
 }
