@@ -330,6 +330,15 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.REGAS_PRICING_PARAMS: {
+				RegasPricingParams regasPricingParams = (RegasPricingParams)theEObject;
+				T result = caseRegasPricingParams(regasPricingParams);
+				if (result == null) result = caseLNGPriceCalculatorParameters(regasPricingParams);
+				if (result == null) result = caseUUIDObject(regasPricingParams);
+				if (result == null) result = caseMMXObject(regasPricingParams);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -811,6 +820,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseStartHeelOptions(StartHeelOptions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Regas Pricing Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Regas Pricing Params</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRegasPricingParams(RegasPricingParams object) {
 		return null;
 	}
 

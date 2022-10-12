@@ -2460,6 +2460,61 @@ public interface CommercialPackage extends EPackage {
 	int START_HEEL_OPTIONS_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl <em>Regas Pricing Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRegasPricingParams()
+	 * @generated
+	 */
+	int REGAS_PRICING_PARAMS = 32;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Num Pricing Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__NUM_PRICING_DAYS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Regas Pricing Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2467,7 +2522,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 32;
+	int CONTRACT_TYPE = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2477,7 +2532,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 33;
+	int PRICING_EVENT = 34;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2487,7 +2542,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 34;
+	int NEXT_PORT_TYPE = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}' enum.
@@ -2497,7 +2552,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 35;
+	int EVESSEL_TANK_STATE = 36;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -3744,6 +3799,38 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getStartHeelOptions_PriceExpression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams <em>Regas Pricing Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Regas Pricing Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams
+	 * @generated
+	 */
+	EClass getRegasPricingParams();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams#getPriceExpression()
+	 * @see #getRegasPricingParams()
+	 * @generated
+	 */
+	EAttribute getRegasPricingParams_PriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams#getNumPricingDays <em>Num Pricing Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Num Pricing Days</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams#getNumPricingDays()
+	 * @see #getRegasPricingParams()
+	 * @generated
+	 */
+	EAttribute getRegasPricingParams_NumPricingDays();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4796,6 +4883,32 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl <em>Regas Pricing Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRegasPricingParams()
+		 * @generated
+		 */
+		EClass REGAS_PRICING_PARAMS = eINSTANCE.getRegasPricingParams();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REGAS_PRICING_PARAMS__PRICE_EXPRESSION = eINSTANCE.getRegasPricingParams_PriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Num Pricing Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REGAS_PRICING_PARAMS__NUM_PRICING_DAYS = eINSTANCE.getRegasPricingParams_NumPricingDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

@@ -231,6 +231,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createStartHeelOptionsAdapter();
 			}
 			@Override
+			public Adapter caseRegasPricingParams(RegasPricingParams object) {
+				return createRegasPricingParamsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -707,6 +711,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStartHeelOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams <em>Regas Pricing Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams
+	 * @generated
+	 */
+	public Adapter createRegasPricingParamsAdapter() {
 		return null;
 	}
 
