@@ -153,7 +153,6 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 			final int nextInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(nextPrice);
 			if (previousInternalPrice != nextInternalPrice) {
 				consumer.accept(currentHour, nextInternalPrice);
-				// curve.setValueAfter(currentHour, nextInternalPrice);
 				previousInternalPrice = nextInternalPrice;
 			}
 		}
