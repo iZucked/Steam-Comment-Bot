@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>optimiser-parent</artifactId>
 		<groupId>com.mmxlabs.optimiser</groupId>
-		<version>5.10.2-SNAPSHOT</version>
+		<version>5.10.3.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-common.tests</artifactId>
