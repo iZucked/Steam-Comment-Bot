@@ -19,9 +19,9 @@ public class LazyIntegerIntervalCurve implements IIntegerIntervalCurve {
 	@Nullable
 	private IIntegerIntervalCurve defaultIntervalCurve;
 	private ThreadLocal<IIntegerIntervalCurve> wrappedCurve = new ThreadLocal<>();
-	final Function<ISeries, IIntegerIntervalCurve> splitMonthInitialiser;
+	final Function<@NonNull ISeries, @NonNull IIntegerIntervalCurve> splitMonthInitialiser;
 	
-	public LazyIntegerIntervalCurve(@NonNull final IIntegerIntervalCurve defaultCurve, final Function<ISeries, IIntegerIntervalCurve> splitMonthInitialiser) {
+	public LazyIntegerIntervalCurve(@NonNull final IIntegerIntervalCurve defaultCurve, final Function<@NonNull ISeries, @NonNull IIntegerIntervalCurve> splitMonthInitialiser) {
 		defaultIntervalCurve = defaultCurve;
 		this.splitMonthInitialiser = splitMonthInitialiser;
 	}
@@ -30,7 +30,7 @@ public class LazyIntegerIntervalCurve implements IIntegerIntervalCurve {
 		wrappedCurve.set(defaultIntervalCurve);
 	}
 
-	public void initialise(final ISeries series) {
+	public void initialise(@NonNull final ISeries series) {
 		final IIntegerIntervalCurve wrapped = splitMonthInitialiser.apply(series);
 		wrappedCurve.set(wrapped);
 	}

@@ -184,5 +184,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
     </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//RegasPricingParams">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/numPricingDays"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

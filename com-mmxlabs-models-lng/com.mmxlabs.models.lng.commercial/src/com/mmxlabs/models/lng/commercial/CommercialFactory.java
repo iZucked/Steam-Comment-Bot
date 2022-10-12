@@ -231,6 +231,15 @@ public interface CommercialFactory extends EFactory {
 	StartHeelOptions createStartHeelOptions();
 
 	/**
+	 * Returns a new object of class '<em>Regas Pricing Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Regas Pricing Params</em>'.
+	 * @generated
+	 */
+	RegasPricingParams createRegasPricingParams();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

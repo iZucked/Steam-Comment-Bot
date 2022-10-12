@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
 import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RegasPricingParams;
 import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
@@ -287,6 +288,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass startHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass regasPricingParamsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1550,6 +1558,36 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EClass getRegasPricingParams() {
+		return regasPricingParamsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRegasPricingParams_PriceExpression() {
+		return (EAttribute)regasPricingParamsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRegasPricingParams_NumPricingDays() {
+		return (EAttribute)regasPricingParamsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -1761,6 +1799,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
 
+		regasPricingParamsEClass = createEClass(REGAS_PRICING_PARAMS);
+		createEAttribute(regasPricingParamsEClass, REGAS_PRICING_PARAMS__PRICE_EXPRESSION);
+		createEAttribute(regasPricingParamsEClass, REGAS_PRICING_PARAMS__NUM_PRICING_DAYS);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
@@ -1831,6 +1873,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getLumpSumTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
+		regasPricingParamsEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2001,6 +2044,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getStartHeelOptions_MinVolumeAvailable(), ecorePackage.getEDouble(), "minVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(regasPricingParamsEClass, RegasPricingParams.class, "RegasPricingParams", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRegasPricingParams_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 1, 1, RegasPricingParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRegasPricingParams_NumPricingDays(), ecorePackage.getEInt(), "numPricingDays", null, 0, 1, RegasPricingParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
@@ -2245,6 +2292,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   });
 		addAnnotation
 		  (getStartHeelOptions_PriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getRegasPricingParams_PriceExpression(),
 		   source,
 		   new String[] {
 			   "type", "commodity"

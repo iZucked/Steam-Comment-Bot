@@ -93,6 +93,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM: return createOriginPortRepositioningFeeTerm();
 			case CommercialPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
 			case CommercialPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
+			case CommercialPackage.REGAS_PRICING_PARAMS: return createRegasPricingParams();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -391,6 +392,17 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public StartHeelOptions createStartHeelOptions() {
 		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
 		return startHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RegasPricingParams createRegasPricingParams() {
+		RegasPricingParamsImpl regasPricingParams = new RegasPricingParamsImpl();
+		return regasPricingParams;
 	}
 
 	/**

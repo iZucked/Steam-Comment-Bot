@@ -315,7 +315,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
  
 
 	@NonNull
-	public IIntegerIntervalCurve getSplitMonthDatesForChangePoint(final int[] changePoints) {
+	public static IIntegerIntervalCurve getSplitMonthDatesForChangePoint(final int[] changePoints) {
 		final IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
 		intervals.addAll(Arrays.stream(changePoints).boxed().collect(Collectors.toList()));
 		return intervals;
@@ -345,5 +345,21 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		ZonedDateTime asDate = getDateFromHours(hours, "UTC");
 		asDate = asDate.minusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 		return convertTime(asDate);
+	}
+
+	public int getNextOrEqualDay(final int hours) {
+		@NonNull
+		ZonedDateTime date = getDateFromHours(hours, "UTC");
+		if (!isAtStartOfDay(date)) {
+			date = date.plusDays(1L).withHour(0).truncatedTo(ChronoUnit.DAYS);
+		}
+		return convertTime(date);
+	}
+
+	/*
+	 * Note: this method doesn't inspect the timezone
+	 */
+	private boolean isAtStartOfDay(final ZonedDateTime date) {
+		return date.getHour() == 0 && date.getMinute() == 0 && date.getSecond() == 0 && date.getNano() == 0;
 	}
 }

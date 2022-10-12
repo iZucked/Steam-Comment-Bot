@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+<plugin>
+  
+ <extension
+         point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.regasExpressionSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Regas Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.RegasPricingParams"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
+ </extension>
+</plugin>

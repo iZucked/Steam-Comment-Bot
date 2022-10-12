@@ -292,5 +292,12 @@
             class="com.mmxlabs.models.lng.commercial.editor.NominationsDialogPostChangeCommandProvider">
       </dialogpostchangecommandprovider>
    </extension>-->
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="regas-contract"
+            plugin.xml="regas-contract.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 
 </plugin>
