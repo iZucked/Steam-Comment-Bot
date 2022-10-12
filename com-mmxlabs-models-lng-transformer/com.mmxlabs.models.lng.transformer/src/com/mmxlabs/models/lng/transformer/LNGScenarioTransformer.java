@@ -106,6 +106,7 @@ import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingBasis;
@@ -309,7 +310,7 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
-	
+
 	@Inject
 	@Named(SchedulerConstants.Parser_PricingBasis)
 	private SeriesParser pricingBases;
@@ -1629,7 +1630,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 
-				ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 				dynamicContract.setPriceExpression(priceExpression);
 
 				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
@@ -1826,7 +1827,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 
-				ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 				dynamicContract.setPriceExpression(priceExpression);
 
 				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
@@ -2942,7 +2943,7 @@ public class LNGScenarioTransformer {
 		// Next apply formula
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
-			buildPanamaCosts(builder, vesselAssociation, optimiserVessels, panamaCanalTariff);
+			buildPanamaCosts(builder, vesselAssociation, optimiserVessels, panamaCanalTariff, dateHelper);
 		}
 
 		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
@@ -3002,7 +3003,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final Collection<IVessel> vessels,
-			@NonNull final PanamaCanalTariff panamaCanalTariff) {
+			@NonNull final PanamaCanalTariff panamaCanalTariff, final @NonNull DateAndCurveHelper dateHelper) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
@@ -3021,38 +3022,70 @@ public class LNGScenarioTransformer {
 			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(vessel);
 			final int capacityInM3 = eVessel.getVesselOrDelegateCapacity();
 
-			double totalLadenCost = 0.0;
-			double totalBallastCost = 0.0;
-			double totalBallastRoundTripCost = 0.0;
-			for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
-				final PanamaCanalTariffBand band = p.getSecond();
-				//// How much vessel capacity is used for this band calculation?
-				// First, find the largest value valid in this band
-				double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+			final StepwiseLongCurve ladenCurve = new StepwiseLongCurve();
+			final StepwiseLongCurve ballastCurve = new StepwiseLongCurve();
+			final StepwiseLongCurve ballastRoundtripCurve = new StepwiseLongCurve();
 
-				// Next, subtract band lower bound to find the capacity contribution
-				contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+			// Legacy pricing model
+			{
 
-				if (contributingCapacity > 0) {
-					totalLadenCost += contributingCapacity * band.getLadenTariff();
-					totalBallastCost += contributingCapacity * band.getBallastTariff();
-					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+				double totalLadenCost = 0.0;
+				double totalBallastCost = 0.0;
+				double totalBallastRoundTripCost = 0.0;
+				for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
+					final PanamaCanalTariffBand band = p.getSecond();
+					//// How much vessel capacity is used for this band calculation?
+					// First, find the largest value valid in this band
+					double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+
+					// Next, subtract band lower bound to find the capacity contribution
+					contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+					if (contributingCapacity > 0) {
+						totalLadenCost += contributingCapacity * band.getLadenTariff();
+						totalBallastCost += contributingCapacity * band.getBallastTariff();
+						totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+					}
 				}
+
+				// If there is a markup %, apply it
+				if (panamaCanalTariff.getMarkupRate() != 0.0) {
+					final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
+					totalLadenCost *= multiplier;
+					totalBallastCost *= multiplier;
+					totalBallastRoundTripCost *= multiplier;
+				}
+				ladenCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+				ballastCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+				ballastRoundtripCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
 			}
 
-			// If there is a markup %, apply it
-			if (panamaCanalTariff.getMarkupRate() != 0.0) {
-				final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
-				totalLadenCost *= multiplier;
-				totalBallastCost *= multiplier;
-				totalBallastRoundTripCost *= multiplier;
+			// Pricing model from 1st Jan 2023
+			for (final PanamaTariffV2 tariff : panamaCanalTariff.getAnnualTariffs()) {
+				final int time = dateHelper.convertTime(tariff.getEffectiveFrom().atStartOfDay(ZoneId.of("Etc/UTC")));
+
+				double totalLadenCost = tariff.getFixedFee() + tariff.getCapacityTariff() * capacityInM3;
+				// Ballast is 85% of laden cost
+				double totalBallastCost = 0.85 * totalLadenCost;
+				// No more round trip discount
+				double totalBallastRoundTripCost = totalBallastCost;
+
+				// If there is a markup %, apply it
+				if (panamaCanalTariff.getMarkupRate() != 0.0) {
+					final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
+					totalLadenCost *= multiplier;
+					totalBallastCost *= multiplier;
+					totalBallastRoundTripCost *= multiplier;
+				}
+
+				ladenCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+				ballastCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+				ballastRoundtripCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
 			}
 
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost))));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast,
-					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost))));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast,
-					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost))));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, ladenCurve);
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, ballastCurve);
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, ballastRoundtripCurve);
 		}
 	}
 
@@ -3188,8 +3221,8 @@ public class LNGScenarioTransformer {
 			// fuel types.
 			final IVessel oVessel;
 
-			if (eVessel.isMarker() && (builder instanceof SchedulerBuilder sBuilder)) {
-				long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
+			if (eVessel.isMarker() && (builder instanceof final SchedulerBuilder sBuilder)) {
+				final long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
 
 				oVessel = sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
 			} else {

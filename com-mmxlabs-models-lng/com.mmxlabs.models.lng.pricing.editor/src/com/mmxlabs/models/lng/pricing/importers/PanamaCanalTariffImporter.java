@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.pricing.importers;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -49,7 +50,11 @@ public class PanamaCanalTariffImporter extends DefaultClassImporter {
 	}
 
 	public Collection<Map<String, String>> exportTariff(final PanamaCanalTariff tariff, final IMMXExportContext context) {
-		final Collection<Map<String, String>> exportObjects = exportObjects(tariff.getBands(), context);
+		
+		final Collection<Map<String, String>> exportObjects = new LinkedList<>();
+		exportObjects.addAll(exportObjects(tariff.getBands(), context));
+		exportObjects.addAll(exportObjects(tariff.getAnnualTariffs(), context));
+		
 		{
 			final Map<String, String> row = new HashMap<>();
 			row.put(MARKUP_RATE_KEY, String.format("%0,1f", tariff.getMarkupRate()));

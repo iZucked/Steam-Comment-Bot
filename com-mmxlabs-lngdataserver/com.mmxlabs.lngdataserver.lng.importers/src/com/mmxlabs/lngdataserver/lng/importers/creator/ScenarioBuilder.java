@@ -417,7 +417,123 @@ public class ScenarioBuilder {
 		}
 
 		return this;
-
+	}
+	
+	
+	/**
+	 * Method to programatically update ports and distances.
+	 * 
+	 * Note: Keep in sync with LingoDistanceUpdater and UpdatePortsPage.
+	 * TODO: Refactor into shared code path.
+	 * @param scenarioDataProvider
+	 * @throws IOException
+	 */
+	public static void reloadPortsAndDistances(IScenarioDataProvider scenarioDataProvider) throws IOException {
+		
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		
+		{
+			for (final PortCapability capability : PortCapability.values()) {
+				boolean found = false;
+				for (final CapabilityGroup g : portModel.getSpecialPortGroups()) {
+					if (g.getCapability().equals(capability)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
+					g.setName("All " + capability.getName() + " Ports");
+					g.setCapability(capability);
+					portModel.getSpecialPortGroups().add(g);
+				}
+			}
+			
+		}
+		
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.registerModule(new JavaTimeModule());
+		
+		final LocationsVersion locationsVersion;
+		{
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/ports.json")) {
+				locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
+			}
+			
+			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion);
+			
+			final CompoundCommand command = new CompoundCommand("Update ports");
+			// Apply basic updates
+			steps.stream() //
+			.filter(UpdateStep.class::isInstance) //
+			.map(UpdateStep.class::cast) //
+			.map(UpdateStep::getAction) //
+			.filter(Objects::nonNull) //
+			.forEach(a -> a.accept(command));
+			
+			// Apply selected quick fixes
+			steps.stream() //
+			.filter(UserUpdateStep.class::isInstance) //
+			.map(UserUpdateStep.class::cast) //
+			.filter(UserUpdateStep::isHasQuickFix) //
+			.forEach(a -> a.getQuickFix().accept(command));
+			
+			steps.stream() //
+			.filter(UpdateWarning.class::isInstance) //
+			.map(UpdateWarning.class::cast) //
+			.filter(UpdateWarning::isHasQuickFix) //
+			.forEach(a -> a.getQuickFix().accept(command));
+			
+			command.execute();
+		}
+		
+		{
+			final List<AtoBviaCLookupRecord> distanceRecords;
+			final List<AtoBviaCLookupRecord> manualDistanceRecords;
+			
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances.json")) {
+				distanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
+				});
+			}
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances-manual.json")) {
+				manualDistanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
+				});
+			}
+			
+			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationsVersion, distanceRecords, manualDistanceRecords);
+			command.execute();
+		}
+		
+		{
+			final Map<String, APortSet<Port>> typeMap = new HashMap<>();
+			
+			portModel.getPorts().forEach(c -> typeMap.put(PortTypeConstants.PORT_PREFIX + c.getLocation().getMmxId(), c));
+			portModel.getPortCountryGroups().forEach(c -> typeMap.put(PortTypeConstants.COUNTRY_GROUP_PREFIX + c.getName(), c));
+			portModel.getPortGroups().forEach(c -> typeMap.put(PortTypeConstants.PORT_GROUP_PREFIX + c.getName(), c));
+			
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/port-groups.json")) {
+				
+				final List<PortGroupDefinition> portGroups = mapper.readValue(inputStream, new TypeReference<List<PortGroupDefinition>>() {
+				});
+				
+				for (final PortGroupDefinition pgd : portGroups) {
+					final PortGroup pg = PortFactory.eINSTANCE.createPortGroup();
+					pg.setName(pgd.getName());
+					
+					for (final String id : pgd.getEntries()) {
+						final APortSet<Port> obj = typeMap.get(id);
+						if (obj == null) {
+							throw new IllegalStateException("Unknown object: " + id);
+						}
+						pg.getContents().add(obj);
+					}
+					portModel.getPortGroups().add(pg);
+				}
+				
+			}
+		}
 	}
 
 	public ScenarioBuilder loadDefaultVessels() throws IOException {

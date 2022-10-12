@@ -50,7 +50,10 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private static final List<String> types = getBaseCaseTypesToCheck();
 	
-	private class RDSRecords {
+	public static class RDSRecords {
+		public RDSRecords() {
+			super();
+		}
 		public Map<String, String> typeVersion = new HashMap<String, String>();
 		public boolean isDismissed = false;
 	}

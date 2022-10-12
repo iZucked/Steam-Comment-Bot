@@ -38,20 +38,26 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class LoadTriggerHelper {
+	
+	public LoadTriggerHelper(Inventory selectedInventory, PurchaseContract selectedContract) {
+		this.selectedInventory = selectedInventory;
+		this.selectedContract = selectedContract;
+	}
+
+	private final Inventory selectedInventory;
+	private final PurchaseContract selectedContract;
 
 	public void doMatchAndMoveLoadTrigger(final LNGScenarioModel model, final int globalLoadTrigger, final Integer cargoVolume, final LocalDate start) {
 		final EList<Inventory> inventoryModels = model.getCargoModel().getInventoryModels();
 		if (inventoryModels.size() != 1) {
 			throw new RuntimeException("Only 1 inventory model is supported at present.");
 		}
-		for (final Inventory inventory : inventoryModels) {
-			final TreeMap<LocalDate, InventoryDailyEvent> inventoryInsAndOuts = getInventoryInsAndOuts(inventory);
+			final TreeMap<LocalDate, InventoryDailyEvent> inventoryInsAndOuts = getInventoryInsAndOuts(selectedInventory);
 			// modify to take into account start date
-			final List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, inventory, inventoryInsAndOuts);
+			final List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, selectedInventory, inventoryInsAndOuts);
 			processWithLoadsAndStartDate(loadSlotsToConsider, inventoryInsAndOuts, start);
 			// create new Loads
-			matchAndMoveSlotsLoadTrigger(model, inventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
-		}
+			matchAndMoveSlotsLoadTrigger(model, selectedInventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
 	}
 
 	public List<Pair<LocalDate, LoadSlot>> getLoadDatesForExistingSlotsFromLoadTrigger(final LNGScenarioModel model, final Inventory inventory, final int globalLoadTrigger, final Integer cargoVolume,
@@ -66,7 +72,6 @@ public class LoadTriggerHelper {
 
 	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(final Inventory inventory) {
 		final EList<InventoryCapacityRow> capacities = inventory.getCapacities();
-		final Port port = inventory.getPort();
 
 		final TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = capacities.stream().collect(Collectors.toMap(InventoryCapacityRow::getDate, c -> c, (oldValue, newValue) -> newValue, TreeMap::new));
 
@@ -255,15 +260,11 @@ public class LoadTriggerHelper {
 		final CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
 		int i = 0;
 
-		PurchaseContract mdpc = null;
-		if (!scenario.getReferenceModel().getCommercialModel().getPurchaseContracts().isEmpty()) {
-			mdpc = scenario.getReferenceModel().getCommercialModel().getPurchaseContracts().get(0);
-		}
 
 		for (final LocalDate slotDate : dates) {
 			assert port != null;
 			final SlotMaker<LoadSlot> loadMaker = new SlotMaker<>(builder);
-			loadMaker.withFOBPurchase(String.format("%s_%s", "load", ++i), slotDate, port, mdpc, scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null, null);
+			loadMaker.withFOBPurchase(String.format("%s_%s", "load", ++i), slotDate, port, selectedContract, scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null, null);
 			loadMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
 			loadMaker.withWindowSize(0, TimePeriod.DAYS);
 			loadMaker.build();

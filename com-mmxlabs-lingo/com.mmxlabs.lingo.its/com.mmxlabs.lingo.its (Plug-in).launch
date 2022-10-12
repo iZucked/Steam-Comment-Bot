@@ -19,6 +19,7 @@
     <stringAttribute key="featurePluginResolution" value="workspace"/>
     <booleanAttribute key="includeOptional" value="true"/>
     <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
         <listEntry value="/com.mmxlabs.lingo.its"/>
     </listAttribute>
@@ -31,7 +32,7 @@
     </listAttribute>
     <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=com.mmxlabs.lingo.its"/>
     <stringAttribute key="org.eclipse.jdt.junit.EXCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.HubTest"/>
-    <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.OptimisationTest"/>
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
@@ -52,7 +53,6 @@
     <setAttribute key="selected_features">
         <setEntry value="com.google.ortools.feature:default"/>
         <setEntry value="com.mmxlabs.common.util.feature:default"/>
-        <setEntry value="com.mmxlabs.jobmanager.feature:default"/>
         <setEntry value="com.mmxlabs.lingo.feature:default"/>
         <setEntry value="com.mmxlabs.lingo.its.feature:default"/>
         <setEntry value="com.mmxlabs.lingo.platform.feature:default"/>

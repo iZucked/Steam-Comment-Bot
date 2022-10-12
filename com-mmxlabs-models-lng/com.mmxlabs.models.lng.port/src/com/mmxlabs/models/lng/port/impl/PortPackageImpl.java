@@ -780,6 +780,16 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLocation_Locode() {
+		return (EAttribute)locationEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getLocation__GetZoneId() {
 		return locationEClass.getEOperations().get(0);
 	}
@@ -997,6 +1007,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(locationEClass, LOCATION__COUNTRY);
 		createEAttribute(locationEClass, LOCATION__LAT);
 		createEAttribute(locationEClass, LOCATION__LON);
+		createEAttribute(locationEClass, LOCATION__LOCODE);
 		createEOperation(locationEClass, LOCATION___GET_ZONE_ID);
 
 		portCountryGroupEClass = createEClass(PORT_COUNTRY_GROUP);
@@ -1148,6 +1159,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getLocation_Country(), ecorePackage.getEString(), "country", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lat(), ecorePackage.getEDouble(), "lat", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLocation_Locode(), ecorePackage.getEString(), "locode", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLocation__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 

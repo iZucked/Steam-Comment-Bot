@@ -27,5 +27,22 @@
     "ballastRoundtripTariff" : "1.87",
     "bandStart" : "120000"
   } ],
-  "markupRate" : "0.2"
+  "markupRate" : "0.2",
+  "annualTariffs": [ {
+    "@class" : "PanamaTariffV2",
+    "fixedFee" : "300000",
+    "capacityTariff" : "0.75",
+    "effectiveFrom" : "2023/01/01"
+  }, {
+    "@class" : "PanamaTariffV2",
+    "fixedFee" : "300000",
+    "capacityTariff" : "1.15",
+    "effectiveFrom" : "2024/01/01"
+  }, {
+    "@class" : "PanamaTariffV2",
+    "fixedFee" : "300000",
+    "capacityTariff" : "1.50",
+    "effectiveFrom" : "2025/01/01"
+  }
+  ]
 }

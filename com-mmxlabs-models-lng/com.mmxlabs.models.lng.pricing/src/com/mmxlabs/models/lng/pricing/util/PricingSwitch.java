@@ -41,7 +41,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.pricing.PricingPackage
  * @generated
  */
-public class PricingSwitch<@Nullable T> extends Switch<T> {
+public class PricingSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -185,6 +185,12 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: {
 				PanamaCanalTariffBand panamaCanalTariffBand = (PanamaCanalTariffBand)theEObject;
 				T result = casePanamaCanalTariffBand(panamaCanalTariffBand);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PANAMA_TARIFF_V2: {
+				PanamaTariffV2 panamaTariffV2 = (PanamaTariffV2)theEObject;
+				T result = casePanamaTariffV2(panamaTariffV2);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -583,6 +589,21 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Tariff V2</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Tariff V2</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaTariffV2(PanamaTariffV2 object) {
 		return null;
 	}
 
