@@ -5,7 +5,10 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.IStatus;
 import org.junit.jupiter.api.Assertions;
@@ -13,10 +16,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.validation.ValidationTestUtil;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -27,12 +32,15 @@ import com.mmxlabs.models.lng.commercial.validation.VolumeTierContractConstraint
 import com.mmxlabs.models.lng.commercial.validation.VolumeTierSlotParamsConstraint;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
+import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.DealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -42,6 +50,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 
 @ExtendWith(value = ShiroRunner.class)
+@RequireFeature(value = { KnownFeatures.FEATURE_EXPOSURES })
 public class VolumeTierContractTests extends AbstractMicroTestCase {
 
 	/**
@@ -81,6 +90,123 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
 		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
 		Assertions.assertEquals(1, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testPurchaseContractExposures1() {
+
+		pricingModelBuilder.makeCommodityDataCurve("lowprice", "$", "mmBTU") //
+				.addIndexPoint(YearMonth.of(2022, 10), 2.0) //
+				.build();
+		pricingModelBuilder.makeCommodityDataCurve("highprice", "$", "mmBTU") //
+				.addIndexPoint(YearMonth.of(2022, 10), 10.0) //
+				.build();
+
+		final PurchaseContract purchaseContract = commercialModelBuilder.makeVolumeTierPurchaseContract("vt1", entity, "lowprice", "highprice", 70000, VolumeUnits.M3);
+
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), purchaseContract, entity, null, 22.8, null)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withVolumeLimits(140_000, 140_000, VolumeUnits.M3) //
+				//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "5") //
+				.build() //
+
+				//
+				.build();
+
+		final Slot<?> load = testCargo.getSlots().get(0);
+		((LoadSlot) load).setCargoCV(20.0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		runnerBuilder.evaluateInitialState();
+
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+
+		final List<ExposureDetail> exposures = simpleCargoAllocation.getLoadAllocation().getExposures();
+		Assertions.assertEquals(2 + 1, exposures.size());
+		{
+			final Optional<ExposureDetail> lowDetail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> Objects.equals(d.getIndexName(), "lowprice")).findFirst();
+			Assertions.assertTrue(lowDetail.isPresent());
+			Assertions.assertEquals(-70000 * 20.0, lowDetail.get().getVolumeInMMBTU(), 0.001);
+		}
+		{
+			final Optional<ExposureDetail> highDetail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> Objects.equals(d.getIndexName(), "highprice")).findFirst();
+			Assertions.assertTrue(highDetail.isPresent());
+			Assertions.assertEquals(-70000 * 20.0, highDetail.get().getVolumeInMMBTU(), 0.001);
+		}
+
+	}
+
+	/**
+	 * Exposures with a shift to check this is correctly propogated
+	 */
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testPurchaseContractExposures2() {
+
+		pricingModelBuilder.makeCommodityDataCurve("lowprice", "$", "mmBTU") //
+				.addIndexPoint(YearMonth.of(2022, 10), 2.0) //
+				.build();
+		pricingModelBuilder.makeCommodityDataCurve("highprice", "$", "mmBTU") //
+				.addIndexPoint(YearMonth.of(2022, 10), 10.0) //
+				.build();
+
+		final PurchaseContract purchaseContract = commercialModelBuilder.makeVolumeTierPurchaseContract("vt1", entity, "lowprice", "SHIFT(highprice, 1)", 70000, VolumeUnits.M3);
+
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), purchaseContract, entity, null, 22.8, null)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withVolumeLimits(140_000, 140_000, VolumeUnits.M3) //
+				//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "5") //
+				.build() //
+
+				//
+				.build();
+
+		final Slot<?> load = testCargo.getSlots().get(0);
+		((LoadSlot) load).setCargoCV(20.0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		runnerBuilder.evaluateInitialState();
+
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+
+		final List<ExposureDetail> exposures = simpleCargoAllocation.getLoadAllocation().getExposures();
+		Assertions.assertEquals(2 + 1, exposures.size());
+		{
+			final Optional<ExposureDetail> lowDetail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> Objects.equals(d.getIndexName(), "lowprice")).findFirst();
+			Assertions.assertTrue(lowDetail.isPresent());
+			Assertions.assertEquals(-70000 * 20.0, lowDetail.get().getVolumeInMMBTU(), 0.001);
+			Assertions.assertEquals(YearMonth.of(2018, 6), lowDetail.get().getDate());
+
+		}
+		{
+			final Optional<ExposureDetail> highDetail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> Objects.equals(d.getIndexName(), "highprice")).findFirst();
+			Assertions.assertTrue(highDetail.isPresent());
+			Assertions.assertEquals(-70000 * 20.0, highDetail.get().getVolumeInMMBTU(), 0.001);
+			Assertions.assertEquals(YearMonth.of(2018, 5), highDetail.get().getDate());
+		}
+
 	}
 
 	/**

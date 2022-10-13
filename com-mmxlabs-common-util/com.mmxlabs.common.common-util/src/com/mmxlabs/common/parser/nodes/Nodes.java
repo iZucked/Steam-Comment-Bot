@@ -15,8 +15,9 @@ import com.mmxlabs.common.parser.RawTreeParser;
 
 public class Nodes {
 	/**
-	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
-	 * still have changed).
+	 * Expands the node tree. Returns a new node if the parentNode has change and
+	 * needs to be replaced in the upper chain. Returns null if the node does not
+	 * need replacing (note: the children may still have changed).
 	 * 
 	 * @param exposedIndexToken
 	 * @param parentNode
@@ -77,6 +78,20 @@ public class Nodes {
 			n = new MaxFunctionNode();
 		} else if (parentNode.token.equalsIgnoreCase("MIN")) {
 			n = new MinFunctionNode();
+		} else if (parentNode.token.equalsIgnoreCase("VOLUMETIERM3")) {
+			final MarkedUpNode lowTier = markupNodes(parentNode.children[0], lookupData);
+			final MarkedUpNode highTier = markupNodes(parentNode.children[1], lookupData);
+			final double volume = extractDoubleNode(markupNodes(parentNode.children[2], lookupData));
+			n = new VolumeTierNode(lowTier, highTier, volume, true);
+			return n;
+
+		} else if (parentNode.token.equalsIgnoreCase("VOLUMETIERMMBTU")) {
+			final MarkedUpNode lowTier = markupNodes(parentNode.children[0], lookupData);
+			final MarkedUpNode highTier = markupNodes(parentNode.children[1], lookupData);
+			final double volume = extractDoubleNode(markupNodes(parentNode.children[2], lookupData));
+			n = new VolumeTierNode(lowTier, highTier, volume, false);
+			return n;
+
 		} else if (parentNode.token.equalsIgnoreCase("SPLITMONTH")) {
 			final MarkedUpNode splitPoint = markupNodes(parentNode.children[2], lookupData);
 			double splitPointValue = -1;
@@ -143,7 +158,7 @@ public class Nodes {
 			final BasicCommodityCurveData curve = lookupData.commodityMap.get(parentNode.token.toLowerCase());
 			n = new CommodityNode(curve);
 		} else if (lookupData.currencyList.contains(parentNode.token.toLowerCase())) {
-			
+
 			n = new CurrencyNode(parentNode.token.toLowerCase());
 
 		} else if (lookupData.conversionMap.containsKey(parentNode.token.toLowerCase())) {
@@ -151,14 +166,14 @@ public class Nodes {
 			final String to = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getTo();
 			final double factor = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFactor();
 			final BasicUnitConversionData uce = new BasicUnitConversionData(from, to, factor);
-			
+
 			n = new ConversionNode(parentNode.token, uce, false);
 		} else if (lookupData.reverseConversionMap.containsKey(parentNode.token.toLowerCase())) {
 			final String from = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFrom();
 			final String to = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getTo();
 			final double factor = lookupData.conversionMap.get(parentNode.token.toLowerCase()).getFactor();
 			final BasicUnitConversionData uce = new BasicUnitConversionData(from, to, factor);
-			
+
 			n = new ConversionNode(parentNode.token, uce, true);
 		} else if (parentNode.token.equals("?")) {
 			n = new BreakevenNode();

@@ -75,12 +75,13 @@ public class BasicExposuresTest {
 
 	private static final double defaultVolumeInMMBTU = 3_000_000.0;
 	private static final double bbl_to_mmBtu = 0.180136;
-	
+
 	public static Collection generateTests() {
 		return Arrays.asList(new Object[][] { //
 				{ "HH", "HH", "HH", single(calcExpected("HH", 5.0, 1.0)), indicesOf(makeHH()) }, //
 
-				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1 * bbl_to_mmBtu, defaultVolumeInMMBTU * 0.1 * 90 * bbl_to_mmBtu)), indicesOf(makeBrent()) }, //
+				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1 * bbl_to_mmBtu, defaultVolumeInMMBTU * 0.1 * 90 * bbl_to_mmBtu)),
+						indicesOf(makeBrent()) }, //
 
 				{ "A + 1", "A + 1", "HH", single(calcExpected("A", 5.0, 1.0)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
 
@@ -122,15 +123,23 @@ public class BasicExposuresTest {
 				{ "TTF (Units)", "((TTF-0.4))*mwh_to_mmBtu*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 * 0.293297, (12.6 - 0.4) * 0.293297 * 1.111)),
 						indicesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
 
-				// Reverse factor means detected units are still therms and alt conversion code path happends.
-				// { "NBP (Units) Reverse Conversion", "90%NBP*mmBtu_to_therm*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0 * 1.3)),
+				// Reverse factor means detected units are still therms and alt conversion code
+				// path happends.
+				// { "NBP (Units) Reverse Conversion", "90%NBP*mmBtu_to_therm*FX_p_to_USD",
+				// "NBP", single(calcExpected("NBP", 30.0, 0.9 / 10.0, 0.9 * 30.0 / 100.0 / 10.0
+				// * 1.3)),
 				// indiciesOf(makeIndex("NBP", "p", "therm", YearMonth.of(2000, 1), 30)) }, //
 
 				/// Another Complex example
-				// { "TTF (Units) Reverse Conversion ", "((TTF-0.4)) *mmBtu_to_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
-				// indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) }, //
+				// { "TTF (Units) Reverse Conversion ", "((TTF-0.4))
+				/// *mmBtu_to_MwH*FX_EURO_to_USD", "TTF", single(calcExpected("TTF", 12.6, 1.0 /
+				/// 0.293297, (12.6 - 0.4) / 0.293297 * 1.111)),
+				// indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6)) },
+				/// //
 
-				// { "HH - Shift -1", "SHIFT(HH,0-1)", "HH", calcExpected(8, 1, 8), indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+				// { "HH - Shift -1", "SHIFT(HH,0-1)", "HH", calcExpected(8, 1, 8),
+				// indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8))
+				// }, //
 				{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 1", "SHIFT(HH,1)", "HH", single(calcExpected("HH", YearMonth.of(2016, 3), 6, 1, 6)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 2", "SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
@@ -284,49 +293,33 @@ public class BasicExposuresTest {
 	public static Collection generateTestsWithDay() {
 		return Arrays.asList(new Object[][] { //
 
-			{ "Nested SplitMonth Exposure (w1)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W1", 1, single(//
-					calcExpected("WEEK_W1", YearMonth.of(2016, 4), 10, 1.0, LocalDate.of(2016, 4, 1)) //
-			), //
-					indicesOf(//
-							makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
-							makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
-							makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
-							makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
-					)
-			}, //
-			
-			{ "Nested SplitMonth Exposure (w2)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W2", 7, single(//
-					calcExpected("WEEK_W2", YearMonth.of(2016, 4), 20, 1.0, LocalDate.of(2016, 4, 7)) //
-					), //
-				indicesOf(//
-						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
-						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
-						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
-						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
-						)
-			}, //
-			
-			{ "Nested SplitMonth Exposure (w3)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W3",14, single(//
-					calcExpected("WEEK_W3", YearMonth.of(2016, 4), 30, 1.0, LocalDate.of(2016, 4, 14)) //
-					), //
-				indicesOf(//
-						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
-						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
-						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
-						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
-						)
-			}, //
-			
-			{ "Nested SplitMonth Exposure (w4)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W4",21, single(//
-					calcExpected("WEEK_W4", YearMonth.of(2016, 4), 40, 1.0, LocalDate.of(2016, 4, 21)) //
-					), //
-				indicesOf(//
-						makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10),
-						makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
-						makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30),
-						makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40) 
-						)
-			} //
+				{ "Nested SplitMonth Exposure (w1)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W1", 1, single(//
+						calcExpected("WEEK_W1", YearMonth.of(2016, 4), 10, 1.0, LocalDate.of(2016, 4, 1)) //
+				), //
+						indicesOf(//
+								makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10), makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+								makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30), makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40)) }, //
+
+				{ "Nested SplitMonth Exposure (w2)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W2", 7, single(//
+						calcExpected("WEEK_W2", YearMonth.of(2016, 4), 20, 1.0, LocalDate.of(2016, 4, 7)) //
+				), //
+						indicesOf(//
+								makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10), makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+								makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30), makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40)) }, //
+
+				{ "Nested SplitMonth Exposure (w3)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W3", 14, single(//
+						calcExpected("WEEK_W3", YearMonth.of(2016, 4), 30, 1.0, LocalDate.of(2016, 4, 14)) //
+				), //
+						indicesOf(//
+								makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10), makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+								makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30), makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40)) }, //
+
+				{ "Nested SplitMonth Exposure (w4)", "SPLITMONTH(SPLITMONTH(WEEK_W1,WEEK_W2,7),SPLITMONTH(WEEK_W3,WEEK_W4,21),14)", "WEEK_W4", 21, single(//
+						calcExpected("WEEK_W4", YearMonth.of(2016, 4), 40, 1.0, LocalDate.of(2016, 4, 21)) //
+				), //
+						indicesOf(//
+								makeIndex("WEEK_W1", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 10), makeIndex("WEEK_W2", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 20),
+								makeIndex("WEEK_W3", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 30), makeIndex("WEEK_W4", "$", "mmBtu", YearMonth.of(2016, 3), /* 2017 */ 40)) } //
 		});
 	};
 
@@ -376,29 +369,31 @@ public class BasicExposuresTest {
 		final boolean isPurchase = false;
 
 		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
-		
+
 		// Creating exposures lookup data
 		final ExposuresLookupData exLookupData = new ExposuresLookupData();
 		pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
-		.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
+				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
 						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
 		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
-		.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
+				.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
 		pricingModel.getConversionFactors().forEach(f -> exLookupData.conversionMap.put(//
 				PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
 		pricingModel.getConversionFactors().forEach(f -> exLookupData.reverseConversionMap.put(//
 				PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
-		
+
 		final SeriesParser commodityParser = makeCommodityParser(lookupData);
 		final SeriesParser currencyParser = makeCurrencyParser(lookupData);
 		final Injector injector = createInjector(commodityParser, currencyParser);
 		final ExposuresCalculator calc = injector.getInstance(ExposuresCalculator.class);
 		final LocalDate pricingLocalDate = LocalDate.of(pricingDate.getYear(), pricingDate.getMonthValue(), pricingDay);
 		final long volumeInMMBTU = OptimiserUnitConvertor.convertToInternalVolume(volume);
-		
-		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
+
+		int cargoCV = OptimiserUnitConvertor.convertToInternalConversionFactor(22.6);
+
+		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, cargoCV, exLookupData);
 		//
-		
+
 		checker.validate(exposureRecords, expression, commodityParser);
 	}
 
@@ -436,14 +431,14 @@ public class BasicExposuresTest {
 		final boolean isPurchase = false;
 
 		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
-		
+
 		// Creating exposures lookup data
 		final ExposuresLookupData exLookupData = new ExposuresLookupData();
 		pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
-		.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-				idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
 		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
-		.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
+				.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
 		pricingModel.getConversionFactors().forEach(f -> exLookupData.conversionMap.put(//
 				PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
 		pricingModel.getConversionFactors().forEach(f -> exLookupData.reverseConversionMap.put(//
@@ -455,8 +450,9 @@ public class BasicExposuresTest {
 		final ExposuresCalculator calc = injector.getInstance(ExposuresCalculator.class);
 		final LocalDate pricingLocalDate = LocalDate.of(pricingDate.getYear(), pricingDate.getMonthValue(), dayOfMonth);
 		final long volumeInMMBTU = OptimiserUnitConvertor.convertToInternalVolume(volume);
+		int cargoCV = OptimiserUnitConvertor.convertToInternalConversionFactor(22.6);
 
-		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
+		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, cargoCV, exLookupData);
 		//
 
 		checker.validate(exposureRecords, expression, commodityParser);
@@ -534,11 +530,11 @@ public class BasicExposuresTest {
 
 		return index;
 	}
-	
+
 	private static SeriesParser makeCommodityParser(final LookupData lookupData) {
 		return PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 	}
-	
+
 	private static SeriesParser makeCurrencyParser(final LookupData lookupData) {
 		return PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.CURRENCY);
 	}
@@ -585,7 +581,7 @@ public class BasicExposuresTest {
 		public ResultChecker(final Collection<ExpectedResult> multiple) {
 			results = new LinkedList<>(multiple);
 		}
-		
+
 		void validate(@Nullable final List<BasicExposureRecord> records, final String expression, final SeriesParser seriesParser) {
 
 			final Map<Pair<String, YearMonth>, ExpectedResult> m = new HashMap<>();
@@ -668,7 +664,7 @@ public class BasicExposuresTest {
 			this.expectedValue = OptionalDouble.of(expectedValue);
 			this.expectedExpressionValue = OptionalDouble.of(expectedExpressionValue);
 		}
-		
+
 		void validate(@Nullable final BasicExposureRecord record, final String expression, final SeriesParser seriesParser) {
 			if (!expectExposed) {
 				Assertions.assertTrue(record == null);
@@ -676,7 +672,7 @@ public class BasicExposuresTest {
 			}
 
 			YearMonth month = YearMonth.from(record.getTime());
-			
+
 			Assertions.assertEquals(expectedDate, month);
 
 			Assertions.assertNotNull(record);
@@ -744,39 +740,39 @@ public class BasicExposuresTest {
 	private static ExpectedResult calcExpected(String index, final YearMonth date, final double unitPrice, final double factor, final double expressionUnitPrice) {
 		return new ExpectedResult(index, date, defaultVolumeInMMBTU * factor, defaultVolumeInMMBTU * factor * unitPrice, defaultVolumeInMMBTU * expressionUnitPrice);
 	}
-	
+
 	private @NonNull Injector createInjector(final SeriesParser commodityParser, final SeriesParser currencyParser) {
 		return Guice.createInjector(new AbstractModule() {
 
-					@Override
-					protected void configure() {
-						bind(ExposuresCalculator.class);
-						
-						bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
-						bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
-							
-						bind(DefaultExposureDataProvider.class).in(Singleton.class);
-						bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
-						bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
-						
-						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(commodityParser);
-						bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(currencyParser);
-						
-						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
-						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(Boolean.TRUE);
-						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
-					}
-					
-					@Provides
-					public IExternalDateProvider getIExternalDateProvider() {
-						return new SimpleExternalDateProvider();
-					}
-					
-				});
+			@Override
+			protected void configure() {
+				bind(ExposuresCalculator.class);
+
+				bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
+				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+
+				bind(DefaultExposureDataProvider.class).in(Singleton.class);
+				bind(IExposureDataProvider.class).to(DefaultExposureDataProvider.class);
+				bind(IExposureDataProviderEditor.class).to(DefaultExposureDataProvider.class);
+
+				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(commodityParser);
+				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(currencyParser);
+
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(Boolean.TRUE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
+			}
+
+			@Provides
+			public IExternalDateProvider getIExternalDateProvider() {
+				return new SimpleExternalDateProvider();
+			}
+
+		});
 	}
-	
-	private class SimpleExternalDateProvider implements IExternalDateProvider{
-		
+
+	private class SimpleExternalDateProvider implements IExternalDateProvider {
+
 		final LocalDateTime dateZero = LocalDate.of(2000, 1, 1).atStartOfDay();
 
 		@SuppressWarnings("null")
