@@ -19,7 +19,7 @@ public final class Calculator {
 	public static final int ScaleFactor = 1000;
 	/**
 	 */
-	public static final long HighScaleFactor = 1000000;
+	public static final long HighScaleFactor = 1_000_000L;
 
 	public static int speedFromDistanceTime(final long distance, final int time) {
 
