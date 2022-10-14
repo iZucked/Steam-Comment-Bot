@@ -10,9 +10,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -24,17 +29,21 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILazyCurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
+import com.mmxlabs.common.curves.ParameterisedIntegerCurve;
 import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.curves.PreGeneratedLongCurve;
+import com.mmxlabs.common.curves.WrappedParameterisedCurve;
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesUtil;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
@@ -102,24 +111,58 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
-	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
+	public ParameterisedIntegerCurve generateParameterisedExpressionCurve(final ISeries series) {
+
+		return new ParameterisedIntegerCurve(params -> {
+			if (series.getChangePoints().length == 0) {
+				final int v = OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0, params).doubleValue());
+				return Pair.of(v, new TreeMap<>());
+			} else {
+				final TreeMap<Integer, Integer> intervals = new TreeMap<>();
+				for (final int i : series.getChangePoints()) {
+					intervals.put(i, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, params).doubleValue()));
+				}
+				return Pair.of(0, intervals);
+			}
+		}, series.getParameters());
+	}
+
+	public PreGeneratedIntegerCurve generateExpressionCurve(final ISeries series) {
+
+		if (series.isParameterised()) {
+			throw new IllegalArgumentException();
+		}
+
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
+		if (series.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0, Collections.emptyMap()).doubleValue()));
+		} else {
+			curve.setDefaultValue(0);
+			for (final int i : series.getChangePoints()) {
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
+			}
+		}
+		return curve;
+	}
+
+	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
 		}
 
-		final ISeries parsed = indices.asSeries(priceExpression);
+		final ISeries parsed = seriesParser.asSeries(priceExpression);
+		return generateExpressionCurve(parsed);
+	}
 
-		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
-		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-		} else {
-			curve.setDefaultValue(0);
-			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
-			}
+	public @Nullable ParameterisedIntegerCurve generateParameterisedExpressionCurve(final @Nullable String priceExpression, final SeriesParser seriesParser) {
+
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return null;
 		}
-		return curve;
+
+		final ISeries parsed = seriesParser.asSeries(priceExpression);
+		return generateParameterisedExpressionCurve(parsed);
 	}
 
 	public @Nullable PreGeneratedLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
@@ -130,14 +173,25 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 		final ISeries parsed = seriesParser.asSeries(priceExpression);
 
-		final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
-		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue(Math.round(parsed.evaluate(0).doubleValue() * (double) Calculator.ScaleFactor));
+		return generateLongExpressionCurve(parsed);
+	}
+
+	public PreGeneratedLongCurve generateLongExpressionCurve(final ISeries seried) {
+
+		if (seried.isParameterised()) {
+			throw new IllegalArgumentException();
+		}
+
+		final PreGeneratedLongCurve curve;
+		if (seried.getChangePoints().length == 0) {
+			curve = new PreGeneratedLongCurve();
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalDailyCost(seried.evaluate(0, Collections.emptyMap()).doubleValue()));
 		} else {
-			curve.setDefaultValue(0L);
-			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, Math.round(parsed.evaluate(i).doubleValue() * (double) Calculator.ScaleFactor));
+			curve = new PreGeneratedLongCurve();
+			for (final int i : seried.getChangePoints()) {
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalDailyCost(seried.evaluate(i, Collections.emptyMap()).doubleValue()));
 			}
+			curve.setDefaultValue(0L);
 		}
 		return curve;
 	}
@@ -215,9 +269,9 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return earliestAndLatestTimes;
 	}
 
-	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression) {
+	public @Nullable Pair<IParameterisedCurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression) {
 
-		return createCurveAndIntervals(seriesParser, priceExpression, this::generateExpressionCurve);
+		return createCurveAndIntervals(seriesParser, priceExpression, this::generateParameterisedExpressionCurve);
 	}
 
 	public @NonNull Pair<ICurve, IIntegerIntervalCurve> createConstantCurveAndIntervals(final int constant) {
@@ -225,14 +279,20 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return Pair.of(new ConstantValueCurve(constant), monthIntervalsInHoursCurve);
 	}
 
-	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
+	public @NonNull Pair<IParameterisedCurve, IIntegerIntervalCurve> createConstantParameterisedCurveAndIntervals(final int constant) {
+
+		return Pair.of(new WrappedParameterisedCurve(new ConstantValueCurve(constant)), monthIntervalsInHoursCurve);
+	}
+
+	public @Nullable Pair<IParameterisedCurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression,
+			final Function<ISeries, IParameterisedCurve> curveFactory) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
 		}
 
 		final IIntegerIntervalCurve priceIntervals;
-		final ICurve curve;
+		final IParameterisedCurve curve;
 
 		final IExpression<ISeries> expression = seriesParser.asIExpression(priceExpression);
 
@@ -242,12 +302,12 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 			if (parsed.getChangePoints().length == 0) {
 				priceIntervals = monthIntervalsInHoursCurve;
 			} else {
-				priceIntervals = getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+				priceIntervals = getIntegerIntervalCurveForChangePoints(parsed.getChangePoints());
 			}
 
 			curve = curveFactory.apply(parsed);
 		} else {
-			final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(monthIntervalsInHoursCurve, parsed -> getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
+			final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(monthIntervalsInHoursCurve, parsed -> getIntegerIntervalCurveForChangePoints(parsed.getChangePoints()));
 			priceIntervals = lazyIntervalCurve;
 
 			final ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, curveFactory, lazyIntervalCurve::initialise);
@@ -258,35 +318,23 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return Pair.of(curve, priceIntervals);
 	}
 
-	public ICurve generateShiftedCurve(final ISeries series, final UnaryOperator<ZonedDateTime> dateShifter) {
-		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
-		if (series.getChangePoints().length == 0) {
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0).doubleValue()));
-		} else {
-			curve.setDefaultValue(0);
-			for (final int i : series.getChangePoints()) {
-				ZonedDateTime date = getDateFromHours(i, "UTC");
-				date = dateShifter.apply(date);
-				final int time = convertTime(date);
-				curve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i).doubleValue()));
-			}
-		}
-		return curve;
-	}
+	public IParameterisedCurve generateShiftedCurve(final ISeries series, final UnaryOperator<ZonedDateTime> dateShifter) {
 
-	public ICurve generateExpressionCurve(final ISeries parsed) {
-
-		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
-		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-		} else {
-			curve.setDefaultValue(0);
-			// Copy in real data from change points
-			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+		return new ParameterisedIntegerCurve(params -> {
+			if (series.getChangePoints().length == 0) {
+				final int v = OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0, params).doubleValue());
+				return Pair.of(v, new TreeMap<>());
+			} else {
+				final TreeMap<Integer, Integer> intervals = new TreeMap<>();
+				for (final int i : series.getChangePoints()) {
+					ZonedDateTime date = getDateFromHours(i, "UTC");
+					date = dateShifter.apply(date);
+					final int time = convertTime(date);
+					intervals.put(time, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, params).doubleValue()));
+				}
+				return Pair.of(0, intervals);
 			}
-		}
-		return curve;
+		}, series.getParameters());
 	}
 
 	@SuppressWarnings("null")
@@ -311,9 +359,9 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	}
 
 	@NonNull
-	public static IIntegerIntervalCurve getSplitMonthDatesForChangePoint(final int[] changePoints) {
+	public static IIntegerIntervalCurve getIntegerIntervalCurveForChangePoints(final int[] changePoints) {
 		final IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
-		intervals.addAll(Arrays.stream(changePoints).boxed().collect(Collectors.toList()));
+		intervals.addAll(Arrays.stream(changePoints).boxed().toList());
 		return intervals;
 	}
 
@@ -357,5 +405,71 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	 */
 	private boolean isAtStartOfDay(final ZonedDateTime date) {
 		return date.getHour() == 0 && date.getMinute() == 0 && date.getSecond() == 0 && date.getNano() == 0;
+	}
+
+	public PreGeneratedIntegerCurve constructConcreteCurve(final YearMonthPointContainer ymPointContainer) {
+
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
+		curve.setDefaultValue(0);
+
+		for (final YearMonthPoint pt : ymPointContainer.getPoints()) {
+
+			final int time = convertTime(pt.getDate());
+			final int value = OptimiserUnitConvertor.convertToInternalPrice(pt.getValue());
+			curve.setValueAfter(time, value);
+		}
+		return curve;
+	}
+
+	public PreGeneratedLongCurve constructConcreteLongCurve(final YearMonthPointContainer ymPointContainer) {
+
+		final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
+		curve.setDefaultValue(0L);
+
+		for (final YearMonthPoint pt : ymPointContainer.getPoints()) {
+
+			final int time = convertTime(pt.getDate());
+			final long value = OptimiserUnitConvertor.convertToInternalDailyCost(pt.getValue());
+			curve.setValueAfter(time, value);
+		}
+		return curve;
+	}
+
+	public ISeries constructConcreteSeries(final YearMonthPointContainer ymPointContainer) {
+		final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
+		for (final YearMonthPoint pt : ymPointContainer.getPoints()) {
+			vals.add(new Pair<>(pt.getDate(), pt.getValue()));
+		}
+		final int[] times = new int[vals.size()];
+		final Number[] nums = new Number[vals.size()];
+		int k = 0;
+		for (final Pair<YearMonth, Number> e : vals) {
+			times[k] = convertTime(e.getFirst());
+			nums[k++] = e.getSecond();
+		}
+		return new ISeries() {
+
+			public boolean isParameterised() {
+				return false;
+			}
+
+			public Set<String> getParameters() {
+				return Collections.emptySet();
+			}
+
+			@Override
+			public int[] getChangePoints() {
+				return times;
+			}
+
+			@Override
+			public Number evaluate(final int point, final Map<String, String> params) {
+				final int pos = SeriesUtil.floor(times, point);
+				if (pos == -1) {
+					return 0;
+				}
+				return nums.length == 0 ? 0 : nums[pos];
+			}
+		};
 	}
 }

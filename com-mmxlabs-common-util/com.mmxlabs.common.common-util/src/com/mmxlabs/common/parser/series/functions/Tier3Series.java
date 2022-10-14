@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
 import com.mmxlabs.common.parser.astnodes.Tier3FunctionASTNode;
@@ -22,6 +26,7 @@ public class Tier3Series implements ISeries {
 	private final ISeries midValue;
 	private final ISeries highValue;
 	private final int[] changePoints;
+	private final Set<String> parameters;
 
 	public Tier3Series(final ISeries target, final ComparisonOperators lowOp, final double low, final ISeries lowValue, final ComparisonOperators midOp, final double mid, final ISeries midValue,
 			final ISeries highValue) {
@@ -35,6 +40,21 @@ public class Tier3Series implements ISeries {
 		this.highValue = highValue;
 
 		this.changePoints = SeriesUtil.mergeChangePoints(target, lowValue, midValue, highValue);
+		parameters = new HashSet<>();
+		parameters.addAll(target.getParameters());
+		parameters.addAll(lowValue.getParameters());
+		parameters.addAll(midValue.getParameters());
+		parameters.addAll(highValue.getParameters());
+	}
+
+	@Override
+	public Set<String> getParameters() {
+		return parameters;
+	}
+
+	@Override
+	public boolean isParameterised() {
+		return !parameters.isEmpty();
 	}
 
 	@Override
@@ -43,15 +63,15 @@ public class Tier3Series implements ISeries {
 	}
 
 	@Override
-	public Number evaluate(final int point) {
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
 
-		final Number baseValue = target.evaluate(point);
+		final Number baseValue = target.evaluate(timePoint, params);
 		final ExprSelector selected = Tier3FunctionASTNode.select(baseValue.doubleValue(), lowOp, low, midOp, mid);
 
 		return switch (selected) {
-		case LOW -> lowValue.evaluate(point);
-		case MID -> midValue.evaluate(point);
-		case HIGH -> highValue.evaluate(point);
+		case LOW -> lowValue.evaluate(timePoint, params);
+		case MID -> midValue.evaluate(timePoint, params);
+		case HIGH -> highValue.evaluate(timePoint, params);
 		};
 
 	}

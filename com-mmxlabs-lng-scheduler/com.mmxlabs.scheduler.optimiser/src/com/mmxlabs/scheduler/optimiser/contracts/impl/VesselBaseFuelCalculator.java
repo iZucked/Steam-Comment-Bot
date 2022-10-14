@@ -18,7 +18,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
- * Implementation of {@link IVesselBaseFuelCalculator} looking up the base fuel rate of the vessel based on the voyage plan.
+ * Implementation of {@link IVesselBaseFuelCalculator} looking up the base fuel
+ * rate of the vessel based on the voyage plan.
  * 
  * @author achurchill
  * 

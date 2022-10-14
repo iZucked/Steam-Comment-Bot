@@ -58,6 +58,7 @@ Exponent = [eE] [+-]? [0-9]+
 
 Integer = 0 | [1-9][0-9]* 
 
+PARAM = @[a-zA-Z_0-9]+[a-zA-Z_][a-zA-Z_0-9]*
 VAR = \#[a-zA-Z]+[a-zA-Z_0-9]*
 
 mPositive = m[0-9][0-9]?
@@ -117,6 +118,8 @@ white_space = {new_line} | [ \t\f]
 "]"               { return symbol("]",RBRACKET); }
   \"              { string.setLength(0); yybegin(STRING); }
 ","               { return symbol("comma",COMMA); }
+":"               { return symbol("colon",COLON); }
+
 ";"               { return symbol("semicolon",SEMICOLON); }
 "="               { return symbol("equals",EQUALS); }
 "("               { return symbol("(",LPAREN); }
@@ -127,6 +130,8 @@ white_space = {new_line} | [ \t\f]
 "/"               { return symbol("div",DIVIDE  ); }
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
+{PARAM}        { return symbol("param", PARAM, new String(yytext()).replace("@","") ); }
+
 {VAR}        { return symbol("var", VAR, new String(yytext()).replace("#","") ); }
 m        { return symbol("m", M, Integer.valueOf(0) ); }
 {MValue}        { return symbol("m", M, Integer.valueOf(yytext().replace("m","")) ); }

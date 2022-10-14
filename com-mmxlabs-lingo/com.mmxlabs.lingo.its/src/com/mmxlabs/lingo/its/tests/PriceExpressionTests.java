@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -171,7 +172,7 @@ public class PriceExpressionTests {
 
 		final SeriesParser p = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
 		final ISeries series = p.asSeries(expression);
-		final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero, time));
+		final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero, time), Collections.emptyMap());
 		final double unitPrice = evaluate.doubleValue();
 
 		return unitPrice;

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -37,6 +38,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalculator, IPriceIntervalProvider {
 
+	@Inject
+	private SlotExpressionParamsHelper paramsHelper;
+
 	public static final String ANNOTATION_KEY = "VolumeTierContract.annotation";
 
 	public enum VolumeType {
@@ -50,7 +54,7 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 			IIntegerIntervalCurve combinedIntervals) {
 	}
 
-	public record PricePair(ICurve curve, IIntegerIntervalCurve intervals) {
+	public record PricePair(IParameterisedCurve curve, IIntegerIntervalCurve intervals) {
 	}
 
 	private final Map<IPortSlot, Parameters> perSlotParameters = new HashMap<>();
@@ -200,10 +204,12 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 				volume = allocationAnnotation.getCommercialSlotVolumeInMMBTu(slot);
 			}
 		}
+
+		Map<String, String> params = paramsHelper.buildParameters(slot, null, allocationAnnotation);
 		if (volume <= parameters.threshold()) {
 
 			VolumeTierAnnotation annotation = new VolumeTierAnnotation();
-			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime);
+			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime, params);
 			annotation.lowVolume = volume;
 
 			if (annotations != null) {
@@ -216,8 +222,8 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 			assert allocationAnnotation != null;
 
 			VolumeTierAnnotation annotation = new VolumeTierAnnotation();
-			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime);
-			annotation.highPrice = parameters.highExpressionCurve.curve().getValueAtPoint(pricingTime);
+			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime, params);
+			annotation.highPrice = parameters.highExpressionCurve.curve().getValueAtPoint(pricingTime, params);
 
 			annotation.lowVolume = parameters.threshold();
 			annotation.highVolume = volume - parameters.threshold();

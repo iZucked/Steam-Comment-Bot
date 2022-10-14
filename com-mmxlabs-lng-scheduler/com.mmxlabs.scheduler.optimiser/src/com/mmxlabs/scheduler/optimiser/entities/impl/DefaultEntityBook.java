@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
 
+import java.util.Collections;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;

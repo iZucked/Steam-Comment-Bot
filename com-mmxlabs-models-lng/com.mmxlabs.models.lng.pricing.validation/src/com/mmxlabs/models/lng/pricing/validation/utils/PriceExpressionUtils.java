@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class PriceExpressionUtils {
 	}
 
 	// Pattern to match invalid characters
-	private static final @NonNull Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()\\[\\]]#;=<>)");
+	private static final @NonNull Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()@:\\[\\]]#;=<>)");
 
 	// Pattern to detect use of SHIFT function.
 	private static final @NonNull Pattern shiftDetectPattern = Pattern.compile(".*SHIFT\\p{Space}*\\(.*", Pattern.CASE_INSENSITIVE);
@@ -294,7 +295,7 @@ public class PriceExpressionUtils {
 
 			final int pricingTime = Hours.between(PriceIndexUtils.dateZero, date);
 
-			final double value = parsed.evaluate(pricingTime).doubleValue();
+			final double value = parsed.evaluate(pricingTime, Collections.emptyMap()).doubleValue();
 
 			checkValue(ctx, object, feature, minValue, maxValue, failures, value);
 

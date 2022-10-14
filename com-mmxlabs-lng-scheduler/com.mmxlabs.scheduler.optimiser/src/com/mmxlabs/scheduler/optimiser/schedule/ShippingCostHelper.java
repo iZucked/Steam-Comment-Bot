@@ -120,7 +120,7 @@ public class ShippingCostHelper {
 			final Object obj = sequence[i];
 			if (obj instanceof final PortDetails portDetails) {
 				final @NonNull IPortSlot slot = portDetails.getOptions().getPortSlot();
-				if (actualsDataProvider.hasActuals(slot)) {
+				if (actualsDataProvider != null && actualsDataProvider.hasActuals(slot)) {
 					capacityCosts += actualsDataProvider.getCapacityCosts(slot);
 					crewBonusCosts += actualsDataProvider.getCrewBonusCosts(slot);
 					insuranceCosts += actualsDataProvider.getInsuranceCosts(slot);

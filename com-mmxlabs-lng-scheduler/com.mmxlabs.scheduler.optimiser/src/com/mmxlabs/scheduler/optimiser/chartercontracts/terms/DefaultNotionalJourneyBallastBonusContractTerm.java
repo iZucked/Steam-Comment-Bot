@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -63,8 +64,8 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	@Override
 	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
-		return( slot.getPortType() == PortType.End || slot.getPortType() == PortType.Round_Trip_Cargo_End)
-				
+		return (slot.getPortType() == PortType.End || slot.getPortType() == PortType.Round_Trip_Cargo_End)
+
 				&& (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
 	}
 
@@ -82,8 +83,8 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 		long minCost = Long.MAX_VALUE;
 		for (final IPort returnPort : getReturnPorts()) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
-					speedInKnots, AvailableRouteChoices.OPTIMAL);
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
@@ -120,8 +121,8 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 		IPort minReturnPort = null;
 		for (final IPort returnPort : getReturnPorts()) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
-					speedInKnots, AvailableRouteChoices.OPTIMAL);
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;

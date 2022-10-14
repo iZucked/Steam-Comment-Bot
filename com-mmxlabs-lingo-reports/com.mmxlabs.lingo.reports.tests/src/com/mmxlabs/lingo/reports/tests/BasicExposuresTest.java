@@ -771,9 +771,9 @@ public class BasicExposuresTest {
 				Number evaluate;
 				// "Magic" date constant used in PriceIndexUtils for date zero
 				if (pricingDateOverride != null) {
-					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero.toLocalDate(), pricingDateOverride));
+					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero.toLocalDate(), pricingDateOverride), Collections.emptyMap());
 				} else {
-					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, pricingDate));
+					evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, pricingDate), Collections.emptyMap());
 				}
 
 				final double val = evaluate.doubleValue() * defaultVolumeInMMBTU;

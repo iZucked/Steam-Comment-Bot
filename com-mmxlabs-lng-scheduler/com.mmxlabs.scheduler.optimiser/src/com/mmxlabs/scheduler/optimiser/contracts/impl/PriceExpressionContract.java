@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -19,25 +22,30 @@ import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  */
 public class PriceExpressionContract extends SimpleContract implements IPriceIntervalProvider {
 
-	protected final @NonNull ICurve expressionCurve;
+	protected final @NonNull IParameterisedCurve expressionCurve;
 	protected final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours;
+
+	@Inject
+	private SlotExpressionParamsHelper paramsHelper;
 
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
-	public PriceExpressionContract(final @NonNull ICurve expressionCurve, final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours) {
+	public PriceExpressionContract(final @NonNull IParameterisedCurve expressionCurve, final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours) {
 		this.expressionCurve = expressionCurve;
 		this.priceChangeIntervalsInHours = priceChangeIntervalsInHours;
 	}
 
 	@Override
-	protected int calculateSimpleUnitPrice(final int time, final IPort port) {
-		return expressionCurve.getValueAtPoint(time);
+	protected int calculateSimpleUnitPrice(final int time, final IPort port, Map<String, String> params) {
+		return expressionCurve.getValueAtPoint(time, params);
 	}
 
 	@Override
@@ -63,7 +71,11 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 		}
 	}
 
-	public ICurve getExpressionCurve() {
-		return this.expressionCurve;
+	@Override
+	protected @NonNull Map<@NonNull String, @NonNull String> buildParameters(@NonNull IPortSlot slot, @Nullable VoyagePlan plan, @Nullable IPortTimesRecord ptr) {
+		if (expressionCurve.hasParameters()) {
+			return paramsHelper.buildParameters(slot, plan, ptr);
+		}
+		return Collections.emptyMap();
 	}
 }

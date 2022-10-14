@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
@@ -57,14 +61,28 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		}
 
 		@Override
+		public boolean isParameterised() {
+			return lhs.isParameterised() || rhs.isParameterised();
+		}
+
+		@Override
+		public Set<String> getParameters() {
+
+			Set<String> p = new HashSet<>();
+			p.addAll(lhs.getParameters());
+			p.addAll(rhs.getParameters());
+			return p;
+		}
+
+		@Override
 		public int[] getChangePoints() {
 			return SeriesUtil.mergeChangePoints(lhs.getChangePoints(), rhs.getChangePoints());
 		}
 
 		@Override
-		public Number evaluate(final int point) {
-			final Number n1 = lhs.evaluate(point);
-			final Number n2 = rhs.evaluate(point);
+		public Number evaluate(final int timePoint, final Map<String, String> params) {
+			final Number n1 = lhs.evaluate(timePoint, params);
+			final Number n2 = rhs.evaluate(timePoint, params);
 			return op.evaluate(n1, n2);
 		}
 

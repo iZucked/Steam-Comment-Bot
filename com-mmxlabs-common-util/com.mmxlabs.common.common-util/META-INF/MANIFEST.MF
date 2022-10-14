@@ -44,7 +44,6 @@ Export-Package: com.mmxlabs.common,
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.googlecode.json-simple;bundle-version="1.1.1",
  org.eclipse.emf.ecore;bundle-version="2.25.0",
- com.mmxlabs.common.common-util,
  com.google.guava
 Bundle-ClassPath: java-cup-11b-runtime.jar,
  .

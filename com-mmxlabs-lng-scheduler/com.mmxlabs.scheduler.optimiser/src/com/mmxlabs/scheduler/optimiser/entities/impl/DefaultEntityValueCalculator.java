@@ -114,10 +114,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
-	
+
 	@Inject
 	private ITransferModelDataProvider transferModelDataProvider;
-	
+
 	@Inject
 	@Named(SchedulerConstants.PROCESS_TRANSFER_MODEL)
 	private boolean processTransferModel;
@@ -251,8 +251,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (slot instanceof ILoadOption loadOption) {
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
-				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselCharter,
-						plan, volumeAllocatedSequences, portSlotDetails);
+				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselCharter, plan,
+						volumeAllocatedSequences, portSlotDetails);
 
 				cargoPNLData.setSlotAdditionalOtherPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_OTHER_VALUE]);
 				cargoPNLData.setSlotAdditionalUpsidePNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSIDE_VALUE]);
@@ -391,8 +391,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return new Pair<>(cargoPNLData, result);
 	}
 
-	protected void calculateExtraPreTaxItems(final Map<IEntityBook, Long> entityPreTaxProfit, final IVesselCharter vesselCharter, final VoyagePlan plan,
-			final CargoValueAnnotation cargoPNLData, final IEntity baseEntity, final IEntity shippingEntity, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+	protected void calculateExtraPreTaxItems(final Map<IEntityBook, Long> entityPreTaxProfit, final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
+			final IEntity baseEntity, final IEntity shippingEntity, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 		// Do nothing by default
 
 	}
@@ -454,9 +454,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 	}
-	
-	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
-			final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+
+	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData, final Map<IEntityBook, Long> entityPreTaxProfit,
+			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		if (cargoPNLData.getSlots().size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
 			throw new RuntimeException("Complex cargoes not supported");
@@ -464,7 +464,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		IEntity loadEntity = null;
 		IEntity dischargeEntity = null;
-		
+
 		ILoadOption loadOption = null;
 		IDischargeOption dischargeOption = null;
 
@@ -479,63 +479,63 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				dischargeEntity = cargoPNLData.getSlotEntity(slot);
 			}
 		}
-		
+
 		assert loadOption != null;
 		assert dischargeOption != null;
 		assert loadEntity != null;
 		assert dischargeEntity != null;
-		
+
 		boolean isTransferred = (transferModelDataProvider.isSlotTransferred(loadOption) || transferModelDataProvider.isSlotTransferred(dischargeOption));
-		
+
 		final List<BasicTransferRecord> records = getSortedTransferRecords(loadOption, dischargeOption, loadEntity, dischargeEntity);
-		
+
 		if (isTransferred && !records.isEmpty()) {
-			
+
 			// initial info
 			final long volumeInMMBTu = cargoPNLData.getCommercialSlotVolumeInMMBTu(loadOption);
 			final long loadPurchaseCost = cargoPNLData.getSlotValue(loadOption);
 			final long dischargeSaleRevenue = cargoPNLData.getSlotValue(dischargeOption);
-			
+
 			// Negate the original cost and revenue from the trading book
 			// Since these are already added in evaluateCargoPnL for the corresponding slots
 			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), loadPurchaseCost);
 			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), -dischargeSaleRevenue);
-			
+
 			BasicTransferRecord previousRecord = null;
 			TranferRecordAnnotation prevAnnotation = null;
-			for(final BasicTransferRecord currentRecord : records) {
-				
+			for (final BasicTransferRecord currentRecord : records) {
+
 				int tpPrice = getTransferPrice(currentRecord);
-				
+
 				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
 				annotation.transferRecord = currentRecord;
 				annotation.fromEntity = currentRecord.getFromEntity();
 				annotation.toEntity = currentRecord.getToEntity();
 				annotation.tpPrice = tpPrice;
-				
+
 				long purchaseCost = loadPurchaseCost;
 				long saleRevenue = dischargeSaleRevenue;
 				long volumeTPValue = Calculator.costFromVolume(volumeInMMBTu, tpPrice);
 				if (previousRecord != null && prevAnnotation != null) {
-					purchaseCost =  volumeTPValue;
+					purchaseCost = volumeTPValue;
 					prevAnnotation.toEntityRevenue = volumeTPValue;
 				}
-				
+
 				annotation.fromEntityCost = purchaseCost;
 				annotation.fromEntityRevenue = volumeTPValue;
-				
+
 				annotation.toEntityCost = volumeTPValue;
 				annotation.toEntityRevenue = saleRevenue;
-				
+
 				// Add previous annotation into the book
 				if (prevAnnotation != null && previousRecord != null) {
 					addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
 				}
-				
+
 				previousRecord = currentRecord;
 				prevAnnotation = annotation;
 			}
-			
+
 			// Add the last annotation into the book
 			if (prevAnnotation != null && previousRecord != null) {
 				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
@@ -545,37 +545,38 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 	}
-	
+
 	/**
 	 * Override-able method to add any back-market or contingency time
+	 * 
 	 * @param record
 	 * @return
 	 */
 	protected int getTransferPrice(final BasicTransferRecord record) {
 		return record.getPricingSeries().getValueAtPoint(record.getPricingDate());
 	}
-	
+
 	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,
 			final TranferRecordAnnotation annotation) {
 		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), -annotation.toEntityCost);
 		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityRevenue);
 		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), -annotation.fromEntityCost);
 		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityRevenue);
-		
+
 		if (entityBookDetailTreeMap != null) {
 			final IDetailTree detailTree = getEntityBookDetails(entityBookDetailTreeMap, annotation.fromEntity.getTradingBook());
 			detailTree.addChild(TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY, annotation);
 		}
 	}
-	
-	private List<BasicTransferRecord> getSortedTransferRecords(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IEntity loadEntity, final IEntity dischargeEntity){
+
+	private List<BasicTransferRecord> getSortedTransferRecords(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IEntity loadEntity, final IEntity dischargeEntity) {
 		final List<BasicTransferRecord> unsorted = new ArrayList<>();
 		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(loadOption));
 		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(dischargeOption));
-		if (unsorted.size() <= 1 ) {
+		if (unsorted.size() <= 1) {
 			return unsorted;
 		}
-		
+
 		final List<BasicTransferRecord> sorted = new ArrayList<>(unsorted.size());
 		IEntity toEntity = loadEntity;
 		for (int i = 0; i < unsorted.size(); i++) {
@@ -595,7 +596,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// throw new IllegalStateException
 			}
 		}
-				
+
 		return sorted;
 	}
 
@@ -802,8 +803,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityDetailTreeMap
 	 * @return
 	 */
-	protected long calculatePostTaxItems(final IVesselCharter vesselCharter, final VoyagePlan plan, final ICargoValueAnnotation cargoPNLData,
-			final Map<IEntityBook, Long> entityPostTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityDetailTreeMap) {
+	protected long calculatePostTaxItems(final IVesselCharter vesselCharter, final VoyagePlan plan, final ICargoValueAnnotation cargoPNLData, final Map<IEntityBook, Long> entityPostTaxProfit,
+			@Nullable final Map<IEntityBook, IDetailTree> entityDetailTreeMap) {
 		return 0;
 	}
 

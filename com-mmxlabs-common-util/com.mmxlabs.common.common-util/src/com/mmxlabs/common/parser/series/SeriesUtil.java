@@ -6,28 +6,52 @@ package com.mmxlabs.common.parser.series;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 public class SeriesUtil {
 
-	public static final int[] mergeChangePoints(ISeries... arguments) {
+	public static final int[] mergeChangePoints(final ISeries... arguments) {
 
-		int[] accumulator = new int[0];
+		final Set<Integer> changePointsSet = new TreeSet<>();
 		for (final ISeries argument : arguments) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
+			IntStream.of(argument.getChangePoints()).forEach(changePointsSet::add);
 		}
-		return accumulator;
+		return changePointsSet.stream().mapToInt(Integer::intValue).toArray();
+
 	}
 
-	public static final int[] mergeChangePoints(Collection<ISeries> arguments) {
+	public static final int[] mergeChangePoints(final Collection<ISeries> arguments) {
 
-		int[] accumulator = new int[0];
+		final Set<Integer> changePointsSet = new TreeSet<>();
 		for (final ISeries argument : arguments) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
+			IntStream.of(argument.getChangePoints()).forEach(changePointsSet::add);
 		}
-		return accumulator;
+		return changePointsSet.stream().mapToInt(Integer::intValue).toArray();
+	}
+
+	public static final Set<String> mergeParameters(final ISeries... arguments) {
+
+		final Set<String> parameters = new HashSet<>();
+		for (final ISeries argument : arguments) {
+			parameters.addAll(argument.getParameters());
+		}
+		return parameters;
+
+	}
+
+	public static final Set<String> mergeParameters(final Collection<ISeries> arguments) {
+
+		final Set<String> parameters = new HashSet<>();
+		for (final ISeries argument : arguments) {
+			parameters.addAll(argument.getParameters());
+		}
+		return parameters;
 	}
 
 	public static final int[] mergeChangePoints(final int[] a, final int[] b) {
@@ -123,7 +147,7 @@ public class SeriesUtil {
 		for (final int p : points) {
 			sb.append(p);
 			sb.append("=>");
-			sb.append(s.evaluate(p));
+			sb.append(s.evaluate(p, Collections.emptyMap()));
 			sb.append(" ");
 		}
 		return sb.toString();

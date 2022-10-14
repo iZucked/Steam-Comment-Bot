@@ -24,13 +24,12 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
-public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
+public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm {
 	private final @NonNull ILongCurve lumpSumCurve;
 	private final @NonNull ICurve fuelPriceCurve;
 	private final @NonNull ILongCurve charterRateCurve;
@@ -49,7 +48,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-	
+
 	@Inject
 	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
 
@@ -82,8 +81,8 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		long minCost = Long.MAX_VALUE;
 		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
-					speedInKnots, AvailableRouteChoices.OPTIMAL);
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
@@ -125,8 +124,8 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		IPort minReturnPort = null;
 		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
-					speedInKnots, AvailableRouteChoices.OPTIMAL);
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
@@ -187,11 +186,11 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	/**
 	 * portTimesRecord - end port
 	 */
-	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {	
-		// 
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
+		//
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 		int vesselStartTimeUTC = utcOffsetProvider.UTC(vesselStartTime, vesselStartPort);
-		
+
 		if (monthStartInclusive <= vesselStartTimeUTC && vesselStartTimeUTC < monthEndExclusive) {
 			return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(slot.getPort());
 		}

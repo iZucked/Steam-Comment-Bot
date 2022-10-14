@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -104,6 +105,6 @@ public class SeriesParserTest {
 		parser.addSeriesExpression("HH4", SeriesType.COMMODITY, "4.0");
 
 		final ISeries series = parser.asSeries(expression);
-		return series.evaluate(0).doubleValue();
+		return series.evaluate(0, Collections.emptyMap()).doubleValue();
 	}
 }

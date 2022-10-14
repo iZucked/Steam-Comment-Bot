@@ -12,12 +12,22 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 
-public class ConstantSeriesExpression implements IExpression<ISeries> {
+public class ParamSeriesExpression implements IExpression<ISeries> {
 	protected static final int[] NONE = new int[0];
-	private final Number constant;
 
-	public ConstantSeriesExpression(final Number constant) {
-		this.constant = constant;
+	private final Number defaultValue;
+	private final String name;
+
+	private final Set<String> parameters;
+
+	public ParamSeriesExpression(final String name) {
+		this(name, null);
+	}
+
+	public ParamSeriesExpression(final String name, final Number defaultValue) {
+		this.name = name;
+		this.defaultValue = defaultValue;
+		this.parameters = Collections.singleton(name);
 	}
 
 	@Override
@@ -26,12 +36,12 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 
 			@Override
 			public boolean isParameterised() {
-				return false;
+				return true;
 			}
 
 			@Override
 			public Set<String> getParameters() {
-				return Collections.emptySet();
+				return parameters;
 			}
 
 			@Override
@@ -41,19 +51,17 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 
 			@Override
 			public Number evaluate(final int timePoint, final Map<String, String> params) {
-				return constant;
+				final String v = params.get(name);
+				if (v == null) {
+					return defaultValue;
+				}
+				return Double.parseDouble(v);
 			}
 		};
-	}
-
-	public Number getConstant() {
-		// TODO Auto-generated method stub
-		return constant;
 	}
 
 	@Override
 	public boolean canEvaluate() {
 		return true;
 	}
-
 }

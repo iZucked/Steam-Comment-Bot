@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

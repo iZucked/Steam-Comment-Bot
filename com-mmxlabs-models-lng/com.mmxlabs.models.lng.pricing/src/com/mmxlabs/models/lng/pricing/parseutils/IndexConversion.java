@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.parseutils;
 
 import java.time.YearMonth;
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -57,7 +58,7 @@ public class IndexConversion extends ExposuresIndexConversion {
 		double unitPrice = 0.0;
 		if (series instanceof SeriesOperatorExpression opExpr) {
 			final @NonNull ISeries opSeries = opExpr.evaluate();
-			final Number evaluate = opSeries.evaluate(Hours.between(PriceIndexUtils.dateZero, date));
+			final Number evaluate = opSeries.evaluate(Hours.between(PriceIndexUtils.dateZero, date), Collections.emptyMap());
 			unitPrice = evaluate.doubleValue();
 		}
 		return unitPrice;

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.time.YearMonth;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -705,7 +706,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							// Pricing model should not have lazy curves
 							final ISeries series = seriesParser.getSeries(name).get();
 							if (series != null) {
-								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
+								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate), Collections.emptyMap());
 							}
 						} catch (final Exception e) {
 							// Ignore, anything from series parser should be picked up via validation
