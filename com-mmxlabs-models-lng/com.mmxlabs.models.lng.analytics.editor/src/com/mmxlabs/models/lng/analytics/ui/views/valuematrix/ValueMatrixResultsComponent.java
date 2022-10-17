@@ -442,6 +442,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 
 	public void refresh(final SwapValueMatrixModel model) {
 		clearValueMatrix();
+		summaryComposite.setVisible(false);
 		if (model != null) {
 			final SwapValueMatrixResultSet resultsSet = model.getSwapValueMatrixResult();
 			if (resultsSet != null) {
