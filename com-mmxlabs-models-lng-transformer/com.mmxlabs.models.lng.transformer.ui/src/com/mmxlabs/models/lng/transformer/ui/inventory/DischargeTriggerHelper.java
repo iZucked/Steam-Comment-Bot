@@ -261,14 +261,12 @@ public class DischargeTriggerHelper {
 				clearCargoesAndSchedule(scenario, start);
 		}
 		final CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
-		int i = 0;
 
 		for (final LocalDate slotDate : dates) {
 			assert port != null;
 			assert port.getCapabilities().contains(PortCapability.DISCHARGE) == true;
 			final SlotMaker<DischargeSlot> dischargeMaker = new SlotMaker<>(builder);
-			dischargeMaker.withDESSale(String.format("%d-%s-%s-%s", slotDate.getYear(), this.triggerRecord.contract.getName().toUpperCase(), //
-					"discharge-trigger", ++i), slotDate, port, this.triggerRecord.contract, this.triggerRecord.contract.getEntity(), null);
+			dischargeMaker.withDESSale(InventoryTriggerUtils.proposeName(scenario, slotDate.getYear(), this.triggerRecord.contract.getName(), "discharge"), slotDate, port, this.triggerRecord.contract, this.triggerRecord.contract.getEntity(), null);
 			dischargeMaker.withVolumeLimits(this.triggerRecord.contract.getMinQuantity(), this.triggerRecord.contract.getMaxQuantity(), //
 					this.triggerRecord.contract.getVolumeLimitsUnit());
 			dischargeMaker.withWindowSize(matchingFlexibilityDays, TimePeriod.DAYS);
@@ -347,5 +345,4 @@ public class DischargeTriggerHelper {
 				})
 				.collect(Collectors.toList());
 	}
-
 }
