@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
@@ -36,6 +37,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getViabilityModel <em>Viability Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getMtmModel <em>Mtm Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getBreakevenModels <em>Breakeven Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSwapValueMatrixModels <em>Swap Value Matrix Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -90,6 +92,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<BreakEvenAnalysisModel> breakevenModels;
+
+	/**
+	 * The cached value of the '{@link #getSwapValueMatrixModels() <em>Swap Value Matrix Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSwapValueMatrixModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SwapValueMatrixModel> swapValueMatrixModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -245,6 +257,19 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @generated
 	 */
 	@Override
+	public EList<SwapValueMatrixModel> getSwapValueMatrixModels() {
+		if (swapValueMatrixModels == null) {
+			swapValueMatrixModels = new EObjectContainmentEList<SwapValueMatrixModel>(SwapValueMatrixModel.class, this, AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS);
+		}
+		return swapValueMatrixModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
@@ -257,6 +282,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return basicSetMtmModel(null, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
 				return ((InternalEList<?>)getBreakevenModels()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
+				return ((InternalEList<?>)getSwapValueMatrixModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -279,6 +306,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getMtmModel();
 			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
 				return getBreakevenModels();
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
+				return getSwapValueMatrixModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -310,6 +339,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getBreakevenModels().clear();
 				getBreakevenModels().addAll((Collection<? extends BreakEvenAnalysisModel>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
+				getSwapValueMatrixModels().clear();
+				getSwapValueMatrixModels().addAll((Collection<? extends SwapValueMatrixModel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -337,6 +370,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
 				getBreakevenModels().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
+				getSwapValueMatrixModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -359,6 +395,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return mtmModel != null;
 			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
 				return breakevenModels != null && !breakevenModels.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
+				return swapValueMatrixModels != null && !swapValueMatrixModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

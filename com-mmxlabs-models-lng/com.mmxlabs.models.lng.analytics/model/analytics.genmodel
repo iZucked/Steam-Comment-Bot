@@ -25,6 +25,7 @@
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/viabilityModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/mtmModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/breakevenModels"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/swapValueMatrixModels"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
     <genClasses ecoreClass="analytics.ecore#//SellOption"/>
@@ -377,6 +378,39 @@
     <genClasses ecoreClass="analytics.ecore#//PortfolioSensitivityResult"/>
     <genClasses ecoreClass="analytics.ecore#//CargoPnLResult">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CargoPnLResult/cargo"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SwapValueMatrixModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/baseLoad"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/baseDischarge"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/baseVesselCharter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/swapLoadMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/swapDischargeMarket"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/baseDischargeMinPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/baseDischargeMaxPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/baseDischargeStepSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/marketMinPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/marketMaxPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/marketStepSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixModel/swapFee"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/swapValueMatrixResult"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SwapValueMatrixResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/baseDischargePrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/swapMarketPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/swapPnlMinusBasePnl"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/baseLoadPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/swapFobLoadPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/baseFobLoadVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/swapFobLoadVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/marketBuyVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/marketSellVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/baseDesSellVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SwapValueMatrixResultSet">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixResultSet/results"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResultSet/swapFee"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixResultSet/generatedSpotLoadSlot"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixResultSet/generatedSpotDischargeSlot"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

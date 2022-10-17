@@ -127,6 +127,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.SENSITIVITY_SOLUTION_SET: return createSensitivitySolutionSet();
 			case AnalyticsPackage.PORTFOLIO_SENSITIVITY_RESULT: return createPortfolioSensitivityResult();
 			case AnalyticsPackage.CARGO_PN_LRESULT: return createCargoPnLResult();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL: return createSwapValueMatrixModel();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT: return createSwapValueMatrixResult();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET: return createSwapValueMatrixResultSet();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -835,6 +838,39 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public CargoPnLResult createCargoPnLResult() {
 		CargoPnLResultImpl cargoPnLResult = new CargoPnLResultImpl();
 		return cargoPnLResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixModel createSwapValueMatrixModel() {
+		SwapValueMatrixModelImpl swapValueMatrixModel = new SwapValueMatrixModelImpl();
+		return swapValueMatrixModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixResult createSwapValueMatrixResult() {
+		SwapValueMatrixResultImpl swapValueMatrixResult = new SwapValueMatrixResultImpl();
+		return swapValueMatrixResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixResultSet createSwapValueMatrixResultSet() {
+		SwapValueMatrixResultSetImpl swapValueMatrixResultSet = new SwapValueMatrixResultSetImpl();
+		return swapValueMatrixResultSet;
 	}
 
 	/**

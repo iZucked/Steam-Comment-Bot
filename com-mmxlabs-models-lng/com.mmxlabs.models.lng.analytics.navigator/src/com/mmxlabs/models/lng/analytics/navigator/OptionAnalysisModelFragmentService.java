@@ -159,6 +159,7 @@ public class OptionAnalysisModelFragmentService {
 				List<AbstractAnalysisModel> plans = new LinkedList<>();
 				plans.addAll(analyticsModel.getOptionModels());
 				plans.addAll(analyticsModel.getBreakevenModels());
+				plans.addAll(analyticsModel.getSwapValueMatrixModels());
 
 				for (final AbstractAnalysisModel plan : plans) {
 					String uuid = plan.getUuid();
@@ -246,6 +247,7 @@ public class OptionAnalysisModelFragmentService {
 					List<AbstractAnalysisModel> plans = new LinkedList<>();
 					plans.addAll(analyticsModel.getOptionModels());
 					plans.addAll(analyticsModel.getBreakevenModels());
+					plans.addAll(analyticsModel.getSwapValueMatrixModels());
 
 					for (final AbstractAnalysisModel plan : plans) {
 						ScenarioFragment fragment = uuidToFragmentMap.get(plan.getUuid());
@@ -389,9 +391,10 @@ public class OptionAnalysisModelFragmentService {
 				return;
 			}
 
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()
-				|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations()
-					|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels()) {
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels() //
+				|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_Optimisations() //
+				|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_BreakevenModels() //
+				|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_SwapValueMatrixModels()) {
 
 				if (notification.getEventType() == Notification.ADD) {
 					final EObject eObj = (EObject) notification.getNewValue();

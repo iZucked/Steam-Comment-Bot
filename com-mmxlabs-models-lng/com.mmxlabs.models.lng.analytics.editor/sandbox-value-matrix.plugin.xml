@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+      		category="com.mmxlabs.models.lng.views.tools"
+            class="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.ValueMatrixModellerView"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/16x16/sandbox.png"
+            id="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.ValueMatrixModellerView"
+            name="Value-matrix Sandbox"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

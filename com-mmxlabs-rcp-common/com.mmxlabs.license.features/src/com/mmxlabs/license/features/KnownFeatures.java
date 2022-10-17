@@ -57,7 +57,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_EXPOSURES = "features:exposures";
 	public static final String FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION = "features:exposures-ignore-energy-conversion";
 	public static final String FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START = "features:exposures-cutoff-at-prompt-start";
-	
+
 	public static final String FEATURE_TRANSFER_MODEL = "features:transfer-model";
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_AGREEMENT_GROUPING = "features:transfer-model-transfer-agreement-grouping";
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_RECORD_EXPOSURE = "features:transfer-model-transfer-record-exposure";
@@ -107,6 +107,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_SANDBOX_CHARTER_INS = "features:sandbox-charter-ins";
 
+	public static final String FEATURE_SANDBOX_VALUE_MATRIX = "features:sandbox-value-matrix";
+
 	public static final String FEATURE_BREAK_EVEN_TABLE = "features:break-even-table";
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";
@@ -136,7 +138,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_PRICE_SENSITIVITY = "features:price-sensitivity";
 
 	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
-	
+
 	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
 
 	/**

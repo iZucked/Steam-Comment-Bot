@@ -38,6 +38,16 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 
 	private ThreadLocal<Integer> price = new ThreadLocal<>();
 
+	private final int addToPrice;
+
+	public ChangeablePriceCalculator() {
+		this.addToPrice = 0;
+	}
+
+	public ChangeablePriceCalculator(final int addToPrice) {
+		this.addToPrice = addToPrice;
+	}
+
 	/**
 	 */
 	@Override
@@ -58,7 +68,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	public void setPrice(final int newPrice) {
-		this.price.set(newPrice);
+		this.price.set(newPrice + addToPrice);
 	}
 
 	@Override

@@ -50,7 +50,6 @@ import com.mmxlabs.common.parser.nodes.ShiftNode;
 import com.mmxlabs.common.parser.nodes.SplitNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -99,12 +98,16 @@ public class ExposuresCalculator {
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
+	
+	@Inject(optional = true)
+	@Named(SchedulerConstants.IGNORE_EXPOSURES)
+	private boolean exposuresIgnored = false;
 
 	final long HighScaleFactor = 1_000_000;
 	final int ScaleFactor = 1_000;
 
 	public List<BasicExposureRecord> calculateExposures(final ICargoValueAnnotation cargoValueAnnotation, final IPortSlot portSlot) {
-		if (exposuresEnabled) {
+		if (exposuresEnabled && !exposuresIgnored) {
 
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
 
@@ -143,6 +146,26 @@ public class ExposuresCalculator {
 			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
 
 			if (pricingDate.isAfter(lookupData.cutoffDate)) {
+//				if (priceExpression.equals("??")) {
+//					if (portSlot instanceof DischargeSlot dischargeSlot //
+//							&& dischargeSlot.getDischargePriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
+//							&& changeablePriceCalculator.isSetPrice()) {
+//								final int setPrice = changeablePriceCalculator.estimateSalesUnitPrice(dischargeSlot, null, null);
+//								final String newPriceExpression = Double.toString(OptimiserUnitConvertor.convertToExternalPrice(setPrice));
+//								return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, newPriceExpression, pricingDate, isLong, lookupData);
+//					} else if (portSlot instanceof IDischargeOption dischargeOption //
+//							&& dischargeOption.getDischargePriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
+//							&& changeablePriceCalculator.isSetPrice()) {
+//								final int setPrice = changeablePriceCalculator.estimateSalesUnitPrice(dischargeOption, null, null);
+//								final String newPriceExpression = Double.toString(OptimiserUnitConvertor.convertToExternalPrice(setPrice));
+//								return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, newPriceExpression, pricingDate, isLong, lookupData);
+//					} else if (portSlot instanceof ILoadOption loadOption //
+//							&& loadOption.getLoadPriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
+//							&& changeablePriceCalculator.isSetPrice()) {
+//						final int setPrice = changeablePriceCalculator.
+//						
+//					}
+//				}
 				return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
 			}
 
@@ -220,7 +243,7 @@ public class ExposuresCalculator {
 	 */
 	private MarkedUpNode getExposureCoefficient(final String priceExpression, final @NonNull ExposuresLookupData lookupData) {
 		if (priceExpression != null && !priceExpression.isEmpty()) {
-			if (!priceExpression.equals("?")) {
+			if (!priceExpression.equals("?") && !priceExpression.equals("??")) {
 
 				if (lookupData.expressionToNode.containsKey(priceExpression)) {
 					return lookupData.expressionToNode.get(priceExpression);

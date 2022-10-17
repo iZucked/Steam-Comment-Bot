@@ -93,6 +93,7 @@ public class AnalyticsModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__VIABILITY_MODEL);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__MTM_MODEL);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__BREAKEVEN_MODELS);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS);
 		}
 		return childrenFeatures;
 	}
@@ -152,6 +153,7 @@ public class AnalyticsModelItemProvider
 			case AnalyticsPackage.ANALYTICS_MODEL__VIABILITY_MODEL:
 			case AnalyticsPackage.ANALYTICS_MODEL__MTM_MODEL:
 			case AnalyticsPackage.ANALYTICS_MODEL__BREAKEVEN_MODELS:
+			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -213,6 +215,11 @@ public class AnalyticsModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__BREAKEVEN_MODELS,
 				 AnalyticsFactory.eINSTANCE.createBreakEvenAnalysisModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixModel()));
 	}
 
 }

@@ -1491,6 +1491,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixModelItemProvider swapValueMatrixModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixModelAdapter() {
+		if (swapValueMatrixModelItemProvider == null) {
+			swapValueMatrixModelItemProvider = new SwapValueMatrixModelItemProvider(this);
+		}
+
+		return swapValueMatrixModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixResultItemProvider swapValueMatrixResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixResultAdapter() {
+		if (swapValueMatrixResultItemProvider == null) {
+			swapValueMatrixResultItemProvider = new SwapValueMatrixResultItemProvider(this);
+		}
+
+		return swapValueMatrixResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixResultSetItemProvider swapValueMatrixResultSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixResultSetAdapter() {
+		if (swapValueMatrixResultSetItemProvider == null) {
+			swapValueMatrixResultSetItemProvider = new SwapValueMatrixResultSetItemProvider(this);
+		}
+
+		return swapValueMatrixResultSetItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1781,6 +1850,9 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (sensitivitySolutionSetItemProvider != null) sensitivitySolutionSetItemProvider.dispose();
 		if (portfolioSensitivityResultItemProvider != null) portfolioSensitivityResultItemProvider.dispose();
 		if (cargoPnLResultItemProvider != null) cargoPnLResultItemProvider.dispose();
+		if (swapValueMatrixModelItemProvider != null) swapValueMatrixModelItemProvider.dispose();
+		if (swapValueMatrixResultItemProvider != null) swapValueMatrixResultItemProvider.dispose();
+		if (swapValueMatrixResultSetItemProvider != null) swapValueMatrixResultSetItemProvider.dispose();
 	}
 
 }
