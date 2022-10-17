@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -42,9 +43,9 @@ public class DischargeTriggerHelper {
 			final List<InventoryDailyEvent> inventoryInsAndOuts = getInventoryInsAndOuts(triggerRecord.inventory);
 			// modify to take into account start date
 			final List<SlotAllocation> dischargeSlotsToConsider = getSortedFilteredDischargeSlots(model, triggerRecord.cutOffDate, triggerRecord.inventory, inventoryInsAndOuts.get(0).date);
-			processWithDischargesAndStartDate(dischargeSlotsToConsider, inventoryInsAndOuts, triggerRecord.cutOffDate);
+			//processWithDischargesAndStartDate(dischargeSlotsToConsider, inventoryInsAndOuts, triggerRecord.cutOffDate);
 			// create new discharges
-			matchAndMoveSlotsDischargeTrigger(model, triggerRecord.inventory.getPort(), inventoryInsAndOuts, triggerRecord.trigger, //
+			matchAndMoveSlotsDischargeTrigger(model, dischargeSlotsToConsider, triggerRecord.inventory.getPort(), inventoryInsAndOuts, triggerRecord.trigger, //
 					triggerRecord.maxQuantity, triggerRecord.cutOffDate, triggerRecord.matchingFlexibilityDays);
 	}
 	
@@ -89,8 +90,8 @@ public class DischargeTriggerHelper {
 			if (event.date.isBefore(start)) {
 				totalInventoryVolume += event.netVolumeIn;
 				totalInventoryVolume += event.netVolumeOut;
-				iter.remove();
 			} else {
+				iter.remove();
 				break;
 			}
 		}
@@ -113,11 +114,11 @@ public class DischargeTriggerHelper {
 	 * @param cargoVolume
 	 * @param start
 	 */
-	private void matchAndMoveSlotsDischargeTrigger(final LNGScenarioModel model, final Port port, final List<InventoryDailyEvent> inventoryInsAndOuts, final int globalDischargeTrigger,
+	private void matchAndMoveSlotsDischargeTrigger(final LNGScenarioModel model, final List<SlotAllocation> dischargeSlotsToConsider, final Port port, final List<InventoryDailyEvent> inventoryInsAndOuts, final int globalDischargeTrigger,
 			final Integer cargoVolume, final LocalDate start, final int matchingFlexibilityDays) {
 		final List<DischargeSlot> sortedSlots = getSortedSlots(model, port, start);
 
-		final List<LocalDate> dischargeDates = getDischargeDates(inventoryInsAndOuts, globalDischargeTrigger, cargoVolume);
+		final List<LocalDate> dischargeDates = getDischargeDates(inventoryInsAndOuts, dischargeSlotsToConsider, globalDischargeTrigger, cargoVolume);
 
 		// Iterate through the discharge dates and find the discharge slots which are within 2 days of the date
 		// change the date
@@ -128,7 +129,7 @@ public class DischargeTriggerHelper {
 			final Iterator<DischargeSlot> dsIter = sortedSlots.iterator();
 			while (dsIter.hasNext()) {
 				final DischargeSlot slot = dsIter.next();
-				if (!slot.getWindowStart().isAfter(ld.plusDays(matchingFlexibilityDays))) {
+				if (!(slot.getWindowStart().isBefore(ld) || slot.getWindowStart().isAfter(ld.plusDays(matchingFlexibilityDays)))) {
 					slot.setWindowStart(ld);
 					iter.remove();
 					dsIter.remove();
@@ -140,19 +141,19 @@ public class DischargeTriggerHelper {
 		// Afterwards create more discharges if any discharge dates left
 		// Create remaining one
 		if (!dischargeDates.isEmpty()) {
-			createDischargeSlots(model, port, dischargeDates, matchingFlexibilityDays, start, false);
+			createDischargeSlots(model, port, dischargeDates, sortedSlots, start, false);
 		}
 	}
 
 	private List<DischargeSlot> getSortedSlots(final LNGScenarioModel model, final Port port, final LocalDate start) {
 		final List<DischargeSlot> sortedSlots = model.getCargoModel().getDischargeSlots().stream() //
-				.filter(d -> d.getPort() == port && (d.getWindowStart().isAfter(start) || d.getWindowStart().isEqual(start))) //
+				.filter(d -> d.getPort() == port && (!d.getWindowStart().isAfter(start))) //
 				.sorted((a, b) -> a.getWindowStart().compareTo(b.getWindowStart())) //
 				.collect(Collectors.toList());
 		return sortedSlots;
 	}
-
-	private List<LocalDate> getDischargeDates(final List<InventoryDailyEvent> inventoryInsAndOuts, final int globalLoadTrigger, final Integer cargoVolume) {
+	
+	private List<LocalDate> getDischargeDates(final List<InventoryDailyEvent> inventoryInsAndOuts, final List<SlotAllocation> dischargeSlotsToConsider, final int globalLoadTrigger, final Integer cargoVolume) {
 		// Create all the discharge date
 		final List<LocalDate> dischargeDates = new LinkedList<>();
 		int runningVolume = 0;
@@ -163,12 +164,25 @@ public class DischargeTriggerHelper {
 				runningVolume += entry.netVolumeOut;
 				runningVolume += entry.netVolumeIn;
 			}
+			final SlotAllocation sa = getAllocationForDate(dischargeSlotsToConsider, entry.date);
+			if (sa != null) {
+				runningVolume += sa.getPhysicalVolumeTransferred();
+			}
 			if (runningVolume < globalLoadTrigger) {
 				dischargeDates.add(entry.date);
 				runningVolume += cargoVolume;
 			}
 		}
 		return dischargeDates;
+	}
+	
+	private SlotAllocation getAllocationForDate(final List<SlotAllocation> dischargeSlotsToConsider, final LocalDate date) {
+		for (final SlotAllocation sa : dischargeSlotsToConsider) {
+			if (sa.getSlot().getWindowStart().isEqual(date)) {
+				return sa;
+			}
+		}
+		return null;
 	}
 	
 	private void processNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents, final boolean isIntake) {
@@ -192,9 +206,8 @@ public class DischargeTriggerHelper {
 			final InventoryEventRow inventoryEventRow) {
 		for (LocalDate ld = inventoryEventRow.getStartDate(); inventoryEventRow.getEndDate().isAfter(ld); ld = ld.plusDays(1)) {
 			// Get existing or create new inventory daily event
-			InventoryDailyEvent inventoryDailyEvent = new InventoryDailyEvent();
-			inventoryDailyEvent.date = ld;
-			setCapacityLimits(capacityTreeMap, inventoryDailyEvent);
+			InventoryDailyEvent inventoryDailyEvent = getOrCreateInventoryDailyEvent(capacityTreeMap, idEvents, ld);
+
 			int reliableVolume = inventoryEventRow.getReliableVolume();
 			switch (inventoryEventRow.getPeriod()) {
 			case HOURLY:
@@ -212,8 +225,20 @@ public class DischargeTriggerHelper {
 			} else {
 				inventoryDailyEvent.subtractVolume(reliableVolume);
 			}
-			idEvents.add(inventoryDailyEvent);
 		}
+	}
+	
+	private InventoryDailyEvent getOrCreateInventoryDailyEvent(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents, final LocalDate date) {
+		for(final InventoryDailyEvent event : idEvents) {
+			if (event.date.equals(date)) {
+				return event;
+			}
+		}
+		InventoryDailyEvent inventoryDailyEvent = new InventoryDailyEvent();
+		inventoryDailyEvent.date = date;
+		setCapacityLimits(capacityTreeMap, inventoryDailyEvent);
+		idEvents.add(inventoryDailyEvent);
+		return inventoryDailyEvent;
 	}
 	
 	private void processLevelOrCargoEventRow(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents,
@@ -252,7 +277,7 @@ public class DischargeTriggerHelper {
 	 * Entry point to create discharge slots
 	 * 
 	 */
-	private void createDischargeSlots(final LNGScenarioModel scenario, final Port port, final List<LocalDate> dates, final int matchingFlexibilityDays, final LocalDate start, final boolean clear) {
+	private void createDischargeSlots(final LNGScenarioModel scenario, final Port port, final List<LocalDate> dates, final List<DischargeSlot> sortedSlots, final LocalDate start, final boolean clear) {
 		// First clear all discharge slots, if necessary
 		final EList<DischargeSlot> dischargeSlots = scenario.getCargoModel().getDischargeSlots();
 		if (dischargeSlots != null) {
@@ -261,16 +286,70 @@ public class DischargeTriggerHelper {
 				clearCargoesAndSchedule(scenario, start);
 		}
 		final CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
+		final List<String> usedIDStrings = InventoryTriggerUtils.getUsedNames(scenario);
+		int counter = 0;
 
 		for (final LocalDate slotDate : dates) {
 			assert port != null;
 			assert port.getCapabilities().contains(PortCapability.DISCHARGE) == true;
 			final SlotMaker<DischargeSlot> dischargeMaker = new SlotMaker<>(builder);
-			dischargeMaker.withDESSale(InventoryTriggerUtils.proposeName(scenario, slotDate.getYear(), this.triggerRecord.contract.getName(), "discharge"), slotDate, port, this.triggerRecord.contract, this.triggerRecord.contract.getEntity(), null);
+			String suggestedName = String.format("%d-%s-%s-%s", slotDate.getYear(), this.triggerRecord.contract.getName(), "discharge", "trigger");
+			{
+				while (usedIDStrings.contains(suggestedName)) {
+					suggestedName = String.format("%s-%d", suggestedName, counter++);
+				}
+				usedIDStrings.add(suggestedName);
+			}
+			
+			final LocalDate prev = getPrevious(slotDate, sortedSlots);
+			int numDays = Days.between(prev, slotDate) / 2;
+			final LocalDate date = prev.plusDays(numDays);
+			
+			dischargeMaker.withDESSale(suggestedName, date, port, this.triggerRecord.contract, this.triggerRecord.contract.getEntity(), null);
 			dischargeMaker.withVolumeLimits(this.triggerRecord.contract.getMinQuantity(), this.triggerRecord.contract.getMaxQuantity(), //
 					this.triggerRecord.contract.getVolumeLimitsUnit());
-			dischargeMaker.withWindowSize(matchingFlexibilityDays, TimePeriod.DAYS);
+			dischargeMaker.withWindowSize(numDays, TimePeriod.DAYS);
 			dischargeMaker.build();
+		}
+	}
+	
+	private LocalDate getPrevious(final LocalDate slotDate, final List<DischargeSlot> sortedSlots) {
+		DischargeSlot selected = null;
+		for (final DischargeSlot slot : sortedSlots) {
+			if (slot.getWindowStart().isBefore(slotDate)) {
+				if (selected == null) {
+					selected = slot;
+				} else {
+					if (selected.getWindowStart().isBefore(slot.getWindowStart())) {
+						selected = slot;
+					}
+				}
+			}
+		}
+		if (selected != null) {
+			return selected.getWindowStart();
+		} else {
+			return slotDate;
+		}
+	}
+	
+	private LocalDate getNext(final LocalDate slotDate, final List<DischargeSlot> sortedSlots) {
+		DischargeSlot selected = null;
+		for (final DischargeSlot slot : sortedSlots) {
+			if (slot.getWindowStart().isAfter(slotDate)) {
+				if (selected == null) {
+					selected = slot;
+				} else {
+					if (selected.getWindowStart().isAfter(slot.getWindowStart())) {
+						selected = slot;
+					}
+				}
+			}
+		}
+		if (selected != null) {
+			return selected.getWindowStart();
+		} else {
+			return slotDate;
 		}
 	}
 

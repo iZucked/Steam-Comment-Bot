@@ -17,19 +17,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class InventoryTriggerUtils {
 	
-	public static String proposeName(final LNGScenarioModel model, int year, final String contractName, final String slotSide) {
-		
-		final List<String> usedIDStrings = getUsedNames(model);
-		int counter = 0;
-		String suggestedName = String.format("%d-%s-%s-%s", year, contractName, slotSide, "trigger");
-		
-		while (usedIDStrings.contains(suggestedName)) {
-			suggestedName = String.format("%s-%d", suggestedName, counter++);
-		}
-		return suggestedName;
-	}
-	
-	private static List<String> getUsedNames(final LNGScenarioModel model){
+	public static List<String> getUsedNames(final LNGScenarioModel model){
 		final List<String> names = new LinkedList<>();
 		
 		for (final EObject obj : collectRequiredObjects(model)) {
