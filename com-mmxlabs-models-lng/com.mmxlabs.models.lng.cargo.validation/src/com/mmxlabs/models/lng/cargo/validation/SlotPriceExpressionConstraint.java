@@ -16,6 +16,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -34,7 +35,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 
 		if (target instanceof Slot<?> slot) {
 
-			if (slot.isSetPriceExpression()) {
+			if (slot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
 				if ("??".equals(priceExpression)) {

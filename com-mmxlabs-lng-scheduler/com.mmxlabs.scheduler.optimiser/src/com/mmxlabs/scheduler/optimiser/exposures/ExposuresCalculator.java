@@ -48,6 +48,7 @@ import com.mmxlabs.common.parser.nodes.OperatorNode;
 import com.mmxlabs.common.parser.nodes.SCurveNode;
 import com.mmxlabs.common.parser.nodes.ShiftNode;
 import com.mmxlabs.common.parser.nodes.SplitNode;
+import com.mmxlabs.common.parser.nodes.VolumeTierNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
@@ -146,27 +147,8 @@ public class ExposuresCalculator {
 			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
 
 			if (pricingDate.isAfter(lookupData.cutoffDate)) {
-//				if (priceExpression.equals("??")) {
-//					if (portSlot instanceof DischargeSlot dischargeSlot //
-//							&& dischargeSlot.getDischargePriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
-//							&& changeablePriceCalculator.isSetPrice()) {
-//								final int setPrice = changeablePriceCalculator.estimateSalesUnitPrice(dischargeSlot, null, null);
-//								final String newPriceExpression = Double.toString(OptimiserUnitConvertor.convertToExternalPrice(setPrice));
-//								return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, newPriceExpression, pricingDate, isLong, lookupData);
-//					} else if (portSlot instanceof IDischargeOption dischargeOption //
-//							&& dischargeOption.getDischargePriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
-//							&& changeablePriceCalculator.isSetPrice()) {
-//								final int setPrice = changeablePriceCalculator.estimateSalesUnitPrice(dischargeOption, null, null);
-//								final String newPriceExpression = Double.toString(OptimiserUnitConvertor.convertToExternalPrice(setPrice));
-//								return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, newPriceExpression, pricingDate, isLong, lookupData);
-//					} else if (portSlot instanceof ILoadOption loadOption //
-//							&& loadOption.getLoadPriceCalculator() instanceof ChangeablePriceCalculator changeablePriceCalculator //
-//							&& changeablePriceCalculator.isSetPrice()) {
-//						final int setPrice = changeablePriceCalculator.
-//						
-//					}
-//				}
-				return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+				int cargoCV = cargoValueAnnotation.getSlotCargoCV(portSlot);
+				return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, cargoCV, lookupData);
 			}
 
 		}
@@ -175,11 +157,11 @@ public class ExposuresCalculator {
 	}
 
 	private List<BasicExposureRecord> calculateExposures(final String name, final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, final LocalDate pricingDate,
-			final boolean isLong, final ExposuresLookupData lookupData) {
+			final boolean isLong, int cargoCV, final ExposuresLookupData lookupData) {
 
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		result.add(calculatePhysicalExposure(volumeMMBTU, pricePerMMBTU, pricingDate, isLong));
-		result.addAll(calculateFinancialExposures(name, priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
+		result.addAll(calculateFinancialExposures(name, priceExpression, volumeMMBTU, pricingDate, isLong, cargoCV, lookupData));
 		return result;
 	}
 
@@ -193,11 +175,11 @@ public class ExposuresCalculator {
 	 * @param lookupData
 	 * @return
 	 */
-	public List<BasicExposureRecord> calculateExposuresForITS(final long volumeMMBTU, final String priceExpression, final LocalDate pricingDate, final boolean isLong,
+	public List<BasicExposureRecord> calculateExposuresForITS(final long volumeMMBTU, final String priceExpression, final LocalDate pricingDate, final boolean isLong, int cargoCV,
 			final ExposuresLookupData lookupData) {
 
 		final List<BasicExposureRecord> result = new ArrayList<>();
-		result.addAll(calculateFinancialExposures("", priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
+		result.addAll(calculateFinancialExposures("", priceExpression, volumeMMBTU, pricingDate, isLong, cargoCV, lookupData));
 		return result;
 	}
 
@@ -219,12 +201,12 @@ public class ExposuresCalculator {
 	}
 
 	private List<BasicExposureRecord> calculateFinancialExposures(final String name, final String priceExpression, final long volumeMMBTU, final LocalDate pricingDate, //
-			final boolean isLong, final ExposuresLookupData lookupData) {
+			final boolean isLong, int cargoCV, final ExposuresLookupData lookupData) {
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		if (lookupData != null) {
 			final MarkedUpNode node = getExposureCoefficient(priceExpression, lookupData);
 			if (node != null) {
-				final Collection<BasicExposureRecord> records = createOptimiserExposureRecord(name, node, pricingDate, volumeMMBTU, isLong, lookupData, priceExpression);
+				final Collection<BasicExposureRecord> records = createOptimiserExposureRecord(name, node, pricingDate, volumeMMBTU, isLong, cargoCV, lookupData, priceExpression);
 				if (!records.isEmpty()) {
 					result.addAll(records);
 				}
@@ -261,14 +243,13 @@ public class ExposuresCalculator {
 	}
 
 	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull MarkedUpNode node, final LocalDate pricingDate, final long volumeInMMBtu,
-			final boolean isLong, final ExposuresLookupData lookupData, final String priceExpression) {
+			final boolean isLong, final int cargoCV, final ExposuresLookupData lookupData, final String priceExpression) {
 		final List<BasicExposureRecord> results = new LinkedList<>();
 
 		final InputRecord inputRecord = new InputRecord();
 		inputRecord.volumeInMMBTU = volumeInMMBtu;
-		final IExposureNode enode = getExposureNode(inputRecord, node, pricingDate, lookupData).getSecond();
-		if (enode instanceof ExposureRecords) {
-			final ExposureRecords exposureRecords = (ExposureRecords) enode;
+		final IExposureNode enode = getExposureNode(inputRecord, node, pricingDate, cargoCV, lookupData).getSecond();
+		if (enode instanceof ExposureRecords exposureRecords) {
 			for (final ExposureRecord record : exposureRecords.records) {
 
 				final BasicExposureRecord exposure = new BasicExposureRecord();
@@ -355,15 +336,22 @@ public class ExposuresCalculator {
 
 	static class InputRecord {
 		long volumeInMMBTU;
+
+		public InputRecord() {
+
+		}
+
+		public InputRecord(long value) {
+			volumeInMMBTU = value;
+		}
 	}
 
-	private @NonNull Pair<Integer, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final LocalDate date, final ExposuresLookupData lookupData) {
+	private @NonNull Pair<Integer, IExposureNode> getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final LocalDate date, int cargoCV,
+			final ExposuresLookupData lookupData) {
 		final int dayOfMonth = date.getDayOfMonth();
-		if (node instanceof ShiftNode) {
-			final ShiftNode shiftNode = (ShiftNode) node;
-			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData);
-		} else if (node instanceof DatedAverageNode) {
-			final DatedAverageNode averageNode = (DatedAverageNode) node;
+		if (node instanceof ShiftNode shiftNode) {
+			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), cargoCV, lookupData);
+		} else if (node instanceof DatedAverageNode averageNode) {
 
 			LocalDate startDate = date.minusMonths(averageNode.getMonths());
 			if (averageNode.getReset() != 1) {
@@ -374,9 +362,8 @@ public class ExposuresCalculator {
 			final ExposureRecords records = new ExposureRecords();
 			int price = 0;
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
-				final Pair<Integer, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
-				if (p.getSecond() instanceof ExposureRecords) {
-					ExposureRecords result = (ExposureRecords) p.getSecond();
+				final Pair<Integer, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), cargoCV, lookupData);
+				if (p.getSecond() instanceof ExposureRecords result) {
 					price += p.getFirst();
 					result = modify(result,
 							c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
@@ -387,10 +374,52 @@ public class ExposuresCalculator {
 			}
 
 			return new Pair<>(price / months, records);
-		} else if (node instanceof SCurveNode) {
-			final SCurveNode scurveNode = (SCurveNode) node;
+		} else if (node instanceof VolumeTierNode volumeTierNode) {
+			long totalVolumeInMMBTU = inputRecord.volumeInMMBTU;
+			long lowVolumeInMMBTU;
+			long highVolumeInMMBTU;
+			if (volumeTierNode.isM3Volume()) {
+				long thresholdInM3 = OptimiserUnitConvertor.convertToInternalVolume(volumeTierNode.getVolume());
+				long thresholdInMMBtu = Calculator.convertM3ToMMBTu(thresholdInM3, cargoCV);
 
-			final Pair<Integer, IExposureNode> baseNodeData = getExposureNode(inputRecord, scurveNode.getBase(), date, lookupData);
+				lowVolumeInMMBTU = Math.min(totalVolumeInMMBTU, thresholdInMMBtu);
+				highVolumeInMMBTU = Math.max(0, lowVolumeInMMBTU);
+			} else {
+				lowVolumeInMMBTU = Math.min(totalVolumeInMMBTU, OptimiserUnitConvertor.convertToInternalVolume(volumeTierNode.getVolume()));
+				highVolumeInMMBTU = Math.max(0, lowVolumeInMMBTU);
+			}
+
+			final ExposureRecords records = new ExposureRecords();
+			long value = 0;
+			{
+				final Pair<Integer, IExposureNode> p = getExposureNode(new InputRecord(lowVolumeInMMBTU), volumeTierNode.getLowTier(), date, cargoCV, lookupData);
+				
+				// Shortcut if there is no high tier volume
+				if (highVolumeInMMBTU == 0) {
+					return p;
+				}
+				
+				if (p.getSecond() instanceof ExposureRecords result) {
+					value += Calculator.costFromConsumption(lowVolumeInMMBTU, p.getFirst());
+					records.records.addAll(result.records);
+				} else if (p.getSecond() instanceof Constant) {
+					return new Pair<>(p.getFirst(), p.getSecond());
+				}
+			}
+			{
+				final Pair<Integer, IExposureNode> p = getExposureNode(new InputRecord(highVolumeInMMBTU), volumeTierNode.getHighTier(), date, cargoCV, lookupData);
+				if (p.getSecond() instanceof ExposureRecords result) {
+					value += Calculator.costFromConsumption(highVolumeInMMBTU, p.getFirst());
+					records.records.addAll(result.records);
+				} else if (p.getSecond() instanceof Constant) {
+					return new Pair<>(p.getFirst(), p.getSecond());
+				}
+			}
+			// Compute weighted price
+			return new Pair<>(Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(value, inputRecord.volumeInMMBTU), records);
+		} else if (node instanceof SCurveNode scurveNode) {
+
+			final Pair<Integer, IExposureNode> baseNodeData = getExposureNode(inputRecord, scurveNode.getBase(), date, cargoCV, lookupData);
 
 			double timesValue;
 			double foo = baseNodeData.getFirst() / (double) HighScaleFactor;
@@ -410,19 +439,17 @@ public class ExposuresCalculator {
 			plus.addChildNode(times);
 			plus.addChildNode(new ConstantNode(scurveNode.getB1()));
 
-			return getExposureNode(inputRecord, plus, date, lookupData);
-		} else if (node instanceof ConstantNode) {
-			final ConstantNode constantNode = (ConstantNode) node;
+			return getExposureNode(inputRecord, plus, date, cargoCV, lookupData);
+		} else if (node instanceof ConstantNode constantNode) {
 			int constant = OptimiserUnitConvertor.convertToInternalPrice(constantNode.getConstant());
 			return new Pair<>(constant, new Constant(constant, ""));
-		} else if (node instanceof SplitNode) {
-			final SplitNode splitNode = (SplitNode) node;
+		} else if (node instanceof SplitNode splitNode) {
 			if (node.getChildren().size() != 3) {
 				throw new IllegalStateException();
 			}
 
-			final Pair<Integer, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
-			final Pair<Integer, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData);
+			final Pair<Integer, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, cargoCV, lookupData);
+			final Pair<Integer, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, cargoCV, lookupData);
 
 			if (dayOfMonth < splitNode.getSplitPointInDays()) {
 				return pc0;
@@ -431,15 +458,14 @@ public class ExposuresCalculator {
 			}
 		}
 		// Arithmetic operator token
-		else if (node instanceof OperatorNode) {
-			final OperatorNode operatorNode = (OperatorNode) node;
+		else if (node instanceof OperatorNode operatorNode) {
 			if (node.getChildren().size() != 2) {
 				throw new IllegalStateException();
 			}
 
 			final String operator = operatorNode.getOperator();
-			final Pair<Integer, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
-			final Pair<Integer, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData);
+			final Pair<Integer, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, cargoCV, lookupData);
+			final Pair<Integer, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, cargoCV, lookupData);
 			final IExposureNode c0 = pc0.getSecond();
 			final IExposureNode c1 = pc1.getSecond();
 			if (operator.equals("+")) {
@@ -614,9 +640,9 @@ public class ExposuresCalculator {
 			if (node.getChildren().size() == 0) {
 				throw new IllegalStateException();
 			}
-			Pair<Integer, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
+			Pair<Integer, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, cargoCV, lookupData);
 			for (int i = 1; i < node.getChildren().size(); ++i) {
-				final Pair<Integer, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData);
+				final Pair<Integer, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, cargoCV, lookupData);
 				if (pc.getFirst() > best.getFirst()) {
 					best = pc;
 				}
@@ -626,9 +652,9 @@ public class ExposuresCalculator {
 			if (node.getChildren().size() == 0) {
 				throw new IllegalStateException();
 			}
-			Pair<Integer, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
+			Pair<Integer, IExposureNode> best = getExposureNode(inputRecord, node.getChildren().get(0), date, cargoCV, lookupData);
 			for (int i = 1; i < node.getChildren().size(); ++i) {
-				final Pair<Integer, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, lookupData);
+				final Pair<Integer, IExposureNode> pc = getExposureNode(inputRecord, node.getChildren().get(i), date, cargoCV, lookupData);
 				if (pc.getFirst() < best.getFirst()) {
 					best = pc;
 				}

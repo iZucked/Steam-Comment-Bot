@@ -146,5 +146,4 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 		intList.add(end);
 		return intList;
 	}
-
 }

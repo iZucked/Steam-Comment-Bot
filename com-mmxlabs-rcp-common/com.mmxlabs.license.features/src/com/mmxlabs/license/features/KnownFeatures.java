@@ -89,6 +89,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_HEEL_RETENTION = "features:heel-retention";
 
+	public static final String FEATURE_REGAS_CONTRACT = "features:regas-contract";
+
 	/**
 	 * Enable the charter length evaluation mode
 	 */

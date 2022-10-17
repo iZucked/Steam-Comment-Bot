@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
@@ -58,6 +59,10 @@ public abstract class AbstractSlotContractCommandProvider<P extends LNGPriceCalc
 
 	protected static @NonNull SlotFilter FILTER_DischargeSlotFilter = (s, p) -> {
 		return s instanceof DischargeSlot;
+	};
+	
+	protected static @NonNull SlotFilter FILTER_NonSpotSlotFilter = (s, p) -> {
+		return !(s instanceof SpotSlot);
 	};
 
 	protected AbstractSlotContractCommandProvider(final @NonNull Class<P> pricingParamsClass, @NonNull final Class<C> slotContractParamsClass, @NonNull final EClass slotContractParamsEClass,

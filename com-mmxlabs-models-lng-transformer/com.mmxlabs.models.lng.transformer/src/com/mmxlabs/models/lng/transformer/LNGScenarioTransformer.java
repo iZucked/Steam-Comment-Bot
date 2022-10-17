@@ -72,6 +72,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
+import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.cargo.util.SpotSlotUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -1616,7 +1617,7 @@ public class LNGScenarioTransformer {
 		final ISalesPriceCalculator dischargePriceCalculator;
 
 		final boolean isSpot = (dischargeSlot instanceof SpotSlot);
-		if (dischargeSlot.isSetPriceExpression()) {
+		if (dischargeSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
 
@@ -1814,7 +1815,7 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-		if (loadSlot.isSetPriceExpression()) {
+		if (loadSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
 
 			final String priceExpression = loadSlot.getPriceExpression();
 			if ("??".equals(priceExpression)) {

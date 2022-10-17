@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerDialog;
 import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerHelper;
+import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerRecord;
 import com.mmxlabs.models.lng.transformer.ui.inventory.InventoryFileName;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
@@ -64,15 +65,10 @@ public class DischargeTriggerEditorActionDelegate implements IEditorActionDelega
 						if (copyScenario != null) {
 							DischargeTriggerDialog dialog = new DischargeTriggerDialog(Display.getDefault().getActiveShell(), copyScenario, copyScenario.getPromptPeriodStart());
 							dialog.open();
-							final Integer globalDischargeTrigger = dialog.getGlobalDischargeTrigger();
-							final Integer cargoVolume = dialog.getCargoVolume();
-							final Integer matchingFlexibilityDays = dialog.getMatchingFlexibilityDays();
-							final LocalDate startDate = dialog.getSelectedDate();
-							final SalesContract salesContract = dialog.getSelectedContract();
-							final Inventory inventory = dialog.getSelectedInventory();
-							if (dialog.getReturnCode() == 0 && cargoVolume != null && startDate != null) {
-								DischargeTriggerHelper dischargeTriggerHelper = new DischargeTriggerHelper(salesContract, inventory, matchingFlexibilityDays);
-								dischargeTriggerHelper.doMatchAndMoveDischargeTrigger(copyScenario, globalDischargeTrigger, cargoVolume, startDate);
+							final DischargeTriggerRecord triggerRecord = dialog.getDischargeTriggerRecord();
+							if (dialog.getReturnCode() == 0 && triggerRecord.maxQuantity != null && triggerRecord.cutOffDate != null) {
+								DischargeTriggerHelper dischargeTriggerHelper = new DischargeTriggerHelper(triggerRecord);
+								dischargeTriggerHelper.doMatchAndMoveDischargeTrigger(copyScenario);
 								try {
 									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_discharge_trigger");
 									final IScenarioDataProvider scenarioDataProvider =  SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), copyScenario);

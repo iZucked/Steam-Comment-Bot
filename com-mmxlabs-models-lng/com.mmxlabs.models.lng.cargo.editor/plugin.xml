@@ -108,7 +108,19 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.CharterOutEvent">
-         </componentHelper>   
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VolumeTierSlotParamsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.VolumeTierSlotParamsComponentHelper_LoadSlot"
+               inheritable="false"
+               modelClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VolumeTierSlotParamsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.VolumeTierSlotParamsComponentHelper_DischargeSlot"
+               inheritable="false"
+               modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+         </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -584,6 +596,10 @@
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider">
     </ModelCommandProvider>
     <!--<ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider"
