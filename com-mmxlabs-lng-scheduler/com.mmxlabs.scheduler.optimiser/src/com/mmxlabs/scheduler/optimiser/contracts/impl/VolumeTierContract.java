@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -91,13 +92,13 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, final IPortTimesRecord ptr, final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(@NonNull IVessel vessel, @NonNull IDischargeOption dischargeOption, @NonNull IPortTimesRecord portTimesRecord) {
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, ptr);
-		return getPriceForSlot(dischargeOption, getAllocationAnnotation(ptr), pricingDate, annotations);
+		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord);
+		return getPriceForSlot(dischargeOption, getAllocationAnnotation(portTimesRecord), pricingDate, null);
 	}
 
 	@Override
@@ -111,7 +112,8 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
+	public int calculateSalesUnitPrice(@NonNull IVesselCharter vesselCharter, @NonNull IDischargeOption dischargeOption, @NonNull IAllocationAnnotation allocationAnnotation,
+			@NonNull VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}

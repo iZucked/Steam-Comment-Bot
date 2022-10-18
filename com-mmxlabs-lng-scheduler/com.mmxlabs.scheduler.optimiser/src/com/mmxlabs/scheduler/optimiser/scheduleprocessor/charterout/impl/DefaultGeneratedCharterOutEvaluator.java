@@ -202,10 +202,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// now we set the heel options on the charter out event as it will be need when
 				// the second voyage plan is calculated
 				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
-				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
+				setHeelOptions(vesselCharter.getVessel(), charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
 			} else {
 				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
-				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
+				setHeelOptions(vesselCharter.getVessel(), charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
 			}
 
 			// TODO: really we need partial boiloff here (see BugzID: 1798)
@@ -447,8 +447,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param ballastStartTime
 	 * @return
 	 */
-	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final IVesselCharter vesselCharter, final Object[] currentSequence,
-			final GeneratedCharterOutOption charterOutOption, final IPortTimesRecord portTimesRecord, final int ballastIdx, final int ballastStartTime) {
+	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final IVesselCharter vesselCharter, final Object[] currentSequence, final GeneratedCharterOutOption charterOutOption,
+			final IPortTimesRecord portTimesRecord, final int ballastIdx, final int ballastStartTime) {
 		final List<IOptionsSequenceElement> newRawSequence = new ArrayList<>(currentSequence.length);
 		final ExtendedCharterOutSequence bigSequence = new ExtendedCharterOutSequence();
 		final IVessel vessel = vesselCharter.getVessel();
@@ -808,8 +808,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param portTimesRecord
 	 * @return
 	 */
-	private void setHeelOptions(final IGeneratedCharterOutVesselEvent generatedCharterOutVesselEvent, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement[] sequence,
-			final long heelVolume) {
+	private void setHeelOptions(final IVessel vessel, final IGeneratedCharterOutVesselEvent generatedCharterOutVesselEvent, final IPortTimesRecord portTimesRecord,
+			final IDetailsSequenceElement[] sequence, final long heelVolume) {
 		IHeelPriceCalculator heelPriceCalculator = null;
 		int cv = 0;
 
@@ -822,15 +822,15 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			} else if (portSlot instanceof ILoadSlot loadSlot) {
 				IDischargeSlot discharge = null;
 				for (int i = sequence.length - 1; i >= 0; i--) {
-					if (sequence[i]instanceof PortDetails pdi) {
-						if (pdi.getOptions().getPortSlot()instanceof IDischargeSlot ds) {
+					if (sequence[i] instanceof PortDetails pdi) {
+						if (pdi.getOptions().getPortSlot() instanceof IDischargeSlot ds) {
 							discharge = ds;
 							break;
 						}
 					}
 				}
 				if (discharge != null) {
-					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null));
+					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(vessel, discharge, portTimesRecord));
 				}
 				cv = loadSlot.getCargoCVValue();
 			} else {
