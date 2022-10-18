@@ -46,8 +46,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseLongCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.parser.series.ILazyExpressionContainer;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -630,7 +630,7 @@ public class LNGScenarioTransformer {
 		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
 				final ISeries concreteSeries = constructConcreteSeries(index);
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 				curve.setDefaultValue(0);
 				final int[] changePoints = concreteSeries.getChangePoints();
 				if (changePoints.length == 0) {
@@ -671,7 +671,7 @@ public class LNGScenarioTransformer {
 		for (final BunkerFuelCurve index : pricingModel.getBunkerFuelCurves()) {
 			try {
 				final ISeries parsed = baseFuelIndices.getSeries(index.getName()).get();
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
@@ -692,7 +692,7 @@ public class LNGScenarioTransformer {
 		for (final CharterCurve index : pricingModel.getCharterCurves()) {
 			try {
 				final ISeries parsed = charterIndices.getSeries(index.getName()).get();
-				final StepwiseLongCurve curve = new StepwiseLongCurve();
+				final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
 				curve.setDefaultValue(0L);
 
 				final int[] changePoints = parsed.getChangePoints();
@@ -750,7 +750,7 @@ public class LNGScenarioTransformer {
 				}
 				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
 			} else {
-				final StepwiseIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
+				final PreGeneratedIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
 				if (expression == null) {
 					throw new IllegalStateException("Unable to parse cooldown curve");
 				}
@@ -3023,9 +3023,9 @@ public class LNGScenarioTransformer {
 			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(vessel);
 			final int capacityInM3 = eVessel.getVesselOrDelegateCapacity();
 
-			final StepwiseLongCurve ladenCurve = new StepwiseLongCurve();
-			final StepwiseLongCurve ballastCurve = new StepwiseLongCurve();
-			final StepwiseLongCurve ballastRoundtripCurve = new StepwiseLongCurve();
+			final PreGeneratedLongCurve ladenCurve = new PreGeneratedLongCurve();
+			final PreGeneratedLongCurve ballastCurve = new PreGeneratedLongCurve();
+			final PreGeneratedLongCurve ballastRoundtripCurve = new PreGeneratedLongCurve();
 
 			// Legacy pricing model
 			{

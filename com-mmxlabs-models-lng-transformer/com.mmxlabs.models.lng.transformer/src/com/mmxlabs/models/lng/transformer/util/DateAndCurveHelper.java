@@ -25,8 +25,8 @@ import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILazyCurve;
 import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseLongCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -101,7 +101,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
-	public @Nullable StepwiseIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
+	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -110,7 +110,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		final IExpression<ISeries> expression = indices.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
 
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {
@@ -122,7 +122,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return curve;
 	}
 
-	public @Nullable StepwiseLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
+	public @Nullable PreGeneratedLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -131,7 +131,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
 
-		final StepwiseLongCurve curve = new StepwiseLongCurve();
+		final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(Math.round(parsed.evaluate(0).doubleValue() * (double) Calculator.ScaleFactor));
 		} else {
@@ -261,7 +261,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	}
 
 	public ICurve generateShiftedCurve(final ISeries series, final UnaryOperator<ZonedDateTime> dateShifter) {
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (series.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0).doubleValue()));
 		} else {
@@ -278,7 +278,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	public ICurve generateExpressionCurve(final ISeries parsed) {
 
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {

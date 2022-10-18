@@ -22,7 +22,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILazyCurve;
 import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -114,7 +114,7 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 
 	private Function<@NonNull ISeries, @NonNull ICurve> makeCurveCreator(final int numPricingDays) {
 		return parsed -> {
-			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+			final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 			if (parsed.getChangePoints().length == 0) {
 				curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 			} else {

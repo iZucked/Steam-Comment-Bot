@@ -10,13 +10,13 @@ import java.util.TreeMap;
 /**
  * An implementation of ICurve which consists of a bunch of intervals on the
  * x-axis with corresponding fixed values on the y-axis. Intervals are specified
- * using {@link StepwiseIntegerCurve#setValueAfter(int, int)}, proceeding from
+ * using {@link PreGeneratedIntegerCurve#setValueAfter(int, int)}, proceeding from
  * least x-value to greatest x-value.
  * 
  * @author hinton
  * 
  */
-public class StepwiseIntegerCurve implements ICurve {
+public class PreGeneratedIntegerCurve implements ICurve {
 
 	private int defaultValue;
 	private final TreeMap<Integer, Integer> intervals = new TreeMap<>();
