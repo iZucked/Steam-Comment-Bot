@@ -49,6 +49,11 @@ public class DischargeTriggerHelper {
 					triggerRecord.maxQuantity, triggerRecord.cutOffDate, triggerRecord.matchingFlexibilityDays);
 	}
 	
+	/**
+	 * Creates a sorted list of inventory daily events with separate in-take and off-take volumes
+	 * @param inventory
+	 * @return
+	 */
 	private List<InventoryDailyEvent> getInventoryInsAndOuts(final Inventory inventory) {
 		final List<InventoryCapacityRow> capacities = inventory.getCapacities();
 
@@ -153,7 +158,15 @@ public class DischargeTriggerHelper {
 		return sortedSlots;
 	}
 	
-	private List<LocalDate> getDischargeDates(final List<InventoryDailyEvent> inventoryInsAndOuts, final List<SlotAllocation> dischargeSlotsToConsider, final int globalLoadTrigger, final Integer cargoVolume) {
+	/**
+	 * Determines the list of dates when global discharge trigger is being hit
+	 * @param inventoryInsAndOuts
+	 * @param dischargeSlotsToConsider
+	 * @param globalDischargeTrigger
+	 * @param cargoVolume
+	 * @return
+	 */
+	private List<LocalDate> getDischargeDates(final List<InventoryDailyEvent> inventoryInsAndOuts, final List<SlotAllocation> dischargeSlotsToConsider, final int globalDischargeTrigger, final Integer cargoVolume) {
 		// Create all the discharge date
 		final List<LocalDate> dischargeDates = new LinkedList<>();
 		int runningVolume = 0;
@@ -168,7 +181,7 @@ public class DischargeTriggerHelper {
 			if (sa != null) {
 				runningVolume += sa.getPhysicalVolumeTransferred();
 			}
-			if (runningVolume < globalLoadTrigger) {
+			if (runningVolume < globalDischargeTrigger) {
 				dischargeDates.add(entry.date);
 				runningVolume += cargoVolume;
 			}
@@ -228,6 +241,15 @@ public class DischargeTriggerHelper {
 		}
 	}
 	
+	/**
+	 * Returns the {@link InventoryDailyEvent} instance from the idEvents list
+	 * if no instance is present for the given date
+	 * creates a new instance and adds it to the idEvents list
+	 * @param capacityTreeMap
+	 * @param idEvents
+	 * @param date
+	 * @return
+	 */
 	private InventoryDailyEvent getOrCreateInventoryDailyEvent(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents, final LocalDate date) {
 		for(final InventoryDailyEvent event : idEvents) {
 			if (event.date.equals(date)) {
@@ -241,6 +263,12 @@ public class DischargeTriggerHelper {
 		return inventoryDailyEvent;
 	}
 	
+	/**
+	 * Accounts for the LEVEL and CARGO volume contribution to the inventory
+	 * @param capacityTreeMap
+	 * @param idEvents
+	 * @param inventoryEventRow
+	 */
 	private void processLevelOrCargoEventRow(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents,
 			final InventoryEventRow inventoryEventRow) {
 		LocalDate ld = inventoryEventRow.getStartDate(); 
@@ -275,6 +303,7 @@ public class DischargeTriggerHelper {
 
 	/**
 	 * Entry point to create discharge slots
+	 * @param dates - list of dates on which discharge slots would be created
 	 * 
 	 */
 	private void createDischargeSlots(final LNGScenarioModel scenario, final Port port, final List<LocalDate> dates, final List<DischargeSlot> sortedSlots, final LocalDate start, final boolean clear) {
@@ -289,6 +318,7 @@ public class DischargeTriggerHelper {
 		final List<String> usedIDStrings = InventoryTriggerUtils.getUsedNames(scenario);
 		int counter = 0;
 
+		// for each 
 		for (final LocalDate slotDate : dates) {
 			assert port != null;
 			assert port.getCapabilities().contains(PortCapability.DISCHARGE) == true;
@@ -313,6 +343,12 @@ public class DischargeTriggerHelper {
 		}
 	}
 	
+	/**
+	 * Returns the first most closest to the slotDate previous discharge slot.
+	 * @param slotDate
+	 * @param sortedSlots
+	 * @return
+	 */
 	private LocalDate getPrevious(final LocalDate slotDate, final List<DischargeSlot> sortedSlots) {
 		DischargeSlot selected = null;
 		for (final DischargeSlot slot : sortedSlots) {
@@ -333,6 +369,12 @@ public class DischargeTriggerHelper {
 		}
 	}
 	
+	/**
+	 * Returns the first most closest to the slotDate next discharge slot.
+	 * @param slotDate
+	 * @param sortedSlots
+	 * @return
+	 */
 	private LocalDate getNext(final LocalDate slotDate, final List<DischargeSlot> sortedSlots) {
 		DischargeSlot selected = null;
 		for (final DischargeSlot slot : sortedSlots) {
