@@ -24,6 +24,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.models.ui.valueproviders.RefetchingReferenceValueProviderProvider;
 
 public class ValueMatrixDataComponent extends AbstractValueMatrixComponent {
 
@@ -62,17 +64,15 @@ public class ValueMatrixDataComponent extends AbstractValueMatrixComponent {
 					final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
 					cargoColumnGroup.setHeaderRenderer(renderer);
 				}
-				parametersViewer.addTypicalColumn(
-						"Vessel", cargoColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getExistingVesselCharterOption_VesselCharter(),
-								scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()),
-						AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter());
-				parametersViewer.addTypicalColumn("Load", cargoColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyReference_Slot(),
-						scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()), AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseLoad());
-				parametersViewer
-						.addTypicalColumn(
-								"Discharge", cargoColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellReference_Slot(),
-										scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()),
-								AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischarge());
+				final IReferenceValueProviderProvider referenceValueProviderProvider = new RefetchingReferenceValueProviderProvider(() -> scenarioEditingLocation.getReferenceValueProviderCache());
+				parametersViewer.addTypicalColumn("Vessel", cargoColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getExistingVesselCharterOption_VesselCharter(),
+						referenceValueProviderProvider, scenarioEditingLocation.getDefaultCommandHandler()), AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter());
+				parametersViewer.addTypicalColumn("Load", cargoColumnGroup,
+						new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyReference_Slot(), referenceValueProviderProvider, scenarioEditingLocation.getDefaultCommandHandler()),
+						AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseLoad());
+				parametersViewer.addTypicalColumn("Discharge", cargoColumnGroup,
+						new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellReference_Slot(), referenceValueProviderProvider, scenarioEditingLocation.getDefaultCommandHandler()),
+						AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischarge());
 				parametersViewer.addTypicalColumn("Min", cargoColumnGroup,
 						new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMinPrice(), scenarioEditingLocation.getDefaultCommandHandler()));
 				parametersViewer.addTypicalColumn("Max", cargoColumnGroup,
@@ -89,10 +89,11 @@ public class ValueMatrixDataComponent extends AbstractValueMatrixComponent {
 								"DES Buy", marketsColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyMarket_Market(),
 										scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()),
 								AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapLoadMarket());
-				parametersViewer.addTypicalColumn(
-						"DES Sell", marketsColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellMarket_Market(),
-								scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()),
-						AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket());
+				parametersViewer
+						.addTypicalColumn(
+								"DES Sell", marketsColumnGroup, new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellMarket_Market(),
+										scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getDefaultCommandHandler()),
+								AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket());
 				parametersViewer.addTypicalColumn("Min", marketsColumnGroup,
 						new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMinPrice(), scenarioEditingLocation.getDefaultCommandHandler()));
 				parametersViewer.addTypicalColumn("Max", marketsColumnGroup,
