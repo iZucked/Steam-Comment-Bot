@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
@@ -17,21 +15,9 @@ public class ShiftFunctionConstructor implements IExpression<ISeries> {
 	private IExpression<ISeries> toShift;
 	private int shiftBy;
 
-	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
+	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, IExpression<ISeries> expr, final int shiftBy) {
 		this.seriesParserData = seriesParserData;
-		this.toShift = arguments.get(0);
-		this.shiftBy = arguments.get(1).evaluate().evaluate(0).intValue();
-	}
-
-	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, final IExpression<ISeries> expr, IExpression<ISeries> shiftBy) {
-		this.seriesParserData = seriesParserData;
-		this.toShift = expr;
-		this.shiftBy = shiftBy.evaluate().evaluate(0).intValue();
-	}
-
-	public ShiftFunctionConstructor(@NonNull SeriesParserData seriesParserData, IExpression<ISeries> expr, final Integer shiftBy) {
-		this.seriesParserData = seriesParserData;
-		this.shiftBy = shiftBy.intValue();
+		this.shiftBy = shiftBy;
 		this.toShift = expr;
 	}
 
@@ -40,8 +26,18 @@ public class ShiftFunctionConstructor implements IExpression<ISeries> {
 		return new ShiftedSeries(seriesParserData, toShift.evaluate(), shiftBy);
 	}
 
+	public IExpression<ISeries> getShiftedExpression() {
+		return toShift;
+	}
+
+	public int getShiftBy() {
+		return shiftBy;
+	}
+
 	@Override
 	public boolean canEvaluate() {
 		return toShift.canEvaluate();
 	}
+	
+	
 }

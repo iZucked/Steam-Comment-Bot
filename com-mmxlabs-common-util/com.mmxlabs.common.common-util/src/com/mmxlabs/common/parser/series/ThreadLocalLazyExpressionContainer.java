@@ -11,6 +11,14 @@ import com.mmxlabs.common.parser.IExpression;
 public class ThreadLocalLazyExpressionContainer implements ILazyExpressionContainer {
 
 	private final ThreadLocal<@Nullable IExpression<ISeries>> localExpression = new ThreadLocal<>();
+	private String name;
+	private SeriesType seriesType;
+
+	public ThreadLocalLazyExpressionContainer(String name, SeriesType seriesType) {
+		this.name = name;
+		this.seriesType = seriesType;
+
+	}
 
 	@Override
 	public ISeries get() {
@@ -37,4 +45,13 @@ public class ThreadLocalLazyExpressionContainer implements ILazyExpressionContai
 		localExpression.set(expression);
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public SeriesType getType() {
+		return seriesType;
+	}
 }

@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
@@ -152,8 +151,8 @@ public class PriceExpressionTests {
 		}
 
 		final SeriesParser p = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
-		final IExpression<ISeries> series = p.parse(expression);
-		final Number evaluate = series.evaluate().evaluate(Hours.between(PriceIndexUtils.dateTimeZero, time));
+		final ISeries series = p.asSeries(expression);
+		final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateTimeZero, time));
 		double unitPrice = evaluate.doubleValue();
 
 		return unitPrice;

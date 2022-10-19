@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.mmxlabs.common.parser.IExpression;
-
 public class SeriesParserTest {
 
 	public static Iterable<Object[]> generateTests() {
@@ -92,13 +90,12 @@ public class SeriesParserTest {
 		});
 
 		SeriesParser parser = new SeriesParser(data);
-		parser.addSeriesExpression("HH", "1.0");
-		parser.addSeriesExpression("HH2", "2.0");
-		parser.addSeriesExpression("HH3", "3.0");
-		parser.addSeriesExpression("HH4", "4.0");
+		parser.addSeriesExpression("HH", SeriesType.COMMODITY, "1.0");
+		parser.addSeriesExpression("HH2", SeriesType.COMMODITY, "2.0");
+		parser.addSeriesExpression("HH3", SeriesType.COMMODITY, "3.0");
+		parser.addSeriesExpression("HH4", SeriesType.COMMODITY, "4.0");
 
-		IExpression<ISeries> parsed = parser.parse(expression);
-
-		return parsed.evaluate().evaluate(0).doubleValue();
+		final ISeries series = parser.asSeries(expression);
+		return series.evaluate(0).doubleValue();
 	}
 }

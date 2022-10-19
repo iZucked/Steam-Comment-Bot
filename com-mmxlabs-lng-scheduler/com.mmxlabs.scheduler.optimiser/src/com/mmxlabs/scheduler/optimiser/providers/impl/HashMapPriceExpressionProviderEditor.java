@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.scheduler.optimiser.providers.IPriceExpressionProviderEditor;
@@ -25,12 +24,6 @@ public class HashMapPriceExpressionProviderEditor implements IPriceExpressionPro
 			throw new IllegalStateException("Unknown price curve reference");
 		}
 		return series;
-	}
-
-	@Override
-	public @NonNull ISeries getExpression(@NonNull String indexName, @Nullable String curveName) {
-		final PriceCurveKey key = new PriceCurveKey(indexName, curveName);
-		return getExpression(key);
 	}
 
 	@Override

@@ -90,12 +90,10 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		final Function<@NonNull ISeries, @NonNull ICurve> curveFactory = makeCurveCreator(numPricingDays);
 		final Function<@NonNull ISeries, @NonNull IIntegerIntervalCurve> priceIntervalFactory = makePriceIntervalCreator(numPricingDays);
 
-		@NonNull
-		final ICurve curve;
-		@NonNull
-		final IIntegerIntervalCurve priceIntervals;
+		final @NonNull ICurve curve;
+		final @NonNull IIntegerIntervalCurve priceIntervals;
 
-		final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
+		final IExpression<ISeries> expression = commodityIndices.asIExpression(priceExpression);
 		if (expression.canEvaluate()) {
 			final ISeries parsed = expression.evaluate();
 			curve = curveFactory.apply(parsed);
@@ -150,7 +148,8 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		final int numHoursInRange = numPricingDays * 24;
 		// Before this hour average equals default value
 		final int minStartHour = minChangePointHour - numHoursInRange + 1;
-		// After maxChangePointHour, average equal same value. But we still have to calculate at least one (could add after)
+		// After maxChangePointHour, average equal same value. But we still have to
+		// calculate at least one (could add after)
 		// TODO: make loop work in steps of 24 hours
 		for (int currentHour = minStartHour; currentHour <= maxChangePointHour; ++currentHour) {
 			final double nextPrice = calculateAveragePrice(currentHour, numPricingDays, parsed);

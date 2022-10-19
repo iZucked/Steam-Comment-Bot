@@ -9,16 +9,18 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.parser.IExpression;
 
 public class NamedSeriesExpression implements IExpression<ISeries> {
-	
+
 	@NonNull
 	private final ISeriesContainer seriesContainer;
+	private final @NonNull String name;
 
-	public NamedSeriesExpression(final @NonNull ISeries series) {
-		this.seriesContainer = new DefaultSeriesContainer(series);
+	public NamedSeriesExpression(final @NonNull ISeries series, SeriesType seriesType, final String name) {
+		this(new DefaultSeriesContainer(name, seriesType, series), name);
 	}
 
-	public NamedSeriesExpression(@NonNull final ISeriesContainer seriesContainer) {
+	public NamedSeriesExpression(@NonNull final ISeriesContainer seriesContainer, final String name) {
 		this.seriesContainer = seriesContainer;
+		this.name = name;
 	}
 
 	@Override
@@ -30,4 +32,9 @@ public class NamedSeriesExpression implements IExpression<ISeries> {
 	public boolean canEvaluate() {
 		return seriesContainer.canGet();
 	}
+
+	public @NonNull String getName() {
+		return name;
+	}
+
 }

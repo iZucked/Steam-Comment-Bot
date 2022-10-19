@@ -80,6 +80,18 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		public static final IOp PERCENT = (a, b) -> a.doubleValue() * b.doubleValue() / 100.0;
 	}
 
+	public char getOperation() {
+		return op;
+	}
+
+	public @NonNull IExpression<ISeries> getLHS() {
+		return lhs;
+	}
+
+	public @NonNull IExpression<ISeries> getRHS() {
+		return rhs;
+	}
+
 	@Override
 	public boolean canEvaluate() {
 		return lhs.canEvaluate() && rhs.canEvaluate();

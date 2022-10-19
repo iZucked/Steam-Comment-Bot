@@ -76,6 +76,8 @@ white_space = {new_line} | [ \t\f]
 "DATEDAVG"           { return symbol("datedavg",DATEDAVG); }
 "SPLITMONTH"           { return symbol("splitmonth", SPLITMONTH); }
 "S"           { return symbol("scurve", S); }
+"VOLUMETIERM3"           { return symbol("volumetierm3", VOLUMETIERM3); }
+"VOLUMETIERMMBTU"           { return symbol("volumetiermmbtu", VOLUMETIERMMBTU); }
  
 /* separators */
   \"              { string.setLength(0); yybegin(STRING); }

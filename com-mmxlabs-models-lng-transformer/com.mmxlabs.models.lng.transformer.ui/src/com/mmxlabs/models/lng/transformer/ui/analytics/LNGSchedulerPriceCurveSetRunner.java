@@ -29,6 +29,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
+import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.common.util.TriFunction;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -138,7 +139,8 @@ public class LNGSchedulerPriceCurveSetRunner {
 				final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(originalScenarioDataProvider);
 
-				// Doing this to populate the base case curves first - order should not matter so this can probably be removed if wanted
+				// Doing this to populate the base case curves first - order should not matter
+				// so this can probably be removed if wanted
 				final Set<CommodityCurve> curvesToOverlay = model.getCommodityCurves().stream() //
 						.filter(CommodityCurveOverlay.class::isInstance) //
 						.map(CommodityCurveOverlay.class::cast) //
@@ -148,7 +150,7 @@ public class LNGSchedulerPriceCurveSetRunner {
 
 				final Map<String, List<PriceCurveKey>> curveOptions = curvesToOverlay.stream() //
 						.map(curve -> curve.getName().toLowerCase()) //
-						.collect(Collectors.toMap(Function.identity(), curveName -> new LinkedList<>(Collections.singleton(new PriceCurveKey(curveName, null)))));
+						.collect(Collectors.toMap(Function.identity(), curveName -> new LinkedList<>(Collections.singleton(new PriceCurveKey(curveName, null, SeriesType.COMMODITY)))));
 
 				model.getCommodityCurves().stream() //
 						.filter(CommodityCurveOverlay.class::isInstance) //
@@ -159,7 +161,7 @@ public class LNGSchedulerPriceCurveSetRunner {
 							overlay.getAlternativeCurves().stream() //
 									.forEach(ympContainer -> {
 										final String alternativeName = ympContainer.getName().toLowerCase();
-										final PriceCurveKey key = new PriceCurveKey(referenceCurveName, alternativeName);
+										final PriceCurveKey key = new PriceCurveKey(referenceCurveName, alternativeName, SeriesType.COMMODITY);
 										curveOptions.get(referenceCurveName).add(key);
 									});
 						});
