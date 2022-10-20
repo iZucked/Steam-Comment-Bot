@@ -32,12 +32,13 @@ terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, C
 terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, VOLUMETIERM3, VOLUMETIERMMBTU;
 
 terminal Integer    INTEGER;
-terminal Double    NUMBER;
+terminal Double    FLOAT;
 terminal ASTNode    SERIES;       
 terminal String NAMED_ELEMENT;
 
 /* Non terminals */
 non terminal ASTNode    expr;      // used to store evaluated subexpressions
+non terminal Number NUMBER;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -47,10 +48,12 @@ precedence left PERCENT;
 precedence left UPLUS;
 precedence left UMINUS;
 precedence left INTEGER;
-precedence left NUMBER;
+precedence left FLOAT;
 
 /* The grammar rules */
+start with expr;
 
+NUMBER ::= INTEGER:n {: RESULT = n; :} | FLOAT:n {: RESULT = n; :} ;
 
 expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs, rhs, Operator.PLUS);       :}
              | expr:lhs MINUS expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.MINUS);      :}
@@ -78,7 +81,7 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs
        | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
        | SERIES:n	                     {: RESULT = n;           :}
        | NAMED_ELEMENT:n	                     {: RESULT = seriesParser.getNamedSeriesASTNode(n);           :}
-       | NUMBER:n	                     {: RESULT =  new ConstantASTNode(n);           :}
+       | FLOAT:n	                     {: RESULT =  new ConstantASTNode(n);           :}
        | INTEGER:n	                     {: RESULT =  new ConstantASTNode(n);           :}
        | QUESTION:n	                     {: RESULT =  new BreakEvenASTNode();           :}
              ;     

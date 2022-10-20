@@ -24,21 +24,21 @@ public final class SCurveFunctionASTNode implements ASTNode {
 	private double a3;
 	private double b3;
 
-	public SCurveFunctionASTNode(final ASTNode base, final double lowerThan, final double higherThan, final double a1, final double b1, final double a2, final double b2, final double a3,
-			final double b3) {
+	public SCurveFunctionASTNode(final ASTNode base, final Number lowerThan, final Number higherThan, final Number a1, final Number b1, final Number a2, final Number b2, final Number a3,
+			final Number b3) {
 
 		this.base = base;
-		this.firstThreshold = lowerThan;
-		this.secondThreshold = higherThan;
-		this.a1 = a1;
-		this.b1 = b1;
-		this.a2 = a2;
-		this.b2 = b2;
-		this.a3 = a3;
-		this.b3 = b3;
-		this.lowerSeries = makeExpression(base, a1, b1);
-		this.middleSeries = makeExpression(base, a2, b2);
-		this.higherSeries = makeExpression(base, a3, b3);
+		this.firstThreshold = lowerThan.doubleValue();
+		this.secondThreshold = higherThan.doubleValue();
+		this.a1 = a1.doubleValue();
+		this.b1 = b1.doubleValue();
+		this.a2 = a2.doubleValue();
+		this.b2 = b2.doubleValue();
+		this.a3 = a3.doubleValue();
+		this.b3 = b3.doubleValue();
+		this.lowerSeries = makeExpression(base, a1.doubleValue(), b1.doubleValue());
+		this.middleSeries = makeExpression(base, a2.doubleValue(), b2.doubleValue());
+		this.higherSeries = makeExpression(base, a3.doubleValue(), b3.doubleValue());
 	}
 
 	private ASTNode makeExpression(ASTNode base, double a, double b) {

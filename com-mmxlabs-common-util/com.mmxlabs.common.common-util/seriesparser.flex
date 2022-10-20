@@ -55,8 +55,8 @@ Exponent = [eE] [+-]? [0-9]+
 
 Integer = 0 | [1-9][0-9]* 
 
-Named_Element = [a-zA-Z_0-9]+[a-zA-Z_][a-zA-Z_0-9]*
-Number = {Integer}|({FLit1}|{FLit2}|{FLit3}) {Exponent}?  
+Named_Element = [a-zA-Z_0-9]+[a-zA-Z_][a-zA-Z_0-9]*|[a-zA-Z_]+[a-zA-Z_0-9]*
+Float =  ({FLit1}|{FLit2}|{FLit3}) {Exponent}?  
 
 new_line = \r|\n|\r\n;
 white_space = {new_line} | [ \t\f]
@@ -92,7 +92,7 @@ white_space = {new_line} | [ \t\f]
 "?"               { return symbol("question",QUESTION  ); }
 {Named_Element}        { return symbol("namedelement", NAMED_ELEMENT, new String(yytext()) ); }
 {Integer}        { return symbol("integer", INTEGER, new Integer(yytext()) ); }
-{Number}        { return symbol("number", NUMBER, new Double(yytext()) ); }
+{Float}        { return symbol("float", FLOAT, new Double(yytext()) ); }
 {white_space}     { /* ignore */ }
 
 }

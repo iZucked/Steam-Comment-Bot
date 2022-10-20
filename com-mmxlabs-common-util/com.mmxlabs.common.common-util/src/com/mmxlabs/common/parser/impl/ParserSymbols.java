@@ -21,7 +21,7 @@ public interface ParserSymbols {
   public static final int LPAREN = 8;
   public static final int CAP = 13;
   public static final int COMMA = 10;
-  public static final int NUMBER = 24;
+  public static final int FLOAT = 24;
   public static final int EOF = 0;
   public static final int UPLUS = 6;
   public static final int DIVIDE = 5;
@@ -60,7 +60,7 @@ public interface ParserSymbols {
   "VOLUMETIERM3",
   "VOLUMETIERMMBTU",
   "INTEGER",
-  "NUMBER",
+  "FLOAT",
   "SERIES",
   "NAMED_ELEMENT"
   };
