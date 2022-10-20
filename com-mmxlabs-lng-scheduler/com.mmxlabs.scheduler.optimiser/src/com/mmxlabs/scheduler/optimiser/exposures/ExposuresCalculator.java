@@ -438,27 +438,7 @@ public class ExposuresCalculator {
 
 	}
 
-	static class ExposureRecord {
-		String curveName;
-		String currencyUnit;
-		int unitPrice;
-		long nativeVolume;
-		long nativeValue;
-		long mmbtuVolume;
-		LocalDate date;
-		String volumeUnit;
-
-		ExposureRecord(final String curveName, final String currencyUnit, final int unitPrice, final long nativeVolume, final long nativeValue, final long mmbtuVolume, final LocalDate date,
-				final String volumeUnit) {
-			this.curveName = curveName;
-			this.currencyUnit = currencyUnit;
-			this.unitPrice = unitPrice;
-			this.nativeVolume = nativeVolume;
-			this.nativeValue = nativeValue;
-			this.mmbtuVolume = mmbtuVolume;
-			this.date = date;
-			this.volumeUnit = volumeUnit;
-		}
+	static record ExposureRecord(String curveName, String currencyUnit, int unitPrice, long nativeVolume, long nativeValue, long mmbtuVolume, LocalDate date, String volumeUnit) {
 	}
 
 	static class InputRecord {
