@@ -50,7 +50,6 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public boolean canEvaluate() {
-		// TODO Auto-generated method stub
 		return series1.canEvaluate() && series2.canEvaluate();
 	}
 
