@@ -94,7 +94,7 @@ public class HeadlineReportView extends ViewPart {
 	 */
 	public enum ColumnDefinition {
 		LABEL_PNL(ColumnType.LABEL, "P&L", null), //
-		VALUE_PNL(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		VALUE_PNL(ColumnType.VALUE, 10_000_000_000l, KPIReportTransformer.TYPE_COST), //
 		//
 		LABEL_PAPER(ColumnType.LABEL, "Paper", null, KnownFeatures.FEATURE_PAPER_DEALS), //
 		VALUE_PAPER(ColumnType.VALUE, 1000000000l, KPIReportTransformer.TYPE_COST, KnownFeatures.FEATURE_PAPER_DEALS), //
