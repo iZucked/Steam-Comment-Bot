@@ -269,7 +269,7 @@ public class PriceExpressionUtils {
 	/**
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
-			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
+			final Double maxValue, final YearMonth date, final List<IStatus> failures, final PriceIndexType type) {
 
 		if (date == null) {
 			// No date, but try to parse expression as a number.
@@ -295,7 +295,7 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
+		final SeriesParser parser = getIndexParser(type);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();

@@ -66,7 +66,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.cargo.CargoPackage
  * @generated
  */
-public class CargoSwitch<@Nullable T1> extends Switch<T1> {
+public class CargoSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

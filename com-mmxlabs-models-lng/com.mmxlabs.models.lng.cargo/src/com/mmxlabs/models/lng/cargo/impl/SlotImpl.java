@@ -96,6 +96,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  * </ul>
  *
  * @generated
@@ -1022,6 +1023,35 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRICING_BASIS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
+
+	/**
+	 * This is true if the Pricing Basis attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pricingBasisESet;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2624,6 +2654,56 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getPricingBasis() {
+		return pricingBasis;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingBasis(String newPricingBasis) {
+		String oldPricingBasis = pricingBasis;
+		pricingBasis = newPricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasisESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, pricingBasis, !oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPricingBasis() {
+		String oldPricingBasis = pricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasis = PRICING_BASIS_EDEFAULT;
+		pricingBasisESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, PRICING_BASIS_EDEFAULT, oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPricingBasis() {
+		return pricingBasisESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -2984,6 +3064,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isCancelled();
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return isWindowCounterParty();
+			case CargoPackage.SLOT__PRICING_BASIS:
+				return getPricingBasis();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3126,6 +3208,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				setPricingBasis((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3263,6 +3348,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				unsetPricingBasis();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3375,6 +3463,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return cancelled != CANCELLED_EDEFAULT;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				return isSetPricingBasis();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3573,6 +3663,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(cancelled);
 		result.append(", windowCounterParty: ");
 		result.append(windowCounterParty);
+		result.append(", pricingBasis: ");
+		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

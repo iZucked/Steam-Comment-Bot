@@ -944,6 +944,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getExpressionPriceParameters_PricingBasis() {
+		return (EAttribute)expressionPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getVolumeTierPriceParameters() {
 		return volumeTierPriceParametersEClass;
 	}
@@ -1838,6 +1848,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
+		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS);
 
 		volumeTierPriceParametersEClass = createEClass(VOLUME_TIER_PRICE_PARAMETERS);
 		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__LOW_EXPRESSION);
@@ -2087,6 +2098,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExpressionPriceParameters_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(volumeTierPriceParametersEClass, VolumeTierPriceParameters.class, "VolumeTierPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVolumeTierPriceParameters_LowExpression(), ecorePackage.getEString(), "lowExpression", "", 1, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2405,6 +2417,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getExpressionPriceParameters_PricingBasis(),
+		   source,
+		   new String[] {
+			   "type", "pricingBasis"
 		   });
 		addAnnotation
 		  (getVolumeTierPriceParameters_LowExpression(),

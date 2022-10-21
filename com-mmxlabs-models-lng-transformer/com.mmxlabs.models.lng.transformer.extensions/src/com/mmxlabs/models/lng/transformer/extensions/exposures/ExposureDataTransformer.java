@@ -28,8 +28,10 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -42,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IExposureDataProviderEditor;
  */
 public class ExposureDataTransformer implements ISlotTransformer {
 
+	private PricingModel pricingModel;
+	
 	@Inject
 	private IExposureDataProviderEditor exposureDataProviderEditor;
 
@@ -85,9 +89,12 @@ public class ExposureDataTransformer implements ISlotTransformer {
 					}
 				}
 			}
-
+			
 			if (priceExpression == null) {
 				priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot);
+				if (priceExpression == null || priceExpression.isBlank()) {
+					priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot, ModelMarketCurveProvider.getOrCreate(pricingModel));
+				}
 			}
 			if (priceExpression != null) {
 				exposureDataProviderEditor.addPriceExpressionForPortSlot(optimiserSlot, priceExpression);
@@ -102,6 +109,7 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
 				final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 				if (pricingModel != null) {
+					this.pricingModel = pricingModel;
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();

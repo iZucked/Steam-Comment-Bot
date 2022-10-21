@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.pricing.DatePoint;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
@@ -250,7 +251,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 	}
 
 	public @NonNull Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression) {
-		if (priceExpression == null || priceExpression.trim().isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return Collections.emptySet();
 		}
 
@@ -280,6 +281,42 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 		return Collections.emptySet();
 
+	}
+	
+	public @NonNull String convertPricingBasisToPriceExpression(final String pricingBasis) {
+		if (pricingBasis == null || pricingBasis.isBlank()) {
+			return "";
+		}
+		String priceExpression = "";
+		String lpe = pricingBasis;
+		LookupData lookupData = expressionToIndexUseCache.get();
+		if (lookupData == null) {
+			lookupData = LookupData.createLookupData(pricingModel);
+			expressionToIndexUseCache = new SoftReference<>(lookupData);
+		}
+		final LookupData pLookupData = lookupData;
+		try {
+			final IExpression<Node> parse = new RawTreeParser().parse(lpe);
+			final Node p = parse.evaluate();
+			final Node node = expandNode(p, pLookupData);
+			priceExpression = packNode(node);
+		} catch (Exception e) {
+			return priceExpression;
+		}
+		return priceExpression;
+	}
+	
+	private String packNode(final Node node) {
+		String result = "";
+		if (node.children.length == 0) {
+			result += node.token;
+		} else {
+			result += node.children[0].token + node.token;
+			for (int i = 1; i < node.children.length; i++) {
+				result += packNode(node.children[i]);
+			}
+		}
+		return result;
 	}
 
 	public @NonNull List<Pair<AbstractYearMonthCurve, LocalDate>> getLinkedCurvesAndDate(final String priceExpression, LocalDate date) {
@@ -382,6 +419,27 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 					return parentNode;
 				}
 			}
+			if (lookupData.pricingBases.containsKey(parentNode.token.toLowerCase())) {
+				final PricingBasis idx = lookupData.pricingBases.get(parentNode.token.toLowerCase());
+
+				// Matched derived index...
+				if (idx.isSetExpression()) {
+					// Parse the expression
+					final IExpression<Node> parse = new RawTreeParser().parse(idx.getExpression());
+					final Node p = parse.evaluate();
+					// Expand the parsed tree again if needed,
+					@Nullable
+					final Node expandNode = expandNode(p, lookupData);
+					// return the new sub-parse tree for the expression
+					if (expandNode != null) {
+						lookupData.expressionCache.put(idx.getExpression(), expandNode);
+						return expandNode;
+					}
+					return p;
+				} else {
+					return parentNode;
+				}
+			}
 			return parentNode;
 
 			// return null;
@@ -410,6 +468,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			s.addAll(Collections.singleton(lookupData.baseFuelMap.get(parentNode.token.toLowerCase())));
 		} else if (lookupData.currencyMap.containsKey(parentNode.token.toLowerCase())) {
 			s.addAll(Collections.singleton(lookupData.currencyMap.get(parentNode.token.toLowerCase())));
+		} else if (lookupData.pricingBases.containsKey(parentNode.token.toLowerCase())) {
+			s.addAll(Collections.singleton(lookupData.pricingBases.get(parentNode.token.toLowerCase())));
 		}
 
 		for (final Node child : parentNode.children) {

@@ -228,7 +228,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(SeriesParser seriesParser, final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 

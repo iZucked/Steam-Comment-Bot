@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
@@ -67,7 +68,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					failures.add(dcsd);
 				} else {
 					if (!c.isLumpsum()) {
-						PriceExpressionUtils.constrainPriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), 0.0, 90.0, null, failures);
+						PriceExpressionUtils.constrainPriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), 0.0, 90.0, null, failures, PriceIndexType.COMMODITY);
 					}
 				}
 				if (c.getPorts().isEmpty()) {

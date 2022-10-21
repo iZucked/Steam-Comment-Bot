@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -17,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -35,7 +37,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 
 		if (target instanceof Slot<?> slot) {
 
-			if (slot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
+			if ((slot.isSetPriceExpression() || slot.isSetPricingBasis()) && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
 				if ("??".equals(priceExpression)) {
@@ -50,30 +52,50 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				}
 
 				if (checkExpression) {
-					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression);
-					if (!result.isOk()) {
-						final String message = String.format("[Slot|'%s']%s", slot.getName(), result.getErrorDetails());
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					final String name = slot.getName();
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS) &&
+							slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+						final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, should be set", name);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
 						failures.add(dsd);
 					}
-					final ZonedDateTime start;
-					if (slot.isSetPricingDate()) {
-						start = slot.getPricingDateAsDateTime();
-					} else {
-						// Not strictly correct, may differ on pricing event and actual scheduled date
-						start = slot.getSchedulingTimeWindow().getStart();
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
+						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.PRICING_BASIS, name, slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
 					}
-					if (start != null) {
-
-						final YearMonth key = YearMonth.from(start);
-						PriceExpressionUtils.constrainPriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, minExpressionValue, maxExpressionValue, key, failures);
-
-						if (priceExpression != null && !priceExpression.trim().isEmpty()) {
-							PriceExpressionUtils.checkExpressionAgainstPricingDate(ctx, priceExpression, slot, start.toLocalDate(), CargoPackage.Literals.SLOT__PRICE_EXPRESSION, failures);
-						}
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.COMMODITY, name, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 					}
 				}
+			}
+		}
+	}
+	
+	private void validatePrice(final IValidationContext ctx, final List<IStatus> failures, final String price, final PriceIndexType type, final String targetName, //
+			final Slot<?> slot, final EStructuralFeature feature) {
+		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, feature, price, type);
+		if (!result.isOk()) {
+			final String message = String.format("[Slot|'%s']%s", slot.getName(), result.getErrorDetails());
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(slot, feature);
+			failures.add(dsd);
+		}
+		final ZonedDateTime start;
+		if (slot.isSetPricingDate()) {
+			start = slot.getPricingDateAsDateTime();
+		} else {
+			// Not strictly correct, may differ on pricing event and actual scheduled date
+			start = slot.getSchedulingTimeWindow().getStart();
+		}
+		if (start != null) {
+
+			final YearMonth key = YearMonth.from(start);
+			// type!
+			PriceExpressionUtils.constrainPriceExpression(ctx, slot, feature, price, minExpressionValue, maxExpressionValue, key, failures, type);
+
+			if (price != null && !price.trim().isEmpty()) {
+				PriceExpressionUtils.checkExpressionAgainstPricingDate(ctx, price, slot, start.toLocalDate(), feature, failures);
 			}
 		}
 	}

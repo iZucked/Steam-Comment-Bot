@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 
 public interface IExposuresCustomiser {
 
@@ -19,6 +20,11 @@ public interface IExposuresCustomiser {
 	 */
 	@Nullable
 	String provideExposedPriceExpression(@NonNull Slot<?> slot);
+	
+	@Nullable
+	default String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider) {
+		return null;
+	}
 	
 	Slot<?> getExposed(final Slot<?> slot);
 }

@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class DefaultExposuresCustomiser implements IExposuresCustomiser{
@@ -26,8 +27,8 @@ public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 			final Contract contract = slot.getContract();
 			if (contract != null) {
 				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
-				if (priceInfo instanceof ExpressionPriceParameters) {
-					return ((ExpressionPriceParameters) priceInfo).getPriceExpression();
+				if (priceInfo instanceof ExpressionPriceParameters priceParams) {
+					return priceParams.getPriceExpression();
 				}
 			}
 		} else if (slot instanceof SpotSlot) {
@@ -42,6 +43,28 @@ public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 		}
 
 		return null;
+	}
+	
+	@Override
+	public @Nullable String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider) {
+		String priceExpression = provideExposedPriceExpression(slot);
+		if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
+			priceExpression = slot.getPricingBasis();
+		} else if (slot.eIsSet(CargoPackage.Literals.SLOT__CONTRACT)){
+			final Contract contract = slot.getContract();
+			if (contract != null) {
+				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
+				if (priceInfo instanceof ExpressionPriceParameters priceParams) {
+					if (priceParams.getPricingBasis() != null && !priceParams.getPricingBasis().isBlank()) {
+						priceExpression = priceParams.getPricingBasis();
+					}
+				}
+			}
+		}
+		if (priceExpression != null && mmCurveProvider != null) {
+			priceExpression = mmCurveProvider.convertPricingBasisToPriceExpression(priceExpression);
+		}
+		return priceExpression;
 	}
 
 	@Override

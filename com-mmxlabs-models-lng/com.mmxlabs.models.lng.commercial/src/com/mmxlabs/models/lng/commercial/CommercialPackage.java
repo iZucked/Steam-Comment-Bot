@@ -1312,13 +1312,22 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
@@ -3284,6 +3293,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getExpressionPriceParameters_PriceExpression();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis <em>Pricing Basis</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis()
+	 * @see #getExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getExpressionPriceParameters_PricingBasis();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters <em>Volume Tier Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4607,6 +4627,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = eINSTANCE.getExpressionPriceParameters_PricingBasis();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.

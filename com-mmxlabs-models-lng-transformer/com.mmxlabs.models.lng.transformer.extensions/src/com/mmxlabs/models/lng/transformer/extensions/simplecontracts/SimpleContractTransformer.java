@@ -50,18 +50,23 @@ public class SimpleContractTransformer implements IContractTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser indices;
+	
+	@Inject
+	@Named(SchedulerConstants.Parser_PricingBasis)
+	private SeriesParser pricingBasisParser;
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		if (priceInfo instanceof final ExpressionPriceParameters expressionPriceInfo) {
-			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve);
+			final boolean isBasis = isBasis(expressionPriceInfo);
+			return createPriceExpressionContract(isBasis ? expressionPriceInfo.getPricingBasis() : expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve, isBasis);
 
 		} else if (priceInfo instanceof final DateShiftExpressionPriceParameters expressionPriceInfo) {
 			if (expressionPriceInfo.getValue() == 0) {
 				// No shift set, return simple variant.
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve, false);
 			} else {
 				Function<ISeries, ICurve> curveFactory;
 				if (expressionPriceInfo.isSpecificDay()) {
@@ -69,7 +74,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 				} else {
 					curveFactory = parsed -> dateHelper.generateShiftedCurve(parsed, date -> date.minusDays(expressionPriceInfo.getValue()));
 				}
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), curveFactory);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), curveFactory, false);
 			}
 		}
 
@@ -103,16 +108,28 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *         the optimiser
 	 */
 	protected PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
-		return createPriceExpressionContract(priceExpression, dateHelper::generateExpressionCurve);
+		return createPriceExpressionContract(priceExpression, dateHelper::generateExpressionCurve, false);
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
+	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, ICurve> curveFactory, final boolean isBasis) {
 
-		final var p = dateHelper.createCurveAndIntervals(indices, priceExpression, curveFactory);
+		final var p = dateHelper.createCurveAndIntervals(isBasis ? pricingBasisParser : indices, priceExpression, curveFactory);
 
 		final PriceExpressionContract contract = new PriceExpressionContract(p.getFirst(), p.getSecond());
 		injector.injectMembers(contract);
 		return contract;
+	}
+	
+	private boolean isBasis(final ExpressionPriceParameters expressionPriceInfo) {
+		final boolean isBasis;
+		if (expressionPriceInfo.getPricingBasis() != null && !expressionPriceInfo.getPricingBasis().isBlank()) {
+			isBasis = true;
+		} else if (expressionPriceInfo.getPriceExpression() != null && !expressionPriceInfo.getPriceExpression().isBlank()) {
+			isBasis = false;
+		} else {
+			throw new IllegalStateException("Missing the price data");
+		}
+		return isBasis;
 	}
 
 }

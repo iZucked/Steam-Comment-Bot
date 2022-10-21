@@ -104,6 +104,7 @@
     <genClasses image="false" ecoreClass="commercial.ecore#//LNGPriceCalculatorParameters"/>
     <genClasses ecoreClass="commercial.ecore#//ExpressionPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/pricingBasis"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//VolumeTierPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/lowExpression"/>
