@@ -10,7 +10,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
-import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -40,7 +41,7 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractPriceP
 
 		}
 		if (pricingParams.getValue() != 0) {
-			if (checkNodeForSplitMonth(PriceExpressionUtils.convertCommodityToExpandedNodes(pricingParams.getPriceExpression()))) {
+			if (checkNodeForSplitMonth(PriceExpressionUtils.convertCommodityToASTNodes(pricingParams.getPriceExpression()))) {
 				factory.copyName()//
 						.withMessage("Cannot use SPLITMONTH with a date shift") //
 						.withObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION) //
@@ -66,18 +67,27 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractPriceP
 		}
 	}
 
-	private static boolean checkNodeForSplitMonth(final Node node) {
-		if (node.token.toLowerCase().equals("splitmonth")) {
+	private static boolean checkNodeForSplitMonth(final ASTNode markedUpNode) {
+		if(markedUpNode instanceof SplitMonthFunctionASTNode) {
 			return true;
 		}
-		if (node.children != null) {
-			for (final Node c : node.children) {
-				if (checkNodeForSplitMonth(c)) {
-					return true;
-				}
+		for(ASTNode childMarkedUpNode : markedUpNode.getChildren()) {
+			if(checkNodeForSplitMonth(childMarkedUpNode)) {
+				return true;
 			}
 		}
 		return false;
+//		if (node.token.toLowerCase().equals("splitmonth")) {
+//			return true;
+//		}
+//		if (node.children != null) {
+//			for (final Node c : node.children) {
+//				if (checkNodeForSplitMonth(c)) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
 
 	}
 }

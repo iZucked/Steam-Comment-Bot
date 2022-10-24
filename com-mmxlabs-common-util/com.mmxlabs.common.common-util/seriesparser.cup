@@ -1,9 +1,8 @@
 /* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
 import java_cup.runtime.*;
 import java.util.*;
-import com.mmxlabs.common.parser.*;
+import com.mmxlabs.common.parser.astnodes.*;
 import com.mmxlabs.common.parser.series.*;
-import com.mmxlabs.common.parser.series.functions.*;
 
 parser code {:
     // Constructor, needed for call to scan later
@@ -30,15 +29,16 @@ scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, COMMA, PERCENT, QUESTION;
-terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S;
+terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, VOLUMETIERM3, VOLUMETIERMMBTU;
 
 terminal Integer    INTEGER;
-terminal Double    NUMBER;
-terminal IExpression<ISeries>    SERIES;       
+terminal Double    FLOAT;
+terminal ASTNode    SERIES;       
 terminal String NAMED_ELEMENT;
 
 /* Non terminals */
-non terminal IExpression<ISeries>    expr;      // used to store evaluated subexpressions
+non terminal ASTNode    expr;      // used to store evaluated subexpressions
+non terminal Number NUMBER;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -48,46 +48,41 @@ precedence left PERCENT;
 precedence left UPLUS;
 precedence left UMINUS;
 precedence left INTEGER;
-precedence left NUMBER;
+precedence left FLOAT;
 
 /* The grammar rules */
+start with expr;
 
+NUMBER ::= INTEGER:n {: RESULT = n; :} | FLOAT:n {: RESULT = n; :} ;
 
-expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpression('+', lhs, rhs);       :}
-             | expr:lhs MINUS expr:rhs        {: RESULT = new SeriesOperatorExpression('-', lhs, rhs);      :}
-             | expr:lhs TIMES expr:rhs        {: RESULT = new SeriesOperatorExpression('*', lhs, rhs);       :}
-             | expr:lhs DIVIDE expr:rhs        {: RESULT = new SeriesOperatorExpression('/', lhs, rhs);       :}
-             | CAP LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
-             | FLOOR LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
-             | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
-             | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
-             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
-             | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
+expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs, rhs, Operator.PLUS);       :}
+             | expr:lhs MINUS expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.MINUS);      :}
+             | expr:lhs TIMES expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.TIMES);       :}
+             | expr:lhs DIVIDE expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.DIVIDE);       :}
+             | CAP LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.CAP);       :}
+             | FLOOR LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.FLOOR);       :}
+             | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.MIN);       :}
+             | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.MAX);       :}
+             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), rhs, Operator.PERCENT); :}
+             | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), rhs, Operator.PERCENT); :}
+             | QUESTION:lhs PERCENT expr:rhs               {: RESULT = new OperatorASTNode(new BreakEvenASTNode(), rhs, Operator.PERCENT); :}  
              %prec PERCENT
-             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(seriesParserData, e1, i1);       :}
-             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(seriesParserData,e1,  -i1);       :}
-             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(seriesParserData, lhs, n1, n2, n3); :}
-             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionConstructor(seriesParserData, e1, e2, s); :}
-             | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionConstructor(seriesParserData, base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
-             | MINUS expr:e                 {: RESULT = new IExpression<ISeries>() {
-						@Override
-						public ISeries evaluate() {
-							return new Minus(e.evaluate());
-						}
-						
-						@Override
-						public boolean canEvaluate() {
-							return e.canEvaluate();
-						}
-					};         :}
+             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, i1);       :}
+             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, -i1);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3); :}
+             | VOLUMETIERM3 LPAREN expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN  {: RESULT =  new VolumeTierASTNode(true, low, n1, high); :}
+             | VOLUMETIERMMBTU LPAREN expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN  {: RESULT =  new VolumeTierASTNode(false, low, n1, high); :}             
+             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
+             | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
+             | MINUS expr:e                 {: RESULT = new MinusASTNode(e);        :}
   	     %prec UMINUS
              | PLUS expr:e                 {: RESULT = e;         :}
   	     %prec UPLUS
        | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
        | SERIES:n	                     {: RESULT = n;           :}
-       | NAMED_ELEMENT:n	                     {: RESULT =  new NamedSeriesExpression(seriesParser.getSeries(n));           :}
-       | NUMBER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
-       | INTEGER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
-       | QUESTION:n	                     {: RESULT =  new ConstantSeriesExpression(0.0);           :}
+       | NAMED_ELEMENT:n	                     {: RESULT = seriesParser.getNamedSeriesASTNode(n);           :}
+       | FLOAT:n	                     {: RESULT =  new ConstantASTNode(n);           :}
+       | INTEGER:n	                     {: RESULT =  new ConstantASTNode(n);           :}
+       | QUESTION:n	                     {: RESULT =  new BreakEvenASTNode();           :}
              ;     
              

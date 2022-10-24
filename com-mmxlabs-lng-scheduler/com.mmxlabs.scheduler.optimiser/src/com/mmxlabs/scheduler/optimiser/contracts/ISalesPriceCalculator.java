@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -22,53 +22,58 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * An interface for sales contract price calculations. This calculator only have access to sequence and time information, because it will be used to calculate shipping costs.
+ * An interface for sales contract price calculations. This calculator only have
+ * access to sequence and time information, because it will be used to calculate
+ * shipping costs.
  * 
  * @author hinton
  * 
  */
+@NonNullByDefault
 public interface ISalesPriceCalculator extends ICalculator {
 	/**
-	 * This method will be called once before any of the slots in the argument are evaluated using {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)}, to allow for shared
-	 * pre-computation.
+	 * This method will be called once before any of the slots in the argument are
+	 * evaluated using
+	 * {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)}, to allow
+	 * for shared pre-computation.
 	 * 
 	 * @param sequences
 	 */
-	default void prepareSalesForEvaluation(@NonNull ISequences sequences) {
+	default void prepareSalesForEvaluation(ISequences sequences) {
 	}
 
 	/**
-	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time - volume independent. This method should always return a value as it will be used by the
-	 * {@link IVoyagePlanOptimiser} and {@link ILNGVoyageCalculator} to value LNG. Final sales price will be calculated using {@link #calculateSalesUnitPrice(IDischargeOption, int, long, IDetailTree)}
+	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the
+	 * given time - volume independent. This method should always return a value as
+	 * it will be used by the {@link IVoyagePlanOptimiser} and
+	 * {@link ILNGVoyageCalculator} to value LNG. Final sales price will be
+	 * calculated using
+	 * {@link #calculateSalesUnitPrice(IDischargeOption, int)}
 	 * once volume decisions have been made.
 	 * 
 	 * @param vessel
 	 * @param time
-	 * @param annotations
-	 *            TODO
 	 * @param slot
 	 */
-	default public int estimateSalesUnitPrice(IVessel vessel, IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations) {
-		return estimateSalesUnitPrice(option, voyageRecord, annotations);
-	}
+	int estimateSalesUnitPrice(IVessel vessel, IDischargeOption dischargeOption, IPortTimesRecord portTimesRecord);
 
+
+	/**
+	 * Get the estimated sales price in dollars per mmbtu at a given point in time
+	 * in hours. Time should already shifted into UTC equiv.
+	 * 
+	 * @param loadOption
+	 * @param dischargeOption
+	 * @param timeInHours
+	 * @return
+	 */
+	int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
 	
 	/**
-	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time - volume independent. This method should always return a value as it will be used by the
-	 * {@link IVoyagePlanOptimiser} and {@link ILNGVoyageCalculator} to value LNG. Final sales price will be calculated using {@link #calculateSalesUnitPrice(IDischargeOption, int, long, IDetailTree)}
-	 * once volume decisions have been made.
-	 * 
-	 * @param time
-	 * @param annotations
-	 *            TODO
-	 * @param slot
-	 * @deprecated Use version that passes in IVessel.
-	 */
-	public int estimateSalesUnitPrice(IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations);
-
-	/**
-	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
-	 * decisions have been made.
+	 * Another variant of
+	 * {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a
+	 * discharge volume to calculate the exact price. This method should not be
+	 * called before volume decisions have been made.
 	 * 
 	 * @param vesselCharter
 	 * @param option
@@ -77,41 +82,19 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param annotations
 	 * @return
 	 */
-	default public int calculateSalesUnitPrice(IVesselCharter vesselCharter, IDischargeOption option, IAllocationAnnotation allocationAnnotation, VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
-		return calculateSalesUnitPrice(option, allocationAnnotation, annotations);
-	}
-
-	
-	/**
-	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
-	 * decisions have been made.
-	 * 
-	 * @param time
-	 * @param annotations
-	 *            TODO
-	 * @param slot
-	 * @deprecated Use version that passes in IVesselCharter.
-	 */
-	public int calculateSalesUnitPrice(IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
+	int calculateSalesUnitPrice(IVesselCharter vesselCharter, IDischargeOption dischargeOption, IAllocationAnnotation allocationAnnotation, VoyagePlan voyagePlan, @Nullable IDetailTree annotations);
 
 	/**
-	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to
-	 * clean any cached data prior to the real calculations.
+	 * Invoked before final P&L calculations are about to begin, but after
+	 * {@link #prepareEvaluation(ISequences)}. The calculate methods may have been
+	 * invoked to obtain P&L estimates, now we want to clean any cached data prior
+	 * to the real calculations.
 	 */
 	default void prepareRealSalesPNL() {
 	}
 
-	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
+	@Nullable PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 
-	/**
-	 * Get the estimated sales price in dollars per mmbtu at a given point in time in hours. Time should already shifted into UTC equiv.
-	 * 
-	 * @param loadOption
-	 * @param dischargeOption
-	 * @param timeInHours
-	 * @return
-	 */
-	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
 
 	/**
 	 * A contract may specify the pricing date of a purchase
@@ -120,5 +103,5 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param portTimeWindowsRecord
 	 * @return
 	 */
-	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
+	int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 }

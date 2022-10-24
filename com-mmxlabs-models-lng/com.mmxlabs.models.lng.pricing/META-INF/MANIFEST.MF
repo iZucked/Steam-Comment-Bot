@@ -23,3 +23,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.rcp.common
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.pricing
+Import-Package: com.google.inject,
+ com.google.inject.name;version="1.4.0"
+

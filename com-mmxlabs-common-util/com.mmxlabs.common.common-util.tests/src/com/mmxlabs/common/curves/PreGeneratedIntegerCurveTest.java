@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
  * @author hinton
  * 
  */
-public class StepwiseIntegerCurveTest {
+public class PreGeneratedIntegerCurveTest {
 	@Test
 	public void testDefaultValue() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 		c.setDefaultValue(12);
 
 		Assertions.assertEquals(12, c.getDefaultValue());
@@ -29,7 +29,7 @@ public class StepwiseIntegerCurveTest {
 
 	@Test
 	public void testSeveralSegments() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 
 		c.setDefaultValue(0);
 

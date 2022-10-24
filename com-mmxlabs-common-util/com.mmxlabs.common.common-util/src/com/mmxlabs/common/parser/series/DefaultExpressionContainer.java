@@ -4,18 +4,17 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.common.parser.IExpression;
 
 public class DefaultExpressionContainer implements IExpressionContainer {
 
 	private IExpression<ISeries> wrappedExpression = null;
+	private final String name;
+	private final SeriesType seriesType;
 
-	public DefaultExpressionContainer() {
-	}
-
-	public DefaultExpressionContainer(@NonNull final IExpression<ISeries> wrappedExpression) {
+	public DefaultExpressionContainer(final String name, final SeriesType seriesType, final IExpression<ISeries> wrappedExpression) {
+		this.name = name;
+		this.seriesType = seriesType;
 		this.wrappedExpression = wrappedExpression;
 	}
 
@@ -30,8 +29,18 @@ public class DefaultExpressionContainer implements IExpressionContainer {
 	}
 
 	@Override
-	public void setExpression(@NonNull IExpression<ISeries> expression) {
+	public void setExpression(final IExpression<ISeries> expression) {
 		this.wrappedExpression = expression;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public SeriesType getType() {
+		return seriesType;
 	}
 
 }

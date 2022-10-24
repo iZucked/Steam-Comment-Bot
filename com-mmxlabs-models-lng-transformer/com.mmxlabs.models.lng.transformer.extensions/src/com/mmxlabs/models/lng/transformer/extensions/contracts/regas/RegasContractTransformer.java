@@ -22,7 +22,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILazyCurve;
 import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -90,12 +90,10 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		final Function<@NonNull ISeries, @NonNull ICurve> curveFactory = makeCurveCreator(numPricingDays);
 		final Function<@NonNull ISeries, @NonNull IIntegerIntervalCurve> priceIntervalFactory = makePriceIntervalCreator(numPricingDays);
 
-		@NonNull
-		final ICurve curve;
-		@NonNull
-		final IIntegerIntervalCurve priceIntervals;
+		final @NonNull ICurve curve;
+		final @NonNull IIntegerIntervalCurve priceIntervals;
 
-		final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
+		final IExpression<ISeries> expression = commodityIndices.asIExpression(priceExpression);
 		if (expression.canEvaluate()) {
 			final ISeries parsed = expression.evaluate();
 			curve = curveFactory.apply(parsed);
@@ -114,7 +112,7 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 
 	private Function<@NonNull ISeries, @NonNull ICurve> makeCurveCreator(final int numPricingDays) {
 		return parsed -> {
-			final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+			final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 			if (parsed.getChangePoints().length == 0) {
 				curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 			} else {
@@ -150,7 +148,8 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		final int numHoursInRange = numPricingDays * 24;
 		// Before this hour average equals default value
 		final int minStartHour = minChangePointHour - numHoursInRange + 1;
-		// After maxChangePointHour, average equal same value. But we still have to calculate at least one (could add after)
+		// After maxChangePointHour, average equal same value. But we still have to
+		// calculate at least one (could add after)
 		// TODO: make loop work in steps of 24 hours
 		for (int currentHour = minStartHour; currentHour <= maxChangePointHour; ++currentHour) {
 			final double nextPrice = calculateAveragePrice(currentHour, numPricingDays, parsed);

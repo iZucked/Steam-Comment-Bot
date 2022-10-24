@@ -11,12 +11,12 @@ import java.util.TreeMap;
 
 /**
  * An implementation of ICurve which consists of a bunch of intervals on the x-axis with corresponding fixed values on the y-axis. Intervals are specified using
- * {@link StepwiseLongCurve#setValueAfter(int, int)}, proceeding from least x-value to greatest x-value.
+ * {@link PreGeneratedLongCurve#setValueAfter(int, int)}, proceeding from least x-value to greatest x-value.
  * 
  * @author hinton
  * 
  */
-public class StepwiseLongCurve implements ILongCurve {
+public class PreGeneratedLongCurve implements ILongCurve {
 	private long defaultValue;
 	private final TreeMap<Integer, Long> intervals = new TreeMap<>();
 	
@@ -61,7 +61,7 @@ public class StepwiseLongCurve implements ILongCurve {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof StepwiseLongCurve other) {
+		if (obj instanceof PreGeneratedLongCurve other) {
 			return defaultValue == other.defaultValue && //
 					intervals.equals(other.intervals);
 		}

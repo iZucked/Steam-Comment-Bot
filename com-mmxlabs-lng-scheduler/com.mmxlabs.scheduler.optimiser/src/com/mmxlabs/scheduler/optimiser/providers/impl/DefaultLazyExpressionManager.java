@@ -16,6 +16,7 @@ import com.mmxlabs.common.curves.ILazyCurve;
 import com.mmxlabs.common.parser.series.ILazyExpressionContainer;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.NamedSeriesExpression;
+import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.scheduler.optimiser.curves.LazyIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManager;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerContainer;
@@ -52,13 +53,13 @@ public class DefaultLazyExpressionManager implements ILazyExpressionManager, ILa
 	}
 
 	@Override
-	public void setPriceCurve(@NonNull String name, @NonNull ISeries series) {
+	public void setPriceCurve(@NonNull String name, SeriesType seriesType, @NonNull ISeries series) {
 		final String lowercaseName = name.toLowerCase();
 		final ILazyExpressionContainer lazyContainer = priceCurves.get(lowercaseName);
 		if (lazyContainer == null) {
 			throw new IllegalStateException("Unexpected curve.");
 		}
-		lazyContainer.setExpression(new NamedSeriesExpression(series));
+		lazyContainer.setExpression(new NamedSeriesExpression(series, seriesType, lowercaseName));
 	}
 
 	@Override

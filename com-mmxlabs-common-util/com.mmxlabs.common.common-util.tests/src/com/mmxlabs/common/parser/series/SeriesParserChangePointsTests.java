@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 
 public class SeriesParserChangePointsTests {
 
@@ -66,12 +67,11 @@ public class SeriesParserChangePointsTests {
 		data.setEarliestAndLatestTime(timebox);
 
 		final SeriesParser parser = new SeriesParser(data);
-		parser.addSeriesExpression("HH", "1.0");
-		parser.addSeriesExpression("HH2", "2.0");
+		parser.addSeriesExpression("HH", SeriesType.COMMODITY, "1.0");
+		parser.addSeriesExpression("HH2", SeriesType.COMMODITY, "2.0");
 
-		final IExpression<ISeries> parsed = parser.parse(expression);
-
-		final int[] changePoints = parsed.evaluate().getChangePoints();
+		final ISeries series = parser.asSeries(expression);
+		final int[] changePoints = series.getChangePoints();
 
 		return Arrays.stream(changePoints).boxed().collect(Collectors.toList());
 	}

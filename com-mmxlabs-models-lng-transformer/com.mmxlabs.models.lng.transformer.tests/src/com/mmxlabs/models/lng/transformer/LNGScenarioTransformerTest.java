@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
@@ -22,7 +20,7 @@ import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.common.curves.StepwiseLongCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -34,7 +32,6 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
-import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
@@ -672,8 +669,8 @@ public class LNGScenarioTransformerTest {
 		Mockito.verifyNoMoreInteractions(builder);
 	}
 
-	private StepwiseLongCurve createDefaultCurve(long value) {
-		var c = new StepwiseLongCurve();
+	private PreGeneratedLongCurve createDefaultCurve(long value) {
+		var c = new PreGeneratedLongCurve();
 		c.setDefaultValue(value);
 		return c;
 	}
@@ -699,7 +696,7 @@ public class LNGScenarioTransformerTest {
 
 		total *= 1.0 + panamaCanalTariff.getMarkupRate();
 
-		var curve = new StepwiseLongCurve();
+		var curve = new PreGeneratedLongCurve();
 		curve.setDefaultValue(1000L * (long) Math.round(total));
 		return curve;
 	}
