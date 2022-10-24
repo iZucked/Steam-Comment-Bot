@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -25,7 +26,8 @@ public class ExistingCharterMarketOptionConstraint extends AbstractModelMultiCon
 
 		if (target instanceof final ExistingCharterMarketOption option) {
 
-			if (option.getCharterInMarket() == null) {
+			final CharterInMarket charterInMarket = option.getCharterInMarket();
+			if (charterInMarket == null) {
 				final String message = "No market specified";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
@@ -37,6 +39,28 @@ public class ExistingCharterMarketOptionConstraint extends AbstractModelMultiCon
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
 				failures.add(dsd);
+			}
+
+			if (charterInMarket != null) {
+				if (option.getSpotIndex() == -1 && !charterInMarket.isNominal()) {
+					final String message = "Nominal vessels not enabled for market";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
+					failures.add(dsd);
+				}
+				if (charterInMarket.isEnabled() && option.getSpotIndex() >= 0 && option.getSpotIndex() >= charterInMarket.getSpotCharterCount()) {
+					final String message = "Market option larger than available options";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
+					failures.add(dsd);
+				}
+				if (!charterInMarket.isEnabled() && option.getSpotIndex() >= 0) {
+					final String message = "Market option assigned to disable market";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(option, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
+					failures.add(dsd);
+				}
+
 			}
 		}
 	}

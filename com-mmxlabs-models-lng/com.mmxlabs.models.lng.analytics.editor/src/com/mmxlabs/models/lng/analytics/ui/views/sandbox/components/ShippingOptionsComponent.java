@@ -179,11 +179,12 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 						}));
 					}
-					if (portfolioMode && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX_CHARTER_INS)) {
+					if (portfolioMode) {
 						helper.addAction(new RunnableAction("Existing Market Charter", () -> {
 							final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
 							final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 							opt.setCharterInMarket(market);
+							opt.setSpotIndex(-1);
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);

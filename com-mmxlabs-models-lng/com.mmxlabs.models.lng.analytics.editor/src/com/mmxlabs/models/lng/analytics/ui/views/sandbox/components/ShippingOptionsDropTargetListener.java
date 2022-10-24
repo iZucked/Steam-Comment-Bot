@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -81,14 +82,16 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 		if (optionAnalysisModel == null) {
 			return;
 		}
+		boolean portfolioMode = false;
+		if (optionAnalysisModel instanceof OptionAnalysisModel m) {
+			portfolioMode = m.getBaseCase().isKeepExistingScenario();
+		}
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
 			if (selection.size() == 1) {
 				final Object o = selection.getFirstElement();
 
-				if (o instanceof Vessel) {
-					final Vessel vessel = (Vessel) o;
-
+				if (o instanceof Vessel vessel) {
 					menuHelper.clearActions();
 					menuHelper.addAction(new RunnableAction("Create Nominated", () -> {
 						final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
@@ -109,13 +112,17 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
 					// menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-					// final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+					// final FleetShippingOption opt =
+					// AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 					// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 					// opt.setVessel(vessel);
 					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-					// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+					// AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+					// optionAnalysisModel,
+					// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 					// optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+					// StructuredSelection(opt));
 					// }));
 					menuHelper.addAction(new RunnableAction("Create availability", () -> {
 						final OptionalSimpleVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption();
@@ -128,21 +135,20 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					}));
 
 					menuHelper.open();
-				} else if (o instanceof ShippingOption) {
-					ShippingOption opt = (ShippingOption) EMFCopier.copy((ShippingOption) o);
+				} else if (o instanceof ShippingOption so) {
+					ShippingOption opt = EMFCopier.copy(so);
 
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 							optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 				}
-				if (o instanceof CargoModelRowTransformer.RowData) {
-					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+				if (o instanceof CargoModelRowTransformer.RowData rowData) {
 					final CompoundCommand cmd = new CompoundCommand();
 
 					final LoadSlot loadSlot = rowData.getLoadSlot();
 					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 
-					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, false, optionAnalysisModel);
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, portfolioMode, optionAnalysisModel);
 					if (shippingOption != null && shippingOption.eContainer() == null) {
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 								shippingOption));

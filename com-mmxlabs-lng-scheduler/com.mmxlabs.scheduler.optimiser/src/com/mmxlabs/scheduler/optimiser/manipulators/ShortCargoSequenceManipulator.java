@@ -84,8 +84,24 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 							final IPort loadPort = portSlotProvider.getPortSlot(element).getPort();
 							returnElement = shortCargoReturnElementProvider.getReturnElement(resource, element, loadPort);
 						} else {
-							final ISequenceElement element2 = seq.get(i + 1);
-							final IPort dischargePort = portSlotProvider.getPortSlot(element2).getPort();
+							// Find last discharge at the D -> L transition
+							ISequenceElement lastDischarge = null;
+							// Find the insertion location at the D -> L transition
+							boolean foundDischarge = false;
+							for (int j = i + 1; j < seq.size(); ++j) {
+								final ISequenceElement nextE = seq.get(j);
+								final PortType nextPortType = portTypeProvider.getPortType(nextE);
+								if (nextPortType == PortType.Discharge) {
+									lastDischarge = nextE;
+									foundDischarge = true;
+								} else {
+									if (foundDischarge) {
+										break;
+									}
+								}
+							}
+							assert lastDischarge != null;
+							final IPort dischargePort = portSlotProvider.getPortSlot(lastDischarge).getPort();
 							final IPort destPort = returnToClosestInSet(resource, dischargePort, endRequirement.getLocations());
 							returnElement = shortCargoReturnElementProvider.getReturnElement(resource, element, destPort);
 						}
@@ -101,9 +117,29 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 						if (returnElement != null) {
 
 							final ISegment segment = new DisconnectedSegment(Collections.singletonList(returnElement));
-							if (i + 2 <= seq.size()) {
-								seq.insert(i + 2, segment);
+
+							int insertPoint = -1;
+							// Find the insertion location at the D -> L transition
+							boolean foundDischarge = false;
+							for (int j = i + 1; j < seq.size(); ++j) {
+								final ISequenceElement nextE = seq.get(j);
+								final PortType nextPortType = portTypeProvider.getPortType(nextE);
+								if (!foundDischarge) {
+									if (nextPortType == PortType.Discharge) {
+										foundDischarge = true;
+									}
+								} else {
+									if (nextPortType == PortType.Load) {
+										insertPoint = j;
+										break;
+									}
+								}
+							}
+							if (insertPoint != -1) {
+								seq.insert(insertPoint, segment);
 							} else {
+								// We didn't find a D to L transition, so assume this is the last cargo and we
+								// can append to the list
 								seq.add(returnElement);
 							}
 						}
