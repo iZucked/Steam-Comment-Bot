@@ -45,6 +45,12 @@
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
 	
  <componentHelper
        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"

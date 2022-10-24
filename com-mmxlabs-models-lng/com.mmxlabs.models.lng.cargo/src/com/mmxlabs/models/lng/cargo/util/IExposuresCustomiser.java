@@ -22,9 +22,7 @@ public interface IExposuresCustomiser {
 	String provideExposedPriceExpression(@NonNull Slot<?> slot);
 	
 	@Nullable
-	default String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider) {
-		return null;
-	}
+	String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider);
 	
 	Slot<?> getExposed(final Slot<?> slot);
 }

@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -63,6 +62,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	@Inject
 	@Named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)
 	private boolean cutoffAtPromptStart;
+	
+	@Inject
+	@Named(SchedulerConstants.PRICING_BASES)
+	private boolean pricingBasesEnabled;
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
@@ -91,9 +94,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 			}
 			
 			if (priceExpression == null) {
-				priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot);
-				if (priceExpression == null || priceExpression.isBlank()) {
+				if (pricingBasesEnabled) {
 					priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot, ModelMarketCurveProvider.getOrCreate(pricingModel));
+				} else {
+					priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot);
 				}
 			}
 			if (priceExpression != null) {
