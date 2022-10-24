@@ -69,6 +69,7 @@ public class PanamaCanalTariffItemProvider
 			super.getPropertyDescriptors(object);
 
 			addMarkupRatePropertyDescriptor(object);
+			addAnnualTariffsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -85,12 +86,34 @@ public class PanamaCanalTariffItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_PanamaCanalTariff_markupRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_markupRate_feature", "_UI_PanamaCanalTariff_type"),
+				 getString("_UI_PanamaCanalTariff_markupRate_description"),
 				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__MARKUP_RATE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Annual Tariffs feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAnnualTariffsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PanamaCanalTariff_annualTariffs_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_annualTariffs_feature", "_UI_PanamaCanalTariff_type"),
+				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

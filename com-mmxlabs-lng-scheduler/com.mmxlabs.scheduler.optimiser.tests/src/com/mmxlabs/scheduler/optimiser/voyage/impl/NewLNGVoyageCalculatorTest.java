@@ -1157,7 +1157,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final long cooldownCost = calc.calculateCooldownCost(vessel, portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
-		Mockito.verifyZeroInteractions(cooldownCalculator);
+		Mockito.verifyNoInteractions(cooldownCalculator);
 
 		Assertions.assertEquals(0, cooldownCost);
 

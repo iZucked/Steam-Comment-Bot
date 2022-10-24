@@ -26,7 +26,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
@@ -144,7 +144,7 @@ public class SimpleSchedulerTest {
 		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, 0, false);
 
 		// set up basefuel curve
-		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve baseFuelCurve = new PreGeneratedIntegerCurve();
 		baseFuelCurve.setValueAfter(0, 7000);
 		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
 

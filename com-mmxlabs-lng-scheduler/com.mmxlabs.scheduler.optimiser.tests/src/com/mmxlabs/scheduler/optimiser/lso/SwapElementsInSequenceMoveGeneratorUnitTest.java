@@ -69,7 +69,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
-		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.any(ISequenceElement.class))).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -78,7 +78,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 				return followers.get(e);
 			}
 		});
-		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.any(ISequenceElement.class))).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -144,7 +144,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementC)));
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
-		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidFollowers(ArgumentMatchers.any(ISequenceElement.class))).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
@@ -153,7 +153,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 				return followers.get(e);
 			}
 		});
-		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+		Mockito.when(followersAndPreceders.getValidPreceders(ArgumentMatchers.any(ISequenceElement.class))).then(new Answer<Followers<ISequenceElement>>() {
 
 			@Override
 			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {

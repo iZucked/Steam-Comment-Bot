@@ -222,6 +222,9 @@ public class LNGTransformerModule extends AbstractModule {
 				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
+		
+		// Pricing bases
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PRICING_BASES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES));
 
 		// ----->
 		// <------ Transfers

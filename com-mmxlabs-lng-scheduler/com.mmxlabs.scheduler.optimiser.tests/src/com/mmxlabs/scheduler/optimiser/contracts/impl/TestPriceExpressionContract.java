@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
@@ -46,14 +47,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author Simon McGregor
  * 
- *         Simple JUnit test for the optimiser internal PriceExpressionContract class.
+ *         Simple JUnit test for the optimiser internal PriceExpressionContract
+ *         class.
  */
 public class TestPriceExpressionContract {
 	/**
 	 * Test for the PriceExpressionContract.calculateSimpleUnitPrice method.
 	 * 
-	 * Tests whether the ICurve object supplied as a constructor argument is called with appropriate arguments when calculateSimpleUnitPrice is called. Also tests that the appropriate values are
-	 * returned.
+	 * Tests whether the ICurve object supplied as a constructor argument is called
+	 * with appropriate arguments when calculateSimpleUnitPrice is called. Also
+	 * tests that the appropriate values are returned.
 	 * 
 	 */
 	@Test
@@ -166,6 +169,7 @@ public class TestPriceExpressionContract {
 	public void testCalculateDischargeUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
+		final IVessel vessel = mock(IVessel.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
@@ -197,14 +201,14 @@ public class TestPriceExpressionContract {
 
 		when(dischargeSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
 
-		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, portTimesRecord1, null);
+		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(vessel, dischargeSlotWithPricingDate, portTimesRecord1);
 		verify(curve).getValueAtPoint(pricingDate);
 
 		final IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
 		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
 		when(portTimesRecord2.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlotNoPricingDate));
 
-		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, portTimesRecord2, null);
+		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(vessel, dischargeSlotNoPricingDate, portTimesRecord2);
 
 		verify(curve).getValueAtPoint(dischargeTime);
 		verifyNoMoreInteractions(curve);

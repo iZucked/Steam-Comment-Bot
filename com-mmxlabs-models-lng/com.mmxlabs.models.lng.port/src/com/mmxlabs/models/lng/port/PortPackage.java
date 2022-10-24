@@ -1097,13 +1097,22 @@ public interface PortPackage extends EPackage {
 	int LOCATION__LON = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Locode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__LOCODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int LOCATION_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2062,6 +2071,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getLocation_Lon();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Location#getLocode <em>Locode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locode</em>'.
+	 * @see com.mmxlabs.models.lng.port.Location#getLocode()
+	 * @see #getLocation()
+	 * @generated
+	 */
+	EAttribute getLocation_Locode();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Location#getZoneId() <em>Get Zone Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2690,6 +2710,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
+
+		/**
+		 * The meta object literal for the '<em><b>Locode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCATION__LOCODE = eINSTANCE.getLocation_Locode();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.

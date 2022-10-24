@@ -410,6 +410,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaTariffV2ItemProvider panamaTariffV2ItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaTariffV2Adapter() {
+		if (panamaTariffV2ItemProvider == null) {
+			panamaTariffV2ItemProvider = new PanamaTariffV2ItemProvider(this);
+		}
+
+		return panamaTariffV2ItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1015,6 +1038,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
 		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
 		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();
+		if (panamaTariffV2ItemProvider != null) panamaTariffV2ItemProvider.dispose();
 		if (suezCanalTugBandItemProvider != null) suezCanalTugBandItemProvider.dispose();
 		if (suezCanalTariffItemProvider != null) suezCanalTariffItemProvider.dispose();
 		if (suezCanalTariffBandItemProvider != null) suezCanalTariffBandItemProvider.dispose();

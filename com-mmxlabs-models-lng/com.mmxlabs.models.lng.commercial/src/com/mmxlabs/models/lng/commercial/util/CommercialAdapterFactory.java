@@ -139,6 +139,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createExpressionPriceParametersAdapter();
 			}
 			@Override
+			public Adapter caseVolumeTierPriceParameters(VolumeTierPriceParameters object) {
+				return createVolumeTierPriceParametersAdapter();
+			}
+			@Override
+			public Adapter caseVolumeTierSlotParams(VolumeTierSlotParams object) {
+				return createVolumeTierSlotParamsAdapter();
+			}
+			@Override
 			public Adapter caseSlotContractParams(SlotContractParams object) {
 				return createSlotContractParamsAdapter();
 			}
@@ -229,6 +237,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseStartHeelOptions(StartHeelOptions object) {
 				return createStartHeelOptionsAdapter();
+			}
+			@Override
+			public Adapter caseRegasPricingParams(RegasPricingParams object) {
+				return createRegasPricingParamsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -385,6 +397,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createExpressionPriceParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters <em>Volume Tier Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters
+	 * @generated
+	 */
+	public Adapter createVolumeTierPriceParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams <em>Volume Tier Slot Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams
+	 * @generated
+	 */
+	public Adapter createVolumeTierSlotParamsAdapter() {
 		return null;
 	}
 
@@ -707,6 +747,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStartHeelOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams <em>Regas Pricing Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams
+	 * @generated
+	 */
+	public Adapter createRegasPricingParamsAdapter() {
 		return null;
 	}
 

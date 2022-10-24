@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.lingo.app;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -15,11 +18,14 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineContributionItem;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Util;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.actions.ContributionItemFactory;
@@ -28,6 +34,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.eclipse.ui.internal.actions.DynamicHelpAction;
 import org.eclipse.ui.internal.handlers.IActionCommandMappingService;
 import org.eclipse.ui.internal.provisional.application.IActionBarConfigurer2;
 import org.eclipse.ui.internal.registry.ActionSetRegistry;
@@ -44,7 +51,8 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * 
- * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
+ * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some
+ * point (rebase on version in history?)
  * 
  * 
  */
@@ -228,10 +236,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// private MenuManager coolbarPopupMenuManager;
 
 	/**
-	 * Constructs a new action builder which contributes actions to the given window.
+	 * Constructs a new action builder which contributes actions to the given
+	 * window.
 	 * 
-	 * @param configurer
-	 *            the action bar configurer for the window
+	 * @param configurer the action bar configurer for the window
 	 */
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -733,9 +741,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager createHelpMenu() {
 		final MenuManager menu = new MenuManager("Help", "mmx.help");
 		// Add Help Menu
-		menu.add(helpContentsAction);
-		// Check for updates (needs an icon)
-		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
+		{
+			final CommandContributionItemParameter parm = new CommandContributionItemParameter(PlatformUI.getWorkbench(), null, IWorkbenchCommandConstants.VIEWS_SHOW_VIEW,
+					CommandContributionItem.STYLE_PUSH);
+			final Map<String, String> targetId = new HashMap<>();
+			targetId.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_ID, "org.eclipse.help.ui.HelpView");
+			parm.parameters = targetId;
+			parm.label = "Help Contents";
+//				  if (parm.label.length() > 0) {
+//				    parm.mnemonic = parm.label.substring(0, 1);
+//				  }
+			// parm.icon = // add in help icon
+			menu.add(new CommandContributionItem(parm));
+
+		}
+		if (!LicenseFeatures.isPermitted("features:lingo-updater")) {
+			// Check for updates (needs an icon)
+			menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
+		}
 		// Bug report
 		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "com.mmxlabs.rcp.common.submitbugreport", CommandContributionItem.STYLE_PUSH)));
 		// About menu
@@ -746,7 +769,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Disposes any resources and unhooks any listeners that are no longer needed. Called when the window is closed.
+	 * Disposes any resources and unhooks any listeners that are no longer needed.
+	 * Called when the window is closed.
 	 */
 	@Override
 	public void dispose() {
@@ -857,7 +881,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Returns true if the menu with the given ID should be considered as an OLE container menu. Container menus are preserved in OLE menu merging.
+	 * Returns true if the menu with the given ID should be considered as an OLE
+	 * container menu. Container menus are preserved in OLE menu merging.
 	 */
 	@Override
 	public boolean isApplicationMenu(final String menuId) {
@@ -871,7 +896,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Return whether or not given id matches the id of the coolitems that the workbench creates.
+	 * Return whether or not given id matches the id of the coolitems that the
+	 * workbench creates.
 	 */
 	public boolean isWorkbenchCoolItemId(final String id) {
 		if (IWorkbenchActionConstants.TOOLBAR_FILE.equalsIgnoreCase(id)) {
@@ -893,7 +919,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
+	 * Creates actions (and contribution items) for the menu bar, toolbar and status
+	 * line.
 	 */
 	@Override
 	protected void makeActions(final IWorkbenchWindow window) {
@@ -1443,8 +1470,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		final IActionCommandMappingService acms = getWindow().getService(IActionCommandMappingService.class);
 		acms.map(actionId, commandId);
 
-		ImageDescriptor enabledImage = CommonImages.getImageDescriptor(image, IconMode.Enabled);
-		ImageDescriptor disabledImage = CommonImages.getImageDescriptor(image, IconMode.Disabled);
+		final ImageDescriptor enabledImage = CommonImages.getImageDescriptor(image, IconMode.Enabled);
+		final ImageDescriptor disabledImage = CommonImages.getImageDescriptor(image, IconMode.Disabled);
 
 		final CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId, commandId, null, enabledImage, disabledImage, null, label, null, tooltip,
 				CommandContributionItem.STYLE_PUSH, null, false);
@@ -1452,10 +1479,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * @See http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing- unwanted_02.html
+	 * @See http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing-
+	 *      unwanted_02.html
 	 * 
-	 *      This method can seemingly go in numerous places. However, I suspect none of them will work should a plugin get loaded after this method has been called. This should be hooked into a bundle
-	 *      activator listener of some kind.
+	 *      This method can seemingly go in numerous places. However, I suspect none
+	 *      of them will work should a plugin get loaded after this method has been
+	 *      called. This should be hooked into a bundle activator listener of some
+	 *      kind.
 	 */
 	private void hideUnwantedActionSets() {
 
@@ -1485,4 +1515,5 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			reg.removeExtension(ext, new Object[] { actionSets[i] });
 		}
 	}
+
 }

@@ -62,13 +62,16 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.lingo.app.updater.auth.IUpdateAuthenticationProvider;
 import com.mmxlabs.lingo.app.updater.model.UpdateVersion;
 import com.mmxlabs.lingo.app.updater.model.Version;
 import com.mmxlabs.lingo.app.updater.util.SignatureByteProcessor;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -120,9 +123,24 @@ public class LiNGOUpdater {
 
 	private boolean performSigCheck = true;
 
-	private void withAuthHeader(final Request.Builder b) {
+	private void withAuthHeader(final URL url, final Request.Builder b) {
 		if (user != null && pw != null) {
 			b.header("Authorization", Credentials.basic(user, pw));
+		} else {
+
+			ServiceHelper.withOptionalServiceConsumer(IUpdateAuthenticationProvider.class, p -> {
+				if (p != null) {
+					try {
+						final Pair<String, String> header = p.provideAuthenticationHeader(url);
+						if (header != null) {
+							b.addHeader(header.getFirst(), header.getSecond());
+						}
+					} catch (final Exception exception) {
+						// Error generating the token
+						exception.printStackTrace();
+					}
+				}
+			});
 		}
 	}
 
@@ -183,6 +201,10 @@ public class LiNGOUpdater {
 				updateVersion = getVersion(url);
 			} else {
 				final List<URL> updateSites = getUpdateSites();
+				if (updateSites.isEmpty()) {
+					Display.getDefault().asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", "No enabled update sites found"));
+					return;
+				}
 				for (final URL u : updateSites) {
 					final UpdateVersion version = getVersion(u);
 					if (version != null) {
@@ -198,30 +220,33 @@ public class LiNGOUpdater {
 				final UpdateVersion pUpdateVersion = updateVersion;
 				{
 					final Version v = getLiNGOVersion();
-					if (v != null) {
-						if (updateVersion.isBetter(v)) {
-							final boolean[] proceed = new boolean[1];
-							Display.getDefault().syncExec(() -> {
-								final String msg = String.format("An update to LiNGO %s has been found.\nCurrent version is %s.\nProceed?", pUpdateVersion, v);
-								if (MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "Update found", msg)) {
-									proceed[0] = true;
-								}
-							});
-							if (!proceed[0]) {
-								return;
+					if (v == null || updateVersion.isBetter(v)) {
+						final boolean[] proceed = new boolean[1];
+						Display.getDefault().syncExec(() -> {
+							final String msg;
+							if (v == null) {
+								msg = String.format("An update to LiNGO %s has been found.\nProceed?", pUpdateVersion);
+							} else {
+								msg = String.format("An update to LiNGO %s has been found.\nCurrent version is %s.\nProceed?", pUpdateVersion, v);
 							}
-
-						} else {
-							Display.getDefault().syncExec(() -> {
-								final String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
-								MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
-							});
+							if (MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "Update found", msg)) {
+								proceed[0] = true;
+							}
+						});
+						if (!proceed[0]) {
 							return;
 						}
 
+					} else {
+						Display.getDefault().syncExec(() -> {
+							final String msg = String.format("LiNGO %s has been found. Current version is %s. No upgrade needed", pUpdateVersion, v);
+							MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
+						});
+						return;
 					}
-
 				}
+
+				m.setTaskName(String.format("Updating to %s", updateVersion.getVersion()));
 
 				if (!versionExists(updateVersion)) {
 					if (performSigCheck) {
@@ -355,7 +380,7 @@ public class LiNGOUpdater {
 		final Request.Builder requestBuilder = new Request.Builder() //
 				.url(url) //
 		;
-		withAuthHeader(requestBuilder);
+		withAuthHeader(url, requestBuilder);
 
 		final Request request = requestBuilder //
 				.build();
@@ -396,7 +421,7 @@ public class LiNGOUpdater {
 		final Request.Builder requestBuilder = new Request.Builder() //
 				.url(url) //
 		;
-		withAuthHeader(requestBuilder);
+		withAuthHeader(url, requestBuilder);
 
 		final Request request = requestBuilder //
 				.build();
@@ -423,14 +448,14 @@ public class LiNGOUpdater {
 
 		if (url.toString().startsWith("http")) {
 
-			OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
+			final OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
 
 			final OkHttpClient localHttpClient = clientBuilder //
 					.build();
 			final Request.Builder requestBuilder = new Request.Builder() //
 					.url(url) //
 			;
-			withAuthHeader(requestBuilder);
+			withAuthHeader(url, requestBuilder);
 
 			final Request request = requestBuilder //
 					.build();
@@ -570,8 +595,9 @@ public class LiNGOUpdater {
 
 //			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
 
-			operation.getProvisioningContext().setArtifactRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
-			operation.getProvisioningContext().setMetadataRepositories(new URI[] { new URI(UPDATE_SITE_URL) });
+			final URI updateSiteURI = new URI(UPDATE_SITE_URL);
+			operation.getProvisioningContext().setArtifactRepositories(updateSiteURI);
+			operation.getProvisioningContext().setMetadataRepositories(updateSiteURI);
 
 			final IStatus status = operation.resolveModal(progress.split(10));
 
@@ -593,7 +619,7 @@ public class LiNGOUpdater {
 
 			// Skip the bundle verification step as we will assume content is validated from
 			// zip
-			if (provisioningJob instanceof ProfileModificationJob profileModificationJob) {
+			if (provisioningJob instanceof final ProfileModificationJob profileModificationJob) {
 				profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
 			}
 
@@ -624,8 +650,9 @@ public class LiNGOUpdater {
 		this.pw = pw;
 	}
 
-	public void disableSigCheck(boolean b) {
+	public void disableSigCheck(final boolean b) {
 		this.performSigCheck = !b;
 
 	}
+
 }

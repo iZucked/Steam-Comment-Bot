@@ -31,9 +31,15 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 		};
 	}
 
+	public Number getConstant() {
+		// TODO Auto-generated method stub
+		return constant;
+	}
+
 	@Override
 	public boolean canEvaluate() {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
 }

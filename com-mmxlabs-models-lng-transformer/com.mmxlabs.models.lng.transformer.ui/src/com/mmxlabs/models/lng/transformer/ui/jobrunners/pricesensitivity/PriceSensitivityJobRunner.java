@@ -236,7 +236,7 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 							try (ILazyExpressionManager lazyExpressionManager = lazyExpressionManagerContainer.getExpressionManager()) {
 								final List<PriceCurveKey> priceCurveCombination = (List<PriceCurveKey>) p.getSecond().get("combination");
 								for (final PriceCurveKey key : priceCurveCombination) {
-									lazyExpressionManager.setPriceCurve(key.getIndexName().toLowerCase(), priceExpressionProvider.getExpression(key));
+									lazyExpressionManager.setPriceCurve(key.getIndexName().toLowerCase(), key.seriesType(), priceExpressionProvider.getExpression(key));
 								}
 								lazyExpressionManager.initialiseAllPricingData();
 								resultSet = exporter.computeOption(seq);

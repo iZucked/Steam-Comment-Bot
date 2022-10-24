@@ -18,6 +18,26 @@ import com.mmxlabs.models.lng.commercial.SlotContractParams;
 public final class SlotContractParamsHelper {
 
 	public static final String ANNOTATION_SLOT_CONTRACT_PARAMS = "http://minimaxlabs.com/models/commercial/slot/parameters";
+	public static final String ANNOTATION_SLOT_CONTRACT_EXPRESSION = "http://minimaxlabs.com/models/commercial/slot/expression";
+	
+	public static boolean isSlotExpressionUsed(final Slot<?> slot) {
+		final Contract contract = slot.getContract();
+		if (contract != null) {
+			final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
+			if (priceInfo != null) {
+				final EAnnotation eAnnotation = priceInfo.eClass().getEAnnotation(ANNOTATION_SLOT_CONTRACT_EXPRESSION);
+				if (eAnnotation != null) {
+					final String value = eAnnotation.getDetails().get("allowExpressionOverride");
+					if ("false".equalsIgnoreCase(value)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	
 
 	/**
 	 * Find and return if present a valid {@link SlotContractParams} instance, otherwise return null. A valid params instance is one that is valid for the current contract. It is possible that a slot
@@ -66,7 +86,7 @@ public final class SlotContractParamsHelper {
 		if (paramsObjectEClass == null) {
 			return null;
 		}
-		Class<?> cls = paramsObjectEClass.getInstanceClass();
+		final Class<?> cls = paramsObjectEClass.getInstanceClass();
 
 		if (!SlotContractParams.class.isAssignableFrom(cls)) {
 			return null;
@@ -96,7 +116,7 @@ public final class SlotContractParamsHelper {
 		if (paramsObjectEClass == null) {
 			return null;
 		}
-		Class<?> cls = paramsObjectEClass.getInstanceClass();
+		final Class<?> cls = paramsObjectEClass.getInstanceClass();
 
 		if (!SlotContractParams.class.isAssignableFrom(cls)) {
 			return null;
@@ -108,7 +128,7 @@ public final class SlotContractParamsHelper {
 				}
 			}
 		}
-		EObject instance = paramsObjectEClass.getEPackage().getEFactoryInstance().create(paramsObjectEClass);
+		final EObject instance = paramsObjectEClass.getEPackage().getEFactoryInstance().create(paramsObjectEClass);
 		return (SlotContractParams) instance;
 	}
 

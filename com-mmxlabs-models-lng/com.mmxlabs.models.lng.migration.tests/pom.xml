@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>5.9.3-SNAPSHOT</version>
+		<version>5.10.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.migration.tests</artifactId>
@@ -40,14 +40,6 @@
 							<artifactId>ch.qos.logback.classic</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-
-
-
 					</dependencies>
 					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
 					<bundleStartLevel>

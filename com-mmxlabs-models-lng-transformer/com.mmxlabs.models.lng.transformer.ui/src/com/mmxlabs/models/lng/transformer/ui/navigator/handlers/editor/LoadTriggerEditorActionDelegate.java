@@ -17,6 +17,8 @@ import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.inventory.InventoryFileName;
 import com.mmxlabs.models.lng.transformer.ui.inventory.LoadTriggerDialog;
@@ -60,13 +62,15 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 						}
 						
 						if (copyScenario != null) {
-							LoadTriggerDialog dialog = new LoadTriggerDialog(Display.getDefault().getActiveShell(), copyScenario, copyScenario.getPromptPeriodStart());
+							final LoadTriggerDialog dialog = new LoadTriggerDialog(Display.getDefault().getActiveShell(), copyScenario, copyScenario.getPromptPeriodStart());
 							dialog.open();
-							Integer globalLoadTrigger = dialog.getGlobalLoadTrigger();
-							Integer cargoVolume = dialog.getCargoVolume();
-							LocalDate startDate = dialog.getSelectedDate();
+							final Integer globalLoadTrigger = dialog.getGlobalLoadTrigger();
+							final Integer cargoVolume = dialog.getCargoVolume();
+							final LocalDate startDate = dialog.getSelectedDate();
+							final Inventory selectedInventory = dialog.getSelectedInventory();
+							final PurchaseContract purchaseContract = dialog.getSelectedContract();
 							if (dialog.getReturnCode() == 0 && cargoVolume != null && startDate != null) {
-								LoadTriggerHelper loadTriggerHelper = new LoadTriggerHelper();
+								LoadTriggerHelper loadTriggerHelper = new LoadTriggerHelper(selectedInventory, purchaseContract);
 								loadTriggerHelper.doMatchAndMoveLoadTrigger(copyScenario, globalLoadTrigger, cargoVolume, startDate);
 								try {
 									final String name = InventoryFileName.getName(scenarioInstance.getName(), "_load_trigger");

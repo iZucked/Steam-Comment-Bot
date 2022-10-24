@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.Collection;
-import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,9 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.RawTreeParser;
-import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.common.parser.series.GenericSeriesParsesException;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -46,9 +43,6 @@ import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.PricingBasis;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
-import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -116,6 +110,12 @@ public class PriceExpressionUtils {
 		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
 	}
 
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, @Nullable final String constraintKey, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		final PriceIndexType priceIndexType = getPriceIndexType(feature);
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, constraintKey, otherFeatures);
+	}
+
 	public static @NonNull PriceIndexType getPriceIndexType(final EAttribute feature) {
 		PriceIndexType priceIndexType = null;
 		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
@@ -140,7 +140,14 @@ public class PriceExpressionUtils {
 	}
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
-			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk, final Pair<EObject, EStructuralFeature>... otherFeatures) {
+			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk,
+			final Pair<EObject, EStructuralFeature>... otherFeatures) {
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, null, otherFeatures);
+	}
+
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, final EAttribute feature, final @NonNull PriceIndexType priceIndexType, final boolean missingIsOk, @Nullable final String key,
+			final Pair<EObject, EStructuralFeature>... otherFeatures) {
 		final String expression = (String) target.eGet(feature);
 		if (expression == null || expression.isEmpty()) {
 			if (!missingIsOk) {
@@ -148,6 +155,7 @@ public class PriceExpressionUtils {
 						.withMessage("Missing price expression") //
 						.withObjectAndFeature(target, feature) //
 						.withObjectAndFeatures(otherFeatures) //
+						.withConstraintKey(key) //
 						.make(ctx, failures);
 			}
 		} else {
@@ -157,6 +165,7 @@ public class PriceExpressionUtils {
 						.withMessage(result.getErrorDetails()) //
 						.withObjectAndFeature(target, feature) //
 						.withObjectAndFeatures(otherFeatures) //
+						.withConstraintKey(key) //
 						.make(ctx, failures);
 			}
 		}
@@ -194,53 +203,46 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
-		
-		// adds support for the custom parameters
-		String localPriceExpression = priceExpression;
-		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
-		if (eAnnotation != null) {
-			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.PARAMETERS_KEY);
-			if (value != null) {
-				final String[] values = value.split(",");
-				for (int i = 0; i < values.length; i++) {
-					if (values[i].equalsIgnoreCase(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE)) {
-						localPriceExpression = localPriceExpression.toLowerCase().replace(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE, "(1)"); 
-					}
-				}
-			}
-		}
-		
 		// Check for illegal characters
 		{
-			final Matcher matcher = pattern.matcher(localPriceExpression);
+			final Matcher matcher = pattern.matcher(priceExpression);
 			if (matcher.find()) {
-				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", localPriceExpression, matcher.group(1));
+				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 				return ValidationResult.createErrorStatus(message);
 			}
 		}
 		// Test SHIFT function use
 		{
-			final Matcher matcherA = shiftDetectPattern.matcher(localPriceExpression);
+			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
 			if (matcherA.find()) {
-				final Matcher matcherB = shiftUsePattern.matcher(localPriceExpression);
+				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
 				if (!matcherB.find()) {
-					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", localPriceExpression);
+					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
 					return ValidationResult.createErrorStatus(message);
 				}
 			}
 		}
+
+		// The current grammar of the series parser allows for expressions like 1+++3,
+		// 1-+-3
+		// so we need to check these cases
+		final String multipleOperatorPattern = "([-/*+][-/*+]+)";
+		final Pattern pattern = Pattern.compile(multipleOperatorPattern);
+		final Matcher matcher = pattern.matcher(priceExpression);
+		if (matcher.find()) {
+			return ValidationResult.createErrorStatus(String.format("Unable to parse expression, consecutive %s operators found", matcher.group(0)));
+		}
+
 		// TODO DATED AVG USE
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
 			try {
-				final IExpression<ISeries> expression = parser.parse(localPriceExpression);
-				parsed = expression.evaluate();
-
+				parsed = parser.asSeries(priceExpression);
 			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
 				hints = e.getMessage();
 			} catch (final Exception e) {
-				final String operatorPattern = "([-/*+][-/*+]+)";
+				final String operatorPattern = "([-/*+][-/*+]+)"; // TODO ask Simon if this is reachable
 				final Pattern p = Pattern.compile(operatorPattern);
 				final Matcher m = p.matcher(priceExpression);
 				if (m.find()) {
@@ -252,25 +254,16 @@ public class PriceExpressionUtils {
 			if (parsed == null) {
 				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
 			}
+
 		}
-		{
-			try {
-				final IExpression<Node> parse = new RawTreeParser().parse(localPriceExpression);
-				parse.evaluate();
-			} catch (final EmptyStackException e) {
-				return ValidationResult.createErrorStatus("Unable to parse: the price expression has an empty argument");
-			} catch (final Exception e) {
-				final String hints = e.getMessage();
-				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
-			}
-		}
+
 		return ValidationResult.createOKStatus();
 	}
 
 	/**
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
-			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
+			final Double maxValue, final YearMonth date, final List<IStatus> failures, final PriceIndexType type) {
 
 		if (date == null) {
 			// No date, but try to parse expression as a number.
@@ -296,10 +289,9 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
+		final SeriesParser parser = getIndexParser(type);
 		try {
-			final IExpression<ISeries> expression = parser.parse(priceExpression);
-			final ISeries parsed = expression.evaluate();
+			final ISeries parsed = parser.asSeries(priceExpression);
 
 			final int pricingTime = Hours.between(PriceIndexUtils.dateZero, date);
 
@@ -337,9 +329,7 @@ public class PriceExpressionUtils {
 			final List<IStatus> failures) {
 		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
 		try {
-			final IExpression<ISeries> expression = parser.parse(priceExpression);
-			final ISeries parsed = expression.evaluate();
-			return parsed;
+			return parser.asSeries(priceExpression);
 		} catch (final Exception e) {
 			final String message = String.format("Price expression is not valid: %s", priceExpression);
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -445,7 +435,8 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature, final List<IStatus> failures) {
+	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
+			final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
 		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
 
@@ -478,21 +469,14 @@ public class PriceExpressionUtils {
 		}
 	}
 
-	public static Node convertCommodityToExpandedNodes(final String expression) {
+	public static ASTNode convertCommodityToASTNodes(final String expression) {
 
-		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		final PricingModel pricingModel = marketCurveProvider.getPricingModel();
-
-		final LookupData lookupData = LookupData.createLookupData(pricingModel);
-		final IExpression<Node> parse = new RawTreeParser().parse(expression);
-		final Node p = parse.evaluate();
-		final Node node = Nodes.expandNode(p, lookupData);
-
-		return node;
+		final SeriesParser seriesParser = getIndexParser(PriceIndexType.COMMODITY);
+		return seriesParser.parse(expression);
 	}
-	
-	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, EObject target, String contractName, final LNGPriceCalculatorParameters pricingParams, EAttribute priceExprAttribute,
-			String priceExpr) {
+
+	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, final EObject target, final String contractName,
+			final LNGPriceCalculatorParameters pricingParams, final EAttribute priceExprAttribute, final String priceExpr) {
 		if (priceExpr == null || priceExpr.isEmpty()) {
 			addToFailures(ctx, failures, target, String.format("Contract %s| Missing price expression ", contractName), pricingParams, priceExprAttribute);
 		} else {
@@ -504,8 +488,8 @@ public class PriceExpressionUtils {
 		}
 	}
 
-	public static void addToFailures(final IValidationContext ctx, final List<IStatus> failures, EObject target, String errorMessage, final LNGPriceCalculatorParameters pricingParams,
-			EAttribute baseExpressionFeature) {
+	public static void addToFailures(final IValidationContext ctx, final List<IStatus> failures, final EObject target, final String errorMessage, final LNGPriceCalculatorParameters pricingParams,
+			final EAttribute baseExpressionFeature) {
 		final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(errorMessage));
 		dsd.addEObjectAndFeature(target, CommercialPackage.Literals.CONTRACT__PRICE_INFO);
 		dsd.addEObjectAndFeature(pricingParams, baseExpressionFeature);

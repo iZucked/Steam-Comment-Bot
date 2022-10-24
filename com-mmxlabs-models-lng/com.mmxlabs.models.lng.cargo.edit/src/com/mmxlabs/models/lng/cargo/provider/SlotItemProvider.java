@@ -91,6 +91,7 @@ public class SlotItemProvider
 			addLockedPropertyDescriptor(object);
 			addCancelledPropertyDescriptor(object);
 			addWindowCounterPartyPropertyDescriptor(object);
+			addPricingBasisPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1020,6 +1021,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Basis feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingBasisPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_pricingBasis_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingBasis_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PRICING_BASIS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1089,6 +1112,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__CANCELLED:
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+			case CargoPackage.SLOT__PRICING_BASIS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

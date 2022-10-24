@@ -24,15 +24,17 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
- * Class, intended primarily for the validation framework, to help generate consistent name/id strings
+ * Class, intended primarily for the validation framework, to help generate
+ * consistent name/id strings
  * 
  * @author Simon Goodall
  *
@@ -81,7 +83,7 @@ public class ScenarioElementNameHelper {
 	public static @NonNull String getName(final @Nullable EObject target, @NonNull final String defaultName) {
 		if (target instanceof Cargo cargo) {
 			return String.format("%s \"%s\"", TYPE_CARGO.toLowerCase(), getNonNullString(cargo.getLoadName()));
-		} else if (target instanceof Slot slot) {
+		} else if (target instanceof Slot<?> slot) {
 			return String.format("%s \"%s\"", TYPE_SLOT.toLowerCase(), getNonNullString(slot.getName()));
 		} else if (target instanceof VesselEvent vesselEvent) {
 			return String.format("%s \"%s\"", TYPE_VESSEL_EVENT.toLowerCase(), getNonNullString(vesselEvent.getName()));
@@ -112,6 +114,15 @@ public class ScenarioElementNameHelper {
 		return null;
 	}
 
+	public static @Nullable Triple<@NonNull String, @NonNull EObject, @NonNull EStructuralFeature> getContainerName(@NonNull final SlotContractParams params) {
+		final EObject eContainer = params.eContainer();
+		if (eContainer instanceof Slot<?> slot) {
+			final String name = String.format("%s|'%s'", TYPE_SLOT, getName(slot, "Un-named slot"));
+			return new Triple<>(name, eContainer, MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS);
+		}
+		return null;
+	}
+
 	public static @NonNull String getName(@Nullable final NamedObject namedObject, @NonNull final String defaultName) {
 		if (namedObject != null) {
 			final String name = namedObject.getName();
@@ -122,7 +133,7 @@ public class ScenarioElementNameHelper {
 		return defaultName;
 	}
 
-	public static < U extends NamedObject> @NonNull String getName(final @Nullable Collection<U> namedObjects, final @NonNull String defaultName) {
+	public static <U extends NamedObject> @NonNull String getName(final @Nullable Collection<U> namedObjects, final @NonNull String defaultName) {
 		if (namedObjects == null || namedObjects.isEmpty()) {
 			return defaultName;
 		}

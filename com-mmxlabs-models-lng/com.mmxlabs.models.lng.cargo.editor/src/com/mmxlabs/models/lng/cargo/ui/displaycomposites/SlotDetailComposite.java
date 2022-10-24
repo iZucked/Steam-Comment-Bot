@@ -71,6 +71,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowCounterParty = CargoFeatures.getSlot_WindowCounterParty();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
+	private static final EStructuralFeature PricingBasis = CargoFeatures.getSlot_PricingBasis();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
 
 	Composite contentComposite;
@@ -114,10 +115,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		pricingFeatures = new ArrayList<>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract, CargoPackage.Literals.SPOT_SLOT__MARKET });
-		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
+		pricingFeatures.add(new EStructuralFeature[] { PriceExpression, PricingBasis });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION,  CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD,  CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingEvent(), CargoFeatures.getSlot_PricingDate() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MiscCosts(), CargoFeatures.getSlot_CancellationExpression() });
-		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
+		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression, PricingBasis);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
 		shippedWindowFeatures = new ArrayList<>();
@@ -188,12 +192,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final MMXObject mmxEo = (MMXObject) eo;
 				final Contract c = (Contract) mmxEo.eGet(Contract);
 				final String pe = (String) mmxEo.eGet(PriceExpression);
+				final String pb = (String) mmxEo.eGet(PricingBasis);
 				String text = "";
 				if (c != null) {
 					text += c.getName() != null ? c.getName() : "";
 					text += pe != null && pe.length() > 0 ? ", " : "";
+					text += pb != null && pb.length() > 0 ? ", " : "";
 				}
 				text += pe != null ? pe : "";
+				text += pb != null ? pb : "";
 				textClient.setText(text);
 				textClient.update();
 			}
@@ -435,6 +442,43 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
+				
+				if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION || feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Price tiers");
+						}
+						editor.setLabel(null);
+					} else  {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD || feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+					
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Threshold");
+						}
+						editor.setLabel(null);
+					} else  {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				
+				
 				return super.createEditorLayoutData(root, value, editor, control);
 			}
 		};
@@ -503,8 +547,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		boolean isUnshipped = false;
-		if (object instanceof Slot<?>) {
-			Slot<?> slot = (Slot<?>)object;
+		if (object instanceof Slot<?> slot) {
 			if (slot.getCargo() != null && slot.getCargo().getCargoType() != CargoType.FLEET) {
 				isUnshipped = true;
 			}
@@ -533,7 +576,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		createSpacer();
 
-		final HashSet<ETypedElement> contractFeatures = new LinkedHashSet<ETypedElement>();
+		final HashSet<ETypedElement> contractFeatures = new LinkedHashSet<>();
 		for (final ETypedElement f : missedFeaturesList) {
 
 			if (f instanceof EStructuralFeature feature && feature.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)) {

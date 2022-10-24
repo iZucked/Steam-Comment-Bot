@@ -1312,13 +1312,95 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeTierPriceParameters()
+	 * @generated
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Low Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__LOW_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>High Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__HIGH_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__THRESHOLD = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS__VOLUME_LIMITS_UNIT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Volume Tier Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
@@ -1328,7 +1410,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
 	 * @generated
 	 */
-	int SLOT_CONTRACT_PARAMS = 9;
+	int SLOT_CONTRACT_PARAMS = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1358,6 +1440,88 @@ public interface CommercialPackage extends EPackage {
 	int SLOT_CONTRACT_PARAMS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierSlotParamsImpl <em>Volume Tier Slot Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.VolumeTierSlotParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeTierSlotParams()
+	 * @generated
+	 */
+	int VOLUME_TIER_SLOT_PARAMS = 10;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__EXTENSIONS = SLOT_CONTRACT_PARAMS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__UUID = SLOT_CONTRACT_PARAMS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Low Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>High Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__THRESHOLD = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Override Contract</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Volume Tier Slot Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_TIER_SLOT_PARAMS_FEATURE_COUNT = SLOT_CONTRACT_PARAMS_FEATURE_COUNT + 5;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl <em>Contract Expression Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1365,7 +1529,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractExpressionMapEntry()
 	 * @generated
 	 */
-	int CONTRACT_EXPRESSION_MAP_ENTRY = 10;
+	int CONTRACT_EXPRESSION_MAP_ENTRY = 12;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -1402,7 +1566,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeParams()
 	 * @generated
 	 */
-	int VOLUME_PARAMS = 11;
+	int VOLUME_PARAMS = 13;
 
 	/**
 	 * The number of structural features of the '<em>Volume Params</em>' class.
@@ -1421,7 +1585,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseEntityBook()
 	 * @generated
 	 */
-	int BASE_ENTITY_BOOK = 12;
+	int BASE_ENTITY_BOOK = 14;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1467,7 +1631,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleEntityBook()
 	 * @generated
 	 */
-	int SIMPLE_ENTITY_BOOK = 13;
+	int SIMPLE_ENTITY_BOOK = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1513,7 +1677,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getDateShiftExpressionPriceParameters()
 	 * @generated
 	 */
-	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS = 14;
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1577,7 +1741,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getGenericCharterContract()
 	 * @generated
 	 */
-	int GENERIC_CHARTER_CONTRACT = 15;
+	int GENERIC_CHARTER_CONTRACT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1677,7 +1841,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIRepositioningFee()
 	 * @generated
 	 */
-	int IREPOSITIONING_FEE = 16;
+	int IREPOSITIONING_FEE = 18;
 
 	/**
 	 * The number of structural features of the '<em>IRepositioning Fee</em>' class.
@@ -1696,7 +1860,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleRepositioningFeeContainer()
 	 * @generated
 	 */
-	int SIMPLE_REPOSITIONING_FEE_CONTAINER = 17;
+	int SIMPLE_REPOSITIONING_FEE_CONTAINER = 19;
 
 	/**
 	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
@@ -1724,7 +1888,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIBallastBonus()
 	 * @generated
 	 */
-	int IBALLAST_BONUS = 18;
+	int IBALLAST_BONUS = 20;
 
 	/**
 	 * The number of structural features of the '<em>IBallast Bonus</em>' class.
@@ -1743,7 +1907,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleBallastBonusContainer()
 	 * @generated
 	 */
-	int SIMPLE_BALLAST_BONUS_CONTAINER = 19;
+	int SIMPLE_BALLAST_BONUS_CONTAINER = 21;
 
 	/**
 	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
@@ -1771,7 +1935,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContainer()
 	 * @generated
 	 */
-	int MONTHLY_BALLAST_BONUS_CONTAINER = 20;
+	int MONTHLY_BALLAST_BONUS_CONTAINER = 22;
 
 	/**
 	 * The feature id for the '<em><b>Hubs</b></em>' reference list.
@@ -1808,7 +1972,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_TERM = 21;
+	int LUMP_SUM_TERM = 23;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -1836,7 +2000,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyTerm()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_TERM = 22;
+	int NOTIONAL_JOURNEY_TERM = 24;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -1909,7 +2073,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusTerm()
 	 * @generated
 	 */
-	int BALLAST_BONUS_TERM = 23;
+	int BALLAST_BONUS_TERM = 25;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -1937,7 +2101,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_BALLAST_BONUS_TERM = 24;
+	int LUMP_SUM_BALLAST_BONUS_TERM = 26;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -1974,7 +2138,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusTerm()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = 25;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = 27;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -2065,7 +2229,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusTerm()
 	 * @generated
 	 */
-	int MONTHLY_BALLAST_BONUS_TERM = 26;
+	int MONTHLY_BALLAST_BONUS_TERM = 28;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -2192,7 +2356,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRepositioningFeeTerm()
 	 * @generated
 	 */
-	int REPOSITIONING_FEE_TERM = 27;
+	int REPOSITIONING_FEE_TERM = 29;
 
 	/**
 	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
@@ -2220,7 +2384,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumRepositioningFeeTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM = 28;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM = 30;
 
 	/**
 	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
@@ -2257,7 +2421,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFeeTerm()
 	 * @generated
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM = 29;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM = 31;
 
 	/**
 	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
@@ -2348,7 +2512,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEndHeelOptions()
 	 * @generated
 	 */
-	int END_HEEL_OPTIONS = 30;
+	int END_HEEL_OPTIONS = 32;
 
 	/**
 	 * The feature id for the '<em><b>Tank State</b></em>' attribute.
@@ -2412,7 +2576,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getStartHeelOptions()
 	 * @generated
 	 */
-	int START_HEEL_OPTIONS = 31;
+	int START_HEEL_OPTIONS = 33;
 
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
@@ -2460,6 +2624,61 @@ public interface CommercialPackage extends EPackage {
 	int START_HEEL_OPTIONS_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl <em>Regas Pricing Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRegasPricingParams()
+	 * @generated
+	 */
+	int REGAS_PRICING_PARAMS = 34;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Num Pricing Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS__NUM_PRICING_DAYS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Regas Pricing Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REGAS_PRICING_PARAMS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2467,7 +2686,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 32;
+	int CONTRACT_TYPE = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2477,7 +2696,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 33;
+	int PRICING_EVENT = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2487,7 +2706,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 34;
+	int NEXT_PORT_TYPE = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}' enum.
@@ -2497,7 +2716,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 35;
+	int EVESSEL_TANK_STATE = 38;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -3072,6 +3291,136 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getExpressionPriceParameters_PriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis <em>Pricing Basis</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis()
+	 * @see #getExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getExpressionPriceParameters_PricingBasis();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters <em>Volume Tier Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Volume Tier Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters
+	 * @generated
+	 */
+	EClass getVolumeTierPriceParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getLowExpression <em>Low Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Low Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getLowExpression()
+	 * @see #getVolumeTierPriceParameters()
+	 * @generated
+	 */
+	EAttribute getVolumeTierPriceParameters_LowExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getHighExpression <em>High Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>High Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getHighExpression()
+	 * @see #getVolumeTierPriceParameters()
+	 * @generated
+	 */
+	EAttribute getVolumeTierPriceParameters_HighExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getThreshold <em>Threshold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Threshold</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getThreshold()
+	 * @see #getVolumeTierPriceParameters()
+	 * @generated
+	 */
+	EAttribute getVolumeTierPriceParameters_Threshold();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getVolumeLimitsUnit <em>Volume Limits Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Limits Unit</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters#getVolumeLimitsUnit()
+	 * @see #getVolumeTierPriceParameters()
+	 * @generated
+	 */
+	EAttribute getVolumeTierPriceParameters_VolumeLimitsUnit();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams <em>Volume Tier Slot Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Volume Tier Slot Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams
+	 * @generated
+	 */
+	EClass getVolumeTierSlotParams();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getLowExpression <em>Low Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Low Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getLowExpression()
+	 * @see #getVolumeTierSlotParams()
+	 * @generated
+	 */
+	EAttribute getVolumeTierSlotParams_LowExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getHighExpression <em>High Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>High Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getHighExpression()
+	 * @see #getVolumeTierSlotParams()
+	 * @generated
+	 */
+	EAttribute getVolumeTierSlotParams_HighExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getThreshold <em>Threshold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Threshold</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getThreshold()
+	 * @see #getVolumeTierSlotParams()
+	 * @generated
+	 */
+	EAttribute getVolumeTierSlotParams_Threshold();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getVolumeLimitsUnit <em>Volume Limits Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Limits Unit</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#getVolumeLimitsUnit()
+	 * @see #getVolumeTierSlotParams()
+	 * @generated
+	 */
+	EAttribute getVolumeTierSlotParams_VolumeLimitsUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#isOverrideContract <em>Override Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Override Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeTierSlotParams#isOverrideContract()
+	 * @see #getVolumeTierSlotParams()
+	 * @generated
+	 */
+	EAttribute getVolumeTierSlotParams_OverrideContract();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
@@ -3744,6 +4093,38 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getStartHeelOptions_PriceExpression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams <em>Regas Pricing Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Regas Pricing Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams
+	 * @generated
+	 */
+	EClass getRegasPricingParams();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams#getPriceExpression()
+	 * @see #getRegasPricingParams()
+	 * @generated
+	 */
+	EAttribute getRegasPricingParams_PriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RegasPricingParams#getNumPricingDays <em>Num Pricing Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Num Pricing Days</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RegasPricingParams#getNumPricingDays()
+	 * @see #getRegasPricingParams()
+	 * @generated
+	 */
+	EAttribute getRegasPricingParams_NumPricingDays();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4246,6 +4627,106 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = eINSTANCE.getExpressionPriceParameters_PricingBasis();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeTierPriceParameters()
+		 * @generated
+		 */
+		EClass VOLUME_TIER_PRICE_PARAMETERS = eINSTANCE.getVolumeTierPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Low Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_PRICE_PARAMETERS__LOW_EXPRESSION = eINSTANCE.getVolumeTierPriceParameters_LowExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>High Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_PRICE_PARAMETERS__HIGH_EXPRESSION = eINSTANCE.getVolumeTierPriceParameters_HighExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Threshold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_PRICE_PARAMETERS__THRESHOLD = eINSTANCE.getVolumeTierPriceParameters_Threshold();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Limits Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_PRICE_PARAMETERS__VOLUME_LIMITS_UNIT = eINSTANCE.getVolumeTierPriceParameters_VolumeLimitsUnit();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierSlotParamsImpl <em>Volume Tier Slot Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.VolumeTierSlotParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeTierSlotParams()
+		 * @generated
+		 */
+		EClass VOLUME_TIER_SLOT_PARAMS = eINSTANCE.getVolumeTierSlotParams();
+
+		/**
+		 * The meta object literal for the '<em><b>Low Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION = eINSTANCE.getVolumeTierSlotParams_LowExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>High Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION = eINSTANCE.getVolumeTierSlotParams_HighExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Threshold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_SLOT_PARAMS__THRESHOLD = eINSTANCE.getVolumeTierSlotParams_Threshold();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Limits Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT = eINSTANCE.getVolumeTierSlotParams_VolumeLimitsUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Override Contract</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT = eINSTANCE.getVolumeTierSlotParams_OverrideContract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
@@ -4796,6 +5277,32 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl <em>Regas Pricing Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RegasPricingParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRegasPricingParams()
+		 * @generated
+		 */
+		EClass REGAS_PRICING_PARAMS = eINSTANCE.getRegasPricingParams();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REGAS_PRICING_PARAMS__PRICE_EXPRESSION = eINSTANCE.getRegasPricingParams_PriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Num Pricing Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REGAS_PRICING_PARAMS__NUM_PRICING_DAYS = eINSTANCE.getRegasPricingParams_NumPricingDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

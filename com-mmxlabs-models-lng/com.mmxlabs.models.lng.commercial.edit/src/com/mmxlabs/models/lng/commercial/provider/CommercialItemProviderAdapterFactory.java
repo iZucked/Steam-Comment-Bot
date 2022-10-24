@@ -249,6 +249,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VolumeTierPriceParametersItemProvider volumeTierPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVolumeTierPriceParametersAdapter() {
+		if (volumeTierPriceParametersItemProvider == null) {
+			volumeTierPriceParametersItemProvider = new VolumeTierPriceParametersItemProvider(this);
+		}
+
+		return volumeTierPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VolumeTierSlotParamsItemProvider volumeTierSlotParamsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.VolumeTierSlotParams}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVolumeTierSlotParamsAdapter() {
+		if (volumeTierSlotParamsItemProvider == null) {
+			volumeTierSlotParamsItemProvider = new VolumeTierSlotParamsItemProvider(this);
+		}
+
+		return volumeTierSlotParamsItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -617,6 +663,29 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RegasPricingParams} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RegasPricingParamsItemProvider regasPricingParamsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RegasPricingParams}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRegasPricingParamsAdapter() {
+		if (regasPricingParamsItemProvider == null) {
+			regasPricingParamsItemProvider = new RegasPricingParamsItemProvider(this);
+		}
+
+		return regasPricingParamsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -755,6 +824,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
+		if (volumeTierPriceParametersItemProvider != null) volumeTierPriceParametersItemProvider.dispose();
+		if (volumeTierSlotParamsItemProvider != null) volumeTierSlotParamsItemProvider.dispose();
 		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
 		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 		if (dateShiftExpressionPriceParametersItemProvider != null) dateShiftExpressionPriceParametersItemProvider.dispose();
@@ -771,6 +842,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (originPortRepositioningFeeTermItemProvider != null) originPortRepositioningFeeTermItemProvider.dispose();
 		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
 		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
+		if (regasPricingParamsItemProvider != null) regasPricingParamsItemProvider.dispose();
 	}
 
 }

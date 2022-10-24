@@ -165,6 +165,24 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.VOLUME_TIER_PRICE_PARAMETERS: {
+				VolumeTierPriceParameters volumeTierPriceParameters = (VolumeTierPriceParameters)theEObject;
+				T result = caseVolumeTierPriceParameters(volumeTierPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(volumeTierPriceParameters);
+				if (result == null) result = caseUUIDObject(volumeTierPriceParameters);
+				if (result == null) result = caseMMXObject(volumeTierPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.VOLUME_TIER_SLOT_PARAMS: {
+				VolumeTierSlotParams volumeTierSlotParams = (VolumeTierSlotParams)theEObject;
+				T result = caseVolumeTierSlotParams(volumeTierSlotParams);
+				if (result == null) result = caseSlotContractParams(volumeTierSlotParams);
+				if (result == null) result = caseUUIDObject(volumeTierSlotParams);
+				if (result == null) result = caseMMXObject(volumeTierSlotParams);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case CommercialPackage.SLOT_CONTRACT_PARAMS: {
 				SlotContractParams slotContractParams = (SlotContractParams)theEObject;
 				T result = caseSlotContractParams(slotContractParams);
@@ -330,6 +348,15 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.REGAS_PRICING_PARAMS: {
+				RegasPricingParams regasPricingParams = (RegasPricingParams)theEObject;
+				T result = caseRegasPricingParams(regasPricingParams);
+				if (result == null) result = caseLNGPriceCalculatorParameters(regasPricingParams);
+				if (result == null) result = caseUUIDObject(regasPricingParams);
+				if (result == null) result = caseMMXObject(regasPricingParams);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -466,6 +493,36 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseExpressionPriceParameters(ExpressionPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Volume Tier Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Volume Tier Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVolumeTierPriceParameters(VolumeTierPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Volume Tier Slot Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Volume Tier Slot Params</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVolumeTierSlotParams(VolumeTierSlotParams object) {
 		return null;
 	}
 
@@ -811,6 +868,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseStartHeelOptions(StartHeelOptions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Regas Pricing Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Regas Pricing Params</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRegasPricingParams(RegasPricingParams object) {
 		return null;
 	}
 

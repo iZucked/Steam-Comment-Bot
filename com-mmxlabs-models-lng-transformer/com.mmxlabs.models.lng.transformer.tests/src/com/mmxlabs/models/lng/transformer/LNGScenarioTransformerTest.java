@@ -20,6 +20,7 @@ import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -175,8 +176,10 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel8, oVessel8);
 
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
+		final DateAndCurveHelper dateHelper = new DateAndCurveHelper(
+				new Pair<>(ZonedDateTime.of(LocalDateTime.of(2000, 1, 1, 0, 0, 0), ZoneId.of("UTC")), ZonedDateTime.of(LocalDateTime.of(2020, 1, 1, 0, 0, 0), ZoneId.of("UTC"))));
 
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff, dateHelper);
 
 		Mockito.verify(builder).setVesselRouteCost(ArgumentMatchers.eq(ERouteOption.PANAMA), ArgumentMatchers.eq(oVessel1), ArgumentMatchers.eq(IRouteCostProvider.CostType.Laden),
 				ArgumentMatchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0)));
@@ -252,7 +255,7 @@ public class LNGScenarioTransformerTest {
 
 		Mockito.verifyNoMoreInteractions(builder);
 	}
-
+ 
 	@Test
 	public void testSuezCostCalculator() {
 
@@ -511,8 +514,10 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel8, oVessel8);
 
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
+		final DateAndCurveHelper dateHelper = new DateAndCurveHelper(
+				new Pair<>(ZonedDateTime.of(LocalDateTime.of(2000, 1, 1, 0, 0, 0), ZoneId.of("UTC")), ZonedDateTime.of(LocalDateTime.of(2020, 1, 1, 0, 0, 0), ZoneId.of("UTC"))));
 
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff, dateHelper);
 
 		Mockito.verify(builder).setVesselRouteCost(ArgumentMatchers.eq(ERouteOption.PANAMA), ArgumentMatchers.eq(oVessel1), ArgumentMatchers.eq(IRouteCostProvider.CostType.Laden),
 				ArgumentMatchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0)));
@@ -648,18 +653,26 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel2, oVessel2);
 
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2);
+		final DateAndCurveHelper dateHelper = new DateAndCurveHelper(
+				new Pair<>(ZonedDateTime.of(LocalDateTime.of(2000, 1, 1, 0, 0, 0), ZoneId.of("UTC")), ZonedDateTime.of(LocalDateTime.of(2020, 1, 1, 0, 0, 0), ZoneId.of("UTC"))));
 
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff, dateHelper);
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(311_880_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(274_980_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(247_500_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden, createDefaultCurve(311_880_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast, createDefaultCurve(274_980_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.RoundTripBallast, createDefaultCurve(247_500_000L));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(345_200_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(304_050_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(273_000_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden, createDefaultCurve(345_200_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast, createDefaultCurve(304_050_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast, createDefaultCurve(273_000_000L));
 
 		Mockito.verifyNoMoreInteractions(builder);
+	}
+
+	private PreGeneratedLongCurve createDefaultCurve(long value) {
+		var c = new PreGeneratedLongCurve();
+		c.setDefaultValue(value);
+		return c;
 	}
 
 	/**
@@ -683,7 +696,9 @@ public class LNGScenarioTransformerTest {
 
 		total *= 1.0 + panamaCanalTariff.getMarkupRate();
 
-		return new ConstantValueLongCurve(1000L * (long) Math.round(total));
+		var curve = new PreGeneratedLongCurve();
+		curve.setDefaultValue(1000L * (long) Math.round(total));
+		return curve;
 	}
 
 	/**

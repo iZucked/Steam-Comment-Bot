@@ -4,17 +4,15 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
-import org.eclipse.emf.ecore.EClass;
-
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
-import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
-import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
@@ -48,6 +46,14 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			}
 		});
 
+		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
+		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES)) {
+			addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICING_BASIS, SlotExpressionWrapper::new);
+		} else {
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
+		}
+
+		
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 
 		addEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,

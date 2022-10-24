@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.validation.tests;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -23,15 +23,22 @@ import com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint;
  * 
  * Write a test for the ShipFillPercentageConstraint.
  * 
- * The ship fill percentage is the percentage of a vessel's tanks that can actually be used. In the model, percentages are held as floating point numbers from 0 to 1 (i.e. proportions). The
- * ShipFillPercentageConstraint is supposed to check that this value is (a) valid and (b) reasonable.
+ * The ship fill percentage is the percentage of a vessel's tanks that can
+ * actually be used. In the model, percentages are held as floating point
+ * numbers from 0 to 1 (i.e. proportions). The ShipFillPercentageConstraint is
+ * supposed to check that this value is (a) valid and (b) reasonable.
  * 
- * A valid ship fill percentage is strictly greater than zero and less than or equal to 100%
+ * A valid ship fill percentage is strictly greater than zero and less than or
+ * equal to 100%
  * 
  * A reasonable ship fill percentage is more than 80% (0.8).
  * 
- * The constraint expects its IValidationContext to provide a Vessel as the target, and one of "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity" or
- * "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity" from IValidationContext.getCurrentConstraintID(), indicating whether it's checking validity or reasonableness.
+ * The constraint expects its IValidationContext to provide a Vessel as the
+ * target, and one of
+ * "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_validity" or
+ * "com.mmxlabs.lngscheduler.emf-extras.constraints.ship_fill_sanity" from
+ * IValidationContext.getCurrentConstraintID(), indicating whether it's checking
+ * validity or reasonableness.
  * 
  */
 public class ShipFillPercentageConstraintTest {
@@ -122,7 +129,8 @@ public class ShipFillPercentageConstraintTest {
 	}
 
 	/**
-	 * Runs a test given a fill and a constraint to check. Expects the test to succeed and produce a success status.
+	 * Runs a test given a fill and a constraint to check. Expects the test to
+	 * succeed and produce a success status.
 	 * 
 	 * @param fill
 	 * @param id

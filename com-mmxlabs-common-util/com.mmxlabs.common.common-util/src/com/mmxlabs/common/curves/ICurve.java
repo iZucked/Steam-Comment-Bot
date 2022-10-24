@@ -12,8 +12,5 @@ package com.mmxlabs.common.curves;
  */
 public interface ICurve {
 
-	/**
-	 * @since 2.0
-	 */
-	int getValueAtPoint(final int point);
+	int getValueAtPoint(int point);
 }

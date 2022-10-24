@@ -104,6 +104,21 @@
     <genClasses image="false" ecoreClass="commercial.ecore#//LNGPriceCalculatorParameters"/>
     <genClasses ecoreClass="commercial.ecore#//ExpressionPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/pricingBasis"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//VolumeTierPriceParameters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/lowExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/highExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/threshold"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/volumeLimitsUnit"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//VolumeTierSlotParams">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierSlotParams/lowExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierSlotParams/highExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierSlotParams/threshold"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierSlotParams/volumeLimitsUnit"/>
+      <genFeatures createChild="false" propertyDescription="Override volume tier contract defaults"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierSlotParams/overrideContract"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//SlotContractParams"/>
     <genClasses ecoreClass="commercial.ecore#//ContractExpressionMapEntry">
@@ -183,6 +198,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/minVolumeAvailable"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//RegasPricingParams">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/numPricingDays"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

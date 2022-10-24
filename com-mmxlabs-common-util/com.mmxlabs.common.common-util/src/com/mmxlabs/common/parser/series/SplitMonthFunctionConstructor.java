@@ -16,6 +16,7 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 	private final IExpression<ISeries> series1;
 	private final IExpression<ISeries> series2;
 	private final int splitPoint;
+
 	private @NonNull SeriesParserData seriesParserData;
 
 	public SplitMonthFunctionConstructor(@NonNull SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
@@ -34,6 +35,14 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 		this.splitPoint = splitPoint.intValue();
 	}
 
+	public SplitMonthFunctionConstructor(@NonNull SeriesParserData seriesParserData, IExpression<ISeries> series1, IExpression<ISeries> series2, final int splitPoint) {
+		this.seriesParserData = seriesParserData;
+
+		this.series1 = series1;
+		this.series2 = series2;
+		this.splitPoint = splitPoint;
+	}
+
 	@Override
 	public @NonNull ISeries evaluate() {
 		return new SplitMonthSeries(seriesParserData, series1.evaluate(), series2.evaluate(), splitPoint);
@@ -41,8 +50,19 @@ public class SplitMonthFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public boolean canEvaluate() {
-		// TODO Auto-generated method stub
 		return series1.canEvaluate() && series2.canEvaluate();
+	}
+
+	public IExpression<ISeries> getSeries1() {
+		return series1;
+	}
+
+	public IExpression<ISeries> getSeries2() {
+		return series2;
+	}
+
+	public int getSplitPoint() {
+		return splitPoint;
 	}
 
 }

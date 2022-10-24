@@ -93,6 +93,8 @@ public final class SchedulerConstants {
 	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 	public static final String INDIVIDUAL_EXPOSURES = "individual-exposures";
 	
+	public static final String PRICING_BASES = "pricing-bases";
+	
 	public static final String PROCESS_TRANSFER_MODEL = "process-transfer-model";
 	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";

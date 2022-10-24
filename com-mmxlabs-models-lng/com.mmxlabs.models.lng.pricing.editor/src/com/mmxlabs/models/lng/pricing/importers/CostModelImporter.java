@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -116,11 +117,11 @@ public class CostModelImporter implements ISubmodelImporter {
 			final PanamaCanalTariff panamaCanalTariff = PricingFactory.eINSTANCE.createPanamaCanalTariff();
 			costModel.setPanamaCanalTariff(panamaCanalTariff);
 			for (final EObject o : panamaCanalTariffBandImporter.importObjects(PricingPackage.eINSTANCE.getPanamaCanalTariffBand(), inputs.get(PANAMA_CANAL_TARIFF_KEY), context)) {
-				if (o instanceof PanamaCanalTariffBand) {
-					final PanamaCanalTariffBand band = (PanamaCanalTariffBand) o;
+				if (o instanceof PanamaCanalTariffBand band) {
 					panamaCanalTariff.getBands().add(band);
-				} else if (o instanceof MarkupRate) {
-					final MarkupRate markupRate = (MarkupRate) o;
+				} else if (o instanceof PanamaTariffV2 band) {
+					panamaCanalTariff.getAnnualTariffs().add(band);
+				} else if (o instanceof MarkupRate markupRate) {
 					panamaCanalTariff.setMarkupRate(markupRate.markupRate);
 				}
 			}
@@ -130,17 +131,13 @@ public class CostModelImporter implements ISubmodelImporter {
 			final SuezCanalTariff suezCanalTariff = PricingFactory.eINSTANCE.createSuezCanalTariff();
 			costModel.setSuezCanalTariff(suezCanalTariff);
 			for (final EObject o : suezCanalTariffBandImporter.importObjects(EcorePackage.eINSTANCE.getEObject(), inputs.get(SUEZ_CANAL_TARIFF_KEY), context)) {
-				if (o instanceof SuezCanalTariffBand) {
-					final SuezCanalTariffBand band = (SuezCanalTariffBand) o;
+				if (o instanceof SuezCanalTariffBand band) {
 					suezCanalTariff.getBands().add(band);
-				} else if (o instanceof SuezCanalTugBand) {
-					final SuezCanalTugBand band = (SuezCanalTugBand) o;
+				} else if (o instanceof SuezCanalTugBand band) {
 					suezCanalTariff.getTugBands().add(band);
-				} else if (o instanceof SuezCanalRouteRebate) {
-					final SuezCanalRouteRebate rebate = (SuezCanalRouteRebate) o;
+				} else if (o instanceof SuezCanalRouteRebate rebate) {
 					suezCanalTariff.getRouteRebates().add(rebate);
-				} else if (o instanceof ExtraData) {
-					final ExtraData data = (ExtraData) o;
+				} else if (o instanceof ExtraData data) {
 					suezCanalTariff.eSet(data.feature, data.value);
 				}
 			}

@@ -38,7 +38,7 @@ public class DefaultComponentHelper implements IComponentHelper {
 	 * parameters which are the top level class whe are querying.
 	 */
 	protected final EClass targetClass;
-	
+
 	protected boolean includeEOperations = false;
 
 	protected final Set<ETypedElement> ignoreFeatures = new HashSet<>();
@@ -192,7 +192,7 @@ public class DefaultComponentHelper implements IComponentHelper {
 	 */
 	protected void sortEditorBeforeOtherEditor(final List<IInlineEditor> editors, EStructuralFeature beforeFeature, EStructuralFeature afterFeature) {
 
-		// There may be multiple editors for the same featire, so gather them here...
+		// There may be multiple editors for the same feature, so gather them here...
 		final List<IInlineEditor> editorsForFeature = new LinkedList<>();
 		IInlineEditor afterEditor = null;
 		for (final var editor : editors) {
@@ -209,6 +209,20 @@ public class DefaultComponentHelper implements IComponentHelper {
 			int idx = editors.indexOf(afterEditor);
 			editors.addAll(idx, editorsForFeature);
 		}
+	}
+ 
+	protected List<IInlineEditor> getEditorsForFeature(final List<IInlineEditor> editors, EStructuralFeature feature) {
+
+		// There may be multiple editors for the same feature, so gather them here...
+		final List<IInlineEditor> editorsForFeature = new LinkedList<>();
+		IInlineEditor afterEditor = null;
+		for (final var editor : editors) {
+			if (editor.getFeature() == feature) {
+				editorsForFeature.add(editor);
+			}
+		}
+
+		return editorsForFeature;
 	}
 
 	/**

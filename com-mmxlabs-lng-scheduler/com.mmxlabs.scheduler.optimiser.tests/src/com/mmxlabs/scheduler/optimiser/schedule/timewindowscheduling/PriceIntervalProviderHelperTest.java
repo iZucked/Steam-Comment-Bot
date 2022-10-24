@@ -22,7 +22,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -101,7 +101,7 @@ public class PriceIntervalProviderHelperTest {
 
 	@Test
 	public void testIntervals() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 
 		c.setValueAfter(-1, 5);
 		c.setValueAfter(21, 8);
@@ -156,7 +156,7 @@ public class PriceIntervalProviderHelperTest {
 
 	@Test
 	public void testIntervalsPlusTime() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 
 		c.setValueAfter(-1, 5);
 		c.setValueAfter(21, 8);
@@ -215,7 +215,7 @@ public class PriceIntervalProviderHelperTest {
 
 	@Test
 	public void testIntervalsStartOfLoadWindowPlusTime() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 
 		c.setValueAfter(-2, 4);
 		c.setValueAfter(-1, 5);
@@ -271,7 +271,7 @@ public class PriceIntervalProviderHelperTest {
 
 	@Test
 	public void testIntervalsStartOfLoadWindow() {
-		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve c = new PreGeneratedIntegerCurve();
 
 		c.setValueAfter(-1, 5);
 		c.setValueAfter(21, 8);
@@ -323,7 +323,7 @@ public class PriceIntervalProviderHelperTest {
 
 	@Test
 	public void testBuildDateChangeCurveAsIntegerList() {
-		final StepwiseIntegerCurve pp = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve pp = new PreGeneratedIntegerCurve();
 
 		pp.setValueAfter(-1, 5);
 		pp.setValueAfter(21, 8);
@@ -335,7 +335,7 @@ public class PriceIntervalProviderHelperTest {
 		pp.setValueAfter(40, 30);
 		pp.setValueAfter(41, 31);
 
-		final StepwiseIntegerCurve sp = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve sp = new PreGeneratedIntegerCurve();
 
 		sp.setValueAfter(-1, 5 - 5);
 		sp.setValueAfter(21, 8 - 5);
@@ -412,7 +412,7 @@ public class PriceIntervalProviderHelperTest {
 		final int start = 0;
 		final int end = 50;
 
-		final StepwiseIntegerCurve pp = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve pp = new PreGeneratedIntegerCurve();
 
 		pp.setValueAfter(-1, 5);
 		pp.setValueAfter(21, 8);
@@ -426,7 +426,7 @@ public class PriceIntervalProviderHelperTest {
 		pp.setValueAfter(45, 60);
 		pp.setValueAfter(46, 70);
 
-		final StepwiseIntegerCurve sp = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve sp = new PreGeneratedIntegerCurve();
 
 		sp.setValueAfter(-1, 5 - 5);
 		sp.setValueAfter(21, 8 - 5);

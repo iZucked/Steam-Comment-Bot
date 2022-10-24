@@ -55,6 +55,7 @@ public class LocationItemProvider
 			addCountryPropertyDescriptor(object);
 			addLatPropertyDescriptor(object);
 			addLonPropertyDescriptor(object);
+			addLocodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -192,6 +193,28 @@ public class LocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Locode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLocodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Location_locode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Location_locode_feature", "_UI_Location_type"),
+				 PortPackage.Literals.LOCATION__LOCODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Location.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -234,6 +257,7 @@ public class LocationItemProvider
 			case PortPackage.LOCATION__COUNTRY:
 			case PortPackage.LOCATION__LAT:
 			case PortPackage.LOCATION__LON:
+			case PortPackage.LOCATION__LOCODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

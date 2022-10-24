@@ -942,6 +942,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlot_PricingBasis() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getSlot__GetSlotOrDelegateMinQuantity() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -3313,6 +3323,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__LOCKED);
 		createEAttribute(slotEClass, SLOT__CANCELLED);
 		createEAttribute(slotEClass, SLOT__WINDOW_COUNTER_PARTY);
+		createEAttribute(slotEClass, SLOT__PRICING_BASIS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE);
@@ -3759,6 +3770,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Cancelled(), ecorePackage.getEBoolean(), "cancelled", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowCounterParty(), ecorePackage.getEBoolean(), "windowCounterParty", "false", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateMinQuantity(), ecorePackage.getEInt(), "getSlotOrDelegateMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4401,6 +4413,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getSlot_PricingBasis(),
+		   source,
+		   new String[] {
+			   "type", "pricingBasis"
 		   });
 		addAnnotation
 		  (getVesselCharter_TimeCharterRate(),

@@ -10,8 +10,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.parser.nodes.MarkedUpNode;
-import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -32,9 +31,8 @@ public class LookupData {
 	public Map<String, UnitConversion> conversionMap = new HashMap<>();
 	public Map<String, UnitConversion> reverseConversionMap = new HashMap<>();
 
-	public Map<String, Node> expressionCache = new HashMap<>();
 	public Map<String, Collection<AbstractYearMonthCurve>> expressionCache2 = new HashMap<>();
-	public Map<String, MarkedUpNode> expressionToNode = new HashMap<>();
+	public Map<String, ASTNode> expressionToNode = new HashMap<>();
 
 	public static @NonNull LookupData createLookupData(final PricingModel pricingModel) {
 		final LookupData lookupData = new LookupData();

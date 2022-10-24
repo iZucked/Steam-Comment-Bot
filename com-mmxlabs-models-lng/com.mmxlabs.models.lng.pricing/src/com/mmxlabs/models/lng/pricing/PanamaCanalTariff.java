@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getMarkupRate <em>Markup Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAnnualTariffs <em>Annual Tariffs</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff()
@@ -69,5 +70,17 @@ public interface PanamaCanalTariff extends EObject {
 	 * @generated
 	 */
 	void setMarkupRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Annual Tariffs</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Annual Tariffs</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff_AnnualTariffs()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PanamaTariffV2> getAnnualTariffs();
 
 } // PanamaCanalTariff

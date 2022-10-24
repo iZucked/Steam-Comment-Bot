@@ -30,6 +30,8 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
@@ -1242,6 +1244,8 @@ public class TestCalculations {
 				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(new SeriesParser(new SeriesParserData()));
 				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Currency)).toInstance(new SeriesParser(new SeriesParserData()));
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PROCESS_TRANSFER_MODEL)).toInstance(Boolean.FALSE);	
+				// Pricing bases
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PRICING_BASES)).toInstance(Boolean.FALSE);
 				bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 
 				bind(IArrivalTimeScheduler.class).toInstance(Mockito.mock(IArrivalTimeScheduler.class));

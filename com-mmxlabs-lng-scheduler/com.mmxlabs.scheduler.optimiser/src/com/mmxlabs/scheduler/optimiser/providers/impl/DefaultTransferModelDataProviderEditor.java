@@ -13,7 +13,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -103,16 +103,15 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	 * @param indices
 	 * @return
 	 */
-	public @Nullable StepwiseIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
+	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
 		}
 
-		final IExpression<ISeries> expression = indices.parse(priceExpression);
-		final ISeries parsed = expression.evaluate();
+		final ISeries parsed = indices.asSeries(priceExpression);
 
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {
