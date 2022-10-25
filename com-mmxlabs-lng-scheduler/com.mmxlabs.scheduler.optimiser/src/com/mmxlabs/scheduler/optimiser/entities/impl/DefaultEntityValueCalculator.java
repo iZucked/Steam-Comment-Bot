@@ -268,7 +268,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		evaluateCargoPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 		// Calculate actual transfer pricing between entities based on transfer records
 		if (processTransferModel && annotatedSolution != null && entityBookDetailTreeMap != null) {
-//			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 		}
 
 		// The first load entity
