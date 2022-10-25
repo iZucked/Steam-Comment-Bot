@@ -203,9 +203,22 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
+		String localPriceExpression = priceExpression;
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.PARAMETERS_KEY);
+			if (value != null) {
+				final String[] values = value.split(",");
+				for (int i = 0; i < values.length; i++) {
+					if (values[i].equalsIgnoreCase(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE)) {
+						localPriceExpression = localPriceExpression.toLowerCase().replace(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE, "(1)"); 
+					}
+				}
+			}
+		}
 		// Check for illegal characters
 		{
-			final Matcher matcher = pattern.matcher(priceExpression);
+			final Matcher matcher = pattern.matcher(localPriceExpression);
 			if (matcher.find()) {
 				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 				return ValidationResult.createErrorStatus(message);
@@ -213,9 +226,9 @@ public class PriceExpressionUtils {
 		}
 		// Test SHIFT function use
 		{
-			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			final Matcher matcherA = shiftDetectPattern.matcher(localPriceExpression);
 			if (matcherA.find()) {
-				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				final Matcher matcherB = shiftUsePattern.matcher(localPriceExpression);
 				if (!matcherB.find()) {
 					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
 					return ValidationResult.createErrorStatus(message);
@@ -228,7 +241,7 @@ public class PriceExpressionUtils {
 		// so we need to check these cases
 		final String multipleOperatorPattern = "([-/*+][-/*+]+)";
 		final Pattern pattern = Pattern.compile(multipleOperatorPattern);
-		final Matcher matcher = pattern.matcher(priceExpression);
+		final Matcher matcher = pattern.matcher(localPriceExpression);
 		if (matcher.find()) {
 			return ValidationResult.createErrorStatus(String.format("Unable to parse expression, consecutive %s operators found", matcher.group(0)));
 		}
@@ -238,13 +251,13 @@ public class PriceExpressionUtils {
 			ISeries parsed = null;
 			String hints = "";
 			try {
-				parsed = parser.asSeries(priceExpression);
+				parsed = parser.asSeries(localPriceExpression);
 			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
 				hints = e.getMessage();
 			} catch (final Exception e) {
 				final String operatorPattern = "([-/*+][-/*+]+)"; // TODO ask Simon if this is reachable
 				final Pattern p = Pattern.compile(operatorPattern);
-				final Matcher m = p.matcher(priceExpression);
+				final Matcher m = p.matcher(localPriceExpression);
 				if (m.find()) {
 					hints = "Consecutive operators: " + m.group(0);
 				} else {

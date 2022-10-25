@@ -161,32 +161,6 @@ public class CargoEditorMenuHelper {
 	/**
 	 * For a given transfer agreement creates an action
 	 * which allows creation of the new transfer record
-	 * @author FM
-	 *
-	 */
-	private final class CreateAddTransferRecordAction extends Action {
-		private final Slot<?> slot;
-		private final EObject transferAgreement;
-
-		private CreateAddTransferRecordAction(final String text, final Slot<?> slot, final EObject transferAgreement) {
-			super(text);
-			this.slot = slot;
-			this.transferAgreement = transferAgreement;
-		}
-
-		@Override
-		public void run() {
-
-			if (slot != null) {
-				helper.transferCargoBetweenEntities(scenarioEditingLocation, "Create transfer record", slot, transferAgreement);
-			}
-
-		}
-	}
-	
-	/**
-	 * For a given transfer agreement creates an action
-	 * which allows creation of the new transfer record
 	 * for a list of slots
 	 * @author FM
 	 *
@@ -347,7 +321,7 @@ public class CargoEditorMenuHelper {
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
 				
-				createAddTransferRecordMenu(manager, dischargeSlot);
+				createAddTransferRecordsMenu(manager, Collections.singletonList(dischargeSlot));
 				createEditTransferRecordMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
@@ -787,7 +761,7 @@ public class CargoEditorMenuHelper {
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
 			
-			createAddTransferRecordMenu(manager, loadSlot);
+			createAddTransferRecordsMenu(manager, Collections.singletonList(loadSlot));
 			createEditTransferRecordMenu(manager, loadSlot);
 			
 			if (loadSlot.isDESPurchase()) {
@@ -829,17 +803,6 @@ public class CargoEditorMenuHelper {
 			}
 
 		};
-	}
-
-	private void createAddTransferRecordMenu(IMenuManager manager, final Slot<?> slot) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL)) {
-			manager.add(new Separator());
-			final MenuManager transferMenuManager = new MenuManager("Transfer...", null);
-			for (final NamedObject ta : CargoTransferUtil.getTransferAgreementsForMenu(scenarioModel)) {
-				transferMenuManager.add(new CreateAddTransferRecordAction(ta.getName(), slot, ta));
-			}
-			manager.add(transferMenuManager);
-		}
 	}
 	
 	private void createAddTransferRecordsMenu(IMenuManager manager, final List<Slot<?>> slots) {

@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
-import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -100,16 +99,16 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	/**
 	 * Copy from the DateAndCurveHelper! Keep in sync
 	 * @param priceExpression
-	 * @param indices
+	 * @param parser
 	 * @return
 	 */
-	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
+	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser parser) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 
-		final ISeries parsed = indices.asSeries(priceExpression);
+		final ISeries parsed = parser.asSeries(priceExpression);
 
 		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {

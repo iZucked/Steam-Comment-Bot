@@ -83,16 +83,23 @@ public class CargoTransferUtil {
 		final List<Pair<CompoundCommand, EObject>> result = new LinkedList<>();
 		
 		for (final Slot<?> slot : slots) {
-			Pair<CompoundCommand, EObject> pair = createTransferRecord(description, scenarioModel, editingDomain, slot, transferAgreement);
-			if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
-				result.add(pair);
+			if (isSimpleCargo(slot)) {
+				Pair<CompoundCommand, EObject> pair = createTransferRecord(description, scenarioModel, editingDomain, slot, transferAgreement);
+				if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
+					result.add(pair);
+				}
 			}
 		}
 		
 		return result;
 	}
 	
-	public static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
+	// check that slot is not within a complex cargo
+	private static boolean isSimpleCargo(final Slot<?> slot) {
+		return (slot != null && slot.getCargo() != null && slot.getCargo().getSlots().size() > 2);
+	}
+	
+	private static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
 			final EditingDomain editingDomain, final Slot<?> slot, final EObject transferAgreement) {
 		final CompoundCommand cc = new CompoundCommand(description);
 		

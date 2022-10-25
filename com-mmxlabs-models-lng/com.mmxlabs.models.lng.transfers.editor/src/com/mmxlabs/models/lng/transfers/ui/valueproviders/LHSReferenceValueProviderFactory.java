@@ -44,6 +44,16 @@ public class LHSReferenceValueProviderFactory implements IReferenceValueProvider
 							if (target instanceof Slot<?>) {
 								return superValues.stream()
 								.filter(s -> !(s.getSecond() instanceof SpotSlot))
+								.filter(s -> {
+									if (s.getSecond() instanceof Slot slot) {
+										if (slot.getCargo() != null) {
+											if (slot.getCargo().getSlots().size() > 2) {
+												return false;
+											}
+										}
+									}
+									return true;
+								})
 								.collect(Collectors.toList());
 							}
 							

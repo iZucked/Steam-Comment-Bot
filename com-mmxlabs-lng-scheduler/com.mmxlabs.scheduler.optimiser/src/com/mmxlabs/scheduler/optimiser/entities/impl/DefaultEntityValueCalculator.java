@@ -268,7 +268,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		evaluateCargoPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 		// Calculate actual transfer pricing between entities based on transfer records
 		if (processTransferModel && annotatedSolution != null && entityBookDetailTreeMap != null) {
-//			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 		}
 
 		// The first load entity
@@ -455,11 +455,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 	
+	/**
+	 * Skips complex cargoes
+	 * @param vesselCharter
+	 * @param plan
+	 * @param cargoPNLData
+	 * @param entityPreTaxProfit
+	 * @param annotatedSolution
+	 * @param entityBookDetailTreeMap
+	 */
 	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
 			final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
+		// Complex cargoes not supported
 		if (cargoPNLData.getSlots().size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
-			throw new RuntimeException("Complex cargoes not supported");
+			return;
 		}
 
 		IEntity loadEntity = null;

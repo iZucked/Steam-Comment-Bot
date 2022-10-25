@@ -102,13 +102,19 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
-	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser indices) {
+	/**
+	 * Please keep in sync with DefaultTransferModelDataProviderEditor#generateExpressionCurve (FM)
+	 * @param priceExpression
+	 * @param seriesParser
+	 * @return
+	 */
+	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser parser) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 
-		final ISeries parsed = indices.asSeries(priceExpression);
+		final ISeries parsed = parser.asSeries(priceExpression);
 
 		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {
@@ -124,7 +130,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	public @Nullable PreGeneratedLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 
