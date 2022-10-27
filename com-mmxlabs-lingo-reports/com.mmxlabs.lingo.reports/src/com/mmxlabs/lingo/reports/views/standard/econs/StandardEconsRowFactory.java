@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails;
 import com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails;
@@ -88,8 +89,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsInCharterBallastBonus = false;
 		boolean containsInCharterRepositioning = false;
 		boolean complexCargo = false;
-		int ladenLegs = 1;
-		int ballastLegs = 1;
+		int ladenLegs = 0;
+		int ballastLegs = 0;
 
 		int numLoads = 0;
 		int numDischarges = 0;
@@ -109,10 +110,34 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					}
 					containsCargo = true;
 					complexCargo |= cargoAllocation.getSlotAllocations().size() > 2;
-					// Assuming LDD - multiple laden legs with one final ballast leg
-					ladenLegs = Math.max(ladenLegs, cargoAllocation.getSlotAllocations().size() - 1);
-					ballastLegs = Math.max(ballastLegs, 1);
 
+					// First leg is always laden
+					boolean laden = true;
+					for (final Event evt : cargoAllocation.getEvents()) {
+						if (evt instanceof final Journey j) {
+							laden = j.isLaden();
+							if (laden) {
+								++ladenLegs;
+							} else {
+								++ballastLegs;
+							}
+						} else if (evt instanceof final Idle i) {
+							// We may have just an idle without a travel
+							if (!(i.getPreviousEvent() instanceof Journey)) {
+								laden = i.isLaden();
+								if (laden) {
+									++ladenLegs;
+								} else {
+									++ballastLegs;
+								}
+							}
+						}
+					}
+
+					// If there is a cargo, ensure one of each leg
+					ladenLegs = Math.max(ladenLegs, 1);
+					ballastLegs = Math.max(ballastLegs, 1);
+					
 					for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 							numLoads++;
@@ -125,6 +150,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					containsOpenSlot = true;
 				}
 				if (target instanceof final StartEvent evt) {
+					ballastLegs = Math.max(ballastLegs, 1);
 					containsStartEvent = true;
 					final Sequence sequence = evt.getSequence();
 					if (sequence != null && sequence.getVesselCharter() != null) {
@@ -161,6 +187,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					}
 				}
 				if (target instanceof final VesselEventVisit vesselEventVisit) {
+					ballastLegs = Math.max(ballastLegs, 1);
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 						containsCharterOut = true;
 					}
@@ -181,6 +208,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						}
 						if (e instanceof Purge) {
 							containsPurge = true;
+						}
+						if (e instanceof Journey) {
+							ballastLegs = Math.max(ballastLegs, 1);
 						}
 					}
 				}
