@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -90,10 +91,12 @@ import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
- * The {@link IndexPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject tree
- * datastructure.
+ * The {@link IndexPane} displays data for various indices in a tree format. The
+ * {@link IndexTreeTransformer} is used to combine the different indices into an
+ * internal dynamic EObject tree datastructure.
  * 
- * Note - call {@link #setInput(PricingModel)} on {@link IndexPane} rather than the {@link Viewer}.
+ * Note - call {@link #setInput(PricingModel)} on {@link IndexPane} rather than
+ * the {@link Viewer}.
  * 
  * @author Simon Goodall
  * 
@@ -101,7 +104,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class IndexPane extends ScenarioTableViewerPane {
 
 	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
-	
+
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
 
@@ -128,7 +131,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
+	 * Ensures that a given date is visible in the editor column range, as long as
+	 * the editor is open.
 	 * 
 	 * @param date
 	 */
@@ -173,7 +177,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
 		result.addFilter(new ViewerFilter() {
-			
+
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				// if pricing bases feature is not enabled - do not show the pricing basis!
@@ -273,7 +277,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 							if (dialog.open() != Window.OK) {
 								while (commandStack.getUndoCommand() != currentCommand) {
 									commandStack.undo();
-									// This avoids infinite loop... but should only be valid if currentCommand is also null.
+									// This avoids infinite loop... but should only be valid if currentCommand is
+									// also null.
 									if (commandStack.getUndoCommand() == null) {
 										break;
 									}
@@ -444,9 +449,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 				public void setValue(final Object element, final Object value) {
 					final DataType dt = getDataTypeForElement(element);
 					if (dt != null) {
-						if (element instanceof AbstractYearMonthCurve) {
+						if (element instanceof @NonNull final AbstractYearMonthCurve curve) {
 							final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
-							setIndexPoint((Double) value, (AbstractYearMonthCurve) element, colDate);
+							setIndexPoint((Double) value, curve, colDate);
 						}
 					}
 				}
@@ -514,25 +519,17 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				@Override
 				public boolean canEdit(final Object element) {
-					if (element instanceof AbstractYearMonthCurve) {
-						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
-						return !curve.isSetExpression();
-
-					}
-
-					return false;
+					return element instanceof @NonNull final AbstractYearMonthCurve curve && !curve.isSetExpression();
 				}
 
 				@Override
 				public void setParent(final Object parent, final Object object) {
 					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void setExtraCommandsHook(final IExtraCommandsHook extraCommandsHook) {
 					// TODO Auto-generated method stub
-
 				}
 			};
 			col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
@@ -580,11 +577,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public Color getForeground(final Object element) {
 
-					if (element instanceof AbstractYearMonthCurve) {
-						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
-						if (curve.isSetExpression()) {
-							return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-						}
+					if (element instanceof @NonNull final AbstractYearMonthCurve curve && curve.isSetExpression()) {
+						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 					}
 					return super.getForeground(element);
 				}
@@ -595,9 +589,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
-						return String.format("%01.3f", number.doubleValue());
+						return String.format("%,01.3f", number.doubleValue());
 					}
-
 					return null;
 				}
 			});
