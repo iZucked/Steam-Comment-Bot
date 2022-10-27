@@ -18,6 +18,9 @@ public class CompanyStatusInlineEditor extends SimpleOperationInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
+		if (text == null || text.isDisposed()) {
+			return;
+		}
 		if (value instanceof CompanyStatus status) {
 			text.setText(
 					switch (status) {

@@ -75,6 +75,9 @@ public class SimpleOperationInlineEditor extends BasicOperationInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
+		if (text == null || text.isDisposed()) {
+			return;
+		}
 		if (value instanceof String string) {
 			text.setText(string);
 		} else if (value instanceof NamedObject object) {
