@@ -315,6 +315,12 @@ public class HubTestHelper {
 	// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-samples.html#prerequisites
 
 	public static String getSecret() {
+		
+		// Copy env vars to system properties as the SDK can fail to read them for some reason in the ITS runs.
+		Map<String, String> getenv = System.getenv();
+		System.setProperty("aws.accessKeyId", getenv.get("AWS_ACCESS_KEY_ID"));
+		System.setProperty("aws.secretAccessKey", getenv.get("AWS_SECRET_ACCESS_KEY"));
+		
 		String secretName = "lingo/hub-test";
 		Region region = Region.of("eu-west-2");
 
