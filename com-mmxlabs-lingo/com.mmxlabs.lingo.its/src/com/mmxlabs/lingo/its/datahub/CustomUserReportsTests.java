@@ -58,7 +58,7 @@ public class CustomUserReportsTests {
 	String REPORT_NAME = "test";
 
 	@BeforeAll
-	private static void beforeAll() {
+	public static void beforeAll() {
 		bot = new SWTWorkbenchBot();
 	}
 

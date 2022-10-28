@@ -83,6 +83,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.dialogs.FormDialogColourHelper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -289,6 +290,7 @@ public class CreateStripDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
+		FormDialogColourHelper.setFormColours(mform.getToolkit());
 
 		String title = "Create strip of ";
 		switch (stripType) {

@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.hub.auth;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -103,7 +103,7 @@ public class AuthenticationManager {
 		}
 	}
 
-	public void addAuthToRequest(@NonNull final HttpRequestBase request, final @NonNull BasicCookieStore basicCookieStore) {
+	public void addAuthToRequest(@NonNull final HttpUriRequestBase request, final @NonNull BasicCookieStore basicCookieStore) throws URISyntaxException {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthManager.buildRequestWithToken(request, basicCookieStore);
 		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication.get()) {

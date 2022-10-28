@@ -14,11 +14,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -35,7 +37,7 @@ public class ReportsServiceClient {
 		return DataHubServiceProvider.getInstance().doPostRequest(uploadURL + "/" + uuid + "/" + type, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("version", version);
 			formDataBuilder.addBinaryBody("report", content.getBytes(StandardCharsets.UTF_8), ContentType.DEFAULT_BINARY, type + fileExtension);
 	
@@ -44,7 +46,7 @@ public class ReportsServiceClient {
 			request.setEntity(entity);
 		}, response -> {
 
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
 					// 404: Endpoint not defined - old server version
@@ -70,7 +72,7 @@ public class ReportsServiceClient {
 
 		final String requestURL = String.format("%s/%s", REPORT_GET_URL, uuid);
 		return DataHubServiceProvider.getInstance().doGetRequest(requestURL,response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}

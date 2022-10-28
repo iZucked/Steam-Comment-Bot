@@ -18,9 +18,10 @@ import java.util.function.Consumer;
 
 import javax.inject.Named;
 
-import org.apache.http.HttpHost;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.HttpHost;
+
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.io.Files;

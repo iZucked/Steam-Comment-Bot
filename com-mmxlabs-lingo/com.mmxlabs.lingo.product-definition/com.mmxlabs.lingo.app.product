@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="6.11.7.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="6.11.7.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="false">
 
    <aboutInfo>
       <image path="icons/minimax_logo.png"/>
@@ -37,7 +37,6 @@ Build: {1}
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
       <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17</linux>

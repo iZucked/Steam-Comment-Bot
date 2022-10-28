@@ -26,19 +26,12 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	public ExtendedLogLogger(final String name) {
 		this.name = name;
 		// TODO: Hack to disable excess log messages from shiro. Build some better API
-		infoEnabled = !("org.apache.shiro.session.mgt.AbstractValidatingSessionManager".equals(name)
-				|| "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping".equals(name) //
-				|| "org.springframework.web.servlet.handler.SimpleUrlHandlerMapping".equals(name) //
-				|| "org.springframework.core.annotation.AnnotationUtils".equals(name) //
-				|| "org.mongodb.driver.cluster".equals(name) //
-				|| "org.mongodb.morphia.logging.MorphiaLoggerFactory".equals(name) //
-				|| "org.springframework.boot.web.servlet.FilterRegistrationBean".equals(name) //
-				|| "com.mmxlabs.lngdataservice.central.EmbeddedMongoMorphiaAutoConfiguration".equals(name) //
-		);
-		debugEnabled = !(name.startsWith("org.springframework")//
-				|| name.startsWith("org.eclipse.jetty")//
-				|| name.startsWith("org.asynchttpclient.netty")//
-		);
+		infoEnabled = !(name.startsWith("org.apache.hc")) //
+		;
+		debugEnabled = !(name.startsWith("org.eclipse.jetty") //
+				|| name.startsWith("org.asynchttpclient.netty") //
+				|| name.startsWith("org.apache.hc")) //
+		;
 	}
 
 	@Override

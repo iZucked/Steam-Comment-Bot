@@ -17,7 +17,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;

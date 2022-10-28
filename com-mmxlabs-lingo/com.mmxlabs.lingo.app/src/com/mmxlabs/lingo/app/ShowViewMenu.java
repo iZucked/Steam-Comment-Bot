@@ -18,18 +18,20 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IParameter;
-import org.eclipse.core.commands.NotEnabledException;
-import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPlaceholder;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.ContributionItem;
@@ -39,15 +41,18 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IPluginContribution;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.activities.WorkbenchActivityHelper;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -57,6 +62,7 @@ import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.WorkbenchPage;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.WorkbenchWindow;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 import org.eclipse.ui.internal.intro.IIntroConstants;
 import org.eclipse.ui.internal.registry.PerspectiveDescriptor;
@@ -66,6 +72,8 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
@@ -85,6 +93,8 @@ import com.google.common.collect.Sets;
 @SuppressWarnings("restriction")
 public class ShowViewMenu extends ContributionItem {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShowViewMenu.class);
+	
 	// These are the display names for the category. The API's used here do no get
 	// the underlying id.
 	private static final String CAT_USER_REPORTS = "User Reports";
@@ -163,17 +173,46 @@ public class ShowViewMenu extends ContributionItem {
 		showDlgAction = new Action("Search...") {
 			@Override
 			public void run() {
-				try {
-					handlerService.executeCommand(cmd, null);
-				} catch (final ExecutionException e) {
-					// Do nothing.
-				} catch (final NotDefinedException e) {
-					// Do nothing.
-				} catch (final NotEnabledException e) {
-					// Do nothing.
-				} catch (final NotHandledException e) {
-					// Do nothing.
+				
+				
+				Shell shell = window.getShell();
+				
+				IEclipseContext ctx = window.getService(IEclipseContext.class);
+				EModelService modelService = window.getService(EModelService.class);
+				MWindow mWindow = window.getService(MWindow.class);
+
+				final ShowViewDialog dialog = new ShowViewDialog(shell, eApplication, mWindow, eModelService, ePartService, ctx);
+				dialog.open();
+
+				if (dialog.getReturnCode() == Window.CANCEL) {
+					return;
 				}
+
+				final MPartDescriptor[] descriptors = dialog.getSelection();
+				for (MPartDescriptor descriptor : descriptors) {
+					openView(window, descriptor, ePartService);
+				}
+
+		
+				
+//		        return ;
+//
+//				IEclipseContext ctx = new EclipseContext(PlatformUI.getWorkbench().getService(IEclipseContext.class));
+//				ShowViewDialog dialog = new ShowViewDialog(shell, eApplication,window, eModelService, ePartService, ctx);
+						
+						
+				
+//				try {
+//					handlerService.executeCommand(cmd, null);
+//				} catch (final ExecutionException e) {
+//					// Do nothing.
+//				} catch (final NotDefinedException e) {
+//					// Do nothing.
+//				} catch (final NotEnabledException e) {
+//					// Do nothing.
+//				} catch (final NotHandledException e) {
+//					// Do nothing.
+//				}
 			}
 		};
 
@@ -527,5 +566,38 @@ public class ShowViewMenu extends ContributionItem {
 			}
 		}
 		return new ParameterizedCommand(c, parms);
+	}
+	
+	/**
+	 * Opens the view with the given descriptor.
+	 *
+	 * @param viewDescriptor The view to open; must not be <code>null</code>
+	 */
+	private static void openView(IWorkbenchWindow window, final MPartDescriptor viewDescriptor,
+			EPartService partService) {
+		/*
+		 * TODO: see bug 483699: the code below duplicates the code in
+		 * org.eclipse.ui.internal.quickaccess.ViewElement#execute() and should be
+		 * refactored to some user friendly API
+		 */
+		String viewId = viewDescriptor.getElementId();
+		if (CompatibilityPart.COMPATIBILITY_VIEW_URI.equals(viewDescriptor.getContributionURI())) {
+			IWorkbenchPage page = window.getActivePage();
+			if (page != null) {
+				try {
+					page.showView(viewId);
+				} catch (PartInitException e) {
+					LOGGER.error(e.getMessage(), e);
+//					handleViewError(viewId, e);
+				}
+			}
+		} else {
+			MPart part = partService.findPart(viewId);
+			if (part == null) {
+				MPlaceholder placeholder = partService.createSharedPart(viewId);
+				part = (MPart) placeholder.getRef();
+			}
+			partService.showPart(part, PartState.ACTIVATE);
+		}
 	}
 }

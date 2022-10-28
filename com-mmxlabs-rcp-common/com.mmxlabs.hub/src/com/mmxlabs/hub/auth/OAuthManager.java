@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.hub.auth;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.utils.URIUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -61,13 +62,15 @@ public class OAuthManager extends AbstractAuthenticationManager {
 
 	/**
 	 * Create a request builder with Authorization header.
+	 * 
+	 * @throws URISyntaxException
 	 */
-	public void buildRequestWithToken(final HttpRequestBase msg, final BasicCookieStore store) {
+	public void buildRequestWithToken(final HttpUriRequestBase msg, final BasicCookieStore store) throws URISyntaxException {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 		if (token.isPresent()) {
 			final String tkn = token.get();
 			final BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", tkn.replace("JSESSIONID=", ""));
-			cookie.setDomain(msg.getURI().getHost());
+			cookie.setDomain(msg.getUri().getHost());
 			cookie.setPath("/");
 			store.addCookie(cookie);
 		}
@@ -104,7 +107,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		boolean valid = false;
 
 		final HttpGet request = new HttpGet(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION);
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getUri()), false).build()) {
 			if (httpClient == null) {
 				return valid;
 			}
@@ -113,8 +116,8 @@ public class OAuthManager extends AbstractAuthenticationManager {
 			buildRequestWithToken(request, store);
 			ctx.setCookieStore(store);
 
-			valid = httpClient.execute(request, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+			valid = httpClient.execute(request, ctx, response -> {
+				final int responseCode = response.getCode();
 				if (HttpClientUtil.isSuccessful(responseCode)) {
 					return true;
 				} else {
@@ -122,7 +125,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
 				return false;
-			}, ctx);
+			});
 		} catch (final Exception e) {
 			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}

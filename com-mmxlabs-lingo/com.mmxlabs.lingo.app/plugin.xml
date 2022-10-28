@@ -196,4 +196,14 @@
             name="Submit Bug Report">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+      <theme
+            basestylesheeturi="css/testing-mode-style.css"
+            id="com.mmxlabs.lingo.app.testing-mode"
+            label="Testing Mode"
+            os="win32">
+      </theme>
+ 
+   </extension>
 </plugin>

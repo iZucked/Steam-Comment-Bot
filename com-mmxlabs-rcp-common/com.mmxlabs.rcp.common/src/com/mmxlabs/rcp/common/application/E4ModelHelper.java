@@ -88,6 +88,16 @@ public class E4ModelHelper {
 				descriptorItr.remove();
 			}
 		}
+		
+		final List<MPartDescriptor> desc = modelService.findElements(application, null, MPartDescriptor.class, null);
+		for (var placeholder : desc) {
+
+			if (viewId.equals(placeholder.getElementId())) {
+				descriptorItr.remove();
+			}
+		}
+
+		
 		final List<MPart> parts = modelService.findElements(application, viewId, MPart.class, null);
 		for (final MPart part : parts) {
 			part.setToBeRendered(false);

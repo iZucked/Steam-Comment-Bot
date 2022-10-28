@@ -146,14 +146,12 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private final DialogEcoreCopier dialogEcoreCopier = new DialogEcoreCopier();
 
 	/**
-	 * Contains elements which have been removed from {@link #inputs}, which will be
-	 * deleted if the dialog is OKed.
+	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
 	 */
 	private final List<EObject> deletedInputs = new ArrayList<>();
 
 	/**
-	 * Contains elements which have been added (these will actually be added into
-	 * the model, so they must be deleted on cancel)
+	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
 	 */
 	private final List<Triple<@NonNull EObject, @NonNull EObject, @NonNull EReference>> addedInputs = new ArrayList<>();
 
@@ -220,8 +218,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * Get the duplicate object (for editing) corresponding to the given input
-	 * object.
+	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
 	 * @param input
 	 * @param displayComposite
@@ -279,18 +276,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			while (rangeIterator.hasNext() && duplicateRangeIterator.hasNext()) {
 				final EObject originalOne = rangeIterator.next();
 				final EObject duplicateOne = duplicateRangeIterator.next();
-				
+
 				if (returnDuplicates) {
 					// Set name of duplicate objects Copy of + original name
 					// Check if original contains name attribute
-					if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())){
+					if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())) {
 						String originalName = originalOne.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()).toString();
 						duplicateOne.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "Copy of " + originalName);
 					}
-					
+
 					dialogValidationSupport.getValidationContext().setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
 				}
-				
+
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
 			}
@@ -327,8 +324,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * Construct a new detail composite dialog, with style.
 	 * 
-	 * @param style - turns style bits on or off (since "&"ed with current); e.g.
-	 *              "~SWT.MAX" removes min/max button.
+	 * @param style
+	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -568,6 +565,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		this.managedForm = managedForm;
 		this.toolkit = managedForm.getToolkit();
+		FormDialogColourHelper.setFormColours(this.toolkit);
 
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -731,8 +729,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * When the sidebar is displayed, this method is invoked to add actions to the
-	 * toolbar above it.
+	 * When the sidebar is displayed, this method is invoked to add actions to the toolbar above it.
 	 * 
 	 * @param barManager
 	 */
@@ -870,8 +867,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private DefaultDialogEditingContext dialogContext;
 
 	/**
-	 * This version of the open method also displays the sidebar and allows for
-	 * creation and deletion of objects in the sidebar.
+	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
 	 * 
 	 * @param part
 	 * @param rootObject
@@ -989,9 +985,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();
 
-						
-						
-						
 						if (duplicate instanceof UUIDObject uuidObject) {
 							uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}

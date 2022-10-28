@@ -32,20 +32,20 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpMessage;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestWrapper;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.EntityDetails;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpMessage;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.net.URIBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -397,7 +397,7 @@ public class LiNGOUpdater {
 			final HttpGet request = new HttpGet(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				response.setEntity(new ProgressHttpEntityWrapper(response.getEntity(), progressListener));
-				if (response.getStatusLine().getStatusCode() != 200) {
+				if (response.getCode() != 200) {
 					throw new IOException("" + response);
 				}
 				final HttpEntity entity = response.getEntity();
@@ -415,20 +415,17 @@ public class LiNGOUpdater {
 		final boolean needsClientAuth = url.getHost().contains("updates.minimaxlabs.com");
 		final HttpHost httpHost = URIUtils.extractHost(url);
 		var builder = HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
-		builder.addInterceptorFirst(new HttpRequestInterceptor() {
+		builder.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 
 			@Override
-			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+			public void process(final HttpRequest request, final EntityDetails entityDetails, final HttpContext context) throws HttpException, IOException {
 				try {
-					URI uri = new URI(request.getRequestLine().getUri());
+					URI uri = request.getUri();
 
 					if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
 						LOG.trace(String.format("Download requested URL %s", uri.toString()));
 					}
 
-					if (request instanceof HttpRequestWrapper w) {
-						uri = new URI(w.getOriginal().getRequestLine().getUri());
-					}
 					if (uri.getHost().contains("update.minimaxlabs.com")) {
 						withAuthHeader(url, request);
 					} else if (uri.getHost().contains("updates.minimaxlabs.com")) {
@@ -477,7 +474,7 @@ public class LiNGOUpdater {
 				final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
 				response.setEntity(w);
 
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				if (statusCode != 200) {
 					if (statusCode == 404) {
 						throw new RuntimeException("No signature file found at " + url);
@@ -505,19 +502,18 @@ public class LiNGOUpdater {
 			url = new URIBuilder(url).addParameter("meta", null).build();
 
 			final HttpClientBuilder builder = createHttpBuilder(url);
-			builder.addInterceptorFirst(new HttpRequestInterceptor() {
+			builder.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 
 				@Override
-				public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				public void process(final HttpRequest request, final EntityDetails details, final HttpContext context) throws HttpException, IOException {
 					try {
 
-						URI uri = new URI(request.getRequestLine().getUri());
+						final URI uri = request.getUri();
+
 						if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
 							LOG.trace(String.format("Check version: Requested URL %s", uri.toString()));
 						}
-						if (request instanceof HttpRequestWrapper w) {
-							uri = new URI(w.getOriginal().getRequestLine().getUri());
-						}
+
 						if (!uri.getHost().contains("update.minimaxlabs.com")) {
 							// Adding a header also means the original request headers are discarded.
 							request.addHeader(HttpHeaders.RANGE, "bytes=0-512");
@@ -534,10 +530,10 @@ public class LiNGOUpdater {
 
 				final HttpGet request = new HttpGet(url);
 				try (CloseableHttpResponse response = httpClient.execute(request)) {
-					final int statusCode = response.getStatusLine().getStatusCode();
+					final int statusCode = response.getCode();
 
 					if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
-						LOG.trace(String.format("Checking %s returns %d (%s)", url.toString(), statusCode, response.getStatusLine().getReasonPhrase()));
+						LOG.trace(String.format("Checking %s returns %d (%s)", url.toString(), statusCode, response.getReasonPhrase()));
 					}
 
 					if (statusCode < 200 && statusCode >= 300) {

@@ -18,7 +18,7 @@ import java.util.Set;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -155,11 +155,11 @@ public class TLSPreferencePage extends FieldEditorPreferencePage implements IWor
 				try (final var client = HttpClientUtil.createBasicHttpClient(pingRequest, true).build()) {
 
 					try (final var pingResponse = client.execute(pingRequest)) {
-						final int responseCode = pingResponse.getStatusLine().getStatusCode();
+						final int responseCode = pingResponse.getCode();
 						if (HttpClientUtil.isSuccessful(responseCode)) {
 							MessageDialog.openConfirm(getShell(), CONNECTION_CHECKER, "Connected successfully " + responseCode);
 						} else {
-							MessageDialog.openError(getShell(), CONNECTION_CHECKER, "Connected with an error repsonse " + responseCode + " - " + pingResponse.getStatusLine().getReasonPhrase());
+							MessageDialog.openError(getShell(), CONNECTION_CHECKER, "Connected with an error repsonse " + responseCode + " - " + pingResponse.getReasonPhrase());
 						}
 					}
 				} catch (final UnknownHostException e) {
@@ -169,7 +169,7 @@ public class TLSPreferencePage extends FieldEditorPreferencePage implements IWor
 					MessageDialog.openError(getShell(), CONNECTION_CHECKER, "Connection failed - hostname mismatch between SSL certificate and URL");
 				} catch (final SSLException e) {
 					MessageDialog.openError(getShell(), CONNECTION_CHECKER, "Connection failed - SSL Error " + e.getMessage());
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					MessageDialog.openError(getShell(), CONNECTION_CHECKER, "Connection failed - Unknown Error " + e.getMessage());
 				}
 

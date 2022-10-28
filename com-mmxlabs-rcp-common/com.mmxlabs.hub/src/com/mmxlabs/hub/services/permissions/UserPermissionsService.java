@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +46,7 @@ public class UserPermissionsService implements IUserPermissionsService {
 				while (true) {
 					try {
 						updateUserPermissions();
-					} catch (final IOException e1) {
+					} catch (final Exception e1) {
 						// e1.printStackTrace();
 					}
 
@@ -60,15 +62,15 @@ public class UserPermissionsService implements IUserPermissionsService {
 		updateThread.start();
 		try {
 			updateUserPermissions();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// Ignore errors
 		}
 	}
 
-	public synchronized void updateUserPermissions() throws IOException {
+	public synchronized void updateUserPermissions() throws IOException, ParseException {
 
 		DataHubServiceProvider.getInstance().doGetRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, response -> { 
-			int responseCode = response.getStatusLine().getStatusCode();
+			int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
 					hubSupportsPermissions = false;

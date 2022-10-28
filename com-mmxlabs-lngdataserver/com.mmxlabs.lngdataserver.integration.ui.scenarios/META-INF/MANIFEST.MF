@@ -60,6 +60,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.license.ssl,
  org.eclipse.core.net,
  com.mmxlabs.models.lng.scenario.ui,
+ org.apache.httpcomponents.client5.httpclient5,
+ org.apache.httpcomponents.core5.httpcore5, 
  org.bouncycastle.bcprov,
  wrapped.com.auth0.java-jwt,
  com.mmxlabs.lngdataserver.integration.paper

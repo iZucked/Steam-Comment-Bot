@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
@@ -236,7 +236,7 @@ public class HubTestHelper {
 		final HttpGet request = new HttpGet(String.format("https://docker.mmxlabs.com/v2/datahub-%s/tags/list", client));
 		try (var httpClient = HttpClientUtil.createBasicHttpClient(request, false).build()) {
 			try (var response = httpClient.execute(request)) {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 
 				if (HttpClientUtil.isSuccessful(responseCode)) {
 					final ObjectMapper objectMapper = new ObjectMapper();

@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
@@ -14,7 +14,7 @@ public class GatewayResponseMaker {
 	}
 
 	public static IGatewayResponse makeGatewayResponse(final CloseableHttpResponse response) {
-		final int responseCode = response.getStatusLine().getStatusCode();
+		final int responseCode = response.getCode();
 		if (responseCode >= 200 && responseCode < 400) {
 			return new Success(responseCode);
 		} else {

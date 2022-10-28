@@ -14,9 +14,9 @@ import java.util.concurrent.Future;
 
 import javax.inject.Named;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.ProtocolException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,7 +145,7 @@ public class AtoBViaCUpdateService {
 	// return copy;
 	// }
 
-	private AtoBviaCLookupRecord parseResponse(final String version, final Pair<String, String> request, final HttpResponse res, Throwable ex) {
+	private AtoBviaCLookupRecord parseResponse(final String version, final Pair<String, String> request, final ClassicHttpResponse res, Throwable ex) {
 		// Version more strictly correct from response headers? (if present). Could happen if new version published during update?
 
 		// Unwrap nested exceptions
@@ -166,7 +166,7 @@ public class AtoBViaCUpdateService {
 			final AtoBviaCLookupRecord r = AtoBviaCLookupRecord.fail(version, request.getFirst(), request.getSecond());
 			return r;
 		} else {
-			if (res.getStatusLine().getStatusCode() == 200) {
+			if (res.getCode() == 200) {
 				try {
 					final String responseBody = EntityUtils.toString(res.getEntity());
 					final AtoBviaCLookupRecord r = AtoBviaCLookupRecord.distance(version, request.getFirst(), request.getSecond(), Double.parseDouble(responseBody));
@@ -179,7 +179,7 @@ public class AtoBViaCUpdateService {
 				}
 			} else {
 				LOGGER.warn("Failed to parse distance response for {} > {} : {}", request.getFirst(), request.getSecond(), res);
-				final AtoBviaCLookupRecord r = AtoBviaCLookupRecord.upstreamError(version, request.getFirst(), request.getSecond(), res.getStatusLine().getReasonPhrase());
+				final AtoBviaCLookupRecord r = AtoBviaCLookupRecord.upstreamError(version, request.getFirst(), request.getSecond(), res.getReasonPhrase());
 				return r;
 			}
 		}
@@ -302,7 +302,7 @@ public class AtoBViaCUpdateService {
 	// return errorRecordList;
 	// }
 
-	public Map<String, String> getAccountDetails() throws ClientProtocolException, IOException {
+	public Map<String, String> getAccountDetails() throws ProtocolException, IOException {
 		final String[] response = atoBviaCAdapter.getAccountDetails(atoBviaCAdapter.getAccountRequestString()).split(",");
 		final String[] account = new String[3];
 		for (int i = 0; i < response.length; i++) {

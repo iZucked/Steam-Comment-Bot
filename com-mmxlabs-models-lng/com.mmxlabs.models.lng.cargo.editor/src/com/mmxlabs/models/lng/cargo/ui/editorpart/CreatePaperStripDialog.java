@@ -84,6 +84,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.dialogs.FormDialogColourHelper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -323,6 +324,7 @@ public class CreatePaperStripDialog extends FormDialog {
 
 	private void createFormArea(final IManagedForm mform) {
 		final FormToolkit toolkit = mform.getToolkit();
+		FormDialogColourHelper.setFormColours(toolkit);
 
 		final Composite body = mform.getForm().getBody();
 		body.setLayout(new GridLayout(1, false));

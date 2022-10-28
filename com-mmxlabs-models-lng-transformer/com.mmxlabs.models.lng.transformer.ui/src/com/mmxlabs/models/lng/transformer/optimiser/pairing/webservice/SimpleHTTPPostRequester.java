@@ -7,11 +7,10 @@ package com.mmxlabs.models.lng.transformer.optimiser.pairing.webservice;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,17 +39,14 @@ public class SimpleHTTPPostRequester {
 			throw new IOException();
 		}
 
-		try (DefaultHttpClient httpClient = new DefaultHttpClient()) {
+		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 			HttpPost httpPost = new HttpPost(url);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			String responseBody = null;
 
 			StringEntity stringEntity = new StringEntity(jsonRequest);
 			httpPost.setEntity(stringEntity);
 			httpPost.setHeader("Content-type", "application/json");
-			responseBody = httpClient.execute(httpPost, responseHandler);
-
-			return responseBody;
+			return httpClient.execute(httpPost, response -> response.getEntity().toString());
 		}
 	}
 }

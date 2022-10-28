@@ -11,11 +11,14 @@ import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +44,7 @@ public class SharedWorkspaceServiceClient {
 		return DataHubServiceProvider.getInstance().doPostRequest(SCENARIO_UPLOAD_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("path", path);
 			formDataBuilder.addBinaryBody("scenario", file, ContentType.DEFAULT_BINARY, "scenario.lingo");
 
@@ -49,7 +52,7 @@ public class SharedWorkspaceServiceClient {
 
 			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					throw new IOException("Scenario already exists " + path);
@@ -67,7 +70,7 @@ public class SharedWorkspaceServiceClient {
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(String.format("%s%s", SCENARIO_DOWNLOAD_URL, uuid), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -84,7 +87,7 @@ public class SharedWorkspaceServiceClient {
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_DOWNLOAD_URL + uuid + "/details", response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -97,7 +100,7 @@ public class SharedWorkspaceServiceClient {
 	public Pair<String, Instant> getScenarios() throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LIST_URL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -114,7 +117,7 @@ public class SharedWorkspaceServiceClient {
 	public void deleteScenario(final String uuid) throws IOException {
 
 		DataHubServiceProvider.getInstance().doDeleteRequest(SCENARIO_DELETE_URL + uuid, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -124,7 +127,7 @@ public class SharedWorkspaceServiceClient {
 	public @Nullable Instant getLastModified() {
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (HttpClientUtil.isSuccessful(responseCode)) {
 					final String date = EntityUtils.toString(response.getEntity());
 					return Instant.ofEpochSecond(Long.parseLong(date));
@@ -144,13 +147,13 @@ public class SharedWorkspaceServiceClient {
 		DataHubServiceProvider.getInstance().doPostRequest(SCENARIO_MOVE_URL + uuid, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("path", newPath);
 
 			final HttpEntity entity = formDataBuilder.build();
 			request.setEntity(entity);
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					throw new IOException("Scenario already exists " + newPath);

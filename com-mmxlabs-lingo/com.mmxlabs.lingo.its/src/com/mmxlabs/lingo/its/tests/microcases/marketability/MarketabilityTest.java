@@ -57,7 +57,7 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 	private Port pAltamira;
 
 	@BeforeEach
-	private void initialiseVesselsAndPorts() {
+	public void initialiseVesselsAndPorts() {
 		vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
 		pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
 		pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);

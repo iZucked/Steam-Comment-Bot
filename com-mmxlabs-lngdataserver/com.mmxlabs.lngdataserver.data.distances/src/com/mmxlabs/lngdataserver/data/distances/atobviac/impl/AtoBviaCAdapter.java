@@ -11,12 +11,13 @@ import java.util.concurrent.ExecutorService;
 
 import javax.inject.Named;
 
-import org.apache.http.Header;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.ProtocolException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -171,7 +172,7 @@ public class AtoBviaCAdapter {
 		return sb.toString();
 	}
 
-	public String getAccountDetails(String accountRequestString) throws ClientProtocolException, IOException {
+	public String getAccountDetails(String accountRequestString) throws ProtocolException, IOException {
 		HttpGet request = new HttpGet(accountRequestString);
 		return client.execute(request, response -> EntityUtils.toString(response.getEntity()));
 	}

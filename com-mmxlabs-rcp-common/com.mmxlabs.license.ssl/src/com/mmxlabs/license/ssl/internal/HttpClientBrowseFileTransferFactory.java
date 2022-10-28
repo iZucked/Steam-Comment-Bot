@@ -10,8 +10,11 @@ import java.security.KeyStore;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContexts;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.core.identity.Namespace;
@@ -23,7 +26,7 @@ import org.eclipse.ecf.filetransfer.RemoteFileSystemException;
 import org.eclipse.ecf.filetransfer.identity.IFileID;
 import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowser;
 import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowserFactory;
-import org.eclipse.ecf.provider.filetransfer.httpclient45.HttpClientFileSystemBrowser;
+import org.eclipse.ecf.provider.filetransfer.httpclient5.HttpClientFileSystemBrowser;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.osgi.util.NLS;
 
@@ -80,7 +83,15 @@ public class HttpClientBrowseFileTransferFactory implements IRemoteFileSystemBro
 					}
 
 					final SSLContext sslContext = sslBuilder.build();
-					builder.setSSLContext(sslContext);
+					var sslFactoryBuilder = SSLConnectionSocketFactoryBuilder.create();
+					sslFactoryBuilder.setSslContext(sslContext);
+
+					final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create() //
+							.setSSLSocketFactory(sslFactoryBuilder.build()) //
+							.build();
+
+					builder.setConnectionManager(cm);
+					builder.evictExpiredConnections();
 
 				} catch (final Exception e1) {
 					e1.printStackTrace();
@@ -107,8 +118,6 @@ public class HttpClientBrowseFileTransferFactory implements IRemoteFileSystemBro
 			public <T> T getAdapter(Class<T> adapter) {
 				return (T) null;
 			}
-
 		};
-
 	}
 }

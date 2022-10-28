@@ -21,7 +21,7 @@ import java.util.function.Function;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.ValidationStatusProvider;
-import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -48,7 +48,7 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -484,7 +484,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		stringToValueStrategy.setAfterGetValidator(v);
 
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
-		final Binding bindValue = dbc.bindValue(WidgetProperties.selection().observe(btn), prop.observe(option.data), stringToValueStrategy, null);
+		final Binding bindValue = dbc.bindValue(WidgetProperties.buttonSelection().observe(btn), prop.observe(option.data), stringToValueStrategy, null);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
 		for (Consumer<IObservableValue<?>> callback : option.validatorCallbacks) {

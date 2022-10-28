@@ -37,16 +37,14 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.security.auth.x500.X500Principal;
 
-import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestWrapper;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-import org.eclipse.core.runtime.Platform;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.EntityDetails;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONObject;
 
@@ -56,7 +54,6 @@ import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseManager;
-import com.mmxlabs.lingo.app.updater.internal.LiNGOUpdaterDebugContants;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 public abstract class ClasspathKeystoreProvider implements IUpdateAuthenticationProvider {
@@ -228,13 +225,6 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 		try (FileOutputStream os = new FileOutputStream(keystoreFile)) {
 			keyStore.store(os, password);
 		}
-		//
-		// test!
-		//
-		// (need test connect code!)
-		//
-		//
-		// other clients too
 
 		// Print secret creation information
 		System.out.println("Execute the following command to create the secret in AWS");
@@ -252,16 +242,12 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 
 		VersionHelper.getInstance().setClientCode(code);
 		final Pair<String, String> header = provideAuthenticationHeader(url);
-		localHttpClient.addInterceptorFirst(new HttpRequestInterceptor() {
-
+		
+		localHttpClient.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 			@Override
-			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+			public void process(final HttpRequest request, final EntityDetails entity, final HttpContext context) throws HttpException, IOException {
 				try {
-
-					URI uri = new URI(request.getRequestLine().getUri());
-					if (request instanceof HttpRequestWrapper w) {
-						uri = new URI(w.getOriginal().getRequestLine().getUri());
-					}
+					URI uri = request.getUri();
 					if (!uri.getHost().contains("update.minimaxlabs.com")) {
 						// Adding a header also means the original request headers are discarded.
 						request.addHeader(HttpHeaders.RANGE, "bytes=0-512");
@@ -279,8 +265,8 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 		System.out.println("Printing response code and status. Expected return code of 200 or 206 if the file is present");
 		try (var httpClient = localHttpClient.build()) {
 			try (var response = httpClient.execute(request)) {
-				System.out.println(response.getStatusLine().getStatusCode());
-				System.out.println(response.getStatusLine().getReasonPhrase());
+				System.out.println(response.getCode());
+				System.out.println(response.getReasonPhrase());
 			}
 		}
 	}

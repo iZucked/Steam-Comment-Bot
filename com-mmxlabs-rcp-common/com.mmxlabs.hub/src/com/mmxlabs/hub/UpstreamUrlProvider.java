@@ -10,9 +10,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.net.http.HttpClient;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -27,23 +24,24 @@ import java.util.function.Function;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import org.apache.http.Header;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.EntityDetails;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicHeader;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -392,20 +390,26 @@ public class UpstreamUrlProvider {
 		}
 
 		final HttpGet pingRequest = new HttpGet(url + "/ping");
-		final var p = cacheWithoutAuth.getUnchecked(URIUtils.extractHost(pingRequest.getURI()));
-		final CloseableHttpClient httpClient = p.getFirst();
-		try (final var pingResponse = httpClient.execute(pingRequest)) {
-			final int reponseCode = pingResponse.getStatusLine().getStatusCode();
-			if (HttpClientUtil.isSuccessful(reponseCode)) {
+		try {
+			final var p = cacheWithoutAuth.getUnchecked(URIUtils.extractHost(pingRequest.getUri()));
+			final CloseableHttpClient httpClient = p.getFirst();
+			return httpClient.execute(pingRequest, pingResponse -> {
+				int reponseCode = pingResponse.getCode();
+				if (HttpClientUtil.isSuccessful(reponseCode)) {
+					// Clear any logged errors
+					reportedError.remove(url);
+					return OnlineState.online();
+				} else {
+					// Check for specific error codes
+					if (reponseCode == 502) {
+						return OnlineState.error("Error finding Data Hub endpoint - bad gateway", null);
+					}
+				}
 				// Clear any logged errors
 				reportedError.remove(url);
-				return OnlineState.online();
-			} else {
-				// Check for specific error codes
-				if (reponseCode == 502) {
-					return OnlineState.error("Error finding Data Hub endpoint - bad gateway", null);
-				}
-			}
+
+				return OnlineState.error("Error finding Data Hub endpoint", null);
+			});
 		} catch (final UnknownHostException e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
@@ -432,7 +436,7 @@ public class UpstreamUrlProvider {
 			}
 			return OnlineState.error("Connection attempt to upstream server timed out", e);
 
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			if (!reportedError.containsKey(url)) {
 				reportedError.put(url, new Object());
 				LOGGER.error("Error reaching upstream server", e);
@@ -440,10 +444,6 @@ public class UpstreamUrlProvider {
 			return OnlineState.error("Error reaching upstream server", e);
 		}
 
-		// Clear any logged errors
-		reportedError.remove(url);
-
-		return OnlineState.error("Error finding Data Hub endpoint", null);
 	}
 
 	public boolean isAvailable() {
@@ -495,7 +495,7 @@ public class UpstreamUrlProvider {
 		final var client = p.getFirst();
 		final HttpGet request = new HttpGet(url);
 		try (var response = client.execute(request)) {
-			final int statusCode = response.getStatusLine().getStatusCode();
+			final int statusCode = response.getCode();
 			if (HttpClientUtil.isSuccessful(statusCode)) {
 				// bind response to pojo
 				final ObjectMapper objectMapper = new ObjectMapper();
@@ -570,14 +570,14 @@ public class UpstreamUrlProvider {
 					// The endpoint may be protected, so add in auth tokens
 					authenticationManager.addAuthToRequest(request, cookieStore);
 					// If we used basic auth, then include the header for future requests.
-					builder.setDefaultHeaders(Lists.newArrayList(request.getAllHeaders()));
+					builder.setDefaultHeaders(Lists.newArrayList(request.getHeaders()));
 
 					// Create an interceptor to add the CSRF token to all request used by the final http client.
 					final Header[] csrf = new Header[1];
-					builder.addInterceptorLast(new HttpRequestInterceptor() {
+					builder.addRequestInterceptorLast(new HttpRequestInterceptor() {
 
 						@Override
-						public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+						public void process(final HttpRequest request, final EntityDetails entity,  final HttpContext context) throws HttpException, IOException {
 							// Add the CSRF token if available
 							if (csrf[0] != null) {
 								request.addHeader(csrf[0]);
@@ -592,7 +592,7 @@ public class UpstreamUrlProvider {
 					// If the endpoint is not there, then this will fail and we can ignore.
 					try (var response = client.execute(request)) {
 						// We found the endpoint!
-						if (response.getStatusLine().getStatusCode() == 200) {
+						if (response.getCode() == 200) {
 							try {
 								final String value = EntityUtils.toString(response.getEntity());
 								final JSONObject jsonObject = (JSONObject) new JSONTokener(value).nextValue();
@@ -620,7 +620,7 @@ public class UpstreamUrlProvider {
 	 *
 	 * @param <T>
 	 */
-	public record HttpClientRecord<T extends HttpRequestBase> (CloseableHttpClient client, // The client
+	public record HttpClientRecord<T extends HttpUriRequestBase> (CloseableHttpClient client, // The client
 			T request, // The constructed request object
 			BasicCookieStore cookieStore // The cookie store (e.g containing the session token or csrf tokens)
 	) {
@@ -629,11 +629,11 @@ public class UpstreamUrlProvider {
 			return client.execute(request);
 		}
 
-		public <U> @Nullable U execute(final ResponseHandler<U> responseHandler) throws IOException {
+		public <U> @Nullable U execute(final HttpClientResponseHandler<U> responseHandler) throws IOException {
 			return execute(null, responseHandler);
 		}
 
-		public <U> @Nullable U execute(@Nullable final Consumer<T> requestCusomiser, final ResponseHandler<U> responseHandler) throws IOException {
+		public <U> @Nullable U execute(@Nullable final Consumer<T> requestCusomiser, final HttpClientResponseHandler<U> responseHandler) throws IOException {
 			if (requestCusomiser != null) {
 				requestCusomiser.accept(request);
 			}
@@ -642,7 +642,7 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	public <T extends HttpRequestBase> @Nullable HttpClientRecord<T> makeRequest(@NonNull final String uriFragment, @NonNull final Function<URI, T> func) {
+	public <T extends HttpUriRequestBase> @Nullable HttpClientRecord<T> makeRequest(@NonNull final String uriFragment, @NonNull final Function<URI, T> func) {
 		final String baseUrlIfAvailable = getBaseUrlIfAvailable();
 
 		if (baseUrlIfAvailable.isEmpty()) {

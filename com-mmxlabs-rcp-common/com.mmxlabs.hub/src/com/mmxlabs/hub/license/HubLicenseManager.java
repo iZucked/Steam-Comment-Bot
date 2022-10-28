@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public final class HubLicenseManager {
 			return null;
 		}
 		try (var response = p.execute()) {
-			final int statusCode = response.getStatusLine().getStatusCode();
+			final int statusCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(statusCode)) {
 				if (statusCode == 401) {
 					LOG.error("insufficient permissions to retrieve license from DataHub");

@@ -71,7 +71,7 @@ public class HubTests {
 	private static OAuthManager oauthManager = OAuthManager.getInstance();
 
 	@BeforeAll
-	private static void beforeAll() {
+	public static void beforeAll() {
 		datahubBasicHost = datahubContainer.getServiceHost(basicHubContainer, 8091);
 		datahubBasicPort = datahubContainer.getServicePort(basicHubContainer, 8091);
 		datahubOAuthHost = datahubContainer.getServiceHost(oauthHubContainer, 8090);

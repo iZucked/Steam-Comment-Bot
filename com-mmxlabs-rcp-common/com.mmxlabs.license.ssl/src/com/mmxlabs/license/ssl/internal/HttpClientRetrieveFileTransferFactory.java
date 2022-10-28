@@ -8,11 +8,14 @@ import java.security.KeyStore;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContexts;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.eclipse.ecf.filetransfer.service.IRetrieveFileTransfer;
 import org.eclipse.ecf.filetransfer.service.IRetrieveFileTransferFactory;
-import org.eclipse.ecf.provider.filetransfer.httpclient45.HttpClientRetrieveFileTransfer;
+import org.eclipse.ecf.provider.filetransfer.httpclient5.HttpClientRetrieveFileTransfer;
 
 import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.license.ssl.TrustStoreManager;
@@ -23,7 +26,6 @@ import com.mmxlabs.license.ssl.TrustStoreManager;
  * @author Simon Goodall
  * 
  */
-@SuppressWarnings({ "deprecation", "restriction" })
 public class HttpClientRetrieveFileTransferFactory implements IRetrieveFileTransferFactory {
 
 	@Override
@@ -47,7 +49,15 @@ public class HttpClientRetrieveFileTransferFactory implements IRetrieveFileTrans
 			}
 
 			final SSLContext sslContext = sslBuilder.build();
-			builder.setSSLContext(sslContext);
+			var sslFactoryBuilder = SSLConnectionSocketFactoryBuilder.create();
+			sslFactoryBuilder.setSslContext(sslContext);
+
+			final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create() //
+					.setSSLSocketFactory(sslFactoryBuilder.build()) //
+					.build();
+
+			builder.setConnectionManager(cm);
+			builder.evictExpiredConnections();
 
 		} catch (final Exception e1) {
 			e1.printStackTrace();

@@ -11,14 +11,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -142,11 +142,11 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public <U> @Nullable U doGetRequest(String urlPath, ResponseHandler<U> responseHandler) throws IOException {
+	public <U> @Nullable U doGetRequest(String urlPath, HttpClientResponseHandler<U> responseHandler) throws IOException {
 		return doRequest(urlPath, HttpGet::new, responseHandler);
 	}
 
-	private <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, ResponseHandler<U> responseHandler) throws IOException {
+	private <T extends HttpUriRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, HttpClientResponseHandler<U> responseHandler) throws IOException {
 
 		if (!isOnlineAndLoggedIn()) {
 			return null;
@@ -160,7 +160,7 @@ public class DataHubServiceProvider {
 		return p.execute(responseHandler);
 	}
 
-	public void doDeleteRequest(String urlPath, CheckedConsumer<HttpResponse, IOException> responseHandler) throws IOException {
+	public void doDeleteRequest(String urlPath, CheckedConsumer<ClassicHttpResponse, IOException> responseHandler) throws IOException {
 
 		if (!isOnlineAndLoggedIn()) {
 			return;
@@ -176,7 +176,7 @@ public class DataHubServiceProvider {
 		});
 	}
 
-	public <U> @Nullable U doPostRequest(String urlPath, Consumer<HttpPost> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
+	public <U> @Nullable U doPostRequest(String urlPath, Consumer<HttpPost> requestCusomiser, HttpClientResponseHandler<U> responseHandler) throws IOException {
 
 		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpPost::new);
 		if (p == null) {
@@ -186,7 +186,7 @@ public class DataHubServiceProvider {
 		return p.execute(requestCusomiser, responseHandler);
 	}
 
-	public <T extends HttpRequestBase> boolean doGetRequestAsBoolean(String urlPath, ResponseHandler<Boolean> responseHandler) throws IOException {
+	public <T extends HttpUriRequestBase> boolean doGetRequestAsBoolean(String urlPath, HttpClientResponseHandler<Boolean> responseHandler) throws IOException {
 
 		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpGet::new);
 		if (p == null) {

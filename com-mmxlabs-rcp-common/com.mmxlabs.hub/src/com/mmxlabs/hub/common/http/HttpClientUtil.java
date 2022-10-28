@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,22 +44,24 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.DefaultHostnameVerifier;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustAllStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
-import org.apache.http.ssl.SSLContexts;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -118,8 +121,8 @@ public class HttpClientUtil {
 		invalidationListeners.remove(r);
 	}
 
-	public static HttpClientBuilder createBasicHttpClient(final HttpRequestBase request, final boolean withKeystore) {
-		return createBasicHttpClient(URIUtils.extractHost(request.getURI()), withKeystore);
+	public static HttpClientBuilder createBasicHttpClient(final HttpUriRequestBase request, final boolean withKeystore) throws URISyntaxException {
+		return createBasicHttpClient(URIUtils.extractHost(request.getUri()), withKeystore);
 	}
 
 	public static HttpClientBuilder createBasicHttpClient(final HttpHost httpHost, final boolean withKeystore) {
@@ -131,9 +134,9 @@ public class HttpClientUtil {
 		// .readTimeout(readTimeout, TimeUnit.MINUTES) //
 		// .writeTimeout(writeTimeout, TimeUnit.MINUTES) //
 		final RequestConfig config = RequestConfig.custom() //
-				.setConnectTimeout(20 * 1000) //
-				.setConnectionRequestTimeout(20 * 1000) //
-				.setSocketTimeout(20 * 1000)//
+				.setConnectTimeout(20, TimeUnit.SECONDS) //
+				.setConnectionRequestTimeout(20, TimeUnit.SECONDS) //
+				// .setSocketTimeout(20, TimeUnit.SECONDS)//
 				.build();
 
 		builder.setDefaultRequestConfig(config);
@@ -154,21 +157,21 @@ public class HttpClientUtil {
 			}
 
 			final SSLContext sslContext = sslBuilder.build();
-			builder.setSSLContext(sslContext);
+
+			var sslFactoryBuilder = SSLConnectionSocketFactoryBuilder.create();
+			sslFactoryBuilder.setSslContext(sslContext);
 
 			if (disableSSLHostnameCheck) {
-				final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
-				builder.setSSLSocketFactory(sslsf);
-			} else {
-				final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new DefaultHostnameVerifier());
-				builder.setSSLSocketFactory(sslsf);
+				sslFactoryBuilder.setHostnameVerifier(NoopHostnameVerifier.INSTANCE);
 			}
 
-			// PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-			//// cm.set
-			//// BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
-			// builder.setConnectionManager( cm );
+			final SSLConnectionSocketFactory sslSocketFactory = sslFactoryBuilder.build();
+			final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create() //
+					.setSSLSocketFactory(sslSocketFactory) //
+					.build();
 
+			builder.setConnectionManager(cm);
+			builder.evictExpiredConnections();
 		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
@@ -496,33 +499,38 @@ public class HttpClientUtil {
 	 */
 	public static boolean getSelectedProtocolAndVersion(final String url, final String[] selectedTlsVersion, final String[] selectedCipher) {
 
-		// TODO -- procy!
+		final SSLContext sslContext = SSLContexts.createSystemDefault();
 
 		final HttpClientBuilder builder = HttpClientBuilder.create();
 		// Ignore any hostname issues here
-		builder.setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE);
-		//
+		final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create() //
+				.setSslContext(sslContext) //
+				// Ignore any hostname issues here
+				.setHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+				.build();
 
-		final SSLContext sslContext = SSLContexts.createSystemDefault();
+		final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(sslSocketFactory).build();
 
-		builder.setSslcontext(sslContext);
+		builder.setConnectionManager(cm);
+		builder.evictExpiredConnections();
 
-		final HttpGet request = new HttpGet(url);
+		try {
+			final HttpGet request = new HttpGet(url);
+			configureProxyServer(URIUtils.extractHost(request.getUri()), builder);
+			try (CloseableHttpClient client = builder.build()) {
+				try (var response = client.execute(request)) {
 
-		configureProxyServer(URIUtils.extractHost(request.getURI()), builder);
+					SSLSessionContext sslSessionContext = sslContext.getClientSessionContext();
+					Enumeration<byte[]> sessionIds = sslSessionContext.getIds();
+					while (sessionIds.hasMoreElements()) {
+						SSLSession sslSession = sslSessionContext.getSession(sessionIds.nextElement());
+						selectedTlsVersion[0] = sslSession.getProtocol();
+						selectedCipher[0] = sslSession.getCipherSuite();
+					}
 
-		try (CloseableHttpClient client = builder.build()) {
-			try (var response = client.execute(request)) {
+					return true;
 
-				final SSLSessionContext sslSessionContext = sslContext.getClientSessionContext();
-				final Enumeration<byte[]> sessionIds = sslSessionContext.getIds();
-				while (sessionIds.hasMoreElements()) {
-					final SSLSession sslSession = sslSessionContext.getSession(sessionIds.nextElement());
-					selectedTlsVersion[0] = sslSession.getProtocol();
-					selectedCipher[0] = sslSession.getCipherSuite();
 				}
-
-				return true;
 			}
 		} catch (final Exception e) {
 			// Log.e("error", e.toString());
@@ -535,21 +543,24 @@ public class HttpClientUtil {
 		try {
 
 			final HttpClientBuilder builder = HttpClientBuilder.create();
-			// Ignore any hostname issues here
-			builder.setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE);
 			final SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
 
 			final SSLConnectionSocketFactory f = new SSLConnectionSocketFactory( //
 					sslContext, //
 					new String[] { tlsVersion }, //
 					new String[] { cipherSuite }, //
-					AllowAllHostnameVerifier.INSTANCE);
+					// Ignore any hostname issues here
+					NoopHostnameVerifier.INSTANCE);
 
-			builder.setSslcontext(sslContext);
-			builder.setSSLSocketFactory(f);
+			final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create() //
+					.setSSLSocketFactory(f) //
+					.build();
+
+			builder.setConnectionManager(cm);
+			builder.evictExpiredConnections();
 
 			final HttpGet request = new HttpGet(url);
-			configureProxyServer(URIUtils.extractHost(request.getURI()), builder);
+			configureProxyServer(URIUtils.extractHost(request.getUri()), builder);
 
 			try (CloseableHttpClient client = builder.build()) {
 				try (var response = client.execute(request)) {
@@ -572,7 +583,15 @@ public class HttpClientUtil {
 		return "Basic " + new String(encodedAuth);
 	}
 
-	public static @Nullable String getHeaderValue(final @NonNull HttpResponse response, final @NonNull String name) {
+	public static @Nullable String getHeaderValue(final @NonNull CloseableHttpResponse response, final @NonNull String name) {
+		final Header header = response.getLastHeader(name);
+		if (header != null) {
+			return header.getValue();
+		}
+		return null;
+	}
+
+	public static @Nullable String getHeaderValue(final @NonNull ClassicHttpResponse response, final @NonNull String name) {
 		final Header header = response.getLastHeader(name);
 		if (header != null) {
 			return header.getValue();

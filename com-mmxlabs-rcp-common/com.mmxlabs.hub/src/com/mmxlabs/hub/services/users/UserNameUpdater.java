@@ -6,13 +6,12 @@ package com.mmxlabs.hub.services.users;
 
 import java.io.IOException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,13 +43,13 @@ public class UserNameUpdater {
 			return DataHubServiceProvider.getInstance().doPostRequest("/user/displayname", request -> {
 
 				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+				formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 				formDataBuilder.addTextBody("userId", userId);
 				final HttpEntity entity = formDataBuilder.build();
 
 				request.setEntity(entity);
 			}, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					if (responseCode == 404) {
 						// Assume older hub without this endpoint
@@ -74,7 +73,7 @@ public class UserNameUpdater {
 	private static String getCurrentUserId() throws Exception {
 
 		return DataHubServiceProvider.getInstance().doGetRequest("/user/id", response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}

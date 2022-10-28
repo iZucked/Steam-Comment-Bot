@@ -7,7 +7,7 @@ package com.mmxlabs.hub.auth;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

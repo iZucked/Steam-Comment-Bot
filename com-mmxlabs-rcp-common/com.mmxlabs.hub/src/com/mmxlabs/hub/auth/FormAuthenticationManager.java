@@ -4,20 +4,21 @@
  */
 package com.mmxlabs.hub.auth;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -73,13 +74,14 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 
 	/**
 	 * Create a request builder with Authorization header.
+	 * @throws URISyntaxException 
 	 */
-	public void buildRequestWithToken(final HttpRequestBase msg, final BasicCookieStore store) {
+	public void buildRequestWithToken(final HttpUriRequestBase msg, final BasicCookieStore store) throws URISyntaxException {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 		if (token.isPresent()) {
 			final String tkn = token.get();
 			final BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", tkn.replace("JSESSIONID=", ""));
-			cookie.setDomain(msg.getURI().getHost());
+			cookie.setDomain(msg.getUri().getHost());
 			cookie.setPath("/");
 			store.addCookie(cookie);
 		}
@@ -109,7 +111,7 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 		boolean valid = false;
 
 		final HttpGet request = new HttpGet(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION);
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getUri()), false).build()) {
 			if (httpClient == null) {
 				return valid;
 			}
@@ -118,8 +120,8 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 			buildRequestWithToken(request, store);
 			ctx.setCookieStore(store);
 
-			valid = httpClient.execute(request, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+			valid = httpClient.execute(request, ctx, response -> {
+				final int responseCode = response.getCode();
 				if (HttpClientUtil.isSuccessful(responseCode)) {
 					return true;
 				} else {
@@ -127,7 +129,7 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
 				return false;
-			}, ctx);
+			});
 		} catch (final Exception e) {
 			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
@@ -139,9 +141,9 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 	public void logout(final String upstreamURL, @Nullable final Shell shell) {
 
 		final HttpPost request = new HttpPost(upstreamURL + UpstreamUrlProvider.LOGOUT_PATH);
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false)
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getUri()), false)
 				.setDefaultRequestConfig(RequestConfig.custom() //
-						.setCookieSpec(CookieSpecs.STANDARD)
+						.setCookieSpec(StandardCookieSpec.RELAXED)
 						.build()) //
 				.build()) {
 
@@ -176,7 +178,7 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 		final HttpGet getRequest = new HttpGet(url + "/login/local");
 		try (var http = HttpClientBuilder.create()
 				// .setRedirectStrategy(new LaxRedirectStrategy())
-				.setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build())
+				.setDefaultRequestConfig(RequestConfig.custom().setCookieSpec(StandardCookieSpec.RELAXED).build())
 				.setDefaultCookieStore(s)
 				.build())
 
@@ -201,7 +203,7 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 			}
 
 			// Now we can issue the login request
-			final var reqBuilder = RequestBuilder.post()
+			final var reqBuilder = ClassicRequestBuilder.post()
 					.setUri(url + UpstreamUrlProvider.BASIC_LOGIN_FORM_PATH)
 					.addParameter("Submit", "Login")
 					.addParameter("username", username)
@@ -213,7 +215,7 @@ public class FormAuthenticationManager extends AbstractAuthenticationManager {
 			}
 			final var p = reqBuilder.build();
 			try (var response = http.execute(p)) {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					LOGGER.error("Invalid data hub credentials");
 					return false;

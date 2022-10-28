@@ -6,7 +6,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions;
 
 import java.io.IOException;
 
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -53,7 +53,7 @@ public class ReportPublisherRegistry {
 	public synchronized void refreshState() {
 		try {
 			DataHubServiceProvider.getInstance().doGetRequest("/scenarios/v1/reports/versions", response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (responseCode == 404) {
 					// Either an old Hub or unknown format.
 					// Create a blank object. Publishers will typically interpret no values a "1"
@@ -65,8 +65,6 @@ public class ReportPublisherRegistry {
 				}
 				return null;
 			});
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

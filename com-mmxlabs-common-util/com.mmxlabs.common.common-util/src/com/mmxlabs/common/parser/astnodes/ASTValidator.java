@@ -38,7 +38,7 @@ public final class ASTValidator {
 			return childValidationLists;
 		} else if (node instanceof final MinusASTNode minusASTNode) {
 			return validate(minusASTNode.getExpression());
-		} else if (node instanceof final NamedSeriesASTNode) {
+		} else if (node instanceof NamedSeriesASTNode) {
 			// TODO check for circular dependencies and also they should be in the lookup
 			// Data?
 		} else if (node instanceof final OperatorASTNode operatorASTNode) {

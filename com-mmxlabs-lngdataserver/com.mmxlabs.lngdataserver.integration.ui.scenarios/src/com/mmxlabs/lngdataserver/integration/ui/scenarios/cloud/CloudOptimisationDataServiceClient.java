@@ -19,24 +19,25 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestWrapper;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.EntityDetails;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.core.runtime.Platform;
@@ -103,14 +104,11 @@ public class CloudOptimisationDataServiceClient {
 					final boolean needsClientAuth = baseUrl.getHostName().endsWith("gw.minimaxlabs.com");
 
 					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, needsClientAuth);
-					builder.addInterceptorFirst(new HttpRequestInterceptor() {
+					builder.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 						@Override
-						public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+						public void process(final HttpRequest request, final EntityDetails entity, final HttpContext context) throws HttpException, IOException {
 							try {
-								URI uri = new URI(request.getRequestLine().getUri());
-								if (request instanceof final HttpRequestWrapper w) {
-									uri = new URI(w.getOriginal().getRequestLine().getUri());
-								}
+								URI uri = request.getUri();
 								if (uri.getHost().endsWith("gw.minimaxlabs.com")) {
 									final URI url = uri;
 									ServiceHelper.withOptionalServiceConsumer(ICloudAuthenticationProvider.class, p -> {
@@ -178,12 +176,12 @@ public class CloudOptimisationDataServiceClient {
 
 		final var httpClient = getHttpClient(url);
 		final HttpGet request = new HttpGet(url);
-		try (CloseableHttpResponse response = httpClient.execute(request)) {
-			if (response.getStatusLine().getStatusCode() == 200) {
+		return httpClient.execute(request, response -> {
+			if (response.getCode() == 200) {
 				return EntityUtils.toString(response.getEntity());
 			}
 			throw new IOException("Unexpected code: " + response);
-		}
+		});
 	}
 
 	public String upload(final File scenario, //
@@ -200,22 +198,24 @@ public class CloudOptimisationDataServiceClient {
 		final var httpClient = getHttpClient(url);
 		{
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("sha256", checksum);
 			formDataBuilder.addBinaryBody("scenario", scenario, ContentType.DEFAULT_BINARY, scenarioName + ".zip");
 			formDataBuilder.addBinaryBody("encryptedsymkey", encryptedSymmetricKey, ContentType.DEFAULT_BINARY, "aes.key.enc");
 			final HttpEntity entity = formDataBuilder.build();
 			final HttpPost request = new HttpPost(url);
 			// Wrap entity for progress monitor
-			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
-			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
-				if (statusCode >= 200 && statusCode < 300) {
-					return EntityUtils.toString(response.getEntity());
-				}
-				// 400 - missing data or data filename in request
-				// 415 - archive was not a zip file
-				throw new IOException("Unexpected code " + response);
+			try (ProgressHttpEntityWrapper wrappedEntity = new ProgressHttpEntityWrapper(entity, progressListener)) {
+				request.setEntity(wrappedEntity);
+				return httpClient.execute(request, response -> {
+					final int statusCode = response.getCode();
+					if (statusCode >= 200 && statusCode < 300) {
+						return EntityUtils.toString(response.getEntity());
+					}
+					// 400 - missing data or data filename in request
+					// 415 - archive was not a zip file
+					throw new IOException("Unexpected code " + response);
+				});
 			}
 		}
 	}
@@ -238,7 +238,7 @@ public class CloudOptimisationDataServiceClient {
 		{
 			final HttpGet request = new HttpGet(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				if (statusCode != 200) {
 					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
 						LOG.trace("Download Result (%s): Error response code is %d", jobid, statusCode);
@@ -271,7 +271,7 @@ public class CloudOptimisationDataServiceClient {
 		{
 			final HttpGet request = new HttpGet(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				if (statusCode != 200) {
 					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
 						LOG.trace("Status Result (%s): Response code is %d", jobid, statusCode);
@@ -304,7 +304,7 @@ public class CloudOptimisationDataServiceClient {
 		{
 			final HttpGet request = new HttpGet(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				if (statusCode != 200) {
 					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
 						throw new IOException("Unexpected code: " + response);
@@ -337,7 +337,7 @@ public class CloudOptimisationDataServiceClient {
 		{
 			final HttpDelete request = new HttpDelete(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				if (statusCode != 200) {
 					if (statusCode == 500) {
 						LOG.error("failed to abort remote optimisation job");
@@ -394,7 +394,7 @@ public class CloudOptimisationDataServiceClient {
 		{
 			final HttpDelete request = new HttpDelete(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
+				final int statusCode = response.getCode();
 				// Could return 200 OK or 204 no content
 				if (statusCode != 200 && statusCode != 204) {
 					if (statusCode == 500) {

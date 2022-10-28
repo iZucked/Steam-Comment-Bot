@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,7 @@ public class DataServiceClient {
 			final StringEntity requestEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
 			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					// Data version already exists, we didn't need to upload again....
@@ -56,17 +58,17 @@ public class DataServiceClient {
 	public void downloadTo(final TypeRecord typeRecord, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
 		DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getDownloadURL(uuid), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
-			try (FileOutputStream fos = new FileOutputStream(file)) {
-				EncryptionUtils.encrypt(fos, os -> {
-					typeRecord.writeHeader(os);
-					w.writeTo(os);
-				});
-
+			try (final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener)) {
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					EncryptionUtils.encrypt(fos, os -> {
+						typeRecord.writeHeader(os);
+						w.writeTo(os);
+					});
+				}
 			} catch (Exception e) {
 				throw new IOException(e);
 			}
@@ -77,7 +79,7 @@ public class DataServiceClient {
 	public @Nullable Pair<String, Instant> getRecords(final TypeRecord typeRecord) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getListURL(), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
@@ -89,7 +91,7 @@ public class DataServiceClient {
 
 	public void deleteData(final TypeRecord typeRecord, final String uuid) throws IOException {
 		DataHubServiceProvider.getInstance().doDeleteRequest(typeRecord.getDeleteURL(uuid), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -103,7 +105,7 @@ public class DataServiceClient {
 		}
 
 		return DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getCurrentURL(), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current pricing version
 				if (responseCode != 404) {

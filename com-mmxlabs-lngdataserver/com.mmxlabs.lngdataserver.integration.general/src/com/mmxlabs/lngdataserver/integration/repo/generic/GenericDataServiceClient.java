@@ -11,11 +11,14 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONObject;
 
@@ -46,14 +49,14 @@ public class GenericDataServiceClient {
 		return DataHubServiceProvider.getInstance().doPostRequest(requestURL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addBinaryBody("data", file, ContentType.DEFAULT_BINARY, "data.json");
 			formDataBuilder.addTextBody("contentType", contentType);
 			final HttpEntity requestEntity = formDataBuilder.build();
 
 			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					throw new IOException("Data already exists " + type + "/" + uuid);
@@ -73,14 +76,15 @@ public class GenericDataServiceClient {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DOWNLOAD_URL, type, uuid);
 		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(requestURL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
-			try (FileOutputStream out = new FileOutputStream(file)) {
-				DataStreamReencrypter.reencryptData(w.getContent(), out);
-				return true;
+			try (ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener)) {
+				try (FileOutputStream out = new FileOutputStream(file)) {
+					DataStreamReencrypter.reencryptData(w.getContent(), out);
+					return true;
+				}
 			} catch (Exception e) {
 				throw new IOException(e);
 			}
@@ -98,7 +102,7 @@ public class GenericDataServiceClient {
 		final String requestURL = String.format("%s/%s", SCENARIO_LIST_URL, typesList);
 
 		return DataHubServiceProvider.getInstance().doGetRequest(requestURL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -116,7 +120,7 @@ public class GenericDataServiceClient {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DELETE_URL, type, uuid);
 		DataHubServiceProvider.getInstance().doDeleteRequest(requestURL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
@@ -126,7 +130,7 @@ public class GenericDataServiceClient {
 	public Instant getLastModified() {
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					final String date = EntityUtils.toString(response.getEntity());
 					final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));

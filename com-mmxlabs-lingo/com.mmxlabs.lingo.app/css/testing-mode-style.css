@@ -1,0 +1,11 @@
+/* see https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.ui.themes/css/e4_default_win.css */
+
+@import url("platform:/plugin/org.eclipse.ui.themes/css/e4_default_win.css");
+
+ColorDefinition#org-eclipse-ui-workbench-INACTIVE_UNSELECTED_TABS_COLOR_START {
+	color: #bce0bc;
+}
+
+ColorDefinition#org-eclipse-ui-workbench-ACTIVE_UNSELECTED_TABS_COLOR_START {
+	color: #bce0bc;
+}

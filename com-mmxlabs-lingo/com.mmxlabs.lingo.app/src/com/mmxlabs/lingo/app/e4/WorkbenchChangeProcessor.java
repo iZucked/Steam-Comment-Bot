@@ -109,6 +109,10 @@ public class WorkbenchChangeProcessor {
 		// platform:/plugin/com.mmxlabs.models.ui.validation.views/icons/problems_view.gif
 		// platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif
 
+		
+		E4ModelHelper.removeViewPart("org.eclipse.ui.internal.introview", application, modelService);
+
+		
 		if (!LicenseFeatures.isPermitted("features:fitness-view")) {
 			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView", application, modelService);
 		}

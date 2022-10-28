@@ -35,9 +35,9 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.security.auth.x500.X500Principal;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.auth0.jwt.JWT;
@@ -209,8 +209,8 @@ public abstract class ClasspathDataHubKeystoreProvider implements IDataHubUpdate
 		System.out.println("Printing response code and status. Expected return code of 200 or 206 if the file is present");
 		try (var httpClient = localHttpClient.build()) {
 			try (var response = httpClient.execute(request)) {
-				System.out.println(response.getStatusLine().getStatusCode());
-				System.out.println(response.getStatusLine().getReasonPhrase());
+				System.out.println(response.getCode());
+				System.out.println(response.getReasonPhrase());
 				System.out.println(EntityUtils.toString(response.getEntity()));
 			}
 		}

@@ -204,6 +204,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 
 		this.managedForm = managedForm;
 		this.toolkit = managedForm.getToolkit();
+		FormDialogColourHelper.setFormColours(this.toolkit);
 
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));

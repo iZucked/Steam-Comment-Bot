@@ -9,9 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
 
-import org.apache.http.HttpMessage;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.utils.URIUtils;
+import org.apache.hc.core5.http.HttpMessage;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Shell;
 
@@ -72,7 +72,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 		HttpGet request = new HttpGet(url + UpstreamUrlProvider.BASIC_LOGIN_PATH);
 
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getUri()), false).build()) {
 			if (httpClient == null) {
 				return false;
 			}
@@ -80,7 +80,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 			request.addHeader("Cache-Control", "no-store, max-age=0");
 
 			try (var response = httpClient.execute(request)) {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					LOGGER.error("Invalid data hub credentials");
 					return false;

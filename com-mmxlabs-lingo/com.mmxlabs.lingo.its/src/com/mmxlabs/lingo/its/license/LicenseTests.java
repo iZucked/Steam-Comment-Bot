@@ -25,13 +25,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -83,7 +84,7 @@ class LicenseTests {
 	public static GenericContainer datahubContainer = HubTestHelper.createDataHubContainer(CONTAINER, availablePort, DATAHUB_PORT, false);
 
 	@BeforeAll
-	private static void beforeAll() {
+	public static void beforeAll() {
 		datahubHost = datahubContainer.getHost();
 		upstreamUrl = String.format("http://%s:%s", datahubHost, availablePort);
 		log.info(upstreamUrl);
@@ -158,7 +159,7 @@ class LicenseTests {
 		return new JcaX509CertificateConverter().getCertificate(certBuilder.build(contentSigner));
 	}
 
-	public void setCurrentLicense() throws IOException {
+	public void setCurrentLicense() throws IOException, ParseException {
 
 		try {
 			File license = createLicense();
@@ -167,7 +168,7 @@ class LicenseTests {
 			DataHubServiceProvider.getInstance().doPostRequest(postLicenseURL, request -> {
 
 				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+				formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 				formDataBuilder.addBinaryBody("file", license, ContentType.DEFAULT_BINARY, "license.p12");
 				final HttpEntity entity = formDataBuilder.build();
 
@@ -179,7 +180,7 @@ class LicenseTests {
 				request.setHeader("Authorization", authHeader);
 			}, response -> {
 				// Check the response
-				int statusCode = response.getStatusLine().getStatusCode();
+				int statusCode = response.getCode();
 				if (statusCode < 200 || statusCode >= 400) {
 					log.error(EntityUtils.toString(response.getEntity()));
 				}
@@ -193,7 +194,7 @@ class LicenseTests {
 	}
 
 	@Test
-	void getLicenseFromDatahub() throws IOException {
+	void getLicenseFromDatahub() throws Exception {
 		log.info(Boolean.toString(basicAuthenticationManager.isAuthenticated(upstreamUrl)));
 		setCurrentLicense();
 

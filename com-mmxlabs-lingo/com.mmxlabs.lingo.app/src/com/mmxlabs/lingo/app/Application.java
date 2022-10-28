@@ -96,6 +96,11 @@ public class Application implements IApplication {
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
 
+		// Various attempts to disable dark mode. However the eclipse theme takes over later.
+		// OS.SetPreferredAppMode(3); // Force light mode
+		// System.setProperty("org.eclipse.swt.internal.win32.disableCustomThemeTweaks", "true");
+		// System.setProperty("org.eclipse.swt.internal.win32.useDarkModeExplorerTheme", "false");
+
 		cleanUpTemporaryFolder();
 
 		// Hacky code to ensure initialised
@@ -329,7 +334,7 @@ public class Application implements IApplication {
 				// refresh permissions
 				try {
 					UserPermissionsService.INSTANCE.updateUserPermissions();
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
 				}
 

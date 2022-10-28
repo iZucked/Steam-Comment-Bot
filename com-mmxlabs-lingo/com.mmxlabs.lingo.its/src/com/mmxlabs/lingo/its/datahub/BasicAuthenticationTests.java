@@ -56,7 +56,7 @@ public class BasicAuthenticationTests {
 	public static GenericContainer datahubContainer = HubTestHelper.createDataHubContainer(CONTAINER, availablePort, DATAHUB_PORT, false);
 
 	@BeforeAll
-	private static void beforeAll() {
+	public static void beforeAll() {
 		datahubHost = datahubContainer.getHost();
 		upstreamUrl = String.format("http://%s:%s", datahubHost, availablePort);
 		logger.info(upstreamUrl);

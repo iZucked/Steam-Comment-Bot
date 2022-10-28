@@ -9,11 +9,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONObject;
@@ -65,7 +67,7 @@ public class BaseCaseServiceClient {
 		return DataHubServiceProvider.getInstance().doPostRequest(BASECASE_UPLOAD_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("pricingVersionUUID", pricingVersion);
 			formDataBuilder.addTextBody("paperVersionUUID", paperVersion);
 			formDataBuilder.addTextBody("portsVersionUUID", "");
@@ -81,7 +83,7 @@ public class BaseCaseServiceClient {
 
 			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					throw new BasecaseServiceLockedException();
@@ -100,7 +102,7 @@ public class BaseCaseServiceClient {
 		DataHubServiceProvider.getInstance().doPostRequest(BASECASE_UPLOAD_ARCHIVE_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 			formDataBuilder.addTextBody("uuid", uuid);
 			formDataBuilder.addBinaryBody("archive", file, ContentType.DEFAULT_BINARY, uuid + ".zip");
 
@@ -108,7 +110,7 @@ public class BaseCaseServiceClient {
 
 			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
 					// 404: Endpoint not defined - old server version
@@ -133,7 +135,7 @@ public class BaseCaseServiceClient {
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
 		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(String.format("%s%s", BASECASE_DOWNLOAD_URL, uuid), response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_DOWNLOAD)) {
 					LOGGER.trace("Bad status code downloading base case " + responseCode);
@@ -141,8 +143,7 @@ public class BaseCaseServiceClient {
 				throw new IOException(UNEXPECTED_CODE + responseCode);
 			}
 
-			ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
-			try (FileOutputStream out = new FileOutputStream(file)) {
+			try (ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener); FileOutputStream out = new FileOutputStream(file)) {
 				DataStreamReencrypter.reencryptScenario(w.getContent(), out);
 				return true;
 			} catch (Exception e) {
@@ -157,7 +158,7 @@ public class BaseCaseServiceClient {
 	public String getCurrentBaseCase() throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_CURRENT_URL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current basecase
 				if (responseCode != 404) {
@@ -172,7 +173,7 @@ public class BaseCaseServiceClient {
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_CURRENT_URL + "/" + uuid, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
@@ -183,7 +184,7 @@ public class BaseCaseServiceClient {
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_DOWNLOAD_URL + uuid + "/details", response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + responseCode);
 			}
@@ -222,7 +223,7 @@ public class BaseCaseServiceClient {
 
 		needsLocking = true;
 		DataHubServiceProvider.getInstance().doGetRequest(LOCK_STATE_URL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
 					needsLocking = false;
@@ -253,7 +254,7 @@ public class BaseCaseServiceClient {
 
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(LOCK_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					if (responseCode == 404) {
 						return true;
@@ -271,7 +272,7 @@ public class BaseCaseServiceClient {
 	public synchronized boolean unlock() throws IOException {
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(UNLOCK_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					if (responseCode == 404) {
 						return true;
@@ -293,7 +294,7 @@ public class BaseCaseServiceClient {
 	public synchronized boolean forceUnlock() throws IOException {
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(FORCE_UNLOCK_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (!HttpClientUtil.isSuccessful(responseCode)) {
 					if (responseCode == 404) {
 						return true;

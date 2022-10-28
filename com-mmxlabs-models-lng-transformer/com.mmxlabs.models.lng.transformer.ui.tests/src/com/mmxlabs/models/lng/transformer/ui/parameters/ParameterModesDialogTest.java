@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -355,7 +355,7 @@ public class ParameterModesDialogTest {
 					IScenarioDataProvider sdp = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), dummyModel);
 
 					UserSettings settings[] = new UserSettings[1];
-					Realm.runWithDefault(SWTObservables.getRealm(display), () -> {
+					Realm.runWithDefault(DisplayRealm.getRealm(display), () -> {
 						settings[0] = UserSettingsHelper.openUserDialog(sdp, display, shell, false, initialSettings, initialSettings, false, null, false, false);
 					});
 					return settings[0];
@@ -381,7 +381,7 @@ public class ParameterModesDialogTest {
 				// Create or reuse existing display
 				display = Display.getDefault();
 				shell = new Shell(display);
-				Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
+				Realm.runWithDefault(DisplayRealm	.getRealm(display), new Runnable() {
 					public void run() {
 						shell.setText("Testing: " + getClass().getName());
 						shell.setLayout(new FillLayout());

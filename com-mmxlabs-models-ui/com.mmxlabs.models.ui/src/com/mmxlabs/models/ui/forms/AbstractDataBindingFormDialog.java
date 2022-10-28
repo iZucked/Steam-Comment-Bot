@@ -33,6 +33,7 @@ import org.eclipse.ui.forms.IMessage;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.ui.editors.dialogs.FormDialogColourHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -64,6 +65,7 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 
 		this.managedForm = managedForm;
 		this.toolkit = managedForm.getToolkit();
+		FormDialogColourHelper.setFormColours(this.toolkit);
 
 		this.dbc = new EMFDataBindingContext();
 		this.observablesManager = new ObservablesManager();

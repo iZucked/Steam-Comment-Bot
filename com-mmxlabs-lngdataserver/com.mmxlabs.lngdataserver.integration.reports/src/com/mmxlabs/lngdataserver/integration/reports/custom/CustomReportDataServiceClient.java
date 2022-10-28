@@ -11,11 +11,11 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -42,7 +42,7 @@ public class CustomReportDataServiceClient {
 		return DataHubServiceProvider.getInstance().doPostRequest(requestURL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.setMode(HttpMultipartMode.LEGACY);
 
 			formDataBuilder.addTextBody("uuid", uuid);
 			formDataBuilder.addTextBody("contentType", contentType);
@@ -51,7 +51,7 @@ public class CustomReportDataServiceClient {
 			final HttpEntity entity = formDataBuilder.build();
 			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
 		}, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					throw new IOException("Data already exists " + "/" + uuid);
@@ -67,14 +67,15 @@ public class CustomReportDataServiceClient {
 
 		final String requestURL = String.format("%s/%s", SCENARIO_ENDPOINT_URL, uuid);
 		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(requestURL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
-			final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
-			try (FileOutputStream fos = new FileOutputStream(file)) {
-				w.writeTo(fos);
-				return true;
+			try (final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener)) {
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					w.writeTo(fos);
+					return true;
+				}
 			}
 		});
 	}
@@ -82,7 +83,7 @@ public class CustomReportDataServiceClient {
 	public Pair<String, Instant> getRecords() throws IOException {
 
 		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_ENDPOINT_URL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -100,7 +101,7 @@ public class CustomReportDataServiceClient {
 
 		final String requestURL = String.format("%s/%s", SCENARIO_DELETE_URL, uuid);
 		DataHubServiceProvider.getInstance().doDeleteRequest(requestURL, response -> {
-			final int responseCode = response.getStatusLine().getStatusCode();
+			final int responseCode = response.getCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
@@ -111,7 +112,7 @@ public class CustomReportDataServiceClient {
 
 		try {
 			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
-				final int responseCode = response.getStatusLine().getStatusCode();
+				final int responseCode = response.getCode();
 				if (HttpClientUtil.isSuccessful(responseCode)) {
 					final String date = EntityUtils.toString(response.getEntity());
 					final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));

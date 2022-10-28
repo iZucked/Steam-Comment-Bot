@@ -37,6 +37,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.dialogs.FormDialogColourHelper;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -66,6 +67,7 @@ public class GroupedSlotsDialog extends FormDialog {
 
 	private void createFormArea(final IManagedForm mform) {
 		final FormToolkit toolkit = mform.getToolkit();
+		FormDialogColourHelper.setFormColours(toolkit);
 
 		final Composite body = mform.getForm().getBody();
 		body.setLayout(new GridLayout(1, false));
