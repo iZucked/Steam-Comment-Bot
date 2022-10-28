@@ -208,7 +208,6 @@ public class ChangeSetViewColumnHelper {
 		imageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
 		imageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
 
-
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
@@ -2875,7 +2874,7 @@ public class ChangeSetViewColumnHelper {
 			imageClosedCircle.dispose();
 			imageClosedCircle = null;
 		}
-		 
+
 		if (colour_VesselTypeColumn != null) {
 			colour_VesselTypeColumn.dispose();
 			colour_VesselTypeColumn = null;
@@ -2915,7 +2914,11 @@ public class ChangeSetViewColumnHelper {
 	public void showAlternativePNLColumn(final boolean showAlternativePNLBase) {
 		this.showAlternativePNLBase = showAlternativePNLBase;
 		if (altPNLBaseColumn != null) {
-			RunnerHelper.asyncExec(() -> altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase));
+			RunnerHelper.asyncExec(() -> {
+				if (!altPNLBaseColumn.getColumn().isDisposed()) {
+					altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase);
+				}
+			});
 		}
 	}
 
