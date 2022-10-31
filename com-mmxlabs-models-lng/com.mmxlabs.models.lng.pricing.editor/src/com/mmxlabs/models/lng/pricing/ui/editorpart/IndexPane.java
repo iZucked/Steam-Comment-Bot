@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -52,6 +53,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -68,6 +71,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
+import com.mmxlabs.models.lng.pricing.importers.PricingImportConstants;
 import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.IndexTreeTransformer.DataType;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -87,13 +91,17 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
- * The {@link IndexPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject tree
- * datastructure.
+ * The {@link IndexPane} displays data for various indices in a tree format. The
+ * {@link IndexTreeTransformer} is used to combine the different indices into an
+ * internal dynamic EObject tree datastructure.
  * 
- * Note - call {@link #setInput(PricingModel)} on {@link IndexPane} rather than the {@link Viewer}.
+ * Note - call {@link #setInput(PricingModel)} on {@link IndexPane} rather than
+ * the {@link Viewer}.
  * 
  * @author Simon Goodall
  * 
@@ -101,7 +109,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 public class IndexPane extends ScenarioTableViewerPane {
 
 	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
-	
+
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
 
@@ -113,6 +121,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 	private GridViewerColumn unitViewerColumn;
 
 	private Action unitAction;
+
+	private IEventBroker eventBroker;
 
 	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -128,7 +138,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
+	 * Ensures that a given date is visible in the editor column range, as long as
+	 * the editor is open.
 	 * 
 	 * @param date
 	 */
@@ -173,7 +184,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
 		result.addFilter(new ViewerFilter() {
-			
+
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				// if pricing bases feature is not enabled - do not show the pricing basis!
@@ -273,7 +284,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 							if (dialog.open() != Window.OK) {
 								while (commandStack.getUndoCommand() != currentCommand) {
 									commandStack.undo();
-									// This avoids infinite loop... but should only be valid if currentCommand is also null.
+									// This avoids infinite loop... but should only be valid if currentCommand is
+									// also null.
 									if (commandStack.getUndoCommand() == null) {
 										break;
 									}
@@ -334,8 +346,32 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	protected class IndexTableViewer extends ScenarioTableViewer {
 
+		private IEventBroker eventBroker;
+		private final EventHandler loadPriceCurvesEventHandler = event -> {
+			final ScenarioInstance si = getScenarioEditingLocation().getScenarioInstance();
+			if (event.getProperty(IEventBroker.DATA) == si) {
+				RunnerHelper.asyncExec(() -> {
+					if (viewer != null && !viewer.getControl().isDisposed()) {
+						updateDateRange(pricingModel);
+						redisplayDateRange(null);
+					}
+				});
+			}
+		};
+
 		public IndexTableViewer(final Composite parent, final int style, final IScenarioEditingLocation part) {
 			super(parent, style, part);
+			eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.subscribe(PricingImportConstants.LOADED_PRICE_CURVES, loadPriceCurvesEventHandler);
+		}
+
+		@Override
+		public void dispose() {
+			if (eventBroker != null) {
+				eventBroker.unsubscribe(loadPriceCurvesEventHandler);
+				eventBroker = null;
+			}
+			super.dispose();
 		}
 
 		@Override
