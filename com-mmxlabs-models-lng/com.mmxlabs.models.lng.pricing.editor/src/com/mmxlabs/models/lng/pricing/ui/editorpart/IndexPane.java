@@ -91,6 +91,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -349,8 +350,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 		private final EventHandler loadPriceCurvesEventHandler = event -> {
 			final ScenarioInstance si = getScenarioEditingLocation().getScenarioInstance();
 			if (event.getProperty(IEventBroker.DATA) == si) {
-				updateDateRange(pricingModel);
-				redisplayDateRange(null);
+				RunnerHelper.asyncExec(() -> {
+					if (viewer != null && !viewer.getControl().isDisposed()) {
+						updateDateRange(pricingModel);
+						redisplayDateRange(null);
+					}
+				});
 			}
 		};
 
