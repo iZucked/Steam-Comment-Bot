@@ -56,7 +56,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	private final @NonNull ZonedDateTime latestTime;
 
-	private Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes;
+	private final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes;
 
 	@Inject
 	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
@@ -215,17 +215,17 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return earliestAndLatestTimes;
 	}
 
-	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(SeriesParser seriesParser, final String priceExpression) {
+	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression) {
 
 		return createCurveAndIntervals(seriesParser, priceExpression, this::generateExpressionCurve);
 	}
 
-	public @NonNull Pair<ICurve, IIntegerIntervalCurve> createConstantCurveAndIntervals(int constant) {
+	public @NonNull Pair<ICurve, IIntegerIntervalCurve> createConstantCurveAndIntervals(final int constant) {
 
 		return Pair.of(new ConstantValueCurve(constant), monthIntervalsInHoursCurve);
 	}
 
-	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(SeriesParser seriesParser, final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
+	public @Nullable Pair<ICurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -281,6 +281,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {
 			curve.setDefaultValue(0);
+			// Copy in real data from change points
 			for (final int i : parsed.getChangePoints()) {
 				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 			}

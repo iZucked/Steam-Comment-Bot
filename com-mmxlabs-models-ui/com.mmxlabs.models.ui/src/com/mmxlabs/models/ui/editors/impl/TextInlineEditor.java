@@ -6,8 +6,6 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -15,6 +13,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
+import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 
 public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
@@ -44,12 +43,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 		text.addModifyListener(new ModifyListener() {
 			{
 				final ModifyListener ml = this;
-				text.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						text.removeModifyListener(ml);
-					}
-				});
+				text.addDisposeListener(e -> text.removeModifyListener(ml));
 			}
 
 			@Override
@@ -95,7 +89,11 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 	protected Text createText(final Composite parent) {
 		final Text text = toolkit.createText(parent, "", style);
-		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text, typedElement);
+		this.proposalHelper = createProposalHelper(text);
 		return text;
+	}
+
+	protected IMMXContentProposalProvider createProposalHelper(final Text text) {
+		return AutoCompleteHelper.createControlProposalAdapter(text, typedElement);
 	}
 }

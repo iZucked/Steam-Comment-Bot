@@ -22,7 +22,6 @@ import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.math.BigIntegerMath;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.calendars.BasicHolidayCalendar;
@@ -33,17 +32,18 @@ import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
 import com.mmxlabs.common.parser.astnodes.ASTNode;
-import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
 import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.FunctionType;
+import com.mmxlabs.common.parser.astnodes.MonthFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.Operator;
 import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
 import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.TierFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -311,7 +311,7 @@ public class ExposuresCalculator {
 		final IExposureNode c0 = pc0.getSecond();
 		final IExposureNode c1 = pc1.getSecond();
 
-		if (c0 instanceof Constant c0Const && c1 instanceof Constant c1Const) {
+		if (c0 instanceof final Constant c0Const && c1 instanceof final Constant c1Const) {
 			return new Pair<>((multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100), //
 					new Constant((multiplyConstantByConstant(c0Const.getConstant(), c1Const.getConstant()) / 100), ""));
 		} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
@@ -319,7 +319,7 @@ public class ExposuresCalculator {
 			throw new UnsupportedOperationException();
 			// return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index,
 			// c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
-		} else if (c0 instanceof Constant c0Const && c1 instanceof ExposureRecords c1Records) {
+		} else if (c0 instanceof final Constant c0Const && c1 instanceof final ExposureRecords c1Records) {
 			final long constant = c0Const.getConstant() / 100;
 			return new Pair<>((multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100), modify(c1Records, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice,
 					multiplyVolumeByConstant(c.nativeVolume, constant), multiplyVolumeByConstant(c.nativeValue, constant), multiplyVolumeByConstant(c.mmbtuVolume, constant), c.date, c.volumeUnit)));
@@ -339,12 +339,12 @@ public class ExposuresCalculator {
 		final IExposureNode c0 = pc0.getSecond();
 		final IExposureNode c1 = pc1.getSecond();
 
-		if (c0 instanceof Constant const_c0 && c1 instanceof Constant const_c1) {
+		if (c0 instanceof final Constant const_c0 && c1 instanceof final Constant const_c1) {
 			final long value = (pc1.getFirst() == 0 ? 0 : divideConstantByConstant(pc0.getFirst(), pc1.getFirst()));
 			final int newConstant = (int) (const_c1.getConstant() == 0 ? 0 : divideConstantByConstant(const_c0.getConstant(), const_c1.getConstant()));
 
 			return new Pair<>(value, new Constant(newConstant, ""));
-		} else if (c0 instanceof ExposureRecords c0Records && c1 instanceof Constant const_c1) {
+		} else if (c0 instanceof final ExposureRecords c0Records && c1 instanceof final Constant const_c1) {
 			final long value = pc1.getFirst() == 0 ? 0 : divideVolumeByConstant(pc0.getFirst(), pc1.getFirst());
 			final long constant = const_c1.getConstant();
 			if (constant == 0.0) {
@@ -357,7 +357,7 @@ public class ExposuresCalculator {
 					return new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, nativeVolume, nativeValue, mmbtuVolume, c.date, c.volumeUnit);
 				}));
 			}
-		} else if (c0 instanceof Constant const_c0 && c1 instanceof ExposureRecords c1Records) {
+		} else if (c0 instanceof final Constant const_c0 && c1 instanceof final ExposureRecords c1Records) {
 			final long value = (pc1.getFirst() == 0 ? 0 : divideConstantByVolume(pc0.getFirst(), pc1.getFirst()));
 			final long constant = const_c0.getConstant();
 			if (constant == 0.0) {
@@ -461,15 +461,15 @@ public class ExposuresCalculator {
 		final LocalDate date = inputRecord.date;
 		final int dayOfMonth = inputRecord.date.getDayOfMonth();
 		if (node instanceof final ShiftFunctionASTNode shiftNode) {
-			return getExposureNode(shiftNode.getToShift(), inputRecord.withDate(date.minusMonths(shiftNode.getShiftBy())));
-
+			final LocalDate pricingDate = shiftNode.mapTime(date.atStartOfDay()).toLocalDate();
+			return getExposureNode(shiftNode.getToShift(), inputRecord.withDate(pricingDate));
+		} else if (node instanceof final MonthFunctionASTNode monthNode) {
+			final LocalDate pricingDate = monthNode.mapTime(date.atStartOfDay()).toLocalDate();
+			return getExposureNode(monthNode.getSeries(), inputRecord.withDate(pricingDate));
 		} else if (node instanceof final DatedAvgFunctionASTNode averageNode) {
 
-			LocalDate startDate = date.minusMonths(averageNode.getMonths());
-			if (averageNode.getReset() != 1) {
-				startDate = startDate.minusMonths((date.getMonthValue() - 1) % averageNode.getReset());
-			}
-			startDate = startDate.minusMonths(averageNode.getLag());
+			LocalDate startDate = averageNode.mapTimeToStartDate(date.atStartOfDay()).toLocalDate();
+
 			final int months = averageNode.getMonths();
 			final ExposureRecords records = new ExposureRecords();
 			long price = 0;
@@ -533,17 +533,28 @@ public class ExposuresCalculator {
 
 			final Pair<Long, IExposureNode> baseNodeData = getExposureNode(scurveNode.getBase(), inputRecord);
 
-			ASTNode selectedOption;
-			final double foo = baseNodeData.getFirst() / (double) Calculator.HighScaleFactor;
-			if (foo < scurveNode.getFirstThreshold()) {
-				selectedOption = scurveNode.getLowerSeries();
-			} else if (foo > scurveNode.getSecondThreshold()) {
-				selectedOption = scurveNode.getHigherSeries();
-			} else {
-				selectedOption = scurveNode.getMiddleSeries();
-			}
+			final double baseValue = baseNodeData.getFirst() / (double) Calculator.HighScaleFactor;
+			final double lowCheck = scurveNode.getFirstThreshold();
+			final double midCheck = scurveNode.getSecondThreshold();
+			var selected = scurveNode.select(baseValue, lowCheck, midCheck);
+			return switch (selected) {
+			case LOW -> getExposureNode(scurveNode.getLowerSeries(), inputRecord);
+			case MID -> getExposureNode(scurveNode.getMiddleSeries(), inputRecord);
+			case HIGH -> getExposureNode(scurveNode.getHigherSeries(), inputRecord);
+			};
+		} else if (node instanceof final TierFunctionASTNode tierNode) {
+			final Pair<Long, IExposureNode> baseNodeData = getExposureNode(tierNode.getTarget(), inputRecord);
 
-			return getExposureNode(selectedOption, inputRecord);
+			final double baseValue = baseNodeData.getFirst() / (double) Calculator.HighScaleFactor;
+			final double lowCheck = tierNode.getLow().doubleValue();
+			final double midCheck = tierNode.getMid().doubleValue();
+			var selected = tierNode.select(baseValue, lowCheck, midCheck);
+			return switch (selected) {
+			case LOW -> getExposureNode(tierNode.getLowValue(), inputRecord);
+			case MID -> getExposureNode(tierNode.getMidValue(), inputRecord);
+			case HIGH -> getExposureNode(tierNode.getHighValue(), inputRecord);
+			};
+
 		} else if (node instanceof final ConstantASTNode constantNode) {
 			final long constant = OptimiserUnitConvertor.convertToInternalPrice(constantNode.getConstant().doubleValue());
 			return new Pair<>(constant, new Constant(constant, ""));

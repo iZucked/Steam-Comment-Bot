@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,24 +23,14 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.astnodes.ASTNode;
-import com.mmxlabs.common.parser.astnodes.BreakEvenASTNode;
 import com.mmxlabs.common.parser.astnodes.BunkersSeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.CharterSeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
-import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
 import com.mmxlabs.common.parser.astnodes.CurrencySeriesASTNode;
-import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
-import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
 import com.mmxlabs.common.parser.astnodes.PricingBasisSeriesASTNode;
-import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.DatePoint;
@@ -51,9 +40,6 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
-import com.mmxlabs.models.lng.pricing.util.IndexToDate.IIndexToDateNode;
-import com.mmxlabs.models.lng.pricing.util.IndexToDate.IndexDateRecord;
-import com.mmxlabs.models.lng.pricing.util.IndexToDate.IndexToDateRecords;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class ModelMarketCurveProvider extends EContentAdapter {
@@ -122,6 +108,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		cacheObj.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
 		cacheObj.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
 		cacheObj.put(PriceIndexType.CURRENCY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CURRENCY));
+		cacheObj.put(PriceIndexType.PRICING_BASIS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.PRICING_BASIS));
 
 		return cacheObj;
 	}
@@ -162,13 +149,11 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		earlyDateCache = new SoftReference<>(cacheObj);
 		final Function<AbstractYearMonthCurve, @Nullable YearMonth> finder = (curve) -> {
 			if (!curve.isSetExpression()) {
-				final Optional<?> min = curve.getPoints().stream() //
-						.min((p1, p2) -> {
-							return p1.getDate().compareTo(p2.getDate());
-						});
+				final Optional<YearMonthPoint> min = curve.getPoints().stream() //
+						.min((p1, p2) -> p1.getDate().compareTo(p2.getDate()));
 				// No data check
 				if (min.isPresent()) {
-					return ((YearMonthPoint) min.get()).getDate();
+					return min.get().getDate();
 				}
 			}
 			return null;
@@ -178,6 +163,7 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		pricingModel.getCharterCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getBunkerFuelCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getCurrencyCurves().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getPricingBases().forEach(c -> cacheObj.put(c, finder.apply(c)));
 
 		return cacheObj;
 	}
@@ -289,9 +275,18 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 	}
 
-	public @NonNull List<Pair<AbstractYearMonthCurve, LocalDate>> getLinkedCurvesAndDate(final String priceExpression, final LocalDate date) {
+	/**
+	 * Given an expression and pricing date, work out which data curves have been
+	 * used and the earliest date needed for that curve. E.g. a DATEDAVG expression
+	 * will need dates before the pricing date.
+	 * 
+	 * @param priceExpression
+	 * @param date
+	 * @return
+	 */
+	public @NonNull Map<AbstractYearMonthCurve, LocalDate> getLinkedCurvesAndEarliestNeededDate(final String priceExpression, final LocalDate date) {
 		if (priceExpression == null || priceExpression.trim().isEmpty()) {
-			return Collections.emptyList();
+			return Collections.emptyMap();
 		}
 
 		LookupData lookupData = expressionToIndexUseCache.get();
@@ -302,20 +297,11 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 		final LookupData pLookupData = lookupData;
 		try {
-			final IIndexToDateNode n = IndexToDate.calculateIndicesToDate(priceExpression, date, pLookupData);
-			if (n instanceof IndexToDateRecords) {
-				final IndexToDateRecords indexToDateRecords = (IndexToDateRecords) n;
-				final List<Pair<AbstractYearMonthCurve, LocalDate>> result = new LinkedList<>();
-				for (final IndexDateRecord rec : indexToDateRecords.records) {
-					result.add(new Pair<>(rec.index, rec.date));
-				}
-				return result;
-
-			}
+			return IndexToDate.calculateIndicesToFirstDate(priceExpression, date, pLookupData);
 		} catch (final Exception e) {
 			// ignore
 		}
-		return Collections.emptyList();
+		return Collections.emptyMap();
 	}
 
 	public static Set<@NonNull AbstractYearMonthCurve> collectIndicies(@NonNull final ASTNode parentNode, final LookupData lookupData) {
@@ -339,29 +325,11 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return s;
 	}
 
-	private static Set<@NonNull AbstractYearMonthCurve> collectIndicies(final ASTNode parsedExpression, final LookupData lookupData, final Set<AbstractYearMonthCurve> result) {
+	private static Set<@NonNull AbstractYearMonthCurve> collectIndicies(final ASTNode astNode, final LookupData lookupData, final Set<AbstractYearMonthCurve> result) {
 
-		if (parsedExpression instanceof final OperatorASTNode seriesOperator) {
-			collectIndicies(seriesOperator.getLHS(), lookupData, result);
-			collectIndicies(seriesOperator.getRHS(), lookupData, result);
-		} else if (parsedExpression instanceof final FunctionASTNode functionConstructor) {
-			functionConstructor.getArguments().forEach(arg -> collectIndicies(arg, lookupData, result));
-		} else if (parsedExpression instanceof final ShiftFunctionASTNode shiftFunctionConstructor) {
-			collectIndicies(shiftFunctionConstructor.getToShift(), lookupData, result);
-		} else if (parsedExpression instanceof final DatedAvgFunctionASTNode datedAvgFunctionConstructor) {
-			collectIndicies(datedAvgFunctionConstructor.getSeries(), lookupData, result);
-		} else if (parsedExpression instanceof final SplitMonthFunctionASTNode splitMonthFunctionConstructor) {
-			collectIndicies(splitMonthFunctionConstructor.getSeries1(), lookupData, result);
-			collectIndicies(splitMonthFunctionConstructor.getSeries2(), lookupData, result);
-		} else if (parsedExpression instanceof final SCurveFunctionASTNode sCurveFunctionConstructor) {
-			collectIndicies(sCurveFunctionConstructor.getBase(), lookupData, result);
-		} else if (parsedExpression instanceof final BreakEvenASTNode breakEvenSeriesExpression) {
-			// do nothing
-		} else if (parsedExpression instanceof final ConstantASTNode constantSeriesExpression) {
-			// do nothing
-		} else if (parsedExpression instanceof final NamedSeriesASTNode namedSeriesExpression) {
+		if (astNode instanceof final NamedSeriesASTNode namedSeriesASTNode) {
 
-			final String indexName = namedSeriesExpression.getName().toLowerCase();
+			final String indexName = namedSeriesASTNode.getName().toLowerCase();
 			if (lookupData.commodityMap.containsKey(indexName)) {
 				final CommodityCurve commodityCurve = lookupData.commodityMap.get(indexName);
 				if (commodityCurve.isSetExpression()) {
@@ -379,9 +347,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			} else if (lookupData.currencyMap.containsKey(indexName)) {
 				result.add(lookupData.currencyMap.get(indexName));
 			}
-
 		} else {
-			throw new UnknownSeriesException("The price expression is in an invalid state.");
+			astNode.getChildren().forEach(c -> collectIndicies(c, lookupData, result));
 		}
 
 		return result;
@@ -403,6 +370,8 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 			return lookupData.commodityMap.get(name.toLowerCase());
 		case CURRENCY:
 			return lookupData.currencyMap.get(name.toLowerCase());
+		case PRICING_BASIS:
+			return lookupData.pricingBases.get(name.toLowerCase());
 		default:
 			break;
 

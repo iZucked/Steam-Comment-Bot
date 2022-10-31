@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.parser.astnodes;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,11 +21,18 @@ import com.mmxlabs.common.parser.series.ShiftFunctionConstructor;
  */
 public final class ShiftFunctionASTNode implements ASTNode {
 
+	public enum InputMode {
+		FUNCTION, NOTATION
+	}
+
 	private ASTNode toShift;
 	private final int shiftBy;
 
-	public ShiftFunctionASTNode(ASTNode toShift, Integer shiftBy) {
+	private final InputMode inputMode;
+
+	public ShiftFunctionASTNode(final ASTNode toShift, final Integer shiftBy, final InputMode inputMode) {
 		this.toShift = toShift;
+		this.inputMode = inputMode;
 		this.shiftBy = shiftBy.intValue();
 	}
 
@@ -42,7 +50,7 @@ public final class ShiftFunctionASTNode implements ASTNode {
 	}
 
 	@Override
-	public void replace(ASTNode original, ASTNode replacement) {
+	public void replace(final ASTNode original, final ASTNode replacement) {
 		if (toShift != original) {
 			throw new IllegalArgumentException();
 		}
@@ -51,11 +59,22 @@ public final class ShiftFunctionASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		return String.format("shift(%s, %d)", toShift.asString(), getShiftBy());
+		return switch (inputMode) {
+		case FUNCTION -> String.format("shift(%s, %d)", toShift.asString(), getShiftBy());
+		case NOTATION -> String.format("%s[m%d]", toShift.asString(), -getShiftBy());
+		};
 	}
 
 	@Override
-	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull SeriesParser seriesParser) {
+	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull final SeriesParser seriesParser) {
 		return new ShiftFunctionConstructor(seriesParser.getSeriesParserData(), toShift.asExpression(seriesParser), shiftBy);
+	}
+
+	public LocalDateTime mapTime(final LocalDateTime currentTime) {
+		return mapTime(currentTime, getShiftBy());
+	}
+
+	public static LocalDateTime mapTime(final LocalDateTime currentTime, final int shifyBy) {
+		return currentTime.minusMonths(shifyBy);
 	}
 }

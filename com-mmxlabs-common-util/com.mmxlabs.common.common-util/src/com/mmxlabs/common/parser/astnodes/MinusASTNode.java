@@ -41,7 +41,10 @@ public final class MinusASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		return String.format("-(%s)", expression.asString());
+		if (expression instanceof OperatorASTNode) {
+			return String.format("-(%s)", expression.asString());
+		}
+		return String.format("-%s", expression.asString());
 	}
 
 	@Override

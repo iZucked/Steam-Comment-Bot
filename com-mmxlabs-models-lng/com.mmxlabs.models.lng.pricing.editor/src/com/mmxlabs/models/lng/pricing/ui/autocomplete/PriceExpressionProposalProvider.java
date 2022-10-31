@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
@@ -97,7 +98,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 
 		final String contents = full_contents.substring(completeFrom, position);
-		final ArrayList<ContentProposal> list = new ArrayList<ContentProposal>();
+		final ArrayList<ContentProposal> list = new ArrayList<>();
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final List<AbstractYearMonthCurve> curves = new LinkedList<>();
 		for (final PriceIndexType type : types) {
@@ -123,6 +124,9 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 		for (final AbstractYearMonthCurve index : curves) {
 			final String proposal = index.getName();
+			if (proposal == null || proposal.isBlank()) {
+				continue;
+			}
 			String type = "";
 			if (index instanceof CurrencyCurve) {
 				type = " (currency conversion)";
@@ -201,7 +205,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "index,lower,upper,a1,b1,a2,b2,a3,b3)",
-						"S curve function. Select a different ax+b form depending on index value.\n  index < lower -> a1 * index + b1\n  index <= upper -> a2 * index + b2 \n  else ->  a3* index + b3",
+						"S curve function. Select a different a*index+b form depending on the index value.\n  index < lower -> a1 * index + b1\n  index <= upper -> a2 * index + b2 \n  else ->  a3* index + b3",
 						c.length()));
 			}
 		}
@@ -212,6 +216,14 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				list.add(new ContentProposal(c, proposal + "index,window,delay,period)", "Function to use the average of a month window with delay and application period", c.length()));
 			}
 		}
+		{
+			final String proposal = "TIER(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,lowerbound,lowexpr,upperbound,midexpr,highexpr)", "Tiered pricing function. lowerbound and upperbound define the conditions (< or <= to a number value) against the value of index to select which expression to use (lowexpr, midexpr or highexpr).\nFor example TIER(Brent, < 40, 5, <= 90, Brent[301], 10) will use Brent[301] if Brent is 40 or above and less than 90. Otherwise use the constants.", c.length()));
+			}
+		}
+
 		return list.toArray(new IContentProposal[list.size()]);
 
 	}
@@ -234,5 +246,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		} else {
 			this.scenarioModel = null;
 		}
+	}
+
+	@Override
+	public void setInputOject(EObject eObject) {
+
 	}
 }

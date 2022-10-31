@@ -110,7 +110,7 @@ public class IndexConversionsTest {
 		final String expression = "?%HH";
 		@Nullable
 		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X, 10.0);
-		Assertions.assertEquals("(10.0)/(1.0%(HH))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("10.0/(1.0%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class IndexConversionsTest {
 		final String expression = "?%HH+5";
 		@Nullable
 		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
-		Assertions.assertEquals("((10.0)-(5))/(1.0%(HH))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("(10.0-5)/(1.0%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class IndexConversionsTest {
 		final String expression = "100%HH+?";
 		@Nullable
 		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
-		Assertions.assertEquals("(10.0)-(100%(HH))", IndexConversion.getExpression(testGraphRearrangement));
+		Assertions.assertEquals("10.0-(100%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class IndexConversionsTest {
 		final ASTNode markedUpNode = getParentMarkedUpNode(expression);
 		final String rearrangedExpression = IndexConversion.getExpression(markedUpNode);
 		System.out.println(rearrangedExpression);
-		Assertions.assertEquals("(115%(HH))+(5)", rearrangedExpression);
+		Assertions.assertEquals("(115%HH)+5", rearrangedExpression);
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class IndexConversionsTest {
 		final String expression = "?%HH+3";
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assertions.assertEquals("((10.0)-(3))/(1.0%(HH))", rearrangedExpression);
+		Assertions.assertEquals("(10.0-3)/(1.0%HH)", rearrangedExpression);
 		final double parseExpression = parseExpression(rearrangedExpression);
 		Assertions.assertEquals(140, parseExpression, 0.0001);
 	}
@@ -153,7 +153,7 @@ public class IndexConversionsTest {
 		final String expression = "100%(HH*FX_EURO_to_USD*mwh_to_mmbtu)+?";
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
-		Assertions.assertEquals("(10.0)-(100%(((HH)*(FX_EURO_to_USD))*(mwh_to_mmbtu)))", rearrangedExpression);
+		Assertions.assertEquals("10.0-(100%((HH*FX_EURO_to_USD)*mwh_to_mmbtu))", rearrangedExpression);
 		System.out.println(rearrangedExpression);
 		final double parseExpression = parseExpression(rearrangedExpression);
 		Assertions.assertEquals(8.37, parseExpression, 0.001);
@@ -165,7 +165,7 @@ public class IndexConversionsTest {
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.X_PLUS_C, 10);
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
 		System.out.println(rearrangedExpression);
-		Assertions.assertEquals("(10.0)-((1)*(HH))", rearrangedExpression);
+		Assertions.assertEquals("10.0-(1*HH)", rearrangedExpression);
 		final double parseExpression = parseExpression(rearrangedExpression);
 		Assertions.assertEquals(5.0, parseExpression, 0.001);
 	}

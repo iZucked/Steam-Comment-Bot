@@ -15,38 +15,43 @@ import com.mmxlabs.common.parser.series.SCurveFunctionConstructor;
 import com.mmxlabs.common.parser.series.SeriesParser;
 
 public final class SCurveFunctionASTNode implements ASTNode {
+
+	public enum ExprSelector {
+		LOW, MID, HIGH
+	}
+
 	private ASTNode base;
-	private final double firstThreshold;
-	private final double secondThreshold;
+	private final Number firstThreshold;
+	private final Number secondThreshold;
 	private ASTNode lowerSeries;
 	private ASTNode middleSeries;
 	private ASTNode higherSeries;
-	private double a1;
-	private double b1;
-	private double a2;
-	private double b2;
-	private double a3;
-	private double b3;
+	private final Number a1;
+	private final Number b1;
+	private final Number a2;
+	private final Number b2;
+	private final Number a3;
+	private final Number b3;
 
 	public SCurveFunctionASTNode(final ASTNode base, final Number lowerThan, final Number higherThan, final Number a1, final Number b1, final Number a2, final Number b2, final Number a3,
 			final Number b3) {
 
 		this.base = base;
-		this.firstThreshold = lowerThan.doubleValue();
-		this.secondThreshold = higherThan.doubleValue();
-		this.a1 = a1.doubleValue();
-		this.b1 = b1.doubleValue();
-		this.a2 = a2.doubleValue();
-		this.b2 = b2.doubleValue();
-		this.a3 = a3.doubleValue();
-		this.b3 = b3.doubleValue();
+		this.firstThreshold = lowerThan;
+		this.secondThreshold = higherThan;
+		this.a1 = a1;
+		this.b1 = b1;
+		this.a2 = a2;
+		this.b2 = b2;
+		this.a3 = a3;
+		this.b3 = b3;
 		this.lowerSeries = makeExpression(base, a1.doubleValue(), b1.doubleValue());
 		this.middleSeries = makeExpression(base, a2.doubleValue(), b2.doubleValue());
 		this.higherSeries = makeExpression(base, a3.doubleValue(), b3.doubleValue());
 	}
 
-	private ASTNode makeExpression(ASTNode base, double a, double b) {
-		return new OperatorASTNode(new OperatorASTNode(base, new ConstantASTNode(a), Operator.TIMES), new ConstantASTNode(b), Operator.PLUS);
+	private ASTNode makeExpression(final ASTNode base, final double a, final double b) {
+		return new OperatorASTNode(new OperatorASTNode(base, Operator.TIMES, new ConstantASTNode(a)), Operator.PLUS, new ConstantASTNode(b));
 	}
 
 	public ASTNode getBase() {
@@ -54,11 +59,11 @@ public final class SCurveFunctionASTNode implements ASTNode {
 	}
 
 	public double getFirstThreshold() {
-		return firstThreshold;
+		return firstThreshold.doubleValue();
 	}
 
 	public double getSecondThreshold() {
-		return secondThreshold;
+		return secondThreshold.doubleValue();
 	}
 
 	public ASTNode getLowerSeries() {
@@ -79,7 +84,7 @@ public final class SCurveFunctionASTNode implements ASTNode {
 	}
 
 	@Override
-	public void replace(ASTNode original, ASTNode replacement) {
+	public void replace(final ASTNode original, final ASTNode replacement) {
 		if (base == original) {
 			base = replacement;
 		} else if (lowerSeries == original) {
@@ -95,14 +100,25 @@ public final class SCurveFunctionASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		return String.format("S(%s, %s,%s, %f, %f, %f, %f, %f, %f)", base.asString(), firstThreshold, secondThreshold, a1, b1, a2, b2, a3, b3);
+		return String.format("S(%s, %s, %s, %s, %s, %s, %s, %s, %s)", base.asString(), firstThreshold, secondThreshold, a1, b1, a2, b2, a3, b3);
 	}
 
 	@Override
-	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull SeriesParser seriesParser) {
+	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull final SeriesParser seriesParser) {
 
 		return new SCurveFunctionConstructor(base.asExpression(seriesParser), //
-				firstThreshold, secondThreshold, //
+				firstThreshold.doubleValue(), secondThreshold.doubleValue(), //
 				lowerSeries.asExpression(seriesParser), middleSeries.asExpression(seriesParser), higherSeries.asExpression(seriesParser));
+	}
+
+	public static ExprSelector select(final double baseValue, final double lowCheck, final double midCheck) {
+
+		if (baseValue < lowCheck) {
+			return ExprSelector.LOW;
+		} else if (baseValue <= midCheck) {
+			return ExprSelector.MID;
+		} else {
+			return ExprSelector.HIGH;
+		}
 	}
 }

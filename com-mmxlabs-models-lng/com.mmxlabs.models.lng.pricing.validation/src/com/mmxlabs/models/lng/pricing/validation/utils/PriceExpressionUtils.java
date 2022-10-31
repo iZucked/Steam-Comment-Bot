@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -97,12 +96,12 @@ public class PriceExpressionUtils {
 	}
 
 	// Pattern to match invalid characters
-	private final @NonNull static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
+	private static final @NonNull Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()\\[\\]]#;=<>)");
 
 	// Pattern to detect use of SHIFT function.
-	private final @NonNull static Pattern shiftDetectPattern = Pattern.compile(".*SHIFT\\p{Space}*\\(.*", Pattern.CASE_INSENSITIVE);
+	private static final @NonNull Pattern shiftDetectPattern = Pattern.compile(".*SHIFT\\p{Space}*\\(.*", Pattern.CASE_INSENSITIVE);
 
-	private final @NonNull static Pattern shiftUsePattern = Pattern.compile("SHIFT\\p{Space}*\\(\\p{Space}*[a-z][a-z0-9_]*\\p{Space}*,\\p{Space}*-?[0-9]+\\p{Space}*\\)", Pattern.CASE_INSENSITIVE);
+	private static final @NonNull Pattern shiftUsePattern = Pattern.compile("SHIFT\\p{Space}*\\(\\p{Space}*[a-z][a-z0-9_]*\\p{Space}*,\\p{Space}*-?[0-9]+\\p{Space}*\\)", Pattern.CASE_INSENSITIVE);
 
 	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
 			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, final Pair<EObject, EStructuralFeature>... otherFeatures) {
@@ -438,10 +437,7 @@ public class PriceExpressionUtils {
 	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
 			final List<IStatus> failures) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		final List<Pair<AbstractYearMonthCurve, LocalDate>> linkedCurvesAndDate = marketCurveProvider.getLinkedCurvesAndDate(priceExpression, pricingDate);
-
-		final Map<AbstractYearMonthCurve, LocalDate> result1 = linkedCurvesAndDate.stream()
-				.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond, (oldValue, newValue) -> (oldValue.isBefore(newValue) ? oldValue : newValue)));
+		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, pricingDate);
 
 		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
 			final AbstractYearMonthCurve index = e.getKey();

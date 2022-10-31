@@ -50,6 +50,14 @@ public final class ASTValidator {
 				baseList.add(new Pair<>(node, "The first threshold should be strictly lower than the second one"));
 			}
 			return baseList;
+		} else if (node instanceof final TierFunctionASTNode sCurveFunctionASTNode) {
+			List<Pair<ASTNode, String>> baseList = validate(sCurveFunctionASTNode.getTarget());
+			final double firstThreshold = sCurveFunctionASTNode.getLow().doubleValue();
+			final double secondThreshold = sCurveFunctionASTNode.getMid().doubleValue();
+			if (firstThreshold >= secondThreshold) {
+				baseList.add(new Pair<>(node, "The first threshold should be strictly lower than the second one"));
+			}
+			return baseList;
 		} else if (node instanceof final ShiftFunctionASTNode shiftFunctionASTNode) {
 			List<Pair<ASTNode, String>> shiftedExpressionList = validate(shiftFunctionASTNode.getToShift());
 			return shiftedExpressionList;

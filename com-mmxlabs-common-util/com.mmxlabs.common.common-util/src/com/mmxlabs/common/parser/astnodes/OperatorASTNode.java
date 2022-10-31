@@ -20,10 +20,10 @@ public final class OperatorASTNode implements ASTNode {
 	private ASTNode rhs;
 	private final Operator operator;
 
-	public OperatorASTNode(final ASTNode lhs, final ASTNode rhs, final Operator operator) {
+	public OperatorASTNode(final ASTNode lhs, final Operator operator, final ASTNode rhs) {
 		this.lhs = lhs;
-		this.rhs = rhs;
 		this.operator = operator;
+		this.rhs = rhs;
 	}
 
 	public ASTNode getLHS() {
@@ -56,15 +56,18 @@ public final class OperatorASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		if (operator == Operator.PERCENT) {
-			// LHS should be a constant or ?
-			return String.format("%s%s(%s)", lhs.asString(), operator.asString(), rhs.asString());
-		}
-		return String.format("(%s)%s(%s)", lhs.asString(), operator.asString(), rhs.asString());
+		return String.format("%s%s%s", wrap(lhs), operator.asString(), wrap(rhs));
 	}
 
 	@Override
 	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull final SeriesParser seriesParser) {
 		return new SeriesOperatorExpression(operator.asChar(), lhs.asExpression(seriesParser), rhs.asExpression(seriesParser));
+	}
+
+	private String wrap(ASTNode node) {
+		if (node instanceof OperatorASTNode) {
+			return String.format("(%s)", node.asString());
+		}
+		return node.asString();
 	}
 }

@@ -63,8 +63,8 @@ public class AbstractYearMonthCurveDetailComposite extends DefaultDetailComposit
 				}
 
 				final Object data = super.createEditorLayoutData(root, value, editor, control);
-				if (data instanceof GridData) {
-					((GridData) data).horizontalSpan = 3;
+				if (data instanceof GridData gd) {
+					gd.horizontalSpan = 3;
 				}
 				return data;
 			}

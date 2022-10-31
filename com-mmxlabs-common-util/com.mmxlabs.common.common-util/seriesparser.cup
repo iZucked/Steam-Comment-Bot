@@ -1,6 +1,7 @@
 /* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
 import java_cup.runtime.*;
 import java.util.*;
+import java.time.*;
 import com.mmxlabs.common.parser.astnodes.*;
 import com.mmxlabs.common.parser.series.*;
 
@@ -20,6 +21,8 @@ parser code {:
     // Error capturing
     public List<Symbol> errors = new LinkedList<>();
 	public void syntax_error(Symbol s){	errors.add(s); }
+	
+	private Map<String, ASTNode> userVariables = new HashMap<>();
     
 :}
 
@@ -28,17 +31,29 @@ parser code {:
 scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, COMMA, PERCENT, QUESTION;
-terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, VOLUMETIERM3, VOLUMETIERMMBTU;
+terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, LBRACKET, RBRACKET, COMMA, PERCENT, QUESTION;
+terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, VOLUMETIERM3, VOLUMETIERMMBTU, TIER;
+terminal            SEMICOLON, EQUALS;
+terminal ComparisonOperators    LT, LTE, GT, GTE;
 
+terminal Integer M;
+terminal Month MONTH;
 terminal Integer    INTEGER;
 terminal Double    FLOAT;
 terminal ASTNode    SERIES;       
 terminal String NAMED_ELEMENT;
+terminal String VAR;
+
+
 
 /* Non terminals */
-non terminal ASTNode    expr;      // used to store evaluated subexpressions
+non terminal ASTNode  full_expr, expr;  // used to store evaluated subexpressions
+non terminal ASTNode  stmt;             // used to store evaluated subexpressions
+non terminal          stmt_list;        // used to store evaluated subexpressions
+
 non terminal Number NUMBER;
+non terminal ComparisonOperators LTOPS;
+
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -49,31 +64,64 @@ precedence left UPLUS;
 precedence left UMINUS;
 precedence left INTEGER;
 precedence left FLOAT;
+precedence left LBRACKET;
+
 
 /* The grammar rules */
-start with expr;
+start with full_expr;
 
+
+
+full_expr       ::= expr:e {: RESULT =e;       :}
+            | stmt_list SEMICOLON expr:e {: RESULT =e;       :}
+;
+stmt_list    ::= stmt | stmt_list SEMICOLON stmt
+           
+;
+
+stmt        ::= VAR:n EQUALS expr:e  {: userVariables.put(n,e);  :}
+         ;
+ 
+LTOPS ::= LT:n {: RESULT = n; :} | LTE:n {: RESULT = n; :} ;
 NUMBER ::= INTEGER:n {: RESULT = n; :} | FLOAT:n {: RESULT = n; :} ;
 
-expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs, rhs, Operator.PLUS);       :}
-             | expr:lhs MINUS expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.MINUS);      :}
-             | expr:lhs TIMES expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.TIMES);       :}
-             | expr:lhs DIVIDE expr:rhs        {: RESULT = new OperatorASTNode(lhs, rhs, Operator.DIVIDE);       :}
+expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs, Operator.PLUS, rhs);       :}
+             | expr:lhs MINUS expr:rhs        {: RESULT = new OperatorASTNode(lhs,Operator.MINUS, rhs);      :}
+             | expr:lhs TIMES expr:rhs        {: RESULT = new OperatorASTNode(lhs,  Operator.TIMES, rhs);       :}
+             | expr:lhs DIVIDE expr:rhs        {: RESULT = new OperatorASTNode(lhs, Operator.DIVIDE, rhs);       :}
              | CAP LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.CAP);       :}
              | FLOOR LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.FLOOR);       :}
              | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.MIN);       :}
              | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionASTNode(e1, e2, FunctionType.MAX);       :}
-             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), rhs, Operator.PERCENT); :}
-             | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), rhs, Operator.PERCENT); :}
-             | QUESTION:lhs PERCENT expr:rhs               {: RESULT = new OperatorASTNode(new BreakEvenASTNode(), rhs, Operator.PERCENT); :}  
+             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs),Operator.PERCENT, rhs); :}
              %prec PERCENT
-             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, i1);       :}
-             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, -i1);       :}
-             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3); :}
+             
+             | VAR:v PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(userVariables.get(v),Operator.PERCENT, rhs); :}
+             %prec PERCENT
+             
+             | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), Operator.PERCENT, rhs); :}
+             %prec PERCENT
+             
+             | QUESTION:lhs PERCENT expr:rhs               {: RESULT = new OperatorASTNode(new BreakEvenASTNode(), Operator.PERCENT, rhs); :}  
+             %prec PERCENT
+             
+             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, i1, ShiftFunctionASTNode.InputMode.FUNCTION);       :}
+             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionASTNode(e1, -i1, ShiftFunctionASTNode.InputMode.FUNCTION);       :}
+
+             | expr:e1 LBRACKET M:i1 RBRACKET  {: RESULT = new ShiftFunctionASTNode(e1, -i1, ShiftFunctionASTNode.InputMode.NOTATION);       :}
+
+
+             | expr:e1 LBRACKET MONTH:m1 RBRACKET       {: RESULT = new MonthFunctionASTNode(e1, m1);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.FUNCTION); :}
+             | expr:lhs LBRACKET INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RBRACKET       {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.NOTATION_WITH_COMMA);       :}
+             | expr:lhs LBRACKET INTEGER:a1 RBRACKET       {: RESULT =  new DatedAvgFunctionASTNode(lhs, a1, DatedAvgFunctionASTNode.InputMode.NOTATION_WITHOUT_COMMA);       :}
              | VOLUMETIERM3 LPAREN expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN  {: RESULT =  new VolumeTierASTNode(true, low, n1, high); :}
              | VOLUMETIERMMBTU LPAREN expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN  {: RESULT =  new VolumeTierASTNode(false, low, n1, high); :}             
              | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
              | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
+             
+             | TIER LPAREN expr:target COMMA LTOPS:lowOp NUMBER:low COMMA expr:lowValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:midValue COMMA expr:highValue RPAREN {: RESULT =  new TierFunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}             
+             
              | MINUS expr:e                 {: RESULT = new MinusASTNode(e);        :}
   	     %prec UMINUS
              | PLUS expr:e                 {: RESULT = e;         :}
@@ -84,5 +132,6 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT = new OperatorASTNode(lhs
        | FLOAT:n	                     {: RESULT =  new ConstantASTNode(n);           :}
        | INTEGER:n	                     {: RESULT =  new ConstantASTNode(n);           :}
        | QUESTION:n	                     {: RESULT =  new BreakEvenASTNode();           :}
+       | VAR:v	                         {: RESULT = userVariables.get(v);           :}       
              ;     
              

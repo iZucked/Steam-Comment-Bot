@@ -11,8 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import javax.print.DocFlavor.STRING;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jdt.annotation.NonNull;
@@ -94,6 +93,15 @@ public class PriceIndexUtils {
 				int b = plusMonths.getMonthValue();
 
 				return m;
+			}
+
+			@Override
+			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+
+				final LocalDateTime ldt = dateTimeZero.plusHours(point);
+				final LocalDateTime mappedTime = mapFunction.apply(ldt);
+
+				return Hours.between(dateTimeZero, mappedTime);
 			}
 		});
 		final SeriesParser indices = new SeriesParser(seriesParserData);
