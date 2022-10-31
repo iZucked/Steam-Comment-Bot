@@ -36,7 +36,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.common.common-util,
  com.mmxlabs.scenario.service.util,
  com.mmxlabs.models.lng.pricing,
- com.mmxlabs.models.lng.port.editor
+ com.mmxlabs.models.lng.port.editor,
+ org.eclipse.e4.core.services,
+ org.eclipse.osgi.services
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
