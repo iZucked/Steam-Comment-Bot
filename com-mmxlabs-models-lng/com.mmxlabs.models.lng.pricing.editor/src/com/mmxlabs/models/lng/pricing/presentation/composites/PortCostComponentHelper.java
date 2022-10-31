@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -130,7 +130,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 					}
 
 					@Override
-					public EStructuralFeature getFeature() {
+					public ETypedElement getFeature() {
 						return numberEditor.getFeature();
 					}
 

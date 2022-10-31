@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -23,7 +23,7 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 
 public class PanamaDirectionInlineEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement feature) {
 
 		ArrayList<Object> objectsList = new ArrayList<>();
 		for (final CanalEntry canalEntry : CanalEntry.values()) {

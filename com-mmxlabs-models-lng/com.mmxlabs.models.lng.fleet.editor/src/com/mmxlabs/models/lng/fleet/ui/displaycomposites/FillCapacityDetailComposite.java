@@ -39,7 +39,7 @@ public class FillCapacityDetailComposite extends DefaultDetailComposite implemen
 			final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 			
 			// Special case for fill capacity.
-			final EStructuralFeature feature = editor.getFeature();
+			final var feature = editor.getFeature();
 			if (feature == FleetPackage.Literals.VESSEL__FILL_CAPACITY || editor.getProxy() instanceof VesselFillVolumeInlineEditor) {
 				if (editor.getProxy() instanceof VesselFillVolumeInlineEditor) {
 					final Label label = editor.getLabel();

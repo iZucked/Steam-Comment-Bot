@@ -32,7 +32,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage
  * @generated
  */
-public class LNGScenarioSwitch<T> extends Switch<T> {
+public class LNGScenarioSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

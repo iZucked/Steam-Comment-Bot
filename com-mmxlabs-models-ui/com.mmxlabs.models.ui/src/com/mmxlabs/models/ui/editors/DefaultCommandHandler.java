@@ -6,7 +6,7 @@ package com.mmxlabs.models.ui.editors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -46,7 +46,7 @@ public class DefaultCommandHandler implements ICommandHandler {
 	}
 
 	@Override
-	public void handleCommand(@NonNull Command command, @Nullable EObject target, @Nullable EStructuralFeature feature) {
+	public void handleCommand(@NonNull Command command, @Nullable EObject target, @Nullable ETypedElement typedElement) {
 		if (command.canExecute()) {
 			editingDomain.getCommandStack().execute(command);
 		} else {

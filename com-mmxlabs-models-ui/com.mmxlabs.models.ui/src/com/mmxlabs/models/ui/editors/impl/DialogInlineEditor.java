@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,7 +21,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public abstract class DialogInlineEditor extends UnsettableInlineEditor {
-	public DialogInlineEditor(final EStructuralFeature feature) {
+	public DialogInlineEditor(final ETypedElement feature) {
 		super(feature);
 	}
 

@@ -13,6 +13,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
@@ -41,10 +42,10 @@ class ExpandableSet implements DisposeListener {
 
 	ExpandableComposite ec;
 	Composite client;
-	List<EStructuralFeature[]> featureLines;
+	List<ETypedElement[]> featureLines;
 	Label textClient;
 	String baseTitle;
-	Set<EStructuralFeature> headerFeatures;
+	Set<ETypedElement> headerFeatures;
 	EContentAdapter titleListener;
 	HashSet<EObject> titleEObjects;
 	private final ExpansionListener expansionListener;
@@ -56,7 +57,7 @@ class ExpandableSet implements DisposeListener {
 		expansionListener = el;
 	}
 
-	void setFeatures(final List<EStructuralFeature[]> f, final Set<EStructuralFeature> titleF) {
+	void setFeatures(final List<ETypedElement[]> f, final Set<ETypedElement> titleF) {
 		headerFeatures = titleF;
 		featureLines = f;
 		titleListener = headerFeatures == null ? null : new EContentAdapter() {
@@ -71,13 +72,13 @@ class ExpandableSet implements DisposeListener {
 	}
 
 	void create(final IDialogEditingContext dialogContext, final Composite contentComposite, final MMXRootObject root, final EObject object,
-			final Map<EStructuralFeature, IInlineEditor> feature2Editor, final EMFDataBindingContext dbc, final IDisplayCompositeLayoutProvider lp, final FormToolkit toolkit) {
+			final Map<ETypedElement, IInlineEditor> feature2Editor, final EMFDataBindingContext dbc, final IDisplayCompositeLayoutProvider lp, final FormToolkit toolkit) {
 		ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		final Composite c = createExpandable(ec, toolkit);
 		ec.addDisposeListener(this);
 		// feature editors
 		boolean visible = false;
-		for (final EStructuralFeature[] fs : featureLines) {
+		for (final ETypedElement[] fs : featureLines) {
 			EditorControlFactory.makeControls(dialogContext, root, object, c, fs, feature2Editor, dbc, lp, toolkit);
 			visible = true;
 		}

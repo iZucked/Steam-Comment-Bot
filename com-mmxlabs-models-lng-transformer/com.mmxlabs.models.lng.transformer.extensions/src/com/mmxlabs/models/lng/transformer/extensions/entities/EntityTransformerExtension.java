@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -73,25 +73,22 @@ public class EntityTransformerExtension implements ITransformerExtension, ISlotT
 		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
 			IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(e, IEntity.class);
-			if (e.getShippingBook() instanceof SimpleEntityBook) {
-				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getShippingBook();
-				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
+			if (e.getShippingBook() instanceof SimpleEntityBook simpleBook) {
+				final ICurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
 				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
 				entityProvider.setEntityBook(entity, EntityBookType.Shipping, book);
 			}
-			if (e.getTradingBook() instanceof SimpleEntityBook) {
-				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getTradingBook();
-				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
+			if (e.getTradingBook() instanceof SimpleEntityBook simpleBook) {
+				final ICurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
 				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Trading, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
 				entityProvider.setEntityBook(entity, EntityBookType.Trading, book);
 			}
-			if (e.getUpstreamBook() instanceof SimpleEntityBook) {
-				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getUpstreamBook();
-				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
+			if (e.getUpstreamBook() instanceof SimpleEntityBook simpleBook) {
+				final ICurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
 				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Upstream, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);

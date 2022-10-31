@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
@@ -29,7 +29,7 @@ public class MonthInlineEditor extends ValueListInlineEditor<Integer> {
 	 * @param feature
 	 * @param VALUE
 	 */
-	public MonthInlineEditor(EStructuralFeature feature) {
+	public MonthInlineEditor(ETypedElement feature) {
 		super(feature, VALUE);
 	}
 

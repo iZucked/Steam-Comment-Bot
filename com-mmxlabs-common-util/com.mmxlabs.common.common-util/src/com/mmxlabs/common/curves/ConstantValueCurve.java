@@ -5,7 +5,8 @@
 package com.mmxlabs.common.curves;
 
 /**
- * Implementation of {@link ICurve} which returns a single constant value regardless of the input value.
+ * Implementation of {@link ICurve} which returns a single constant value
+ * regardless of the input value.
  * 
  * @author Simon Goodall
  * 

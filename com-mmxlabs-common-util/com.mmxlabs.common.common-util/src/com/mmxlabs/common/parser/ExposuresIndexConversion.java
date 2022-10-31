@@ -12,16 +12,15 @@ import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.nodes.AbstractMarkedUpNode;
-import com.mmxlabs.common.parser.nodes.BreakevenNode;
-import com.mmxlabs.common.parser.nodes.CommodityNode;
-import com.mmxlabs.common.parser.nodes.ConstantNode;
-import com.mmxlabs.common.parser.nodes.ConversionNode;
-import com.mmxlabs.common.parser.nodes.CurrencyNode;
-import com.mmxlabs.common.parser.nodes.MarkedUpNode;
-import com.mmxlabs.common.parser.nodes.OperatorNode;
-import com.mmxlabs.common.parser.nodes.ShiftNode;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.BreakEvenASTNode;
+import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
+import com.mmxlabs.common.parser.astnodes.Operator;
+import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
+import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 
 /**
  * Utility class holding methods used to convert a breakeven price from e.g.
@@ -40,36 +39,35 @@ public class ExposuresIndexConversion {
 	}
 
 	@Nullable
-	public static Form getForm(final MarkedUpNode parent) {
-		if (!(parent instanceof final OperatorNode operator)) {
+	public static Form getForm(final ASTNode parent) {
+		if (!(parent instanceof final OperatorASTNode operator)) {
 			return null;
 		} else {
-			@NonNull
-			final String type = operator.getOperator();
-			if (type.equals("+")) {
-				final Pair<MarkedUpNode, MarkedUpNode> operatorChildren = getOperatorChildren(operator);
+			final var type = operator.getOperator();
+			if (type == Operator.PLUS) {
+				final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operator);
 				if (operatorChildren != null) {
-					final MarkedUpNode constant = operatorChildren.getFirst();
-					final MarkedUpNode other = operatorChildren.getSecond();
+					final ASTNode constant = operatorChildren.getFirst();
+					final ASTNode other = operatorChildren.getSecond();
 					if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
 						return Form.X_PLUS_C;
 					}
-					if (other instanceof final OperatorNode otherOperator) {
-						final Pair<MarkedUpNode, MarkedUpNode> otherOperatorChildren = getOperatorChildren(otherOperator);
+					if (other instanceof final OperatorASTNode otherOperator) {
+						final Pair<ASTNode, ASTNode> otherOperatorChildren = getOperatorChildren(otherOperator);
 						if (otherOperatorChildren != null) {
-							final MarkedUpNode nextConstant = operatorChildren.getFirst();
-							final MarkedUpNode nextOther = otherOperatorChildren.getSecond();
-							if (nextConstant != null && nextOther != null && (containsCommodity(nextOther) || containsShift(nextOther))) {
+							final ASTNode nextConstant = operatorChildren.getFirst();
+							final ASTNode nextOther = otherOperatorChildren.getSecond();
+							if (!(nextOther instanceof OperatorASTNode) && nextConstant != null && nextOther != null && (containsCommodity(nextOther) || containsShift(nextOther))) {
 								return Form.M_X_PLUS_C;
 							}
 						}
 					}
 				}
-			} else if (type.equals("*") || type.equals("%")) {
-				final Pair<MarkedUpNode, MarkedUpNode> operatorChildren = getOperatorChildren(operator);
+			} else if (type == Operator.TIMES || type == Operator.PERCENT) {
+				final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operator);
 				if (operatorChildren != null) {
-					final MarkedUpNode constant = operatorChildren.getFirst();
-					final MarkedUpNode other = operatorChildren.getSecond();
+					final ASTNode constant = operatorChildren.getFirst();
+					final ASTNode other = operatorChildren.getSecond();
 					if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
 						return Form.M_X;
 					}
@@ -80,24 +78,22 @@ public class ExposuresIndexConversion {
 	}
 
 	@Nullable
-	public static MarkedUpNode rearrangeGraph(final double price, final MarkedUpNode parent, Form form) {
+	public static ASTNode rearrangeGraph(final double price, final ASTNode parent, Form form) {
 		if (form == Form.X_PLUS_C) {
 			// Convert to a different form
 			processCommodityNode(parent);
 			form = getForm(parent);
 		}
-		final ConstantNode breakEvenPriceNode = new ConstantNode(price);
+		final ConstantASTNode breakEvenPriceNode = new ConstantASTNode(price);
 		final BreakEvenType breakEvenType = getBreakEvenType(parent);
 		if (form == Form.M_X && breakEvenType == BreakEvenType.COEFFICIENT) {
-			if (parent instanceof final OperatorNode operatorNode) {
-				final String operator = operatorNode.getOperator();
-				if (operator.equals("*") || operator.equals("%")) {
-					final Pair<MarkedUpNode, MarkedUpNode> operatorChildren = getOperatorChildren(operatorNode);
-					final MarkedUpNode constant = operatorChildren.getFirst();
+			if (parent instanceof final OperatorASTNode operatorNode) {
+				final var operator = operatorNode.getOperator();
+				if (operator == Operator.TIMES || operator == Operator.PERCENT) {
+					final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operatorNode);
+					final ASTNode constant = operatorChildren.getFirst();
 					replaceBreakEvenWithConstant(parent, constant);
-					final OperatorNode divider = new OperatorNode("/");
-					divider.addChildNode(breakEvenPriceNode);
-					divider.addChildNode(parent);
+					final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, parent, Operator.DIVIDE);
 					return divider;
 				}
 			}
@@ -105,18 +101,16 @@ public class ExposuresIndexConversion {
 		if (form == Form.M_X_PLUS_C) {
 
 			if (breakEvenType == BreakEvenType.INTERCEPT) {
-				if (parent instanceof final OperatorNode operatorNode) {
-					final String operator = operatorNode.getOperator();
-					if (operator.equals("+")) {
-						final Pair<MarkedUpNode, MarkedUpNode> operatorChildren = getOperatorChildren(operatorNode);
-						final MarkedUpNode indexOperator = operatorChildren.getSecond();
-						if (indexOperator instanceof OperatorNode) {
-							final MarkedUpNode indexOperator_i = operatorChildren.getSecond();
+				if (parent instanceof final OperatorASTNode operatorNode) {
+					final var operator = operatorNode.getOperator();
+					if (operator == Operator.PLUS) {
+						final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operatorNode);
+						final ASTNode indexOperator = operatorChildren.getSecond();
+						if (indexOperator instanceof OperatorASTNode) {
+							final ASTNode indexOperator_i = operatorChildren.getSecond();
 
 							if (indexOperator_i != null && containsCommodity(indexOperator_i)) {
-								final OperatorNode divider = new OperatorNode("-");
-								divider.addChildNode(breakEvenPriceNode);
-								divider.addChildNode(indexOperator_i);
+								final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, indexOperator_i, Operator.MINUS);
 								return divider;
 							}
 						}
@@ -124,28 +118,24 @@ public class ExposuresIndexConversion {
 				}
 			}
 			if (breakEvenType == BreakEvenType.COEFFICIENT) {
-				if (parent instanceof final OperatorNode operatorNode) {
-					final String operator = operatorNode.getOperator();
-					if (operator.equals("+")) {
-						final Pair<MarkedUpNode, MarkedUpNode> operatorChildren = getOperatorChildren(operatorNode);
-						final MarkedUpNode constant = operatorChildren.getFirst();
-						final MarkedUpNode indexOperator = operatorChildren.getSecond();
+				if (parent instanceof final OperatorASTNode operatorNode) {
+					final var operator = operatorNode.getOperator();
+					if (operator == Operator.PLUS) {
+						final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operatorNode);
+						final ASTNode constant = operatorChildren.getFirst();
+						final ASTNode indexOperator = operatorChildren.getSecond();
 
 						// price nodes
-						final MarkedUpNode minus = new OperatorNode("-");
-						minus.addChildNode(breakEvenPriceNode);
-						minus.addChildNode(constant);
-						if (indexOperator instanceof final OperatorNode indexOperatorNode) {
-							final Pair<MarkedUpNode, MarkedUpNode> indexOperatorChildren = getOperatorChildren(indexOperatorNode);
-							final MarkedUpNode indexOperator_c = indexOperatorChildren.getFirst();
-							final MarkedUpNode indexOperator_i = indexOperatorChildren.getSecond();
+						final OperatorASTNode minus = new OperatorASTNode(breakEvenPriceNode, constant, Operator.MINUS);
+						if (indexOperator instanceof final OperatorASTNode indexOperatorNode) {
+							final Pair<ASTNode, ASTNode> indexOperatorChildren = getOperatorChildren(indexOperatorNode);
+							final ASTNode indexOperator_c = indexOperatorChildren.getFirst();
+							final ASTNode indexOperator_i = indexOperatorChildren.getSecond();
 
 							if (indexOperator_i != null && containsCommodity(indexOperator_i)) {
 								// create new operator node
 								replaceBreakEvenWithConstant(indexOperator, indexOperator_c);
-								final OperatorNode divider = new OperatorNode("/");
-								divider.addChildNode(minus);
-								divider.addChildNode(indexOperator);
+								final OperatorASTNode divider = new OperatorASTNode(minus, indexOperator, Operator.DIVIDE);
 								return divider;
 							}
 						}
@@ -156,48 +146,42 @@ public class ExposuresIndexConversion {
 		return null;
 	}
 
-	private static void processCommodityNode(final MarkedUpNode node) {
-		for (int i = 0; i < node.getChildren().size(); i++) {
-			final MarkedUpNode child = node.getChildren().get(i);
-			if (child instanceof CommodityNode) {
-				final MarkedUpNode mult = new OperatorNode("*");
-				mult.addChildNode(new ConstantNode(1));
-				mult.addChildNode(child);
-				node.getChildren().set(i, mult);
+	private static void processCommodityNode(final ASTNode node) {
+		for (final ASTNode child : node.getChildren()) {
+			if (child instanceof CommoditySeriesASTNode) {
+				final ASTNode mult = new OperatorASTNode(new ConstantASTNode(1), child, Operator.TIMES);
+				node.replace(child, mult);
 			}
 			processCommodityNode(child);
 		}
 	}
 
-	private static void replaceBreakEvenWithConstant(final MarkedUpNode indexOperator, final MarkedUpNode indexOperator_c) {
-		if (indexOperator_c instanceof BreakevenNode) {
-			final int indexOf = indexOperator.getChildren().indexOf(indexOperator_c);
-			indexOperator.getChildren().remove(indexOf);
-			indexOperator.getChildren().add(indexOf, new ConstantNode(1.0));
+	private static void replaceBreakEvenWithConstant(final ASTNode indexOperator, final ASTNode indexOperator_c) {
+		if (indexOperator_c instanceof BreakEvenASTNode) {
+			indexOperator.replace(indexOperator_c, new ConstantASTNode(1.0));
 		}
 	}
 
-	public static BreakEvenType getBreakEvenType(final MarkedUpNode node) {
-		final MarkedUpNode findFirstParent = findFirstParent(node, BreakevenNode.class);
-		if (findFirstParent instanceof final OperatorNode operatorNode) {
-			@NonNull
-			final String type = operatorNode.getOperator();
-			if (type.equals("+")) {
+	public static BreakEvenType getBreakEvenType(final ASTNode node) {
+		final ASTNode findFirstParent = findFirstParent(node, BreakEvenASTNode.class);
+		if (findFirstParent instanceof final OperatorASTNode operatorNode) {
+			final var type = operatorNode.getOperator();
+			if (type == Operator.PLUS) {
 				return BreakEvenType.INTERCEPT;
-			} else if (type.equals("*") || type.equals("%")) {
+			} else if (type == Operator.TIMES || type == Operator.PERCENT) {
 				return BreakEvenType.COEFFICIENT;
 			}
 		}
 		return null;
 	}
 
-	public static <T extends AbstractMarkedUpNode> MarkedUpNode findFirstParent(final MarkedUpNode current, final Class<T> clazz) {
+	public static <T extends ASTNode> ASTNode findFirstParent(final ASTNode current, final Class<T> clazz) {
 		for (@NonNull
-		final MarkedUpNode markedUpNode : current.getChildren()) {
+		final ASTNode markedUpNode : current.getChildren()) {
 			if (clazz.isAssignableFrom(markedUpNode.getClass())) {
 				return current;
 			} else {
-				final MarkedUpNode parent = findFirstParent(markedUpNode, clazz);
+				final ASTNode parent = findFirstParent(markedUpNode, clazz);
 				if (parent != null) {
 					return parent;
 				}
@@ -206,88 +190,48 @@ public class ExposuresIndexConversion {
 		return null;
 	}
 
-	public static @Nullable Pair<MarkedUpNode, MarkedUpNode> getOperatorChildren(final OperatorNode node) {
-		final List<MarkedUpNode> children = node.getChildren();
-		if (children.size() == 2) {
-			final Optional<MarkedUpNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantNode || c instanceof BreakevenNode)).findFirst();
-			final MarkedUpNode constant = optionalConstant.isPresent() ? optionalConstant.get() : null;
-			final Optional<MarkedUpNode> optionalOther = children.stream().filter(c -> c != constant).findFirst();
-			final MarkedUpNode other = optionalOther.isPresent() ? optionalOther.get() : null;
-			return new Pair<>(constant, other);
-		}
-		return null;
+	public static @Nullable Pair<ASTNode, ASTNode> getOperatorChildren(final OperatorASTNode node) {
+		final List<ASTNode> children = Lists.newArrayList(node.getLHS(), node.getRHS());
+		final Optional<ASTNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantASTNode || c instanceof BreakEvenASTNode)).findFirst();
+		final ASTNode constant = optionalConstant.isPresent() ? optionalConstant.get() : null;
+		final Optional<ASTNode> optionalOther = children.stream().filter(c -> c != constant).findFirst();
+		final ASTNode other = optionalOther.isPresent() ? optionalOther.get() : null;
+		return new Pair<>(constant, other);
 	}
 
-	public static boolean containsCommodity(final MarkedUpNode node) {
-		return containsNodeOfType(node, CommodityNode.class);
+	public static boolean containsCommodity(final ASTNode node) {
+		return containsNodeOfType(node, CommoditySeriesASTNode.class);
 	}
 
-	public static boolean containsShift(final MarkedUpNode node) {
-		return containsNodeOfType(node, ShiftNode.class);
+	public static boolean containsShift(final ASTNode node) {
+		return containsNodeOfType(node, ShiftFunctionASTNode.class);
 	}
 
-	public static boolean containsConstant(final MarkedUpNode node) {
-		return containsNodeOfType(node, ConstantNode.class);
+	public static boolean containsConstant(final ASTNode node) {
+		return containsNodeOfType(node, ConstantASTNode.class);
 	}
 
-	public static boolean containsBreakeven(final MarkedUpNode node) {
-		return containsNodeOfType(node, BreakevenNode.class);
+	public static boolean containsBreakeven(final ASTNode node) {
+		return containsNodeOfType(node, BreakEvenASTNode.class);
 	}
 
-	private static <T extends AbstractMarkedUpNode> boolean containsNodeOfType(final MarkedUpNode node, final Class<T> clazz) {
+	private static <T extends ASTNode> boolean containsNodeOfType(final ASTNode node, final Class<T> clazz) {
 		final LinkedList<T> nodes = new LinkedList<>();
 		getNodesOfType(node, clazz, nodes);
 		return !nodes.isEmpty();
 	}
 
-	public static <T extends AbstractMarkedUpNode> void getNodesOfType(final MarkedUpNode node, final Class<T> clazz, final Collection<T> nodes) {
+	public static <T extends ASTNode> void getNodesOfType(final ASTNode node, final Class<T> clazz, final Collection<T> nodes) {
 		if (clazz.isAssignableFrom(node.getClass())) {
 			nodes.add((T) node);
 		}
 		for (@NonNull
-		final MarkedUpNode markedUpNode : node.getChildren()) {
+		final ASTNode markedUpNode : node.getChildren()) {
 			getNodesOfType(markedUpNode, clazz, nodes);
 		}
 	}
 
-	public static String getExpression(final MarkedUpNode node) {
-		String s = "";
-		if (node instanceof final ConstantNode constantNode) {
-			s = "" + constantNode.getConstant();
-		} else if (node instanceof final OperatorNode operatorNode) {
-			final StringBuilder builder = new StringBuilder();
-
-			final @NonNull String operator = operatorNode.getOperator();
-			for (int i = 0; i < node.getChildren().size(); i++) {
-				final @NonNull MarkedUpNode child = node.getChildren().get(i);
-				String extra = "";
-				if (i < node.getChildren().size() - 1) {
-					extra = "" + operator;
-				} else {
-					extra = "";
-				}
-				if ("%".equals(operator) && i == 0) {
-					String expression = getExpression(child);
-					if (expression.startsWith("(") && expression.endsWith(")")) {
-						expression = expression.substring(1, expression.length() - 1);
-					}
-					builder.append(expression + extra);
-				} else {
-					builder.append(getExpression(child) + extra);
-				}
-			}
-			s = builder.toString();
-		} else if (node instanceof final ShiftNode shiftNode) {
-			s = String.format("shift(%s, %s)", getExpression(shiftNode.getChild()), shiftNode.getMonths());
-		} else if (node instanceof final CommodityNode commodityNode) {
-			s = commodityNode.getName();
-		} else if (node instanceof final CurrencyNode currencyNode) {
-			s = currencyNode.getName();
-		} else if (node instanceof final ConversionNode conversionNode) {
-			s = conversionNode.getName();
-		} else if (node instanceof BreakevenNode) {
-			s = "?";
-		}
-		return String.format("(%s)", s);
+	public static String getExpression(final ASTNode node) {
+		return node.asString();
 	}
 }

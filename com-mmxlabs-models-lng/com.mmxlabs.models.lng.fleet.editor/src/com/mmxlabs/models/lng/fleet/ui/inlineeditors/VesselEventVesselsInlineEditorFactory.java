@@ -5,14 +5,14 @@
 package com.mmxlabs.models.lng.fleet.ui.inlineeditors;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
 public class VesselEventVesselsInlineEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement feature) {
 		return new VesselEventVesselsInlineEditor(feature);
 	}
 }

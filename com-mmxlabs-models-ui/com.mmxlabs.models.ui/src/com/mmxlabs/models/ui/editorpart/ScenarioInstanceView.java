@@ -10,10 +10,8 @@ import java.util.Stack;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.BasicNotifierImpl.EAdapterList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -43,9 +41,7 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
 import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
@@ -293,7 +289,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	final ICommandHandler commandHandler = new ICommandHandler() {
 
 		@Override
-		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+		public void handleCommand(final Command command, final EObject target, final ETypedElement typedElement) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
 

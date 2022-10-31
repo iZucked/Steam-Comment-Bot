@@ -84,6 +84,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -480,6 +481,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass originPortRepositioningFeeTermDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass transferRecordPNLDetailsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3270,6 +3278,96 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EClass getTransferRecordPNLDetails() {
+		return transferRecordPNLDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTransferRecordPNLDetails_TransferRecord() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTransferRecordPNLDetails_TransferPrice() {
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTransferRecordPNLDetails_FromEntity() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTransferRecordPNLDetails_FromEntityRevenue() {
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTransferRecordPNLDetails_FromEntityCost() {
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTransferRecordPNLDetails_ToEntity() {
+		return (EReference)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTransferRecordPNLDetails_ToEntityRevenue() {
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTransferRecordPNLDetails_ToEntityCost() {
+		return (EAttribute)transferRecordPNLDetailsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -3712,6 +3810,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		originPortRepositioningFeeTermDetailsEClass = createEClass(ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS);
 		createEAttribute(originPortRepositioningFeeTermDetailsEClass, ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT);
 
+		transferRecordPNLDetailsEClass = createEClass(TRANSFER_RECORD_PNL_DETAILS);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TRANSFER_RECORD);
+		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TRANSFER_PRICE);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY);
+		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_REVENUE);
+		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__FROM_ENTITY_COST);
+		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY);
+		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE);
+		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -3841,6 +3949,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		notionalJourneyDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyBallastBonusTermDetailsEClass.getESuperTypes().add(this.getNotionalJourneyDetails());
 		originPortRepositioningFeeTermDetailsEClass.getESuperTypes().add(this.getNotionalJourneyDetails());
+		transferRecordPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -4173,6 +4282,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(originPortRepositioningFeeTermDetailsEClass, OriginPortRepositioningFeeTermDetails.class, "OriginPortRepositioningFeeTermDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getOriginPortRepositioningFeeTermDetails_OriginPort(), ecorePackage.getEString(), "originPort", "", 1, 1, OriginPortRepositioningFeeTermDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(transferRecordPNLDetailsEClass, TransferRecordPNLDetails.class, "TransferRecordPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTransferRecordPNLDetails_TransferRecord(), theMMXCorePackage.getNamedObject(), null, "transferRecord", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecordPNLDetails_TransferPrice(), ecorePackage.getEDouble(), "transferPrice", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecordPNLDetails_FromEntity(), theCommercialPackage.getBaseLegalEntity(), null, "fromEntity", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecordPNLDetails_FromEntityRevenue(), ecorePackage.getEInt(), "fromEntityRevenue", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecordPNLDetails_FromEntityCost(), ecorePackage.getEInt(), "fromEntityCost", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferRecordPNLDetails_ToEntity(), theCommercialPackage.getBaseLegalEntity(), null, "toEntity", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecordPNLDetails_ToEntityRevenue(), ecorePackage.getEInt(), "toEntityRevenue", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecordPNLDetails_ToEntityCost(), ecorePackage.getEInt(), "toEntityCost", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");

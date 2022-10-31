@@ -126,6 +126,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorActi
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.GroupedSlotsDialog;
+import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -249,6 +250,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private CargoEditorMenuHelper menuHelper;
 
 	private final Image notesImage;
+	private final Image transferImage;
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -280,6 +282,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				ScenarioModelUtil.getCommercialModel(scenarioModel), Activator.getDefault().getModelFactoryRegistry());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
+		transferImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_TRANSFER);
 
 		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
 			if (p == null) {
@@ -1061,12 +1064,19 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
-
 					if (element instanceof final RowData rowDataItem) {
 						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof final LoadSlot ls) {
+							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) // 
+									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ls, getScenarioModel());
 							if (ls.getNotes() != null && !ls.getNotes().isEmpty()) {
+								if (slotTransferred) {
+									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+								}
 								return notesImage;
+							}
+							if (slotTransferred) {
+								return transferImage;
 							}
 						}
 					}
@@ -1249,8 +1259,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof DischargeSlot ds) {
 
+							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) // 
+									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ds, getScenarioModel());
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
+								if (slotTransferred) {
+									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+								}
 								return notesImage;
+							}
+							if (slotTransferred) {
+								return transferImage;
 							}
 						}
 					}

@@ -189,7 +189,7 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public IGatewayResponse downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
+	public IGatewayResponse downloadTo(final String jobid, int resultIdx, final File file,  final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -203,7 +203,7 @@ public class CloudOptimisationDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String requestURL = String.format("%s/%s/%s", SCENARIO_RESULT_URL, jobid, getUserId());
+		final String requestURL = String.format("%s/%s/%s/%d", SCENARIO_RESULT_URL, jobid, getUserId(), resultIdx);
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {

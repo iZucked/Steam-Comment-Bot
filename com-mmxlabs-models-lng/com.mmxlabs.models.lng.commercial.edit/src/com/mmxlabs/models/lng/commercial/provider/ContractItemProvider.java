@@ -791,7 +791,17 @@ public class ContractItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createVolumeTierPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createRegasPricingParams()));
 	}
 
 }

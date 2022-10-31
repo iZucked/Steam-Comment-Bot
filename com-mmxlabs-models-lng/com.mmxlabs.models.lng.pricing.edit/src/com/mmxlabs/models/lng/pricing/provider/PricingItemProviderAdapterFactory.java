@@ -410,6 +410,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaTariffV2ItemProvider panamaTariffV2ItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaTariffV2}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaTariffV2Adapter() {
+		if (panamaTariffV2ItemProvider == null) {
+			panamaTariffV2ItemProvider = new PanamaTariffV2ItemProvider(this);
+		}
+
+		return panamaTariffV2ItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -847,6 +870,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PricingBasis} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PricingBasisItemProvider pricingBasisItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PricingBasis}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPricingBasisAdapter() {
+		if (pricingBasisItemProvider == null) {
+			pricingBasisItemProvider = new PricingBasisItemProvider(this);
+		}
+
+		return pricingBasisItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -992,6 +1038,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
 		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
 		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();
+		if (panamaTariffV2ItemProvider != null) panamaTariffV2ItemProvider.dispose();
 		if (suezCanalTugBandItemProvider != null) suezCanalTugBandItemProvider.dispose();
 		if (suezCanalTariffItemProvider != null) suezCanalTariffItemProvider.dispose();
 		if (suezCanalTariffBandItemProvider != null) suezCanalTariffBandItemProvider.dispose();
@@ -1011,6 +1058,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (holidayCalendarEntryItemProvider != null) holidayCalendarEntryItemProvider.dispose();
 		if (holidayCalendarItemProvider != null) holidayCalendarItemProvider.dispose();
 		if (settleStrategyItemProvider != null) settleStrategyItemProvider.dispose();
+		if (pricingBasisItemProvider != null) pricingBasisItemProvider.dispose();
 	}
 
 }

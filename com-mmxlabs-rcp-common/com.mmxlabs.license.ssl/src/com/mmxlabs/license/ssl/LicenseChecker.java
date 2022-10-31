@@ -25,6 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +192,8 @@ public final class LicenseChecker {
 	}
 
 	/**
-	 * Create copies of the default & license keystores and place them in a known place on the filesystem so we can reference them later
+	 * Create copies of the default & license keystores and place them in a known
+	 * place on the filesystem so we can reference them later
 	 *
 	 * @param keyStore
 	 * @param licenseKeystore
@@ -220,7 +222,6 @@ public final class LicenseChecker {
 		}
 	}
 
-
 	/**
 	 * Populate the default keystore with the necessary certificates
 	 *
@@ -232,10 +233,19 @@ public final class LicenseChecker {
 	 */
 	private static void populateDefaultKeystore(KeyStore keyStore) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
 		String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
+		String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
+
+		// Windows - use system truststore by default if not specified otherwise
+		if (defaultStorePath == null && defaultStoreType == null) {
+			if (Objects.equals(Platform.getOS(), Platform.OS_WIN32)) {
+				defaultStorePath = "NUL";
+				defaultStoreType = "Windows-ROOT";
+			}
+		}
+
 		if (defaultStorePath == null) {
 			defaultStorePath = CACERTS_PATH;
 		}
-		String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
 		if (defaultStoreType == null) {
 			defaultStoreType = CACERTS_TYPE;
 		}
@@ -263,7 +273,8 @@ public final class LicenseChecker {
 	}
 
 	/**
-	 * Get license keystore from one of the following locations, respectively: system properties, eclipse home, user's mmxlabs folder
+	 * Get license keystore from one of the following locations, respectively:
+	 * system properties, eclipse home, user's mmxlabs folder
 	 *
 	 * @return the license keystore if it exists, otherwise null
 	 */
@@ -313,9 +324,9 @@ public final class LicenseChecker {
 		return null;
 	}
 
-
 	/**
-	 * Get license from system property (as defined in Eclipse runtime program arguments)
+	 * Get license from system property (as defined in Eclipse runtime program
+	 * arguments)
 	 *
 	 * @return license keystore
 	 * @throws CertificateException
@@ -341,9 +352,9 @@ public final class LicenseChecker {
 		return null;
 	}
 
-
 	/**
 	 * Get license keystore from Eclipse home directory
+	 * 
 	 * @return
 	 * @throws CertificateException
 	 */
@@ -365,7 +376,6 @@ public final class LicenseChecker {
 		}
 		return null;
 	}
-
 
 	/**
 	 * Loads the client license certificate into memory.

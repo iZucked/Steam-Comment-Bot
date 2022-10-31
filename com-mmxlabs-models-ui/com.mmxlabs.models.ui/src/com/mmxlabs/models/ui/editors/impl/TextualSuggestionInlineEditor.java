@@ -53,23 +53,25 @@ public class TextualSuggestionInlineEditor extends UnsettableInlineEditor {
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(feature.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}
@@ -93,7 +95,11 @@ public class TextualSuggestionInlineEditor extends UnsettableInlineEditor {
 
 		toolkit.adapt(editor, true, true);
 
-		editor.setEnabled(feature.isChangeable() && isEditorEnabled());
+		if (typedElement instanceof EStructuralFeature feature) {
+			editor.setEnabled(feature.isChangeable() && isEditorEnabled());
+		} else {
+			editor.setEnabled(false);
+		}
 		editor.addModifyListener(e -> {
 			editor.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 			final String text = editor.getText().toLowerCase();

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>5.8.3-SNAPSHOT</version>
+		<version>5.10.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.reports.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
@@ -59,11 +59,7 @@
 							<artifactId>ch.qos.logback.classic</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
+
 						<!-- avoid CNFE in Surefire when looking for JUnitPlatformProvider -->
 						<dependency>
 							<artifactId>org.junit</artifactId>

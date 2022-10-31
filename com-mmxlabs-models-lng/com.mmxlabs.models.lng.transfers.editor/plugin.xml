@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+<plugin>
+<extension
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.transfers.TransferAgreement"
+            factory="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferAgreementDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+            factory="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferRecordDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.transfers.editor.displaycomposites.TransferRecordDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+</extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.TransferIncotermValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.TransferIncotermValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="TransferIncoterm"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CompanyStatus"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.transfers.editor.factories.TransferStatusValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.transfers.editor.factories.TransferStatusValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="TransferStatus"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/transfers/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    </extension>
+    <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.TransferAgreementReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+          referenceEClass="com.mmxlabs.models.lng.transfers.TransferAgreement">
+    </valueProvider>
+       <valueProvider
+             factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+             id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
+             ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+             referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+       </valueProvider>
+       <valueProvider
+             factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
+             id="com.mmxlabs.models.lng.transfers.ui.valueproviders.RHSReferenceValueProviderFactory"
+             ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+             referenceEClass="com.mmxlabs.models.lng.transfers.TransferRecord">
+       </valueProvider>
+    </extension>
+    <extension
+         point="com.mmxlabs.models.ui.componenthelpers">
+      <componentHelper
+            helperClass="com.mmxlabs.models.lng.transfers.presentation.composites.TransferRecordComponentHelper"
+            id="com.mmxlabs.models.lng.transfers.presentation.composites.TransferRecordComponentHelper"
+            inheritable="false"
+            modelClass="com.mmxlabs.models.lng.transfers.TransferRecord"/>
+      <componentHelper
+            helperClass="com.mmxlabs.models.lng.transfers.presentation.composites.TransferAgreementComponentHelper"
+            id="com.mmxlabs.models.lng.transfers.presentation.composites.TransferAgreementComponentHelper"
+            inheritable="false"
+            modelClass="com.mmxlabs.models.lng.transfers.TransferAgreement"/>
+    </extension>  
+    <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="transfer-model"
+            plugin.xml="transfers.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
+   <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.transfers.editor.transferModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.transfers.TransferModel"
+          subModelImporterClass="com.mmxlabs.models.lng.transfers.importers.TransferModelImporter">
+    </submodelImporter>
+    </extension>
+</plugin>

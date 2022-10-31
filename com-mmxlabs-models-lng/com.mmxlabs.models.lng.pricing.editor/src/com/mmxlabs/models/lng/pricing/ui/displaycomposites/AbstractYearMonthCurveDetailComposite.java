@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.pricing.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,9 +37,8 @@ public class AbstractYearMonthCurveDetailComposite extends DefaultDetailComposit
 
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
-
 				// Special case
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 				if (feature == PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT || feature == PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog

@@ -5,7 +5,7 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 
@@ -31,12 +31,12 @@ public interface IDialogController {
 	 * Change the visibility of an object feature as registered in the framework (features are not necessarily linked directly the the target object). See #updateVisibility() to request UI state
 	 * change.
 	 */
-	void setEditorVisibility(EObject object, EStructuralFeature feature, boolean visible);
+	void setEditorVisibility(EObject object, ETypedElement typedElement, boolean visible);
 
 	/**
 	 * Returns the visibility of an object feature. Default is true.
 	 */
-	boolean getEditorVisibility(EObject object, EStructuralFeature feature);
+	boolean getEditorVisibility(EObject object, ETypedElement typedElement);
 
 	/**
 	 * Request a top-down check of object feature visibility state changes and update UI accordingly.

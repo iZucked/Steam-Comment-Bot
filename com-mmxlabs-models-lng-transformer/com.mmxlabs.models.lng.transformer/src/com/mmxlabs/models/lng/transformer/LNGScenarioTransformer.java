@@ -46,11 +46,12 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
-import com.mmxlabs.common.curves.StepwiseLongCurve;
+import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.parser.series.ILazyExpressionContainer;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.common.parser.series.SeriesUtil;
 import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
@@ -72,6 +73,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
+import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.cargo.util.SpotSlotUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -106,8 +108,10 @@ import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
@@ -308,6 +312,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
+
+	@Inject
+	@Named(SchedulerConstants.Parser_PricingBasis)
+	private SeriesParser pricingBases;
 
 	@Inject(optional = true)
 	@Nullable
@@ -591,35 +599,39 @@ public class LNGScenarioTransformer {
 			final String name = commodityIndex.getName();
 			assert name != null;
 			registerCommodityIndex(name, commodityIndex, commodityIndices);
-			// registerIndex(name, commodityIndex, commodityIndices);
+			registerCommodityIndex(name, commodityIndex, pricingBases);
 		}
 		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
-			registerIndex(baseFuelIndex.getName(), baseFuelIndex, baseFuelIndices);
+			registerIndex(baseFuelIndex.getName(), SeriesType.BUNKERS, baseFuelIndex, baseFuelIndices);
 		}
 		for (final CharterCurve charterIndex : pricingModel.getCharterCurves()) {
-			registerIndex(charterIndex.getName(), charterIndex, charterIndices);
+			registerIndex(charterIndex.getName(), SeriesType.CHARTER, charterIndex, charterIndices);
+		}
+		for (final PricingBasis pricingBasis : pricingModel.getPricingBases()) {
+			registerIndex(pricingBasis.getName(), SeriesType.PRICING_BASIS, pricingBasis, pricingBases);
 		}
 
 		// Currency is added to all the options
 		for (final CurrencyCurve currencyIndex : pricingModel.getCurrencyCurves()) {
 			final String name = currencyIndex.getName();
 			if (name != null) {
-				registerIndex(name, currencyIndex, commodityIndices);
-				registerIndex(name, currencyIndex, baseFuelIndices);
-				registerIndex(name, currencyIndex, charterIndices);
-				registerIndex(name, currencyIndex, currencyIndices);
+				registerIndex(name, SeriesType.CURRENCY, currencyIndex, commodityIndices);
+				registerIndex(name, SeriesType.CURRENCY, currencyIndex, baseFuelIndices);
+				registerIndex(name, SeriesType.CURRENCY, currencyIndex, charterIndices);
+				registerIndex(name, SeriesType.CURRENCY, currencyIndex, currencyIndices);
+				registerIndex(name, SeriesType.CURRENCY, currencyIndex, pricingBases);
 			}
 		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
-			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices);
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices, pricingBases);
 		}
 
 		// Now pre-compute our various curve data objects...
 		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
 				final ISeries concreteSeries = constructConcreteSeries(index);
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 				curve.setDefaultValue(0);
 				final int[] changePoints = concreteSeries.getChangePoints();
 				if (changePoints.length == 0) {
@@ -636,7 +648,7 @@ public class LNGScenarioTransformer {
 				if (commodityIndices.getSeries(index.getName()) instanceof ILazyExpressionContainer) {
 					// Only the lazy curves need to be added - the series parser should already have
 					// initialised on lazy curves
-					final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null);
+					final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null, SeriesType.COMMODITY);
 					priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 				}
 			} catch (final Exception exception) {
@@ -652,7 +664,7 @@ public class LNGScenarioTransformer {
 				}
 				final String curveName = ymPointContainer.getName().toLowerCase();
 				final ISeries concreteSeries = constructConcreteSeries(ymPointContainer);
-				final PriceCurveKey key = new PriceCurveKey(indexName, curveName);
+				final PriceCurveKey key = new PriceCurveKey(indexName, curveName, SeriesType.COMMODITY);
 				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
 			}
 		}
@@ -660,7 +672,7 @@ public class LNGScenarioTransformer {
 		for (final BunkerFuelCurve index : pricingModel.getBunkerFuelCurves()) {
 			try {
 				final ISeries parsed = baseFuelIndices.getSeries(index.getName()).get();
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
@@ -681,7 +693,7 @@ public class LNGScenarioTransformer {
 		for (final CharterCurve index : pricingModel.getCharterCurves()) {
 			try {
 				final ISeries parsed = charterIndices.getSeries(index.getName()).get();
-				final StepwiseLongCurve curve = new StepwiseLongCurve();
+				final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
 				curve.setDefaultValue(0L);
 
 				final int[] changePoints = parsed.getChangePoints();
@@ -739,7 +751,7 @@ public class LNGScenarioTransformer {
 				}
 				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
 			} else {
-				final StepwiseIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
+				final PreGeneratedIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
 				if (expression == null) {
 					throw new IllegalStateException("Unable to parse cooldown curve");
 				}
@@ -965,10 +977,10 @@ public class LNGScenarioTransformer {
 		return null;
 	}
 
-	private void registerIndex(final String name, @NonNull final AbstractYearMonthCurve curve, @NonNull final SeriesParser indices) {
+	private void registerIndex(final String name, SeriesType seriesType, @NonNull final AbstractYearMonthCurve curve, @NonNull final SeriesParser indices) {
 		assert name != null;
 		if (curve.isSetExpression()) {
-			indices.addSeriesExpression(name, curve.getExpression());
+			indices.addSeriesExpression(name, seriesType, curve.getExpression());
 
 		} else {
 			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
@@ -982,7 +994,7 @@ public class LNGScenarioTransformer {
 				times[k] = dateHelper.convertTime(e.getFirst());
 				nums[k++] = e.getSecond();
 			}
-			indices.addSeriesData(name, times, nums);
+			indices.addSeriesData(name, seriesType, times, nums);
 		}
 	}
 
@@ -993,11 +1005,11 @@ public class LNGScenarioTransformer {
 				.map(CommodityCurve::getName) //
 				.anyMatch(name::equalsIgnoreCase);
 		if (hasLazyEntry) {
-			final ILazyExpressionContainer lazyContainer = new ThreadLocalLazyExpressionContainer();
+			final ILazyExpressionContainer lazyContainer = new ThreadLocalLazyExpressionContainer(name, SeriesType.COMMODITY);
 			indices.addSeriesData(name, lazyContainer);
 			lazyExpressionManagerEditor.addPriceCurve(name, lazyContainer);
 		} else {
-			registerIndex(name, curve, indices);
+			registerIndex(name, SeriesType.COMMODITY, curve, indices);
 		}
 	}
 
@@ -1006,8 +1018,8 @@ public class LNGScenarioTransformer {
 		final String reverseName = PriceIndexUtils.createReverseConversionFactorName(factor);
 		if (name != null && reverseName != null) {
 			for (final SeriesParser parser : parsers) {
-				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
-				parser.addSeriesExpression(reverseName, Double.toString(1.0 / factor.getFactor()));
+				parser.addSeriesExpression(name, SeriesType.CONVERSION, Double.toString(factor.getFactor()));
+				parser.addSeriesExpression(reverseName, SeriesType.CONVERSION, Double.toString(1.0 / factor.getFactor()));
 			}
 		}
 	}
@@ -1606,7 +1618,7 @@ public class LNGScenarioTransformer {
 		final ISalesPriceCalculator dischargePriceCalculator;
 
 		final boolean isSpot = (dischargeSlot instanceof SpotSlot);
-		if (dischargeSlot.isSetPriceExpression()) {
+		if (dischargeSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
 
@@ -1620,7 +1632,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 
-				ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 				dynamicContract.setPriceExpression(priceExpression);
 
 				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
@@ -1804,7 +1816,7 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-		if (loadSlot.isSetPriceExpression()) {
+		if (loadSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
 
 			final String priceExpression = loadSlot.getPriceExpression();
 			if ("??".equals(priceExpression)) {
@@ -1817,7 +1829,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 
-				ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 				dynamicContract.setPriceExpression(priceExpression);
 
 				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
@@ -2933,7 +2945,7 @@ public class LNGScenarioTransformer {
 		// Next apply formula
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
-			buildPanamaCosts(builder, vesselAssociation, optimiserVessels, panamaCanalTariff);
+			buildPanamaCosts(builder, vesselAssociation, optimiserVessels, panamaCanalTariff, dateHelper);
 		}
 
 		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
@@ -2993,7 +3005,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final Collection<IVessel> vessels,
-			@NonNull final PanamaCanalTariff panamaCanalTariff) {
+			@NonNull final PanamaCanalTariff panamaCanalTariff, final @NonNull DateAndCurveHelper dateHelper) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
@@ -3012,38 +3024,70 @@ public class LNGScenarioTransformer {
 			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(vessel);
 			final int capacityInM3 = eVessel.getVesselOrDelegateCapacity();
 
-			double totalLadenCost = 0.0;
-			double totalBallastCost = 0.0;
-			double totalBallastRoundTripCost = 0.0;
-			for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
-				final PanamaCanalTariffBand band = p.getSecond();
-				//// How much vessel capacity is used for this band calculation?
-				// First, find the largest value valid in this band
-				double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+			final PreGeneratedLongCurve ladenCurve = new PreGeneratedLongCurve();
+			final PreGeneratedLongCurve ballastCurve = new PreGeneratedLongCurve();
+			final PreGeneratedLongCurve ballastRoundtripCurve = new PreGeneratedLongCurve();
 
-				// Next, subtract band lower bound to find the capacity contribution
-				contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+			// Legacy pricing model
+			{
 
-				if (contributingCapacity > 0) {
-					totalLadenCost += contributingCapacity * band.getLadenTariff();
-					totalBallastCost += contributingCapacity * band.getBallastTariff();
-					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+				double totalLadenCost = 0.0;
+				double totalBallastCost = 0.0;
+				double totalBallastRoundTripCost = 0.0;
+				for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
+					final PanamaCanalTariffBand band = p.getSecond();
+					//// How much vessel capacity is used for this band calculation?
+					// First, find the largest value valid in this band
+					double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+
+					// Next, subtract band lower bound to find the capacity contribution
+					contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+					if (contributingCapacity > 0) {
+						totalLadenCost += contributingCapacity * band.getLadenTariff();
+						totalBallastCost += contributingCapacity * band.getBallastTariff();
+						totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+					}
 				}
+
+				// If there is a markup %, apply it
+				if (panamaCanalTariff.getMarkupRate() != 0.0) {
+					final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
+					totalLadenCost *= multiplier;
+					totalBallastCost *= multiplier;
+					totalBallastRoundTripCost *= multiplier;
+				}
+				ladenCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+				ballastCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+				ballastRoundtripCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
 			}
 
-			// If there is a markup %, apply it
-			if (panamaCanalTariff.getMarkupRate() != 0.0) {
-				final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
-				totalLadenCost *= multiplier;
-				totalBallastCost *= multiplier;
-				totalBallastRoundTripCost *= multiplier;
+			// Pricing model from 1st Jan 2023
+			for (final PanamaTariffV2 tariff : panamaCanalTariff.getAnnualTariffs()) {
+				final int time = dateHelper.convertTime(tariff.getEffectiveFrom().atStartOfDay(ZoneId.of("Etc/UTC")));
+
+				double totalLadenCost = tariff.getFixedFee() + tariff.getCapacityTariff() * capacityInM3;
+				// Ballast is 85% of laden cost
+				double totalBallastCost = 0.85 * totalLadenCost;
+				// No more round trip discount
+				double totalBallastRoundTripCost = totalBallastCost;
+
+				// If there is a markup %, apply it
+				if (panamaCanalTariff.getMarkupRate() != 0.0) {
+					final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
+					totalLadenCost *= multiplier;
+					totalBallastCost *= multiplier;
+					totalBallastRoundTripCost *= multiplier;
+				}
+
+				ladenCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+				ballastCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+				ballastRoundtripCurve.setValueAfter(time, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
 			}
 
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost))));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast,
-					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost))));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast,
-					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost))));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, ladenCurve);
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, ballastCurve);
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, ballastRoundtripCurve);
 		}
 	}
 
@@ -3179,8 +3223,8 @@ public class LNGScenarioTransformer {
 			// fuel types.
 			final IVessel oVessel;
 
-			if (eVessel.isMarker() && (builder instanceof SchedulerBuilder sBuilder)) {
-				long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
+			if (eVessel.isMarker() && (builder instanceof final SchedulerBuilder sBuilder)) {
+				final long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
 
 				oVessel = sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
 			} else {
@@ -3908,7 +3952,7 @@ public class LNGScenarioTransformer {
 			if (expression == null || expression.isEmpty()) {
 				heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
 			} else {
-				final ICurve expressionCurve = dateHelper.generateExpressionCurve(commodityIndices.parse(expression).evaluate());
+				final ICurve expressionCurve = dateHelper.generateExpressionCurve(commodityIndices.asSeries(expression));
 				heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
 				injector.injectMembers(heelPriceCalculator);
 			}
@@ -3939,8 +3983,7 @@ public class LNGScenarioTransformer {
 		if (expression == null || expression.isEmpty()) {
 			heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
 		} else {
-
-			final ICurve expressionCurve = dateHelper.generateExpressionCurve(commodityIndices.parse(expression).evaluate());
+			final ICurve expressionCurve = dateHelper.generateExpressionCurve(commodityIndices.asSeries(expression));
 			heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
 			injector.injectMembers(heelPriceCalculator);
 		}

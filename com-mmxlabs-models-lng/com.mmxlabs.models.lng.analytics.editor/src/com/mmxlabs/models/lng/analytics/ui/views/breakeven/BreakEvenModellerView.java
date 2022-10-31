@@ -23,7 +23,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -862,7 +862,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			commandHandler = new ICommandHandler() {
 
 				@Override
-				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+				public void handleCommand(final Command command, final EObject target, final ETypedElement feature) {
 					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, model, () -> superHandler.handleCommand(command, target, feature));
 				}
 

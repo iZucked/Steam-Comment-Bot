@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
-import com.mmxlabs.common.curves.StepwiseLongCurve;
+import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 
 public class WeightedAverageCharterCostCalculatorTest {
 
@@ -23,7 +23,7 @@ public class WeightedAverageCharterCostCalculatorTest {
 	
 	@Test
 	public void testMonthlyChangeCharterRate() {
-		StepwiseLongCurve monthlyCharterRate = new StepwiseLongCurve();
+		PreGeneratedLongCurve monthlyCharterRate = new PreGeneratedLongCurve();
 		monthlyCharterRate.setValueAfter(0, 10000);
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);
@@ -34,7 +34,7 @@ public class WeightedAverageCharterCostCalculatorTest {
 	
 	@Test
 	public void testMonthlyChangeCharterRateBelowLowerRate() {
-		StepwiseLongCurve monthlyCharterRate = new StepwiseLongCurve();
+		PreGeneratedLongCurve monthlyCharterRate = new PreGeneratedLongCurve();
 		monthlyCharterRate.setDefaultValue(10000);
 		monthlyCharterRate.setValueAfter(31*24, 20000);
 		monthlyCharterRate.setValueAfter(31*2*24, 30000);

@@ -5,7 +5,7 @@
 package com.mmxlabs.models.ui;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,15 +24,15 @@ public class ComponentHelperUtils {
 	 * Add an editor to the given detail composite
 	 * 
 	 * @param detailComposite
-	 * @param feature
+	 * @param typedElement
 	 */
-	public static IInlineEditor createDefaultEditor(final EClass owner, final EStructuralFeature feature) {
-		final IInlineEditorFactory factory = Activator.getDefault().getEditorFactoryRegistry().getEditorFactory(owner, feature);
+	public static IInlineEditor createDefaultEditor(final EClass owner, final ETypedElement typedElement) {
+		final IInlineEditorFactory factory = Activator.getDefault().getEditorFactoryRegistry().getEditorFactory(owner, typedElement);
 		if (factory == null) {
-			LOG.warn("Unable to find an editor factory for " + owner.getName() + "." + feature.getName());
+			LOG.warn("Unable to find an editor factory for " + owner.getName() + "." + typedElement.getName());
 			return null;
 		} else {
-			return factory.createEditor(owner, feature);
+			return factory.createEditor(owner, typedElement);
 		}
 	}
 }

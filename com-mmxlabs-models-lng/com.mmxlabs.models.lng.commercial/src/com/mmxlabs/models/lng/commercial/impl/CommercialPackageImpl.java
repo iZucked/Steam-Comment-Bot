@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
 import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RegasPricingParams;
 import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
@@ -52,6 +53,8 @@ import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
+import com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters;
+import com.mmxlabs.models.lng.commercial.VolumeTierSlotParams;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -126,6 +129,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass expressionPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass volumeTierPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass volumeTierSlotParamsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -287,6 +304,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass startHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass regasPricingParamsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -912,6 +936,116 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	@Override
 	public EAttribute getExpressionPriceParameters_PriceExpression() {
 		return (EAttribute)expressionPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getVolumeTierPriceParameters() {
+		return volumeTierPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierPriceParameters_LowExpression() {
+		return (EAttribute)volumeTierPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierPriceParameters_HighExpression() {
+		return (EAttribute)volumeTierPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierPriceParameters_Threshold() {
+		return (EAttribute)volumeTierPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierPriceParameters_VolumeLimitsUnit() {
+		return (EAttribute)volumeTierPriceParametersEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getVolumeTierSlotParams() {
+		return volumeTierSlotParamsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierSlotParams_LowExpression() {
+		return (EAttribute)volumeTierSlotParamsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierSlotParams_HighExpression() {
+		return (EAttribute)volumeTierSlotParamsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierSlotParams_Threshold() {
+		return (EAttribute)volumeTierSlotParamsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierSlotParams_VolumeLimitsUnit() {
+		return (EAttribute)volumeTierSlotParamsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVolumeTierSlotParams_OverrideContract() {
+		return (EAttribute)volumeTierSlotParamsEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1550,6 +1684,36 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EClass getRegasPricingParams() {
+		return regasPricingParamsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRegasPricingParams_PriceExpression() {
+		return (EAttribute)regasPricingParamsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRegasPricingParams_NumPricingDays() {
+		return (EAttribute)regasPricingParamsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -1675,6 +1839,19 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
 
+		volumeTierPriceParametersEClass = createEClass(VOLUME_TIER_PRICE_PARAMETERS);
+		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__LOW_EXPRESSION);
+		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__HIGH_EXPRESSION);
+		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__THRESHOLD);
+		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__VOLUME_LIMITS_UNIT);
+
+		volumeTierSlotParamsEClass = createEClass(VOLUME_TIER_SLOT_PARAMS);
+		createEAttribute(volumeTierSlotParamsEClass, VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION);
+		createEAttribute(volumeTierSlotParamsEClass, VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION);
+		createEAttribute(volumeTierSlotParamsEClass, VOLUME_TIER_SLOT_PARAMS__THRESHOLD);
+		createEAttribute(volumeTierSlotParamsEClass, VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT);
+		createEAttribute(volumeTierSlotParamsEClass, VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT);
+
 		slotContractParamsEClass = createEClass(SLOT_CONTRACT_PARAMS);
 
 		contractExpressionMapEntryEClass = createEClass(CONTRACT_EXPRESSION_MAP_ENTRY);
@@ -1761,6 +1938,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
 
+		regasPricingParamsEClass = createEClass(REGAS_PRICING_PARAMS);
+		createEAttribute(regasPricingParamsEClass, REGAS_PRICING_PARAMS__PRICE_EXPRESSION);
+		createEAttribute(regasPricingParamsEClass, REGAS_PRICING_PARAMS__NUM_PRICING_DAYS);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
@@ -1813,6 +1994,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		purchaseContractEClass.getESuperTypes().add(this.getContract());
 		lngPriceCalculatorParametersEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		expressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		volumeTierPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		volumeTierSlotParamsEClass.getESuperTypes().add(this.getSlotContractParams());
 		slotContractParamsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		baseEntityBookEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		simpleEntityBookEClass.getESuperTypes().add(this.getBaseEntityBook());
@@ -1831,6 +2014,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getLumpSumTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
+		regasPricingParamsEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1903,6 +2087,19 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(volumeTierPriceParametersEClass, VolumeTierPriceParameters.class, "VolumeTierPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVolumeTierPriceParameters_LowExpression(), ecorePackage.getEString(), "lowExpression", "", 1, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierPriceParameters_HighExpression(), ecorePackage.getEString(), "highExpression", "", 1, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierPriceParameters_Threshold(), ecorePackage.getEDouble(), "threshold", null, 0, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierPriceParameters_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(volumeTierSlotParamsEClass, VolumeTierSlotParams.class, "VolumeTierSlotParams", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVolumeTierSlotParams_LowExpression(), ecorePackage.getEString(), "lowExpression", "", 1, 1, VolumeTierSlotParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierSlotParams_HighExpression(), ecorePackage.getEString(), "highExpression", "", 1, 1, VolumeTierSlotParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierSlotParams_Threshold(), ecorePackage.getEDouble(), "threshold", null, 0, 1, VolumeTierSlotParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierSlotParams_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, VolumeTierSlotParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVolumeTierSlotParams_OverrideContract(), ecorePackage.getEBoolean(), "overrideContract", null, 1, 1, VolumeTierSlotParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotContractParamsEClass, SlotContractParams.class, "SlotContractParams", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2002,6 +2199,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(regasPricingParamsEClass, RegasPricingParams.class, "RegasPricingParams", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRegasPricingParams_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 1, 1, RegasPricingParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRegasPricingParams_NumPricingDays(), ecorePackage.getEInt(), "numPricingDays", null, 0, 1, RegasPricingParams.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
@@ -2035,6 +2236,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createExpressionTypeAnnotations();
 		// slotContractParams
 		createSlotContractParamsAnnotations();
+		// http://minimaxlabs.com/models/commercial/slot/parameters
+		createParametersAnnotations();
+		// http://minimaxlabs.com/models/commercial/slot/expression
+		createExpressionAnnotations();
 	}
 
 	/**
@@ -2202,6 +2407,30 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 			   "type", "commodity"
 		   });
 		addAnnotation
+		  (getVolumeTierPriceParameters_LowExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getVolumeTierPriceParameters_HighExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getVolumeTierSlotParams_LowExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getVolumeTierSlotParams_HighExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
 		  (getDateShiftExpressionPriceParameters_PriceExpression(),
 		   source,
 		   new String[] {
@@ -2249,6 +2478,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			   "type", "commodity"
 		   });
+		addAnnotation
+		  (getRegasPricingParams_PriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
 	}
 
 	/**
@@ -2266,6 +2501,40 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   },
 		   new URI[] {
 			 URI.createURI(eNS_URI).appendFragment("//SlotContractParams")
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://minimaxlabs.com/models/commercial/slot/parameters</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createParametersAnnotations() {
+		String source = "http://minimaxlabs.com/models/commercial/slot/parameters";
+		addAnnotation
+		  (volumeTierPriceParametersEClass,
+		   source,
+		   new String[] {
+		   },
+		   new URI[] {
+			 URI.createURI(eNS_URI).appendFragment("//VolumeTierSlotParams")
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://minimaxlabs.com/models/commercial/slot/expression</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionAnnotations() {
+		String source = "http://minimaxlabs.com/models/commercial/slot/expression";
+		addAnnotation
+		  (volumeTierPriceParametersEClass,
+		   source,
+		   new String[] {
+			   "allowExpressionOverride", "false"
 		   });
 	}
 

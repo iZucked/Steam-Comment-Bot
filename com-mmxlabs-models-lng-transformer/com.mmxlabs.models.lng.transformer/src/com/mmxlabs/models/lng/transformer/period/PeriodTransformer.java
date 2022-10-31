@@ -1470,6 +1470,16 @@ public class PeriodTransformer {
 		return null;
 	}
 
+	/*
+	 * Trims copied scenario. DO NOT use this method with the original scenario
+	 */
+	private void trimCopiedScenario(@NonNull LNGScenarioModel copiedScenario) {
+		// Period transformer should not depend on ADP data
+		if (copiedScenario.getAdpModel() != null) {
+			copiedScenario.setAdpModel(null);
+		}
+	}
+
 	@NonNull
 	public Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, final Schedule baseSchedule,
 			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final IScenarioEntityMapping mapping) {
@@ -1479,6 +1489,7 @@ public class PeriodTransformer {
 
 		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenarioDataProvider.getScenario());
 		assert output != null;
+		trimCopiedScenario(output);
 		final Schedule copyBaseSchedule = (Schedule) copier.copy(baseSchedule);
 
 		ExtraDataProvider copyExtraDataProvider = null;

@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -87,7 +88,7 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 		private int ownerTypeMinGenerations = Integer.MAX_VALUE;
 
 		public EditorFactoryMatcher(final IInlineEditorFactoryExtension extension,
-				final EClass owner, final EStructuralFeature feature) {
+				final EClass owner, final ETypedElement feature) {
 			this.extension = extension;
 			final String featureNameEquals = extension.getFeatureName();
 			if (featureNameEquals != null && !featureNameEquals.isEmpty()) {
@@ -185,17 +186,17 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 		}
 	}
 
-	final Map<EClass, Map<EStructuralFeature, IInlineEditorFactory>> fasterCache = new HashMap<EClass, Map<EStructuralFeature, IInlineEditorFactory>>();
+	final Map<EClass, Map<ETypedElement, IInlineEditorFactory>> fasterCache = new HashMap<EClass, Map<ETypedElement, IInlineEditorFactory>>();
 	
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.ui.registries.impl.IEditorFactoryRegistry#getEditorFactory(org.eclipse.emf.ecore.EClass, org.eclipse.emf.ecore.EStructuralFeature)
 	 */
 	@Override
 	public IInlineEditorFactory getEditorFactory(
-			final EClass owner, final EStructuralFeature feature) {
-		Map<EStructuralFeature, IInlineEditorFactory> byClass = fasterCache.get(owner);
+			final EClass owner, final ETypedElement feature) {
+		Map<ETypedElement, IInlineEditorFactory> byClass = fasterCache.get(owner);
 		if (byClass == null) {
-			byClass = new HashMap<EStructuralFeature, IInlineEditorFactory>();
+			byClass = new HashMap<ETypedElement, IInlineEditorFactory>();
 			fasterCache.put(owner, byClass);
 		}
 		if (byClass.containsKey(feature)) return byClass.get(feature);

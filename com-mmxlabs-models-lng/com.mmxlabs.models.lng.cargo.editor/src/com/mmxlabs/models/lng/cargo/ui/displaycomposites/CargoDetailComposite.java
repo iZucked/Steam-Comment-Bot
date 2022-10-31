@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,9 +42,9 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 	private Composite topComposite;
 	private Composite otherComposite;
 
-	private final List<EStructuralFeature> topFeatures;
-	private final List<EStructuralFeature> otherFeatures;
-	private final Map<EStructuralFeature, IInlineEditor> feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
+	private final List<ETypedElement> topFeatures;
+	private final List<ETypedElement> otherFeatures;
+	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<ETypedElement, IInlineEditor>();
 
 	public CargoDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
@@ -77,7 +78,7 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 
 		editor = super.addInlineEditor(editor);
 		if (editor != null) {
-			final EStructuralFeature f = editor.getFeature();
+			final var f = editor.getFeature();
 			feature2Editor.put(f, editor);
 			if (!topFeatures.contains(f) && !otherFeatures.contains(f)) {
 				otherFeatures.add(f);

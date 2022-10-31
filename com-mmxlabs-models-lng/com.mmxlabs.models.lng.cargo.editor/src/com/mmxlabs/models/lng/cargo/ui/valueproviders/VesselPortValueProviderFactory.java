@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
@@ -73,7 +73,7 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 				}
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
 					// I assume delegateValue is list of all ports??

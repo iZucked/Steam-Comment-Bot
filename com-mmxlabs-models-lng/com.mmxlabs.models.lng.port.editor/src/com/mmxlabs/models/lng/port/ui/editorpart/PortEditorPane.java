@@ -129,8 +129,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getScenarioEditingLocation().getShell(),
 						PortEditorPane.this.getScenarioEditingLocation().getDefaultCommandHandler());
 				final MMXRootObject rootObject = getScenarioEditingLocation().getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 					dcd.open(getScenarioEditingLocation(), rootObject, lngScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 				}
 			}

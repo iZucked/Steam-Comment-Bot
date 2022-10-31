@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="LiNGO Eclipse Platform Feature"
-      version="5.8.3.qualifier"
+      version="5.10.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
@@ -1348,7 +1348,7 @@
          version="0.0.0"
          unpack="false"/>
 
-     <plugin
+   <plugin
          id="org.eclipse.swtchart"
          download-size="0"
          install-size="0"
@@ -1639,7 +1639,6 @@
          version="0.0.0"
          unpack="false"/>
 
-
    <plugin
          id="javax.mail-api"
          download-size="0"
@@ -1649,6 +1648,13 @@
 
    <plugin
          id="com.sun.mail.javax.mail"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.com.auth0.java-jwt"
          download-size="0"
          install-size="0"
          version="0.0.0"

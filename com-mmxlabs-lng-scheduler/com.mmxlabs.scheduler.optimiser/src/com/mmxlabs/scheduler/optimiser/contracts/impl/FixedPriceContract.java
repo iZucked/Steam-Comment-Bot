@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -44,12 +45,13 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption option, final IPortTimesRecord voyageRecord, @Nullable final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(@NonNull IVessel vessel, @NonNull IDischargeOption dischargeOption, @NonNull IPortTimesRecord portTimesRecord) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final IDischargeOption option, final IAllocationAnnotation allocationAnnotation, @Nullable final IDetailTree annotations) {
+	public int calculateSalesUnitPrice(@NonNull IVesselCharter vesselCharter, @NonNull IDischargeOption dischargeOption, @NonNull IAllocationAnnotation allocationAnnotation,
+			@NonNull VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 

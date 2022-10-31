@@ -11,7 +11,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
@@ -58,7 +58,7 @@ public class VesselCharterVesselMarkerValueProviderFactory implements IReference
 				}
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 					if (target instanceof VesselCharter) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>();

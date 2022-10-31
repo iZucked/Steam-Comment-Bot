@@ -104,7 +104,7 @@ public class VolumeModeEditorWrapper extends IInlineEditorEnablementWrapper {
 		this.range = range;
 
 		enabled = false;
-		final EStructuralFeature feature = wrapped.getFeature();
+		final var feature = wrapped.getFeature();
 		VolumeMode mode = VolumeMode.NOT_SPECIFIED;
 		if (object instanceof BuyOpportunity) {
 			BuyOpportunity buyOpportunity = (BuyOpportunity) object;

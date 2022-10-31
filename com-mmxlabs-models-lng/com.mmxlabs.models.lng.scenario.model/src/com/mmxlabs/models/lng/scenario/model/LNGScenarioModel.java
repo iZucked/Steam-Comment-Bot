@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -41,6 +42,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isLongTerm <em>Long Term</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#isAnonymised <em>Anonymised</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSensitivityModel <em>Sensitivity Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getTransferModel <em>Transfer Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -426,5 +428,27 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setSensitivityModel(SensitivityModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Transfer Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Transfer Model</em>' containment reference.
+	 * @see #setTransferModel(TransferModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_TransferModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	TransferModel getTransferModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getTransferModel <em>Transfer Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transfer Model</em>' containment reference.
+	 * @see #getTransferModel()
+	 * @generated
+	 */
+	void setTransferModel(TransferModel value);
 
 } // LNGScenarioModel

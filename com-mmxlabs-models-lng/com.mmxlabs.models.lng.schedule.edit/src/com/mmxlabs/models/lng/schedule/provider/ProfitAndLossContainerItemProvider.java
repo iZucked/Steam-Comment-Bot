@@ -186,6 +186,11 @@ public class ProfitAndLossContainerItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createCharterContractFeeDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createTransferRecordPNLDetails()));
 	}
 
 }

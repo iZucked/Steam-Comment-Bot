@@ -5,13 +5,10 @@
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -283,17 +280,23 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 					.getScenarioRunner();
 
 			final long startTime = System.currentTimeMillis();
-			runner.evaluateInitialState();
+			
+			// Don't run an evaluation if we are in clean state as this will unpair the starting point 
+			if (!userSettings.isCleanSlateOptimisation()) {
+				sdp.setLastEvaluationFailed(true);
+				runner.evaluateInitialState();
+			}
 
 			final IMultiStateResult result = runner.runWithProgress(monitor);
 
-			final long runTime = System.currentTimeMillis() - startTime;
+			sdp.setLastEvaluationFailed(false);
 
 			if (result == null) {
 				throw new RuntimeException("Error optimising scenario - null result");
 			}
 
 			if (loggingOutput != null) {
+				final long runTime = System.currentTimeMillis() - startTime;
 				loggingOutput.getMetrics().setRuntime(runTime);
 			}
 
@@ -317,7 +320,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 				loggingOutput.setScenarioMeta(scenarioMeta);
 			}
-			
+
 			if (resultName == null || resultName.isBlank()) {
 				options.setName("Optimisation");
 			} else {
@@ -351,11 +354,12 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (doInjections) {
 					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(injections));
+						return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(injections));
 					}
 				}
 				// if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-				// return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule());
+				// return Collections.<@NonNull Module> singletonList(new
+				// OptimisationSettingsOverrideModule());
 				// }
 				if (moduleType == ModuleType.Module_Optimisation) {
 					final LinkedList<@NonNull Module> modules = new LinkedList<>();
@@ -380,7 +384,8 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 	}
 
 	/**
-	 * Creates a module for providing logging parameters to the {@link Injector} framework.
+	 * Creates a module for providing logging parameters to the {@link Injector}
+	 * framework.
 	 */
 
 	private @NonNull Module createLoggingModule(final LoggingParameters loggingParameters, final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook) {

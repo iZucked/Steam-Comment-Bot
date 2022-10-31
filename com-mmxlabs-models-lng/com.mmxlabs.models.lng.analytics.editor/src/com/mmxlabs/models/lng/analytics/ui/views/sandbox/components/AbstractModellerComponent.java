@@ -360,7 +360,7 @@ public abstract class AbstractModellerComponent<T, U> {
 	protected final IDialogEditingContext dialogContext = new IDialogEditingContext() {
 
 		@Override
-		public void registerEditorControl(final EObject target, final EStructuralFeature feature, final Control control) {
+		public void registerEditorControl(final EObject target, final ETypedElement feature, final Control control) {
 
 		}
 
@@ -380,7 +380,7 @@ public abstract class AbstractModellerComponent<T, U> {
 		}
 
 		@Override
-		public List<Control> getEditorControls(final EObject target, final EStructuralFeature feature) {
+		public List<Control> getEditorControls(final EObject target, final ETypedElement feature) {
 			return null;
 		}
 

@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -19,8 +20,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	private Button button;
 
-	public BooleanInlineEditor(final EStructuralFeature feature) {
-		super(feature);
+	public BooleanInlineEditor(final ETypedElement typedElement) {
+		super(typedElement);
 	}
 
 	/**

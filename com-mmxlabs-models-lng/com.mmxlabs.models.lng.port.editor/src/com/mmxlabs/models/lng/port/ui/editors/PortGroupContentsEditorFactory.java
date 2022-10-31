@@ -5,14 +5,14 @@
 package com.mmxlabs.models.lng.port.ui.editors;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
 public class PortGroupContentsEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(EClass owner, EStructuralFeature feature) {
+	public IInlineEditor createEditor(EClass owner, ETypedElement feature) {
 		return new PortGroupContentsEditor(feature);
 	}
 }

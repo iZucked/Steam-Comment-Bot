@@ -217,13 +217,22 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__SENSITIVITY_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Transfer Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_SCENARIO_MODEL__TRANSFER_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 14;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -551,6 +560,17 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGScenarioModel_SensitivityModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getTransferModel <em>Transfer Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Transfer Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getTransferModel()
+	 * @see #getLNGScenarioModel()
+	 * @generated
+	 */
+	EReference getLNGScenarioModel_TransferModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel <em>LNG Reference Model</em>}'.

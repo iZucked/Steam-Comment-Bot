@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.matcher.Matchers;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -97,13 +97,13 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 
 		Mockito.when(actualsDataProvider.hasActuals(ArgumentMatchers.any(IPortSlot.class))).thenReturn(false);
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
-		Mockito.when(shippingHoursRestrictionProvider.isDivertible(Matchers.any(ISequenceElement.class))).thenReturn(true);
+		Mockito.when(shippingHoursRestrictionProvider.isDivertible(ArgumentMatchers.any(ISequenceElement.class))).thenReturn(true);
 		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(timeWindow.getInclusiveStart()).thenReturn(0);
 		Mockito.when(shippingHoursRestrictionProvider.getBaseTime(o1)).thenReturn(timeWindow);
 
-		Mockito.when(divertibleDESShippingTimesCalculator.getDivertibleDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),
-				Matchers.any(IResource.class))).thenReturn(desTimes);
+		Mockito.when(divertibleDESShippingTimesCalculator.getDivertibleDESTimes(ArgumentMatchers.any(ILoadOption.class), ArgumentMatchers.any(IDischargeOption.class), ArgumentMatchers.any(IVessel.class),
+				ArgumentMatchers.any(IResource.class))).thenReturn(desTimes);
 
 		final IVesselCharter vesselCharter = Mockito.mock(IVesselCharter.class);
 		final IVessel vessel = Mockito.mock(IVessel.class);

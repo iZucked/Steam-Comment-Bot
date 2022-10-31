@@ -45,9 +45,9 @@ public class EnumCheckboxEditor extends BooleanInlineEditor {
 	@Override
 	protected Command createSetCommand(Object value) {
 		if ((Boolean) value) {
-			return AddCommand.create(commandHandler.getEditingDomain(), input, feature, enumValue);
+			return AddCommand.create(commandHandler.getEditingDomain(), input, typedElement, enumValue);
 		} else {
-			return RemoveCommand.create(commandHandler.getEditingDomain(), input, feature, enumValue);
+			return RemoveCommand.create(commandHandler.getEditingDomain(), input, typedElement, enumValue);
 		}
 	}
 

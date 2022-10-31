@@ -80,6 +80,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketImporter;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter;
+import com.mmxlabs.models.lng.transfers.TransferModel;
+import com.mmxlabs.models.lng.transfers.TransfersFactory;
+import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -238,7 +241,11 @@ public class CSVImporter {
 			scenarioModel.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 		}
 		scenarioModel.setNominationsModel((NominationsModel) importSubModel(importerRegistry, context, dataMap, NominationsPackage.eINSTANCE.getNominationsModel()));
-
+		scenarioModel.setTransferModel(((TransferModel) importSubModel(importerRegistry, context, dataMap, TransfersPackage.eINSTANCE.getTransferModel())));
+		if (scenarioModel.getTransferModel() == null) {
+			scenarioModel.setTransferModel(TransfersFactory.eINSTANCE.createTransferModel());
+		}
+		
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		scenarioModel.setReferenceModel(referenceModel);
 

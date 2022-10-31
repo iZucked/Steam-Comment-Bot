@@ -87,6 +87,24 @@ public interface CommercialFactory extends EFactory {
 	ExpressionPriceParameters createExpressionPriceParameters();
 
 	/**
+	 * Returns a new object of class '<em>Volume Tier Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Volume Tier Price Parameters</em>'.
+	 * @generated
+	 */
+	VolumeTierPriceParameters createVolumeTierPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Volume Tier Slot Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Volume Tier Slot Params</em>'.
+	 * @generated
+	 */
+	VolumeTierSlotParams createVolumeTierSlotParams();
+
+	/**
 	 * Returns a new object of class '<em>Contract Expression Map Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +247,15 @@ public interface CommercialFactory extends EFactory {
 	 * @generated
 	 */
 	StartHeelOptions createStartHeelOptions();
+
+	/**
+	 * Returns a new object of class '<em>Regas Pricing Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Regas Pricing Params</em>'.
+	 * @generated
+	 */
+	RegasPricingParams createRegasPricingParams();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
@@ -307,6 +308,25 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException(INVALID_SCENARIO_MODEL);
 		}
 		return fleetModel;
+	}
+	
+	@Nullable
+	public static TransferModel getTransferModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final TransferModel transferModel = lngScenarioModel.getTransferModel();
+		if (transferModel == null) {
+			return null;
+		}
+		return transferModel;
+	}
+	
+	@Nullable
+	public static TransferModel getTransferModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel lngScenarioModel) {
+			return getTransferModel(lngScenarioModel);
+		}
+		return null;
 	}
 
 	@NonNull

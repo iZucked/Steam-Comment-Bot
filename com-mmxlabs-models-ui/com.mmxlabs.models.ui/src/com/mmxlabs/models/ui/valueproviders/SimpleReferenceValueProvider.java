@@ -11,7 +11,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.common.Pair;
@@ -36,7 +36,7 @@ public class SimpleReferenceValueProvider extends BaseReferenceValueProvider {
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 		if (cachedValues == null) {
 			cacheValues();
 		}

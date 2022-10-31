@@ -118,7 +118,15 @@ public class OAuthDialog extends Window {
 		// see
 		// https://developer.microsoft.com/en-us/microsoft-edge/webview2/#webview-title
 		// (SG used the Evergreen Bootstrapper)
-		System.out.println(preferEdgeBrowser);
+
+		final String PROPERTY_RUNNING_ITS = "com.mmxlabs.running.its";
+		final String prop = System.getProperty(PROPERTY_RUNNING_ITS);
+		if (prop != null && prop.equals(Boolean.TRUE.toString())) {
+//			// If we are in ITS, then webview is available BUT fails to work properly when running under a SYSTEM account
+			// https://github.com/MicrosoftEdge/WebView2Feedback/issues/1907
+			tryEdge = false;
+		}
+
 		if (preferEdgeBrowser && tryEdge) {
 			try {
 				browser = new Browser(oauthComposite, SWT.EDGE);

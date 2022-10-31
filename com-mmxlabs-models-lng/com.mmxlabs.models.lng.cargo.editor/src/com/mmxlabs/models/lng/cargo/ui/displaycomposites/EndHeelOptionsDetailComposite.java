@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +37,7 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 
 				{
-					final EStructuralFeature feature = editor.getFeature();
+					final var feature = editor.getFeature();
 					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION 
 							|| feature == CommercialPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
 						return super.createEditorLayoutData(root, value, editor, control);

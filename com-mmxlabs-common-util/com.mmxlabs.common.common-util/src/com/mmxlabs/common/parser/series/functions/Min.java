@@ -26,7 +26,7 @@ public class Min extends SimpleSeriesFunction {
 		for (final ISeries s : arguments) {
 			values.add(s.evaluate(point));
 		}
-
+		
 		return Collections.min(values, comparator);
 	}
 }

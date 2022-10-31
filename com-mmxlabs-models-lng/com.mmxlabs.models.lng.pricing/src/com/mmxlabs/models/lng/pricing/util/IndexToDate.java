@@ -14,24 +14,23 @@ import java.util.function.Function;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.RawTreeParser;
-import com.mmxlabs.common.parser.nodes.CommodityNode;
-import com.mmxlabs.common.parser.nodes.ConstantNode;
-import com.mmxlabs.common.parser.nodes.ConversionNode;
-import com.mmxlabs.common.parser.nodes.CurrencyNode;
-import com.mmxlabs.common.parser.nodes.DatedAverageNode;
-import com.mmxlabs.common.parser.nodes.MarkedUpNode;
-import com.mmxlabs.common.parser.nodes.MaxFunctionNode;
-import com.mmxlabs.common.parser.nodes.MinFunctionNode;
-import com.mmxlabs.common.parser.nodes.Node;
-import com.mmxlabs.common.parser.nodes.OperatorNode;
-import com.mmxlabs.common.parser.nodes.SCurveNode;
-import com.mmxlabs.common.parser.nodes.ShiftNode;
-import com.mmxlabs.common.parser.nodes.SplitNode;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
+import com.mmxlabs.common.parser.astnodes.ConversionASTNode;
+import com.mmxlabs.common.parser.astnodes.CurrencySeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.FunctionType;
+import com.mmxlabs.common.parser.astnodes.Operator;
+import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
+import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
-import com.mmxlabs.models.lng.pricing.parseutils.Nodes;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class IndexToDate {
 
@@ -43,11 +42,9 @@ public class IndexToDate {
 	public static @Nullable IIndexToDateNode calculateIndicesToDate(final @NonNull String priceExpression, final LocalDate date, final @NonNull LookupData lookupData) {
 
 		// Parse the expression
-		final MarkedUpNode markedUpNode = lookupData.expressionToNode.computeIfAbsent(priceExpression, expr -> {
-			final IExpression<Node> parse = new RawTreeParser().parse(expr);
-			final Node p = parse.evaluate();
-			final Node node = Nodes.expandNode(p, lookupData);
-			return Nodes.markupNodes(node, lookupData);
+		final ASTNode markedUpNode = lookupData.expressionToNode.computeIfAbsent(priceExpression, expr -> {
+			final SeriesParser commodityIndices = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+			return commodityIndices.parse(expr);
 		});
 
 		return getIndexToDateNode(markedUpNode, date, lookupData);
@@ -85,13 +82,10 @@ public class IndexToDate {
 
 	}
 
-	private static @NonNull IIndexToDateNode getIndexToDateNode(final @NonNull MarkedUpNode node, final LocalDate date, final LookupData lookupData) {
-		if (node instanceof ShiftNode) {
-			final ShiftNode shiftNode = (ShiftNode) node;
-			return getIndexToDateNode(shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData);
-		} else if (node instanceof DatedAverageNode) {
-			final DatedAverageNode averageNode = (DatedAverageNode) node;
-
+	private static @NonNull IIndexToDateNode getIndexToDateNode(final @NonNull ASTNode node, final LocalDate date, final LookupData lookupData) {
+		if (node instanceof ShiftFunctionASTNode shiftNode) {
+			return getIndexToDateNode(shiftNode.getToShift(), date.minusMonths(shiftNode.getShiftBy()), lookupData);
+		} else if (node instanceof DatedAvgFunctionASTNode averageNode) {
 			LocalDate startDate = date.minusMonths(averageNode.getMonths());
 			if (averageNode.getReset() != 1) {
 				startDate = startDate.minusMonths((date.getMonthValue() - 1) % averageNode.getReset());
@@ -99,44 +93,33 @@ public class IndexToDate {
 			startDate = startDate.minusMonths(averageNode.getLag());
 			final IndexToDateRecords records = new IndexToDateRecords();
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
-				final IIndexToDateNode p = getIndexToDateNode(averageNode.getChild(), startDate.plusMonths(i), lookupData);
+				final IIndexToDateNode p = getIndexToDateNode(averageNode.getSeries(), startDate.plusMonths(i), lookupData);
 				final IndexToDateRecords result = (IndexToDateRecords) p;
 				records.records.addAll(result.records);
 			}
 
 			return records;
-		} else if (node instanceof SCurveNode) {
-			final SCurveNode scurveNode = (SCurveNode) node;
+		} else if (node instanceof SCurveFunctionASTNode scurveNode) {
 			return getIndexToDateNode(scurveNode.getBase(), date, lookupData);
-		} else if (node instanceof ConstantNode) {
-			final ConstantNode constantNode = (ConstantNode) node;
+		} else if (node instanceof ConstantASTNode constantNode) {
 			return new EmptyNode();
-		} else if (node instanceof SplitNode) {
-			final SplitNode splitNode = (SplitNode) node;
-			if (node.getChildren().size() != 3) {
-				throw new IllegalStateException();
-			}
+		} else if (node instanceof SplitMonthFunctionASTNode splitNode) {
 
-			final IIndexToDateNode pc0 = getIndexToDateNode(node.getChildren().get(0), date, lookupData);
-			final IIndexToDateNode pc1 = getIndexToDateNode(node.getChildren().get(1), date, lookupData);
-
-			if (date.getDayOfMonth() < splitNode.getSplitPointInDays()) {
+			if (date.getDayOfMonth() < splitNode.getSplitPoint()) {
+				final IIndexToDateNode pc0 = getIndexToDateNode(splitNode.getSeries1(), date, lookupData);
 				return pc0;
 			} else {
+				final IIndexToDateNode pc1 = getIndexToDateNode(splitNode.getSeries2(), date, lookupData);
 				return pc1;
 			}
 		}
 		// Arithmetic operator token
-		else if (node instanceof OperatorNode) {
-			final OperatorNode operatorNode = (OperatorNode) node;
-			if (node.getChildren().size() != 2) {
-				throw new IllegalStateException();
-			}
+		else if (node instanceof OperatorASTNode operatorNode) {
 
-			final String operator = operatorNode.getOperator();
-			final IIndexToDateNode c0 = getIndexToDateNode(node.getChildren().get(0), date, lookupData);
-			final IIndexToDateNode c1 = getIndexToDateNode(node.getChildren().get(1), date, lookupData);
-			if (operator.equals("+")) {
+			final var operator = operatorNode.getOperator();
+			final IIndexToDateNode c0 = getIndexToDateNode(operatorNode.getLHS(), date, lookupData);
+			final IIndexToDateNode c1 = getIndexToDateNode(operatorNode.getRHS(), date, lookupData);
+			if (operator == Operator.PLUS) {
 				// addition: add coefficients of summands
 				if (c0 instanceof EmptyNode && c1 instanceof EmptyNode) {
 					return new EmptyNode();
@@ -147,7 +130,7 @@ public class IndexToDate {
 				} else {
 					return merge((IndexToDateRecords) c0, (IndexToDateRecords) c1, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
 				}
-			} else if (operator.equals("-")) {
+			} else if (operator == Operator.MINUS) {
 				if (c0 instanceof EmptyNode && c1 instanceof EmptyNode) {
 					return new EmptyNode();
 				} else if (c0 instanceof IndexToDateRecords && c1 instanceof EmptyNode) {
@@ -158,7 +141,7 @@ public class IndexToDate {
 					final IndexToDateRecords newC1 = modify((IndexToDateRecords) c1, c -> new IndexDateRecord(c.index, c.date));
 					return merge((IndexToDateRecords) c0, newC1, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
 				}
-			} else if (operator.equals("*")) {
+			} else if (operator == Operator.TIMES) {
 				if (c0 instanceof EmptyNode && c1 instanceof EmptyNode) {
 					return new EmptyNode();
 				} else if (c0 instanceof IndexToDateRecords && c1 instanceof EmptyNode) {
@@ -168,7 +151,7 @@ public class IndexToDate {
 				} else {
 					return merge((IndexToDateRecords) c0, (IndexToDateRecords) c1, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
 				}
-			} else if (operator.equals("/")) {
+			} else if (operator == Operator.DIVIDE) {
 				if (c0 instanceof EmptyNode && c1 instanceof EmptyNode) {
 					return new EmptyNode();
 				} else if (c0 instanceof IndexToDateRecords && c1 instanceof EmptyNode) {
@@ -178,7 +161,7 @@ public class IndexToDate {
 				} else {
 					return merge((IndexToDateRecords) c0, (IndexToDateRecords) c1, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
 				}
-			} else if (operator.equals("%")) {
+			} else if (operator == Operator.PERCENT) {
 
 				if (c0 instanceof EmptyNode && c1 instanceof EmptyNode) {
 					return new EmptyNode();
@@ -193,64 +176,54 @@ public class IndexToDate {
 			} else {
 				throw new IllegalStateException("Invalid operator");
 			}
-		} else if (node instanceof CommodityNode) {
-			final CommodityNode commodityNode = (CommodityNode) node;
+		} else if (node instanceof CommoditySeriesASTNode commodityNode) {
 			return new IndexToDateRecords(new IndexDateRecord(lookupData.commodityMap.get(commodityNode.getName().toLowerCase()), date));
-		} else if (node instanceof CurrencyNode) {
-			final CurrencyNode currencyNode = (CurrencyNode) node;
+		} else if (node instanceof CurrencySeriesASTNode currencyNode) {
 			return new IndexToDateRecords(new IndexDateRecord(lookupData.currencyMap.get(currencyNode.getName().toLowerCase()), date));
-		} else if (node instanceof ConversionNode) {
-			final ConversionNode conversionNode = (ConversionNode) node;
+		} else if (node instanceof ConversionASTNode) {
 			return new EmptyNode();
-		} else if (node instanceof MaxFunctionNode) {
-			if (node.getChildren().isEmpty()) {
-				throw new IllegalStateException();
-			}
-
-			IndexToDateRecords best = null;
-			for (int i = 0; i < node.getChildren().size(); ++i) {
-				final IIndexToDateNode pc = getIndexToDateNode(node.getChildren().get(i), date, lookupData);
-				if (pc instanceof ConstantNode) {
-					continue;
-				}
-				if (pc instanceof IndexToDateRecords) {
-					final IndexToDateRecords r = (IndexToDateRecords) pc;
-					if (best == null) {
-						best = r;
-					} else {
-						best = merge(best, r, (c0, c1) -> new IndexDateRecord(c0.index, c0.date));
+		} else if (node instanceof FunctionASTNode functionNode) {
+//		} else if (node instanceof MaxFunctionNode) {
+			if (functionNode.getFunctionType() == FunctionType.MAX) {
+				IndexToDateRecords best = null;
+				for (ASTNode child : functionNode.getArguments()) {
+					final IIndexToDateNode pc = getIndexToDateNode(child, date, lookupData);
+					if (pc instanceof EmptyNode) {
+						continue;
+					}
+					if (pc instanceof IndexToDateRecords r) {
+						if (best == null) {
+							best = r;
+						} else {
+							best = merge(best, r, (c0, c1) -> new IndexDateRecord(c0.index, c0.date));
+						}
 					}
 				}
-			}
-			if (best == null) {
-				return new EmptyNode();
-			}
-			return best;
-		} else if (node instanceof MinFunctionNode) {
-			if (node.getChildren().size() == 0) {
-				throw new IllegalStateException();
-			}
-			IndexToDateRecords best = null;
-			for (int i = 0; i < node.getChildren().size(); ++i) {
-				final IIndexToDateNode pc = getIndexToDateNode(node.getChildren().get(i), date, lookupData);
-				if (pc instanceof EmptyNode) {
-					continue;
+				if (best == null) {
+					return new EmptyNode();
 				}
-				if (pc instanceof IndexToDateRecords) {
-					final IndexToDateRecords r = (IndexToDateRecords) pc;
-					if (best == null) {
-						best = r;
-					} else {
-						best = merge(best, r, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
+				return best;
+			} else if (functionNode.getFunctionType() == FunctionType.MIN) {
+				IndexToDateRecords best = null;
+				for (ASTNode child : functionNode.getArguments()) {
+					final IIndexToDateNode pc = getIndexToDateNode(child, date, lookupData);
+					if (pc instanceof EmptyNode) {
+						continue;
+					}
+					if (pc instanceof IndexToDateRecords r) {
+						if (best == null) {
+							best = r;
+						} else {
+							best = merge(best, r, (c_0, c_1) -> new IndexDateRecord(c_0.index, c_0.date));
+						}
 					}
 				}
+				if (best == null) {
+					return new EmptyNode();
+				}
+				return best;
 			}
-			if (best == null) {
-				return new EmptyNode();
-			}
-			return best;
 		}
-
 		throw new IllegalStateException("Unexpected node type");
 
 	}

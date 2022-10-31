@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverridePortMultiReferenceInlineEditor;
@@ -48,6 +49,9 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			}
 		});
 
+		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
+
+		
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 
 		addEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,

@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -40,7 +40,7 @@ public class VesselCharterVesselValueProviderFactory implements IReferenceValueP
 			return new SimpleReferenceValueProvider(fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS) {
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 					// determine the current vessel attached to the availability
 					return getAllVesselsList(cargoModel, fleetModel, target);
 				}

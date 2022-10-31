@@ -7,8 +7,10 @@ package com.mmxlabs.scheduler.optimiser;
 import java.math.BigDecimal;
 
 /**
- * A utility class to convert to/from internal/external optimiser units. The optimiser uses integer arithmetic internally and so external floating point numbers need to be scaled appropriately for use
- * within the optimiser and values being extracted back out will need the reverse conversion.
+ * A utility class to convert to/from internal/external optimiser units. The
+ * optimiser uses integer arithmetic internally and so external floating point
+ * numbers need to be scaled appropriately for use within the optimiser and
+ * values being extracted back out will need the reverse conversion.
  * 
  * @author Simon Goodall
  * @noinstantiate This class is not intended to be instantiated by clients.
@@ -23,7 +25,8 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal price units. Such prices are expected to be in the form $/MMBTu or $/MT
+	 * Convert to internal price units. Such prices are expected to be in the form
+	 * $/MMBTu or $/MT
 	 * 
 	 * @param price
 	 * @return
@@ -37,8 +40,13 @@ public final class OptimiserUnitConvertor {
 		return (double) price / (double) Calculator.HighScaleFactor;
 	}
 
+	public static double convertToExternalPrice(final long price) {
+		return (double) price / (double) Calculator.HighScaleFactor;
+	}
+
 	/**
-	 * Convert to internal rate units. Such rates are expected to be e.g. m3/day of boiloff or MT/day of base fuel.
+	 * Convert to internal rate units. Such rates are expected to be e.g. m3/day of
+	 * boiloff or MT/day of base fuel.
 	 * 
 	 * @param rate
 	 * @return
@@ -52,7 +60,9 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal conversion factor. Such factors are expected to be small numbers e.g. conversion factor between LNG and base fuel or a scale factor for a price curve or tax rate.
+	 * Convert to internal conversion factor. Such factors are expected to be small
+	 * numbers e.g. conversion factor between LNG and base fuel or a scale factor
+	 * for a price curve or tax rate.
 	 * 
 	 * @param factor
 	 * @return
@@ -84,7 +94,8 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal volume. This is expected to be a larger number with no floating point. E.g. Vessel capacity, cargo load or discharge limits etc.
+	 * Convert to internal volume. This is expected to be a larger number with no
+	 * floating point. E.g. Vessel capacity, cargo load or discharge limits etc.
 	 * 
 	 * @param volume
 	 * @return
@@ -112,7 +123,8 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal daily rate. This is expected to be larger numbers such as daily charter costs
+	 * Convert to internal daily rate. This is expected to be larger numbers such as
+	 * daily charter costs
 	 * 
 	 * @param dailyCost
 	 * @return
@@ -130,7 +142,8 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal hourly rate. This is expected to be larger numbers such as daily charter costs
+	 * Convert to internal hourly rate. This is expected to be larger numbers such
+	 * as daily charter costs
 	 * 
 	 * @param dailyCost
 	 * @return
@@ -144,7 +157,8 @@ public final class OptimiserUnitConvertor {
 	}
 
 	/**
-	 * Convert to internal fixed costs units. Such costs are expected to be large but a fixed quantity per use. For example port costs or canal costs.
+	 * Convert to internal fixed costs units. Such costs are expected to be large
+	 * but a fixed quantity per use. For example port costs or canal costs.
 	 * 
 	 * @param cost
 	 * @return

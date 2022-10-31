@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+    <setAttribute key="additional_plugins">
+        <setEntry value="org.eclipse.jdt.junit5.runtime:1.0.1400.v20211108-0640:default:true:default:default"/>
+        <setEntry value="org.ops4j.peaberry.activation:1.3.0:default:true:1:true"/>
+    </setAttribute>
+    <booleanAttribute key="append.args" value="true"/>
+    <booleanAttribute key="askclear" value="false"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticValidate" value="false"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <booleanAttribute key="clearws" value="true"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
+    <booleanAttribute key="default" value="false"/>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="true"/>
+    <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/com.mmxlabs.lingo.its"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="4"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=com.mmxlabs.lingo.its"/>
+    <stringAttribute key="org.eclipse.jdt.junit.EXCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.HubTest"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.OptimisationTest"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+    <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit5"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JDK 17.0.2 2022a"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value=""/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.mmxlabs.lingo.its"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea -Xmx3G -Dlingo.suppress.dialogs=true"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value="com.mmxlabs.lingo.app.product"/>
+    <booleanAttribute key="run_in_ui_thread" value="false"/>
+    <setAttribute key="selected_features">
+        <setEntry value="com.google.ortools.feature:default"/>
+        <setEntry value="com.mmxlabs.common.util.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.its.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.platform.feature:default"/>
+        <setEntry value="com.mmxlabs.lingo.reports.feature:default"/>
+        <setEntry value="com.mmxlabs.lngdataserver.feature:default"/>
+        <setEntry value="com.mmxlabs.models.datetime.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.feature:default"/>
+        <setEntry value="com.mmxlabs.models.lng.transformer.its.feature:default"/>
+        <setEntry value="com.mmxlabs.models.migration.feature:default"/>
+        <setEntry value="com.mmxlabs.models.mmxcore.runtime.feature:default"/>
+        <setEntry value="com.mmxlabs.models.ui.runtime.feature:default"/>
+        <setEntry value="com.mmxlabs.optimiser.feature:default"/>
+        <setEntry value="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature:default"/>
+        <setEntry value="com.mmxlabs.rcp.common.feature:default"/>
+        <setEntry value="com.mmxlabs.scenario.service.feature:default"/>
+        <setEntry value="com.mmxlabs.scheduler.optimiser.feature:default"/>
+    </setAttribute>
+    <booleanAttribute key="show_selected_only" value="false"/>
+    <stringAttribute key="timestamp" value="1554123527423"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useDefaultConfigArea" value="false"/>
+    <booleanAttribute key="useProduct" value="true"/>
+</launchConfiguration>

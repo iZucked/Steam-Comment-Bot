@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -17,7 +17,7 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 
 public class VolumeModeInlineEditorFactory implements IInlineEditorFactory {
 	@Override
-	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+	public IInlineEditor createEditor(final EClass owner, final ETypedElement typedElement) {
 
 		ArrayList<Object> objectsList = new ArrayList<>();
 		for (final VolumeMode type : VolumeMode.values()) {
@@ -39,7 +39,7 @@ public class VolumeModeInlineEditorFactory implements IInlineEditorFactory {
 			objectsList.add(name);
 			objectsList.add(type);
 		}
-		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
+		return new EENumInlineEditor((EAttribute) typedElement, objectsList.toArray());
 	}
 
 }

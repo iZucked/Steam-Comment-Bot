@@ -673,7 +673,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IDischargeSlot dischargeSlot = (IDischargeSlot) slot;
 
 			// calculate the effective LNG value based on this discharge slot
-			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(vessel, dischargeSlot, portTimesRecord, null);
+			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(vessel, dischargeSlot, portTimesRecord);
 
 			// and apply the value to prices on all preceding voyages
 			for (int j = prevDischargeIndex; j < i; j++) {

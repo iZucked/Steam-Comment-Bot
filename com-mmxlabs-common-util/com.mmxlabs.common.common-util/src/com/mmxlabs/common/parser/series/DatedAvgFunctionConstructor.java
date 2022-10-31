@@ -17,6 +17,15 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 	private final IExpression<ISeries> series;
 	private final int months;
 	private final int lag;
+
+	public CalendarMonthMapper getCalendarMonthMapper() {
+		return calendarMonthMapper;
+	}
+
+	public IExpression<ISeries> getSeries() {
+		return series;
+	}
+
 	private final int reset;
 
 	public DatedAvgFunctionConstructor(final SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
@@ -45,9 +54,22 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 	public @NonNull ISeries evaluate() {
 		return new DatedAverageSeries(series.evaluate(), months, lag, reset, calendarMonthMapper);
 	}
-	
+
+	public int getMonths() {
+		return months;
+	}
+
+	public int getLag() {
+		return lag;
+	}
+
+	public int getReset() {
+		return reset;
+	}
+
 	@Override
 	public boolean canEvaluate() {
 		return series.canEvaluate();
+
 	}
 }

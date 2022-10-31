@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.IExpression;
 
+@NonNullByDefault
 public interface IExpressionContainer extends ISeriesContainer {
-	void setExpression(@NonNull IExpression<ISeries> expression);
+
+	void setExpression(IExpression<ISeries> expression);
 }

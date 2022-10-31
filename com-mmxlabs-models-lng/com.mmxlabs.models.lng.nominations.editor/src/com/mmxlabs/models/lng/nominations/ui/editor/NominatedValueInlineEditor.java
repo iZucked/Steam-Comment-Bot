@@ -17,6 +17,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -64,31 +65,33 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 	protected FormattedText editor;
 	protected IItemPropertyDescriptor propertyDescriptor = null;
 
-	public NominatedValueInlineEditor(final EStructuralFeature feature, NominatedValueProvider suggestions) {
-		super(feature);
+	public NominatedValueInlineEditor(final ETypedElement typedElement, NominatedValueProvider suggestions) {
+		super(typedElement);
 		this.suggestions = suggestions;
 	}
 
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(feature.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}
@@ -132,7 +135,11 @@ public class NominatedValueInlineEditor extends UnsettableInlineEditor {
 
 		toolkit.adapt(editor.getControl(), true, true);
 
-		editor.getControl().setEnabled(feature.isChangeable() && isEditorEnabled());
+		if (typedElement instanceof EStructuralFeature feature) {
+			editor.getControl().setEnabled(feature.isChangeable() && isEditorEnabled());
+		} else {
+			editor.getControl().setEnabled(false);
+		}
 		editor.getControl().addModifyListener(e -> {
 			editor.getControl().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 			final String text = editor.getControl().getText().toLowerCase();

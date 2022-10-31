@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -73,27 +74,27 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
 
 	Composite contentComposite;
-	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
+	private final Map<ETypedElement, IInlineEditor> feature2Editor;
 	final ExpandableSet esPricing;
 	private final ExpandableSet esWindow;
 	private final ExpandableSet esTerms;
 	private final ExpandableSet esOther;
-	private ArrayList<EStructuralFeature[]> nameFeatures;
-	private ArrayList<EStructuralFeature[]> pricingFeatures;
-	private HashSet<EStructuralFeature> pricingTitleFeatures;
-	private ArrayList<EStructuralFeature[]> mainFeatures;
-	private ArrayList<EStructuralFeature[]> shippedWindowFeatures;
-	private HashSet<EStructuralFeature> shippedWindowTitleFeatures;
-	private ArrayList<EStructuralFeature[]> unshippedWindowFeatures;
-	private HashSet<EStructuralFeature> unshippedWindowTitleFeatures;
+	private ArrayList<ETypedElement[]> nameFeatures;
+	private ArrayList<ETypedElement[]> pricingFeatures;
+	private HashSet<ETypedElement> pricingTitleFeatures;
+	private ArrayList<ETypedElement[]> mainFeatures;
+	private ArrayList<ETypedElement[]> shippedWindowFeatures;
+	private HashSet<ETypedElement> shippedWindowTitleFeatures;
+	private ArrayList<ETypedElement[]> unshippedWindowFeatures;
+	private HashSet<ETypedElement> unshippedWindowTitleFeatures;
 	
-	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
-	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
-	private ArrayList<EStructuralFeature[]> noteFeatures;
-	private HashSet<EStructuralFeature> allFeatures;
+	private ArrayList<ETypedElement[]> loadTermsFeatures;
+	private ArrayList<ETypedElement[]> dischargeTermsFeatures;
+	private ArrayList<ETypedElement[]> noteFeatures;
+	private HashSet<ETypedElement> allFeatures;
 
-	private ArrayList<EStructuralFeature[]> missedFeatures;
-	private ArrayList<EStructuralFeature> missedFeaturesList;
+	private ArrayList<ETypedElement[]> missedFeatures;
+	private ArrayList<ETypedElement> missedFeaturesList;
 
 	{
 		allFeatures = new HashSet<>();
@@ -114,6 +115,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures = new ArrayList<>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract, CargoPackage.Literals.SPOT_SLOT__MARKET });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION,  CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION });
+		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD,  CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingEvent(), CargoFeatures.getSlot_PricingDate() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MiscCosts(), CargoFeatures.getSlot_CancellationExpression() });
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
@@ -137,7 +141,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		unshippedWindowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
 		allFeatures.addAll(getAllFeatures(unshippedWindowFeatures));
 		
-		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
+		loadTermsFeatures = new ArrayList<ETypedElement[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
 		loadTermsFeatures
@@ -153,7 +157,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
-		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
+		dischargeTermsFeatures = new ArrayList<ETypedElement[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures
@@ -280,7 +284,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
 				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY || feature == CargoPackage.Literals.SLOT__OPERATIONAL_TOLERANCE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -434,6 +438,43 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
+				
+				if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION || feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Price tiers");
+						}
+						editor.setLabel(null);
+					} else  {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD || feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					// gd.widthHint = 80;
+					
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Threshold");
+						}
+						editor.setLabel(null);
+					} else  {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				
+				
 				return super.createEditorLayoutData(root, value, editor, control);
 			}
 		};
@@ -444,24 +485,24 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		editor = super.addInlineEditor(editor);
 		if (editor != null) {
-			final EStructuralFeature f = editor.getFeature();
+			final var f = editor.getFeature();
 			feature2Editor.put(f, editor);
 			if (!allFeatures.contains(f)) {
 				final Section section = getSectionFor(f);
 				switch (section) {
 				case MAIN:
-					mainFeatures.add(new EStructuralFeature[] { f });
+					mainFeatures.add(new ETypedElement[] { f });
 					break;
 				case PRICING:
-					pricingFeatures.add(new EStructuralFeature[] { f });
+					pricingFeatures.add(new ETypedElement[] { f });
 					break;
 				case TERMS:
-					loadTermsFeatures.add(new EStructuralFeature[] { f });
-					dischargeTermsFeatures.add(new EStructuralFeature[] { f });
+					loadTermsFeatures.add(new ETypedElement[] { f });
+					dischargeTermsFeatures.add(new ETypedElement[] { f });
 					break;
 				case WINDOW:
-					unshippedWindowFeatures.add(new EStructuralFeature[] { f });
-					shippedWindowFeatures.add(new EStructuralFeature[] { f });
+					unshippedWindowFeatures.add(new ETypedElement[] { f });
+					shippedWindowFeatures.add(new ETypedElement[] { f });
 					break;
 				case OTHER:
 				default:
@@ -483,7 +524,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		esPricing.init(eo);
 		esWindow.init(eo);
 		esTerms.init(eo);
-		esTerms.init(eo);
+		//esOther.init(eo);
 	}
 
 	@Override
@@ -502,8 +543,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		boolean isUnshipped = false;
-		if (object instanceof Slot<?>) {
-			Slot<?> slot = (Slot<?>)object;
+		if (object instanceof Slot<?> slot) {
 			if (slot.getCargo() != null && slot.getCargo().getCargoType() != CargoType.FLEET) {
 				isUnshipped = true;
 			}
@@ -522,25 +562,25 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		layout.verticalSpacing = 8;
 		contentComposite.setLayout(layout);
 
-		for (final EStructuralFeature[] fs : nameFeatures) {
+		for (final ETypedElement[] fs : nameFeatures) {
 			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
-		for (final EStructuralFeature[] fs : mainFeatures) {
+		for (final ETypedElement[] fs : mainFeatures) {
 			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
 		createSpacer();
 
-		final HashSet<EStructuralFeature> contractFeatures = new LinkedHashSet<EStructuralFeature>();
-		for (final EStructuralFeature f : missedFeaturesList) {
+		final HashSet<ETypedElement> contractFeatures = new LinkedHashSet<>();
+		for (final ETypedElement f : missedFeaturesList) {
 
-			if (f.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)) {
+			if (f instanceof EStructuralFeature feature && feature.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)) {
 				contractFeatures.add(f);
 			}
 		}
-		for (final EStructuralFeature f : contractFeatures) {
-			pricingFeatures.add(new EStructuralFeature[] { f });
+		for (final ETypedElement f : contractFeatures) {
+			pricingFeatures.add(new ETypedElement[] { f });
 			missedFeaturesList.remove(f);
 		}
 
@@ -563,19 +603,19 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		if (!missedFeaturesList.isEmpty()) {
 			createSpacer();
 			missedFeaturesList.size();
-			for (final EStructuralFeature f : missedFeaturesList) {
-				missedFeatures.add(new EStructuralFeature[] { f });
+			for (final ETypedElement f : missedFeaturesList) {
+				missedFeatures.add(new ETypedElement[] { f });
 			}
 			makeExpandable(dialogContext, root, object, dbc, esOther, missedFeatures, null, true);
 		}
 
-		for (final EStructuralFeature[] fs : noteFeatures) {
+		for (final ETypedElement[] fs : noteFeatures) {
 			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 	}
 
 	private void makeExpandable(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable,
-			final List<EStructuralFeature[]> features, final Set<EStructuralFeature> titleFeatures, final boolean expanded) {
+			final List<ETypedElement[]> features, final Set<ETypedElement> titleFeatures, final boolean expanded) {
 		expandable.setFeatures(features, titleFeatures);
 		expandable.create(dialogContext, contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		expandable.setExpanded(expanded);
@@ -614,10 +654,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		return null;
 	}
 
-	private HashSet<EStructuralFeature> getAllFeatures(final ArrayList<EStructuralFeature[]> list) {
-		final HashSet<EStructuralFeature> fs = new HashSet<>();
-		for (final EStructuralFeature[] eStructuralFeatures : list) {
-			for (final EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+	private HashSet<ETypedElement> getAllFeatures(final ArrayList<ETypedElement[]> list) {
+		final HashSet<ETypedElement> fs = new HashSet<>();
+		for (final ETypedElement[] eStructuralFeatures : list) {
+			for (final ETypedElement eStructuralFeature : eStructuralFeatures) {
 				fs.add(eStructuralFeature);
 			}
 		}
@@ -633,7 +673,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		OTHER, MAIN, PRICING, WINDOW, TERMS
 	}
 
-	private Section getSectionFor(EStructuralFeature feature) {
+	private Section getSectionFor(ETypedElement feature) {
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/layout/slot");
 
 		if (annotation != null) {

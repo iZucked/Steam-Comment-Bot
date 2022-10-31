@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>5.8.3-SNAPSHOT</version>
+		<version>5.10.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.models.ui.validation.tests</artifactId>
@@ -45,11 +45,6 @@
 						<dependency>
 							<type>eclipse-plugin</type>
 							<artifactId>ch.qos.logback.classic</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 

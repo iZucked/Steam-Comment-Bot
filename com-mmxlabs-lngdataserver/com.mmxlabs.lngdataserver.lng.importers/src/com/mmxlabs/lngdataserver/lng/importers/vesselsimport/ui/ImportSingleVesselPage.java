@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -195,7 +195,7 @@ public class ImportSingleVesselPage extends WizardPage {
 		}
 
 		@Override
-		public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+		public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 			final List<Pair<String, EObject>> delegateValue = delegate.getAllowedValues(target, field);
 
 			final List<Pair<String, EObject>> filteredList = new ArrayList<>();

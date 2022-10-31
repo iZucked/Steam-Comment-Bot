@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -96,15 +97,19 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
- * This dialog is used to create a strip of {@link Slot}s with consistent parameters but with varying date according to some kind of pattern.
+ * This dialog is used to create a strip of {@link Slot}s with consistent
+ * parameters but with varying date according to some kind of pattern.
  * 
  * @author Simon Goodall
  * 
  */
 public class CreateStripDialog extends FormDialog {
 
-	public static enum StripType {
-		TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_PURCHASE_SLOT("DES Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_FOB_SALE_SLOT("FOB Sale");
+	public enum StripType {
+		TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), //
+		TYPE_DES_PURCHASE_SLOT("DES Purchase"), //
+		TYPE_DES_SALE_SLOT("DES Sale"), //
+		TYPE_FOB_SALE_SLOT("FOB Sale");
 
 		private final @NonNull String name;
 
@@ -112,6 +117,7 @@ public class CreateStripDialog extends FormDialog {
 			this.name = name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}
@@ -140,21 +146,21 @@ public class CreateStripDialog extends FormDialog {
 	private DateTime pattern_periodEnd;
 
 	private DialogValidationSupport validationSupport;
-	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+	private final Map<Object, IStatus> validationErrors = new HashMap<>();
 
 	private enum RepeatType {
 		Periodic, Distributed
-	};
+	}
 
 	private enum IntervalType {
 		days, weeks, months
-	};
+	}
 
 	private DefaultDialogEditingContext dialogContext;
 
 	private final IDialogController dialogController = new IDialogController() {
 
-		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+		private final PairKeyedMap<EObject, ETypedElement, Boolean> visibilityMap = new PairKeyedMap<>();
 
 		@Override
 		public void validate() {
@@ -175,13 +181,13 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		@Override
-		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
+		public void setEditorVisibility(final EObject object, final ETypedElement feature, final boolean visible) {
 			visibilityMap.put(object, feature, visible);
 
 		}
 
 		@Override
-		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
+		public boolean getEditorVisibility(final EObject object, final ETypedElement feature) {
 			if (visibilityMap.contains(object, feature)) {
 				return visibilityMap.get(object, feature).booleanValue();
 			}
@@ -253,10 +259,16 @@ public class CreateStripDialog extends FormDialog {
 				if (f == CargoPackage.eINSTANCE.getSlot_Cargo()) {
 					continue;
 				}
+				// Skip FOB/DES flags set above
+				if (f == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+					continue;
+				}
+				if (f == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+					continue;
+				}
 
 				// Skip containment references -- again how should we handle this?
-				if (f instanceof EReference && ((EReference) f).isContainment()) {
-					final EReference reference = (EReference) f;
+				if (f instanceof EReference reference && reference.isContainment()) {
 					if (reference.isMany()) {
 						sample.eSet(f, EMFCopier.copyAll((Collection<EObject>) selectedObject.eGet(f)));
 					} else {
@@ -306,14 +318,7 @@ public class CreateStripDialog extends FormDialog {
 		mgr = new ObservablesManager();
 		dbc = new EMFDataBindingContext();
 
-		mgr.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				createFormArea(mform);
-			}
-		});
-
+		mgr.runAndCollect(() -> createFormArea(mform));
 	}
 
 	@Override
@@ -580,6 +585,7 @@ public class CreateStripDialog extends FormDialog {
 
 		// Hook up refresh handlers
 		final EContentAdapter changedAdapter = new EContentAdapter() {
+			@Override
 			public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 
 				super.notifyChanged(notification);
@@ -608,7 +614,6 @@ public class CreateStripDialog extends FormDialog {
 		col.getColumn().setText(EditorUtils.unmangle(feature.getName()));
 	}
 
-	@SuppressWarnings("deprecation")
 	private List<EObject> updateGeneratedObjects() {
 		// Sync dates
 		{
@@ -712,7 +717,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		// Generate the slots
-		final List<EObject> objects = new ArrayList<EObject>(dates.size());
+		final List<EObject> objects = new ArrayList<>(dates.size());
 		final CargoFactory factory = CargoFactory.eINSTANCE;
 		int counter = 1;
 		for (final LocalDate date : dates) {
@@ -744,8 +749,7 @@ public class CreateStripDialog extends FormDialog {
 					// Copy from template
 					if (sample.eIsSet(feature)) {
 						// Skip containment references -- again how should we handle this?
-						if (feature instanceof EReference && ((EReference) feature).isContainment()) {
-							final EReference reference = (EReference) feature;
+						if (feature instanceof EReference reference && reference.isContainment()) {
 							if (reference.isMany()) {
 								eObj.eSet(feature, EMFCopier.copyAll((Collection<EObject>) sample.eGet(feature)));
 							} else {
@@ -757,9 +761,8 @@ public class CreateStripDialog extends FormDialog {
 					} else {
 						eObj.eUnset(feature);
 					}
-					if (sample instanceof MMXObject) {
-						final MMXObject mmxObject = (MMXObject) sample;
-						final MMXObject clone  = (MMXObject) eObj;
+					if (sample instanceof MMXObject mmxObject) {
+						final MMXObject clone = (MMXObject) eObj;
 						for (final EObject ext : mmxObject.getExtensions()) {
 							clone.getExtensions().add(EMFCopier.copy(ext));
 						}
@@ -774,7 +777,7 @@ public class CreateStripDialog extends FormDialog {
 		scenarioEditingLocation.pushExtraValidationContext(validationSupport.getValidationContext());
 		final IStatus status = validationSupport.validate();
 		validationErrors.clear();
-		validationSupport.processStatus(status, validationErrors);
+		DialogValidationSupport.processStatus(status, validationErrors);
 		scenarioEditingLocation.popExtraValidationContext();
 
 		return objects;
@@ -795,8 +798,9 @@ public class CreateStripDialog extends FormDialog {
 	}
 
 	/**
-	 * Create a new {@link IScenarioEditingLocation} wrapping the "original" {@link IScenarioEditingLocation} to handle the editing requirements of this dialog - editing objects which are not yet
-	 * contained within the scenario.
+	 * Create a new {@link IScenarioEditingLocation} wrapping the "original"
+	 * {@link IScenarioEditingLocation} to handle the editing requirements of this
+	 * dialog - editing objects which are not yet contained within the scenario.
 	 * 
 	 * @param original
 	 * @return
@@ -806,7 +810,7 @@ public class CreateStripDialog extends FormDialog {
 		final ICommandHandler commandHandler = new ICommandHandler() {
 
 			@Override
-			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+			public void handleCommand(final Command command, final EObject target, final ETypedElement typedElement) {
 				command.execute();
 				// Activator.getDefault().getCommandProviderTracker().
 				refreshPreview();
@@ -825,7 +829,7 @@ public class CreateStripDialog extends FormDialog {
 			@Override
 			public ModelReference getModelReference() {
 				return original.getModelReference();
-			};
+			}
 		};
 
 		return new IScenarioEditingLocation() {
@@ -950,8 +954,8 @@ public class CreateStripDialog extends FormDialog {
 		@Override
 		public String getText(Object element) {
 
-			if (element instanceof EObject) {
-				element = ((EObject) element).eGet(feature);
+			if (element instanceof EObject eObj) {
+				element = eObj.eGet(feature);
 			}
 			if (element instanceof LocalDate) {
 				final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
@@ -959,8 +963,8 @@ public class CreateStripDialog extends FormDialog {
 				return formatter.getDisplayString();
 			}
 
-			if (element instanceof NamedObject) {
-				return ((NamedObject) element).getName();
+			if (element instanceof NamedObject no) {
+				return no.getName();
 			} else if (element != null) {
 				return element.toString();
 			}

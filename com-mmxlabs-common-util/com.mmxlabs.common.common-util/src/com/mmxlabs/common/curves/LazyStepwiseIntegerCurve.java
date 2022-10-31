@@ -7,6 +7,8 @@ package com.mmxlabs.common.curves;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 
@@ -14,10 +16,10 @@ public class LazyStepwiseIntegerCurve implements ILazyCurve {
 
 	private ThreadLocal<ICurve> wrappedCurve = new ThreadLocal<>();
 	private IExpression<ISeries> expression;
-	private Function<ISeries, ICurve> initialiser;
-	private Consumer<ISeries> parsedSeriesConsumer;
+	private Function<@NonNull ISeries, @NonNull ICurve> initialiser;
+	private Consumer<@NonNull ISeries> parsedSeriesConsumer;
 
-	public LazyStepwiseIntegerCurve(final IExpression<ISeries> expression, final Function<ISeries, ICurve> initialiser, final Consumer<ISeries> parsedSeriesConsumer) {
+	public LazyStepwiseIntegerCurve(final IExpression<ISeries> expression, final Function<@NonNull ISeries, @NonNull ICurve> initialiser, final Consumer<@NonNull ISeries> parsedSeriesConsumer) {
 		this.expression = expression;
 		this.initialiser = initialiser;
 		this.parsedSeriesConsumer = parsedSeriesConsumer;

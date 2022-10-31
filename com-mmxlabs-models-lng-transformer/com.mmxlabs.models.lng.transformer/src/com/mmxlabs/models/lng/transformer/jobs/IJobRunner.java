@@ -19,6 +19,14 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @NonNullByDefault
 public interface IJobRunner {
 
+	/**
+	 * When running a batch of jobs, this is the individual job id used to e.g.
+	 * select the correct parameter set
+	 * 
+	 * @param subJobId
+	 */
+	void withSubJobId(int subJobId);
+
 	void withParams(File file) throws IOException;
 
 	void withParams(String json) throws IOException;

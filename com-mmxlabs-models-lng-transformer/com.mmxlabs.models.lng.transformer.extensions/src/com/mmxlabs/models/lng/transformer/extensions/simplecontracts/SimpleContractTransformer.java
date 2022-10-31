@@ -109,10 +109,8 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
 
 		final var p = dateHelper.createCurveAndIntervals(indices, priceExpression, curveFactory);
-
 		final PriceExpressionContract contract = new PriceExpressionContract(p.getFirst(), p.getSecond());
 		injector.injectMembers(contract);
 		return contract;
 	}
-
 }

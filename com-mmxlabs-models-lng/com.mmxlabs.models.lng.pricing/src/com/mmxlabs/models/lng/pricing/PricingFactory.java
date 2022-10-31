@@ -150,6 +150,15 @@ public interface PricingFactory extends EFactory {
 	PanamaCanalTariffBand createPanamaCanalTariffBand();
 
 	/**
+	 * Returns a new object of class '<em>Panama Tariff V2</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Panama Tariff V2</em>'.
+	 * @generated
+	 */
+	PanamaTariffV2 createPanamaTariffV2();
+
+	/**
 	 * Returns a new object of class '<em>Suez Canal Tug Band</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -320,6 +329,15 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	SettleStrategy createSettleStrategy();
+
+	/**
+	 * Returns a new object of class '<em>Basis</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Basis</em>'.
+	 * @generated
+	 */
+	PricingBasis createPricingBasis();
 
 	/**
 	 * Returns the package supported by this factory.

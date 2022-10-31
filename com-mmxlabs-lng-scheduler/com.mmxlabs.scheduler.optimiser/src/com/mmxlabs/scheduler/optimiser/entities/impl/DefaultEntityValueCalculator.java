@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -18,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
@@ -64,8 +66,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITransferModelDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
+import com.mmxlabs.scheduler.optimiser.transfers.BasicTransferRecord;
+import com.mmxlabs.scheduler.optimiser.transfers.TranferRecordAnnotation;
+import com.mmxlabs.scheduler.optimiser.transfers.TransferRecordModelConstants;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -108,6 +114,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+	
+	@Inject
+	private ITransferModelDataProvider transferModelDataProvider;
+	
+	@Inject
+	@Named(SchedulerConstants.PROCESS_TRANSFER_MODEL)
+	private boolean processTransferModel;
 
 	/**
 	 * Evaluate the group value of the given cargo. This method first calculates
@@ -253,6 +266,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
 		evaluateCargoPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		// Calculate actual transfer pricing between entities based on transfer records
+		if (processTransferModel && annotatedSolution != null && entityBookDetailTreeMap != null) {
+			evaluateTransferRecordPNL(vesselCharter, plan, cargoPNLData, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
+		}
 
 		// The first load entity
 		IEntity baseEntity = null;
@@ -436,6 +453,150 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
 			}
 		}
+	}
+	
+	protected void evaluateTransferRecordPNL(final IVesselCharter vesselCharter, final VoyagePlan plan, final CargoValueAnnotation cargoPNLData,
+			final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+
+		if (cargoPNLData.getSlots().size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
+			throw new RuntimeException("Complex cargoes not supported");
+		}
+
+		IEntity loadEntity = null;
+		IEntity dischargeEntity = null;
+		
+		ILoadOption loadOption = null;
+		IDischargeOption dischargeOption = null;
+
+		for (final IPortSlot slot : cargoPNLData.getSlots()) {
+			// Hacky first slot check...
+			if (slot instanceof ILoadOption ls) {
+				loadOption = ls;
+				loadEntity = cargoPNLData.getSlotEntity(slot);
+			}
+			if (slot instanceof IDischargeOption ds) {
+				dischargeOption = ds;
+				dischargeEntity = cargoPNLData.getSlotEntity(slot);
+			}
+		}
+		
+		assert loadOption != null;
+		assert dischargeOption != null;
+		assert loadEntity != null;
+		assert dischargeEntity != null;
+		
+		boolean isTransferred = (transferModelDataProvider.isSlotTransferred(loadOption) || transferModelDataProvider.isSlotTransferred(dischargeOption));
+		
+		final List<BasicTransferRecord> records = getSortedTransferRecords(loadOption, dischargeOption, loadEntity, dischargeEntity);
+		
+		if (isTransferred && !records.isEmpty()) {
+			
+			// initial info
+			final long volumeInMMBTu = cargoPNLData.getCommercialSlotVolumeInMMBTu(loadOption);
+			final long loadPurchaseCost = cargoPNLData.getSlotValue(loadOption);
+			final long dischargeSaleRevenue = cargoPNLData.getSlotValue(dischargeOption);
+			
+			// Negate the original cost and revenue from the trading book
+			// Since these are already added in evaluateCargoPnL for the corresponding slots
+			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), loadPurchaseCost);
+			addEntityBookProfit(entityPreTaxProfit, loadEntity.getTradingBook(), -dischargeSaleRevenue);
+			
+			BasicTransferRecord previousRecord = null;
+			TranferRecordAnnotation prevAnnotation = null;
+			for(final BasicTransferRecord currentRecord : records) {
+				
+				int tpPrice = getTransferPrice(currentRecord);
+				
+				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
+				annotation.transferRecord = currentRecord;
+				annotation.fromEntity = currentRecord.getFromEntity();
+				annotation.toEntity = currentRecord.getToEntity();
+				annotation.tpPrice = tpPrice;
+				
+				long purchaseCost = loadPurchaseCost;
+				long saleRevenue = dischargeSaleRevenue;
+				long volumeTPValue = Calculator.costFromVolume(volumeInMMBTu, tpPrice);
+				if (previousRecord != null && prevAnnotation != null) {
+					purchaseCost =  volumeTPValue;
+					prevAnnotation.toEntityRevenue = volumeTPValue;
+				}
+				
+				annotation.fromEntityCost = purchaseCost;
+				annotation.fromEntityRevenue = volumeTPValue;
+				
+				annotation.toEntityCost = volumeTPValue;
+				annotation.toEntityRevenue = saleRevenue;
+				
+				// Add previous annotation into the book
+				if (prevAnnotation != null && previousRecord != null) {
+					addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
+				}
+				
+				previousRecord = currentRecord;
+				prevAnnotation = annotation;
+			}
+			
+			// Add the last annotation into the book
+			if (prevAnnotation != null && previousRecord != null) {
+				addAnnotationToTheBooks(entityPreTaxProfit, entityBookDetailTreeMap, prevAnnotation);
+			} else {
+				throw new IllegalStateException(String.format("Load %s and Discharge %s pair annotated with transfer record but that seems to be missing", //
+						loadOption.getId(), dischargeOption.getId()));
+			}
+		}
+	}
+	
+	/**
+	 * Override-able method to add any back-market or contingency time
+	 * @param record
+	 * @return
+	 */
+	protected int getTransferPrice(final BasicTransferRecord record) {
+		return record.getPricingSeries().getValueAtPoint(record.getPricingDate());
+	}
+	
+	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,
+			final TranferRecordAnnotation annotation) {
+		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), -annotation.toEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.toEntity.getTradingBook(), annotation.toEntityRevenue);
+		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), -annotation.fromEntityCost);
+		addEntityBookProfit(entityPreTaxProfit, annotation.fromEntity.getTradingBook(), annotation.fromEntityRevenue);
+		
+		if (entityBookDetailTreeMap != null) {
+			final IDetailTree detailTree = getEntityBookDetails(entityBookDetailTreeMap, annotation.fromEntity.getTradingBook());
+			detailTree.addChild(TransferRecordModelConstants.TRANSFER_RECORD_ANNOTAION_KEY, annotation);
+		}
+	}
+	
+	private List<BasicTransferRecord> getSortedTransferRecords(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IEntity loadEntity, final IEntity dischargeEntity){
+		final List<BasicTransferRecord> unsorted = new ArrayList<>();
+		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(loadOption));
+		unsorted.addAll(transferModelDataProvider.getTransferRecordsForSlot(dischargeOption));
+		if (unsorted.size() <= 1 ) {
+			return unsorted;
+		}
+		
+		final List<BasicTransferRecord> sorted = new ArrayList<>(unsorted.size());
+		IEntity toEntity = loadEntity;
+		for (int i = 0; i < unsorted.size(); i++) {
+			for (final BasicTransferRecord r : unsorted) {
+				if (toEntity.equals(r.getFromEntity())) {
+					sorted.add(r);
+					toEntity = r.getToEntity();
+					break;
+				}
+			}
+		}
+		if (sorted.size() == unsorted.size()) {
+			if (!sorted.get(unsorted.size() - 1).getToEntity().equals(dischargeEntity)) {
+				// something might have gone wrong
+				// according to K, nothing is wrong
+				// according to P, should be a chain of entities
+				// throw new IllegalStateException
+			}
+		}
+				
+		return sorted;
 	}
 
 	/**

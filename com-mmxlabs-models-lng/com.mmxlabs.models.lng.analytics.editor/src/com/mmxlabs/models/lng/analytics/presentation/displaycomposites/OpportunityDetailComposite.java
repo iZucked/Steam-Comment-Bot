@@ -38,7 +38,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 	public boolean checkVisibility(final IDialogEditingContext dialogContext) {
 		boolean changed = false;
 		for (final IInlineEditor editor : editors) {
-			final EStructuralFeature feature = editor.getFeature();
+			final var feature = editor.getFeature();
 			final boolean visible = dialogContext.getDialogController().getEditorVisibility(object, feature);
 			final List<Control> controls = dialogContext.getEditorControls(object, feature);
 			if (controls != null) {
@@ -93,7 +93,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 
-				final EStructuralFeature feature = editor.getFeature();
+				final var feature = editor.getFeature();
 				if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME //
 						|| feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME //
 						|| feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__VOLUME_UNITS //

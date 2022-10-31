@@ -111,13 +111,13 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 		if (value == SetCommand.UNSET_VALUE) {
 			final CompoundCommand cmd = new CompoundCommand();
 
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			if (overrideToggleFeature != null) {
 				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
 			}
 			return cmd;
 		} else {
-			return SetCommand.create(commandHandler.getEditingDomain(), input, feature, value);
+			return SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 			if (value == null || value == SetCommand.UNSET_VALUE) {
 				theLabel.setText("Unassigned");
 			} else {
-				theLabel.setText(valueProvider.getName(input, (EReference) feature, (EObject) value));
+				theLabel.setText(valueProvider.getName(input, (EReference) typedElement, (EObject) value));
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 		final IReferenceValueProvider valueProvider = getValueProvider();
 		final Object currentValue = getValue();
 
-		final List<Pair<String, EObject>> allowedValues = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> allowedValues = valueProvider.getAllowedValues(input, typedElement);
 
 		if (allowedValues.size() > 0 && allowedValues.get(0).getSecond() == null) {
 			allowedValues.remove(0);
@@ -221,7 +221,7 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 		if (referenceValueProviderProvider == null) {
 			return null;
 		}
-		return referenceValueProviderProvider.getReferenceValueProvider(input.eClass(), (EReference) feature);
+		return referenceValueProviderProvider.getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 	}
 
 	@Override

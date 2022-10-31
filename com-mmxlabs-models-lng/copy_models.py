@@ -6,7 +6,7 @@
 import shutil, os
 #####################################
 path_to_ws = os.getcwd()
-version = 163
+version = 166
 #####################################
 
 root = "{0}/com.mmxlabs.models.lng.".format(path_to_ws)
@@ -22,6 +22,7 @@ files = ["port",
 		 "parameters",
 		 "adp",
 		 "nominations",
+		 "transfers",
 		 ]
 for f in files:
 	source = "{0}{1}/model/{1}.ecore".format(root,f)

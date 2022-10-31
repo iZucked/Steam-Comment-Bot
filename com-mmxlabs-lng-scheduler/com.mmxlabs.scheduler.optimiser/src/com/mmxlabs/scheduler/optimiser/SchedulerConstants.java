@@ -29,6 +29,7 @@ public final class SchedulerConstants {
 	public static final String Parser_BaseFuel = "BaseFuel";
 	public static final String Parser_Charter = "Charter";
 	public static final String Parser_Currency = "Currency";
+	public static final String Parser_PricingBasis = "PricingBasis";
 
 	public static final String MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE = "MidnightAlignedIntegerCurve";
 
@@ -92,6 +93,8 @@ public final class SchedulerConstants {
 	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 	public static final String INDIVIDUAL_EXPOSURES = "individual-exposures";
 	
+	public static final String PROCESS_TRANSFER_MODEL = "process-transfer-model";
+	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
 	
@@ -99,4 +102,8 @@ public final class SchedulerConstants {
 	 * Ignore small capacity violations e.g. 5 units (which would be 5_000).
 	 */
 	public static final long CAPACITY_VIOLATION_THRESHOLD = 0L;
+	/**
+	 * Threshold for the complex "LDD" cargoes
+	 */
+	public static final int COMPLEX_CARGO_SLOTS_THRESHOLD = 2;
 }

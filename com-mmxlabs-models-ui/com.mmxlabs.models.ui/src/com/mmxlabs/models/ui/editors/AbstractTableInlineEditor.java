@@ -7,7 +7,7 @@ package com.mmxlabs.models.ui.editors;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -36,7 +36,7 @@ public abstract class AbstractTableInlineEditor extends BasicAttributeInlineEdit
 	private Control control;
 	protected final Repacker repacker = new Repacker();
 
-	protected AbstractTableInlineEditor(final EStructuralFeature feature) {
+	protected AbstractTableInlineEditor(final ETypedElement feature) {
 		super(feature);
 	}
 

@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>5.8.3-SNAPSHOT</version>
+		<version>5.10.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.cargo.editor.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
@@ -70,11 +70,7 @@
 							<artifactId>ch.qos.logback.classic</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
+
 						<dependency>
 							<type>eclipse-plugin</type>
 							<artifactId>com.mmxlabs.models.lng.cargo.editor</artifactId>

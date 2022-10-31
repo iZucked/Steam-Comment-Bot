@@ -74,8 +74,8 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGScenarioSwitch<Adapter> modelSwitch =
-		new LNGScenarioSwitch<Adapter>() {
+	protected LNGScenarioSwitch<@Nullable Adapter> modelSwitch =
+		new LNGScenarioSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseLNGScenarioModel(LNGScenarioModel object) {
 				return createLNGScenarioModelAdapter();

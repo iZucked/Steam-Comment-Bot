@@ -18,7 +18,7 @@ public final class DefaultExposureDataProvider implements IExposureDataProviderE
 	private ExposuresLookupData lookupData;
 
 	@NonNull
-	private final Map<IPortSlot, String> elements = new HashMap<IPortSlot, String>();
+	private final Map<IPortSlot, String> elements = new HashMap<>();
 
 	@Override
 	public boolean hasPriceExpression(@NonNull IPortSlot portSlot) {
@@ -31,7 +31,7 @@ public final class DefaultExposureDataProvider implements IExposureDataProviderE
 	}
 
 	@Override
-	public void addPriceExpressionForPortSLot(@NonNull IPortSlot portSlot, String priceExpression) {
+	public void addPriceExpressionForPortSlot(@NonNull IPortSlot portSlot, String priceExpression) {
 		if (priceExpression != null && priceExpression.length() > 0) {
 			elements.put(portSlot, priceExpression);
 		}

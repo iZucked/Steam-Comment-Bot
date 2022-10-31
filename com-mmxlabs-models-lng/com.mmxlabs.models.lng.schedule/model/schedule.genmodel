@@ -379,5 +379,15 @@
     <genClasses ecoreClass="schedule.ecore#//OriginPortRepositioningFeeTermDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//OriginPortRepositioningFeeTermDetails/originPort"/>
     </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//TransferRecordPNLDetails">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//TransferRecordPNLDetails/transferRecord"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/transferPrice"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//TransferRecordPNLDetails/fromEntity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/fromEntityRevenue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/fromEntityCost"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//TransferRecordPNLDetails/toEntity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/toEntityRevenue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/toEntityCost"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

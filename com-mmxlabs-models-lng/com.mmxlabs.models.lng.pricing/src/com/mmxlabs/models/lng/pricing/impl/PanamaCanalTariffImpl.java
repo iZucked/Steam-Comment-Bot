@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.pricing.impl;
 
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import java.util.Collection;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -36,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getMarkupRate <em>Markup Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getAnnualTariffs <em>Annual Tariffs</em>}</li>
  * </ul>
  *
  * @generated
@@ -70,6 +73,16 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * @ordered
 	 */
 	protected double markupRate = MARKUP_RATE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAnnualTariffs() <em>Annual Tariffs</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAnnualTariffs()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PanamaTariffV2> annualTariffs;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -132,10 +145,25 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * @generated
 	 */
 	@Override
+	public EList<PanamaTariffV2> getAnnualTariffs() {
+		if (annualTariffs == null) {
+			annualTariffs = new EObjectContainmentEList<PanamaTariffV2>(PanamaTariffV2.class, this, PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS);
+		}
+		return annualTariffs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				return ((InternalEList<?>)getBands()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS:
+				return ((InternalEList<?>)getAnnualTariffs()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -152,6 +180,8 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 				return getBands();
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				return getMarkupRate();
+			case PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS:
+				return getAnnualTariffs();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,6 +202,10 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				setMarkupRate((Double)newValue);
 				return;
+			case PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS:
+				getAnnualTariffs().clear();
+				getAnnualTariffs().addAll((Collection<? extends PanamaTariffV2>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -190,6 +224,9 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				setMarkupRate(MARKUP_RATE_EDEFAULT);
 				return;
+			case PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS:
+				getAnnualTariffs().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -206,6 +243,8 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 				return bands != null && !bands.isEmpty();
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				return markupRate != MARKUP_RATE_EDEFAULT;
+			case PricingPackage.PANAMA_CANAL_TARIFF__ANNUAL_TARIFFS:
+				return annualTariffs != null && !annualTariffs.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

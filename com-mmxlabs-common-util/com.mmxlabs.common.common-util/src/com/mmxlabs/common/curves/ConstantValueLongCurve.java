@@ -5,7 +5,8 @@
 package com.mmxlabs.common.curves;
 
 /**
- * Implementation of {@link ICurve} which returns a single constant value regardless of the input value.
+ * Implementation of {@link ICurve} which returns a single constant value
+ * regardless of the input value.
  * 
  * @author Simon Goodall
  * 
@@ -28,8 +29,7 @@ public final class ConstantValueLongCurve implements ILongCurve {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof ConstantValueLongCurve) {
-			final ConstantValueLongCurve other = (ConstantValueLongCurve) obj;
+		if (obj instanceof ConstantValueLongCurve other) {
 			return value == other.value;
 		}
 		return false;

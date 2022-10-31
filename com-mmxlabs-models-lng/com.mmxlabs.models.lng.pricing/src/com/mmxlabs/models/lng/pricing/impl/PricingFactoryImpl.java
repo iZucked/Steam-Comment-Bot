@@ -83,6 +83,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
 			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
 			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
+			case PricingPackage.PANAMA_TARIFF_V2: return createPanamaTariffV2();
 			case PricingPackage.SUEZ_CANAL_TUG_BAND: return createSuezCanalTugBand();
 			case PricingPackage.SUEZ_CANAL_TARIFF: return createSuezCanalTariff();
 			case PricingPackage.SUEZ_CANAL_TARIFF_BAND: return createSuezCanalTariffBand();
@@ -102,6 +103,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: return createHolidayCalendarEntry();
 			case PricingPackage.HOLIDAY_CALENDAR: return createHolidayCalendar();
 			case PricingPackage.SETTLE_STRATEGY: return createSettleStrategy();
+			case PricingPackage.PRICING_BASIS: return createPricingBasis();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -259,6 +261,17 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
 		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
 		return panamaCanalTariffBand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PanamaTariffV2 createPanamaTariffV2() {
+		PanamaTariffV2Impl panamaTariffV2 = new PanamaTariffV2Impl();
+		return panamaTariffV2;
 	}
 
 	/**
@@ -468,6 +481,17 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public SettleStrategy createSettleStrategy() {
 		SettleStrategyImpl settleStrategy = new SettleStrategyImpl();
 		return settleStrategy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PricingBasis createPricingBasis() {
+		PricingBasisImpl pricingBasis = new PricingBasisImpl();
+		return pricingBasis;
 	}
 
 	/**

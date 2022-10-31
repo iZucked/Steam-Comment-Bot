@@ -188,6 +188,12 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.PANAMA_TARIFF_V2: {
+				PanamaTariffV2 panamaTariffV2 = (PanamaTariffV2)theEObject;
+				T result = casePanamaTariffV2(panamaTariffV2);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PricingPackage.SUEZ_CANAL_TUG_BAND: {
 				SuezCanalTugBand suezCanalTugBand = (SuezCanalTugBand)theEObject;
 				T result = caseSuezCanalTugBand(suezCanalTugBand);
@@ -343,6 +349,17 @@ public class PricingSwitch<T> extends Switch<T> {
 				T result = caseSettleStrategy(settleStrategy);
 				if (result == null) result = caseNamedObject(settleStrategy);
 				if (result == null) result = caseMMXObject(settleStrategy);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PRICING_BASIS: {
+				PricingBasis pricingBasis = (PricingBasis)theEObject;
+				T result = casePricingBasis(pricingBasis);
+				if (result == null) result = caseAbstractYearMonthCurve(pricingBasis);
+				if (result == null) result = caseYearMonthPointContainer(pricingBasis);
+				if (result == null) result = caseUUIDObject(pricingBasis);
+				if (result == null) result = caseNamedObject(pricingBasis);
+				if (result == null) result = caseMMXObject(pricingBasis);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -572,6 +589,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Tariff V2</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Tariff V2</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaTariffV2(PanamaTariffV2 object) {
 		return null;
 	}
 
@@ -872,6 +904,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSettleStrategy(SettleStrategy object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePricingBasis(PricingBasis object) {
 		return null;
 	}
 

@@ -8,10 +8,13 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -25,14 +28,13 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 
 /**
- * A Class to wrap {@link IInlineEditor}s which are part of a a Slot-Contract data structure. This handle the visibility of the control.
+ * A Class to wrap {@link IInlineEditor}s which are part of a a Slot-Contract
+ * data structure. This handle the visibility of the control.
  * 
  * @author Simon Goodall
  * 
- * @param <T>
- *            The LNGPriceCalculatorParameters subclass
- * @param <U>
- *            The custom data structure class
+ * @param <T> The LNGPriceCalculatorParameters subclass
+ * @param <U> The custom data structure class
  */
 public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters, U extends EObject> extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;
@@ -44,6 +46,8 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 
 	private Control control;
 
+	private @Nullable EAttribute enabledFeature;
+	
 	public SlotContractExtensionWrapper(@NonNull final IInlineEditor wrapped, @NonNull final Class<T> paramsClass, @NonNull final Class<U> slotContractParamsClass) {
 		super(wrapped);
 		this.paramsClass = paramsClass;
@@ -52,11 +56,14 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
-
+		if (enabledFeature != null && notification.getFeature() ==  enabledFeature) {
+			return true;
+		}
+		
+		
 		final EObject object = (EObject) notification.getNotifier();
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Contract()) {
-			if (notification.getNotifier() instanceof Slot) {
-				final Slot slot = (Slot) notification.getNotifier();
+			if (notification.getNotifier() instanceof Slot<?> slot) {
 				enabled = false;
 				if (notification.getNewValue() != null) {
 					final Contract contract = (Contract) notification.getNewValue();
@@ -69,7 +76,10 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 								dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 								dialogContext.getDialogController().updateEditorVisibility();
 								super.display(dialogContext, scenario, r, range);
-								getLabel().pack();
+								Label label = getLabel();
+								if (label != null) {
+									getLabel().pack();
+								}
 								dialogContext.getDialogController().relayout();
 								return true;
 							}
@@ -88,7 +98,10 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 					dialogContext.getDialogController().updateEditorVisibility();
 					super.display(dialogContext, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
-					getLabel().pack();
+					Label label = getLabel();
+					if (label != null) {
+						getLabel().pack();
+					}
 					dialogContext.getDialogController().relayout();
 					return true;
 
@@ -106,7 +119,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 
 	@Override
 	protected boolean isEnabled() {
-		return enabled;
+		return enabled && (enabledFeature == null || (Boolean)input.eGet(enabledFeature));
 	}
 
 	@Override
@@ -117,13 +130,10 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 		this.range = range;
 
 		enabled = false;
-		if (object instanceof Slot) {
-			final Slot slot = (Slot) object;
-			if (slot.getContract() != null) {
-				final Contract contract = slot.getContract();
-				if (paramsClass.isInstance(contract.getPriceInfo())) {
-					enabled = true;
-				}
+		if (object instanceof Slot<?> slot && slot.getContract() != null) {
+			final Contract contract = slot.getContract();
+			if (paramsClass.isInstance(contract.getPriceInfo())) {
+				enabled = true;
 			}
 		}
 
@@ -133,7 +143,10 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					if (slotContractParamsClass.isInstance(r)) {
 						dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 						super.display(dialogContext, scenario, r, range);
-						getLabel().pack();
+						Label label = getLabel();
+						if (label != null) {
+							label.pack();
+						}
 						return;
 					}
 				}
@@ -155,9 +168,15 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 	}
 
 	@Override
-	public Object createLayoutData(MMXRootObject root, EObject value,
-			Control control) {
-		// TODO Auto-generated method stub
+	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 		return null;
+	}
+
+	public EAttribute getEnabledFeature() {
+		return enabledFeature;
+	}
+
+	public void setEnabledFeature(EAttribute enabledFeature) {
+		this.enabledFeature = enabledFeature;
 	}
 }

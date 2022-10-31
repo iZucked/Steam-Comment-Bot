@@ -39,23 +39,25 @@ public class RouteExclusionMultiInlineEditor extends MultiEnumInlineEditor {
 	@Override
 	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(typedElement.getName() + "Override")) {
+						isOverridable = true;
+						this.overrideToggleFeature = f;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
-					this.overrideToggleFeature = f;
 				}
 			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
+			if (isOverridable) {
+				isOverridableWithButton = true;
 			}
-		}
-		if (isOverridable) {
-			isOverridableWithButton = true;
 		}
 		return super.createControl(parent, dbc, toolkit);
 	}

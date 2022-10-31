@@ -23,7 +23,7 @@ public interface IExposureDataProviderEditor extends IExposureDataProvider {
 	 * @param portSlot
 	 * @return
 	 */
-	public void addPriceExpressionForPortSLot(@NonNull IPortSlot portSlot, String priceExpression);
+	public void addPriceExpressionForPortSlot(@NonNull IPortSlot portSlot, String priceExpression);
 	
 	public void addLookupData(@NonNull ExposuresLookupData lookupData);
 }

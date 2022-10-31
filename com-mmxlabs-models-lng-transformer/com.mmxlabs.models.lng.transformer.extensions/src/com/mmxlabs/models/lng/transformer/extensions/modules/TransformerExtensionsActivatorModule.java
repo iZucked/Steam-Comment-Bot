@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeModule;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterContractExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.contracts.regas.RegasContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume.CounterPartyVolumeDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
@@ -27,8 +28,11 @@ import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.Restrict
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.VolumeTierContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.transfers.TransfersDataExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.transfers.TransfersDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.vesselcharters.VesselCharterEntityTransformerExtensionFactory;
 
 /**
@@ -54,14 +58,18 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new PaperDealDataModule());
 		install(new CounterPartyVolumeDataModule());
 		install(new HeelCarryDataModule());
+		install(new TransfersDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
+		bindService(VolumeTierContractTransformerFactory.class).export();
+		bindService(RegasContractTransformerFactory.class).export();
 		bindService(CharterContractTransformerFactory.class).export();
 
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 		bindService(CharterContractExporterExtensionFactory.class).export();
+		bindService(TransfersDataExporterExtensionFactory.class).export();
 
 		bindService(ExposuresExporterExtensionFactory.class).export();
 		bindService(PaperDealsExporterExtensionFactory.class).export();

@@ -29,7 +29,7 @@
       <command
             defaultHandler="com.mmxlabs.lingo.app.updater.command.UpdateLiNGOCommandHandler"
             id="com.mmxlabs.lingo.updater.command"
-            name="Update LiNGO (Beta)">
+            name="Update LiNGO">
       </command>
    </extension>
 </plugin>

@@ -81,7 +81,7 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) typedElement);
 		super.display(dialogContext, context, input, range);
 	}
 
@@ -127,10 +127,10 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 		if (value == SetCommand.UNSET_VALUE) {
 			CompoundCommand cmd = new CompoundCommand();
 			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			return cmd;
 		} else {
-			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, typedElement, (Collection<?>) value);
 			return setter;
 		}
 	}
@@ -145,7 +145,7 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 			final StringBuilder sb = new StringBuilder();
 			int numNamesAdded = 0;
 			for (final EObject obj : selectedValues) {
-				String name = valueProvider.getName(input, (EReference) feature, obj);
+				String name = valueProvider.getName(input, (EReference) typedElement, obj);
 				if (sb.length() > 0) {
 					sb.append(", ");
 				}
@@ -163,13 +163,13 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 
 	@SuppressWarnings("unchecked")
 	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
-		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, typedElement);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
 
 		PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
-		return picker.pick(options, (List<EObject>) getValue(), (EReference) feature);
+		return picker.pick(options, (List<EObject>) getValue(), (EReference) typedElement);
 
 	}
  
@@ -286,7 +286,7 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 							commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.TRUE), input, overrideToggleFeature);
 						}
 						// Apply a set command otherwise the display value may not be the value stored in eobject
-						commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, feature, getValue()), input, feature);
+						commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, getValue()), input, typedElement);
 						setControlEnabled(inner, true);
 					} else {
 						unsetValue();
@@ -311,23 +311,20 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 
 	@Override
 	protected Object getValue() {
-
-		if (input == null) {
-			return null;
-		}
-		{
+		if (input != null && typedElement instanceof EStructuralFeature feature){
 			if (!canOverride()) {
-				return ((MMXObject) input).getUnsetValue(getFeature());
+				return ((MMXObject) input).getUnsetValue(feature);
 			} else if (input.eIsSet(feature)) {
 				return super.getValue();
 			} else {
 				if (input instanceof MMXObject) {
-					return ((MMXObject) input).getUnsetValue(getFeature());
+					return ((MMXObject) input).getUnsetValue(feature);
 				} else {
 					return null;
 				}
 			}
 		}
+		return null;
 	}
 
 	@Override
@@ -349,10 +346,10 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 	}
 
 	protected boolean valueIsSet() {
-		if (input == null) {
-			return false;
+		if (input != null && typedElement instanceof EStructuralFeature feature){
+			return input.eIsSet(feature);
 		}
-		return input.eIsSet(getFeature());
+		return false;
 	}
 
 	@Override

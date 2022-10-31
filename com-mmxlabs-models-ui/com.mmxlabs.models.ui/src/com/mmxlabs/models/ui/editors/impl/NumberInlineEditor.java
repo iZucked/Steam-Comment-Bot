@@ -11,6 +11,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
@@ -59,7 +60,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	private Label unitPrefixLabel;
 	private Label unitSuffixLabel;
 
-	public NumberInlineEditor(final EStructuralFeature feature) {
+	public NumberInlineEditor(final ETypedElement feature) {
 		super(feature);
 		type = (EDataType) feature.getEType();
 
@@ -94,8 +95,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			defaultValue = Long.parseLong(defaultValueString);
 			final LongFormatter inner = format == null ? new LongFormatter() : new LongFormatter(format);
 			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+				if (input instanceof MMXObject mmxObject && getFeature() instanceof EStructuralFeature f) {
+					final Object v = mmxObject.getUnsetValue(f);
 					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
@@ -107,8 +108,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			defaultValue = Integer.parseInt(defaultValueString);
 			final IntegerFormatter inner = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
 			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+				if (input instanceof MMXObject mmxObject && getFeature() instanceof EStructuralFeature f) {
+					final Object v = mmxObject.getUnsetValue(f);
 
 					if (Objects.equals(Integer.MAX_VALUE, v)) {
 						return "-";
@@ -125,8 +126,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			defaultValue = Float.parseFloat(defaultValueString);
 			final FloatFormatter inner = format == null ? new FloatFormatter() : new FloatFormatter(format);
 			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+				if (input instanceof MMXObject  mmxObject && getFeature() instanceof EStructuralFeature f) {
+					final Object v = mmxObject.getUnsetValue(f);
 					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
@@ -137,8 +138,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			defaultValue = Double.parseDouble(defaultValueString);
 			final DoubleFormatter inner = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
 			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+				if (input instanceof MMXObject mmxObject && getFeature() instanceof EStructuralFeature f) {
+					final Object v = mmxObject.getUnsetValue(f);
 					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
@@ -154,18 +155,20 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		isOverridable = false;
-		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
-		if (eAnnotation == null) {
-			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
-		}
-		if (eAnnotation != null) {
-			for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
-				if (f.getName().equals(feature.getName() + "Override")) {
+		if (typedElement instanceof EStructuralFeature feature) {
+			EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+			if (eAnnotation == null) {
+				eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+			}
+			if (eAnnotation != null) {
+				for (final EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+					if (f.getName().equals(feature.getName() + "Override")) {
+						isOverridable = true;
+					}
+				}
+				if (feature.isUnsettable()) {
 					isOverridable = true;
 				}
-			}
-			if (feature.isUnsettable()) {
-				isOverridable = true;
 			}
 		}
 		return super.createControl(parent, dbc, toolkit);

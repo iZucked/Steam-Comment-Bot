@@ -14,7 +14,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -47,9 +47,9 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 	protected EEnum myEnum;
 	protected Enumerator[] enumerators;
 
-	public MultiEnumInlineEditor(final EStructuralFeature feature) {
-		super(feature);
-		myEnum = (EEnum) ((EAttribute) feature).getEAttributeType();
+	public MultiEnumInlineEditor(final ETypedElement typedElement) {
+		super(typedElement);
+		myEnum = (EEnum) ((EAttribute) typedElement).getEAttributeType();
 		enumerators = new Enumerator[myEnum.getELiterals().size()];
 		for (int i = 0; i < enumerators.length; i++) {
 			enumerators[i] = myEnum.getELiterals().get(i).getInstance();
@@ -100,14 +100,14 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 		if (value == SetCommand.UNSET_VALUE) {
 			CompoundCommand cmd = new CompoundCommand();
 
-			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, typedElement, value));
 			if (overrideToggleFeature != null) {
 				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
 			}
 			return cmd;
 		} else {
 
-			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, typedElement, (Collection<?>) value);
 			return setter;
 		}
 	}

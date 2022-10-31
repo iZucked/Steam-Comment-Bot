@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
+import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -220,7 +221,7 @@ public class EvaluationHelper {
 			@NonNull List<@NonNull PriceCurveKey> priceCurveCombination) {
 		try (final ILazyExpressionManager expressionManager = lazyManagerContainer.getExpressionManager()) {
 			for (final PriceCurveKey key : priceCurveCombination) {
-				expressionManager.setPriceCurve(key.getIndexName().toLowerCase(), priceExpressionProvider.getExpression(key));
+				expressionManager.setPriceCurve(key.getIndexName().toLowerCase(), key.seriesType(), priceExpressionProvider.getExpression(key));
 			}
 			expressionManager.initialiseAllPricingData();
 			

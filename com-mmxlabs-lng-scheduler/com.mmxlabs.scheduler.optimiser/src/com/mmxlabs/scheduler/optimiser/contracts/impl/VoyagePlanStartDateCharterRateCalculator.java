@@ -14,7 +14,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 
 /**
- * Implementation of {@link ICharterRateCalculator} looking up the charter rate of the vessel based on the start time of the current voyage plan
+ * Implementation of {@link ICharterRateCalculator} looking up the charter rate
+ * of the vessel based on the start time of the current voyage plan
  * 
  * @author Simon Goodall
  * 
@@ -22,16 +23,17 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 public class VoyagePlanStartDateCharterRateCalculator implements ICharterRateCalculator {
 
 	@Inject
-	private IVesselCharterInRateProvider IVesselCharterInRateProvider;
+	private IVesselCharterInRateProvider vesselCharterInRateProvider;
 
 	/**
 	 * One client used to use vesselStartTime, probably not used anymore.
+	 * 
 	 * @param vesselStartTime
 	 * @param voyagePlanStartTime
 	 */
 	@Override
 	public long getCharterRatePerDay(final @NonNull IVesselCharter vesselCharter, final int voyagePlanStartTime) {
-		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselCharter);
+		final ILongCurve rate = vesselCharterInRateProvider.getCharterInRatePerDay(vesselCharter);
 		if (rate != null) {
 			return rate.getValueAtPoint(voyagePlanStartTime);
 		}

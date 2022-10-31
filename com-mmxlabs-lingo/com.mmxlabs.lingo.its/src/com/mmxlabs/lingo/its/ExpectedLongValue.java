@@ -42,4 +42,8 @@ public class ExpectedLongValue {
 	public static ExpectedLongValue forFixedCost(int fixedCost) {
 		return new ExpectedLongValue(fixedCost, OptimiserUnitConvertor.convertToInternalFixedCost(fixedCost));
 	}
+
+	public static ExpectedLongValue forRoundedFixedCost(double fixedCost) {
+		return new ExpectedLongValue((int) Math.round(fixedCost), OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(fixedCost)));
+	}
 }

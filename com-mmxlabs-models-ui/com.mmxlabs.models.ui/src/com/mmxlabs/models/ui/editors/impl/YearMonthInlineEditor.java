@@ -6,7 +6,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.time.YearMonth;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -21,13 +21,13 @@ public class YearMonthInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
 	private YearMonthTextFormatter dateFormatter;
 
-	public YearMonthInlineEditor(final EStructuralFeature feature, final YearMonthTextFormatter formatter) {
-		super(feature);
+	public YearMonthInlineEditor(final ETypedElement typedElement, final YearMonthTextFormatter formatter) {
+		super(typedElement);
 		this.dateFormatter = formatter;
 	}
 
-	public YearMonthInlineEditor(final EStructuralFeature feature) {
-		this(feature, new YearMonthTextFormatter());
+	public YearMonthInlineEditor(final ETypedElement typedElement) {
+		this(typedElement, new YearMonthTextFormatter());
 	}
 
 	@Override

@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -220,7 +219,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 		boolean changed = false;
 		for (final IInlineEditor editor : editors) {
-			final EStructuralFeature feature = editor.getFeature();
+			final var feature = editor.getFeature();
 			final boolean visible = dialogContext.getDialogController().getEditorVisibility(object, feature);
 			final List<Control> controls = dialogContext.getEditorControls(object, feature);
 			if (controls != null) {

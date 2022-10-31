@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.LongAccumulator;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -103,6 +105,8 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -1049,9 +1053,11 @@ public class InventoryReport extends ViewPart {
 															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
 															final BaseLegalEntity slotEntity = slotAlloc.getSlot().getEntity();
 															if (slotEntity != null) {
-																otherLiftingDates.get(slotEntity).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																final List<LocalDate> entityLiftingDates = otherLiftingDates.get(slotEntity);
+																if (entityLiftingDates != null) {
+																	entityLiftingDates.add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																}
 															}
-//															otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
 														}
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
@@ -1135,7 +1141,7 @@ public class InventoryReport extends ViewPart {
 						boolean cargoIn = inventory.getFacilityType() != InventoryFacilityType.UPSTREAM;
 
 						// Find the date of the latest position/cargo
-						final Optional<LocalDateTime> latestLoad = inventoryEvents.getEvents().stream() //
+						final Optional<LocalDateTime> latestSlotDate = inventoryEvents.getEvents().stream() //
 								.filter(evt -> evt.getSlotAllocation() != null || evt.getOpenSlotAllocation() != null) //
 								.map(InventoryChangeEvent::getDate) //
 								.reduce((a, b) -> a.isAfter(b) ? a : b);
@@ -1148,6 +1154,17 @@ public class InventoryReport extends ViewPart {
 
 						{
 							final Optional<InventoryChangeEvent> firstInventoryDataFinal = firstInventoryData;
+							final Predicate<Entry<LocalDateTime, Integer>> filterFunction;
+							if (latestSlotDate.isPresent() && firstInventoryDataFinal.isPresent()) {
+								final LocalDateTime dateTime = latestSlotDate.get();
+								final LocalDateTime firstInventoryDate = firstInventoryDataFinal.get().getDate();
+								filterFunction = entry -> {
+									final LocalDateTime entryDate = entry.getKey();
+									return !entryDate.isAfter(dateTime) && entryDate.isAfter(firstInventoryDate);
+								};
+							} else {
+								filterFunction = entry -> false;
+							}
 							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
 									.collect(Collectors.toMap( //
 											InventoryChangeEvent::getDate, //
@@ -1155,12 +1172,7 @@ public class InventoryReport extends ViewPart {
 											(a, b) -> (b), // Take latest value
 											LinkedHashMap::new))
 									.entrySet().stream() //
-									.filter(x -> {
-										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
-											return !x.getKey().isAfter(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
-										}
-										return false;
-									})//
+									.filter(filterFunction) //
 									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
 							if (!inventoryLevels.isEmpty()) {
@@ -1196,26 +1208,21 @@ public class InventoryReport extends ViewPart {
 											}
 										}
 									} else if (event.getSlotAllocation() != null) {
-										final SlotAllocation loadAllocation = event.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(0);
-										final int volumeLoaded = loadAllocation.getVolumeTransferred();
-										final LocalDateTime loadStart = loadAllocation.getSlotVisit().getStart().toLocalDateTime();
-										if (((DischargeSlot) event.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(1).getSlot()).isFOBSale()) {
-											final int loadDuration = loadAllocation.getPort().getLoadDuration();
-											final int delta = volumeLoaded / loadDuration;
-											final int firstAmount = delta + (volumeLoaded % loadDuration);
-											LocalDateTime currentDateTime = loadStart;
-											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
-											for (int hour = 1; hour < loadDuration; ++hour) {
+										final SlotAllocation slotAllocation = event.getSlotAllocation();
+										final int slotDuration = getSlotDuration(slotAllocation);
+										final int volumeTransferred = slotAllocation.getVolumeTransferred();
+										final int delta = volumeTransferred / slotDuration;
+										final int firstAmount = delta + (volumeTransferred % slotDuration);
+										LocalDateTime currentDateTime = slotAllocation.getSlotVisit().getStart().toLocalDateTime();
+										if (cargoIn) {
+											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
+											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
-												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
+												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
 											}
 										} else {
-											final int duration = loadAllocation.getSlotVisit().getDuration();
-											final int delta = volumeLoaded / duration;
-											final int firstAmount = delta + (volumeLoaded % duration);
-											LocalDateTime currentDateTime = loadStart;
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
-											for (int hour = 1; hour < duration; ++hour) {
+											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
 											}
@@ -1513,6 +1520,26 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyCumulativeTableViewer.setInput(pairedCumulativeMullList);
 			mullDailyTableViewer.setInput(pairedDailyMullList);
 		}
+	}
+
+	private int getSlotDuration(final SlotAllocation slotAllocation) {
+		final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+		if (cargoAllocation != null) {
+			final List<SlotAllocation> cargoSlotAllocations = cargoAllocation.getSlotAllocations();
+			if (cargoSlotAllocations.size() == 2) {
+				final List<Slot<?>> slots = cargoSlotAllocations.stream().<Slot<?>>map(SlotAllocation::getSlot).toList();
+				final List<Slot<?>> sortedSlots = CargoSlotSorter.sortedSlots(slots);
+				final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
+				final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
+				if (loadSlot.isDESPurchase()) {
+					return dischargeSlot.getSchedulingTimeWindow().getDuration();
+				} else if (dischargeSlot.isFOBSale()) {
+					return loadSlot.getSchedulingTimeWindow().getDuration();
+				}
+			}
+		}
+		// LDDs assumed to be shipped
+		return slotAllocation.getSlotVisit().getDuration();
 	}
 
 	private Map<LocalDate, Map<BaseLegalEntity, Integer>> calculateDailyAllocatedEntitlement(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,

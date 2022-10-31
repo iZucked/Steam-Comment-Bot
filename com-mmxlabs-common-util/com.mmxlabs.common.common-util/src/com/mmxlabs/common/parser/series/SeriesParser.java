@@ -10,66 +10,83 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.BunkersSeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.CharterSeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.ConversionASTNode;
+import com.mmxlabs.common.parser.astnodes.CurrencySeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
+import com.mmxlabs.common.parser.astnodes.PricingBasisSeriesASTNode;
 import com.mmxlabs.common.parser.impl.Lexer;
 import com.mmxlabs.common.parser.impl.Parser;
 
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.Symbol;
 
+@NonNullByDefault
 public class SeriesParser {
-	private final @NonNull Map<@NonNull String, @NonNull ISeriesContainer> evaluatedSeries = new HashMap<>();
-	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
-	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
+	private final Map<String, ISeriesContainer> evaluatedSeries = new HashMap<>();
+	private final Map<String, Pair<String, SeriesType>> unevaluatedSeries = new HashMap<>();
+	private final Set<String> expressionCurves = new HashSet<>();
 
-	private final @NonNull SeriesParserData seriesParserData;
+	private final SeriesParserData seriesParserData;
 
-	public SeriesParser(@NonNull SeriesParserData seriesParserData) {
+	public SeriesParser(final SeriesParserData seriesParserData) {
 		this.seriesParserData = seriesParserData;
 	}
 
-	public @NonNull ISeriesContainer getSeries(@NonNull final String name) {
+	public ISeriesContainer getSeries(final String name) {
 		final String lowercaseName = name.toLowerCase();
 		if (evaluatedSeries.containsKey(lowercaseName)) {
 			return evaluatedSeries.get(lowercaseName);
 		} else if (unevaluatedSeries.containsKey(lowercaseName)) {
-			final IExpression<ISeries> parsed = parse(unevaluatedSeries.get(lowercaseName));
+			final Pair<String, SeriesType> p = unevaluatedSeries.get(lowercaseName);
+			final IExpression<ISeries> parsed = asIExpression(p.getFirst());
 			final ISeriesContainer ser;
 			if (parsed.canEvaluate()) {
-				ser = new DefaultSeriesContainer(parsed.evaluate());
+				ser = new DefaultSeriesContainer(name, p.getSecond(), parsed.evaluate());
 			} else {
-				ser = new DefaultExpressionContainer(parsed);
+				ser = new DefaultExpressionContainer(name, p.getSecond(), parsed);
 			}
 			evaluatedSeries.put(lowercaseName, ser);
 			return ser;
 		} else {
-			throw new UnknownSeriesException("No series with name " + name + "defined");
+			throw new UnknownSeriesException("No series with name " + name + " defined");
 		}
-		
 	}
 
-	public IExpression<ISeries> parse(final String expression) {
+	public IExpression<ISeries> asIExpression(final String expression) {
+		return parse(expression).asExpression(this);
+	}
 
+	public ISeries asSeries(final String expression) {
+		return parse(expression).asExpression(this).evaluate();
+	}
+
+	public ASTNode parse(final String expression) {
 		final ComplexSymbolFactory symbolFactory = new ComplexSymbolFactory();
-		Parser parser = new Parser(new Lexer(new StringReader(expression), symbolFactory));
+		final Parser parser = new Parser(new Lexer(new StringReader(expression), symbolFactory));
 		try {
 			parser.setSeriesParser(this);
 			parser.setSeriesParserData(seriesParserData);
 
-			Symbol parse = parser.parse();
+			final Symbol parse = parser.parse();
 			if (parse == null || parse.value == null) {
 				if (!parser.errors.isEmpty()) {
-					Symbol s = parser.errors.get(0);
+					final Symbol s = parser.errors.get(0);
 					throw new RuntimeException("Syntax error after: " + expression.substring(0, s.right - 1));
 				} else {
 					throw new RuntimeException("Syntax error: " + expression);
 				}
 			}
 
-			return (IExpression<ISeries>) parse.value;
+			return (ASTNode) parse.value;
 		} catch (final ClassCastException e) {
 			throw new RuntimeException("Syntax error ", e);
 		} catch (final RuntimeException e) {
@@ -79,17 +96,17 @@ public class SeriesParser {
 		}
 	}
 
-	public void addConstant(@NonNull final String name, @NonNull final Number value) {
-		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(new ConstantSeriesExpression(value).evaluate());
+	public void addConstant(final String name, final SeriesType seriesType, final Number value) {
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(name, seriesType, new ConstantSeriesExpression(value).evaluate());
 		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
-	public void addSeriesData(final @NonNull String name, final @NonNull ISeries series) {
-		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(series);
+	public void addSeriesData(final String name, final SeriesType seriesType, final ISeries series) {
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(name, seriesType, series);
 		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
-	public void addSeriesData(final @NonNull String name, @NonNull final ISeriesContainer seriesContainer) {
+	public void addSeriesData(final String name, final ISeriesContainer seriesContainer) {
 		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
@@ -101,22 +118,24 @@ public class SeriesParser {
 		evaluatedSeries.remove(name.toLowerCase());
 		unevaluatedSeries.remove(name.toLowerCase());
 		expressionCurves.remove(name.toLowerCase());
-		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		// Invalidate any pre-evaluated expression curves as we may have changed the
+		// underlying data
 		for (final String expr : expressionCurves) {
 			evaluatedSeries.remove(expr);
 		}
 	}
 
-	private void addSeriesContainerToEvaluatedSeries(@NonNull final String name, @NonNull final ISeriesContainer seriesContainer) {
+	private void addSeriesContainerToEvaluatedSeries(final String name, final ISeriesContainer seriesContainer) {
 		evaluatedSeries.put(name.toLowerCase(), seriesContainer);
-		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		// Invalidate any pre-evaluated expression curves as we may have changed the
+		// underlying data
 		for (final String expr : expressionCurves) {
 			evaluatedSeries.remove(expr);
 		}
 	}
 
-	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
-		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(new ISeries() {
+	public void addSeriesData(final String name, final SeriesType seriesType, final int[] points, final Number[] values) {
+		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(name, seriesType, new ISeries() {
 			@Override
 			public int[] getChangePoints() {
 				return points;
@@ -124,7 +143,7 @@ public class SeriesParser {
 
 			@Override
 			public Number evaluate(final int point) {
-				int pos = SeriesUtil.floor(points, point);
+				final int pos = SeriesUtil.floor(points, point);
 				if (pos == -1) {
 					return 0;
 				}
@@ -134,18 +153,33 @@ public class SeriesParser {
 		addSeriesContainerToEvaluatedSeries(name, seriesContainer);
 	}
 
-	public void addSeriesExpression(final @NonNull String name, final @NonNull String expression) {
+	public void addSeriesExpression(final String name, final SeriesType seriesType, final String expression) {
 		// Register as an expression curve.
 		if (!expressionCurves.add(name.toLowerCase())) {
-			// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+			// Invalidate any pre-evaluated expression curves as we may have changed the
+			// underlying data
 			for (final String expr : expressionCurves) {
 				evaluatedSeries.remove(expr);
 			}
 		}
-		unevaluatedSeries.put(name.toLowerCase(), expression);
+		unevaluatedSeries.put(name.toLowerCase(), Pair.of(expression, seriesType));
 	}
 
 	public SeriesParserData getSeriesParserData() {
 		return seriesParserData;
+	}
+
+	/** Used by the parser to determine which node type the name belongs to */
+	public NamedSeriesASTNode getNamedSeriesASTNode(final String name) {
+		final ISeriesContainer series = getSeries(name);
+		return switch (series.getType()) {
+		case COMMODITY -> new CommoditySeriesASTNode(name);
+		case CURRENCY -> new CurrencySeriesASTNode(name);
+		case CHARTER -> new CharterSeriesASTNode(name);
+		case BUNKERS -> new BunkersSeriesASTNode(name);
+		case CONVERSION -> new ConversionASTNode(name);
+		case PRICING_BASIS -> new PricingBasisSeriesASTNode(name);
+		default -> throw new IllegalArgumentException();
+		};
 	}
 }
