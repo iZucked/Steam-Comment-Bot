@@ -125,7 +125,7 @@ public class LiNGOUpdater {
 
 	private void withAuthHeader(final URL url, final Request.Builder b) {
 		if (user != null && pw != null) {
-			b.header("Authorization", Credentials.basic(user, pw));
+			b.header("Authorization", Credentials.basic(user, pw, StandardCharsets.UTF_8));
 		} else {
 
 			ServiceHelper.withOptionalServiceConsumer(IUpdateAuthenticationProvider.class, p -> {
