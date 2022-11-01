@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.scenario.importWizards;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
