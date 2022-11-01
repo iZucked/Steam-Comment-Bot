@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -480,9 +481,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 				public void setValue(final Object element, final Object value) {
 					final DataType dt = getDataTypeForElement(element);
 					if (dt != null) {
-						if (element instanceof AbstractYearMonthCurve) {
+						if (element instanceof @NonNull final AbstractYearMonthCurve curve) {
 							final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
-							setIndexPoint((Double) value, (AbstractYearMonthCurve) element, colDate);
+							setIndexPoint((Double) value, curve, colDate);
 						}
 					}
 				}
@@ -550,25 +551,17 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				@Override
 				public boolean canEdit(final Object element) {
-					if (element instanceof AbstractYearMonthCurve) {
-						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
-						return !curve.isSetExpression();
-
-					}
-
-					return false;
+					return element instanceof @NonNull final AbstractYearMonthCurve curve && !curve.isSetExpression();
 				}
 
 				@Override
 				public void setParent(final Object parent, final Object object) {
 					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void setExtraCommandsHook(final IExtraCommandsHook extraCommandsHook) {
 					// TODO Auto-generated method stub
-
 				}
 			};
 			col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
@@ -616,11 +609,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public Color getForeground(final Object element) {
 
-					if (element instanceof AbstractYearMonthCurve) {
-						final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
-						if (curve.isSetExpression()) {
-							return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-						}
+					if (element instanceof @NonNull final AbstractYearMonthCurve curve && curve.isSetExpression()) {
+						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 					}
 					return super.getForeground(element);
 				}
@@ -631,9 +621,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
-						return String.format("%01.3f", number.doubleValue());
+						return String.format("%,01.3f", number.doubleValue());
 					}
-
 					return null;
 				}
 			});
