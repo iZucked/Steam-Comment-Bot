@@ -90,11 +90,13 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] needs an entity set.", spotMarket.getName())));
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_Entity());
 				failures.add(dsd);
 			} else if (spotMarket.getEntity().isThirdParty()) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] cannot use a third-party entity.", spotMarket.getName())));
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_Entity());
 				dsd.setConstraintKey(KEY_THIRD_PARTY_ENTITY);
 				failures.add(dsd);
 			}
