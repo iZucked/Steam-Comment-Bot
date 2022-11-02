@@ -138,7 +138,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			{
 				final String proposal = PriceIndexUtils.createConversionFactorName(factor);
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-					final String c = matchCase( contents,proposal.substring(contents.length()));
+					final String c = matchCase(contents, proposal.substring(contents.length()));
 					list.add(new ContentProposal(c, proposal + labelSuffix, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
 				}
 			}
@@ -153,7 +153,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "CAP(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c =  matchCase(contents,proposal.substring(contents.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put an upper limit (a or b) on a price expression, e.g. \"CAP(1.1, 115%HH)\" gives 115%HH but no higher than $1.10",
 						c.length()));
 			}
@@ -161,7 +161,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "FLOOR(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c =  matchCase(contents,proposal.substring(contents.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put a lower limit (a or b) on a price expression, e.g. \"FLOOR(1.1, 115%HH)\" gives 115%HH but no lower than $1.10",
 						c.length()));
 			}
@@ -169,7 +169,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "MIN(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c =  matchCase(contents,proposal.substring(contents.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the lower value of a or b.", c.length()));
 			}
 		}
@@ -183,7 +183,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "SHIFT(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c =  matchCase(contents,proposal.substring(contents.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "index,months)",
 						"Function shifting the index price by the number of months. A positive value will take the price from previous months. A negative value takes the price from future months.",
 						c.length()));
@@ -192,8 +192,17 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "SPLITMONTH(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-			final	String c = matchCase(contents, proposal.substring(contents.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "index,index,day)", "Function switching between two index at a given point each month", c.length()));
+			}
+		}
+		{
+			final String proposal = "S(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,lower,upper,a1,b1,a2,b2,a3,b3)",
+						"S curve function. Select a different ax+b form depending on index value.\n  index < lower -> a1 * index + b1\n  index <= upper -> a2 * index + b2 \n  else ->  a3* index + b3",
+						c.length()));
 			}
 		}
 		{
@@ -208,6 +217,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 	}
 
 	private String matchCase(String contents, String c) {
+		if (contents.length() == 0) {
+			return c;
+		}
+
 		if (Character.isLowerCase(contents.charAt(0))) {
 			return c.toLowerCase();
 		}
