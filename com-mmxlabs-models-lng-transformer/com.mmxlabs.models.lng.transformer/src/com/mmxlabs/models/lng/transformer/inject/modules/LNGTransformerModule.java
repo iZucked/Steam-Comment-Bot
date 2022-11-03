@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
@@ -22,7 +20,6 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
@@ -70,6 +67,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -238,6 +236,9 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+		
+		bind(UnconstrainedVolumeAllocator.class).in(Singleton.class);
+		bind(MinMaxUnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
 
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
@@ -342,7 +343,6 @@ public class LNGTransformerModule extends AbstractModule {
 				return Hours.between(dateTimeZero, mappedTime);
 			}
 
-			  
 			@Override
 			public int mapMonthToChangePoint(final int months) {
 
