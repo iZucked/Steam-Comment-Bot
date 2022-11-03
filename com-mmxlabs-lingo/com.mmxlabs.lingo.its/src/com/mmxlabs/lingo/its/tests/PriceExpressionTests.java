@@ -266,9 +266,11 @@ public class PriceExpressionTests {
 				{ "5-6", -1.0, null }, //
 				{ "-6*-7", 42.0, null }, //
 				{ "-6*(7-6)", -6.0, null }, //
-				{ "MIN(1.5,2)", 1.5, null }, //
-				{ "FLOOR(1,2)", 1, null }, //
-				{ "MAX(1,2)", 2.0, null }, //
+				{ "MIN(1)", 1, null }, //
+				{ "MIN(1.5,2,5)", 1.5, null }, //
+				{ "FLOOR(1,2,5)", 1, null }, //
+				{ "MAX(1)", 1.0, null }, //
+				{ "MAX(1,2,3)", 3.0, null }, //
 				{ "MAX(2,1)", 2.0, null }, //
 				{ "CAP(1,2)", 2.0, null }, //
 
