@@ -6,9 +6,9 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.parser.series.TierFunctionConstructor;
+import com.mmxlabs.common.parser.series.Tier3FunctionConstructor;
 
-public class TierFunctionASTNode implements ASTNode {
+public class Tier3FunctionASTNode implements ASTNode {
 	public enum ExprSelector {
 		LOW, MID, HIGH
 	}
@@ -22,7 +22,7 @@ public class TierFunctionASTNode implements ASTNode {
 	private ASTNode midValue;
 	private ASTNode highValue;
 
-	public TierFunctionASTNode(ASTNode target, ComparisonOperators lowOp, Number low, ASTNode lowValue, ComparisonOperators midOp, Number mid, ASTNode midValue, ASTNode highValue) {
+	public Tier3FunctionASTNode(ASTNode target, ComparisonOperators lowOp, Number low, ASTNode lowValue, ComparisonOperators midOp, Number mid, ASTNode midValue, ASTNode highValue) {
 		this.target = target;
 		this.lowOp = lowOp;
 		this.low = low;
@@ -63,7 +63,7 @@ public class TierFunctionASTNode implements ASTNode {
 	@Override
 	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull SeriesParser seriesParser) {
 
-		return new TierFunctionConstructor(target.asExpression(seriesParser), //
+		return new Tier3FunctionConstructor(target.asExpression(seriesParser), //
 				lowOp, low, lowValue.asExpression(seriesParser), //
 				midOp, mid, midValue.asExpression(seriesParser), //
 				highValue.asExpression(seriesParser));

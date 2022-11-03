@@ -8,9 +8,9 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
-import com.mmxlabs.common.parser.series.functions.TierSeries;
+import com.mmxlabs.common.parser.series.functions.Tier3Series;
 
-public class TierFunctionConstructor implements IExpression<ISeries> {
+public class Tier3FunctionConstructor implements IExpression<ISeries> {
 
 	private IExpression<ISeries> target;
 
@@ -24,7 +24,7 @@ public class TierFunctionConstructor implements IExpression<ISeries> {
 
 	private IExpression<ISeries> highValue;
 
-	public TierFunctionConstructor(@NonNull IExpression<@NonNull ISeries> target, ComparisonOperators lowOp, Number low, @NonNull IExpression<@NonNull ISeries> lowValue, ComparisonOperators midOp,
+	public Tier3FunctionConstructor(@NonNull IExpression<@NonNull ISeries> target, ComparisonOperators lowOp, Number low, @NonNull IExpression<@NonNull ISeries> lowValue, ComparisonOperators midOp,
 			Number mid, @NonNull IExpression<@NonNull ISeries> midValue, @NonNull IExpression<@NonNull ISeries> highValue) {
 		this.target = target;
 		this.lowOp = lowOp;
@@ -38,7 +38,7 @@ public class TierFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new TierSeries(target.evaluate(), lowOp, low.doubleValue(), lowValue.evaluate(), midOp, mid.doubleValue(), midValue.evaluate(), highValue.evaluate());
+		return new Tier3Series(target.evaluate(), lowOp, low.doubleValue(), lowValue.evaluate(), midOp, mid.doubleValue(), midValue.evaluate(), highValue.evaluate());
 	}
 
 	@Override

@@ -43,7 +43,8 @@ import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
 import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.TierFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.Tier3FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -542,7 +543,17 @@ public class ExposuresCalculator {
 			case MID -> getExposureNode(scurveNode.getMiddleSeries(), inputRecord);
 			case HIGH -> getExposureNode(scurveNode.getHigherSeries(), inputRecord);
 			};
-		} else if (node instanceof final TierFunctionASTNode tierNode) {
+		} else if (node instanceof final Tier2FunctionASTNode tierNode) {
+			final Pair<Long, IExposureNode> baseNodeData = getExposureNode(tierNode.getTarget(), inputRecord);
+
+			final double baseValue = baseNodeData.getFirst() / (double) Calculator.HighScaleFactor;
+			final double lowCheck = tierNode.getLow().doubleValue();
+			var selected = tierNode.select(baseValue, lowCheck);
+			return switch (selected) {
+			case LOW -> getExposureNode(tierNode.getLowValue(), inputRecord);
+			case HIGH -> getExposureNode(tierNode.getHighValue(), inputRecord);
+			};
+		} else if (node instanceof final Tier3FunctionASTNode tierNode) {
 			final Pair<Long, IExposureNode> baseNodeData = getExposureNode(tierNode.getTarget(), inputRecord);
 
 			final double baseValue = baseNodeData.getFirst() / (double) Calculator.HighScaleFactor;
