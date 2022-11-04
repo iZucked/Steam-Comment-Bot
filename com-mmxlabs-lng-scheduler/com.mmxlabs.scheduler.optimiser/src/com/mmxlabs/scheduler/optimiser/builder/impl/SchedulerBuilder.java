@@ -112,7 +112,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
@@ -284,9 +283,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IRouteCostProviderEditor routeCostProvider;
-
-	@Inject
-	private IDiscountCurveProviderEditor discountCurveProvider;
 
 	@Inject
 	private IPortCostProviderEditor portCostProvider;
@@ -1463,18 +1459,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portSlotsProvider.setPortSlot(endElement, slot);
 
 		elementPortProvider.setPortForElement(slot.getPort(), endElement);
-	}
-
-	/**
-	 * Set a discount curve for the given fitness component name
-	 * 
-	 * @param name
-	 * @param iCurve
-	 */
-	@Override
-	public void setFitnessComponentDiscountCurve(final String name, final ICurve iCurve) {
-		discountCurveProvider.setDiscountCurve(name, iCurve);
-
 	}
 
 	/**
