@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -255,7 +256,7 @@ public class LNGScenarioTransformerTest {
 
 		Mockito.verifyNoMoreInteractions(builder);
 	}
- 
+
 	@Test
 	public void testSuezCostCalculator() {
 
@@ -774,8 +775,7 @@ public class LNGScenarioTransformerTest {
 		}
 
 		@Override
-		public boolean matches(final ILongCurve item) {
-			final ILongCurve other = (ILongCurve) item;
+		public boolean matches(final ILongCurve other) {
 			long a = reference.getValueAtPoint(0);
 			long b = other.getValueAtPoint(0);
 			if (a != b) {

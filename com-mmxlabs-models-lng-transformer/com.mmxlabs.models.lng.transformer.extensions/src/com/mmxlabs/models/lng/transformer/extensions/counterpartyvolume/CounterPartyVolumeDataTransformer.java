@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+CounterPartyVolumeDataTransformer * Copyright (C) Minimax Labs Ltd., 2010 - 2022
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume;
 
 import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -14,8 +15,6 @@ import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProviderEditor;
 
-/**
- */
 public class CounterPartyVolumeDataTransformer implements ISlotTransformer {
 
 	@Inject
