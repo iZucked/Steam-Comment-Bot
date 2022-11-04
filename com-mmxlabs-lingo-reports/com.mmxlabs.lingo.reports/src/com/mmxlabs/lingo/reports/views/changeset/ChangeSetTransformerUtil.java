@@ -98,13 +98,13 @@ public final class ChangeSetTransformerUtil {
 	 *
 	 */
 	public static class MappingModel {
-		final List<ChangeSetRowDataGroup> groups = new LinkedList<>();
+		public final List<ChangeSetRowDataGroup> groups = new LinkedList<>();
 
-		final Map<String, ChangeSetRowData> lhsRowMap = new LinkedHashMap<>();
-		final Map<String, ChangeSetRowData> rhsRowMap = new LinkedHashMap<>();
+		public final Map<String, ChangeSetRowData> lhsRowMap = new LinkedHashMap<>();
+		public final Map<String, ChangeSetRowData> rhsRowMap = new LinkedHashMap<>();
 
-		final Map<String, List<ChangeSetRowData>> lhsRowMarketMap = new LinkedHashMap<>();
-		final Map<String, List<ChangeSetRowData>> rhsRowMarketMap = new LinkedHashMap<>();
+		public final Map<String, List<ChangeSetRowData>> lhsRowMarketMap = new LinkedHashMap<>();
+		public final Map<String, List<ChangeSetRowData>> rhsRowMarketMap = new LinkedHashMap<>();
 
 	}
 

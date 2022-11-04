@@ -812,5 +812,7 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	boolean isMajorChange();
+	
+	boolean isWiringOrVesselChange();
 
 } // ChangeSetTableRow
