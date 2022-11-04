@@ -1425,6 +1425,11 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 		return isWiringChange() || isVesselChange() || isDateChange();
 	}
 
+	@Override
+	public boolean isWiringOrVesselChange() {
+		return isWiringChange() || isVesselChange();
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

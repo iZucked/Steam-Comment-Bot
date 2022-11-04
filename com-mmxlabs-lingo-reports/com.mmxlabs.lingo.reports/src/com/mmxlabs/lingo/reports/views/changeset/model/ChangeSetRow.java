@@ -162,5 +162,7 @@ public interface ChangeSetRow extends EObject {
 	 * @generated
 	 */
 	boolean isMajorChange();
+	
+	boolean isWiringOrVesselChange();
 
 } // ChangeSetRow
