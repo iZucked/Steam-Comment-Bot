@@ -16,11 +16,7 @@ public abstract class SimpleSeriesFunction implements ISeries {
 
 	protected SimpleSeriesFunction(final List<ISeries> arguments) {
 		this.arguments = arguments;
-		int[] accumulator = new int[0];
-		for (final ISeries argument : arguments) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
-		}
-		this.changePoints = accumulator;
+		this.changePoints = SeriesUtil.mergeChangePoints(arguments);
 	}
 
 	@Override

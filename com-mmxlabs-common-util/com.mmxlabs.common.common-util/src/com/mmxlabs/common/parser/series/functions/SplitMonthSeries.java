@@ -19,13 +19,19 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParserData;
 
 public class SplitMonthSeries implements ISeries {
+
 	protected static final int[] NONE = new int[0];
+
+	// A point unit is currently an hour
+	private static final int pointEquivalenceFactor = 24;
 
 	private final @NonNull CalendarMonthMapper mapper;
 	private final ISeries series1;
 	private final ISeries series2;
 	private final int splitPoint;
 	private final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime;
+
+	private int[] changePoints;
 
 	public SplitMonthSeries(@NonNull final SeriesParserData seriesParserData, final ISeries series1, final ISeries series2, final int splitPoint) {
 		this.series1 = series1;
@@ -34,11 +40,46 @@ public class SplitMonthSeries implements ISeries {
 		this.splitPoint = splitPoint;
 		this.mapper = seriesParserData.calendarMonthMapper;
 		this.earliestAndLatestTime = seriesParserData.earliestAndLatestTime;
+
+		if (earliestAndLatestTime == null) {
+			this.changePoints = NONE;
+		} else {
+
+			int startMonth = mapper.mapChangePointToMonth(0);
+			// Add some extra months past the latest date to catch stragglers (i.e.
+			// lateness).
+			final int endMonth = 2 + startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
+
+			// Find the earliest date in the source date
+			if (series1.getChangePoints().length != 0 && series2.getChangePoints().length != 0) {
+				final int startTime = Math.min(series1.getChangePoints()[0], series2.getChangePoints()[0]);
+				startMonth = mapper.mapChangePointToMonth(startTime);
+			}
+
+			// Merge in the change points from the source arrays....
+			// Use a set to remove duplicates, we will sort it later
+			final Set<Integer> changePointsSet = new HashSet<>();
+			for (final int p : series1.getChangePoints()) {
+				changePointsSet.add(p);
+			}
+			for (final int p : series2.getChangePoints()) {
+				changePointsSet.add(p);
+			}
+			// ... and and in the changes points based on the month split
+			for (int i = startMonth; i < endMonth; i++) {
+				// Should be the start of the month in 'unit' (hour)
+				final int monthStartPoint = mapper.mapMonthToChangePoint(i);
+
+				changePointsSet.add(monthStartPoint);
+				changePointsSet.add(monthStartPoint + daysToPoint(splitPoint - 1));
+			}
+
+			changePoints = CollectionsUtil.integersToIntArray(changePointsSet);
+			Arrays.sort(changePoints);
+		}
 	}
 
 	private int daysToPoint(final int days) {
-		// A point unit is currently an hour
-		final int pointEquivalenceFactor = 24;
 
 		return days * pointEquivalenceFactor;
 	}
@@ -46,43 +87,6 @@ public class SplitMonthSeries implements ISeries {
 	@Override
 	public int[] getChangePoints() {
 
-		if (earliestAndLatestTime == null) {
-			return NONE;
-		}
-
-		int startMonth = mapper.mapChangePointToMonth(0);
-		// Add some extra months past the latest date to catch stragglers (i.e.
-		// lateness).
-		final int endMonth = 2 + startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
-
-		// Find the earliest date in the source date
-		if (series1.getChangePoints().length != 0 && series2.getChangePoints().length != 0) {
-			final int startTime = Math.min(series1.getChangePoints()[0], series2.getChangePoints()[0]);
-			startMonth = mapper.mapChangePointToMonth(startTime);
-		}
-
-		// Merge in the change points from the source arrays....
-		// Use a set to remove duplicates, we will sort it later
-		final Set<Integer> changePointsSet = new HashSet<>();
-		for (final int p : series1.getChangePoints()) {
-			changePointsSet.add(p);
-		}
-		for (final int p : series2.getChangePoints()) {
-			changePointsSet.add(p);
-		}
-		// ... and and in the changes points based on the month split
-		for (int i = startMonth; i < endMonth; i++) {
-			// Should be the start of the month in 'unit' (hour)
-			final int monthStartPoint = mapper.mapMonthToChangePoint(i);
-
-			changePointsSet.add(monthStartPoint);
-			changePointsSet.add(monthStartPoint + daysToPoint(splitPoint - 1));
-
-		}
-
-		// Finally copy into an array and sort.
-		final int[] changePoints = CollectionsUtil.integersToIntArray(changePointsSet);
-		Arrays.sort(changePoints);
 		return changePoints;
 	}
 

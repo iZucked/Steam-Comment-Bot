@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
-import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode.ExprSelector;
+import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesUtil;
 
@@ -27,12 +26,7 @@ public class Tier2Series implements ISeries {
 		this.lowValue = lowValue;
 		this.highValue = highValue;
 
-		int[] accumulator = new int[0];
-		for (final ISeries argument : Lists.newArrayList(target, lowValue, highValue)) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
-		}
-		this.changePoints = accumulator;
-
+		this.changePoints = SeriesUtil.mergeChangePoints(target, lowValue, highValue);
 	}
 
 	@Override

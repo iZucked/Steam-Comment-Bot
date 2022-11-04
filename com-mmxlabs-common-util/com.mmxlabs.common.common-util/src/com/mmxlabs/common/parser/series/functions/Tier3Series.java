@@ -34,12 +34,7 @@ public class Tier3Series implements ISeries {
 		this.midValue = midValue;
 		this.highValue = highValue;
 
-		int[] accumulator = new int[0];
-		for (final ISeries argument : Lists.newArrayList(target, lowValue, midValue, highValue)) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
-		}
-		this.changePoints = accumulator;
-
+		this.changePoints = SeriesUtil.mergeChangePoints(target, lowValue, midValue, highValue);
 	}
 
 	@Override

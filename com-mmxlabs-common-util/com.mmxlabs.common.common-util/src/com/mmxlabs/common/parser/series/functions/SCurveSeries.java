@@ -27,11 +27,7 @@ public class SCurveSeries implements ISeries {
 		this.middleSeries = middleSeries;
 		this.higherSeries = higherSeries;
 
-		int[] accumulator = new int[0];
-		for (final ISeries argument : Lists.newArrayList(base, lowerSeries, middleSeries, higherSeries)) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
-		}
-		this.changePoints = accumulator;
+		this.changePoints = SeriesUtil.mergeChangePoints(base, lowerSeries, middleSeries, higherSeries);
 	}
 
 	@Override
