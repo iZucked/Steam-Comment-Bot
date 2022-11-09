@@ -31,10 +31,10 @@ public class GanttSection implements IFillBackgroundColors {
 
 	private String _name;
 	private GanttComposite _parent;
-	private List _ganttEvents;
+	private List<IGanttChartItem> _ganttEvents;
 	// this list contains events that are being vertically DND'd across the section
 	// and need to be rendered but should not count as actual member-events until (if) they are dropped
-	private List _dndGanttEvents;
+	private List<GanttEvent> _dndGanttEvents;
 	private Rectangle _bounds;
 	private Image _nameImage;
 	private boolean _needsNameUpdate;
@@ -62,8 +62,8 @@ public class GanttSection implements IFillBackgroundColors {
 	private Object data;
 
 	private GanttSection() {
-		this._ganttEvents = new ArrayList();
-		this._dndGanttEvents = new ArrayList();
+		this._ganttEvents = new ArrayList<>();
+		this._dndGanttEvents = new ArrayList<>();
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class GanttSection implements IFillBackgroundColors {
 				}
 				_ganttEvents.add(inx, event);
 			}
-			if (event instanceof GanttEvent) {
-				((GanttEvent) event).setGanttSection(this);
+			if (event instanceof GanttEvent ge) {
+				ge.setGanttSection(this);
 			}
 
 		}
@@ -152,7 +152,7 @@ public class GanttSection implements IFillBackgroundColors {
 	 * 
 	 * @return List of items
 	 */
-	public List getEvents() {
+	public List<IGanttChartItem> getEvents() {
 		return _ganttEvents;
 	}
 
@@ -432,7 +432,7 @@ public class GanttSection implements IFillBackgroundColors {
 		_dndGanttEvents.clear();
 	}
 
-	List getDNDGanttEvents() {
+	List<GanttEvent> getDNDGanttEvents() {
 		return _dndGanttEvents;
 	}
 
@@ -442,13 +442,13 @@ public class GanttSection implements IFillBackgroundColors {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
-		for (final Object event : _ganttEvents) {
-			if (event instanceof GanttGroup) {
-				for (final GanttEvent event2 : ((GanttGroup) event).getEventMembers()) {
+		for (final IGanttChartItem event : _ganttEvents) {
+			if (event instanceof GanttGroup gg) {
+				for (final GanttEvent event2 : gg.getEventMembers()) {
 					event2.setHidden(!visible);
 				}
-			} else if (event instanceof GanttEvent) {
-				((GanttEvent) event).setHidden(!visible);
+			} else if (event instanceof GanttEvent ge) {
+				ge.setHidden(!visible);
 			}
 		}
 

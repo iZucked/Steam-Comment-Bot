@@ -55,6 +55,7 @@ import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
+import org.eclipse.nebula.widgets.ganttchart.IGanttChartItem;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
@@ -408,8 +409,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 					final Iterator<GanttSection> itr = new ArrayList<>(ganttChart.getGanttComposite().getGanttSections()).iterator();
 					while (itr.hasNext()) {
 						final GanttSection ganttSection = itr.next();
-						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
-						for (final Object o : ganttSection.getEvents()) {
+						final Set<IGanttChartItem> events = new HashSet<>(ganttSection.getEvents());
+						for (final IGanttChartItem o : ganttSection.getEvents()) {
 							if (o instanceof final GanttGroup ganttGroup) {
 								events.addAll(ganttGroup.getEventMembers());
 							}
