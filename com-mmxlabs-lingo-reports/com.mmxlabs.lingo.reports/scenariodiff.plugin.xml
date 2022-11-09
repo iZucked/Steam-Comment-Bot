@@ -12,7 +12,7 @@
   <extension
          point="org.eclipse.ui.views">
       <view
-            name="MultiView"
+            name="Scenario Diff"
             icon="icons:/icons/16x16/lateness.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.multi.MultiView"

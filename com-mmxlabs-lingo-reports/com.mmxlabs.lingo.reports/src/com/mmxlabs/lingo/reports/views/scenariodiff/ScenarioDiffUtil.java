@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views.scenarioDiff;
+package com.mmxlabs.lingo.reports.views.scenariodiff;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -19,26 +20,28 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.commercial.impl.DateShiftExpressionPriceParametersImpl;
-import com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class ScenarioDiffUtil {
+
 	public static List<ScenarioDiffData> pairingListElement(List<String> str1, List<String> str2) {
 		List<ScenarioDiffData> res = new ArrayList<>();
 		if (str1.size() == 1) {
@@ -95,29 +98,22 @@ public class ScenarioDiffUtil {
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	private static ComposedAdapterFactory createAdapterFactory() {
-		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
 	}
 
 	public static String fetchRowName(EObject input, EStructuralFeature f) {
-		String labelText = "";
 		if (input != null) {
 			final IItemPropertySource inputPropertySource = (IItemPropertySource) FACTORY.adapt(input, IItemPropertySource.class);
-
 			for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(input)) {
-
 				if (f.equals(descriptor.getFeature(input))) {
-					labelText = descriptor.getDisplayName(input);
-
-					return labelText;
-
+					return descriptor.getDisplayName(input);
 				}
 			}
 		}
-		labelText = f.getName();
-		return labelText;
+		return f.getName();
 	}
 
 	public static List<ScenarioDiffData> extraDataGen(EObject eo1, EObject eo2) {
@@ -126,9 +122,7 @@ public class ScenarioDiffUtil {
 			Port o = (Port) eo1;
 			Port ot = (Port) eo2;
 
-			if (!o.getName().equals(ot.getName()))
-				;
-			{
+			if (!o.getName().equals(ot.getName())) {
 				Map<String, String> childMap = new HashMap<String, String>();
 				childMap.put("pinned", o.getName());
 				childMap.put("", ot.getName());
@@ -183,10 +177,10 @@ public class ScenarioDiffUtil {
 				return result;
 			}
 
-			Vessel v1 = getVesselHelper(e1.getCargo().getVesselAssignmentType());
-			Vessel v2 = getVesselHelper(e2.getCargo().getVesselAssignmentType());
+			final Vessel v1 = getVesselHelper(e1.getCargo().getVesselAssignmentType());
+			final Vessel v2 = getVesselHelper(e2.getCargo().getVesselAssignmentType());
 			if (!v1.getName().equals(v2.getName())) {
-				Map<String, String> childMap = new HashMap<String, String>();
+				Map<String, String> childMap = new HashMap<>();
 				childMap.put("pinned", v1.getName());
 				childMap.put("", v2.getName());
 				ScenarioDiffData child = new ScenarioDiffData(childMap, "Vessel");
@@ -196,19 +190,19 @@ public class ScenarioDiffUtil {
 		return result;
 	}
 
-	public static Vessel getVesselHelper(VesselAssignmentType vat) {
+	public static Vessel getVesselHelper(final VesselAssignmentType vat) {
 		Vessel v = null;
 		if (vat == null) {
 			return v;
 		}
-		if (vat instanceof CharterInMarket) {
-			return ((CharterInMarket) vat).getVessel();
+		if (vat instanceof final CharterInMarket charterInMarket) {
+			return charterInMarket.getVessel();
 		}
-		if (vat instanceof VesselCharter) {
-			return ((VesselCharter) vat).getVessel();
+		if (vat instanceof final VesselCharter vesselCharter) {
+			return vesselCharter.getVessel();
 		}
-		if (vat instanceof CharterInMarketOverride) {
-			return ((CharterInMarketOverride) vat).getCharterInMarket().getVessel();
+		if (vat instanceof final CharterInMarketOverride charterInMarketOverride) {
+			return charterInMarketOverride.getCharterInMarket().getVessel();
 		}
 
 		return v;
@@ -235,7 +229,7 @@ public class ScenarioDiffUtil {
 							continue;
 						}
 
-						Map<String, String> childMap = new HashMap<String, String>();
+						Map<String, String> childMap = new HashMap<>();
 						childMap.put("pinned", "");
 						childMap.put("", eo2.eGet(f).toString());
 						ScenarioDiffData child = new ScenarioDiffData(childMap, fetchRowName(eo2, f));
@@ -244,21 +238,13 @@ public class ScenarioDiffUtil {
 					}
 					if ((eo2 == null || eo2.eGet(f) == null) && (eo1 != null && eo1.eGet(f) != null)) {
 
-						if (eo1.eGet(f) instanceof Integer i) {
-							if (i == 0)
-								continue;
-
-						}
-						if (eo1.eGet(f) instanceof Boolean b) {
-							if (!b)
-								continue;
-
-						}
-						if (eo1.eGet(f).toString().equals("") || eo1.eGet(f).toString().equals("None") || eo1.eGet(f).toString().equals("NOTSET")) {
+						if ((eo1.eGet(f) instanceof Integer i && i == 0) //
+								|| (eo1.eGet(f) instanceof Boolean b && !b) //
+								|| (eo1.eGet(f).toString().isEmpty() || eo1.eGet(f).toString().equals("None") || eo1.eGet(f).toString().equals("NOTSET"))) {
 							continue;
 						}
 
-						Map<String, String> childMap = new HashMap<String, String>();
+						Map<String, String> childMap = new HashMap<>();
 						childMap.put("pinned", eo1.eGet(f).toString());
 						childMap.put("", "");
 						ScenarioDiffData child = new ScenarioDiffData(childMap, fetchRowName(eo1, f));
@@ -289,7 +275,7 @@ public class ScenarioDiffUtil {
 							result.add(child);
 							continue;
 						}
-						if (eo2.eGet(f) instanceof List elist && !elist.isEmpty()) {
+						if (eo2.eGet(f) instanceof List<?> elist && !elist.isEmpty()) {
 							if (((EReference) f).getEReferenceType().getEAllSuperTypes().contains(MMXCorePackage.eINSTANCE.getNamedObject())) {
 								List<NamedObject> elist2 = (List<NamedObject>) elist;
 								Set<NamedObject> eSet2 = elist2.stream().collect(Collectors.toSet());
@@ -326,24 +312,18 @@ public class ScenarioDiffUtil {
 							}
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo2 instanceof PurchaseContract || eo2 instanceof SalesContract) {
-							ExpressionPriceParametersImpl dse2 = (ExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse2, null, dse2.eClass().getEStructuralFeatures(), blackList1);
-							// System.out.println(singleData);
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == CommercialPackage.eINSTANCE.getContract_PriceInfo() && eo2 instanceof final Contract contract) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = contract.getPriceInfo();
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							dataList.forEach(result::add);
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo2 instanceof SpotMarket) {
-							DateShiftExpressionPriceParametersImpl dse2 = (DateShiftExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse2, null, dse2.eClass().getEStructuralFeatures(), blackList1);
-							// System.out.println(singleData);
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == SpotMarketsPackage.eINSTANCE.getSpotMarket_PriceInfo() && eo2 instanceof final SpotMarket spotMarket) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = spotMarket.getPriceInfo();
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							dataList.forEach(result::add);
 							continue;
 						}
 						continue;
@@ -358,7 +338,7 @@ public class ScenarioDiffUtil {
 							result.add(child);
 							continue;
 						}
-						if (eo1.eGet(f) instanceof List elist && !elist.isEmpty()) {
+						if (eo1.eGet(f) instanceof List<?> elist && !elist.isEmpty()) {
 							if (((EReference) f).getEReferenceType().getEAllSuperTypes().contains(MMXCorePackage.eINSTANCE.getNamedObject())) {
 								List<NamedObject> elist1 = (List<NamedObject>) elist;
 								Set<NamedObject> eSet1 = elist1.stream().collect(Collectors.toSet());
@@ -394,24 +374,18 @@ public class ScenarioDiffUtil {
 							}
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof PurchaseContract || eo1 instanceof SalesContract) {
-							ExpressionPriceParametersImpl dse1 = (ExpressionPriceParametersImpl) eo1.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, null, dse1.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == CommercialPackage.eINSTANCE.getContract_PriceInfo() && eo1 instanceof final Contract contract) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = contract.getPriceInfo();
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							dataList.forEach(result::add);
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof SpotMarket) {
-							DateShiftExpressionPriceParametersImpl dse1 = (DateShiftExpressionPriceParametersImpl) eo1.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, null, dse1.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == SpotMarketsPackage.eINSTANCE.getSpotMarket_PriceInfo() && eo1 instanceof final SpotMarket spotMarket) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = spotMarket.getPriceInfo();
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							dataList.forEach(result::add);
 							continue;
 						}
 						continue;
@@ -446,28 +420,20 @@ public class ScenarioDiffUtil {
 		List<ScenarioDiffData> result = new ArrayList<>();
 		if (features != null && !features.isEmpty()) {
 			for (EStructuralFeature f : features) {
-				if (blackList1.contains(f)) {
-					continue;
-				}
-
-				if (eo1.eGet(f) == eo2.eGet(f)) {
+				if (blackList1.contains(f) //
+						|| eo1.eGet(f) == eo2.eGet(f)) {
 					continue;
 				}
 
 				if (f instanceof EAttribute) {
-
 					if ((eo1.eGet(f) == null) && (eo2.eGet(f) != null) && !(eo2.eGet(f).toString().equals("") || eo2.eGet(f).toString().equals("None") || eo2.eGet(f).toString().equals("NOTSET"))) {
 
-						if (eo2.eGet(f) instanceof Integer i) {
-							if (i == 0)
-								continue;
-						}
-						if (eo2.eGet(f) instanceof Boolean b) {
-							if (!b)
-								continue;
+						if ((eo2.eGet(f) instanceof Integer i && i == 0) //
+								&& (eo2.eGet(f) instanceof Boolean b && !b)) {
+							continue;
 						}
 
-						Map<String, String> childMap = new HashMap<String, String>();
+						final Map<String, String> childMap = new HashMap<>();
 						childMap.put("pinned", "");
 						childMap.put("", eo2.eGet(f).toString());
 
@@ -477,16 +443,12 @@ public class ScenarioDiffUtil {
 					}
 					if ((eo2.eGet(f) == null) && !(eo1.eGet(f).toString().equals("") || eo1.eGet(f).toString().equals("None") || eo1.eGet(f).toString().equals("NOTSET"))) {
 
-						if (eo1.eGet(f) instanceof Integer i) {
-							if (i == 0)
-								continue;
-						}
-						if (eo1.eGet(f) instanceof Boolean b) {
-							if (!b)
-								continue;
+						if ((eo1.eGet(f) instanceof Integer i && i == 0) //
+								|| (eo1.eGet(f) instanceof Boolean b && !b)) {
+							continue;
 						}
 
-						Map<String, String> childMap = new HashMap<String, String>();
+						Map<String, String> childMap = new HashMap<>();
 						childMap.put("pinned", eo1.eGet(f).toString());
 						childMap.put("", "");
 						ScenarioDiffData child = new ScenarioDiffData(childMap, fetchRowName(eo1, f));
@@ -494,7 +456,7 @@ public class ScenarioDiffUtil {
 						continue;
 					}
 					if (eo1.eGet(f) != null && eo2.eGet(f) != null && !eo1.eGet(f).equals(eo2.eGet(f))) {
-						Map<String, String> childMap = new HashMap<String, String>();
+						Map<String, String> childMap = new HashMap<>();
 						childMap.put("pinned", eo1.eGet(f).toString());
 						childMap.put("", eo2.eGet(f).toString());
 						ScenarioDiffData child = new ScenarioDiffData(childMap, fetchRowName(eo1, f));
@@ -504,15 +466,15 @@ public class ScenarioDiffUtil {
 				} else {
 
 					if (eo1.eGet(f) == null) {
-						if (eo2.eGet(f) instanceof NamedObject e2 && !(eo2.eGet(f).toString().equals("") || eo2.eGet(f).toString().equals("None") || eo2.eGet(f).toString().equals("NOTSET"))) {
-							Map<String, String> childMap = new HashMap<String, String>();
+						if (eo2.eGet(f) instanceof NamedObject e2 && !(eo2.eGet(f).toString().isEmpty() || eo2.eGet(f).toString().equals("None") || eo2.eGet(f).toString().equals("NOTSET"))) {
+							Map<String, String> childMap = new HashMap<>();
 							childMap.put("pinned", "");
 							childMap.put("", e2.getName());
 							ScenarioDiffData child = new ScenarioDiffData(childMap, fetchRowName(eo1, f));
 							result.add(child);
 							continue;
 						}
-						if (eo2.eGet(f) instanceof List elist && !elist.isEmpty()) {
+						if (eo2.eGet(f) instanceof List<?> elist && !elist.isEmpty()) {
 							if (((EReference) f).getEReferenceType().getEAllSuperTypes().contains(MMXCorePackage.eINSTANCE.getNamedObject())) {
 								List<NamedObject> elist2 = (List<NamedObject>) elist;
 								Set<NamedObject> eSet2 = elist2.stream().collect(Collectors.toSet());
@@ -520,12 +482,8 @@ public class ScenarioDiffUtil {
 								List<String> str2 = new ArrayList<>();
 								StringBuilder sb2 = new StringBuilder();
 
-								for (NamedObject no : eSet2) {
-									res2.add(no);
-								}
-								for (NamedObject no : res2) {
-									str2.add(no.getName());
-								}
+								eSet2.forEach(res2::add);
+								res2.stream().map(NamedObject::getName).forEach(str2::add);
 								Collections.sort(str2);
 								for (String s : str2) {
 									sb2.append(s);
@@ -549,24 +507,18 @@ public class ScenarioDiffUtil {
 							}
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo2 instanceof PurchaseContract || eo2 instanceof SalesContract) {
-							ExpressionPriceParametersImpl dse2 = (ExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse2, null, dse2.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == CommercialPackage.eINSTANCE.getContract_PriceInfo() && eo2 instanceof final Contract contract) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = contract.getPriceInfo();
+							final List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							singleData.forEach(result::add);
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo2 instanceof SpotMarket) {
-							DateShiftExpressionPriceParametersImpl dse2 = (DateShiftExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse2, null, dse2.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == SpotMarketsPackage.eINSTANCE.getSpotMarket_PriceInfo() && eo2 instanceof final SpotMarket spotMarket) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = spotMarket.getPriceInfo();
+							final List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							singleData.forEach(result::add);
 							continue;
 						}
 						continue;
@@ -581,10 +533,10 @@ public class ScenarioDiffUtil {
 							result.add(child);
 							continue;
 						}
-						if (eo1.eGet(f) instanceof List elist && !elist.isEmpty()) {
+						if (eo1.eGet(f) instanceof final List<?> elist && !elist.isEmpty()) {
 							if (((EReference) f).getEReferenceType().getEAllSuperTypes().contains(MMXCorePackage.eINSTANCE.getNamedObject())) {
 								List<NamedObject> elist1 = (List<NamedObject>) elist;
-								Set<NamedObject> eSet1 = elist1.stream().collect(Collectors.toSet());
+								Set<NamedObject> eSet1 = new HashSet<>(elist1);
 								List<NamedObject> res1 = new ArrayList<>();
 								List<String> str1 = new ArrayList<>();
 								StringBuilder sb1 = new StringBuilder();
@@ -604,9 +556,8 @@ public class ScenarioDiffUtil {
 									Map<String, String> parentMap = new HashMap<>();
 									parentMap.put("", sb1.toString());
 									parentMap.put("pinned", "");
-									ScenarioDiffData parent = new ScenarioDiffData(parentMap, fetchRowName(eo1, f));
-
-									List<ScenarioDiffData> children = pairingListElement(str1, new ArrayList<>());
+									final ScenarioDiffData parent = new ScenarioDiffData(parentMap, fetchRowName(eo1, f));
+									final List<ScenarioDiffData> children = pairingListElement(str1, new ArrayList<>());
 									for (ScenarioDiffData sdd : children) {
 										parent.children.add(sdd);
 										sdd.parent = parent;
@@ -617,24 +568,18 @@ public class ScenarioDiffUtil {
 							}
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof PurchaseContract || eo1 instanceof SalesContract) {
-							ExpressionPriceParametersImpl dse1 = (ExpressionPriceParametersImpl) eo1.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, null, dse1.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == CommercialPackage.eINSTANCE.getContract_PriceInfo() && eo1 instanceof final Contract contract) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = contract.getPriceInfo();
+							final List<ScenarioDiffData> diffList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							diffList.forEach(result::add);
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof SpotMarket) {
-							DateShiftExpressionPriceParametersImpl dse1 = (DateShiftExpressionPriceParametersImpl) eo1.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, null, dse1.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
-							}
-
+						if (f == SpotMarketsPackage.eINSTANCE.getSpotMarket_PriceInfo() && eo1 instanceof final SpotMarket spotMarket) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters = spotMarket.getPriceInfo();
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters, null,
+									lngPriceCalculatorParameters.eClass().getEStructuralFeatures(), blackList1);
+							dataList.forEach(result::add);
 							continue;
 						}
 						continue;
@@ -657,12 +602,12 @@ public class ScenarioDiffUtil {
 							continue;
 						}
 
-						if (eo1.eGet(f) instanceof List elist) {
+						if (eo1.eGet(f) instanceof List<?> elist) {
 							if (((EReference) f).getEReferenceType().getEAllSuperTypes().contains(MMXCorePackage.eINSTANCE.getNamedObject())) {
 								List<NamedObject> elist1 = (List<NamedObject>) elist;
 								List<NamedObject> elist2 = (List<NamedObject>) eo2.eGet(f);
-								Set<NamedObject> eSet1 = elist1.stream().collect(Collectors.toSet());
-								Set<NamedObject> eSet2 = elist2.stream().collect(Collectors.toSet());
+								Set<NamedObject> eSet1 = new HashSet<>(elist1);
+								Set<NamedObject> eSet2 = new HashSet<>(elist2);
 								List<NamedObject> res1 = new ArrayList<>();
 								List<NamedObject> res2 = new ArrayList<>();
 								List<String> str1 = new ArrayList<>();
@@ -697,16 +642,12 @@ public class ScenarioDiffUtil {
 									}
 								}
 
-								for (NamedObject no : res1) {
-									str1.add(no.getName());
+								res1.stream().map(NamedObject::getName).forEach(str1::add);
+								res2.stream().map(NamedObject::getName).forEach(str2::add);
 
-								}
-
-								for (NamedObject no : res2) {
-									str2.add(no.getName());
-								}
 								Collections.sort(str1);
 								Collections.sort(str2);
+
 								for (String s : str1) {
 									s1 = s;
 									sb1.append(s);
@@ -739,53 +680,54 @@ public class ScenarioDiffUtil {
 							}
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof PurchaseContract || eo1 instanceof SalesContract && eo1.eGet(f) instanceof ExpressionPriceParametersImpl) {
-							ExpressionPriceParametersImpl dse1 = (ExpressionPriceParametersImpl) eo1.eGet(f);
-							ExpressionPriceParametersImpl dse2 = (ExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, dse2, dse1.eClass().getEStructuralFeatures(), blackList1);
-							// System.out.println(singleData);
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
+						if (f == CommercialPackage.eINSTANCE.getContract_PriceInfo() && eo1 instanceof Contract contract1 && eo2 instanceof Contract contract2) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters1 = contract1.getPriceInfo();
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters2 = contract2.getPriceInfo();
+							if (lngPriceCalculatorParameters1 != null && lngPriceCalculatorParameters2 != null) {
+								final EClass eClsLngPriceCalculatorParams1 = lngPriceCalculatorParameters1.eClass();
+								final EClass eClsLngPriceCalculatorParams2 = lngPriceCalculatorParameters2.eClass();
+								if (eClsLngPriceCalculatorParams1 == eClsLngPriceCalculatorParams2) {
+									final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters1, lngPriceCalculatorParameters2,
+											eClsLngPriceCalculatorParams1.getEStructuralFeatures(), blackList1);
+									dataList.forEach(result::add);
+								}
 							}
-
 							continue;
 						}
-						if (f.getName().equals("priceInfo") && eo1 instanceof SpotMarket) {
-							DateShiftExpressionPriceParametersImpl dse1 = (DateShiftExpressionPriceParametersImpl) eo1.eGet(f);
-							DateShiftExpressionPriceParametersImpl dse2 = (DateShiftExpressionPriceParametersImpl) eo2.eGet(f);
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen(dse1, dse2, dse1.eClass().getEStructuralFeatures(), blackList1);
-
-							for (ScenarioDiffData onePiece : singleData) {
-								result.add(onePiece);
+						if (f == SpotMarketsPackage.eINSTANCE.getSpotMarket_PriceInfo() && eo1 instanceof final SpotMarket spotMarket1 && eo2 instanceof final SpotMarket spotMarket2) {
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters1 = spotMarket1.getPriceInfo();
+							final LNGPriceCalculatorParameters lngPriceCalculatorParameters2 = spotMarket2.getPriceInfo();
+							if (lngPriceCalculatorParameters1 != null && lngPriceCalculatorParameters2 != null) {
+								final EClass eClsLngPriceCalculatorParams1 = lngPriceCalculatorParameters1.eClass();
+								final EClass eClsLngPriceCalculatorParams2 = lngPriceCalculatorParameters2.eClass();
+								if (eClsLngPriceCalculatorParams1 == eClsLngPriceCalculatorParams2) {
+									final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(lngPriceCalculatorParameters1, lngPriceCalculatorParameters2,
+											eClsLngPriceCalculatorParams1.getEStructuralFeatures(), blackList1);
+									dataList.forEach(result::add);
+								}
 							}
-
-							continue;
-						}
-						if (f.getName().equals("requiredHeel") && eo1 instanceof CharterOutEvent) {
-
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen((EObject) eo1.eGet(f), (EObject) eo2.eGet(f),
-									((EObject) eo1.eGet(f)).eClass().getEStructuralFeatures(), blackList1);
-							for (ScenarioDiffData onePiece : singleData) {
-								onePiece.id = "Delivery Heel " + onePiece.id;
-								result.add(onePiece);
-							}
-
-							continue;
-						}
-						if (f.getName().equals("availableHeel") && eo1 instanceof CharterOutEvent) {
-
-							List<ScenarioDiffData> singleData = ScenarioDiffUtil.diffSingleDataGen((EObject) eo1.eGet(f), (EObject) eo2.eGet(f),
-									((EObject) eo1.eGet(f)).eClass().getEStructuralFeatures(), blackList1);
-							for (ScenarioDiffData onePiece : singleData) {
-								onePiece.id = "Redelivery Heel " + onePiece.id;
-								result.add(onePiece);
-							}
-
 							continue;
 						}
 
+						if (eo1 instanceof CharterOutEvent) {
+							final String idPrefix;
+							if (f == CargoPackage.eINSTANCE.getCharterOutEvent_RequiredHeel()) {
+								idPrefix = "Delivery Heel";
+							} else if (f == CargoPackage.eINSTANCE.getCharterOutEvent_AvailableHeel()) {
+								idPrefix = "Redelivery Heel";
+							} else {
+								continue;
+							}
+							final EObject feature1 = (EObject) eo1.eGet(f);
+							final EObject feature2 = (EObject) eo2.eGet(f);
+							final List<ScenarioDiffData> dataList = ScenarioDiffUtil.diffSingleDataGen(feature1, feature2, feature1.eClass().getEStructuralFeatures(), blackList1);
+							for (final ScenarioDiffData data : dataList) {
+								data.id = String.format("%s %s", idPrefix, data.id);
+								result.add(data);
+							}
+							continue;
+						}
 					}
-
 				}
 			}
 

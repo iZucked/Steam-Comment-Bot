@@ -68,7 +68,6 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -172,7 +171,6 @@ import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -983,88 +981,6 @@ public class CargoDiffView extends ChangeSetView {
 			}
 			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
 
-		}
-
-		{
-			getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
-			filterMenu = new AbstractMenuAction("Filter...") {
-
-				@Override
-				protected void populate(final Menu menu) {
-					if (showGroupByMenu) {
-						final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
-							@Override
-							protected void populate(final Menu menu2) {
-								final RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
-
-								final RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
-								final RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
-
-								switch (insertionPlanFilter.getGroupMode()) {
-								case Complexity:
-									mode_Complextiy.setChecked(true);
-									break;
-								case Target:
-									mode_Target.setChecked(true);
-									break;
-								case TargetAndComplexity:
-									mode_TargetComplexity.setChecked(true);
-									break;
-								default:
-									break;
-								}
-								addActionToMenu(mode_Target, menu2);
-								addActionToMenu(mode_TargetComplexity, menu2);
-								addActionToMenu(mode_Complextiy, menu2);
-							}
-						};
-						groupModeAction.setToolTipText("Change the grouping choice");
-						addActionToMenu(groupModeAction, menu);
-					}
-					final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", CargoDiffView.this::doShowMinorChangesToggle);
-					toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
-					toggleMinorChanges.setChecked(showMinorChanges);
-					addActionToMenu(toggleMinorChanges, menu);
-
-					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", CargoDiffView.this::doSortByVesselAndDateToggle);
-					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
-					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
-					addActionToMenu(toggleSortByVesselAndDate, menu);
-
-					if (showNegativePNLChangesMenu) {
-						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", CargoDiffView.this::doShowNegativePNLToggle);
-						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
-						toggleNegativePNL.setChecked(showNegativePNLChanges);
-						addActionToMenu(toggleNegativePNL, menu);
-					}
-					if (showChangeTargetMenu) {
-						if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
-
-							final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
-								@Override
-								protected void populate(final Menu menu2) {
-
-									for (final NamedObject target : currentViewState.allTargetElements) {
-										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
-												() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
-										if (currentViewState.lastTargetElement == target) {
-											action.setChecked(true);
-											action.setEnabled(false);
-										}
-										addActionToMenu(action, menu2);
-									}
-								}
-							};
-							targetMenu.setToolTipText("Select target element");
-							addActionToMenu(targetMenu, menu);
-						}
-					}
-
-				}
-			};
-			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
-			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
 

@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.mmxlabs.lingo.reports.views.cargodiff.CargoDiffView;
-import com.mmxlabs.lingo.reports.views.scenarioDiff.ScenarioDiffReport;
+import com.mmxlabs.lingo.reports.views.scenariodiff.ScenarioDiffReport;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
