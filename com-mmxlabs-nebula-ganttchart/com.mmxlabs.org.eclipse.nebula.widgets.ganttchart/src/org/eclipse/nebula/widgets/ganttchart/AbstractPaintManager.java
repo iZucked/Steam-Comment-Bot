@@ -25,6 +25,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 	public void drawEvent(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean isSelected,
 			final boolean threeDee, final int dayWidth, final int xStart, final int y, final int eventWidth, final Rectangle bounds) {
 
+		// Reset advanced mode. This fixes "disappearing" events caused by calls to gc.setAlpha 
+		gc.setAdvanced(false);
+
 		final boolean alpha = colorManager.useAlphaDrawing();
 
 		int xLoc = xStart;
