@@ -54,12 +54,17 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterMarketEditorPane = new CharterMarketEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		
-
-		purchaseContractEditorPane.createControl(sash);
-		salesContractEditorPane.createControl(sash);
+		final SashForm contractSash = new SashForm(sash, SWT.VERTICAL);
+		purchaseContractEditorPane.createControl(contractSash);
+		salesContractEditorPane.createControl(contractSash);
+		final SashForm nonContractSash = new SashForm(sash, SWT.VERTICAL);
+		final SashForm charterTermsEntitiesSash = new SashForm(nonContractSash, SWT.HORIZONTAL);
+		charterMarketEditorPane.createControl(charterTermsEntitiesSash);
+		entityEditorPane.createControl(charterTermsEntitiesSash);
+		
 		if (processTransferModel) {
 			transferAgreementsEditorPane = new TransferAgreementsViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			transferAgreementsEditorPane.createControl(sash);
+			transferAgreementsEditorPane.createControl(nonContractSash);
 			final EditingDomain domain = editorPart.getEditingDomain();
 			if (domain != null) {
 				transferAgreementsEditorPane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(),
@@ -68,8 +73,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			}
 		}
 		
-		entityEditorPane.createControl(sash);
-		charterMarketEditorPane.createControl(sash);
+		
 
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
