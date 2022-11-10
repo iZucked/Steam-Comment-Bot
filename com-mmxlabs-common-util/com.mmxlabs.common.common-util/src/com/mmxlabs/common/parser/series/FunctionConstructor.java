@@ -5,6 +5,7 @@
 package com.mmxlabs.common.parser.series;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,6 +16,14 @@ import com.mmxlabs.common.parser.IExpression;
 public class FunctionConstructor implements IExpression<ISeries> {
 	private final Class<? extends ISeries> clazz;
 	private final List<IExpression<ISeries>> arguments;
+	
+	public List<IExpression<ISeries>> getArguments() {
+		return arguments;
+	}
+
+	public Class<? extends ISeries> getClazz() {
+		return clazz;
+	}
 
 	public FunctionConstructor(final Class<? extends ISeries> clazz, final IExpression<ISeries> e1, final IExpression<ISeries> e2) {
 		this.clazz = clazz;

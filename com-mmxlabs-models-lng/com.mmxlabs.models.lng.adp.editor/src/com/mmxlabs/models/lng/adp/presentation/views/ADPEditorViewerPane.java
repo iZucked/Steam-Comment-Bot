@@ -55,7 +55,11 @@ import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpToolbarCustomiser;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.YearMonthTextFormatter;
@@ -80,7 +84,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 	private FormattedText startEditor;
 	private FormattedText endEditor;
 
-	public ADPEditorViewerPane(IWorkbenchPage page, JointModelEditorPart editorPart, IActionBars actionBars) {
+	public ADPEditorViewerPane(final IWorkbenchPage page, final JointModelEditorPart editorPart, final IActionBars actionBars) {
 		super(page, editorPart, editorPart, actionBars);
 	}
 
@@ -140,6 +144,14 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 									final CompoundCommand cmd = new CompoundCommand("Delete current ADP");
 									cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
+									// Reset optimisation mode
+									if (getScenarioEditingLocation().getRootObject() instanceof final LNGScenarioModel scenarioModel) {
+										final UserSettings userSettings = scenarioModel.getUserSettings();
+										if (userSettings != null && userSettings.getMode() == OptimisationMode.ADP) {
+											cmd.append(SetCommand.create(getEditingDomain(), userSettings, ParametersPackage.Literals.USER_SETTINGS__MODE, OptimisationMode.SHORT_TERM));
+										}
+									}
+
 									getEditingDomain().getCommandStack().execute(cmd);
 									doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 								}
@@ -229,13 +241,13 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		return new Viewer() {
 
 			@Override
-			public void setSelection(ISelection selection, boolean reveal) {
+			public void setSelection(final ISelection selection, final boolean reveal) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void setInput(Object input) {
+			public void setInput(final Object input) {
 				// TODO Auto-generated method stub
 				doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 			}
@@ -425,7 +437,8 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 		if (status.isOK() == false) {
 
-			// See if this command was executed in the UI thread - if so fire up the dialog box.
+			// See if this command was executed in the UI thread - if so fire up the dialog
+			// box.
 			if (Display.getCurrent() != null) {
 
 				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
@@ -446,7 +459,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		return true;
 	}
 
-	public void setValidationTarget(EObject target) {
+	public void setValidationTarget(final EObject target) {
 		// Note: These indicies need to be kept in sync with page.
 		if (target instanceof FleetProfile) {
 			folder.setSelection(1);

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
-import java.time.LocalDate;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,8 +15,6 @@ import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerDialog;
 import com.mmxlabs.models.lng.transformer.ui.inventory.DischargeTriggerHelper;

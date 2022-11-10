@@ -50,9 +50,9 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IRepositioningFeeTerm;
-import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.DefaultCharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.MonthlyBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultLumpSumBallastBonusContractTerm;
@@ -65,10 +65,7 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
- * 
- * 
  * @author alex
- * 
  */
 public class CharterContractTransformer implements ICharterContractTransformer {
 
@@ -236,14 +233,14 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 			if (term instanceof final LumpSumRepositioningFeeTerm t) {
 				final String priceExpression = t.getPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-				
+
 				assert lumpSumCurve != null;
-				
-				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
+
+				final Set<IPort> startPorts = transformPorts(t.getStartPorts());
 				isAnyPort = t.getStartPorts().isEmpty();
-				
+
 				tt = new DefaultLumpSumRepositioningFeeContractTerm(startPorts, lumpSumCurve);
-				
+
 			} else if (term instanceof final OriginPortRepositioningFeeTerm t) {
 				final String priceExpression = t.getLumpSumPriceExpression();
 				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
@@ -257,9 +254,9 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				final IPort originPort = transformPort(t.getOriginPort());
 				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
 				final boolean includeCanalTime = t.isIncludeCanalTime();
-				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
+				final Set<IPort> startPorts = transformPorts(t.getStartPorts());
 				isAnyPort = t.getStartPorts().isEmpty();
-				
+
 				tt = new DefaultOriginPortRepositioningFeeContractTerm(originPort, startPorts, lumpSumCurve, fuelCurve, charterCurve, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
@@ -283,8 +280,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		final Set<IPort> ports = new LinkedHashSet<>();
 		for (final Port ePort : (SetUtils.getObjects(redeliveryPorts))) {
 			@NonNull
-			final
-			IPort oPort = modelEntityMap.getOptimiserObjectNullChecked(ePort, IPort.class);
+			final IPort oPort = modelEntityMap.getOptimiserObjectNullChecked(ePort, IPort.class);
 			ports.add(oPort);
 		}
 		return ports;

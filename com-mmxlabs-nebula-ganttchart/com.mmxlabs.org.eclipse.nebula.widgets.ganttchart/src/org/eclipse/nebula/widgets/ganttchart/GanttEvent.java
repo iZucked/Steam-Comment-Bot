@@ -84,7 +84,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     private Color           _gradientStatusColor;
     private boolean         _showBoldText;
     private String          _textDisplayFormat;
-    private List            _scopeEvents;
+    private List<GanttEvent>            _scopeEvents;
     private Image           _picture;
     private Menu            _menu;
     private GanttChart      _parentChart;
@@ -337,7 +337,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     }
 
     private final void init() {
-        _scopeEvents = new ArrayList();
+        _scopeEvents = new ArrayList<>();
         _parentComposite.addEvent(this, true);
 
         updateDaysBetweenStartAndEnd();
@@ -1025,7 +1025,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @return List of events
      */
-    public List getScopeEvents() {
+    public List<GanttEvent> getScopeEvents() {
         return _scopeEvents;
     }
 
@@ -1034,7 +1034,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         GanttEvent retEvent = null;
 
         for (int i = 0; i < _scopeEvents.size(); i++) {
-            final GanttEvent ge = (GanttEvent) _scopeEvents.get(i);
+            final GanttEvent ge = _scopeEvents.get(i);
             if (earliest) {
                 if (ret == null) {
                     ret = ge.getActualStartDate();
@@ -2023,7 +2023,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
             clone._revisedStart = (Calendar) _revisedStart.clone();
         }
         clone._scopeParent = _scopeParent;
-        clone._scopeEvents = new ArrayList(_scopeEvents);
+        clone._scopeEvents = new ArrayList<>(_scopeEvents);
         if (_startDate != null) {
             clone._startDate = (Calendar) _startDate.clone();
         }
@@ -2055,7 +2055,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         clone._preMoveBounds = _preMoveBounds;
         clone._resizable = _resizable;
         clone._scope = _scope;
-        clone._scopeEvents = new ArrayList(_scopeEvents);
+        clone._scopeEvents = new ArrayList<>(_scopeEvents);
         clone._scopeParent = _scopeParent;
         clone._showBoldText = _showBoldText;
         clone._statusColor = _statusColor;

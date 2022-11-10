@@ -22,12 +22,12 @@ public class CursorCache {
      * @return Cursor
      */
     public static Cursor getCursor(final int type) {
-        if (_cache.get(new Integer(type)) == null) {
+        if (_cache.get(Integer.valueOf(type)) == null) {
             final Cursor cursor = new Cursor(Display.getDefault(), type);
-            _cache.put(new Integer(type), cursor); // NOPMD
+            _cache.put(Integer.valueOf(type), cursor); // NOPMD
             return cursor;
         } else {
-            return (Cursor) _cache.get(new Integer(type)); // NOPMD
+            return (Cursor) _cache.get(Integer.valueOf(type)); // NOPMD
         }
     }
 

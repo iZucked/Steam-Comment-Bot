@@ -18,11 +18,6 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 	private final IExpression<ISeries> middleSeries;
 	private final IExpression<ISeries> higherSeries;
 
-	public SCurveFunctionConstructor(final SeriesParserData seriesParserData, final IExpression<ISeries> base, final double lowerThan, final double higherThan, final double a1, final double b1,
-			final double a2, final double b2, final double a3, final double b3) {
-		this(base, lowerThan, higherThan, makeExpression(base, a1, b1), makeExpression(base, a2, b2), makeExpression(base, a3, b3));
-	}
-
 	public SCurveFunctionConstructor(final IExpression<ISeries> base, final double lowerThan, final double higherThan, final IExpression<ISeries> lowerSeries, final IExpression<ISeries> series,
 			final IExpression<ISeries> higherSeries) {
 		this.base = base;
@@ -38,15 +33,32 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 		return new SCurveSeries(base.evaluate(), firstThreshold, secondThreshold, lowerSeries.evaluate(), middleSeries.evaluate(), higherSeries.evaluate());
 	}
 
-	private static IExpression<ISeries> makeExpression(final IExpression<ISeries> x, final double a, final double b) {
-		return new SeriesOperatorExpression('+', //
-				new SeriesOperatorExpression('*', //
-						x, new ConstantSeriesExpression(Double.valueOf(a))), //
-				new ConstantSeriesExpression(Double.valueOf(b)));
-	}
-
 	@Override
 	public boolean canEvaluate() {
 		return base.canEvaluate() && lowerSeries.canEvaluate() && middleSeries.canEvaluate() && higherSeries.canEvaluate();
+	}
+
+	public double getFirstThreshold() {
+		return firstThreshold;
+	}
+
+	public double getSecondThreshold() {
+		return secondThreshold;
+	}
+
+	public IExpression<ISeries> getLowerSeries() {
+		return lowerSeries;
+	}
+
+	public IExpression<ISeries> getMiddleSeries() {
+		return middleSeries;
+	}
+
+	public IExpression<ISeries> getHigherSeries() {
+		return higherSeries;
+	}
+
+	public IExpression<ISeries> getBase() {
+		return base;
 	}
 }

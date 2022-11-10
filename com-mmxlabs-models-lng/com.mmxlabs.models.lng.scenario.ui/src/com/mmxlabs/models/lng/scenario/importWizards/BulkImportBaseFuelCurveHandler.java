@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.scenario.importWizards;
 
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 
-public class BulkImportBaseFuelCurveHandler extends BulkImportCSVHandler {
+public class BulkImportBaseFuelCurveHandler extends BulkImportCSVCurvesHandler {
 
 	@Override
 	public FieldChoice getFieldToImport() {

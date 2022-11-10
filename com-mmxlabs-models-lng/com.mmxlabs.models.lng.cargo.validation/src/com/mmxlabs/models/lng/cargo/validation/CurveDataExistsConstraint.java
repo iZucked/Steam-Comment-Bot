@@ -8,10 +8,13 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,12 +23,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.RawTreeParser;
-import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -38,6 +40,9 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -130,9 +135,9 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	protected void validateSlot(final Slot<?> slot, final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
+		if (rootObject instanceof final LNGScenarioModel scenarioModel) {
 
-			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel((LNGScenarioModel) rootObject);
+			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 
 			if (pricingModel == null) {
 				return;
@@ -157,22 +162,31 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 				if (priceExpression == null || priceExpression.isEmpty()) {
 					return;
 				}
-				final RawTreeParser parser = new RawTreeParser();
+
+				final LookupData lookupData = LookupData.createLookupData(pricingModel);
+				// Parse the expression
+				final SeriesParser commodityIndices = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 				try {
 
 					final Map<String, CommodityCurve> indexMap = pricingModel.getCommodityCurves().stream() //
-							.collect(Collectors.toMap(CommodityCurve::getName, Function.identity()));
+							.collect(Collectors.toMap(c -> c.getName().toLowerCase(), Function.identity()));
 
-					final IExpression<Node> parsed = parser.parse(priceExpression);
-					final List<Node> nodes = extract(parsed);
-					for (final Node n : nodes) {
-						if (indexMap.containsKey(n.token)) {
-							final CommodityCurve index = indexMap.get(n.token);
+					final ASTNode parsedExpressionAST = commodityIndices.parse(priceExpression);
+					final Collection<NamedSeriesASTNode> nodes = new LinkedList<>();
+					extractNodes(parsedExpressionAST, nodes);
+					Set<String> seenNames = new HashSet<>();
+					for (final NamedSeriesASTNode node : nodes) {
+						if (indexMap.containsKey(node.getName())) {
+							final CommodityCurve index = indexMap.get(node.getName());
 							if (index.isSetExpression()) {
 								continue;
 							}
-							@Nullable
-							final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+
+							if (!seenNames.add(node.getName())) {
+								continue;
+							}
+
+							final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || utcDate.isBefore(date)) {
 
 								final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
@@ -216,25 +230,12 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	private @NonNull List<@NonNull Node> extract(final IExpression<Node> parsed) {
-		@NonNull
-		final List<@NonNull Node> l = new LinkedList<>();
+	private void extractNodes(final ASTNode node, final Collection<NamedSeriesASTNode> nodes) {
 
-		extract(parsed.evaluate(), l);
-
-		return l;
-	}
-
-	private void extract(final Node n, @NonNull final List<@NonNull Node> l) {
-		if (n == null) {
-			return;
-		}
-		l.add(n);
-
-		if (n.children != null) {
-			for (final Node c : n.children) {
-				extract(c, l);
-			}
+		if (node instanceof final NamedSeriesASTNode n) {
+			nodes.add(n);
+		} else {
+			node.getChildren().forEach(n -> extractNodes(n, nodes));
 		}
 	}
 

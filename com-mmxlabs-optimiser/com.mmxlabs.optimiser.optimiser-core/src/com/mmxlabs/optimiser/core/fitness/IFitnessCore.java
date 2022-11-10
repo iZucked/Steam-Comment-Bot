@@ -28,7 +28,9 @@ public interface IFitnessCore {
 	/**
 	 * Initialise or re-initialise the fitness core. This will reset the state associated with the {@link #evaluate(ISequences, List)} method.
 	 */
-	void init(@NonNull IPhaseOptimisationData data);
+	default void init(@NonNull IPhaseOptimisationData data) {
+		
+	}
 
 	/**
 	 * Return a {@link Collection} of {@link IFitnessComponent} instances that are represented by this {@link IFitnessCore}.

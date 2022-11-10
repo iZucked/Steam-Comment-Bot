@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -203,7 +204,7 @@ public class PortTimesRecordMaker {
 		}
 
 		// Is this an L-D cargo?
-		if (portTimesRecord.getSlots().size() != 2) {
+		if (portTimesRecord.getSlots().size() != SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
 			return null;
 		}
 

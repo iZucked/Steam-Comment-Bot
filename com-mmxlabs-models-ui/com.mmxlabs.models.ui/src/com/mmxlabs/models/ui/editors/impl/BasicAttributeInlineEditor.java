@@ -200,6 +200,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 		if (proposalHelper != null) {
 			proposalHelper.setRootObject(rootObject);
+			proposalHelper.setInputOject(input);
 		}
 
 		firePostDisplay(dialogContext, rootObject, input, range);

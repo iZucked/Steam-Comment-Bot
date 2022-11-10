@@ -12,36 +12,37 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 public class WeightedAverageCharterCostCalculator implements ICharterCostCalculator {
 
 	private ILongCurve charterRateCurve;
-	
+
 	@Override
 	public void setCharterRateCurve(final ILongCurve charterRateCurve) {
 		this.charterRateCurve = charterRateCurve;
 	}
 
 	@Override
-	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
+	public long getCharterCost(final int voyagePlanStartTime, final int eventStartTime, final int duration) {
 		if (charterRateCurve != null) {
 			long charterCost = 0;
 			final int eventEndTime = eventStartTime + duration;
-			NavigableSet<Integer> changePoints = charterRateCurve.getChangePoints();
-						
-			//Otherwise have to step through the change points, from the vesselStartTime up to the vesselEndTime.
-			Integer firstT = eventStartTime;
-			Integer lastT = eventEndTime;
+			final NavigableSet<Integer> changePoints = charterRateCurve.getChangePoints();
+
+			// Otherwise have to step through the change points, from the vesselStartTime up
+			// to the vesselEndTime.
+			final Integer firstT = eventStartTime;
+			final Integer lastT = eventEndTime;
 			int durationCharterRate = 1;
 			int durationRemaining = duration;
-			for (int t = firstT; t < lastT; t+= durationCharterRate) {
-				long charterRatePerDay = charterRateCurve.getValueAtPoint(t);
-				Integer nextT = changePoints.ceiling(t+1);
+			for (int t = firstT; t < lastT; t += durationCharterRate) {
+				final long charterRatePerDay = charterRateCurve.getValueAtPoint(t);
+				Integer nextT = changePoints.ceiling(t + 1);
 				if (nextT == null) {
 					nextT = lastT;
 				}
-				durationCharterRate = Math.min(nextT - t, durationRemaining);				
+				durationCharterRate = Math.min(nextT - t, durationRemaining);
 				charterCost += (charterRatePerDay * durationCharterRate);
 				durationRemaining -= durationCharterRate;
 			}
 			return charterCost / 24L;
 		}
 		return 0;
-	}	
+	}
 }

@@ -129,6 +129,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 					}
 				}
 			};
+			toolkit.adapt(setButton, true, true);
 			this.inner = createValueControl(sub);
 			setButton.addSelectionListener(new SelectionAdapter() {
 				{

@@ -36,6 +36,7 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
@@ -64,9 +65,13 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
 /**
- * JUnit tests for the financial exposures calculations.
+ * JUnit tests for the financial exposures calculations. There should not be
+ * curves with one letter as a name
  * 
  * @author Simon McGregor, Simon Goodall, FM
+ * @author Mihnea-Teodor
+ * 
+ * @version 2
  * 
  */
 public class BasicExposuresTest {
@@ -78,19 +83,25 @@ public class BasicExposuresTest {
 
 	public static Collection generateTests() {
 		return Arrays.asList(new Object[][] { //
+
+				{ "AdditionCurve + 1", "AdditionCurve + 1", "HH", single(calcExpected("AdditionCurve", 5.0, 1.0)),
+						indicesOf(makeHH(), makeIndex("AdditionCurve", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
 				{ "HH", "HH", "HH", single(calcExpected("HH", 5.0, 1.0)), indicesOf(makeHH()) }, //
 
 				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1 * bbl_to_mmBtu, defaultVolumeInMMBTU * 0.1 * 90 * bbl_to_mmBtu)),
 						indicesOf(makeBrent()) }, //
 
-				{ "A + 1", "A + 1", "HH", single(calcExpected("A", 5.0, 1.0)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
-
 				{ "HH * 3 - 2", "HH * 3 - 2", "HH", single(calcExpected("HH", 5.0, 3.0)), indicesOf(makeHH()) }, //
 
-				{ "2.5 * HH + 2 * A", "2.5 * HH + 2 * A", "HH", multi(calcExpected("HH", 5.0, 2.5), calcExpected("A", 5.0, 2.0)),
-						indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
+				{ "HH2 * 3 - 2", "HH2 * 3 - 2", "HH", single(calcExpected("HH", 5.0, 3.0)), indicesOf(makeHH(), makeExpression("HH2", "HH")) }, //
 
-				{ "A - HH * 4", "A - HH * 4", "HH", multi(calcExpected("HH", 5.0, -4.0), calcExpected("A", 5.0, 1.0)), indicesOf(makeHH(), makeA(5.0)) }, //
+				{ "HH2 * 3 - 2", "HH2 * 3 - 2", "HH", single(calcExpected("HH", 5.0, 3.0)), indicesOf(makeHH(), makeExpression("HH2", "HH")) }, //
+
+				{ "2.5 * HH + 2 * MultiplicationCurve", "2.5 * HH + 2 * MultiplicationCurve", "HH", multi(calcExpected("HH", 5.0, 2.5), calcExpected("MultiplicationCurve", 5.0, 2.0)),
+						indicesOf(makeHH(), makeIndex("MultiplicationCurve", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
+
+				{ "SubstractCurve - HH * 4", "SubstractCurve - HH * 4", "HH", multi(calcExpected("HH", 5.0, -4.0), calcExpected("SubstractCurve", 5.0, 1.0)),
+						indicesOf(makeHH(), makeIndex("SubstractCurve", "$", "mmBtu", YearMonth.of(2000, 1), 5.0)) }, //
 
 				{ "10%HH", "10%HH", "HH", single(calcExpected("HH", 5.0, 0.1)), indicesOf(makeHH()) }, //
 
@@ -108,12 +119,38 @@ public class BasicExposuresTest {
 						indicesOf(makeHH(), makeIndex("NBP", "$", "mmBtu", YearMonth.of(2000, 1), 7)) }, //
 
 				// // // This form uses A as expression constant -
-				{ "A*HH (1)", "A*HH", "HH", multi(calcExpected("HH", 5.0, 10.0)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", "10")) }, //
+				{ "MultiplicationCurve*HH (1)", "MultiplicationCurve*HH", "HH", multi(calcExpected("HH", 5.0, 10.0)), indicesOf(makeHH(), makeIndex("MultiplicationCurve", "$", "mmBtu", "10")) }, //
 				// //
 				// // // This form uses A as a curve
-				{ "A*HH (2)", "A*HH", "HH", multi(calcExpected("HH", 5.0, 1.0), calcExpected("A", 10.0, 1.0)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 10)) }, //
+				{ "MultiplicationCurve*HH (2)", "MultiplicationCurve*HH", "HH", multi(calcExpected("HH", 5.0, 1.0), calcExpected("MultiplicationCurve", 10.0, 1.0)),
+						indicesOf(makeHH(), makeIndex("MultiplicationCurve", "$", "mmBtu", YearMonth.of(2000, 1), 10)) },
+
+				{ "MultiplicationCurve*HH (2A)", "HH*MultiplicationCurve", "HH", multi(calcExpected("MultiplicationCurve", 10.0, 1.0), calcExpected("HH", 5.0, 1.0)),
+						indicesOf(makeHH(), makeIndex("MultiplicationCurve", "$", "mmBtu", YearMonth.of(2000, 1), 10)) }, //
 				// A is derived from constant B
-				{ "A*HH (3)", "A*HH", "HH", multi(calcExpected("HH", 5.0, 20 / 2)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", "B/2"), makeIndex("B", "$", "mmBtu", "20")) }, //
+				{ "MultiplicationCurve*HH (3)", "MultiplicationCurve*HH", "HH", multi(calcExpected("HH", 5.0, 20 / 2)),
+						indicesOf(makeHH(), makeIndex("MultiplicationCurve", "$", "mmBtu", "BTest/2"), makeIndex("BTest", "$", "mmBtu", "20")) },
+				// Curves defined in terms of each other - For now we assume that the user won't
+				// introduce cyclical dependencies
+				// e.g. Curve A is defined in terms of curve B, B in terms of C and C in terms
+				// of A
+				{ "UserDefinedCurve (1)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 32)),
+						indicesOf(makeHH(), makeIndex("curveA", "$", "mmBtu", "curveB+5"), makeIndex("curveB", "$", "mmBtu", "curveC+2"), makeIndex("curveC", "$", "mmBtu", "25")) },
+
+				{ "UserDefinedCurve (2)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 30)),
+						indicesOf(makeHH(), makeIndex("curveA", "$", "mmBtu", "(curveB+5)*curveC"), makeIndex("curveB", "$", "mmBtu", "20%curveC"), makeIndex("curveC", "$", "mmBtu", "5")) },
+
+				// TODO fix this test, probably failing because of some overflow error?
+//				{ "UserDefinedCurve (3)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 875)), indicesOf(makeHH(), makeIndex("curveA", "$","mmBtu","curveB*curveC"), 
+//						makeIndex("curveB", "$","mmBtu","curveC+10"), makeIndex("curveC", "$","mmBtu","25"))},
+
+				{ "UserDefinedCurve (4)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 30)), indicesOf(makeHH(), makeIndex("curveA", "$", "mmBtu", "MAX(curveB+10, MIN(curveC, curveD))"), // curveD
+																																																// = 21,
+																																																// C =
+																																																// 194,A
+																																																// = 30
+						makeIndex("curveB", "$", "mmBtu", "20"), makeIndex("curveC", "$", "mmBtu", "S(curveD,1.0,3.0,2.0,2.0,4.0,7.0,9.0,5.0)"),
+						makeIndex("curveD", "$", "mmBtu", "S(2,1.0,10.0,4.0,4.0,9.0,3.0,6.0,2.0)")) },
 
 				/// Complex example with all components - a %, unit conversion and FX curve
 				{ "NBP (Units)", "90%NBP*therm_to_mmBtu*FX_p_to_USD", "NBP", single(calcExpected("NBP", 30.0, 0.9 * 10.0, 0.9 * 30.0 / 100.0 * 10.0 * 1.3)),
@@ -143,6 +180,9 @@ public class BasicExposuresTest {
 				{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 1", "SHIFT(HH,1)", "HH", single(calcExpected("HH", YearMonth.of(2016, 3), 6, 1, 6)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 2", "SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+				{ "Var HH - Shift 2", "#A=HH ; SHIFT(#A,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+
+				{ "HH[m-2]", "HH[m-2]", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 				{ "50% HH - Shift 2", "50%SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 0.5, 0.5 * 5)),
 						indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
@@ -212,6 +252,26 @@ public class BasicExposuresTest {
 				), //
 						indicesOf(//
 								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "Brent[6,0,1] ", "Brent[6,0,1]", "Brent", multi(//
+						calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 3), 56.26, 1.0 / 6.0) //
+				), //
+						indicesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "Brent[601] ", "Brent[601]", "Brent", multi(//
+						calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 3), 56.26, 1.0 / 6.0) //
+				), //
+						indicesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
 				{ "DatedAvg 3,1,1 ", "DATEDAVG(Brent,3,1,1)", "Brent", multi(//
 						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 3.0), //
 						calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 3.0), //
@@ -252,43 +312,52 @@ public class BasicExposuresTest {
 						) //
 				},
 
-				{ "SCurve - (1)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
-						calcExpected("C", YearMonth.of(2016, 4), 9 * 1, 1) //
+				{ "SCurve - (1)", "S(testCurve1, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "testCurve1", multi( //
+						calcExpected("testCurve1", YearMonth.of(2016, 4), 9 * 1, 1) //
 				), //
 					//
 						indicesOf( //
-								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 9) //
+								makeIndex("testCurve1", "$", "mmbtu", YearMonth.of(2016, 4), 9) //
 						) //
 				}, //
-				{ "SCurve - (2)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
-						calcExpected("C", YearMonth.of(2016, 4), 10, 3) //
+				{ "SCurve - (2)", "S(testCurve2, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "testCurve2", multi( //
+						calcExpected("testCurve2", YearMonth.of(2016, 4), 10, 3) //
 				), //
 					//
 						indicesOf( //
-								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 10) //
+								makeIndex("testCurve2", "$", "mmbtu", YearMonth.of(2016, 4), 10) //
 						) //
 				}, //
-				{ "SCurve - (3)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
-						calcExpected("C", YearMonth.of(2016, 4), 20, 3) //
+				{ "SCurve - (3)", "S(testCurve3, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "testCurve3", multi( //
+						calcExpected("testCurve3", YearMonth.of(2016, 4), 20, 3) //
 				), //
 					//
 						indicesOf( //
-								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 20) //
+								makeIndex("testCurve3", "$", "mmbtu", YearMonth.of(2016, 4), 20) //
 
 						) //
 				}, //
-				{ "SCurve - (4)", "S(C, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "C", multi( //
-						calcExpected("C", YearMonth.of(2016, 4), 21, 5) //
+				{ "SCurve - (4)", "S(testCurve4, 10.0, 20.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)", "testCurve4", multi( //
+						calcExpected("testCurve4", YearMonth.of(2016, 4), 21, 5) //
 				), //
 					//
 						indicesOf( //
-								makeIndex("C", "$", "mmbtu", YearMonth.of(2016, 4), 21) //
+								makeIndex("testCurve4", "$", "mmbtu", YearMonth.of(2016, 4), 21) //
 
 						) //
 				}, //
+
+				// Specific month pricing. More tests in ExpressionPriceTests
+				{ "HH[Feb] ", "HH[Feb]", "HH", single(//
+						calcExpected("HH", YearMonth.of(2016, 2), 2, 1.0) //
+				), //
+						indicesOf(//
+								makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)) }, //
 
 		});
 	}
+//	
+//	{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 	public static Collection generateTestsWithDay() {
 		return Arrays.asList(new Object[][] { //
@@ -331,8 +400,20 @@ public class BasicExposuresTest {
 		return makeIndex("HH", "$", "mmBtu", YearMonth.of(2000, 1), 5);
 	}
 
+	private static CommodityCurve makeExpression(String name, String expression) {
+		final CommodityCurve index = PricingFactory.eINSTANCE.createCommodityCurve();
+		index.setName(name);
+		index.setExpression(expression);
+		index.setCurrencyUnit("$");
+		index.setVolumeUnit("mmBtu");
+
+		return index;
+	}
+
 	private static CommodityCurve makeA(final double value) {
+		// makeIndex("MultiplicationCurve", "$", "mmBtu", "10")
 		return makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), value);
+
 	}
 
 	@ParameterizedTest(name = "{0}")
@@ -685,7 +766,7 @@ public class BasicExposuresTest {
 				Assertions.assertEquals(expectedValue.getAsDouble(), volumeValueNative, delta, "Value");
 			}
 			if (expectedExpressionValue.isPresent()) {
-				final ISeries series = seriesParser.parse(expression).evaluate();
+				final ISeries series = seriesParser.asSeries(expression);
 
 				Number evaluate;
 				// "Magic" date constant used in PriceIndexUtils for date zero

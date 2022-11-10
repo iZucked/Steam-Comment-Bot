@@ -12,7 +12,7 @@ public class BasicExposureRecord {
 	private long volumeMMBTU;
 	private long volumeNative;
 	private long volumeValueNative;
-	private int unitPrice;
+	private long unitPrice;
 	private String priceExpression;
 	private LocalDate time;
 	private String indexName;
@@ -43,10 +43,10 @@ public class BasicExposureRecord {
 	public void setVolumeValueNative(long volumeValue) {
 		this.volumeValueNative = volumeValue;
 	}
-	public int getUnitPrice() {
+	public long getUnitPrice() {
 		return unitPrice;
 	}
-	public void setUnitPrice(int unitPrice) {
+	public void setUnitPrice(long unitPrice) {
 		this.unitPrice = unitPrice;
 	}
 	public String getPriceExpression() {

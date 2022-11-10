@@ -5,13 +5,18 @@
 package com.mmxlabs.common.parser.series;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
+@NonNullByDefault
 public class DefaultSeriesContainer implements ISeriesContainer {
 
-	@NonNull
 	private final ISeries series;
+	private final String name;
+	private final SeriesType seriesType;
 
-	public DefaultSeriesContainer(@NonNull final ISeries series) {
+	public DefaultSeriesContainer(final String name, final SeriesType seriesType, final ISeries series) {
+		this.name = name;
+		this.seriesType = seriesType;
 		this.series = series;
 	}
 
@@ -25,4 +30,13 @@ public class DefaultSeriesContainer implements ISeriesContainer {
 		return true;
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public SeriesType getType() {
+		return seriesType;
+	}
 }

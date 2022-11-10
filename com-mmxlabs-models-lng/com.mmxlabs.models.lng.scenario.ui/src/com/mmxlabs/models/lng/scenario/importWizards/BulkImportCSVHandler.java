@@ -7,12 +7,14 @@ package com.mmxlabs.models.lng.scenario.importWizards;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -36,7 +38,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		final Shell shell = HandlerUtil.getActiveShell(event);
 		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-		final BulkImportWizard wizard = new BulkImportWizard(editor != null ? editor.getScenarioInstance() : null, getFieldToImport(), getTitle());
+		final BulkImportWizard wizard = createBulkImportWizard(editor != null ? editor.getScenarioInstance() : null, getFieldToImport(), getTitle());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		final WizardDialog dialog = new WizardDialog(shell, wizard);
@@ -44,6 +46,10 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		dialog.open();
 
 		return null;
+	}
+
+	protected BulkImportWizard createBulkImportWizard(@Nullable final ScenarioInstance scenarioInstance, final FieldChoice fieldToImport, final String title) {
+		return new BulkImportWizard(scenarioInstance, fieldToImport, title);
 	}
 
 	public abstract String getTitle();

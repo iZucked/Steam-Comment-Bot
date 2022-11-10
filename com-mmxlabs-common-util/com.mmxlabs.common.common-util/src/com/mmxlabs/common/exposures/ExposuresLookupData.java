@@ -14,8 +14,7 @@ import com.mmxlabs.common.calendars.BasicHolidayCalendar;
 import com.mmxlabs.common.calendars.BasicPricingCalendar;
 import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
-import com.mmxlabs.common.parser.nodes.MarkedUpNode;
-import com.mmxlabs.common.parser.nodes.Node;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 
 public class ExposuresLookupData {
 	public Map<String, BasicCommodityCurveData> commodityMap = new HashMap<>();
@@ -23,15 +22,14 @@ public class ExposuresLookupData {
 	public Map<String, BasicUnitConversionData> conversionMap = new HashMap<>();
 	public Map<String, BasicUnitConversionData> reverseConversionMap = new HashMap<>();
 
-	public Map<String, Node> expressionCache = new HashMap<>();
-	public Map<String, MarkedUpNode> expressionToNode = new HashMap<>();
-	
+	public Map<String, ASTNode> expressionToNode = new HashMap<>();
+
 	// Keeps a Pricing calendar for a curve name
 	public Map<String, BasicPricingCalendar> pricingCalendars = new HashMap<>();
 	// Keeps a Holiday calendar for a curve name
 	public Map<String, BasicHolidayCalendar> holidayCalendars = new HashMap<>();
-	
+
 	public List<String> slotsToInclude = new ArrayList<>();
-	
+
 	public LocalDate cutoffDate = LocalDate.MIN;
 }

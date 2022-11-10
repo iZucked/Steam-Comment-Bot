@@ -68,7 +68,7 @@ public class LNGVoyageCalculatorTest {
 		ICharterCostCalculator ccc = Mockito.mock(ICharterCostCalculator.class);
 		return ccc;
 	}
-	
+
 	@Test
 	public void testCalculateVoyageFuelRequirements1() {
 
@@ -579,7 +579,7 @@ public class LNGVoyageCalculatorTest {
 		vessel.setIdleBaseFuel(new BaseFuel(indexingContext, "IDLE"));
 		vessel.setPilotLightBaseFuel(new BaseFuel(indexingContext, "PILOT"));
 		vessel.setInPortBaseFuel(new BaseFuel(indexingContext, "PORT"));
-		
+
 		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
@@ -596,7 +596,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 		calc.setTimeZoneToUtcOffsetProvider(new TimeZoneToUtcOffsetProvider());
-		
+
 		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
@@ -605,8 +605,8 @@ public class LNGVoyageCalculatorTest {
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
-		
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
+
 		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);
 		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuels, portTimesRecord, sequence);
 
@@ -677,7 +677,7 @@ public class LNGVoyageCalculatorTest {
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
 
 		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
 
@@ -789,13 +789,14 @@ public class LNGVoyageCalculatorTest {
 		// Expect to throw a RuntimeException here for a capacity violation
 		Assertions.fail("Better to return object, recording the error");
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
 
 		final VoyagePlan plan = new VoyagePlan();
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
 		final int[] baseFuelPrices = GeneralTestUtils.makeBaseFuelPrices(0);
-		Assertions.assertThrows(RuntimeException.class, () -> calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence));
+		Assertions.assertThrows(RuntimeException.class,
+				() -> calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelPrices, portTimesRecord, sequence));
 
 	}
 
@@ -871,7 +872,7 @@ public class LNGVoyageCalculatorTest {
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details1, dischargeDetails, details2, otherDetails };
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
 
 		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);
 
@@ -950,7 +951,7 @@ public class LNGVoyageCalculatorTest {
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
 		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(otherSlot);
 
 		final int[] baseFuelPrices = GeneralTestUtils.makeBaseFuelPrices(0);
@@ -1040,7 +1041,7 @@ public class LNGVoyageCalculatorTest {
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
-		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot> any())).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(ArgumentMatchers.<@NonNull IPortSlot>any())).thenReturn(0);
 		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(otherSlot);
 
 		calc.calculateVoyagePlan(plan, vessel, createTestCharterCostCalculator(), new long[] { 0L, 0L }, baseFuelCalculator.getBaseFuelPrices(vessel, 100), portTimesRecord, sequence);

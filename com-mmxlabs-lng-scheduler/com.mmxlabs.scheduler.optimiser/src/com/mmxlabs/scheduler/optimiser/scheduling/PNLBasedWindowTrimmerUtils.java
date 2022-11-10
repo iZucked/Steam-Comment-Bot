@@ -348,10 +348,9 @@ public class PNLBasedWindowTrimmerUtils {
 							// This is ok! only on a temporary copy of the data for this method
 							copy.setSlotTime(toPortSlot, t);
 
-							if (slotFeasibleTimeWindow.contains(t) && fromPortSlot instanceof IDischargeOption) {
+							if (slotFeasibleTimeWindow.contains(t) && fromPortSlot instanceof IDischargeOption iDischargeOption) {
 
-								final IDischargeOption iDischargeOption = (IDischargeOption) fromPortSlot;
-								final int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(iDischargeOption, copy, null);
+								final int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(vessel, iDischargeOption, copy);
 								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost

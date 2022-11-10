@@ -149,7 +149,7 @@ public class InventoryReport extends ViewPart {
 	private Chart inventoryDailyChartViewer;
 	private Chart mullMonthlyOverliftChart;
 	private Chart mullMonthlyCargoCountChart;
-
+	
 	private GridTableViewer inventoryTableViewer;
 
 	private GridTableViewer mullMonthlyTableViewer;
@@ -605,6 +605,12 @@ public class InventoryReport extends ViewPart {
 			}
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
+		
+		folder.addListener(SWT.Dispose, e -> {
+			inventoryInsAndOutChart.dispose();
+			inventoryDailyChartViewer.dispose();
+			mullMonthlyOverliftChart.dispose();
+			mullMonthlyCargoCountChart.dispose();});
 	}
 
 	public void setCargoVisibilityInInventoryChart(final boolean isVisible) {

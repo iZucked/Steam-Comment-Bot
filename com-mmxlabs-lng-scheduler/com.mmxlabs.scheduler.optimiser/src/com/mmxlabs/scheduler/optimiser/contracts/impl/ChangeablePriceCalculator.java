@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -18,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -30,8 +32,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-/**
- */
+@NonNullByDefault
 public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPriceCalculator, IPriceIntervalProvider {
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
@@ -55,12 +56,12 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption option, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(final IVessel vessel, final IDischargeOption dischargeOption, final IPortTimesRecord portTimesRecord) {
 		return getPrice();
 	}
 
 	private Integer getPrice() {
-		Integer v = price.get();
+		final Integer v = price.get();
 		if (v == null) {
 			return 0;
 		}
@@ -72,22 +73,23 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
+	public int calculateSalesUnitPrice(final IVesselCharter vesselCharter, final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final VoyagePlan voyagePlan,
+			@Nullable final IDetailTree annotations) {
 		return getPrice();
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public @Nullable PricingEventType getCalculatorPricingEventType(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return dischargeOption.getPricingEvent();
 	}
 
 	@Override
-	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+	public int getEstimatedSalesPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int timeInHours) {
 		return getPrice();
 	}
 
 	@Override
-	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public int getCalculatorPricingDate(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return IPortSlot.NO_PRICING_DATE;
 	}
 
@@ -100,7 +102,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	@Override
-	public List<@NonNull Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public @Nullable List<@NonNull Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final int[] intervals = new int[] { start, end };
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
@@ -112,20 +114,21 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	@Override
-	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselCharter vesselCharter, @NonNull VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
+	public int calculateFOBPricePerMMBTu(@NonNull final ILoadSlot loadSlot, @NonNull final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu,
+			@NonNull final IAllocationAnnotation allocationAnnotation, @NonNull final IVesselCharter vesselCharter, @NonNull final VoyagePlan plan,
+			@Nullable final ProfitAndLossSequences profitAndLossSequences, @Nullable final IDetailTree annotations) {
 		return getPrice();
 	}
 
 	@Override
-	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
-			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
+	public int calculateDESPurchasePricePerMMBTu(@NonNull final ILoadOption loadOption, @NonNull final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu,
+			@NonNull final IAllocationAnnotation allocationAnnotation, @Nullable final ProfitAndLossSequences profitAndLossSequences, @Nullable final IDetailTree annotations) {
 		return getPrice();
 	}
 
 	@Override
-	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@Nullable ProfitAndLossSequences profitAndLossSequences, @Nullable IDetailTree annotations) {
+	public int calculatePriceForFOBSalePerMMBTu(@NonNull final ILoadSlot loadSlot, @NonNull final IDischargeOption dischargeOption, final int dischargePricePerMMBTu,
+			@NonNull final IAllocationAnnotation allocationAnnotation, @Nullable final ProfitAndLossSequences profitAndLossSequences, @Nullable final IDetailTree annotations) {
 		return getPrice();
 	}
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -56,10 +57,21 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private final ScenarioInstance currentScenario;
 	private final FieldChoice importedField;
 
+	@NonNull
+	private final Consumer<ScenarioInstance> postImportConsumer;
+
 	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, final String windowTitle) {
 		currentScenario = scenarioInstance;
 		importedField = fieldChoice;
 		setWindowTitle(windowTitle);
+		this.postImportConsumer = instance -> {};
+	}
+
+	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, final String windowTitle, @NonNull final Consumer<ScenarioInstance> postImportConsumer) {
+		currentScenario = scenarioInstance;
+		importedField = fieldChoice;
+		setWindowTitle(windowTitle);
+		this.postImportConsumer = postImportConsumer;
 	}
 
 	@Override
@@ -159,6 +171,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 							doImportAction(choice, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, true);
 						}
 					}
+					postImportConsumer.accept(instance);
 				}));
 				monitor.worked(1);
 				if (monitor.isCanceled()) {

@@ -10,5 +10,6 @@ import com.mmxlabs.common.parser.series.ISeries;
 
 @NonNullByDefault
 public interface IPriceExpressionProviderEditor extends IPriceExpressionProvider {
+
 	void setPriceCurve(PriceCurveKey key, ISeries curve);
 }

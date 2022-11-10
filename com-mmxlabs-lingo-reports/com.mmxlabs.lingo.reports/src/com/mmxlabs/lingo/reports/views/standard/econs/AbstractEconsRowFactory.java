@@ -386,19 +386,28 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFirstSaleTransformer(final Class<T> cls, final Function<SlotAllocation, T> func) {
+	protected <T> Function<Object, @Nullable T> createSaleTransformer(int n, final Class<T> cls, final Function<SlotAllocation, T> func) {
 		return createMappingFunction(cls, object -> {
 			try {
 				if (object instanceof CargoAllocation cargoAllocation) {
+					int t = 0;
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
-							return func.apply(slotAllocation);
+							t++;
+							if (t == n) {
+								return func.apply(slotAllocation);
+							}
 						}
 					}
 				}
 				if (object instanceof SlotAllocation slotAllocation) {
+					int t = 0;
+
 					if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
-						return func.apply(slotAllocation);
+						t++;
+						if (t == n) {
+							return func.apply(slotAllocation);
+						}
 					}
 				}
 			} catch (final NullPointerException e) {
@@ -408,7 +417,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		});
 	}
 
-	protected @NonNull ICellRenderer createFirstSaleAllocationFormatter(final Function<SlotAllocation, String> func) {
+	protected @NonNull ICellRenderer createSaleAllocationFormatter(int n, final Function<SlotAllocation, String> func) {
 
 		return new BaseFormatter() {
 			@Override
@@ -416,15 +425,25 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 
 				try {
 					if (object instanceof CargoAllocation cargoAllocation) {
+						int t = 0;
+
 						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 							if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
-								return func.apply(slotAllocation);
+								t++;
+								if (t == n) {
+									return func.apply(slotAllocation);
+								}
 							}
 						}
 					}
 					if (object instanceof SlotAllocation slotAllocation) {
+						int t = 0;
+
 						if (slotAllocation.getSlotAllocationType() == SlotAllocationType.SALE) {
-							return func.apply(slotAllocation);
+							t++;
+							if (t == n) {
+								return func.apply(slotAllocation);
+							}
 						}
 					}
 				} catch (final NullPointerException e) {
@@ -435,7 +454,7 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 		};
 	}
 
-	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, final int index,
+	protected <T> Function<Object, @Nullable T> createFullLegTransformer2(final Class<T> resultType, boolean laden, final int index,
 			final TriFunction<@Nullable SlotVisit, @Nullable Journey, @Nullable Idle, @Nullable T> func) {
 		return createMappingFunction(resultType, object -> {
 			try {
@@ -444,16 +463,17 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 				Idle idle = null;
 				if (object instanceof CargoAllocation cargoAllocation) {
 					int legNumber = -1;
+					boolean isLaden = true;
 					for (final Event event : cargoAllocation.getEvents()) {
 						if (event instanceof PortVisit) {
-							if (legNumber == index) {
+							if (isLaden == laden && legNumber == index) {
 								return func.apply(slotVisit, journey, idle);
 							}
 							journey = null;
 							idle = null;
 							slotVisit = null;
 							++legNumber;
-							if (legNumber > index) {
+							if (isLaden == laden && legNumber > index) {
 								return null;
 							}
 						}
@@ -462,17 +482,22 @@ public abstract class AbstractEconsRowFactory implements IEconsRowFactory {
 						}
 						if (event instanceof Journey j) {
 							journey = j;
+							// Laden to ballast switch
+							if (isLaden && !journey.isLaden()) {
+								isLaden = journey.isLaden();
+								legNumber = 0;
+							}
+
 						}
 						if (event instanceof Idle i) {
 							idle = i;
 						}
 					}
-					if (legNumber == index) {
+					if (isLaden == laden && legNumber == index) {
 						return func.apply(slotVisit, journey, idle);
 					}
 
-				}
-				if (object instanceof EventGrouping eg) {
+				} else if (object instanceof EventGrouping eg) {
 					for (final Event event : eg.getEvents()) {
 						if (event instanceof SlotVisit sv) {
 							slotVisit = sv;

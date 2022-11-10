@@ -43,7 +43,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int notionalBallastSpeed,
+			final int dischargeDuration, @NonNull final IVessel vessel, @NonNull final ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int notionalBallastSpeed,
 			final int cargoCVValue, @NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, vessel, charterCostCalculator, startHeelInM3, notionalBallastSpeed,
 				cargoCVValue, route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
@@ -51,15 +51,15 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, @NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue,
-			@NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
+			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, @NonNull final ICharterCostCalculator charterCostCalculator, final long startHeelInM3,
+			final int cargoCVValue, @NonNull final ERouteOption route, final int[] basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, returnTime, vessel, charterCostCalculator, startHeelInM3, cargoCVValue, route,
 				basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration,
 			final int dischargeTime, final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel,
-			@NonNull ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT,
+			@NonNull final ICharterCostCalculator charterCostCalculator, final long startHeelInM3, final int cargoCVValue, @NonNull final ERouteOption route, final int[] baseFuelPricePerMT,
 			final int dischargePriceInMMBTU) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel,
 				charterCostCalculator, startHeelInM3, cargoCVValue, route, baseFuelPricePerMT, createSalesPriceCalculator(dischargePriceInMMBTU));
@@ -95,7 +95,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		final VoyageOptions voyageOptions = new VoyageOptions(from, to);
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
-		voyageOptions.setRoute(route, distance, routeCost, /* panama idle days */ 0 );
+		voyageOptions.setRoute(route, distance, routeCost, /* panama idle days */ 0);
 		voyageOptions.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 		voyageOptions.setIdleFuelChoice(IdleFuelChoice.NBO);
@@ -124,9 +124,9 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		return contract;
 	}
 
-	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull IPort dischargePort, int dischargeTime, @NonNull ISalesPriceCalculator salesPriceCalculator) {
-		DischargeSlot dischargeSlot = new NotionalDischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), true, 0L, Long.MAX_VALUE, salesPriceCalculator, 0,
-				0);
+	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull final IPort dischargePort, final int dischargeTime, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
+		final DischargeSlot dischargeSlot = new NotionalDischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), true, 0L, Long.MAX_VALUE, salesPriceCalculator,
+				0, 0);
 
 		return dischargeSlot;
 	}

@@ -5,6 +5,7 @@
 package com.mmxlabs.hub.auth;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,7 +22,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
-	
+
 	private static BasicAuthenticationManager instance = null;
 
 	private BasicAuthenticationManager() {
@@ -69,7 +70,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 		}
 
 		// @formatter:off
-		final Request loginRequest = new Request.Builder().header("Authorization", Credentials.basic(username, password)) //
+		final Request loginRequest = new Request.Builder().header("Authorization", Credentials.basic(username, password, StandardCharsets.UTF_8 )) //
 				.header("Cache-Control", "no-store, max-age=0") //
 				.url(url + UpstreamUrlProvider.BASIC_LOGIN_PATH) //
 				.build();
@@ -110,7 +111,9 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 			builder = Optional.of(new Request.Builder() //
 					.header("Authorization", Credentials.basic( //
 							username.get(), //
-							password.get())) //
+							password.get(),
+							StandardCharsets.UTF_8
+							)) //
 					.header("Cache-Control", "no-store, max-age=0")); //
 			// @formatter:on
 		} else {
@@ -127,6 +130,6 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 	public void withCredentials(String username, String password) {
 		storeInSecurePreferences(KEY_USERNAME, username);
-		storeInSecurePreferences(KEY_PASSWORD, password);		
+		storeInSecurePreferences(KEY_PASSWORD, password);
 	}
 }

@@ -87,8 +87,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  */
 public class ComplexCargoEditor extends Dialog {
 
-	private Text cargoName;
-
 	private DialogValidationSupport validationSupport;
 
 	private final ObservablesManager observablesManager = new ObservablesManager();
@@ -132,17 +130,6 @@ public class ComplexCargoEditor extends Dialog {
 
 		final Composite area = new Composite(c, SWT.NONE);
 		area.setLayout(new GridLayout(1, true));
-		{
-			final Group g = new Group(area, SWT.DEFAULT);
-			g.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, true, false));
-			g.setLayout(new GridLayout(2, false));
-
-			final Label l = new Label(g, SWT.NONE);
-			l.setText("Name");
-			l.setLayoutData(new GridData(40, -1));
-			cargoName = new Text(g, SWT.BORDER);
-			cargoName.setLayoutData(new GridData(80, -1));
-		}
 		{
 			final Group g = new Group(area, SWT.DEFAULT);
 			viewer = new GridTableViewer(g);
@@ -372,12 +359,6 @@ public class ComplexCargoEditor extends Dialog {
 			@Override
 			public void run() {
 				final EditingDomain editingDomain = dialogContext.getScenarioEditingLocation().getEditingDomain();
-				{
-					final IEMFEditValueProperty property = EMFEditProperties.value(editingDomain, FeaturePath.fromList(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-					final IObservableValue modelObservableValue = property.observe(cargo);
-					final ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(cargoName);
-					dbc.bindValue(targetObservableValue, modelObservableValue);
-				}
 
 				final IEMFEditListProperty prop = EMFEditProperties.list(editingDomain, CargoPackage.eINSTANCE.getCargo_Slots());
 

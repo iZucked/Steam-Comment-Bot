@@ -528,7 +528,7 @@ public class PriceIntervalProviderHelper {
 				discharge = (IDischargeOption) slotRow.getFirst();
 			}
 		}
-		return new Pair<ILoadOption, IDischargeOption>(load, discharge);
+		return new Pair<>(load, discharge);
 	}
 
 	public boolean isLoadPricingEventTime(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
@@ -548,6 +548,10 @@ public class PriceIntervalProviderHelper {
 	boolean isLoadPricingEventTime(final @NonNull IDischargeOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final PricingEventType pet = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent()
 				: slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
+		if (pet == null) {
+			return false;
+		}
+
 		return isLoadPricingEventTime(pet);
 	}
 

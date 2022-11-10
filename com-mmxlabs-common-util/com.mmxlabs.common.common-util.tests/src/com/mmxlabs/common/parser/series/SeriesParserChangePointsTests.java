@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +18,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.IExpression;
 
 public class SeriesParserChangePointsTests {
 
@@ -50,6 +50,11 @@ public class SeriesParserChangePointsTests {
 		data.setCalendarMonthMapper(new CalendarMonthMapper() {
 
 			@Override
+			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+				return point;
+			}
+
+			@Override
 			public int mapMonthToChangePoint(final int currentChangePoint) {
 				return currentChangePoint * 30 * 24;
 			}
@@ -66,12 +71,11 @@ public class SeriesParserChangePointsTests {
 		data.setEarliestAndLatestTime(timebox);
 
 		final SeriesParser parser = new SeriesParser(data);
-		parser.addSeriesExpression("HH", "1.0");
-		parser.addSeriesExpression("HH2", "2.0");
+		parser.addSeriesExpression("HH", SeriesType.COMMODITY, "1.0");
+		parser.addSeriesExpression("HH2", SeriesType.COMMODITY, "2.0");
 
-		final IExpression<ISeries> parsed = parser.parse(expression);
-
-		final int[] changePoints = parsed.evaluate().getChangePoints();
+		final ISeries series = parser.asSeries(expression);
+		final int[] changePoints = series.getChangePoints();
 
 		return Arrays.stream(changePoints).boxed().collect(Collectors.toList());
 	}

@@ -20,7 +20,7 @@ public class VerticalDragDropManager {
     private GanttSection _targetSection;
     private GanttEvent   _topEvent;
     private GanttEvent   _bottomEvent;
-    private List         _surroundingEvents;
+    private List<GanttEvent>         _surroundingEvents;
 
     public GanttSection getTargetSection() {
         return _targetSection;
@@ -46,11 +46,11 @@ public class VerticalDragDropManager {
         _bottomEvent = bottomEvent;
     }
 
-    public List getSurroundingEvents() {
+    public List<GanttEvent> getSurroundingEvents() {
         return _surroundingEvents;
     }
 
-    public void setSurroundingEvents(final List surroundingEvents) {
+    public void setSurroundingEvents(final List<GanttEvent> surroundingEvents) {
         _surroundingEvents = surroundingEvents;
     }
 

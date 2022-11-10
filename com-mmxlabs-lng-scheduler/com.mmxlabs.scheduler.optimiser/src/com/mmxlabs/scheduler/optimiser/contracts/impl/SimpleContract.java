@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -14,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -29,23 +31,20 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator {
 
 	@Inject(optional = true)
-	private IActualsDataProvider actualsDataProvider;
+	private @Nullable IActualsDataProvider actualsDataProvider;
 
 	@Inject
 	private PricingEventHelper pricingEventHelper;
 
-	/**
-	 */
 	protected abstract int calculateSimpleUnitPrice(final int time, final IPort port);
 
-	/**
-	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselCharter vesselCharter, final VoyagePlan plan, @Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
+			final IVesselCharter vesselCharter, final VoyagePlan plan, @Nullable final ProfitAndLossSequences profitAndLossSequences, final @Nullable IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
@@ -57,13 +56,13 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, final IPortTimesRecord voyageRecord, final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(final IVessel vessel, final IDischargeOption dischargeOption, final IPortTimesRecord portTimesRecord) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
+		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, portTimesRecord);
 		final IPort port = dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
@@ -89,7 +88,8 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
+	public int calculateSalesUnitPrice(final IVesselCharter vesselCharter, final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final VoyagePlan voyagePlan,
+			@Nullable final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
@@ -104,7 +104,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
+			@Nullable final ProfitAndLossSequences profitAndLossSequences, final @Nullable IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
@@ -117,7 +117,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable ProfitAndLossSequences profitAndLossSequences, final IDetailTree annotations) {
+			@Nullable final ProfitAndLossSequences profitAndLossSequences, final @Nullable IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
@@ -128,7 +128,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public @Nullable PricingEventType getCalculatorPricingEventType(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(loadOption)) {
 			return PricingEventType.DATE_SPECIFIED;
 		}
@@ -136,7 +136,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public @Nullable PricingEventType getCalculatorPricingEventType(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(dischargeOption)) {
 			return PricingEventType.DATE_SPECIFIED;
 		}

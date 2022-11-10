@@ -4,15 +4,12 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
+@NonNullByDefault
 public interface IPriceExpressionProvider {
-	@NonNull
-	ISeries getExpression(@NonNull PriceCurveKey key);
 
-	@NonNull
-	ISeries getExpression(@NonNull String indexName, @Nullable String curveName);
+	ISeries getExpression(PriceCurveKey key);
 }

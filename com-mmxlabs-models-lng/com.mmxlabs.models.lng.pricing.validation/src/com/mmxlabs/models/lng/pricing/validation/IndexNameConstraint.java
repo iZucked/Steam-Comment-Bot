@@ -39,7 +39,14 @@ public class IndexNameConstraint extends AbstractModelMultiConstraint {
 			}
 
 			if ((index.getName() == null) || !pattern.matcher(index.getName()).matches()) {
-				final String message = "Index '" + index.getName() + "': Name can only contain letters, numbers and underscores for use with pricing expressions.";
+				final String message = "Commodity curve '" + index.getName() + "': Name can only contain letters, numbers and underscores for use with pricing expressions.";
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dcsd.addEObjectAndFeature(index, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+				statuses.add(dcsd);
+			}
+			
+			if (index.getName() != null && index.getName().length() == 1 ) {
+				final String message = "Commodity curve '" + index.getName() + "': Name should have at least two characters.";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(index, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 				statuses.add(dcsd);
