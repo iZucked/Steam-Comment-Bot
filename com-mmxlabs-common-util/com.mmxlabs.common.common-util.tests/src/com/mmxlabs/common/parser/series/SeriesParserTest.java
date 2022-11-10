@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
+import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -77,6 +80,11 @@ public class SeriesParserTest {
 		SeriesParserData data = new SeriesParserData();
 		data.setShiftMapper((a, b) -> a);
 		data.setCalendarMonthMapper(new CalendarMonthMapper() {
+
+			@Override
+			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+				return point;
+			}
 
 			@Override
 			public int mapMonthToChangePoint(int currentChangePoint) {

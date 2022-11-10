@@ -156,8 +156,6 @@ public class LatenessComponentTest {
 		Mockito.when(startEndRequirementProvider.getStartRequirement(resource)).thenReturn(startRequirement);
 		Mockito.when(startEndRequirementProvider.getEndRequirement(resource)).thenReturn(endRequirement);
 
-		c.init(data);
-
 		injector.injectMembers(checker);
 		// set up time windows from load/discharge end/start times above
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);

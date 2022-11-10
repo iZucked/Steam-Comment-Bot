@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
@@ -27,7 +28,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 
 /**
- * SimpleContentProposalProvider is a class designed to map a static list of Strings to content proposals.
+ * SimpleContentProposalProvider is a class designed to map a static list of
+ * Strings to content proposals.
  *
  * @see IContentProposalProvider
  * @since 3.2
@@ -44,17 +46,18 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			Character.valueOf('?'), //
 			Character.valueOf(','), //
 			Character.valueOf('(') //
-			);
+	);
 
 	private LNGScenarioModel scenarioModel;
 
 	private final @NonNull PriceIndexType[] types;
 
 	/**
-	 * Construct a SimpleContentProposalProvider whose content proposals are always the specified array of Objects.
+	 * Construct a SimpleContentProposalProvider whose content proposals are always
+	 * the specified array of Objects.
 	 *
-	 * @param proposals
-	 *            the array of Strings to be returned whenever proposals are requested.
+	 * @param proposals the array of Strings to be returned whenever proposals are
+	 *                  requested.
 	 */
 	public PriceExpressionProposalProvider(final @NonNull PriceIndexType... types) {
 		super();
@@ -62,13 +65,14 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 	}
 
 	/**
-	 * Return an array of Objects representing the valid content proposals for a field.
+	 * Return an array of Objects representing the valid content proposals for a
+	 * field.
 	 *
-	 * @param contents
-	 *            the current contents of the field (only consulted if filtering is set to <code>true</code>)
-	 * @param position
-	 *            the current cursor position within the field (ignored)
-	 * @return the array of Objects that represent valid proposals for the field given its current content.
+	 * @param contents the current contents of the field (only consulted if
+	 *                 filtering is set to <code>true</code>)
+	 * @param position the current cursor position within the field (ignored)
+	 * @return the array of Objects that represent valid proposals for the field
+	 *         given its current content.
 	 */
 	@Override
 	public IContentProposal[] getProposals(final String full_contents, final int position) {
@@ -94,7 +98,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 
 		final String contents = full_contents.substring(completeFrom, position);
-		final ArrayList<ContentProposal> list = new ArrayList<ContentProposal>();
+		final ArrayList<ContentProposal> list = new ArrayList<>();
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final List<AbstractYearMonthCurve> curves = new LinkedList<>();
 		for (final PriceIndexType type : types) {
@@ -120,12 +124,15 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 		for (final AbstractYearMonthCurve index : curves) {
 			final String proposal = index.getName();
+			if (proposal == null || proposal.isBlank()) {
+				continue;
+			}
 			String type = "";
 			if (index instanceof CurrencyCurve) {
 				type = " (currency conversion)";
 			}
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + type, null, c.length()));
 			}
 		}
@@ -135,14 +142,14 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			{
 				final String proposal = PriceIndexUtils.createConversionFactorName(factor);
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-					final String c = proposal.substring(contents.length());
+					final String c = matchCase(contents, proposal.substring(contents.length()));
 					list.add(new ContentProposal(c, proposal + labelSuffix, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
 				}
 			}
 			{
 				final String proposal = PriceIndexUtils.createReverseConversionFactorName(factor);
 				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-					final String c = proposal.substring(contents.length());
+					final String c = matchCase(contents, proposal.substring(contents.length()));
 					list.add(new ContentProposal(c, proposal + labelSuffix, String.format("Number of %s\'s per %s is %.6f", factor.getTo(), factor.getFactor(), 1.0 / factor.getFactor()), c.length()));
 				}
 			}
@@ -150,35 +157,37 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "CAP(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put an upper limit (a or b) on a price expression, e.g. \"CAP(1.1, 115%HH)\" gives 115%HH but no higher than $1.10", c.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put an upper limit (a or b) on a price expression, e.g. \"CAP(1.1, 115%HH)\" gives 115%HH but no higher than $1.10",
+						c.length()));
 			}
 		}
 		{
 			final String proposal = "FLOOR(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put a lower limit (a or b) on a price expression, e.g. \"FLOOR(1.1, 115%HH)\" gives 115%HH but no lower than $1.10", c.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "a,b)", "Use this to put a lower limit (a or b) on a price expression, e.g. \"FLOOR(1.1, 115%HH)\" gives 115%HH but no lower than $1.10",
+						c.length()));
 			}
 		}
 		{
 			final String proposal = "MIN(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the lower value of a or b.", c.length()));
 			}
 		}
 		{
 			final String proposal = "MAX(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "a,b)", "Function returning the higher value of a or b.", c.length()));
 			}
 		}
 		{
 			final String proposal = "SHIFT(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
+				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "index,months)",
 						"Function shifting the index price by the number of months. A positive value will take the price from previous months. A negative value takes the price from future months.",
 						c.length()));
@@ -187,23 +196,47 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			final String proposal = "SPLITMONTH(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal + "index,index,day)",
-						"Function switching between two index at a given point each month",
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,index,day)", "Function switching between two index at a given point each month", c.length()));
+			}
+		}
+		{
+			final String proposal = "S(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,lower,upper,a1,b1,a2,b2,a3,b3)",
+						"S curve function. Select a different a*index+b form depending on the index value.\n  index < lower -> a1 * index + b1\n  index <= upper -> a2 * index + b2 \n  else ->  a3* index + b3",
 						c.length()));
 			}
 		}
 		{
 			final String proposal = "DATEDAVG(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal + "index,window,delay,period)",
-						"Function to use the average of a month window with delay and application period",
-						c.length()));
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,window,delay,period)", "Function to use the average of a month window with delay and application period", c.length()));
 			}
 		}
+		{
+			final String proposal = "TIER(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "index,lowerbound,lowexpr,upperbound,midexpr,highexpr)", "Tiered pricing function. lowerbound and upperbound define the conditions (< or <= to a number value) against the value of index to select which expression to use (lowexpr, midexpr or highexpr).\nFor example TIER(Brent, < 40, 5, <= 90, Brent[301], 10) will use Brent[301] if Brent is 40 or above and less than 90. Otherwise use the constants.", c.length()));
+			}
+		}
+
 		return list.toArray(new IContentProposal[list.size()]);
 
+	}
+
+	private String matchCase(String contents, String c) {
+		if (contents.length() == 0) {
+			return c;
+		}
+
+		if (Character.isLowerCase(contents.charAt(0))) {
+			return c.toLowerCase();
+		}
+		return c;
 	}
 
 	@Override
@@ -213,5 +246,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		} else {
 			this.scenarioModel = null;
 		}
+	}
+
+	@Override
+	public void setInputOject(EObject eObject) {
+
 	}
 }

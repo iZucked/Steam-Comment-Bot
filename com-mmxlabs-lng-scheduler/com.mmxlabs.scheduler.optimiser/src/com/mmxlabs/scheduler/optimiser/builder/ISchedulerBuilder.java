@@ -456,14 +456,6 @@ public interface ISchedulerBuilder {
 	void constrainSlotAdjacency(@Nullable IPortSlot firstSlot, @Nullable IPortSlot secondSlot);
 
 	/**
-	 * Set a discount curve for the given fitness component name
-	 * 
-	 * @param name
-	 * @param iCurve
-	 */
-	void setFitnessComponentDiscountCurve(@NonNull String name, @NonNull ICurve iCurve);
-
-	/**
 	 * Set the cost of visiting the given port + vessel in the given way.
 	 * 
 	 * @param port

@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -218,9 +219,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
 					if (mmxEo instanceof Slot) {
-						final Slot<?> slot = (Slot<?>) mmxEo;
-						final ZonedDateTime ed = getDisplayedWindowEndTime(slot);
-						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
+						@NonNull
+						final LocalDateTime ed = getDisplayedWindowEndTime(d.atTime(time, 0), wsize, ePeriod);
+						final String text = formatDate(d, time) + " - " + formatDate(ed.toLocalDate(), ed.getHour());
 						textClient.setText(text);
 					} else {
 						final String text = formatDate(d, time) + " - " + wsize + " " + getUnits(ePeriod);
@@ -229,14 +230,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				}
 			}
 
-			private ZonedDateTime getDisplayedWindowEndTime(Slot<?> slot) {
-				final ZonedDateTime start = slot.getSchedulingTimeWindow().getStart();
-				final TimePeriod p = slot.getWindowSizeUnits();
-				int windowSize = slot.getWindowSize();
-				ZonedDateTime end = start;
+			@NonNull
+			private LocalDateTime getDisplayedWindowEndTime(@NonNull final LocalDateTime start, int windowSize, final TimePeriod windowSizeUnits) {
+				LocalDateTime end = start;
 
 				if (windowSize > 0) {
-					switch (p) {
+					switch (windowSizeUnits) {
 					case DAYS:
 						end = end.plusDays(windowSize).minusHours(1);
 						break;

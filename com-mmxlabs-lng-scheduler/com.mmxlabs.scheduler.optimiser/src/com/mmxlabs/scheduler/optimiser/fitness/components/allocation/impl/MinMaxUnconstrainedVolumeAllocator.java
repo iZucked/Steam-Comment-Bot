@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -35,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProvider;
  *
  */
 @NonNullByDefault
+@Singleton
 public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAllocator {
 
 	@Inject

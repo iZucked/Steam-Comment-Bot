@@ -2,6 +2,9 @@
 
 package com.mmxlabs.common.parser.impl;
 
+import com.mmxlabs.common.parser.astnodes.*;
+
+import java.time.Month;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
@@ -55,11 +58,19 @@ Exponent = [eE] [+-]? [0-9]+
 
 Integer = 0 | [1-9][0-9]* 
 
+VAR = \#[a-zA-Z]+[a-zA-Z_0-9]*
+
+mPositive = m[0-9][0-9]?
+mNegative = m-[1-9][0-9]?
+
+MValue = {mPositive}|{mNegative}
+
 Named_Element = [a-zA-Z_0-9]+[a-zA-Z_][a-zA-Z_0-9]*|[a-zA-Z_]+[a-zA-Z_0-9]*
 Float =  ({FLit1}|{FLit2}|{FLit3}) {Exponent}?  
 
 new_line = \r|\n|\r\n;
 white_space = {new_line} | [ \t\f]
+
 
 %ignorecase
 %state STRING
@@ -78,10 +89,36 @@ white_space = {new_line} | [ \t\f]
 "S"           { return symbol("scurve", S); }
 "VOLUMETIERM3"           { return symbol("volumetierm3", VOLUMETIERM3); }
 "VOLUMETIERMMBTU"           { return symbol("volumetiermmbtu", VOLUMETIERMMBTU); }
+"TIER"           { return symbol("tier", TIER); }
+ 
+ 
+ "JAN" { return symbol("jan",MONTH, Month.JANUARY); }
+ "FEB" { return symbol("feb",MONTH, Month.FEBRUARY); }
+ "MAR" { return symbol("mar",MONTH, Month.MARCH); }
+ "APR" { return symbol("apr",MONTH, Month.APRIL); }
+ "MAY" { return symbol("may",MONTH, Month.MAY); }
+ "JUN" { return symbol("jun",MONTH, Month.JUNE); }
+ "JUL" { return symbol("jul",MONTH, Month.JULY); }
+ "AUG" { return symbol("aug",MONTH, Month.AUGUST); }
+ "SEP" { return symbol("sep",MONTH, Month.SEPTEMBER); }
+ "OCT" { return symbol("oct",MONTH, Month.OCTOBER); }
+ "NOV" { return symbol("nov",MONTH, Month.NOVEMBER); }
+ "DEC" { return symbol("dec",MONTH, Month.DECEMBER); }
+ 
  
 /* separators */
+
+"<"               { return symbol("<",LT, ComparisonOperators.LT); }
+"<="               { return symbol("<=",LTE, ComparisonOperators.LTE); }
+">"               { return symbol(">",GT, ComparisonOperators.GT); }
+">="               { return symbol(">=",GTE, ComparisonOperators.GTE); }
+
+"["               { return symbol("[",LBRACKET); }
+"]"               { return symbol("]",RBRACKET); }
   \"              { string.setLength(0); yybegin(STRING); }
 ","               { return symbol("comma",COMMA); }
+";"               { return symbol("semicolon",SEMICOLON); }
+"="               { return symbol("equals",EQUALS); }
 "("               { return symbol("(",LPAREN); }
 ")"               { return symbol(")",RPAREN); }
 "+"               { return symbol("plus",PLUS  ); }
@@ -90,10 +127,18 @@ white_space = {new_line} | [ \t\f]
 "/"               { return symbol("div",DIVIDE  ); }
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
+{VAR}        { return symbol("var", VAR, new String(yytext()).replace("#","") ); }
+m        { return symbol("m", M, Integer.valueOf(0) ); }
+{MValue}        { return symbol("m", M, Integer.valueOf(yytext().replace("m","")) ); }
+
+
 {Named_Element}        { return symbol("namedelement", NAMED_ELEMENT, new String(yytext()) ); }
-{Integer}        { return symbol("integer", INTEGER, new Integer(yytext()) ); }
+{Integer}        { return symbol("integer", INTEGER, Integer.valueOf(yytext()) ); }
 {Float}        { return symbol("float", FLOAT, new Double(yytext()) ); }
+
 {white_space}     { /* ignore */ }
+
+
 
 }
 

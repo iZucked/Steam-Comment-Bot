@@ -93,7 +93,7 @@ public class ExposuresIndexConversion {
 					final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operatorNode);
 					final ASTNode constant = operatorChildren.getFirst();
 					replaceBreakEvenWithConstant(parent, constant);
-					final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, parent, Operator.DIVIDE);
+					final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, Operator.DIVIDE, parent);
 					return divider;
 				}
 			}
@@ -110,7 +110,7 @@ public class ExposuresIndexConversion {
 							final ASTNode indexOperator_i = operatorChildren.getSecond();
 
 							if (indexOperator_i != null && containsCommodity(indexOperator_i)) {
-								final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, indexOperator_i, Operator.MINUS);
+								final OperatorASTNode divider = new OperatorASTNode(breakEvenPriceNode, Operator.MINUS, indexOperator_i);
 								return divider;
 							}
 						}
@@ -126,7 +126,7 @@ public class ExposuresIndexConversion {
 						final ASTNode indexOperator = operatorChildren.getSecond();
 
 						// price nodes
-						final OperatorASTNode minus = new OperatorASTNode(breakEvenPriceNode, constant, Operator.MINUS);
+						final OperatorASTNode minus = new OperatorASTNode(breakEvenPriceNode, Operator.MINUS, constant);
 						if (indexOperator instanceof final OperatorASTNode indexOperatorNode) {
 							final Pair<ASTNode, ASTNode> indexOperatorChildren = getOperatorChildren(indexOperatorNode);
 							final ASTNode indexOperator_c = indexOperatorChildren.getFirst();
@@ -135,7 +135,7 @@ public class ExposuresIndexConversion {
 							if (indexOperator_i != null && containsCommodity(indexOperator_i)) {
 								// create new operator node
 								replaceBreakEvenWithConstant(indexOperator, indexOperator_c);
-								final OperatorASTNode divider = new OperatorASTNode(minus, indexOperator, Operator.DIVIDE);
+								final OperatorASTNode divider = new OperatorASTNode(minus, Operator.DIVIDE, indexOperator);
 								return divider;
 							}
 						}
@@ -149,7 +149,7 @@ public class ExposuresIndexConversion {
 	private static void processCommodityNode(final ASTNode node) {
 		for (final ASTNode child : node.getChildren()) {
 			if (child instanceof CommoditySeriesASTNode) {
-				final ASTNode mult = new OperatorASTNode(new ConstantASTNode(1), child, Operator.TIMES);
+				final ASTNode mult = new OperatorASTNode(new ConstantASTNode(1), Operator.TIMES, child);
 				node.replace(child, mult);
 			}
 			processCommodityNode(child);

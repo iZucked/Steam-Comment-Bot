@@ -5,20 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.Inject;
-import com.mmxlabs.common.curves.ConstantValueCurve;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
 /**
  * Base class for cargo scheduler fitness components. Provides a name, a
- * reference to the core, evaluated & accepted fitness tracking, and a discount
- * curve usable via {@link #getDiscountedValue(int, long)}.
+ * reference to the core, evaluated & accepted fitness tracking.
  * 
  * @author hinton
  * 
@@ -32,23 +25,10 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 
 	private final @NonNull String name;
 
-	private @NonNull ICurve discountCurve = new ConstantValueCurve(1);
-
-	@Inject(optional = true)
-	private @Nullable IDiscountCurveProvider discountCurveProvider;
-
 	protected AbstractSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super();
 		this.core = core;
 		this.name = name;
-	}
-
-	protected long getDiscountedValue(final int time, final long value) {
-		final double factor = discountCurve.getValueAtPoint(time);
-
-		final long result = (long) (value * factor);
-
-		return result;
 	}
 
 	@Override
@@ -87,16 +67,5 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	@Override
 	public void acceptLastEvaluation() {
 		lastAcceptedFitness = lastEvaluatedFitness;
-	}
-
-	@Override
-	public void init(@NonNull final IPhaseOptimisationData data) {
-		final IDiscountCurveProvider pDiscountCurveProvider = discountCurveProvider;
-		if (pDiscountCurveProvider != null) {
-			final ICurve curve = pDiscountCurveProvider.getDiscountCurve(getName());
-			if (curve != null) {
-				discountCurve = curve;
-			}
-		}
 	}
 }

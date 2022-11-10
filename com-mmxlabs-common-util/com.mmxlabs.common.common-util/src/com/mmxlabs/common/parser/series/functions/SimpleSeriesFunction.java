@@ -12,17 +12,15 @@ import com.mmxlabs.common.parser.series.SeriesUtil;
 public abstract class SimpleSeriesFunction implements ISeries {
 
 	protected List<ISeries> arguments;
+	protected int[] changePoints;
 
 	protected SimpleSeriesFunction(final List<ISeries> arguments) {
 		this.arguments = arguments;
+		this.changePoints = SeriesUtil.mergeChangePoints(arguments);
 	}
 
 	@Override
 	public int[] getChangePoints() {
-		int[] accumulator = new int[0];
-		for (final ISeries argument : arguments) {
-			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
-		}
-		return accumulator;
+		return changePoints;
 	}
 }

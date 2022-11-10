@@ -110,15 +110,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return new ArrayList<>(allComponents);
 	}
 
-	@Override
-	public void init(final IPhaseOptimisationData data) {
-		// scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
-		// Notify fitness components that a new optimisation is beginning
-		for (final ICargoFitnessComponent c : allComponents) {
-			c.init(data);
-		}
-	}
-
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
 		return allComponents;
 	}

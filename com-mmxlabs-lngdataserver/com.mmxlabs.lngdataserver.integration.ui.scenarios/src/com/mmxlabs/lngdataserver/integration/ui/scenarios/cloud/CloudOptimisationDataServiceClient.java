@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
@@ -97,7 +98,7 @@ public class CloudOptimisationDataServiceClient {
 			return null;
 		}
 
-		final String credential = Credentials.basic(getUsername(), getPassword());
+		final String credential = Credentials.basic(getUsername(), getPassword(), StandardCharsets.UTF_8);
 
 		final Request.Builder builder = new Request.Builder() //
 				.url(baseUrl + urlPath) //
@@ -182,14 +183,14 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				// 400 - missing data or data filename in request
-				// 415 - archive was not a zip file 
+				// 415 - archive was not a zip file
 				throw new IOException("Unexpected code " + response);
 			}
 			return response.body().string();
 		}
 	}
 
-	public IGatewayResponse downloadTo(final String jobid, int resultIdx, final File file,  final IProgressListener progressListener) throws IOException {
+	public IGatewayResponse downloadTo(final String jobid, int resultIdx, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {

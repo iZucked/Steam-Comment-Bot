@@ -15,13 +15,13 @@ import java.util.Map;
 public class DateHelper {
 
     private static final long MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
-    private static Map        _dateFormatMap;
+    private static Map<String, SimpleDateFormat>        _dateFormatMap;
     private static int        _todayYear;
     private static int        _todayYearDate;
     private static Locale     _locale;
         
     static {
-        _dateFormatMap = new HashMap();
+        _dateFormatMap = new HashMap<>();
     }
 
     public static void initialize(Locale locale) {

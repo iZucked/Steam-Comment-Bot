@@ -304,6 +304,11 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	public boolean isMajorChange() {
 		return isWiringChange() || isVesselChange() || isDateChange();
 	}
+	
+	@Override
+	public boolean isWiringOrVesselChange() {
+		return isWiringChange()||isVesselChange();
+	}
 
 	/**
 	 * <!-- begin-user-doc -->

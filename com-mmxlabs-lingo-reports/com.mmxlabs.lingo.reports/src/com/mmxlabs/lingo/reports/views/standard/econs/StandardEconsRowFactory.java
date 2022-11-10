@@ -89,16 +89,24 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsInCharterBallastBonus = false;
 		boolean containsInCharterRepositioning = false;
 		boolean complexCargo = false;
-		int ladenLegs = 0;
-		int ballastLegs = 0;
+		int totalLadenLegs = 0;
+		int totalBallastLegs = 0;
 
-		int numLoads = 0;
-		int numDischarges = 0;
+		int totalNumLoads = 0;
+		int totalNumDischarges = 0;
 
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
 		} else {
 			for (final Object target : targets) {
+				
+				
+				int ladenLegs = 0;
+				int ballastLegs = 0;
+
+				int numLoads = 0;
+				int numDischarges = 0;
+				
 				if (target instanceof final CargoAllocation cargoAllocation) {
 					final Sequence sequence = cargoAllocation.getSequence();
 					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
@@ -217,12 +225,18 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof PaperDealAllocation) {
 					containsPaperDeals = true;
 				}
+				
+				
+				totalLadenLegs = Math.max(totalLadenLegs, ladenLegs);
+				totalBallastLegs = Math.max(totalBallastLegs, ballastLegs);
+				totalNumLoads= Math.max(totalNumLoads, numLoads);
+				totalNumDischarges = Math.max(totalNumDischarges, numDischarges);
 			}
 		}
 
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
-			for (int i = 0; i < numLoads; ++i) {
+			for (int i = 0; i < totalNumLoads; ++i) {
 				final int base = EconsRowMarkers.PURCHASES_START + 10 * i;
 				rows.add(createRow(base + 0, "Purchase", true, "$", "", createBuyValuePrice(i, options, RowType.COST)));
 				rows.add(createRow(base + 1, "    Price", true, "$", "", createBuyPrice(i, options, RowType.COST)));
@@ -278,7 +292,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 		if (containsCargo) {
-			for (int i = 0; i < numDischarges; ++i) {
+			for (int i = 0; i < totalNumDischarges; ++i) {
 				final int base = EconsRowMarkers.SALES_START + 10 * i;
 				rows.add(createRow(base + 1, "Sale", true, "$", "", createSellValuePrice(i, options, RowType.REVENUE)));
 				rows.add(createRow(base + 2, "    Price", true, "$", "", createSellPrice(i, options, RowType.REVENUE)));
@@ -315,7 +329,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				// Pnl calcs start.
 				rows.add(createRow(EconsRowMarkers.DETAILS_START, "", false, "", "", createEmptyFormatter()));
 
-				for (int i = 0; i < numLoads; ++i) {
+				for (int i = 0; i < totalNumLoads; ++i) {
 					final int base = EconsRowMarkers.BUY_SELLS_START + EconsRowMarkers.BUY_SELL_LENGTH * i;
 					final String lbl = i > 1 ? "Buy #" + (i + 1) : "Buy";
 
@@ -339,8 +353,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					rows.add(createRow(base + 50, "Buy price($/mmBtu)", false, "", "",
 							createBasicFormatter(options, RowType.COST, Double.class, DollarsPerMMBtuFormat::format, createFirstPurchaseTransformer(Double.class, SlotAllocation::getPrice))));
 				}
-				for (int i = 0; i < numDischarges; ++i) {
-					final int base = EconsRowMarkers.BUY_SELLS_START + EconsRowMarkers.BUY_SELL_LENGTH * (numLoads + i);
+				for (int i = 0; i < totalNumDischarges; ++i) {
+					final int base = EconsRowMarkers.BUY_SELLS_START + EconsRowMarkers.BUY_SELL_LENGTH * (totalNumLoads + i);
 					final String lbl = i > 0 ? "Sale #" + (i + 1) : "Sale";
 					rows.add(createRow(base + 0, lbl + " port", false, "", "", createSaleAllocationFormatter(1, sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
 					rows.add(createRow(base + 10, lbl + " date", false, "", "",
@@ -385,7 +399,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					// Spacer
 					rows.add(createRow(EconsRowMarkers.LEGS_START - 1, "", false, "", "", createEmptyFormatter()));
 
-					final int totalLegs = ladenLegs + ballastLegs;
+					final int totalLegs = totalLadenLegs + totalBallastLegs;
 					for (int tlegIdx = 0; tlegIdx < totalLegs; ++tlegIdx) {
 						final int base = EconsRowMarkers.LEGS_START + EconsRowMarkers.LEGS_LENGTH * tlegIdx;
 
@@ -393,9 +407,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						if (containsCargo || tlegIdx == 1) {
 
 							final boolean laden = tlegIdx + 1 < totalLegs;
-							final int legIdx = laden ? tlegIdx : tlegIdx - ladenLegs;
+							final int legIdx = laden ? tlegIdx : tlegIdx - totalLadenLegs;
 							if (laden) {
-								if (ladenLegs > 1) {
+								if (totalLadenLegs > 1) {
 									rows.add(createRow(base + 10, "Laden leg #" + (legIdx + 1), false, "", "", createEmptyFormatter()));
 								} else {
 									rows.add(createRow(base + 10, "Laden leg", false, "", "", createEmptyFormatter()));
@@ -404,7 +418,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 								if (containsCargo) {
 									rows.add(createRow(base + 9, "", false, "", "", createEmptyFormatter()));
 								}
-								if (ballastLegs > 1) {
+								if (totalBallastLegs > 1) {
 									rows.add(createRow(base + 10, "Ballast leg #" + (legIdx + 1), false, "", "", createEmptyFormatter()));
 								} else {
 									rows.add(createRow(base + 10, "Ballast leg", false, "", "", createEmptyFormatter()));

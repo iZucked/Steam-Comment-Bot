@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -175,7 +176,7 @@ class LicenseTests {
 			if (builder != null) {
 				final Request request = builder //
 						.post(requestBody) //
-						.header("Authorization", Credentials.basic("test", "test")) //
+						.header("Authorization", Credentials.basic("test", "test", StandardCharsets.UTF_8)) //
 						.build();
 
 				// Check the response

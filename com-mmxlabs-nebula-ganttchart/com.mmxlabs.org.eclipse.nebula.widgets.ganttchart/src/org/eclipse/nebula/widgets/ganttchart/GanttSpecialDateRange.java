@@ -88,7 +88,7 @@ public class GanttSpecialDateRange {
 
     private int             _frequency          = REPEAT_WEEKLY;
     private int             _recurCount         = 1;
-    private List            _recurDays;
+    private List<Integer>            _recurDays;
     private int             _startHour          = 0;
     private int             _startMinute        = 0;
     private final int       _startSecond        = 0;
@@ -99,7 +99,7 @@ public class GanttSpecialDateRange {
 
     private Calendar        _lastActualEndDate;
 
-    private List            _cachedRanges       = null;
+    private List<List<Calendar>>            _cachedRanges       = null;
 
     private int             _ddayRepeatInterval = 0;
 
@@ -124,7 +124,7 @@ public class GanttSpecialDateRange {
      * @param end End date
      */
     public GanttSpecialDateRange(final GanttChart parent, final Calendar start, final Calendar end) {
-        _recurDays = new ArrayList();
+        _recurDays = new ArrayList<>();
         _parentChart = parent;
         if (parent != null) {
             _parentComposite = parent.getGanttComposite();
@@ -265,9 +265,9 @@ public class GanttSpecialDateRange {
     public boolean addRecurDay(final int day) {
         if (day < Calendar.SUNDAY || day > Calendar.SATURDAY) { return false; }
 
-        if (_recurDays.contains(new Integer(day))) { return false; }
+        if (_recurDays.contains(Integer.valueOf(day))) { return false; }
 
-        final boolean ret = _recurDays.add(new Integer(day));
+        final boolean ret = _recurDays.add(Integer.valueOf(day));
         if (ret) {
             updateCalculations();
         }
@@ -281,7 +281,7 @@ public class GanttSpecialDateRange {
      * @return true if removed
      */
     public boolean removeRecurDay(final int calDate) {
-        final boolean ret = _recurDays.remove(new Integer(calDate));
+        final boolean ret = _recurDays.remove(Integer.valueOf(calDate));
         if (ret) {
             updateCalculations();
         }
@@ -351,7 +351,7 @@ public class GanttSpecialDateRange {
      * 
      * @return List of recurring days
      */
-    public List getRecurDays() {
+    public List<Integer> getRecurDays() {
         return _recurDays;
     }
 
@@ -500,12 +500,12 @@ public class GanttSpecialDateRange {
     	}
     	
     	// get all blocks that we occupy
-    	List blocks = getBlocks(start, end);
+    	List<List<Calendar>> blocks = getBlocks(start, end);
     	
     	DateRange us = new DateRange(_start, _end);
     	
     	for (int i = 0; i < blocks.size(); i++) {
-    		ArrayList block = (ArrayList) blocks.get(i);
+    		List<Calendar> block =  blocks.get(i);
     		
     		Calendar blockStart = (Calendar) block.get(0);
     		Calendar blockEnd = (Calendar) block.get(1);
@@ -599,14 +599,14 @@ public class GanttSpecialDateRange {
         return cal;
     }
 
-    List getBlocks() {
+    List<List<Calendar>> getBlocks() {
         return getBlocks(null, null);
     }
 
-    List getBlocks(final Calendar start, final Calendar end) {
+    List<List<Calendar>> getBlocks(final Calendar start, final Calendar end) {
         // if (_cachedRanges != null) { return _cachedRanges; }
 
-        _cachedRanges = new ArrayList();
+        _cachedRanges = new ArrayList<>();
 
         final Calendar cal = DateHelper.getNewCalendar(_start);
 
@@ -634,14 +634,14 @@ public class GanttSpecialDateRange {
                     continue;
                 }
 
-                final List foo = new ArrayList();
+                final List<Calendar> foo = new ArrayList<>();
                 foo.add(DateHelper.getNewCalendar(cal));
                 foo.add(DateHelper.getNewCalendar(calEnd));
                 _cachedRanges.add(foo);
 
             } else {
                 for (int x = 0; x < _recurDays.size(); x++) {
-                    final int day = ((Integer) _recurDays.get(x)).intValue();
+                    final int day = (_recurDays.get(x)).intValue();
 
                     cal.set(Calendar.HOUR_OF_DAY, _startHour);
                     cal.set(Calendar.MINUTE, _startMinute);
@@ -662,7 +662,7 @@ public class GanttSpecialDateRange {
                         continue;
                     }
 
-                    final List foo = new ArrayList();
+                    final List<Calendar> foo = new ArrayList<>();
                     foo.add(DateHelper.getNewCalendar(cal));
                     foo.add(DateHelper.getNewCalendar(calEnd));
                     _cachedRanges.add(foo);

@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Singleton;
 
@@ -65,6 +67,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -229,13 +232,16 @@ public class LNGTransformerModule extends AbstractModule {
 		// ----->
 		// <------ Transfers
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PROCESS_TRANSFER_MODEL))//
-		.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL));
+				.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL));
 		// ----->
 
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+		
+		bind(UnconstrainedVolumeAllocator.class).in(Singleton.class);
+		bind(MinMaxUnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
 
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
@@ -330,6 +336,17 @@ public class LNGTransformerModule extends AbstractModule {
 		return new CalendarMonthMapper() {
 
 			@Override
+			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+
+				final LocalDateTime ldt = dateTimeZero.plusHours(point).toLocalDateTime();
+				final ZonedDateTime mappedTime = mapFunction.apply(ldt).atZone(ZoneId.of("Etc/UTC"));
+
+				return Hours.between(dateTimeZero, mappedTime);
+			}
+
+			@Override
 			public int mapMonthToChangePoint(final int months) {
 
 				// Convert internal time units back into UTC date/time
@@ -398,7 +415,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private SeriesParser provideCurrencyParser(final SeriesParserData seriesParserData) {
 		return new SeriesParser(seriesParserData);
 	}
-	
+
 	@Provides
 	@Named(SchedulerConstants.Parser_PricingBasis)
 	@Singleton

@@ -46,15 +46,14 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultTransferModelDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultThirdPartyCargoProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultTransferModelDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapFullCargoLotProvider;
@@ -183,10 +182,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
-
-		final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor();
-		bind(IDiscountCurveProvider.class).toInstance(discountCurveProvider);
-		bind(IDiscountCurveProviderEditor.class).toInstance(discountCurveProvider);
 
 		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);

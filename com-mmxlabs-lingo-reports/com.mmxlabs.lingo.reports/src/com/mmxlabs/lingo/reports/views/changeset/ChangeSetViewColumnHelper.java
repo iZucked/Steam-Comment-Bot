@@ -126,28 +126,38 @@ public class ChangeSetViewColumnHelper {
 	private Color colour_VesselTypeColumn;
 
 	private final ChangeSetView view;
-	private final GridTreeViewer viewer;
+	//@from private to protected
+	protected final GridTreeViewer viewer;
 
-	private GridColumnGroup vesselColumnGroup;
-	private GridViewerColumn vesselColumnStub;
+	//@private to protected
+	protected GridColumnGroup vesselColumnGroup;
+	
+	//@private to protected
+	protected GridViewerColumn vesselColumnStub;
 
-	private GridViewerColumn violationColumn;
+	//@private to protected
+	protected GridViewerColumn violationColumn;
 
-	private GridViewerColumn latenessColumn;
+	//@private to protected
+	protected GridViewerColumn latenessColumn;
 
-	private GridViewerColumn nominationBreaksColumn;
+	//@private to protected
+	protected GridViewerColumn nominationBreaksColumn;
 
-	private ChangeSetWiringDiagram diagram;
+	//@private to protected
+	protected ChangeSetWiringDiagram diagram;
 
 	public ChangeSetWiringDiagram getDiagram() {
 		return diagram;
 	}
+	//@ From private to protected
+	protected GridViewerColumn column_SetName;
 
-	private GridViewerColumn column_SetName;
+	//@private to protected
+	protected GridViewerColumn column_Lateness;
 
-	private GridViewerColumn column_Lateness;
-
-	private GridViewerColumn column_Violations;
+	//@private to protected
+	protected GridViewerColumn column_Violations;
 
 	/**
 	 * Display textual vessel change markers - used for unit testing where graphics
@@ -155,17 +165,23 @@ public class ChangeSetViewColumnHelper {
 	 */
 	private boolean textualVesselMarkers = false;
 
-	private @NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider = getDefaultLabelProvider();
+	//@private to protected
+	protected @NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider = getDefaultLabelProvider();
 
-	private GridViewerColumn column_LoadPrice;
+	//@private to protected
+	protected GridViewerColumn column_LoadPrice;
 
-	private GridViewerColumn column_LoadVolume;
+	//@private to protected
+	protected GridViewerColumn column_LoadVolume;
 
-	private GridViewerColumn column_DischargePrice;
+	//@private to protected
+	protected GridViewerColumn column_DischargePrice;
 
-	private GridViewerColumn column_DischargeVolume;
+	//@private to protected
+	protected GridViewerColumn column_DischargeVolume;
 
-	private boolean showCompareColumns = true;
+	//@private to protected
+	protected boolean showCompareColumns = true;
 
 	public BiFunction<ChangeSetTableGroup, Integer, String> getChangeSetColumnLabelProvider() {
 		return changeSetColumnLabelProvider;
@@ -207,7 +223,6 @@ public class ChangeSetViewColumnHelper {
 		imageRedArrowUp = CommonImages.getImage(IconPaths.RedArrowUp, IconMode.Enabled);
 		imageDarkArrowDown = CommonImages.getImage(IconPaths.DarkArrowDown, IconMode.Enabled);
 		imageDarkArrowUp = CommonImages.getImage(IconPaths.DarkArrowUp, IconMode.Enabled);
-
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
@@ -614,7 +629,8 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private void createNominationBreaksColumn() {
+	//@private to protected
+	protected void createNominationBreaksColumn() {
 		nominationBreaksColumn = new GridViewerColumn(viewer, SWT.CENTER);
 		nominationBreaksColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		nominationBreaksColumn.getColumn().setText("Noms");
@@ -664,9 +680,11 @@ public class ChangeSetViewColumnHelper {
 
 	private static ChangeSetVesselType[] displayedVesselType = { ChangeSetVesselType.FLEET, ChangeSetVesselType.MARKET, ChangeSetVesselType.NOMINAL };
 
-	private boolean showAlternativePNLBase;
+	//@private to protected
+	protected boolean showAlternativePNLBase;
 
-	private GridViewerColumn altPNLBaseColumn;
+	//@private to protected
+	protected GridViewerColumn altPNLBaseColumn;
 
 	public void updateVesselColumns(final Collection<VesselData> data) {
 
@@ -771,8 +789,8 @@ public class ChangeSetViewColumnHelper {
 		gvc.setLabelProvider(createStubLabelProvider());
 		gvc.getColumn().setCellRenderer(createCellRenderer(false));
 	}
-
-	private enum SlotIDRenderMode {
+	//@from public to private
+	public enum SlotIDRenderMode {
 		None, LHS_IN_TARGET, RHS_IN_TARGET
 	};
 
@@ -925,14 +943,16 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private void createWordWrapRenderer(final GridViewerColumn gvc, final int minWidth) {
+	//@private to protected
+	protected void createWordWrapRenderer(final GridViewerColumn gvc, final int minWidth) {
 		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
 		renderer.setWordWrap(true);
 		renderer.setMinWidth(minWidth);
 		gvc.getColumn().setHeaderRenderer(renderer);
 	}
 
-	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
+	//@from private to protected
+	protected void createCenteringGroupRenderer(final GridColumnGroup gcg) {
 		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
 		gcg.setHeaderRenderer(renderer);
 	}
@@ -942,15 +962,15 @@ public class ChangeSetViewColumnHelper {
 	// updateToolItem(part, viewMode);
 	// }
 
-	private ChangeSetWiringDiagram createWiringDiagram(final GridViewerColumn gvc) {
+	protected ChangeSetWiringDiagram createWiringDiagram(final GridViewerColumn gvc) {
 
 		final ChangeSetWiringDiagram d = new ChangeSetWiringDiagram(viewer.getGrid(), gvc);
 
 		return d;
 
 	}
-
-	private CellLabelProvider createStubLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createStubLabelProvider() {
 		return new CellLabelProvider() {
 
 			@Override
@@ -960,7 +980,10 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createIDLabelProvider(final boolean lhs) {
+	//@private to protected
+	
+	
+	protected CellLabelProvider createIDLabelProvider(final boolean lhs) {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1032,7 +1055,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
+	//@private to protected
+	protected CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
 		return new CellLabelProvider() {
 
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
@@ -1333,7 +1357,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
+	//@private to protected
+	protected CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
 			final EStructuralFeature attrib) {
 
 		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
@@ -1373,7 +1398,8 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private CellLabelProvider createPNLDeltaLabelProvider(final boolean showAlt) {
+	//@private to protected
+	protected CellLabelProvider createPNLDeltaLabelProvider(final boolean showAlt) {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1475,7 +1501,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createTaxDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, false, true, true, change -> {
 			return ChangeSetKPIUtil.getTax(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
 		}, change -> {
@@ -1483,7 +1510,8 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createLatenessDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createLatenessDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1647,7 +1675,8 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private CellLabelProvider createNominationBreaksLabelProvider() {
+	//@private to protecteds
+	protected CellLabelProvider createNominationBreaksLabelProvider() {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1939,7 +1968,8 @@ public class ChangeSetViewColumnHelper {
 		return null;
 	}
 
-	private CellLabelProvider createViolationsDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
 			@Override
@@ -2185,7 +2215,8 @@ public class ChangeSetViewColumnHelper {
 		return nominalVesselDelta;
 	}
 
-	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, false, true, false, change -> {
 			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
 		}, change -> {
@@ -2193,7 +2224,8 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createUpstreamDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createUpstreamDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, false, true, true, change -> {
 			return ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpstreamValue);
@@ -2202,7 +2234,8 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, true, true, change -> {
 			return ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingDESValue);
@@ -2212,7 +2245,8 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, true, true, change -> {
 			return ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalUpsideValue);
@@ -2221,7 +2255,8 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createShippingDeltaLabelProvider() {
+	//@private to protected
+	protected CellLabelProvider createShippingDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, true, false, change -> {
 			return ChangeSetKPIUtil.getShipping(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
 		}, change -> {
@@ -2229,17 +2264,20 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createShippingDaysDeltaLabelProvider(final ShippingCostType shippingCostType) {
+	//@private to protected
+	protected CellLabelProvider createShippingDaysDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaDaysLabelProvider(change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType shippingCostType) {
+	//@private to protected
+	protected CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaLabelProvider(true, true, true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType... shippingCostTypes) {
+	//@private to protected
+	protected CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType... shippingCostTypes) {
 		return createLambdaLabelProvider(true, true, true, false, change -> {
 			long sum = 0L;
 			for (final ShippingCostType shippingCostType : shippingCostTypes) {
@@ -2255,7 +2293,8 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	private CellLabelProvider createCSLabelProvider(final InsertionPlanGrouperAndFilter insertionPlanFilter) {
+	//@from private to protected
+	protected CellLabelProvider createCSLabelProvider(final InsertionPlanGrouperAndFilter insertionPlanFilter) {
 
 		return new CellLabelProvider() {
 
@@ -2351,7 +2390,9 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	private CellLabelProvider createWiringLabelProvider() {
+	//@private to protected
+	
+	protected CellLabelProvider createWiringLabelProvider() {
 		return new CellLabelProvider() {
 
 			@Override
@@ -2657,7 +2698,8 @@ public class ChangeSetViewColumnHelper {
 		return str != null && !str.isEmpty();
 	}
 
-	private CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
+	//@private to protected
+	protected CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
 
 		final Function<ChangeSetTableRow, Number> calcF;
 		final Function<ChangeSetTableRow, Number> calcT;
@@ -2875,7 +2917,7 @@ public class ChangeSetViewColumnHelper {
 			imageClosedCircle.dispose();
 			imageClosedCircle = null;
 		}
-		 
+
 		if (colour_VesselTypeColumn != null) {
 			colour_VesselTypeColumn.dispose();
 			colour_VesselTypeColumn = null;
@@ -2915,7 +2957,11 @@ public class ChangeSetViewColumnHelper {
 	public void showAlternativePNLColumn(final boolean showAlternativePNLBase) {
 		this.showAlternativePNLBase = showAlternativePNLBase;
 		if (altPNLBaseColumn != null) {
-			RunnerHelper.asyncExec(() -> altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase));
+			RunnerHelper.asyncExec(() -> {
+				if (!altPNLBaseColumn.getColumn().isDisposed()) {
+					altPNLBaseColumn.getColumn().setVisible(this.showAlternativePNLBase);
+				}
+			});
 		}
 	}
 

@@ -33,13 +33,6 @@ public class SCurveFunctionConstructor implements IExpression<ISeries> {
 		return new SCurveSeries(base.evaluate(), firstThreshold, secondThreshold, lowerSeries.evaluate(), middleSeries.evaluate(), higherSeries.evaluate());
 	}
 
-	private static IExpression<ISeries> makeExpression(final IExpression<ISeries> x, final double a, final double b) {
-		return new SeriesOperatorExpression('+', //
-				new SeriesOperatorExpression('*', //
-						x, new ConstantSeriesExpression(Double.valueOf(a))), //
-				new ConstantSeriesExpression(Double.valueOf(b)));
-	}
-
 	@Override
 	public boolean canEvaluate() {
 		return base.canEvaluate() && lowerSeries.canEvaluate() && middleSeries.canEvaluate() && higherSeries.canEvaluate();

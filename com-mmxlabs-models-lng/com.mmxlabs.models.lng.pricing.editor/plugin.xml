@@ -78,6 +78,12 @@
         inheritable="true"        
         modelClass="com.mmxlabs.models.lng.pricing.PortCost">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve">
+  </componentHelper>
        
 		
 	</extension>

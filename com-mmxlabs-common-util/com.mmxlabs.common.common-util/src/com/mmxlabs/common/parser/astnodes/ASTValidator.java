@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.common.parser.astnodes;
 
 import java.util.Collections;
@@ -42,6 +46,14 @@ public final class ASTValidator {
 			List<Pair<ASTNode, String>> baseList = validate(sCurveFunctionASTNode.getBase());
 			final double firstThreshold = sCurveFunctionASTNode.getFirstThreshold();
 			final double secondThreshold = sCurveFunctionASTNode.getSecondThreshold();
+			if (firstThreshold >= secondThreshold) {
+				baseList.add(new Pair<>(node, "The first threshold should be strictly lower than the second one"));
+			}
+			return baseList;
+		} else if (node instanceof final Tier3FunctionASTNode sCurveFunctionASTNode) {
+			List<Pair<ASTNode, String>> baseList = validate(sCurveFunctionASTNode.getTarget());
+			final double firstThreshold = sCurveFunctionASTNode.getLow().doubleValue();
+			final double secondThreshold = sCurveFunctionASTNode.getMid().doubleValue();
 			if (firstThreshold >= secondThreshold) {
 				baseList.add(new Pair<>(node, "The first threshold should be strictly lower than the second one"));
 			}

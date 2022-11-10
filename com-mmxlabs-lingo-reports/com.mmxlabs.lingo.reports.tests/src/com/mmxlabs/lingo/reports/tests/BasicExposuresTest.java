@@ -36,6 +36,7 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
+import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
@@ -179,6 +180,9 @@ public class BasicExposuresTest {
 				{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 1", "SHIFT(HH,1)", "HH", single(calcExpected("HH", YearMonth.of(2016, 3), 6, 1, 6)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 2", "SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+				{ "Var HH - Shift 2", "#A=HH ; SHIFT(#A,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+
+				{ "HH[m-2]", "HH[m-2]", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 				{ "50% HH - Shift 2", "50%SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 0.5, 0.5 * 5)),
 						indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
@@ -239,6 +243,26 @@ public class BasicExposuresTest {
 								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2016, 1), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
 
 				{ "DatedAvg 6,0,1 ", "DATEDAVG(Brent,6,0,1)", "Brent", multi(//
+						calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 3), 56.26, 1.0 / 6.0) //
+				), //
+						indicesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "Brent[6,0,1] ", "Brent[6,0,1]", "Brent", multi(//
+						calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 6.0), //
+						calcExpected("Brent", YearMonth.of(2016, 3), 56.26, 1.0 / 6.0) //
+				), //
+						indicesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "Brent[601] ", "Brent[601]", "Brent", multi(//
 						calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
 						calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
 						calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
@@ -323,8 +347,17 @@ public class BasicExposuresTest {
 						) //
 				}, //
 
+				// Specific month pricing. More tests in ExpressionPriceTests
+				{ "HH[Feb] ", "HH[Feb]", "HH", single(//
+						calcExpected("HH", YearMonth.of(2016, 2), 2, 1.0) //
+				), //
+						indicesOf(//
+								makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)) }, //
+
 		});
 	}
+//	
+//	{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 	public static Collection generateTestsWithDay() {
 		return Arrays.asList(new Object[][] { //

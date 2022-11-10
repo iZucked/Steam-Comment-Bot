@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * All rights reserved.
+ */
 package com.mmxlabs.common.parser.astnodes;
 
 import java.util.Collections;
@@ -37,7 +41,10 @@ public final class MinusASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		return String.format("-(%s)", expression.asString());
+		if (expression instanceof OperatorASTNode) {
+			return String.format("-(%s)", expression.asString());
+		}
+		return String.format("-%s", expression.asString());
 	}
 
 	@Override

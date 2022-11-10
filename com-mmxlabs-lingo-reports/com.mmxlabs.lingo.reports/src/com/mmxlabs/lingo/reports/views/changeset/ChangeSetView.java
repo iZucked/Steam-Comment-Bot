@@ -321,11 +321,11 @@ public class ChangeSetView extends ViewPart {
 
 	private ViewState currentViewState = null;
 
-	private GridTreeViewer viewer;
+	public GridTreeViewer viewer;
 
-	private ScenarioComparisonService scenarioComparisonService;
+	public ScenarioComparisonService scenarioComparisonService;
 
-	private ChangeSetViewColumnHelper columnHelper;
+	public ChangeSetViewColumnHelper columnHelper;
 
 	private final ISelectedScenariosServiceListener listener = new ISelectedScenariosServiceListener() {
 
@@ -370,10 +370,10 @@ public class ChangeSetView extends ViewPart {
 	private boolean showUserFilterMenus = false;
 	private boolean showNegativePNLChanges = true;
 
-	private final class ViewUpdateRunnable implements Runnable {
+	public final class ViewUpdateRunnable implements Runnable {
 		private final ViewState newViewState;
 
-		private ViewUpdateRunnable(final ViewState newViewState) {
+		public ViewUpdateRunnable(final ViewState newViewState) {
 			this.newViewState = newViewState;
 		}
 

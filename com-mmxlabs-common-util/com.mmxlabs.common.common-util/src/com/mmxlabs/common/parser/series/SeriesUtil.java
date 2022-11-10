@@ -5,11 +5,31 @@
 package com.mmxlabs.common.parser.series;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class SeriesUtil {
+
+	public static final int[] mergeChangePoints(ISeries... arguments) {
+
+		int[] accumulator = new int[0];
+		for (final ISeries argument : arguments) {
+			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
+		}
+		return accumulator;
+	}
+
+	public static final int[] mergeChangePoints(Collection<ISeries> arguments) {
+
+		int[] accumulator = new int[0];
+		for (final ISeries argument : arguments) {
+			accumulator = SeriesUtil.mergeChangePoints(accumulator, argument.getChangePoints());
+		}
+		return accumulator;
+	}
+
 	public static final int[] mergeChangePoints(final int[] a, final int[] b) {
 		int ia = 0;
 		int ib = 0;
@@ -82,7 +102,8 @@ public class SeriesUtil {
 		if (pos >= 0) {
 			return pos;
 		}
-		// If negative, then convert to the index at which we would insert the item to keep sorted
+		// If negative, then convert to the index at which we would insert the item to
+		// keep sorted
 		final int insertionIndex = (-pos) - 1;
 		// Subtract one for floor
 		final int pos2 = insertionIndex - 1;

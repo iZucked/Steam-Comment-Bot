@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +18,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.astnodes.ASTNode;
 
 public class SeriesParserChangePointsTests {
 
@@ -49,6 +48,11 @@ public class SeriesParserChangePointsTests {
 		data.setShiftMapper((a, b) -> a);
 		// Assume 30 day month
 		data.setCalendarMonthMapper(new CalendarMonthMapper() {
+
+			@Override
+			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+				return point;
+			}
 
 			@Override
 			public int mapMonthToChangePoint(final int currentChangePoint) {

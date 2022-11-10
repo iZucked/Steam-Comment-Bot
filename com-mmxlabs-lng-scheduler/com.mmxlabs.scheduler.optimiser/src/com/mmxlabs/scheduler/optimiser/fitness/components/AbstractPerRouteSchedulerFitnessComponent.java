@@ -30,7 +30,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 
 	protected ProfitAndLossSequences profitAndLossSequences;
 
-	public AbstractPerRouteSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
+	protected AbstractPerRouteSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super(name, core);
 	}
 
