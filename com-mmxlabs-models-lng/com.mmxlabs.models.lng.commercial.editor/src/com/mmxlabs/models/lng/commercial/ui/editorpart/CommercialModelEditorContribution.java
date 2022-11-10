@@ -48,23 +48,23 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 	@Override
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
-		
 
 		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterMarketEditorPane = new CharterMarketEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		
-
-		purchaseContractEditorPane.createControl(sash);
-		salesContractEditorPane.createControl(sash);
-		charterMarketEditorPane.createControl(sash);
+		final SashForm contractSash = new SashForm(sash, SWT.VERTICAL);
+		purchaseContractEditorPane.createControl(contractSash);
+		salesContractEditorPane.createControl(contractSash);
+		final SashForm nonContractSash = new SashForm(sash, SWT.VERTICAL);
+		final SashForm charterTermsEntitiesSash = new SashForm(nonContractSash, SWT.HORIZONTAL);
+		charterMarketEditorPane.createControl(charterTermsEntitiesSash);
+		entityEditorPane.createControl(charterTermsEntitiesSash);
 		
-		final SashForm entitySash = new SashForm(sash, SWT.VERTICAL);
-		entityEditorPane.createControl(entitySash);
 		if (processTransferModel) {
 			transferAgreementsEditorPane = new TransferAgreementsViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			transferAgreementsEditorPane.createControl(entitySash);
+			transferAgreementsEditorPane.createControl(nonContractSash);
 			final EditingDomain domain = editorPart.getEditingDomain();
 			if (domain != null) {
 				transferAgreementsEditorPane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel(),
