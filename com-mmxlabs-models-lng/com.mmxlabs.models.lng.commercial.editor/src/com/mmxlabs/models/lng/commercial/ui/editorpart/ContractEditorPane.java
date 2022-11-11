@@ -9,6 +9,9 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -48,6 +51,18 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getContract_Counterparty(),  getCommandHandler()));
 
 		defaultSetTitle("Contracts");
+		
+		final ToolBarManager toolbar = getToolBarManager();
+		final ActionContributionItem filter = filterField.getContribution();
+		if (toolbar != null && filter != null) {
+			toolbar.remove(filter);
+			toolbar.update(true);
+		}
+	}
+	
+	@Override
+	protected Action createCopyToClipboardAction() {
+		return null;
 	}
 
 	/*

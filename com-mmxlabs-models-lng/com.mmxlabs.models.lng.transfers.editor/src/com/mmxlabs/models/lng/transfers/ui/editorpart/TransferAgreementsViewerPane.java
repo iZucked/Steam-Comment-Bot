@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -53,12 +55,6 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 		super.defaultSetTitle("Transfer agreements");
-
-		{
-			getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, createAddAction());
-		}
-		
-		getToolBarManager().update(true);
 		
 		addNameManipulator("Name");
 		addTypicalColumn("From", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
@@ -71,10 +67,18 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 				getCommandHandler()));
 		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
 				getCommandHandler()));
+		
+		final ToolBarManager toolbar = getToolBarManager();
+		final ActionContributionItem filter = filterField.getContribution();
+		if (toolbar != null && filter != null) {
+			toolbar.remove(filter);
+			toolbar.update(true);
+		}
 
 	}
 
-	private Action createAddAction() {
+	@Override
+	protected Action createAddAction(final EReference containment) {
 		addAction = new RunnableAction("Add", CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), () -> {
 			final CompoundCommand cmd = new CompoundCommand("New transfer agreement");
 			final TransferAgreement ta = TransfersFactory.eINSTANCE.createTransferAgreement();
@@ -98,6 +102,11 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 	
 	@Override
 	protected Action createDuplicateAction() {
+		return null;
+	}
+	
+	@Override
+	protected Action createCopyToClipboardAction() {
 		return null;
 	}
 }
