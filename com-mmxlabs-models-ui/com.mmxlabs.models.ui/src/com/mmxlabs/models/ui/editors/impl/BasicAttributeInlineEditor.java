@@ -235,15 +235,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		currentlySettingValue = true;
 
-		final Runnable runnable = new Runnable() {
-
-			@Override
-			public void run() {
-
-				updateDisplay(getValue());
-				currentlySettingValue = false;
-			}
-
+		final Runnable runnable = () -> {
+			updateDisplay(getValue());
+			currentlySettingValue = false;
 		};
 		RunnerHelper.runNowOrAsync(runnable);
 	}
@@ -390,8 +384,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			}
 		}
-		if (status instanceof IDetailConstraintStatus) {
-			final IDetailConstraintStatus element = (IDetailConstraintStatus) status;
+		if (status instanceof final IDetailConstraintStatus element) {
 
 			final Collection<EObject> objects = element.getObjects();
 			if (objects.contains(input)) {
@@ -427,12 +420,12 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		if (input == null) {
 			return null;
 		}
-		if (typedElement instanceof EStructuralFeature f) {
+		if (typedElement instanceof final EStructuralFeature f) {
 			return input.eGet(f);
-		} else if (typedElement instanceof EOperation operation) {
+		} else if (typedElement instanceof final EOperation operation) {
 			try {
 				return input.eInvoke(operation, null);
-			} catch (InvocationTargetException e) {
+			} catch (final InvocationTargetException e) {
 				LOG.error(e.getMessage());
 			}
 		}
