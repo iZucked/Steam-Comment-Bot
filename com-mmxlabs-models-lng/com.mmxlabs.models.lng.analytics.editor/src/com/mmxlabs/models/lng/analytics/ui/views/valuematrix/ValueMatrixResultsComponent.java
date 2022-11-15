@@ -128,7 +128,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 						if (SHOW_ALTERNATIVES && row.hasAlternative) {
 							cell.setText(String.format("%.2f/%.2f", row.value, row.alternative));
 						} else {
-						cell.setText(String.format("%.2f", row.value));
+							cell.setText(String.format("%.2f", row.value));
 						}
 					} else {
 						cell.setText("");
@@ -230,57 +230,34 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					}
 				}
 			});
-			gvc.setEditingSupport(new EditingSupport(valueMatrixViewer) {
-				
-				@Override
-				protected void setValue(Object element, Object value) {
-				}
-				
-				@Override
-				protected Object getValue(Object element) {
-					return null;
-				}
-				
-				@Override
-				protected CellEditor getCellEditor(Object element) {
-					if (element instanceof @NonNull final SwapValueMatrixResult[] resultArr) {
-						final SwapValueMatrixResult result = resultArr[pIndex];
-						final List<SummaryRow> rows = buildSummaryRows(result);
-						summaryTableViewer.setInput(rows);
-						summaryTableViewer.refresh();
-						for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
-							col.pack();
-						}
-						summaryComposite.redraw();
-						summaryComposite.requestLayout();
-						summaryComposite.layout();
-						summaryComposite.setVisible(true);
-					}
-					return null;
-				}
-				
-				@Override
-				protected boolean canEdit(Object element) {
-					return true;
-				}
-			});
 			++index;
 		}
-		valueMatrixViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				final ISelection selection = event.getSelection();
-				if (selection instanceof CellSelection cellSelection) {
-					cellSelection.getFirstElement();
-					if (cellSelection.isEmpty() || cellSelection.size() > 2) {
-						summaryComposite.setVisible(false);
-						return;
+		valueMatrixViewer.addSelectionChangedListener(event -> {
+			final ISelection selection = event.getSelection();
+			boolean showSummary = false;
+			if (selection instanceof CellSelection cellSelection && cellSelection.size() == 1) {
+				final Object firstElement = cellSelection.getFirstElement();
+				final List<?> selectedIndices = cellSelection.getIndices(firstElement);
+				if (firstElement instanceof SwapValueMatrixResult[] resultArr && selectedIndices.size() == 1) {
+					final int arrIndex = (int) selectedIndices.get(0);
+					final SwapValueMatrixResult result = resultArr[arrIndex];
+					final List<SummaryRow> rows = buildSummaryRows(result);
+					summaryTableViewer.setInput(rows);
+					summaryTableViewer.refresh();
+					summaryComposite.redraw();
+					summaryComposite.requestLayout();
+					summaryComposite.layout();
+					for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
+						col.pack();
 					}
-				} else {
-					summaryComposite.setVisible(false);
+					summaryTableViewer.refresh();
+					summaryComposite.redraw();
+					summaryComposite.requestLayout();
+					summaryComposite.layout();
+					showSummary = true;
 				}
 			}
+			summaryComposite.setVisible(showSummary);
 		});
 	}
 
@@ -339,8 +316,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Load vol";
 			row.empty = false;
 			row.units = "tBtu";
-			row.value = result.getSwapFobLoadVolume()/VOL_SCALEDOWN_FACTOR;
-			row.alternative = result.getBaseFobLoadVolume()/VOL_SCALEDOWN_FACTOR;
+			row.value = result.getSwapFobLoadVolume() / VOL_SCALEDOWN_FACTOR;
+			row.alternative = result.getBaseFobLoadVolume() / VOL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -348,7 +325,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Buy vol";
 			row.empty = false;
 			row.units = "tBtu";
-			row.value = result.getMarketBuyVolume()/VOL_SCALEDOWN_FACTOR;
+			row.value = result.getMarketBuyVolume() / VOL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -357,8 +334,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Sell vol";
 			row.empty = false;
 			row.units = "tBtu";
-			row.value = result.getMarketSellVolume()/VOL_SCALEDOWN_FACTOR;
-			row.alternative = result.getBaseDesSellVolume()/VOL_SCALEDOWN_FACTOR;
+			row.value = result.getMarketSellVolume() / VOL_SCALEDOWN_FACTOR;
+			row.alternative = result.getBaseDesSellVolume() / VOL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -366,7 +343,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Optimised vol";
 			row.empty = false;
 			row.units = "tBtu";
-			row.value = (result.getMarketSellVolume() - result.getMarketBuyVolume())/VOL_SCALEDOWN_FACTOR;
+			row.value = (result.getMarketSellVolume() - result.getMarketBuyVolume()) / VOL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -374,7 +351,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Optimised val";
 			row.empty = false;
 			row.units = "$m";
-			row.value = ((result.getMarketSellVolume() - result.getMarketBuyVolume()) * (result.getSwapMarketPrice() - result.getBaseDischargePrice()))/PNL_SCALEDOWN_FACTOR;
+			row.value = ((result.getMarketSellVolume() - result.getMarketBuyVolume()) * (result.getSwapMarketPrice() - result.getBaseDischargePrice())) / PNL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -395,7 +372,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.rowHeader = "Additional cost";
 			row.empty = false;
 			row.units = "$m";
-			row.value = -1 * ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getMarketBuyVolume()/PNL_SCALEDOWN_FACTOR;
+			row.value = -1 * ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getMarketBuyVolume() / PNL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		{
@@ -409,7 +386,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.empty = false;
 			row.units = "$m";
 			row.value = (((result.getMarketSellVolume() - result.getMarketBuyVolume()) * (result.getSwapMarketPrice() - result.getBaseDischargePrice()))
-					- ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getMarketBuyVolume())/PNL_SCALEDOWN_FACTOR;
+					- ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getMarketBuyVolume()) / PNL_SCALEDOWN_FACTOR;
 			rows.add(row);
 		}
 		return rows;
