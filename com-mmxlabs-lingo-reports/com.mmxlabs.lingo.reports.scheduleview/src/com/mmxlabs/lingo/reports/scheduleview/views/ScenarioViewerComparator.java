@@ -19,10 +19,15 @@ import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 
 /**
- * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
- * this; {@link Mode#STACK} will show multiple scenarios in sequence. {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios side-by-side.
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
+ * Implementation sort vessels alphabetically grouped into fleet and spot
+ * vessels. There are currently two sort modes on top of this;
+ * {@link Mode#STACK} will show multiple scenarios in sequence.
+ * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
+ * side-by-side.
  * 
  * @author Simon Goodall
  * 
@@ -110,6 +115,9 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				element = combinedSequence.getSequences().get(0);
 			}
 		}
+		if (element instanceof PositionsSequence ps) {
+			return ps.getSchedule().hashCode();
+		}
 
 		// Use hashcode of resource as sort key
 		if (element instanceof EObject eObj) {
@@ -181,6 +189,9 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			}
 		} else if (obj instanceof InventoryEvents) {
 			return Type.INVENTORY;
+		} else if (obj instanceof PositionsSequence p) {
+			return Type.DES ;
+//			return p.isBuy() ? Type.DES : Type.FOB;
 		}
 		return Type.FLEET;
 	}

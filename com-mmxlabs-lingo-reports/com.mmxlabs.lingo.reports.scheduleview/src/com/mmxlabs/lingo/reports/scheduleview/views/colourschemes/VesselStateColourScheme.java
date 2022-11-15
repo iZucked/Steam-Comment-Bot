@@ -7,7 +7,11 @@ package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
@@ -26,8 +30,11 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.MultiEvent;
 
 public class VesselStateColourScheme extends ColourScheme {
 
@@ -43,6 +50,18 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public Color getBackground(final Object element) {
+
+		OpenOrNonShippedType classification = classify(element);
+		if (classification != null) {
+			if (!classification.fob() || classification.multi()) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+			} else if (classification.open() && !classification.optional()) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+			} else {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
+			}
+		}
+
 		if (element instanceof Journey journey) {
 			if (journey.isLaden()) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
@@ -121,7 +140,39 @@ public class VesselStateColourScheme extends ColourScheme {
 	}
 
 	@Override
+	public SpecialDrawModes getSpecialDrawMode(final Object element) {
+		OpenOrNonShippedType classification = classify(element);
+		if (classification != null) {
+			if (classification.multi()) {
+				if (classification.fob() && classification.des()) {
+					return SpecialDrawModes.THREE_DOTS_WITH_BORDER;
+				} else if (classification.fob()) {
+					return SpecialDrawModes.THREE_DOTS_NO_BORDER;
+				} else {
+					return SpecialDrawModes.ONE_DOT_WITH_BORDER;
+				}
+			} else {
+				if (classification.fob()) {
+					return SpecialDrawModes.SOLID;
+				} else {
+					return SpecialDrawModes.BORDER_ONLY;
+				}
+			}
+		}
+		return SpecialDrawModes.NONE;
+	}
+
+	@Override
 	public Color getBorderColour(final Object element) {
+
+		OpenOrNonShippedType classification = classify(element);
+		if (classification != null) {
+			if (classification.open() && !classification.optional()) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+			} else {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
+			}
+		}
 
 		if (element instanceof Event event) {
 			if (isLocked(event)) {
@@ -133,13 +184,6 @@ public class VesselStateColourScheme extends ColourScheme {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
-			if (event instanceof SlotVisit sv) {
-				if (ColourSchemeUtil.isFOBSaleCargo(sv)) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.FOB_Sale, ColourElements.Border);
-				} else if (ColourSchemeUtil.isDESPurchaseCargo(sv)) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.DES_Purchase, ColourElements.Border);
-				}
-			}
 		}
 
 		return null;
@@ -148,15 +192,55 @@ public class VesselStateColourScheme extends ColourScheme {
 	@Override
 	public int getBorderWidth(final Object element) {
 
-		if (element instanceof Event event) {
-			if (event instanceof SlotVisit sv) {
-				if (ColourSchemeUtil.isFOBSaleCargo(sv) || ColourSchemeUtil.isDESPurchaseCargo(sv)) {
-					return 2;
+		return 1;
+	}
+
+	private static record OpenOrNonShippedType(boolean multi, boolean fob, boolean des, boolean buy, boolean optional, boolean open) {
+	}
+
+	private @Nullable OpenOrNonShippedType classify(Object element) {
+		if (element instanceof MultiEvent multiEvent) {
+			boolean fob = false;
+			boolean des = false;
+			boolean buy = false;
+			boolean sell = false;
+			boolean compulsary = false;
+			boolean open = false;
+			for (Object e : multiEvent.getElements()) {
+				OpenOrNonShippedType t = classify(e);
+				fob |= t.fob();
+				des |= !t.fob();
+
+				buy |= t.buy();
+				sell |= !t.buy();
+
+				compulsary |= t.open() && !t.optional();
+				open |= t.open();
+			}
+			// Can't have mixed buy and sell in the same event/row
+			assert !(buy && sell);
+
+			return new OpenOrNonShippedType(true, fob, des, buy, !compulsary, open);
+		} else if (element instanceof OpenSlotAllocation sa) {
+			if (sa.getSlot() != null) {
+				if (sa.getSlot() instanceof LoadSlot s) {
+					return new OpenOrNonShippedType(false, !s.isDESPurchase(), s.isDESPurchase(), true, s.isOptional(), true);
+				} else if (sa.getSlot() instanceof DischargeSlot s) {
+					return new OpenOrNonShippedType(false, s.isFOBSale(), !s.isFOBSale(), false, s.isOptional(), true);
 				}
-			} else if (isLocked(event)) {
-				return 1;
 			}
 		}
-		return 1;
+
+		if (element instanceof SlotVisit sv) {
+			if (ColourSchemeUtil.isFOBSaleCargo(sv)) {
+				boolean buy = sv.getSlotAllocation().getSlotAllocationType() == SlotAllocationType.PURCHASE;
+				return new OpenOrNonShippedType(false, true, false, buy, sv.getSlotAllocation().getSlot().isOptional(), false);
+			} else if (ColourSchemeUtil.isDESPurchaseCargo(sv)) {
+				boolean buy = sv.getSlotAllocation().getSlotAllocationType() == SlotAllocationType.PURCHASE;
+				return new OpenOrNonShippedType(false, false, true, buy, sv.getSlotAllocation().getSlot().isOptional(), false);
+			}
+		}
+
+		return null;
 	}
 }

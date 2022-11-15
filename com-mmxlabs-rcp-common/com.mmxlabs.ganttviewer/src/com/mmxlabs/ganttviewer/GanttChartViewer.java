@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -30,6 +31,7 @@ import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.IGanttEventListener;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
+import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
@@ -41,9 +43,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A {@link Viewer} implementation to wrap around a {@link GanttChart} with the aim of showing schedules. Content providers should implement {@link IGanttChartContentProvider} to pass in
- * {@link Calendar} objects for start and end dates. Label providers should implement {@link IGanttChartToolTipProvider} if {@link AdvancedTooltip}s are required. If the {@link GanttEvent} colour
- * needs changing, then the label provider should implement {@link IColorProvider}.
+ * A {@link Viewer} implementation to wrap around a {@link GanttChart} with the
+ * aim of showing schedules. Content providers should implement
+ * {@link IGanttChartContentProvider} to pass in {@link Calendar} objects for
+ * start and end dates. Label providers should implement
+ * {@link IGanttChartToolTipProvider} if {@link AdvancedTooltip}s are required.
+ * If the {@link GanttEvent} colour needs changing, then the label provider
+ * should implement {@link IColorProvider}.
  * 
  * @author Simon Goodall
  * 
@@ -165,10 +171,10 @@ public class GanttChartViewer extends StructuredViewer {
 		return getSelectionFromObjects(ganttChart.getGanttComposite().getSelectedEvents());
 	}
 
-	private List<Object> getSelectionFromObjects(final List<GanttEvent> allSelectedEvents) {
+	protected List<Object> getSelectionFromObjects(final List<GanttEvent> allSelectedEvents) {
 
 		// Use reverse map to get underlying objects
-		final List<Object> selectedObjects = new ArrayList<Object>(allSelectedEvents.size());
+		final List<Object> selectedObjects = new ArrayList<>(allSelectedEvents.size());
 
 		for (final GanttEvent ge : allSelectedEvents) {
 
@@ -242,8 +248,7 @@ public class GanttChartViewer extends StructuredViewer {
 		final IContentProvider contentProvider = getContentProvider();
 		final ILabelProvider labelProvider = (ILabelProvider) getLabelProvider();
 
-		if (contentProvider instanceof ITreeContentProvider) {
-			final ITreeContentProvider treeContentProvider = (ITreeContentProvider) contentProvider;
+		if (contentProvider instanceof ITreeContentProvider treeContentProvider) {
 			final Object[] resources = treeContentProvider.getElements(getInput());
 
 			if (resources == null) {
@@ -261,7 +266,8 @@ public class GanttChartViewer extends StructuredViewer {
 			try {
 
 				final Map<Object, GanttEvent> eventMap = new HashMap<>();
-
+				ganttChart.getGanttComposite().setFixedRowHeightOverride(21);
+				ganttChart.getGanttComposite().setEventSpacerOverride(0);
 				for (final Object r : resources) {
 					final String rName = getLabelProviderText(labelProvider, r);
 					final GanttSection section = new GanttSection(ganttChart, rName);
@@ -280,7 +286,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 							final String cName = getLabelProviderText(labelProvider, c);
 							final Image image = getLabelProviderImage(labelProvider, c);
-							final String ganttGroup = getGanttGroup(treeContentProvider, c);
+							final String ganttGroup = null;// getGanttGroup(treeContentProvider, c);
 
 							// Get date/time information from content provider
 							final Calendar startDate = getEventStartDate(treeContentProvider, c);
@@ -296,7 +302,9 @@ public class GanttChartViewer extends StructuredViewer {
 								event = new GanttEvent(ganttChart, c, cName, startDate, endDate, 0);
 							}
 							eventMap.put(c, event);
-							event.setVerticalEventAlignment(SWT.CENTER);
+							int align = getLabelProviderAlign(contentProvider, event);
+
+							event.setVerticalEventAlignment(align);
 							event.setGanttSection(section);
 
 							if (image != null) {
@@ -318,6 +326,8 @@ public class GanttChartViewer extends StructuredViewer {
 							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
+							event.setSpecialDrawMode(getSpecialDrawMode(labelProvider, c));
+							
 							event.setHorizontalTextLocation(SWT.CENTER);
 
 							// Get tooltip from label provider
@@ -340,7 +350,7 @@ public class GanttChartViewer extends StructuredViewer {
 									g = ganttGroups.get(ganttGroup);
 								} else {
 									g = new GanttGroup(ganttChart);
-									g.setVerticalEventAlignment(SWT.CENTER);
+//									g.setVerticalEventAlignment(SWT.CENTER);
 									ganttGroups.put(ganttGroup, g);
 								}
 								g.addEvent(event);
@@ -354,8 +364,9 @@ public class GanttChartViewer extends StructuredViewer {
 						// expect only a single line of entries due to the group
 						section.setTextOrientation(SWT.HORIZONTAL);
 
-						// Include the default group if there are no special groups or if it has some content.
-						if (ganttGroups.isEmpty() || defaultGroup.getEventMembers().size() > 0) {
+						// Include the default group if there are no special groups or if it has some
+						// content.
+						if (ganttGroups.isEmpty() || !defaultGroup.getEventMembers().isEmpty()) {
 							section.addGanttEvent(defaultGroup);
 						}
 						// Add in the special groups
@@ -366,8 +377,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 					layer++;
 				}
-				if (contentProvider instanceof IGanttChartContentProvider) {
-					final IGanttChartContentProvider cp = (IGanttChartContentProvider) contentProvider;
+				if (contentProvider instanceof IGanttChartContentProvider cp) {
 
 					for (final Object c : eventMap.keySet()) {
 						final Object elementDependency = cp.getElementDependency(c);
@@ -392,14 +402,21 @@ public class GanttChartViewer extends StructuredViewer {
 		return null;
 	}
 
-	protected Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {
+	public Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IColorProvider) {
 			return ((IColorProvider) labelProvider).getBackground(c);
 		}
 		return null;
 	}
 
-	protected Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
+	public SpecialDrawModes getSpecialDrawMode(final ILabelProvider provider, final Object c) {
+		if (provider instanceof IGanttChartColourProvider p) {
+			return p.getSpecialDrawMode(c);
+		}
+		return SpecialDrawModes.NONE;
+	}
+
+	public Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getBorderColour(c);
 		}
@@ -422,8 +439,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 	private AdvancedTooltip getTooltip(final ILabelProvider labelProvider, final Object c) {
 
-		if (labelProvider instanceof IGanttChartToolTipProvider) {
-			final IGanttChartToolTipProvider toolTipProvider = (IGanttChartToolTipProvider) labelProvider;
+		if (labelProvider instanceof IGanttChartToolTipProvider toolTipProvider) {
 			final String title = toolTipProvider.getToolTipTitle(c);
 			final String text = toolTipProvider.getToolTipText(c);
 			final Image image = toolTipProvider.getToolTipImage(c);
@@ -439,15 +455,16 @@ public class GanttChartViewer extends StructuredViewer {
 	}
 
 	/**
-	 * Return the text for the element from the labelProvider. If it is null then return the empty String.
+	 * Return the text for the element from the labelProvider. If it is null then
+	 * return the empty String.
 	 * 
-	 * @param labelProvider
-	 *            ILabelProvider
+	 * @param labelProvider ILabelProvider
 	 * @param element
-	 * @return String. Return the emptyString if the labelProvider returns null for the text.
+	 * @return String. Return the emptyString if the labelProvider returns null for
+	 *         the text.
 	 * 
 	 */
-	private String getLabelProviderText(final ILabelProvider labelProvider, final Object element) {
+	private @NonNull String getLabelProviderText(final ILabelProvider labelProvider, final Object element) {
 		final String text = labelProvider.getText(element);
 		if (text == null) {
 			return "";//$NON-NLS-1$
@@ -463,41 +480,43 @@ public class GanttChartViewer extends StructuredViewer {
 		return image;
 	}
 
+	private int getLabelProviderAlign(final IContentProvider contentProvider, final Object element) {
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
+			return gcProvider.getEventAlignment(element);
+		}
+		return SWT.CENTER;
+	}
+
 	private boolean isVisibleByDefault(final IContentProvider contentProvider, final Object resource) {
-		if (contentProvider instanceof IGanttChartContentProvider) {
-			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
 			return gcProvider.isVisibleByDefault(resource);
 		}
 		return true;
 	}
 
 	private Calendar getEventStartDate(final IContentProvider contentProvider, final Object element) {
-		if (contentProvider instanceof IGanttChartContentProvider) {
-			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
 			return gcProvider.getElementStartTime(element);
 		}
 		return null;
 	}
 
 	private Calendar getEventEndDate(final IContentProvider contentProvider, final Object element) {
-		if (contentProvider instanceof IGanttChartContentProvider) {
-			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
 			return gcProvider.getElementEndTime(element);
 		}
 		return null;
 	}
 
 	private Calendar getEventPlannedStartDate(final IContentProvider contentProvider, final Object element) {
-		if (contentProvider instanceof IGanttChartContentProvider) {
-			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
 			return gcProvider.getElementPlannedStartTime(element);
 		}
 		return null;
 	}
 
 	private Calendar getEventPlannedEndDate(final IContentProvider contentProvider, final Object element) {
-		if (contentProvider instanceof IGanttChartContentProvider) {
-			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+		if (contentProvider instanceof IGanttChartContentProvider gcProvider) {
 			return gcProvider.getElementPlannedEndTime(element);
 		}
 		return null;

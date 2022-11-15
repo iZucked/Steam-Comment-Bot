@@ -77,8 +77,7 @@ public class ScheduleSequenceData {
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
 
-				if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				if (event instanceof Journey journey) {
 					usedCanalBookings.add(journey.getCanalBooking());
 				}
 
@@ -94,8 +93,7 @@ public class ScheduleSequenceData {
 				}
 				// Event window data
 				{
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
+					if (event instanceof SlotVisit slotVisit) {
 						final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 
 						final LocalDate sWDate = verticalReportVisualiser.getLocalDateFor(slot.getSchedulingTimeWindow().getStart());

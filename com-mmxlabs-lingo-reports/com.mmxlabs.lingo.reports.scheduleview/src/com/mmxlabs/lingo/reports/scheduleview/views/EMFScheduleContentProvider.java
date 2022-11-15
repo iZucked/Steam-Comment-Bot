@@ -21,8 +21,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
+import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -36,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -43,6 +47,8 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
+import com.mmxlabs.models.lng.schedule.util.MultiEvent;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -65,7 +71,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	}
 
 	@Override
-	public Object @Nullable[] getChildren(final Object parent) {
+	public Object @Nullable [] getChildren(final Object parent) {
 
 		if (parent instanceof final Collection<?> collection) {
 			final List<Object> result = new ArrayList<>();
@@ -82,8 +88,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					while (!unassigned.isEmpty()) {
 						@NonNull
 						final Sequence thisSequence = unassigned.get(0);
-						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselCharter().getVessel().equals(thisSequence.getVesselCharter().getVessel()))
-								.toList();
+						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselCharter().getVessel().equals(thisSequence.getVesselCharter().getVessel())).toList();
 						chartersMap.put(thisSequence.getVesselCharter().getVessel(), matches);
 						unassigned.removeAll(matches);
 					}
@@ -93,6 +98,12 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						if (
 						// seq.getSequenceType() == SequenceType.ROUND_TRIP ||
 						seq.getSequenceType() == SequenceType.VESSEL) {
+							continue;
+						}
+						if (seq.getSequenceType() == SequenceType.DES_PURCHASE) {
+							continue;
+						}
+						if (seq.getSequenceType() == SequenceType.FOB_SALE) {
 							continue;
 						}
 						result.add(seq);
@@ -111,8 +122,18 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
 					// result.add(inventory);
 					// }
+					PositionsSequence buys = PositionsSequence.makeBuySequence(schedule);
+					PositionsSequence sells = PositionsSequence.makeSellSequence(schedule);
+					if (!buys.getElements().isEmpty()) {
+						result.add(buys);
+					}
+					if (!sells.getElements().isEmpty()) {
+						result.add(sells);
+					}
 				}
+//				result.addAll(Schedule)
 			}
+
 			return result.toArray();
 		} else if (parent instanceof final Schedule schedule) {
 			final EList<Sequence> sequences = schedule.getSequences();
@@ -122,12 +143,20 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
 					// continue;
 				}
+				if (seq.getSequenceType() == SequenceType.DES_PURCHASE) {
+					continue;
+				}
+				if (seq.getSequenceType() == SequenceType.FOB_SALE) {
+					continue;
+				}
 				seqs.add(seq);
 			}
 			// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
 			// seqs.add(inventory);
 			// }
 			return seqs.toArray();
+		} else if (parent instanceof final PositionsSequence sequence) {
+			return sequence.getElements().toArray();
 		} else if (parent instanceof final Sequence sequence) {
 			final EList<Event> events = sequence.getEvents();
 
@@ -233,13 +262,40 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	}
 
 	@Override
+	public int getEventAlignment(Object element) {
+		if (element instanceof OpenSlotAllocation sa) {
+			return SWT.CENTER;
+
+		}
+//			return sa.getSlot() instanceof LoadSlot ? SWT.BOTTOM : SWT.TOP;
+//		} else 
+//			
+		if (element instanceof GanttEvent ge) {
+			element = ge.getData();
+		}
+
+		if (element instanceof SlotVisit sv) {
+			if (sv.getSlotAllocation().getCargoAllocation().getCargoType() != CargoType.FLEET) {
+				if (sv.getSlotAllocation().getSlot() instanceof LoadSlot) {
+					return SWT.BOTTOM;
+				} else {
+					return SWT.TOP;
+				}
+//				return "Open";
+			}
+		}
+		return SWT.CENTER;
+	}
+
+	@Override
 	public Object getParent(final Object element) {
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return (element instanceof Sequence) || (element instanceof Schedule) || (element instanceof CombinedSequence) || (element instanceof InventoryEvents);
+		return (element instanceof Sequence) || (element instanceof Schedule) || (element instanceof CombinedSequence) || (element instanceof InventoryEvents)
+				|| (element instanceof PositionsSequence);
 	}
 
 	@Override
@@ -254,8 +310,12 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public Calendar getElementStartTime(final Object element) {
-		if (element instanceof final Event event) {
+		if (element instanceof final MultiEvent event) {
+			return getElementStartTime(event.getElements().get(0));
+		} else if (element instanceof final Event event) {
 			return GregorianCalendar.from(event.getStart());
+		} else if (element instanceof final OpenSlotAllocation event) {
+			return GregorianCalendar.from(event.getSlot().getSchedulingTimeWindow().getStart());
 		} else if (element instanceof final InventoryChangeEvent event) {
 			return GregorianCalendar.from(event.getDate().atZone(ZoneId.of("UTC")));
 		}
@@ -264,8 +324,12 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public Calendar getElementEndTime(final Object element) {
-		if (element instanceof final Event event) {
+		if (element instanceof final MultiEvent event) {
+			return getElementEndTime(event.getElements().get(0));
+		} else if (element instanceof final Event event) {
 			return GregorianCalendar.from(event.getEnd());
+		} else if (element instanceof final OpenSlotAllocation event) {
+			return GregorianCalendar.from(event.getSlot().getSchedulingTimeWindow().getStart());
 		} else if (element instanceof final InventoryChangeEvent event) {
 			return GregorianCalendar.from(event.getDate().plusDays(1).atZone(ZoneId.of("UTC")));
 		}
@@ -306,6 +370,15 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	 */
 	@Override
 	public String getGroupIdentifier(final Object element) {
+
+		if (element instanceof OpenSlotAllocation sa) {
+			return "Open";
+		} else if (element instanceof SlotVisit sv) {
+
+			if (sv.getSlotAllocation().getCargoAllocation().getCargoType() != CargoType.FLEET) {
+				return "Open";
+			}
+		}
 
 		Sequence sequence = null;
 		if (element instanceof final CanalJourneyEvent event) {

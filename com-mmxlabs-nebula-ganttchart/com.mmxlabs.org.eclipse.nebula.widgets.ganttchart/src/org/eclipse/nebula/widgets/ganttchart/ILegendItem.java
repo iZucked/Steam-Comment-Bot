@@ -11,4 +11,6 @@ public interface ILegendItem {
 	String getDescription();
 
 	Color[] getColours();
+	
+	Object getItem();
 }

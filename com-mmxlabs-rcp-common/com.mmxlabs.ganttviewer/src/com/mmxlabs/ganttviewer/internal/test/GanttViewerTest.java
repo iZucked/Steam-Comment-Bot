@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -92,7 +93,7 @@ public class GanttViewerTest {
 
 		int counter = 0;
 
-		Map<Object, Calendar> map = new HashMap<Object, Calendar>();
+		Map<Object, Calendar> map = new HashMap<>();
 
 		@Override
 		public Calendar getElementStartTime(final Object element) {
@@ -116,6 +117,12 @@ public class GanttViewerTest {
 			}
 		}
 
+		@Override
+		public int getEventAlignment(Object element) {
+			return SWT.CENTER;
+
+		}
+		
 		@Override
 		public Calendar getElementPlannedStartTime(final Object element) {
 			return null;

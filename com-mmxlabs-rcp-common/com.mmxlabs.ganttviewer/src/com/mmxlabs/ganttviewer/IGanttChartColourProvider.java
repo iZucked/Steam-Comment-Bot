@@ -5,6 +5,7 @@
 package com.mmxlabs.ganttviewer;
 
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
 import org.eclipse.swt.graphics.Color;
 
 /**
@@ -36,4 +37,6 @@ public interface IGanttChartColourProvider extends IColorProvider {
 	 * @return
 	 */
 	int getBorderWidth(Object element);
+
+	SpecialDrawModes getSpecialDrawMode(Object element);
 }
