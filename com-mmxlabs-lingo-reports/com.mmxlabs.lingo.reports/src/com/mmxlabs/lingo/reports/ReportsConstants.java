@@ -10,6 +10,7 @@ public final class ReportsConstants {
 	public static final String PERSPECTIVE_COMPARE_ID = "com.mmxlabs.lingo.reports.diff.DiffPerspective";
 
 	public static final String VIEW_COMPARE_SCENARIOS_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView";
+	public static final String VIEW_DATA_DIFF_SCENARIOS_ID = "com.mmxlabs.lingo.reports.views.multi.MultiView";
 
 	private ReportsConstants() {
 
