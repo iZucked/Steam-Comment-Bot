@@ -22,12 +22,15 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.timezone.ITimezoneProvider;
 import com.mmxlabs.common.timezone.impl.GoogleTimezoneProvider;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
+import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 
 /**
  * A component helper for Location instances
@@ -41,8 +44,21 @@ public class LocationComponentHelper extends DefaultComponentHelper {
 
 		ignoreFeatures.add(PortPackage.Literals.LOCATION__MMX_ID);
 
-		addEditor(PortPackage.Literals.LOCATION__TIME_ZONE, createTimeZoneEditor());
+		addEditor(PortPackage.Literals.LOCATION__TIME_ZONE, topClass -> new TimezoneInlineEditor(PortPackage.Literals.LOCATION__TIME_ZONE));
+	}
 
+	@Override
+	public IDisplayCompositeLayoutProvider createLayoutProvider() {
+
+		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
+				.withRow() //
+				.withLabel("Lat/Lon") //
+				.withFeature(PortPackage.Literals.LOCATION__LAT) //
+				.withFeature(PortPackage.Literals.LOCATION__LON) //
+				.makeRow() //
+				//
+				.make() //
+		;
 	}
 
 	/**
@@ -50,7 +66,8 @@ public class LocationComponentHelper extends DefaultComponentHelper {
 	 *
 	 * @generated NOT
 	 */
-	protected Function<EClass, IInlineEditor> createTimeZoneEditor() {
+	protected Function<EClass, IInlineEditor> createTimeZoneEditorWithLookupBuuton() {
+		// TODO: This also needs support from the layout code to include space.
 		return topClass -> new TimezoneInlineEditor(PortPackage.Literals.LOCATION__TIME_ZONE) {
 			@Override
 			public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {

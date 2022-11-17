@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.presentation.displaycomposites;
 
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
@@ -82,7 +83,7 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override
