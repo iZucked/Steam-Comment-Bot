@@ -654,7 +654,7 @@
 		}, {
 			"mmxId": "L_CN_Jiang",
 			"name": "Jiangsu",
-			"aliases": ["Nantong", "Rudong"],
+			"aliases": ["Nantong", "Rudong", "Qidong"],
 			"geographicPoint": {
 				"lat": 32.54999923706055,
 				"lon": 121.43000030517578,
