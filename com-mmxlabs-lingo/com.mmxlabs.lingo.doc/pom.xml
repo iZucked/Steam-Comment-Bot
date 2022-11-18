@@ -25,13 +25,22 @@
 						<repository>
 							<id>mmxlabs-releases</id>
 							<layout>p2</layout>
-							<url>http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202109151000/org.eclipse.release-202109151000.zip-unzip/</url>
+							<url>https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/</url>
 						</repository>
 					</repositories>
-					<!-- this is to fix some lucene 3.x compatibility issue -->
-					<argLine>-Declipse.p2.mirrors=false -Dhelp.lucene.tokenizer=standard</argLine>
-					<!-- actual indexer call - - do not wrap -->
-					<appArgLine>-application org.eclipse.ant.core.antRunner -buildfile customBuildCallbacks.xml post.build.jars</appArgLine>
+					<jvmArgs>
+						<!-- this is to fix some lucene 3.x compatibility issue -->
+						<arg>-Declipse.p2.mirrors=false</arg>
+						<arg>-Dhelp.lucene.tokenizer=standard</arg>
+					</jvmArgs>
+					<applicationArgs>
+						<!-- actual indexer call  -->
+						<arg>-application</arg>
+						<arg>org.eclipse.ant.core.antRunner</arg>
+						<arg>-buildfile</arg>
+						<arg>customBuildCallbacks.xml</arg>
+						<arg>post.build.jars</arg>
+					</applicationArgs>
 					<dependencies>
 						<!-- list of bundles that we need -->
 						<dependency>

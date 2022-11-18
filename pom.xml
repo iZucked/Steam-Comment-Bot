@@ -13,7 +13,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>51</version>
+		<version>52</version>
 	</parent>
 
 	<scm>
@@ -26,11 +26,6 @@
 		<system>Jenkins</system>
 		<url>http://build.mmxlabs.com/job/master/job/LiNGO-master/</url>
 	</ciManagement>
-
-	<properties>
-		<tycho-extras-version>2.6.0</tycho-extras-version>
-	    <tycho.version>2.6.0</tycho.version>
-	</properties>
 
 	<modules>
 		<module>com-mmxlabs-lingo-common-target</module>
@@ -88,13 +83,7 @@
 				<!-- Enable tycho packaging types -->
 				<extensions>true</extensions>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<configuration>
-					<release>17</release>
-				</configuration>
-			</plugin>
+		
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
