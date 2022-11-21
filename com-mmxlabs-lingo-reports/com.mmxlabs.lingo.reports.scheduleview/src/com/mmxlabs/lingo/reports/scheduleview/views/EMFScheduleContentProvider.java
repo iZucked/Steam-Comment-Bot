@@ -267,13 +267,27 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 			return SWT.CENTER;
 
 		}
-//			return sa.getSlot() instanceof LoadSlot ? SWT.BOTTOM : SWT.TOP;
-//		} else 
 //			
 		if (element instanceof GanttEvent ge) {
 			element = ge.getData();
 		}
 
+		// Only set align if all paired
+		if (element instanceof MultiEvent me) {
+			for (var e : me.getElements()) {
+				if (e instanceof SlotVisit sv) {
+					for (final SlotAllocation sa : sv.getSlotAllocation().getCargoAllocation().getSlotAllocations()) {
+						if ( sa.getSpotMarket() != null) {
+						return SWT.CENTER;
+						}
+					}
+				} else {
+					return SWT.CENTER;
+				}
+			}
+			element =  me.getElements().get(0);
+		}
+		
 		if (element instanceof SlotVisit sv) {
 			if (sv.getSlotAllocation().getCargoAllocation().getCargoType() != CargoType.FLEET) {
 
