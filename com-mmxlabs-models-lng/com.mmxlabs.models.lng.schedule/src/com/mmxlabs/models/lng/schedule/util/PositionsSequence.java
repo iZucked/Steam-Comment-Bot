@@ -52,6 +52,10 @@ public class PositionsSequence {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (ca.getCargoType() == CargoType.DES || ca.getCargoType() == CargoType.FOB) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
+					// Skip spot market slots
+					if (sa.getSpotMarket() != null) {
+						continue;
+					}
 					if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
 						final SlotVisit sv = sa.getSlotVisit();
 						collectedDates.computeIfAbsent(sv.getStart().toLocalDate(), k -> new LinkedList<>()).add(sv);
@@ -80,6 +84,10 @@ public class PositionsSequence {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (ca.getCargoType() == CargoType.DES || ca.getCargoType() == CargoType.FOB) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
+					// Skip spot market slots
+					if (sa.getSpotMarket() != null) {
+						continue;
+					}
 					if (sa.getSlotAllocationType() == SlotAllocationType.SALE) {
 						final SlotVisit sv = sa.getSlotVisit();
 						collectedDates.computeIfAbsent(sv.getStart().toLocalDate(), k -> new LinkedList<>()).add(sv);

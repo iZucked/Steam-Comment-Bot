@@ -276,10 +276,17 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 		if (element instanceof SlotVisit sv) {
 			if (sv.getSlotAllocation().getCargoAllocation().getCargoType() != CargoType.FLEET) {
-				if (sv.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return SWT.BOTTOM;
-				} else {
-					return SWT.TOP;
+
+				boolean isSpot = false;
+				for (final SlotAllocation sa : sv.getSlotAllocation().getCargoAllocation().getSlotAllocations()) {
+					isSpot |= sa.getSpotMarket() != null;
+				}
+				if (!isSpot) {
+					if (sv.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						return SWT.BOTTOM;
+					} else {
+						return SWT.TOP;
+					}
 				}
 //				return "Open";
 			}
