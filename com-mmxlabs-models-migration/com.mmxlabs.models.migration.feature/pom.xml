@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.mmxlabs.models.migration</groupId>
 		<artifactId>com.mmxlabs.models.migration.parent</artifactId>
-		<version>5.11.1.RELEASE</version>
+		<version>5.11.2-SNAPSHOT</version>
 	</parent>
 
 </project>
