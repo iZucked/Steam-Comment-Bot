@@ -14,20 +14,21 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.internal.CellSelection;
+import org.eclipse.nebula.widgets.grid.DataVisualizer;
+import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.events.IExpansionListener;
@@ -36,23 +37,25 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResult;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet;
-import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SandboxUIHelper;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+import com.mmxlabs.models.ui.tabular.renderers.CellAsRowHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 
 public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 
-	private final boolean SHOW_ALTERNATIVES = false;
+	private static final boolean SHOW_ALTERNATIVES = false;
 
-	private final double PNL_SCALEDOWN_FACTOR = 1_000_000.0;
-	private final double VOL_SCALEDOWN_FACTOR = 1_000_000.0;
-
-	protected SandboxUIHelper sandboxUIHelper;
+	private static final double PNL_SCALEDOWN_FACTOR = 1_000_000.0;
+	private static final double VOL_SCALEDOWN_FACTOR = 1_000_000.0;
 
 	private GridTableViewer valueMatrixViewer;
 	private GridTableViewer summaryTableViewer;
@@ -86,7 +89,6 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		summaryComposite = new Composite(resultsComposite, SWT.NONE);
 		summaryComposite.setLayout(GridLayoutFactory.swtDefaults().margins(20, 0).create());
 		summaryComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
-//		summaryComposite.setLayoutData
 
 		final GridTableViewer viewer = new GridTableViewer(summaryComposite, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(viewer);
@@ -103,11 +105,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			public void update(ViewerCell cell) {
 				final Object element = cell.getElement();
 				if (element instanceof @NonNull final SummaryRow row) {
-					if (!row.empty) {
-						cell.setText(row.rowHeader);
-					} else {
-						cell.setText("");
-					}
+					cell.setText(row.empty ? "" : row.rowHeader);
 				}
 			}
 		});
@@ -124,15 +122,15 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.setLabelProvider(new CellLabelProvider() {
 				@Override
 				public void update(ViewerCell cell) {
+					String cellText = "";
 					if (cell.getElement() instanceof @NonNull final SummaryRow row && !row.empty) {
 						if (SHOW_ALTERNATIVES && row.hasAlternative) {
-							cell.setText(String.format("%.2f/%.2f", row.value, row.alternative));
+							cellText = String.format("%.2f/%.2f", row.value, row.alternative);
 						} else {
-							cell.setText(String.format("%.2f", row.value));
+							cellText = String.format("%.2f", row.value);
 						}
-					} else {
-						cell.setText("");
 					}
+					cell.setText(cellText);
 				}
 			});
 		}
@@ -147,29 +145,13 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.setLabelProvider(new CellLabelProvider() {
 				@Override
 				public void update(ViewerCell cell) {
-					if (cell.getElement() instanceof @NonNull final SummaryRow row && !row.empty) {
-						cell.setText(row.units);
-					} else {
-						cell.setText("");
-					}
+					cell.setText(cell.getElement() instanceof @NonNull final SummaryRow row && !row.empty ? row.units : "");
 				}
 			});
 		}
 		matrixComposite.setVisible(true);
 		summaryComposite.setVisible(false);
-//		summaryTableViewer.getGrid().setVisible(false);
-//		final GridTreeViewer viewer = new GridTreeViewer(resultsComposite, SWT.NONE);
-//		ColumnViewerToolTipSupport.enableFor(viewer);
-//		
-//		GridViewerHelper.configureLookAndFeel(viewer);
-//		viewer.getGrid().setHeaderVisible(true);
-//		viewer.getGrid().setRowHeaderVisible(true);
-//
-//		viewer.getGrid().setCellSelectionEnabled(true);
-//		valueMatrixViewer = viewer;
-		inputWants.add(model -> {
-			refresh(model);
-		});
+		inputWants.add(this::refresh);
 		return resultsComposite;
 	}
 
@@ -179,23 +161,66 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 
 		GridViewerHelper.configureLookAndFeel(viewer);
 		viewer.getGrid().setHeaderVisible(true);
-		viewer.getGrid().setRowHeaderVisible(true);
 
 		viewer.getGrid().setCellSelectionEnabled(true);
 		viewer.setContentProvider(new ArrayContentProvider());
 		valueMatrixViewer = viewer;
-		viewer.setRowHeaderLabelProvider(new CellLabelProvider() {
+		viewer.getGrid().setRowHeaderVisible(false);
 
-			@Override
-			public void update(ViewerCell cell) {
-				final Object element = cell.getElement();
-				if (element instanceof @NonNull final SwapValueMatrixResult[] result) {
-					if (result.length > 0) {
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setTree(false);
+			GridViewerHelper.configureLookAndFeel(gvc);
+			gvc.getColumn().setText("");
+			gvc.getColumn().setWidth(40);
+			gvc.getColumn().setDetail(true);
+			gvc.getColumn().setSummary(true);
+			gvc.getColumn().setCellRenderer(new ValueMatrixRowGroupCellRenderer());
+			gvc.getColumn().setCellSelectionEnabled(false);
+			gvc.setLabelProvider(new CellLabelProvider() {
+				@Override
+				public void update(ViewerCell cell) {
+					if (valueMatrixViewer.getInput() instanceof Object[] results && results.length > 0) {
+						final int numRows = results.length;
+						final DataVisualizer dv = valueMatrixViewer.getGrid().getDataVisualizer();
+						final GridItem item = (GridItem) cell.getItem();
+						dv.setRowSpan(item, cell.getColumnIndex(), numRows - 1);
+						cell.setText("Market price");
+					}
+				}
+			});
+		}
+
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setTree(false);
+			GridViewerHelper.configureLookAndFeel(gvc);
+			gvc.getColumn().setText("");
+			gvc.getColumn().setWidth(40);
+			gvc.getColumn().setDetail(true);
+			gvc.getColumn().setSummary(true);
+			gvc.getColumn().setCellRenderer(new CellAsRowHeaderRenderer() {
+				@Override
+				protected boolean isDrawAsHover() {
+					return false;
+				}
+
+				@Override
+				public boolean isCellFocus() {
+					return false;
+				}
+			});
+			gvc.getColumn().setCellSelectionEnabled(false);
+			gvc.setLabelProvider(new CellLabelProvider() {
+				@Override
+				public void update(ViewerCell cell) {
+					final Object element = cell.getElement();
+					if (element instanceof @NonNull final SwapValueMatrixResult[] result && result.length > 0) {
 						cell.setText(Integer.toString(result[0].getSwapMarketPrice()));
 					}
 				}
-			}
-		});
+			});
+		}
 
 		final GridColumnGroup valueMatrixColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		final DischargeSlot dischargeSlot = model.getBaseDischarge().getSlot();
@@ -218,16 +243,16 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.setLabelProvider(new CellLabelProvider() {
 				@Override
 				public void update(ViewerCell cell) {
+					String cellText = "";
 					if (cell.getElement() instanceof SwapValueMatrixResult[] valueArr) {
 						final double scaledDownPnlDifference = valueArr[pIndex].getSwapPnlMinusBasePnl() / PNL_SCALEDOWN_FACTOR;
 						if (scaledDownPnlDifference < 0.0) {
-							cell.setText(String.format("(%.2f)", -scaledDownPnlDifference));
+							cellText = String.format("(%.2f)", -scaledDownPnlDifference);
 						} else {
-							cell.setText(String.format("%.2f", scaledDownPnlDifference));
+							cellText = String.format("%.2f", scaledDownPnlDifference);
 						}
-					} else {
-						cell.setText("");
 					}
+					cell.setText(cellText);
 				}
 			});
 			++index;
@@ -240,21 +265,24 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 				final List<?> selectedIndices = cellSelection.getIndices(firstElement);
 				if (firstElement instanceof SwapValueMatrixResult[] resultArr && selectedIndices.size() == 1) {
 					final int arrIndex = (int) selectedIndices.get(0);
-					final SwapValueMatrixResult result = resultArr[arrIndex];
-					final List<SummaryRow> rows = buildSummaryRows(result);
-					summaryTableViewer.setInput(rows);
-					summaryTableViewer.refresh();
-					summaryComposite.redraw();
-					summaryComposite.requestLayout();
-					summaryComposite.layout();
-					for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
-						col.pack();
+					// Account for hacked "row headers"
+					if (arrIndex > 1) {
+						final SwapValueMatrixResult result = resultArr[arrIndex-2];
+						final List<SummaryRow> rows = buildSummaryRows(result);
+						summaryTableViewer.setInput(rows);
+						summaryTableViewer.refresh();
+						summaryComposite.redraw();
+						summaryComposite.requestLayout();
+						summaryComposite.layout();
+						for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
+							col.pack();
+						}
+						summaryTableViewer.refresh();
+						summaryComposite.redraw();
+						summaryComposite.requestLayout();
+						summaryComposite.layout();
+						showSummary = true;
 					}
-					summaryTableViewer.refresh();
-					summaryComposite.redraw();
-					summaryComposite.requestLayout();
-					summaryComposite.layout();
-					showSummary = true;
 				}
 			}
 			summaryComposite.setVisible(showSummary);

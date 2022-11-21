@@ -22,7 +22,7 @@
             class="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.ValueMatrixModellerView"
             icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/16x16/sandbox.png"
             id="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.ValueMatrixModellerView"
-            name="Value-matrix Sandbox"
+            name="Value-matrix"
             restorable="true">
       </view>
    </extension>

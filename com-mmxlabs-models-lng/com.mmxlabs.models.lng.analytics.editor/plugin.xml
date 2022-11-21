@@ -291,7 +291,7 @@
       </command>
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createValueMatrixSandbox"
-            name="Create value matrix sandbox">
+            name="Create value matrix">
       </command>
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createBreakEven"

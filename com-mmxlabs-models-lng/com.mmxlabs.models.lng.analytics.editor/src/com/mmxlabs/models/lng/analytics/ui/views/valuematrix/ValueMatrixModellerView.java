@@ -33,9 +33,12 @@ import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -77,7 +80,6 @@ import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
-import com.mmxlabs.models.lng.analytics.services.IAnalyticsPushToCloudRunner;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.SwapValueMatrixSandboxEvaluator;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -128,28 +130,16 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 	private Link createNewLink;
 
 	private ScrolledComposite centralScrolledComposite;
-//	private ShippingOptionsComponent shippingOptionsComponent;
-//	private OptionModelsComponent optionsModelComponent;
 
 	private ICommandHandler commandHandler;
 
-	private ScrolledComposite lhsScrolledComposite;
-//	private BuyOptionsComponent buyComponent;
-//	private SellOptionsComponent sellComponent;
-//	private VesselEventOptionsComponent eventsComponent;
-
 	private ValueMatrixDataComponent valueMatrixDataComponent;
 	private ValueMatrixResultsComponent valueMatrixResultsComponent;
-//	private BaseCaseComponent baseCaseComponent;
-//	private PartialCaseCompoment partialCaseComponent;
 
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
-	private IAnalyticsPushToCloudRunner pushToCloudRunner;
-
 	public ValueMatrixModellerView() {
 		super();
-		this.pushToCloudRunner = PlatformUI.getWorkbench().getService(IAnalyticsPushToCloudRunner.class);
 	}
 
 	@Override
@@ -164,78 +154,12 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 		mainComposite.setLayoutData(GridDataFactory.fillDefaults()//
 				.grab(true, true)//
-				// .align(SWT.LEFT, SWT.TOP)
 				.span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
 				.spacing(0, 0) //
 				.create());
-
-		{
-//			lhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-//			lhsScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
-//					.grab(false, true)//
-//					.span(3, 1) //
-//					.align(SWT.LEFT, SWT.FILL).create());
-//			lhsScrolledComposite.setLayout(GridLayoutFactory.swtDefaults().create());
-//			lhsScrolledComposite.setExpandHorizontal(true);
-//			lhsScrolledComposite.setExpandVertical(true);
-//			lhsScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
-//			lhsScrolledComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-//
-//			lhsComposite = new Composite(lhsScrolledComposite, SWT.NONE);
-//			lhsScrolledComposite.setContent(lhsComposite);
-//			lhsComposite.setLayoutData(GridDataFactory.swtDefaults()//
-//					.grab(false, true)//
-//					.span(1, 1) //
-//					.align(SWT.LEFT, SWT.FILL).create());
-//			lhsComposite.setLayout(GridLayoutFactory.fillDefaults()//
-//					.equalWidth(false) //
-//					.numColumns(1) //
-//					.spacing(0, 20) //
-//					.margins(3, 3)//
-//					.create());
-//			final IExpansionListener lhsExpansionListener = new ExpansionAdapter() {
-//
-//				@Override
-//				public void expansionStateChanged(final ExpansionEvent e) {
-//					lhsComposite.layout(true);
-//					lhsScrolledComposite.setMinSize(lhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//
-//				}
-//			};
-
-//			final BiConsumer<AbstractSandboxComponent, Boolean> hook = (component, expanded) -> {
-//				component.createControls(lhsComposite, expanded, lhsExpansionListener, ValueMatrixModellerView.this);
-//				inputWants.addAll(component.getInputWants());
-//				disposables.add(component::dispose);
-//			};
-
-//			{
-//				optionsModelComponent = new OptionModelsComponent(ValueMatrixModellerView.this, validationErrors, () -> getModel());
-//				hook.accept(optionsModelComponent, true);
-//			}
-//			{
-//				buyComponent = new BuyOptionsComponent(ValueMatrixModellerView.this, validationErrors, () -> getModel());
-//				hook.accept(buyComponent, true);
-//			}
-//
-//			{
-//				sellComponent = new SellOptionsComponent(ValueMatrixModellerView.this, validationErrors, () -> getModel());
-//				hook.accept(sellComponent, true);
-//			}
-//			{
-//				eventsComponent = new VesselEventOptionsComponent(ValueMatrixModellerView.this, validationErrors, () -> getModel());
-//				hook.accept(eventsComponent, true);
-//			}
-//
-//			{
-//				shippingOptionsComponent = new ShippingOptionsComponent(ValueMatrixModellerView.this, validationErrors, () -> getModel());
-//				hook.accept(shippingOptionsComponent, true);
-//			}
-		}
-
 		{
 			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 			centralScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
@@ -277,37 +201,30 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			};
 
 			{
+				final Action runAction = createRunAction();
+				getViewSite().getActionBars().getToolBarManager().add(runAction);
+
+				final Action deleteResultsAction = createDeleteResultsAction();
+				getViewSite().getActionBars().getToolBarManager().add(deleteResultsAction);
+
+				lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> {
+					final IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+					final boolean actionState = currentModel != null && !locked;
+					runAction.setEnabled(actionState);
+					deleteResultsAction.setEnabled(actionState);
+					toolbarManager.update(true);
+				}));
+				getViewSite().getActionBars().getToolBarManager().update(true);
+
 				final Composite c = new Composite(centralComposite, SWT.NONE);
 				GridDataFactory.generate(c, 1, 1);
 				c.setLayout(new GridLayout(7, false));
 
-				/*
-				 * toggle for portfolio mode
-				 */
-//				final Composite portfolioModeToggle = createPortfolioToggleComposite(c);
-//				GridDataFactory.defaultsFor(portfolioModeToggle).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(portfolioModeToggle);
-
-//				final Composite sandboxModeSelector = createSandboxModeComposite(c);
-//				GridDataFactory.defaultsFor(sandboxModeSelector).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(sandboxModeSelector);
-
 				final Composite generateButton = createRunButton(c);
 				GridDataFactory.defaultsFor(generateButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(generateButton);
 
-//				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION) && pushToCloudRunner != null) {
-//					final Composite cloudRunButton = createCloudRunButton(c);
-//					GridDataFactory.defaultsFor(sandboxModeSelector).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(cloudRunButton);
-//				}
-
-//				final Composite displayButton = createDisplayButton(c);
-//				GridDataFactory.defaultsFor(displayButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(displayButton);
-
-//				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
-//					beModeToggle = createUseTargetPNLToggleComposite(c);
-//					GridDataFactory.defaultsFor(beModeToggle).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(beModeToggle);
-//				}
 				final Composite deleteButton = createDeleteResultButton(c);
 				GridDataFactory.defaultsFor(deleteButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(deleteButton);
-
 			}
 
 			{
@@ -318,19 +235,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				valueMatrixResultsComponent = new ValueMatrixResultsComponent(ValueMatrixModellerView.this, validationErrors, this::getModel);
 				hook.accept(valueMatrixResultsComponent, true);
 			}
-//				baseCaseComponent = new BaseCaseComponent(ValueMatrixModellerView.this, validationErrors, this::getModel);
-//				hook.accept(baseCaseComponent, true);
-//			}
-//			{
-//				partialCaseComponent = new PartialCaseCompoment(ValueMatrixModellerView.this, validationErrors, this::getModel);
-//				hook.accept(partialCaseComponent, true);
-//			}
 		}
-//		inputWants.add(am -> {
-//			if (am instanceof SwapValueMatrixModel swapValueMatrixModel) {
-//				
-//			}
-//		});
 
 		final IActionBars actionBars = getViewSite().getActionBars();
 
@@ -875,9 +780,125 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 	}
 
-	private Composite createRunButton(final Composite parent) {
-		//
+	private Action createRunAction() {
+		final ImageDescriptor genDesc = CommonImages.getImageDescriptor(IconPaths.Play_16, IconMode.Enabled);
+		final Action runValueMatrixAnalysisAction = new Action() {
+			@Override
+			public void run() {
+				if (isLocked()) {
+					return;
+				}
+				final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+				if (adpModel != null) {
+					MessageDialog.openError(getShell(), "Unable to perform value matrix analysis", "Value matrix analysis cannot be performed on ADP scenario");
+					return;
+				}
+				final SwapValueMatrixModel m = currentModel;
+				if (m != null) {
+					final IScenarioDataProvider sdp = ValueMatrixModellerView.this.getScenarioDataProvider();
+					final ExistingVesselCharterOption vesselCharterOption = m.getBaseVesselCharter();
+					if (vesselCharterOption.getVesselCharter() == null) {
+						throw new IllegalStateException("No vessel charter selected");
+					}
+					final BuyReference buyReference = m.getBaseLoad();
+					if (buyReference.getSlot() == null) {
+						throw new IllegalStateException("No load slot selected");
+					}
+					final SellReference sellReference = m.getBaseDischarge();
+					if (sellReference.getSlot() == null) {
+						throw new IllegalStateException("No discharge slot selected");
+					}
+					final BuyMarket buyMarket = m.getSwapLoadMarket();
+					if (buyMarket.getMarket() == null) {
+						throw new IllegalStateException("No buy market selected");
+					}
+					final SellMarket sellMarket = m.getSwapDischargeMarket();
+					if (sellMarket.getMarket() == null) {
+						throw new IllegalStateException("No sell market selected");
+					}
+					final Cargo loadSlotCargo = buyReference.getSlot().getCargo();
+					if (loadSlotCargo == sellReference.getSlot().getCargo()) {
+						if (loadSlotCargo.getVesselAssignmentType() != vesselCharterOption.getVesselCharter()) {
+							throw new IllegalStateException("Vessel charter not used to ship selected cargo");
+						}
+					} else {
+						throw new IllegalStateException("Load and discharge slot are not part of the same cargo");
+					}
+					final YearMonth dischargeMonth = YearMonth.from(sellReference.getSlot().getWindowStart());
+					buyMarket.setMonth(dischargeMonth);
+					sellMarket.setMonth(dischargeMonth);
+					SwapValueMatrixSandboxEvaluator.doValueMatrixSandbox(ValueMatrixModellerView.this, m);
+					valueMatrixResultsComponent.refresh();
+				}
+			}
+		};
+		runValueMatrixAnalysisAction.setImageDescriptor(genDesc);
+		runValueMatrixAnalysisAction.setToolTipText("Run value matrix analysis");
 
+		lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> runValueMatrixAnalysisAction.setEnabled(currentModel != null && !locked)));
+		return runValueMatrixAnalysisAction;
+	}
+
+	private Action createDeleteResultsAction() {
+		final ImageDescriptor genDesc = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled);
+		final Action deleteResultsAction = new Action() {
+			@Override
+			public void run() {
+				if (isLocked()) {
+					return;
+				}
+				final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+				if (adpModel != null) {
+					MessageDialog.openError(getShell(), "Unable to perform value matrix analysis", "Value matrix analysis cannot be performed on ADP scenario");
+					return;
+				}
+				final SwapValueMatrixModel m = currentModel;
+				if (m != null) {
+					final IScenarioDataProvider sdp = ValueMatrixModellerView.this.getScenarioDataProvider();
+					final ExistingVesselCharterOption vesselCharterOption = m.getBaseVesselCharter();
+					if (vesselCharterOption.getVesselCharter() == null) {
+						throw new IllegalStateException("No vessel charter selected");
+					}
+					final BuyReference buyReference = m.getBaseLoad();
+					if (buyReference.getSlot() == null) {
+						throw new IllegalStateException("No load slot selected");
+					}
+					final SellReference sellReference = m.getBaseDischarge();
+					if (sellReference.getSlot() == null) {
+						throw new IllegalStateException("No discharge slot selected");
+					}
+					final BuyMarket buyMarket = m.getSwapLoadMarket();
+					if (buyMarket.getMarket() == null) {
+						throw new IllegalStateException("No buy market selected");
+					}
+					final SellMarket sellMarket = m.getSwapDischargeMarket();
+					if (sellMarket.getMarket() == null) {
+						throw new IllegalStateException("No sell market selected");
+					}
+					final Cargo loadSlotCargo = buyReference.getSlot().getCargo();
+					if (loadSlotCargo == sellReference.getSlot().getCargo()) {
+						if (loadSlotCargo.getVesselAssignmentType() != vesselCharterOption.getVesselCharter()) {
+							throw new IllegalStateException("Vessel charter not used to ship selected cargo");
+						}
+					} else {
+						throw new IllegalStateException("Load and discharge slot are not part of the same cargo");
+					}
+					final YearMonth dischargeMonth = YearMonth.from(sellReference.getSlot().getWindowStart());
+					buyMarket.setMonth(dischargeMonth);
+					sellMarket.setMonth(dischargeMonth);
+					SwapValueMatrixSandboxEvaluator.doValueMatrixSandbox(ValueMatrixModellerView.this, m);
+					valueMatrixResultsComponent.refresh();
+				}
+			}
+		};
+		deleteResultsAction.setImageDescriptor(genDesc);
+		deleteResultsAction.setToolTipText("Delete value matrix results");
+
+		lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> deleteResultsAction.setEnabled(currentModel != null && !locked)));
+		return deleteResultsAction;
+	}
+
+	private Composite createRunButton(final Composite parent) {
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
@@ -940,22 +961,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 					sellMarket.setMonth(dischargeMonth);
 					SwapValueMatrixSandboxEvaluator.doValueMatrixSandbox(ValueMatrixModellerView.this, m);
 					valueMatrixResultsComponent.refresh();
-//					final int mode = m.getMode();
-//					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
-//						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
-//					} else if (mode == SandboxModeConstants.MODE_OPTIONISE && !m.getBaseCase().isKeepExistingScenario()) {
-//						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optionise mode needs portfolio link enabled");
-//					} else {
-//						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
-//							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-//								WhatIfEvaluator.runSandbox(ValueMatrixModellerView.this, m);
-//								if (m != null && m.getResults() != null) {
-//									final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
-//									data.open();
-//								}
-//							});
-//						}
-//					}
 				}
 			}
 		});
@@ -966,54 +971,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 		return generateComposite;
 	}
-
-//	private Composite createDisplayButton(final Composite parent) {
-//		//
-//		final Composite generateComposite = new Composite(parent, SWT.NONE);
-//		GridDataFactory.generate(generateComposite, 2, 1);
-//
-//		generateComposite.setLayout(new GridLayout(1, true));
-//
-//		final Label generateButton = new Label(generateComposite, SWT.NONE);
-//		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-//		generateButton.setImage(CommonImages.getImage(IconPaths.Console, IconMode.Enabled));
-//
-//		generateButton.setToolTipText("Display results");
-//
-//		generateButton.addMouseListener(new MouseAdapter() {
-//
-//			@Override
-//			public void mouseDown(final MouseEvent e) {
-//				if (isLocked()) {
-//					return;
-//				}
-//				final OptionAnalysisModel m = currentModel;
-//				if (m != null) {
-//					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-//						if (m != null) {
-//							if (m.getResults() != null) {
-//								final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
-//								data.open();
-//							} else {
-//								// No results, so show a blank case
-//								final SandboxResult emptyResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
-//								emptyResult.setName(m.getName());
-//								emptyResult.setUseScenarioBase(false);
-//								final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), emptyResult, m.getName());
-//								data.open();
-//							}
-//						}
-//					});
-//				}
-//			}
-//		});
-//
-//		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
-//
-//		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
-//
-//		return generateComposite;
-//	}
 
 	private Composite createDeleteResultButton(final Composite parent) {
 		//
@@ -1066,180 +1023,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		return generateComposite;
 	}
 
-//	private Composite createSandboxModeComposite(final Composite composite) {
-//		final Composite matching = new Composite(composite, SWT.ALL);
-//		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
-//		matching.setLayout(gridLayoutRadiosMatching);
-//		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
-//		gdM.horizontalSpan = 2;
-//		matching.setLayoutData(gdM);
-//		new Label(matching, SWT.NONE).setText("Mode:");
-//		final Combo combo = new Combo(matching, SWT.DROP_DOWN);
-//		// final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
-//		combo.setItems("Define", "Optimise", "Optionise");
-//
-//		combo.select(0);
-//		combo.addSelectionListener(new SelectionAdapter() {
-//
-//			@Override
-//			public void widgetSelected(final SelectionEvent e) {
-//				if (isLocked()) {
-//					return;
-//				}
-//				final OptionAnalysisModel m = currentModel;
-//				if (m != null) {
-//					final int mode = combo.getSelectionIndex();
-////					baseCaseComponent.setMode(mode);
-////					partialCaseComponent.setVisible(mode == 0);
-//					if (beModeToggle != null) {
-//						beModeToggle.setVisible(mode != 1);
-//					}
-//
-//					final CompoundCommand cmd = new CompoundCommand();
-//					cmd.append(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE, mode));
-//
-//					if (portfolioLinkBtn != null) {
-//						if (mode == SandboxModeConstants.MODE_OPTIMISE || mode == SandboxModeConstants.MODE_OPTIONISE) {
-//							if (!portfolioLinkBtn.getSelection()) {
-//								cmd.append(SetCommand.create(getEditingDomain(), m.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO, Boolean.TRUE));
-//								cmd.append(SetCommand.create(getEditingDomain(), m.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, Boolean.TRUE));
-//								portfolioLinkBtn.setSelection(true);
-//							}
-//							portfolioLinkBtn.setEnabled(false);
-//						} else {
-//							portfolioLinkBtn.setEnabled(true);
-//						}
-//					}
-//					getDefaultCommandHandler().handleCommand(cmd, m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
-//					refreshSections(true, EnumSet.of(SectionType.MIDDLE));
-//				} else {
-////					baseCaseComponent.setMode(-1);
-//				}
-//
-//			}
-//		});
-//
-//		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(combo, c -> c.setEnabled(!locked)));
-//
-//		inputWants.add(m -> matching.setEnabled(m != null));
-//
-//		// FIXME: This control does not respond to e.g. Undo() calls.
-//		// Need to hook up explicitly to the refresh adapter
-//
-//		inputWants.add(am -> {
-//			if (am instanceof OptionAnalysisModel optionAnalysisModel) {
-//				final int mode = optionAnalysisModel.getMode();
-//				combo.select(mode);
-////				partialCaseComponent.setVisible(mode == SandboxModeConstants.MODE_DERIVE);
-//				if (beModeToggle != null) {
-//					beModeToggle.setVisible(mode != SandboxModeConstants.MODE_OPTIMISE);
-//				}
-//				if (portfolioLinkBtn != null) {
-//					if (mode == SandboxModeConstants.MODE_OPTIMISE || mode == SandboxModeConstants.MODE_OPTIONISE) {
-////						portfolioLinkBtn.setSelection(true);
-//						portfolioLinkBtn.setEnabled(false);
-//					} else {
-//						portfolioLinkBtn.setEnabled(true);
-//					}
-//				}
-////				baseCaseComponent.setMode(mode);
-//				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
-//			} else {
-////				baseCaseComponent.setMode(-1);
-//			}
-//		});
-//
-//		return matching;
-//
-//	}
-
-//	private Composite createPortfolioToggleComposite(final Composite composite) {
-//		final Composite matching = new Composite(composite, SWT.ALL);
-//		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
-//		matching.setLayout(gridLayoutRadiosMatching);
-//		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
-//		gdM.horizontalSpan = 2;
-//		matching.setLayoutData(gdM);
-//		new Label(matching, SWT.NONE).setText("Portfolio link");
-//		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
-//		matchingButton.setSelection(false);
-//		matchingButton.addSelectionListener(new SelectionAdapter() {
-//
-//			@Override
-//			public void widgetSelected(final SelectionEvent e) {
-//				if (isLocked()) {
-//					return;
-//				}
-//				final OptionAnalysisModel m = currentModel;
-//				if (m != null) {
-//
-//					final CompoundCommand cmd = new CompoundCommand();
-//
-//					cmd.append(SetCommand.create(getEditingDomain(), m.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO, matchingButton.getSelection()));
-//					cmd.append(SetCommand.create(getEditingDomain(), m.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, matchingButton.getSelection()));
-//
-//					getDefaultCommandHandler().handleCommand(cmd, null, null);
-//					refreshSections(false, EnumSet.of(SectionType.MIDDLE));
-//				}
-//			}
-//		});
-//
-//		this.portfolioLinkBtn = matchingButton;
-//		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
-//		inputWants.add(m -> matching.setEnabled(m != null));
-//
-//		inputWants.add(am -> {
-//			if (am instanceof OptionAnalysisModel optionAnalysisModel) {
-//				matchingButton.setSelection(optionAnalysisModel.getBaseCase().isKeepExistingScenario());
-//			}
-//		});
-//		return matching;
-//	}
-
-//	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
-//		final Composite matching = new Composite(composite, SWT.ALL);
-//		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
-//		matching.setLayout(gridLayoutRadiosMatching);
-//		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
-//		gdM.horizontalSpan = 2;
-//		matching.setLayoutData(gdM);
-//		final Label l = new Label(matching, SWT.NONE);
-//		l.setText("Starting point P&&L B/E");
-//		l.setToolTipText(
-//				"When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
-//		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
-//		matchingButton.setSelection(false);
-//		matchingButton.addSelectionListener(new SelectionAdapter() {
-//
-//			@Override
-//			public void widgetSelected(final SelectionEvent e) {
-//				if (isLocked()) {
-//					return;
-//				}
-//				final OptionAnalysisModel m = currentModel;
-//				if (currentModel != null) {
-//					getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()),
-//							m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
-//				}
-//			}
-//
-//		});
-//
-//		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(matchingButton, btn -> btn.setEnabled(!locked)));
-//		inputWants.add(m -> matching.setEnabled(m != null));
-//
-//		// FIXME: This control does not respond to e.g. Undo() calls.
-//		// Need to hook up explicitly to the refresh adapter
-//
-//		inputWants.add(am -> {
-//			if (am instanceof OptionAnalysisModel) {
-//				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
-//				matchingButton.setSelection(optionAnalysisModel.isUseTargetPNL());
-//			}
-//		});
-//		return matching;
-//	}
-
 	@Override
 	public void openStatus(final IStatus status) {
 		if (status.isMultiStatus()) {
@@ -1259,7 +1042,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 	}
 
 	private @Nullable SwapValueMatrixModel findMatrixModelInObjectTree(final @Nullable EObject node) {
-
 		if (node instanceof SwapValueMatrixModel swapValueMatrixModel) {
 			return swapValueMatrixModel;
 		}
