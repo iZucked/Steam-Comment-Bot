@@ -722,6 +722,7 @@
 		}, {
 			"mmxId": "L_CN_Shenz",
 			"name": "Shenzhen",
+			"aliases": ["Diefu"],
 			"geographicPoint": {
 				"lat": 22.443429946899414,
 				"lon": 113.88360595703125,
