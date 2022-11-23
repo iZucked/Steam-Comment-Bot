@@ -26,20 +26,17 @@ public abstract class AbstractValueMatrixComponent {
 
 	@NonNull
 	protected final IScenarioEditingLocation scenarioEditingLocation;
-	protected final Map<Object, IStatus> validationErrors;
 	@NonNull
 	protected final Supplier<SwapValueMatrixModel> modelProvider;
 	@NonNull
 	protected final List<Consumer<SwapValueMatrixModel>> inputWants = new LinkedList<>();
-	
+
 	protected ValueMatrixModellerView valueMatrixModellerView;
 
 	protected SandboxUIHelper sandboxUIHelper;
 
-	protected AbstractValueMatrixComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
-			@NonNull final Supplier<SwapValueMatrixModel> modelProvider) {
+	protected AbstractValueMatrixComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Supplier<SwapValueMatrixModel> modelProvider) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
-		this.validationErrors = validationErrors;
 		this.modelProvider = modelProvider;
 	}
 
@@ -69,7 +66,7 @@ public abstract class AbstractValueMatrixComponent {
 		}
 		return expandableCompo;
 	}
-	
+
 	public List<Consumer<SwapValueMatrixModel>> getInputWants() {
 		return inputWants;
 	}

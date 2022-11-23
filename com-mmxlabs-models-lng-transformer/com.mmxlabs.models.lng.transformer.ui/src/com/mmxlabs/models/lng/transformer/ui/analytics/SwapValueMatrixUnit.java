@@ -63,6 +63,7 @@ import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -399,8 +400,9 @@ public class SwapValueMatrixUnit {
 					}
 				}
 				cmd.append(SetCommand.create(sdp.getEditingDomain(), model, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapValueMatrixResult(), resultsSet));
-				sdp.getEditingDomain().getCommandStack().execute(cmd);
-				int i = 0;
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					sdp.getEditingDomain().getCommandStack().execute(cmd);
+				});
 				if (monitor.isCanceled()) {
 					return;
 				}

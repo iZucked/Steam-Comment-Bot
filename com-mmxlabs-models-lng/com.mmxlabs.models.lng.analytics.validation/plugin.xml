@@ -47,6 +47,11 @@
             mandatory="false"
             name="Cargo Sandbox Validation">
       </category>
+      <category
+            id="com.mmxlabs.models.lng.analytics.validation.constraints.valuematrix"
+            mandatory="false"
+            name="Value Matrix Validation">
+      </category>
       <constraintProvider
             cache="true">
          <package
@@ -316,6 +321,28 @@
                <target
                      class="CharterOutOpportunity">
                </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.valuematrix">
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.valuematrix.SwapValueMatrixModelConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.valuematrix.SwapValueMatrixModelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Value Matrix Model Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
             </constraint>
          </constraints>
       </constraintProvider>

@@ -44,8 +44,7 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
-	void evaluateSwapValueMatrixSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, @NonNull SwapValueMatrixModel model, 
-			@NonNull Pair<@NonNull LoadSlot, @NonNull DischargeSlot> swapCargo, IMapperClass mapper);
+	void evaluateSwapValueMatrixSandbox(@NonNull ScenarioInstance scenarioInstance, @NonNull SwapValueMatrixModel model);
 
 	void runSandbox(@NonNull ScenarioInstance scenarioInstance, @NonNull OptionAnalysisModel model);
 

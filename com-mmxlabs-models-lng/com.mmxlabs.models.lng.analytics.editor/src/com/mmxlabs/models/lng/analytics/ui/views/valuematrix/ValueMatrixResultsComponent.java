@@ -22,13 +22,10 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.internal.CellSelection;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
-import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.events.IExpansionListener;
@@ -42,11 +39,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.models.ui.tabular.TableColourPalette;
-import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
-import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.models.ui.tabular.renderers.CellAsRowHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 
@@ -75,9 +68,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		String units;
 	}
 
-	public ValueMatrixResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
-			@NonNull final Supplier<SwapValueMatrixModel> modelProvider) {
-		super(scenarioEditingLocation, validationErrors, modelProvider);
+	public ValueMatrixResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Supplier<SwapValueMatrixModel> modelProvider) {
+		super(scenarioEditingLocation, modelProvider);
 	}
 
 	private Control createResultsComposite(final Composite parent) {
@@ -267,7 +259,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					final int arrIndex = (int) selectedIndices.get(0);
 					// Account for hacked "row headers"
 					if (arrIndex > 1) {
-						final SwapValueMatrixResult result = resultArr[arrIndex-2];
+						final SwapValueMatrixResult result = resultArr[arrIndex - 2];
 						final List<SummaryRow> rows = buildSummaryRows(result);
 						summaryTableViewer.setInput(rows);
 						summaryTableViewer.refresh();

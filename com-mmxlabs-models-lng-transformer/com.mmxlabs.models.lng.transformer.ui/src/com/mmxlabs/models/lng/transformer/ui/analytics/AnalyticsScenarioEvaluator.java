@@ -26,7 +26,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
@@ -74,6 +73,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindow
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.pricesensitivity.PriceSensitivityTask;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.valuematrix.ValueMatrixTask;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
@@ -373,24 +373,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void evaluateSwapValueMatrixSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			@NonNull final SwapValueMatrixModel model, @NonNull Pair<@NonNull LoadSlot, @NonNull DischargeSlot> swapCargo, final IMapperClass mapper) {
-		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
-		helper.processExtraDataProvider(mapper.getExtraDataProvider());
-
-		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
-
-		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
-			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
-			final SwapValueMatrixUnit unit = new SwapValueMatrixUnit(scenarioDataProvider, dataTransformer, "swap-value-matrix", userSettings, constraintAndFitnessSettings, jobExecutorFactory,
-					dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
-			unit.run(model, swapCargo, mapper, new NullProgressMonitor());
-		});
-
+	public void evaluateSwapValueMatrixSandbox(@NonNull final ScenarioInstance scenarioInstance, @NonNull final SwapValueMatrixModel model) {
+		ValueMatrixTask.submit(scenarioInstance, model);
 	}
 
 	@Override

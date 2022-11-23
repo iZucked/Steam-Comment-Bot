@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
@@ -27,10 +28,16 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 
 /**
- * A small utility class to manage validation in a {@link Dialog}. Once created, a call {@link IScenarioEditingLocation#pushExtraValidationContext(IExtraValidationContext)} with the output from
- * {@link #getValidationContext()} should be invoked, and a corresponding call to {@link IScenarioEditingLocation#popExtraValidationContext()} should occur in a try/finally block. The objects to be
- * validated should be set via a call to {@link #setValidationTargets(Collection)}. Validation can then be performed with {@link #validate()}. This will return an {@link IStatus} object which can be
- * queried for further information.
+ * A small utility class to manage validation in a {@link Dialog}. Once created,
+ * a call
+ * {@link IScenarioEditingLocation#pushExtraValidationContext(IExtraValidationContext)}
+ * with the output from {@link #getValidationContext()} should be invoked, and a
+ * corresponding call to
+ * {@link IScenarioEditingLocation#popExtraValidationContext()} should occur in
+ * a try/finally block. The objects to be validated should be set via a call to
+ * {@link #setValidationTargets(Collection)}. Validation can then be performed
+ * with {@link #validate()}. This will return an {@link IStatus} object which
+ * can be queried for further information.
  * 
  * @author Simon Goodall
  * 
@@ -104,8 +111,30 @@ public class DialogValidationSupport {
 		this.validationTargets = validationTargets;
 	}
 
+	public static void processStatus(@NonNull final Map<Object, Collection<IStatus>> validationErrors, @Nullable final IStatus status) {
+		processStatus(status, new DefaultValidationTargetTransformer(), validationErrors);
+	}
+
 	public static void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors) {
 		processStatus(status, validationErrors, new DefaultValidationTargetTransformer());
+	}
+
+	public static void processStatus(@Nullable final IStatus status, @NonNull final IValiationTargetTransformer vtt, @NonNull final Map<Object, Collection<IStatus>> validationErrors) {
+		if (status == null) {
+			return;
+		}
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				processStatus(s, vtt, validationErrors);
+			}
+		}
+		if (status instanceof IDetailConstraintStatus detailConstraintStatus && !status.isOK()) {
+			setStatus(vtt.transform(detailConstraintStatus.getTarget()), validationErrors, status);
+			for (final EObject e : detailConstraintStatus.getObjects()) {
+				setStatus(vtt.transform(e), validationErrors, status);
+			}
+
+		}
 	}
 
 	public static void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors, @NonNull final IValiationTargetTransformer vtt) {
@@ -117,16 +146,20 @@ public class DialogValidationSupport {
 				processStatus(s, validationErrors, vtt);
 			}
 		}
-		if (status instanceof IDetailConstraintStatus) {
-			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
-			if (!status.isOK()) {
-				setStatus(vtt.transform(detailConstraintStatus.getTarget()), status, validationErrors);
+		if ((status instanceof IDetailConstraintStatus detailConstraintStatus) && !status.isOK()) {
+			setStatus(vtt.transform(detailConstraintStatus.getTarget()), status, validationErrors);
 
-				for (final EObject e : detailConstraintStatus.getObjects()) {
-					setStatus(vtt.transform(e), status, validationErrors);
-				}
+			for (final EObject e : detailConstraintStatus.getObjects()) {
+				setStatus(vtt.transform(e), status, validationErrors);
 			}
 		}
+	}
+
+	private static void setStatus(@Nullable final Object e, @NonNull final Map<Object, Collection<IStatus>> validationErrors, @NonNull final IStatus s) {
+		if (e == null) {
+			return;
+		}
+		validationErrors.computeIfAbsent(e, obj -> new HashSet<>()).add(s);
 	}
 
 	private static void setStatus(@Nullable final Object e, @NonNull final IStatus s, @NonNull final Map<Object, IStatus> validationErrors) {

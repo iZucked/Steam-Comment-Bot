@@ -61,7 +61,6 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -119,7 +118,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 	private CommandStack currentCommandStack;
 
 	private SwapValueMatrixModel currentModel;
-	private final Map<Object, IStatus> validationErrors = new HashMap<>();
+	private final Map<Object, Collection<IStatus>> validationErrors = new HashMap<>();
 
 	private DialogValidationSupport validationSupport;
 
@@ -158,7 +157,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
-				.spacing(0, 0) //
+				.spacing(10, 10) //
 				.create());
 		{
 			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -182,7 +181,8 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 			centralComposite.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true) //
 					.numColumns(1) //
-					.spacing(0, 20) //
+					.margins(10, 10)
+					.spacing(20, 20) //
 					.create());
 
 			final IExpansionListener centralExpansionListener = new ExpansionAdapter() {
@@ -202,10 +202,15 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 			{
 				final Action runAction = createRunAction();
+				runAction.setEnabled(true);
 				getViewSite().getActionBars().getToolBarManager().add(runAction);
 
-				final Action deleteResultsAction = createDeleteResultsAction();
+				final Action deleteResultsAction = createDeleteResultsAction(centralComposite);
 				getViewSite().getActionBars().getToolBarManager().add(deleteResultsAction);
+
+				final Action packAction = createPackAction();
+				packAction.setEnabled(true);
+				getViewSite().getActionBars().getToolBarManager().add(packAction);
 
 				lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> {
 					final IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
@@ -216,23 +221,15 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				}));
 				getViewSite().getActionBars().getToolBarManager().update(true);
 
-				final Composite c = new Composite(centralComposite, SWT.NONE);
-				GridDataFactory.generate(c, 1, 1);
-				c.setLayout(new GridLayout(7, false));
-
-				final Composite generateButton = createRunButton(c);
-				GridDataFactory.defaultsFor(generateButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(generateButton);
-
-				final Composite deleteButton = createDeleteResultButton(c);
-				GridDataFactory.defaultsFor(deleteButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(deleteButton);
 			}
 
 			{
 				valueMatrixDataComponent = new ValueMatrixDataComponent(ValueMatrixModellerView.this, validationErrors, this::getModel);
 				hook.accept(valueMatrixDataComponent, true);
+				lockedListeners.add(locked -> valueMatrixDataComponent.setEditingLock(locked));
 			}
 			{
-				valueMatrixResultsComponent = new ValueMatrixResultsComponent(ValueMatrixModellerView.this, validationErrors, this::getModel);
+				valueMatrixResultsComponent = new ValueMatrixResultsComponent(ValueMatrixModellerView.this, this::getModel);
 				hook.accept(valueMatrixResultsComponent, true);
 			}
 		}
@@ -433,6 +430,9 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				setPartName("Value Matrix: " + getModel().getName());
 				return null;
 			}
+			if (notification.getNotifier() == getModel() && notification.getFeature() == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT) {
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
+			}
 
 			if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS) {
 				return new Pair<>(true, EnumSet.of(SectionType.BUYS));
@@ -496,7 +496,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				currentModel.eAdapters().remove(refreshAdapter);
 			}
 			currentModel.eAdapters().remove(historyRenameAdaptor);
-//			optionsModelComponent.setInput(Collections.emptySet());
 			currentModel = null;
 		}
 		if (rootObject != null) {
@@ -516,17 +515,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		doValidate();
 
 		inputWants.forEach(want -> want.accept(model));
-
-		// Disable auto-open results. use the display button!
-		// if (model != null && model.getResults() != null) {
-		// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(),
-		// model.getResults(), model.getName());
-		// data.open();
-		// }
-
-//		if (currentModel != null) {
-//			optionsModelComponent.setInput(Collections.singleton(currentModel));
-//		}
 
 		rootObject = getRootObject();
 		if (rootObject != null) {
@@ -605,20 +593,8 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			final IStatus status = validationSupport.validate();
 
 			validationErrors.clear();
-			validationSupport.processStatus(status, validationErrors);
+			validationSupport.processStatus(validationErrors, status);
 
-			final ToBooleanFunction<EObject> checker = o -> {
-				if (o == null) {
-					return true;
-				}
-				if (validationErrors.containsKey(o)) {
-					final IStatus s = validationErrors.get(o);
-					if (s != null && s.getSeverity() >= IStatus.ERROR) {
-						return false;
-					}
-				}
-				return true;
-			};
 			if (currentModel != null) {
 				boolean l_partialCaseValid = true;
 //				final PartialCase partialCase = currentModel.getPartialCase();
@@ -725,14 +701,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			updateActions(getEditingDomain());
 		}
 
-//		valueMatrixDataComponent.setLocked(thisLocked);
-//		baseCaseComponent.setLocked(thisLocked);
-//		partialCaseComponent.setLocked(thisLocked);
-//		buyComponent.setLocked(locked);
-//		sellComponent.setLocked(thisLocked);
-//		eventsComponent.setLocked(thisLocked);
-//		shippingOptionsComponent.setLocked(thisLocked);
-
 		lockedListeners.forEach(e -> e.accept(thisLocked));
 
 		super.setLocked(locked);
@@ -795,15 +763,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				}
 				final SwapValueMatrixModel m = currentModel;
 				if (m != null) {
-					final IScenarioDataProvider sdp = ValueMatrixModellerView.this.getScenarioDataProvider();
-					final ExistingVesselCharterOption vesselCharterOption = m.getBaseVesselCharter();
-					if (vesselCharterOption.getVesselCharter() == null) {
-						throw new IllegalStateException("No vessel charter selected");
-					}
-					final BuyReference buyReference = m.getBaseLoad();
-					if (buyReference.getSlot() == null) {
-						throw new IllegalStateException("No load slot selected");
-					}
 					final SellReference sellReference = m.getBaseDischarge();
 					if (sellReference.getSlot() == null) {
 						throw new IllegalStateException("No discharge slot selected");
@@ -815,14 +774,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 					final SellMarket sellMarket = m.getSwapDischargeMarket();
 					if (sellMarket.getMarket() == null) {
 						throw new IllegalStateException("No sell market selected");
-					}
-					final Cargo loadSlotCargo = buyReference.getSlot().getCargo();
-					if (loadSlotCargo == sellReference.getSlot().getCargo()) {
-						if (loadSlotCargo.getVesselAssignmentType() != vesselCharterOption.getVesselCharter()) {
-							throw new IllegalStateException("Vessel charter not used to ship selected cargo");
-						}
-					} else {
-						throw new IllegalStateException("Load and discharge slot are not part of the same cargo");
 					}
 					final YearMonth dischargeMonth = YearMonth.from(sellReference.getSlot().getWindowStart());
 					buyMarket.setMonth(dischargeMonth);
@@ -836,159 +787,15 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		runValueMatrixAnalysisAction.setToolTipText("Run value matrix analysis");
 
 		lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> runValueMatrixAnalysisAction.setEnabled(currentModel != null && !locked)));
+		inputWants.add(m -> RunnerHelper.runNowOrAsync(() -> runValueMatrixAnalysisAction.setEnabled(m != null && !isLocked())));
 		return runValueMatrixAnalysisAction;
 	}
 
-	private Action createDeleteResultsAction() {
+	private Action createDeleteResultsAction(final Composite parent) {
 		final ImageDescriptor genDesc = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled);
 		final Action deleteResultsAction = new Action() {
 			@Override
 			public void run() {
-				if (isLocked()) {
-					return;
-				}
-				final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
-				if (adpModel != null) {
-					MessageDialog.openError(getShell(), "Unable to perform value matrix analysis", "Value matrix analysis cannot be performed on ADP scenario");
-					return;
-				}
-				final SwapValueMatrixModel m = currentModel;
-				if (m != null) {
-					final IScenarioDataProvider sdp = ValueMatrixModellerView.this.getScenarioDataProvider();
-					final ExistingVesselCharterOption vesselCharterOption = m.getBaseVesselCharter();
-					if (vesselCharterOption.getVesselCharter() == null) {
-						throw new IllegalStateException("No vessel charter selected");
-					}
-					final BuyReference buyReference = m.getBaseLoad();
-					if (buyReference.getSlot() == null) {
-						throw new IllegalStateException("No load slot selected");
-					}
-					final SellReference sellReference = m.getBaseDischarge();
-					if (sellReference.getSlot() == null) {
-						throw new IllegalStateException("No discharge slot selected");
-					}
-					final BuyMarket buyMarket = m.getSwapLoadMarket();
-					if (buyMarket.getMarket() == null) {
-						throw new IllegalStateException("No buy market selected");
-					}
-					final SellMarket sellMarket = m.getSwapDischargeMarket();
-					if (sellMarket.getMarket() == null) {
-						throw new IllegalStateException("No sell market selected");
-					}
-					final Cargo loadSlotCargo = buyReference.getSlot().getCargo();
-					if (loadSlotCargo == sellReference.getSlot().getCargo()) {
-						if (loadSlotCargo.getVesselAssignmentType() != vesselCharterOption.getVesselCharter()) {
-							throw new IllegalStateException("Vessel charter not used to ship selected cargo");
-						}
-					} else {
-						throw new IllegalStateException("Load and discharge slot are not part of the same cargo");
-					}
-					final YearMonth dischargeMonth = YearMonth.from(sellReference.getSlot().getWindowStart());
-					buyMarket.setMonth(dischargeMonth);
-					sellMarket.setMonth(dischargeMonth);
-					SwapValueMatrixSandboxEvaluator.doValueMatrixSandbox(ValueMatrixModellerView.this, m);
-					valueMatrixResultsComponent.refresh();
-				}
-			}
-		};
-		deleteResultsAction.setImageDescriptor(genDesc);
-		deleteResultsAction.setToolTipText("Delete value matrix results");
-
-		lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> deleteResultsAction.setEnabled(currentModel != null && !locked)));
-		return deleteResultsAction;
-	}
-
-	private Composite createRunButton(final Composite parent) {
-		final Composite generateComposite = new Composite(parent, SWT.NONE);
-		GridDataFactory.generate(generateComposite, 2, 1);
-
-		generateComposite.setLayout(new GridLayout(1, true));
-
-		final Label generateButton = new Label(generateComposite, SWT.NONE);
-		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
-		generateButton.setImage(CommonImages.getImage(IconPaths.Play, IconMode.Enabled));
-		generateButton.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDown(final MouseEvent e) {
-				if (isLocked()) {
-					return;
-				}
-
-				{
-					final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
-					if (adpModel != null) {
-						MessageDialog.openError(getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
-						// Cannot use sandbox with ADP
-						return;
-					}
-
-				}
-
-				final SwapValueMatrixModel m = currentModel;
-				if (m != null) {
-					final IScenarioDataProvider sdp = ValueMatrixModellerView.this.getScenarioDataProvider();
-					final ExistingVesselCharterOption vesselCharterOption = m.getBaseVesselCharter();
-					if (vesselCharterOption.getVesselCharter() == null) {
-						throw new IllegalStateException("No vessel charter selected");
-					}
-					final BuyReference buyReference = m.getBaseLoad();
-					if (buyReference.getSlot() == null) {
-						throw new IllegalStateException("No load slot selected");
-					}
-					final SellReference sellReference = m.getBaseDischarge();
-					if (sellReference.getSlot() == null) {
-						throw new IllegalStateException("No discharge slot selected");
-					}
-					final BuyMarket buyMarket = m.getSwapLoadMarket();
-					if (buyMarket.getMarket() == null) {
-						throw new IllegalStateException("No buy market selected");
-					}
-					final SellMarket sellMarket = m.getSwapDischargeMarket();
-					if (sellMarket.getMarket() == null) {
-						throw new IllegalStateException("No sell market selected");
-					}
-					final Cargo loadSlotCargo = buyReference.getSlot().getCargo();
-					if (loadSlotCargo == sellReference.getSlot().getCargo()) {
-						if (loadSlotCargo.getVesselAssignmentType() != vesselCharterOption.getVesselCharter()) {
-							throw new IllegalStateException("Vessel charter not used to ship selected cargo");
-						}
-					} else {
-						throw new IllegalStateException("Load and discharge slot are not part of the same cargo");
-					}
-					final YearMonth dischargeMonth = YearMonth.from(sellReference.getSlot().getWindowStart());
-					buyMarket.setMonth(dischargeMonth);
-					sellMarket.setMonth(dischargeMonth);
-					SwapValueMatrixSandboxEvaluator.doValueMatrixSandbox(ValueMatrixModellerView.this, m);
-					valueMatrixResultsComponent.refresh();
-				}
-			}
-		});
-
-		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
-
-		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
-
-		return generateComposite;
-	}
-
-	private Composite createDeleteResultButton(final Composite parent) {
-		//
-		final Composite generateComposite = new Composite(parent, SWT.NONE);
-		GridDataFactory.generate(generateComposite, 1, 1);
-		generateComposite.setLayout(new GridLayout(1, true));
-
-		final Label generateButton = new Label(generateComposite, SWT.NONE);
-		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
-
-		generateButton.setImage(CommonImages.getImage(IconPaths.Delete, IconMode.Enabled));
-
-		generateButton.setToolTipText("Delete current results");
-
-		generateButton.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDown(final MouseEvent e) {
 				if (isLocked()) {
 					return;
 				}
@@ -1014,13 +821,28 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 					});
 				}
 			}
-		});
+		};
+		deleteResultsAction.setImageDescriptor(genDesc);
+		deleteResultsAction.setToolTipText("Delete value matrix results");
 
-		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
+		lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> deleteResultsAction.setEnabled(currentModel != null && !locked)));
+		inputWants.add(m -> RunnerHelper.runNowOrAsync(() -> deleteResultsAction.setEnabled(m != null && !isLocked())));
+		return deleteResultsAction;
+	}
 
-		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+	private Action createPackAction() {
+		final ImageDescriptor genDesc = CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled);
+		final Action packAction = new Action() {
+			@Override
+			public void run() {
+				valueMatrixDataComponent.pack();
+			}
+		};
+		packAction.setImageDescriptor(genDesc);
+		packAction.setToolTipText("Pack parameters");
 
-		return generateComposite;
+		inputWants.add(m -> RunnerHelper.runNowOrAsync(() -> packAction.setEnabled(m != null && !isLocked())));
+		return packAction;
 	}
 
 	@Override

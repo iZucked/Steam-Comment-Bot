@@ -52,6 +52,7 @@ public class LNGRecursiveValidationStrategy extends AbstractTraversalStrategy {
 		//// These are sub models we want to validate as an "extra target" as they are effectively mini scenarios.
 		// Ignore sandboxes scenario
 		ignoredUnlessFullFeatures.add(AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels());
+		ignoredUnlessFullFeatures.add(AnalyticsPackage.eINSTANCE.getAnalyticsModel_SwapValueMatrixModels());
 
 	}
 
