@@ -263,6 +263,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public int getEventAlignment(Object element) {
+		// TODO: Move into the label provider
 		if (element instanceof OpenSlotAllocation sa) {
 			return SWT.CENTER;
 
