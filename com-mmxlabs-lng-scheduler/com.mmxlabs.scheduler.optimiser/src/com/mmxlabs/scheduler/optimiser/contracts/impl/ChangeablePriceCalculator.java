@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -36,7 +37,23 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
-	private final ThreadLocal<Integer> price = new ThreadLocal<>();
+	private ThreadLocal<Integer> price = new ThreadLocal<>();
+
+	private final int addToPrice;
+
+	public ChangeablePriceCalculator() {
+		this.addToPrice = 0;
+	}
+
+	public ChangeablePriceCalculator(final int addToPrice) {
+		this.addToPrice = addToPrice;
+	}
+
+	/**
+	 */
+	@Override
+	public void prepareSalesForEvaluation(final @NonNull ISequences sequences) {
+	}
 
 	@Override
 	public int estimateSalesUnitPrice(final IVessel vessel, final IDischargeOption dischargeOption, final IPortTimesRecord portTimesRecord) {
@@ -52,7 +69,7 @@ public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPr
 	}
 
 	public void setPrice(final int newPrice) {
-		this.price.set(newPrice);
+		this.price.set(newPrice + addToPrice);
 	}
 
 	@Override

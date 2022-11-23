@@ -86,6 +86,7 @@ public final class SchedulerConstants {
 
 	public static final String OPTIMISE_PAPER_PNL = "optimise-paper-pnl";
 	public static final String COMPUTE_EXPOSURES = "compute-exposures";
+	public static final String IGNORE_EXPOSURES = "ignore-exposures";
 	public static final String EXPOSURES_CUTOFF_AT_PROMPT_START = "exposures-cutoff-at-prompt-start";
 	public static final String COMPUTE_PAPER_PNL = "compute-paper-pnl";
 	public static final String RE_HEDGE_WITH_PAPERS = "re-hedge-with-papers";

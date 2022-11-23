@@ -626,6 +626,32 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL: {
+				SwapValueMatrixModel swapValueMatrixModel = (SwapValueMatrixModel)theEObject;
+				T result = caseSwapValueMatrixModel(swapValueMatrixModel);
+				if (result == null) result = caseAbstractAnalysisModel(swapValueMatrixModel);
+				if (result == null) result = caseUUIDObject(swapValueMatrixModel);
+				if (result == null) result = caseNamedObject(swapValueMatrixModel);
+				if (result == null) result = caseMMXObject(swapValueMatrixModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT: {
+				SwapValueMatrixResult swapValueMatrixResult = (SwapValueMatrixResult)theEObject;
+				T result = caseSwapValueMatrixResult(swapValueMatrixResult);
+				if (result == null) result = caseUUIDObject(swapValueMatrixResult);
+				if (result == null) result = caseMMXObject(swapValueMatrixResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET: {
+				SwapValueMatrixResultSet swapValueMatrixResultSet = (SwapValueMatrixResultSet)theEObject;
+				T result = caseSwapValueMatrixResultSet(swapValueMatrixResultSet);
+				if (result == null) result = caseUUIDObject(swapValueMatrixResultSet);
+				if (result == null) result = caseMMXObject(swapValueMatrixResultSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1647,6 +1673,51 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCargoPnLResult(CargoPnLResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixModel(SwapValueMatrixModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixResult(SwapValueMatrixResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Result Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Result Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixResultSet(SwapValueMatrixResultSet object) {
 		return null;
 	}
 

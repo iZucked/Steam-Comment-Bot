@@ -142,7 +142,6 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 		}
 		
 		sandboxUIHelper.updateGridItem(cell, s);
-		 
 
 		if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 			if (validationErrors.containsKey(element)) {

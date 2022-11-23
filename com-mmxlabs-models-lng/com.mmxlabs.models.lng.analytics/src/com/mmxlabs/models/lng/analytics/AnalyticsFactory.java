@@ -610,6 +610,33 @@ public interface AnalyticsFactory extends EFactory {
 	CargoPnLResult createCargoPnLResult();
 
 	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Model</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixModel createSwapValueMatrixModel();
+
+	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Result</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixResult createSwapValueMatrixResult();
+
+	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Result Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Result Set</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixResultSet createSwapValueMatrixResultSet();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

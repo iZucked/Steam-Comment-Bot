@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getViabilityModel <em>Viability Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel <em>Mtm Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getBreakevenModels <em>Breakeven Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSwapValueMatrixModels <em>Swap Value Matrix Models</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
@@ -127,6 +128,18 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<BreakEvenAnalysisModel> getBreakevenModels();
+
+	/**
+	 * Returns the value of the '<em><b>Swap Value Matrix Models</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Swap Value Matrix Models</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_SwapValueMatrixModels()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<SwapValueMatrixModel> getSwapValueMatrixModels();
 
 } // end of  AnalyticsModel
 

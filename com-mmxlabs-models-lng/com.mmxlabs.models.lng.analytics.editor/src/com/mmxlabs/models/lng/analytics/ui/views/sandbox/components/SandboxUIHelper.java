@@ -25,8 +25,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
