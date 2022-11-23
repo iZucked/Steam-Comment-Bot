@@ -43,7 +43,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	private ICommandHandler commandHandler;
 	protected EClass displayedClass;
-	protected IDisplayCompositeLayoutProvider layoutProvider = createLayoutProvider();
+	protected IDisplayCompositeLayoutProvider layoutProvider ;//= createLayoutProvider();
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 	/**
 	 */
@@ -58,7 +58,15 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	}
 
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(EClass eClass) {
+		final List<IComponentHelper> helpers = Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(eClass);
+		for (final IComponentHelper helper : helpers) {
+			IDisplayCompositeLayoutProvider lpOverride = helper.createLayoutProvider();
+			if (lpOverride != null) {
+				return lpOverride;
+			}
+		}
+		
 		return new DefaultDisplayCompositeLayoutProvider();
 	}
 
@@ -158,6 +166,9 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		final EClass eClass = object.eClass();
 		this.object = object;
+		if (layoutProvider == null) {
+			layoutProvider = createLayoutProvider(eClass);
+		}
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
 			clear();

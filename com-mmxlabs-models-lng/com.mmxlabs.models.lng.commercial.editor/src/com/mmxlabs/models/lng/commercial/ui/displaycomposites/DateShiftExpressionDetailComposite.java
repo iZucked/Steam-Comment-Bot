@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EClass;
+
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
@@ -37,7 +39,7 @@ public class DateShiftExpressionDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override

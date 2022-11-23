@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -88,7 +89,7 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //

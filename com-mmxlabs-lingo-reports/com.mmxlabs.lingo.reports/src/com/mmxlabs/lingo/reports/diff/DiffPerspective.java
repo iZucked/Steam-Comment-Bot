@@ -37,6 +37,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
 		changeSetArea.addView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
+		changeSetArea.addView(ReportsConstants.VIEW_DATA_DIFF_SCENARIOS_ID);;
 		vesselSummaryReportArea.addView(ConfigurableVesselSummaryReport.ID);
 
 		ganttArea.addView(ScheduleSummaryReport.ID);

@@ -462,6 +462,11 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 	private<R extends NamedObject> ScenarioDiffData findDiffs(final R pinnedNamedObject, final R nonPinnedNamedObject) {
 		Set<EStructuralFeature> blackList1 = new HashSet<>();
 		blackList1.add(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+		blackList1.add(CargoPackage.eINSTANCE.getAssignableElement_SequenceHint());
+		blackList1.add(FleetPackage.eINSTANCE.getVessel_MmxReference());
+		blackList1.add(PortPackage.eINSTANCE.getLocation_MmxId());
+		blackList1.add(FleetPackage.eINSTANCE.getVessel_MmxId());
+		blackList1.add(CargoPackage.eINSTANCE.getVesselCharter_ForceHireCostOnlyEndRule());
 		if (hideNotes) {
 			blackList1.add(CargoPackage.eINSTANCE.getSlot_Notes());
 			blackList1.add(CommercialPackage.eINSTANCE.getContract_Notes());

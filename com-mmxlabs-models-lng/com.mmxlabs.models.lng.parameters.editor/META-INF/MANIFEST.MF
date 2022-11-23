@@ -4,7 +4,7 @@ Bundle-Name: Parameters Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.parameters.editor;singleton:=true
 Bundle-Version: 5.10.6.qualifier
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: 
  com.mmxlabs.models.lng.parameters.editor.ui,
  com.mmxlabs.models.lng.parameters.editor.util

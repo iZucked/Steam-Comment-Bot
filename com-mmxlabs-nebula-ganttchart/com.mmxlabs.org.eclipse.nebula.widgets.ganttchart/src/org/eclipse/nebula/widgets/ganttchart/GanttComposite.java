@@ -310,14 +310,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	private final List<GanttSpecialDateRange> _specDateRanges;
 
 	// cache for "string-extented" strings for much faster fetching
-	  private final Map<String, Point> _stringWidthCache;
+	private final Map<String, Point> _stringWidthCache;
 
 	// the total of all non-hidden events that are GanttEvents
 	private int _totVisEventCnt;
 
-	private	final VerticalDragDropManager _vDNDManager;
+	private final VerticalDragDropManager _vDNDManager;
 
-	private	final GanttUndoRedoManager _undoRedoManager;
+	private final GanttUndoRedoManager _undoRedoManager;
 
 	private boolean _drawToMinute;
 
@@ -1323,6 +1323,15 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				int xpos = getBounds().width - legendWidth - 4;
 				int ypos = 0;
 
+				// Take into account the RHS vertical scrollbar. We can't easily get the number,
+				// but we can infer it.
+				if (getVerticalBar().isVisible()) {
+					int a = getBounds().width;
+					int b = getClientArea().width;
+					int c = a - b;
+					xpos -= c;
+				}
+
 				gc.setBackground(ColorCache.getColor(ColorCache.BLACK));
 				gc.fillRectangle(new Rectangle(xpos, ypos, 2 + legendWidth, 2 + legendHeight));
 
@@ -1337,20 +1346,46 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				gc.setForeground(ColorCache.getColor(ColorCache.BLACK));
 				for (int r = 0; r < rows; ++r) {
 					final ILegendItem item = legendItems.get(r);
-					int c = 0;
 
-					for (final Color rgb : item.getColours()) {
-						gc.setBackground(ColorCache.getColor(ColorCache.BLACK));
-						gc.fillRectangle(new Rectangle(xpos + size * c + 2, colOffset + ypos + r * stringHeight, 2 + size, 2 + size));
+					var a = item.getItem();
+					if (a != null) {
+						if (a instanceof List<?> l) {
+							int xx = xpos + 3;
+							for (var a2 : l) {
+								GanttEvent ge = (GanttEvent) a2;
+								Rectangle b = ge.getBounds();
+//						ge.setSpecialDrawMode(SpecialDrawModes.BORDER_ONLY);
+								_paintManager.drawEvent(this, _settings, _colorManager, ge, gc, false, false, 1, xx, ypos + r * stringHeight, 1, b);
+								xx+= 5;
+							}
+						} else {
+							GanttEvent ge = (GanttEvent) a;
+							Rectangle b = ge.getBounds();
+//							ge.setSpecialDrawMode(SpecialDrawModes.BORDER_ONLY);
+							_paintManager.drawEvent(this, _settings, _colorManager, ge, gc, false, false, 1, xpos + 3, ypos + r * stringHeight, 1, b);
+						}
+						gc.setForeground(ColorCache.getColor(ColorCache.BLACK));
+						gc.setBackground(ColorCache.getColor(ColorCache.WHITE));
 
-						gc.setBackground(rgb);
-						gc.fillRectangle(new Rectangle(xpos + 1 + size * c + 2, colOffset + ypos + 1 + r * stringHeight, size, size));
-						++c;
+						gc.drawString(item.getDescription(), xpos + maxColours * size + 8, ypos + r * stringHeight);
+
+					} else {
+
+						int c = 0;
+
+						for (final Color rgb : item.getColours()) {
+							gc.setBackground(ColorCache.getColor(ColorCache.BLACK));
+							gc.fillRectangle(new Rectangle(xpos + size * c + 2, colOffset + ypos + r * stringHeight, 2 + size, 2 + size));
+
+							gc.setBackground(rgb);
+							gc.fillRectangle(new Rectangle(xpos + 1 + size * c + 2, colOffset + ypos + 1 + r * stringHeight, size, size));
+							++c;
+						}
+						gc.setBackground(ColorCache.getColor(ColorCache.WHITE));
+						gc.drawString(item.getDescription(), xpos + maxColours * size + 8, ypos + r * stringHeight);
 					}
-					gc.setBackground(ColorCache.getColor(ColorCache.WHITE));
-					gc.drawString(item.getDescription(), xpos + maxColours * size + 8, ypos + r * stringHeight);
-
 				}
+
 			}
 		}
 	}
@@ -1423,7 +1458,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * ISettings.VIEW_YEAR: break; case ISettings.VIEW_D_DAY: break; default: break;
 	 * }
 	 * 
-	 * while (true) { _verticalLineLocations.add(Integer.valueOf(current)); // NOPMD } }
+	 * while (true) { _verticalLineLocations.add(Integer.valueOf(current)); // NOPMD
+	 * } }
 	 */
 	/**
 	 * Draws the header but if calculateOnly is set it doesn't actually draw, it
@@ -3507,7 +3543,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 					if (i != 0 && lastLoopWasGroup) {
 						yStart += _eventHeight + _eventSpacer;
 					}
-					groupLocations.put(ge.getGanttGroup(),  Integer.valueOf(yStart));
+					groupLocations.put(ge.getGanttGroup(), Integer.valueOf(yStart));
 				}
 			}
 
@@ -3526,13 +3562,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			int fixedRowHeight = _fixedRowHeight;
 			int verticalAlignment = ge.getVerticalEventAlignment();
-
+			int eventHeight = _eventHeight;
 			if (ge.getGanttGroup() == null) {
 				if (!ge.isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getFixedRowHeight();
 				}
 			} else {
-				verticalAlignment = ge.getGanttGroup().getVerticalEventAlignment();
+//				verticalAlignment = ge.getGanttGroup().getVerticalEventAlignment();
 				if (!ge.getGanttGroup().isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getGanttGroup().getFixedRowHeight();
 				}
@@ -3547,16 +3583,22 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 				int extra = 0;
 
+				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
+
 				switch (verticalAlignment) {
 				case SWT.BOTTOM:
-					extra = fixedRowHeight - _eventHeight;
+					extra = halfExtra;
+					// Reduce size to avoid clipping
+					eventHeight += halfExtra - 1;
+
 					break;
 				case SWT.CENTER:
-					extra = ((fixedRowHeight / 2) - (_eventHeight / 2));
+					extra = halfExtra;// ((fixedRowHeight / 2) - (_eventHeight / 2));
 					break;
 				case SWT.NONE:
 				case SWT.TOP:
-					extra = _eventSpacer - _eventHeight;
+					// extra = 0;//fixedRowHeight;//_eventSpacer - fixedRowHeight ;
+					eventHeight += halfExtra;
 					break;
 				default:
 					break;
@@ -3565,7 +3607,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				if (extra < 0) {
 					extra = 0;
 				}
-
+//				eventHeight+= extra;
 				yDrawPos += extra;
 
 			}
@@ -3574,7 +3616,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			// just set the yStart to the last yStart, which actually
 			// got through the above switch statement and had its start position calculated
 			if (!newGroup && groupedEvent) {
-				yDrawPos = groupLocations.get(ge.getGanttGroup()).intValue();
+//				yDrawPos = groupLocations.get(ge.getGanttGroup()).intValue();
 			}
 
 			if (fixedHeight) {
@@ -3584,7 +3626,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 
 			// set event bounds
-			ge.setBounds(new Rectangle(xStart, yDrawPos, xEventWidth, _eventHeight));
+			ge.setBounds(new Rectangle(xStart, yDrawPos, xEventWidth, eventHeight));
 
 			// update the actual width of the event
 			ge.updateActualWidth();
@@ -3594,14 +3636,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			} else {
 				// space them out
 				if (!fixedHeight) {
-					yStart += _eventHeight + _eventSpacer;
-					_bottomMostY = yStart + _eventHeight;
+					// yStart += _eventHeight + _eventSpacer;
+					_bottomMostY = yStart;// + _eventHeight;
 				}
 				lastLoopWasGroup = false;
 
 			}
 
-			_bottomMostY = Math.max(_bottomMostY, yStart + _eventHeight);
+			_bottomMostY = Math.max(_bottomMostY, yStart);
 
 		}
 
@@ -5119,7 +5161,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		final List<GanttConnection> toRemove = new ArrayList<>();
 		for (int i = 0; i < _ganttConnections.size(); i++) {
-			final GanttConnection con =  _ganttConnections.get(i);
+			final GanttConnection con = _ganttConnections.get(i);
 
 			if (con.getSource().equals(event) || con.getTarget().equals(event)) {
 				toRemove.add(con);
@@ -5773,7 +5815,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
 				for (int j = 0; j < _eventListeners.size(); j++) {
-					 _eventListeners.get(j).eventDoubleClicked(event, me);
+					_eventListeners.get(j).eventDoubleClicked(event, me);
 				}
 
 				return;
@@ -6197,7 +6239,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (notifyListeners) {
 				if (_resizing) {
 					for (int i = 0; i < _eventListeners.size(); i++) {
-						 _eventListeners.get(i).phaseResizeFinished(_dragPhase, event);
+						_eventListeners.get(i).phaseResizeFinished(_dragPhase, event);
 					}
 				}
 				if (_dragging) {
@@ -6437,9 +6479,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		final List<GanttEvent> sorted = new ArrayList<>();
 		for (int i = 0; i < allEvents.size(); i++) {
-			final IGanttChartItem itm =  allEvents.get(i);
+			final IGanttChartItem itm = allEvents.get(i);
 			if (itm instanceof GanttEvent ge) {
-				if ( ge.isHidden()) {
+				if (ge.isHidden()) {
 					continue;
 				}
 

@@ -441,6 +441,11 @@ public class PriceExpressionUtils {
 
 		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
 			final AbstractYearMonthCurve index = e.getKey();
+
+			if (index.isSetExpression()) {
+				continue;
+			}
+
 			String type = "index";
 			if (index instanceof CommodityCurve) {
 				type = "commodity pricing";

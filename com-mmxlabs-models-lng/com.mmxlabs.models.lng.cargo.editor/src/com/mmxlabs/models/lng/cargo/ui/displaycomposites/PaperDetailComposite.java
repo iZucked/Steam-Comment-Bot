@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -53,7 +54,7 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override

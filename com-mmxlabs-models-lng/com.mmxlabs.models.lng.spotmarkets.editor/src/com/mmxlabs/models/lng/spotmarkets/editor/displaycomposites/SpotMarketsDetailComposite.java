@@ -4,27 +4,14 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites;
 
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
- * All rights reserved.
- */
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
-import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 
 /**
@@ -42,7 +29,6 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 	public SpotMarketsDetailComposite(final Composite parent, final int style, final DetailGroup contractDetailGroup, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 		this.contractDetailGroup = contractDetailGroup;
-		layoutProvider = createLayoutProvider();
 	}
 
 	@Override
@@ -79,7 +65,7 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		if (contractDetailGroup == DetailGroup.GENERAL) {
 
 			return new RowGroupDisplayCompositeLayoutProviderBuilder() //
@@ -116,6 +102,6 @@ public class SpotMarketsDetailComposite extends DefaultDetailComposite {
 					//
 					.make();
 		}
-		return super.createLayoutProvider();
+		return super.createLayoutProvider(eClass);
 	}
 }

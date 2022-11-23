@@ -6,7 +6,7 @@ Automatic-Module-Name: com.mmxlabs.models.lng.adp.rateability.spacing
 Bundle-Version: 5.10.6.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.adp.rateability.export,
  com.mmxlabs.models.lng.adp.rateability.spacing

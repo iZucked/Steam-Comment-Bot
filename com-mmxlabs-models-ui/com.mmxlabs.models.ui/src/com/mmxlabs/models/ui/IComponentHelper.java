@@ -9,8 +9,11 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
+import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 
 /**
  * Instances of this interface are used to populate AbstractDetailComposite
@@ -45,5 +48,16 @@ public interface IComponentHelper {
 
 	default int getDisplayPriority() {
 		return 0;
+	}
+
+	/**
+	 * Create a row layout provider to override the default in
+	 * {@link DefaultDetailComposite}. This is to avoid needing to create a
+	 * specific subclass just for this purpose
+	 * 
+	 * @return
+	 */
+	default @Nullable IDisplayCompositeLayoutProvider createLayoutProvider() {
+		return null;
 	}
 }

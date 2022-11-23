@@ -10,6 +10,7 @@
 				"country": "Algeria",
 				"timeZone": "Africa/Algiers"
 			},
+			"locode": "DZ  BHA",
 			"upstreamID": "DZ0004"
 		}, {
 			"mmxId": "L_AO_Soyo",
@@ -21,6 +22,7 @@
 				"country": "Angola",
 				"timeZone": "Africa/Luanda"
 			},
+			"locode": "AO  SZA",
 			"upstreamID": "AO0061"
 		}, {
 			"mmxId": "L_YI_Tener",
@@ -32,6 +34,7 @@
 				"country": "Canary Is.",
 				"timeZone": "Atlantic/Canary"
 			},
+			"locode": "ES  SCT",
 			"upstreamID": "YI0016"
 		}, {
 			"mmxId": "L_CN_Ningb",
@@ -43,6 +46,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  NBO",
 			"upstreamID": "CN0101"
 		}, {
 			"mmxId": "L_CN_BeiHa",
@@ -54,6 +58,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  BHY",
 			"upstreamID": "CN0009"
 		}, {
 			"mmxId": "L_CN_Zhous",
@@ -65,6 +70,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  ZOS",
 			"upstreamID": "CN0188"
 		}, {
 			"mmxId": "L_HR_KrkIs",
@@ -75,6 +81,7 @@
 				"country": "Croatia",
 				"timeZone": "Europe/Zagreb"
 			},
+			"locode": "HR  KRK",
 			"upstreamID": "HR0036"
 		}, {
 			"mmxId": "L_FR_FosCa",
@@ -86,6 +93,7 @@
 				"country": "France",
 				"timeZone": "Europe/Paris"
 			},
+			"locode": "FR  FOS",
 			"upstreamID": "FR0248"
 		}, {
 			"mmxId": "L_ID_Jakar",
@@ -97,6 +105,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Jakarta"
 			},
+			"locode": "ID  JKT",
 			"upstreamID": "ID0076"
 		}, {
 			"mmxId": "L_JP_Higas",
@@ -108,6 +117,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HIO",
 			"upstreamID": "JP0116"
 		}, {
 			"mmxId": "L_JP_Joets",
@@ -118,6 +128,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Kuching"
 			},
+			"locode": "JP  JTS",
 			"upstreamID": "JP0197"
 		}, {
 			"mmxId": "L_JP_Naoet",
@@ -128,6 +139,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Kuching"
 			},
+			"locode": "JP  NAO",
 			"upstreamID": "JP0197"
 		}, {
 			"mmxId": "L_JP_Senbo",
@@ -138,6 +150,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SAK",
 			"upstreamID": "JP0254"
 		}, {
 			"mmxId": "L_NG_Bonny",
@@ -149,6 +162,7 @@
 				"country": "Nigeria",
 				"timeZone": "Africa/Lagos"
 			},
+			"locode": "NG  BON",
 			"upstreamID": "NG0009"
 		}, {
 			"mmxId": "L_PH_Taban",
@@ -159,6 +173,7 @@
 				"country": "Philippines",
 				"timeZone": "Asia/Manila"
 			},
+			"locode": "PH  TBG",
 			"upstreamID": "PH0018"
 		}, {
 			"mmxId": "L_KR_Gwang",
@@ -169,6 +184,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  KAN",
 			"upstreamID": "KR0046"
 		}, {
 			"mmxId": "L_KR_Pyeon",
@@ -180,6 +196,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  PTK",
 			"upstreamID": "KR0079"
 		}, {
 			"mmxId": "L_KR_Samch",
@@ -191,6 +208,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  SUK",
 			"upstreamID": "KR0033"
 		}, {
 			"mmxId": "L_ES_ElFer",
@@ -202,6 +220,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  FRO",
 			"upstreamID": "ES0061"
 		}, {
 			"mmxId": "L_DZ_Arzew",
@@ -212,6 +231,7 @@
 				"country": "Algeria",
 				"timeZone": "Africa/Algiers"
 			},
+			"locode": "DZ  AZW",
 			"upstreamID": "DZ0003"
 		}, {
 			"mmxId": "L_DZ_Skikd",
@@ -223,6 +243,7 @@
 				"country": "Algeria",
 				"timeZone": "Africa/Algiers"
 			},
+			"locode": "DZ  SKK",
 			"upstreamID": "DZ0033"
 		}, {
 			"mmxId": "L_AR_Bahia",
@@ -233,6 +254,7 @@
 				"country": "Argentina",
 				"timeZone": "America/Buenos_Aires"
 			},
+			"locode": "AR  BHI",
 			"upstreamID": "AR0129"
 		}, {
 			"mmxId": "L_AR_Escob",
@@ -243,6 +265,7 @@
 				"country": "Argentina",
 				"timeZone": "America/Cordoba"
 			},
+			"locode": "AR  BDE",
 			"upstreamID": "AR0130"
 		}, {
 			"mmxId": "L_AU_Barro",
@@ -254,6 +277,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Perth"
 			},
+			"locode": "AU  BWB",
 			"upstreamID": "AU0021"
 		}, {
 			"mmxId": "L_AU_Dampi",
@@ -264,6 +288,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Perth"
 			},
+			"locode": "AU  DAM",
 			"upstreamID": "AU0089"
 		}, {
 			"mmxId": "L_AU_Darwi",
@@ -275,6 +300,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Darwin"
 			},
+			"locode": "AU  DRW",
 			"upstreamID": "AU0329"
 		}, {
 			"mmxId": "L_AU_Glads",
@@ -285,6 +311,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Brisbane"
 			},
+			"locode": "AU  GLT",
 			"upstreamID": "AU0421"
 		}, {
 			"mmxId": "L_AU_Karra",
@@ -296,6 +323,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Perth"
 			},
+			"locode": "AU  KTA",
 			"upstreamID": "AU0311"
 		}, {
 			"mmxId": "L_AU_Pluto",
@@ -316,6 +344,7 @@
 				"country": "Bahrain",
 				"timeZone": "Asia/Bahrain"
 			},
+			"locode": "BH  BAH",
 			"upstreamID": "BH0003"
 		}, {
 			"mmxId": "L_BD_Chitt",
@@ -326,6 +355,7 @@
 				"country": "Bangladesh",
 				"timeZone": "Asia/Dhaka"
 			},
+			"locode": "BD  CGP",
 			"upstreamID": "BD0003"
 		}, {
 			"mmxId": "L_BE_Zeebr",
@@ -337,6 +367,7 @@
 				"country": "Belgium",
 				"timeZone": "Europe/Brussels"
 			},
+			"locode": "BE  ZEE",
 			"upstreamID": "BE0033"
 		}, {
 			"mmxId": "L_BR_Guana",
@@ -359,6 +390,7 @@
 				"country": "Brazil",
 				"timeZone": "America/Fortaleza"
 			},
+			"locode": "BR  PEC",
 			"upstreamID": "BR0166"
 		}, {
 			"mmxId": "L_BR_Salva",
@@ -370,6 +402,7 @@
 				"country": "Brazil",
 				"timeZone": "America/Sao_Paulo"
 			},
+			"locode": "BR  SSA",
 			"upstreamID": "BR0130"
 		}, {
 			"mmxId": "L_BR_SaoFr",
@@ -380,6 +413,7 @@
 				"country": "Brazil",
 				"timeZone": "America/Sao_Paulo"
 			},
+			"locode": "BR  SFS",
 			"upstreamID": "BR0134"
 		}, {
 			"mmxId": "L_BN_Lumut",
@@ -391,6 +425,7 @@
 				"country": "Brunei Darussalam",
 				"timeZone": "Asia/Brunei"
 			},
+			"locode": "BN  LUM",
 			"upstreamID": "BN0003"
 		}, {
 			"mmxId": "L_BN_Seria",
@@ -401,6 +436,7 @@
 				"country": "Brunei Darussalam",
 				"timeZone": "Asia/Brunei"
 			},
+			"locode": "BN  SER",
 			"upstreamID": "BN0005"
 		}, {
 			"mmxId": "L_CM_Kribi",
@@ -411,6 +447,7 @@
 				"country": "Cameroon",
 				"timeZone": "Africa/Douala"
 			},
+			"locode": "CM  KBI",
 			"upstreamID": "CM0009"
 		}, {
 			"mmxId": "L_CA_Canap",
@@ -422,6 +459,7 @@
 				"country": "Canada",
 				"timeZone": "America/Halifax"
 			},
+			"locode": "CA  CPT",
 			"upstreamID": "CA0712"
 		}, {
 			"mmxId": "L_CA_Halif",
@@ -432,6 +470,7 @@
 				"country": "Canada",
 				"timeZone": "America/Halifax"
 			},
+			"locode": "CA  HAL",
 			"upstreamID": "CA0201"
 		}, {
 			"mmxId": "L_CA_Kitim",
@@ -442,6 +481,7 @@
 				"country": "Canada",
 				"timeZone": "America/Vancouver"
 			},
+			"locode": "CA  KTM",
 			"upstreamID": "CA0250"
 		}, {
 			"mmxId": "L_CA_Princ",
@@ -452,6 +492,7 @@
 				"country": "Canada",
 				"timeZone": "America/Vancouver"
 			},
+			"locode": "CA  KTM",
 			"upstreamID": "CA0422"
 		}, {
 			"mmxId": "L_CA_Quebe",
@@ -462,6 +503,7 @@
 				"country": "Canada",
 				"timeZone": "America/Toronto"
 			},
+			"locode": "CA  QUE",
 			"upstreamID": "CA0427"
 		}, {
 			"mmxId": "L_CL_Mejil",
@@ -472,6 +514,7 @@
 				"country": "Chile",
 				"timeZone": "America/Santiago"
 			},
+			"locode": "CL  MJS",
 			"upstreamID": "CL0043"
 		}, {
 			"mmxId": "L_CL_Quint",
@@ -482,6 +525,7 @@
 				"country": "Chile",
 				"timeZone": "America/Santiago"
 			},
+			"locode": "CLQTV",
 			"upstreamID": "CL0068"
 		}, {
 			"mmxId": "L_CL_Talca",
@@ -492,6 +536,7 @@
 				"country": "Chile",
 				"timeZone": "America/Santiago"
 			},
+			"locode": "CL  TAL",
 			"upstreamID": "CL0074"
 		}, {
 			"mmxId": "L_CN_Chiwa",
@@ -502,6 +547,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  CWN",
 			"upstreamID": "CN0025"
 		}, {
 			"mmxId": "L_CN_Dalia",
@@ -512,6 +558,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  DAG",
 			"upstreamID": "CN0609"
 		}, {
 			"mmxId": "L_CN_Fujia",
@@ -523,6 +570,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  PUT",
 			"upstreamID": "CN0587"
 		}, {
 			"mmxId": "L_CN_Guang",
@@ -534,6 +582,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN GUT",
 			"upstreamID": "CN0204"
 		}, {
 			"mmxId": "L_CN_Yuedo",
@@ -544,6 +593,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  JYG",
 			"upstreamID": "CN0662"
 		}, {
 			"mmxId": "L_CN_Haiko",
@@ -554,6 +604,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  HKO",
 			"upstreamID": "CN0036"
 		}, {
 			"mmxId": "L_SP_Haina",
@@ -565,6 +616,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  YPG",
 			"upstreamID": "SP5012"
 		}, {
 			"mmxId": "L_CN_Heibe",
@@ -586,6 +638,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  CFD",
 			"upstreamID": "CN0637"
 		}, {
 			"mmxId": "L_CN_Tangs",
@@ -596,17 +649,19 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  TGS",
 			"upstreamID": "CN0637"
 		}, {
 			"mmxId": "L_CN_Jiang",
 			"name": "Jiangsu",
-			"aliases": ["Nantong", "Rudong"],
+			"aliases": ["Nantong", "Rudong", "Qidong"],
 			"geographicPoint": {
 				"lat": 32.54999923706055,
 				"lon": 121.43000030517578,
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN JIA",
 			"upstreamID": "CN0606"
 		}, {
 			"mmxId": "L_CN_Liany",
@@ -617,6 +672,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  LYG",
 			"upstreamID": "CN0073"
 		}, {
 			"mmxId": "L_CN_Qingd",
@@ -628,6 +684,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  QIN",
 			"upstreamID": "CN0148"
 		}, {
 			"mmxId": "L_CN_Qinhu",
@@ -638,6 +695,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  SHP",
 			"upstreamID": "CN0109"
 		}, {
 			"mmxId": "L_CN_Qinzh",
@@ -648,6 +706,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  QZH",
 			"upstreamID": "CN0110"
 		}, {
 			"mmxId": "L_CN_Shang",
@@ -658,16 +717,19 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN SHA",
 			"upstreamID": "CN0116"
 		}, {
 			"mmxId": "L_CN_Shenz",
 			"name": "Shenzhen",
+			"aliases": ["Diefu"],
 			"geographicPoint": {
 				"lat": 22.443429946899414,
 				"lon": 113.88360595703125,
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  SZX",
 			"upstreamID": "CN0122"
 		}, {
 			"mmxId": "L_CN_Tianj",
@@ -679,6 +741,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  TSN",
 			"upstreamID": "CN0594"
 		}, {
 			"mmxId": "L_CN_Tianj2",
@@ -689,6 +752,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  TSN",
 			"upstreamID": "CN0594"
 		}, {
 			"mmxId": "L_CN_Yangp",
@@ -699,6 +763,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  YGP",
 			"upstreamID": "CN0621"
 		}, {
 			"mmxId": "L_CN_Yangs",
@@ -710,6 +775,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  YSN",
 			"upstreamID": "CN0540"
 		}, {
 			"mmxId": "L_CN_Zhang",
@@ -720,6 +786,7 @@
 				"country": "China",
 				"timeZone": "Asia/Shanghai"
 			},
+			"locode": "CN  ZJG", 
 			"upstreamID": "CN0182"
 		}, {
 			"mmxId": "L_CN_Zhuha",
@@ -730,6 +797,7 @@
 				"country": "China",
 				"timeZone": "Asia/Chongqing"
 			},
+			"locode": "CN  ZUH",
 			"upstreamID": "CN0189"
 		}, {
 			"mmxId": "L_CO_Puert",
@@ -741,6 +809,7 @@
 				"country": "Colombia",
 				"timeZone": "America/Bogota"
 			},
+			"locode": "CO  CTG",
 			"upstreamID": "CO0051"
 		}, {
 			"mmxId": "L_CY_Limas",
@@ -751,6 +820,7 @@
 				"country": "Cyprus",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "CY  LMS",
 			"upstreamID": "CY0014"
 		}, {
 			"mmxId": "L_DO_AESAn",
@@ -762,6 +832,7 @@
 				"country": "Dominican Republic",
 				"timeZone": "America/Santo_Domingo"
 			},
+			"locode": "DO  CAU",
 			"upstreamID": "DO0027"
 		}, {
 			"mmxId": "L_TP_Dili",
@@ -772,6 +843,7 @@
 				"country": "East Timor",
 				"timeZone": "Asia/Dili"
 			},
+			"locode": "TL  DIL",
 			"upstreamID": "TP0001"
 		}, {
 			"mmxId": "L_EG_AinSo",
@@ -783,6 +855,7 @@
 				"country": "Egypt",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "EG  AIS",
 			"upstreamID": "EG0006"
 		}, {
 			"mmxId": "L_EG_Damie",
@@ -794,6 +867,7 @@
 				"country": "Egypt",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "EG  DAM",
 			"upstreamID": "EG0016"
 		}, {
 			"mmxId": "L_EG_Idku",
@@ -804,6 +878,7 @@
 				"country": "Egypt",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "EG  IKU",
 			"upstreamID": "EG0096"
 		}, {
 			"mmxId": "L_CP_Suez",
@@ -814,6 +889,7 @@
 				"country": "Egypt",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "EG  SUZ",
 			"upstreamID": "CP3200"
 		}, {
 			"mmxId": "L_SV_Acaju",
@@ -824,6 +900,7 @@
 				"country": "El Salvador",
 				"timeZone": "America/El_Salvador"
 			},
+			"locode": "SV  AQJ",
 			"upstreamID": "SV0001"
 		}, {
 			"mmxId": "L_GQ_Punta",
@@ -835,6 +912,7 @@
 				"country": "Equatorial Guinea",
 				"timeZone": "Africa/Malabo"
 			},
+			"locode": "GQ  PET",
 			"upstreamID": "GQ0044"
 		}, {
 			"mmxId": "L_EE_Paldi",
@@ -846,6 +924,7 @@
 				"country": "Estonia",
 				"timeZone": "Europe/Tallinn"
 			},
+			"locode": "EE PLS",
 			"upstreamID": "EE0019"
 		}, {
 			"mmxId": "L_FR_Dunki",
@@ -857,6 +936,7 @@
 				"country": "France",
 				"timeZone": "Europe/Paris"
 			},
+			"locode": "EE  PLA",
 			"upstreamID": "FR0299"
 		}, {
 			"mmxId": "L_FR_FosSu",
@@ -868,6 +948,7 @@
 				"country": "France",
 				"timeZone": "Europe/Paris"
 			},
+			"locode": "FR  FOS",
 			"upstreamID": "FR0245"
 		}, {
 			"mmxId": "L_FR_LeHav",
@@ -878,6 +959,7 @@
 				"country": "France",
 				"timeZone": "Europe/Paris"
 			},
+			"locode": "FR  LEH",
 			"upstreamID": "FR0090"
 		}, {
 			"mmxId": "L_FR_Monto",
@@ -889,6 +971,7 @@
 				"country": "France",
 				"timeZone": "Europe/Paris"
 			},
+			"locode": "FR  MTX",
 			"upstreamID": "FR0134"
 		}, {
 			"mmxId": "L_DE_Rosto",
@@ -899,6 +982,7 @@
 				"country": "Germany",
 				"timeZone": "Europe/Berlin"
 			},
+			"locode": "DE  RSK",
 			"upstreamID": "DE0091"
 		}, {
 			"mmxId": "L_DE_Wilhe",
@@ -909,6 +993,7 @@
 				"country": "Germany",
 				"timeZone": "Europe/Berlin"
 			},
+			"locode": "DE  WVN",
 			"upstreamID": "DE0117"
 		}, {
 			"mmxId": "L_GI_Gibra",
@@ -920,6 +1005,7 @@
 				"country": "Gibraltar",
 				"timeZone": "Europe/Gibraltar"
 			},
+			"locode": "GI  GIB",
 			"upstreamID": "GI0003"
 		}, {
 			"mmxId": "L_GR_Revit",
@@ -930,6 +1016,7 @@
 				"country": "Greece",
 				"timeZone": "Europe/Athens"
 			},
+			"locode": "GR  REV",
 			"upstreamID": "GR0235"
 		}, {
 			"mmxId": "L_TT_Point",
@@ -941,6 +1028,7 @@
 				"country": "Guadeloupe",
 				"timeZone": "America/Guadeloupe"
 			},
+			"locode": "GP  PTP",
 			"upstreamID": "GP0005"
 		}, {
 			"mmxId": "L_IN_Dabho",
@@ -951,6 +1039,7 @@
 				"country": "India",
 				"timeZone": "Asia/Calcutta"
 			},
+			"locode": "IN  DHP",
 			"upstreamID": "IN0189"
 		}, {
 			"mmxId": "L_IN_Dahej",
@@ -961,6 +1050,7 @@
 				"country": "India",
 				"timeZone": "Asia/Calcutta"
 			},
+			"locode": "IN  DAH",
 			"upstreamID": "IN0201"
 		}, {
 			"mmxId": "L_IN_Ennor",
@@ -971,6 +1061,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  ENR",
 			"upstreamID": "IN0044"
 		}, {
 			"mmxId": "L_IN_Ganga",
@@ -981,6 +1072,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  GGV",
 			"upstreamID": "IN0171"
 		}, {
 			"mmxId": "L_IN_Haldi",
@@ -992,6 +1084,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  HAL",
 			"upstreamID": "IN0047"
 		}, {
 			"mmxId": "L_IN_Hazir",
@@ -1002,6 +1095,7 @@
 				"country": "India",
 				"timeZone": "Asia/Calcutta"
 			},
+			"locode": "IN  HZA",
 			"upstreamID": "IN0048"
 		}, {
 			"mmxId": "L_IN_Kakin",
@@ -1012,6 +1106,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  KAK",
 			"upstreamID": "IN0057"
 		}, {
 			"mmxId": "L_IN_Karwa",
@@ -1023,6 +1118,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  KRW",
 			"upstreamID": "IN0185"
 		}, {
 			"mmxId": "L_IN_Kochi",
@@ -1034,6 +1130,7 @@
 				"country": "India",
 				"timeZone": "Asia/Calcutta"
 			},
+			"locode": "IN  KOC",
 			"upstreamID": "IN0202"
 		}, {
 			"mmxId": "L_IN_Mundr",
@@ -1044,6 +1141,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  MUN",
 			"upstreamID": "IN0093"
 		}, {
 			"mmxId": "L_IN_Pipav",
@@ -1054,6 +1152,7 @@
 				"country": "India",
 				"timeZone": "Asia/Kolkata"
 			},
+			"locode": "IN  PAV",
 			"upstreamID": "IN0110"
 		}, {
 			"mmxId": "L_ID_Ambon",
@@ -1064,6 +1163,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Jayapura"
 			},
+			"locode": "ID  AMQ",
 			"upstreamID": "ID0008"
 		}, {
 			"mmxId": "L_ID_Arun",
@@ -1075,6 +1175,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Jakarta"
 			},
+			"locode": "ID  AUN",
 			"upstreamID": "ID0431"
 		}, {
 			"mmxId": "L_ID_Bonta",
@@ -1086,6 +1187,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Makassar"
 			},
+			"locode": "ID  BXT",
 			"upstreamID": "ID0054"
 		}, {
 			"mmxId": "L_ID_Luwuk",
@@ -1096,6 +1198,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Makassar"
 			},
+			"locode": "ID  LUW",
 			"upstreamID": "ID0154"
 		}, {
 			"mmxId": "L_ID_Semar",
@@ -1106,6 +1209,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Jakarta"
 			},
+			"locode": "ID  SRG",
 			"upstreamID": "ID0260"
 		}, {
 			"mmxId": "L_ID_Tangg",
@@ -1127,6 +1231,7 @@
 				"country": "Iraq",
 				"timeZone": "Asia/Baghdad"
 			},
+			"locode": "IQ  KAZ",
 			"upstreamID": "IQ0006"
 		}, {
 			"mmxId": "L_IR_ParsL",
@@ -1137,6 +1242,7 @@
 				"country": "Iran",
 				"timeZone": "Asia/Tehran"
 			},
+			"locode": "IR  ASA",
 			"upstreamID": "IR0003"
 		}, {
 			"mmxId": "L_IR_Tomba",
@@ -1148,6 +1254,7 @@
 				"country": "Iran",
 				"timeZone": "Asia/Tehran"
 			},
+			"locode": "IR  TMB",
 			"upstreamID": "IR0082"
 		}, {
 			"mmxId": "L_IE_Limer",
@@ -1158,6 +1265,7 @@
 				"country": "Ireland",
 				"timeZone": "Europe/Dublin"
 			},
+			"locode": "IE  LMK",
 			"upstreamID": "IE0057"
 		}, {
 			"mmxId": "L_IL_Ashdo",
@@ -1168,6 +1276,7 @@
 				"country": "Israel",
 				"timeZone": "Asia/Jerusalem"
 			},
+			"locode": "IL  ASH",
 			"upstreamID": "IL0013"
 		}, {
 			"mmxId": "L_IL_Hader",
@@ -1178,6 +1287,7 @@
 				"country": "Israel",
 				"timeZone": "Asia/Tel_Aviv"
 			},
+			"locode": "IL  HAD",
 			"upstreamID": "IL0014"
 		}, {
 			"mmxId": "L_IT_Falco",
@@ -1188,6 +1298,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  FAL",
 			"upstreamID": "IT0053"
 		}, {
 			"mmxId": "L_IT_Gioia",
@@ -1198,6 +1309,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  GIT",
 			"upstreamID": "IT0070"
 		}, {
 			"mmxId": "L_IT_Livor",
@@ -1208,6 +1320,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  LIV",
 			"upstreamID": "IT0276"
 		}, {
 			"mmxId": "L_IT_Orton",
@@ -1218,6 +1331,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  OTN",
 			"upstreamID": "IT0110"
 		}, {
 			"mmxId": "L_IT_Panig",
@@ -1229,6 +1343,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  SPE",
 			"upstreamID": "IT0270"
 		}, {
 			"mmxId": "L_IT_Porto",
@@ -1239,6 +1354,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  PEM",
 			"upstreamID": "IT0133"
 		}, {
 			"mmxId": "L_IT_Rosig",
@@ -1249,6 +1365,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  VDA",
 			"upstreamID": "IT0263"
 		}, {
 			"mmxId": "L_IT_Rovig",
@@ -1259,6 +1376,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  RVO",
 			"upstreamID": "IT0265"
 		}, {
 			"mmxId": "L_IT_Tries",
@@ -1269,6 +1387,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  TRS",
 			"upstreamID": "IT0204"
 		}, {
 			"mmxId": "L_JM_PortE",
@@ -1279,6 +1398,7 @@
 				"country": "Jamaica",
 				"timeZone": "America/Jamaica"
 			},
+			"locode": "JM  PEV",
 			"upstreamID": "JM0013"
 		}, {
 			"mmxId": "L_JP_Chita",
@@ -1289,6 +1409,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  CTA",
 			"upstreamID": "JP0021"
 		}, {
 			"mmxId": "L_JP_Fukuo",
@@ -1300,6 +1421,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  KMJ",
 			"upstreamID": "JP0358"
 		}, {
 			"mmxId": "L_JP_Futts",
@@ -1310,6 +1432,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  FTS",
 			"upstreamID": "JP0360"
 		}, {
 			"mmxId": "L_JP_Hachi",
@@ -1320,6 +1443,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HHE",
 			"upstreamID": "JP0043"
 		}, {
 			"mmxId": "L_JP_Hakod",
@@ -1330,6 +1454,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HKD",
 			"upstreamID": "JP0047"
 		}, {
 			"mmxId": "L_JP_Hatsu",
@@ -1340,6 +1465,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HAT",
 			"upstreamID": "JP0361"
 		}, {
 			"mmxId": "L_JP_Himej",
@@ -1350,6 +1476,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HIM",
 			"upstreamID": "JP0063"
 		}, {
 			"mmxId": "L_JP_Hitac",
@@ -1360,6 +1487,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HTC",
 			"upstreamID": "JP0451"
 		}, {
 			"mmxId": "L_JP_Kagos",
@@ -1370,6 +1498,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  KOJ",
 			"upstreamID": "JP0365"
 		}, {
 			"mmxId": "L_JP_Kawag",
@@ -1380,6 +1509,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  KNA",
 			"upstreamID": "JP0366"
 		}, {
 			"mmxId": "L_JP_Kitak",
@@ -1390,6 +1520,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  WAM",
 			"upstreamID": "JP0340"
 		}, {
 			"mmxId": "L_JP_Kushi",
@@ -1400,6 +1531,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  KUH",
 			"upstreamID": "JP0143"
 		}, {
 			"mmxId": "L_JP_Mizus",
@@ -1410,6 +1542,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  MIZ",
 			"upstreamID": "JP0174"
 		}, {
 			"mmxId": "L_JP_Nagas",
@@ -1420,6 +1553,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  NGS",
 			"upstreamID": "JP0188"
 		}, {
 			"mmxId": "L_JP_Nanao",
@@ -1430,6 +1564,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  NNO",
 			"upstreamID": "JP0196"
 		}, {
 			"mmxId": "L_JP_Negis",
@@ -1440,6 +1575,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  NGI",
 			"upstreamID": "JP0200"
 		}, {
 			"mmxId": "L_JP_Niiga",
@@ -1451,6 +1587,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  NIH",
 			"upstreamID": "JP0203"
 		}, {
 			"mmxId": "L_JP_Niiga2",
@@ -1462,6 +1599,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  KIJ",
 			"upstreamID": "JP0204"
 		}, {
 			"mmxId": "L_JP_Ohgis",
@@ -1473,6 +1611,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  OGS",
 			"upstreamID": "JP0215"
 		}, {
 			"mmxId": "L_JP_Oita",
@@ -1484,6 +1623,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  OIT",
 			"upstreamID": "JP0219"
 		}, {
 			"mmxId": "L_JP_Okina",
@@ -1495,6 +1635,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  GKA",
 			"upstreamID": "JP0369"
 		}, {
 			"mmxId": "L_JP_Osaka",
@@ -1506,6 +1647,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  OSA",
 			"upstreamID": "JP0238"
 		}, {
 			"mmxId": "L_JP_Otaru",
@@ -1517,6 +1659,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  OTR",
 			"upstreamID": "JP0240"
 		}, {
 			"mmxId": "L_JP_Sakai",
@@ -1527,6 +1670,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SAK",
 			"upstreamID": "JP0427"
 		}, {
 			"mmxId": "L_JP_Sakai2",
@@ -1537,6 +1681,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SKD",
 			"upstreamID": "JP0255"
 		}, {
 			"mmxId": "L_JP_Senda",
@@ -1547,6 +1692,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SDJ",
 			"upstreamID": "JP0264"
 		}, {
 			"mmxId": "L_JP_Shimi",
@@ -1558,6 +1704,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SMZ",
 			"upstreamID": "JP0274"
 		}, {
 			"mmxId": "L_JP_Shinm",
@@ -1569,6 +1716,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  TOS",
 			"upstreamID": "JP0368"
 		}, {
 			"mmxId": "L_JP_Sodeg",
@@ -1579,6 +1727,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SDU",
 			"upstreamID": "JP0362"
 		}, {
 			"mmxId": "L_JP_Soma",
@@ -1589,6 +1738,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  SOM",
 			"upstreamID": "JP0285"
 		}, {
 			"mmxId": "L_JP_Tobat",
@@ -1599,6 +1749,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  TBT",
 			"upstreamID": "JP0305"
 		}, {
 			"mmxId": "L_JP_Tokyo",
@@ -1620,6 +1771,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  WAK",
 			"upstreamID": "JP0341"
 		}, {
 			"mmxId": "L_JP_Yanai",
@@ -1630,6 +1782,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  YAN",
 			"upstreamID": "JP0363"
 		}, {
 			"mmxId": "L_JP_Yokka",
@@ -1640,6 +1793,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  YKK",
 			"upstreamID": "JP0367"
 		}, {
 			"mmxId": "L_JP_Yokoh",
@@ -1651,6 +1805,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  YOK",
 			"upstreamID": "JP0352"
 		}, {
 			"mmxId": "L_JO_Aqaba",
@@ -1661,6 +1816,7 @@
 				"country": "Jordan",
 				"timeZone": "Asia/Amman"
 			},
+			"locode": "JO  AQJ",
 			"upstreamID": "JO0001"
 		}, {
 			"mmxId": "L_KE_Momba",
@@ -1671,6 +1827,7 @@
 				"country": "Kenya",
 				"timeZone": "Africa/Nairobi"
 			},
+			"locode": "KE  MBA",
 			"upstreamID": "KE0006"
 		}, {
 			"mmxId": "L_KR_Kwang",
@@ -1681,6 +1838,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  KAN",
 			"upstreamID": "KR0046"
 		}, {
 			"mmxId": "L_KW_MinaA",
@@ -1692,6 +1850,7 @@
 				"country": "Kuwait",
 				"timeZone": "Asia/Kuwait"
 			},
+			"locode": "KW  MEA",
 			"upstreamID": "KW0009"
 		}, {
 			"mmxId": "L_LB_Tripo",
@@ -1703,6 +1862,7 @@
 				"country": "Lebanon",
 				"timeZone": "Asia/Beirut"
 			},
+			"locode": "LB  KYE",
 			"upstreamID": "LB0010"
 		}, {
 			"mmxId": "L_LY_Marsa",
@@ -1714,6 +1874,7 @@
 				"country": "Libya",
 				"timeZone": "Africa/Tripoli"
 			},
+			"locode": "LY  LMQ",
 			"upstreamID": "LY0020"
 		}, {
 			"mmxId": "L_LT_Klaip",
@@ -1724,6 +1885,7 @@
 				"country": "Lithuania",
 				"timeZone": "Europe/Vilnius"
 			},
+			"locode": "LT  KLJ",
 			"upstreamID": "LT0004"
 		}, {
 			"mmxId": "L_MY_Bintu",
@@ -1735,6 +1897,7 @@
 				"country": "Malaysia",
 				"timeZone": "Asia/Kuala_Lumpur"
 			},
+			"locode": "MY  BTU",
 			"upstreamID": "MY0010"
 		}, {
 			"mmxId": "L_MY_Johor",
@@ -1745,6 +1908,7 @@
 				"country": "Malaysia",
 				"timeZone": "Asia/Kuala_Lumpur"
 			},
+			"locode": "MY  JHB",
 			"upstreamID": "MY0129"
 		}, {
 			"mmxId": "L_MY_Malac",
@@ -1755,6 +1919,7 @@
 				"country": "Malaysia",
 				"timeZone": "Asia/Kuala_Lumpur"
 			},
+			"locode": "MY  MKZ",
 			"upstreamID": "MY0056"
 		}, {
 			"mmxId": "L_MY_Sunga",
@@ -1765,6 +1930,7 @@
 				"country": "Malaysia",
 				"timeZone": "Asia/Kuala_Lumpur"
 			},
+			"locode": "MY  SUP",
 			"upstreamID": "MY0097"
 		}, {
 			"mmxId": "L_MT_Malta",
@@ -1775,6 +1941,7 @@
 				"country": "Malta",
 				"timeZone": "Europe/Malta"
 			},
+			"locode": "MT  MLA",
 			"upstreamID": "MT0001"
 		}, {
 			"mmxId": "L_MQ_Fortd",
@@ -1785,6 +1952,7 @@
 				"country": "Martinique",
 				"timeZone": "America/Martinique"
 			},
+			"locode": "MQ  FDF",
 			"upstreamID": "MQ0002"
 		}, {
 			"mmxId": "L_MX_Altam",
@@ -1796,6 +1964,7 @@
 				"country": "Mexico",
 				"timeZone": "America/Mexico_City"
 			},
+			"locode": "MX  ATM",
 			"upstreamID": "MX0002"
 		}, {
 			"mmxId": "L_MX_Costa",
@@ -1817,6 +1986,7 @@
 				"country": "Mexico",
 				"timeZone": "America/Mexico_City"
 			},
+			"locode": "MX  ZLO",
 			"upstreamID": "MX0039"
 		}, {
 			"mmxId": "L_MX_Rosar",
@@ -1827,6 +1997,7 @@
 				"country": "Mexico",
 				"timeZone": "America/Tijuana"
 			},
+			"locode": "MX  RST",
 			"upstreamID": "MX0062"
 		}, {
 			"mmxId": "L_MA_JorfL",
@@ -1837,6 +2008,7 @@
 				"country": "Morocco",
 				"timeZone": "Africa/Casablanca"
 			},
+			"locode": "MA  JFL",
 			"upstreamID": "MA0021"
 		}, {
 			"mmxId": "L_MZ_Mozam",
@@ -1847,6 +2019,7 @@
 				"country": "Mozambique",
 				"timeZone": "Africa/Maputo"
 			},
+			"locode": "MZ  MZQ",
 			"upstreamID": "MZ0018"
 		}, {
 			"mmxId": "L_NL_Rotte",
@@ -1858,6 +2031,7 @@
 				"country": "Netherlands",
 				"timeZone": "Europe/Amsterdam"
 			},
+			"locode": "NL  RTM",
 			"upstreamID": "NL0051"
 		}, {
 			"mmxId": "L_NZ_NewPl",
@@ -1868,6 +2042,7 @@
 				"country": "New Zealand",
 				"timeZone": "Pacific/Auckland"
 			},
+			"locode": "NZ  NPL",
 			"upstreamID": "NZ0052"
 		}, {
 			"mmxId": "L_NG_Brass",
@@ -1878,6 +2053,7 @@
 				"country": "Nigeria",
 				"timeZone": "Africa/Lagos"
 			},
+			"locode": "NG  BRA",
 			"upstreamID": "NG0013"
 		}, {
 			"mmxId": "L_NO_Hamme",
@@ -1889,6 +2065,7 @@
 				"country": "Norway",
 				"timeZone": "Europe/Oslo"
 			},
+			"locode": "NO  HFT",
 			"upstreamID": "NO0278"
 		}, {
 			"mmxId": "L_OM_Qalha",
@@ -1900,6 +2077,7 @@
 				"country": "Oman",
 				"timeZone": "Asia/Qatar"
 			},
+			"locode": "OM  QAL",
 			"upstreamID": "OM0018"
 		}, {
 			"mmxId": "L_PK_Karac",
@@ -1910,6 +2088,7 @@
 				"country": "Pakistan",
 				"timeZone": "Asia/Karachi"
 			},
+			"locode": "PK  KHI",
 			"upstreamID": "PK0004"
 		}, {
 			"mmxId": "L_PK_PortQ",
@@ -1921,17 +2100,18 @@
 				"country": "Pakistan",
 				"timeZone": "Asia/Karachi"
 			},
+			"locode": "PK  BQM",
 			"upstreamID": "PK0021"
 		}, {
 			"mmxId": "L_CP_Colon",
 			"name": "Colon",
-			"aliases": ["Colon,Panama", "Colon, Panama"],
 			"geographicPoint": {
 				"lat": 9.388333320617676,
 				"lon": -79.9191665649414,
 				"country": "Panama",
 				"timeZone": "America/Panama"
 			},
+			"locode":"PA  ONX",
 			"upstreamID": "CP1500"
 		}, {
 			"mmxId": "L_PG_PortM",
@@ -1943,6 +2123,7 @@
 				"country": "Papua New Guinea",
 				"timeZone": "Pacific/Port_Moresby"
 			},
+			"locode": "PG  POM",
 			"upstreamID": "PG0049"
 		}, {
 			"mmxId": "L_PE_Pampa",
@@ -1954,6 +2135,7 @@
 				"country": "Peru",
 				"timeZone": "America/Lima"
 			},
+			"locode": "PE  PMC",
 			"upstreamID": "PE0045"
 		}, {
 			"mmxId": "L_PH_Batan",
@@ -1964,6 +2146,7 @@
 				"country": "Philippines",
 				"timeZone": "Asia/Manila"
 			},
+			"locode": "PH  BTG",
 			"upstreamID": "PH0018"
 		}, {
 			"mmxId": "L_PL_Swino",
@@ -1974,6 +2157,7 @@
 				"country": "Poland",
 				"timeZone": "Europe/Lisbon"
 			},
+			"locode": "PL  SWI",
 			"upstreamID": "PL0021"
 		}, {
 			"mmxId": "L_PT_Sines",
@@ -1984,6 +2168,7 @@
 				"country": "Portugal",
 				"timeZone": "Europe/Lisbon"
 			},
+			"locode": "PT  SIE",
 			"upstreamID": "PT0044"
 		}, {
 			"mmxId": "L_PR_Penue",
@@ -1995,17 +2180,18 @@
 				"country": "Puerto Rico",
 				"timeZone": "America/Puerto_Rico"
 			},
+			"locode": "PR  GUY",
 			"upstreamID": "PR0029"
 		}, {
 			"mmxId": "L_QA_RasLa",
 			"name": "Ras Laffan",
-			"aliases": ["Ras Laffan (Rich)", "Ras Laffan (Lean)"],
 			"geographicPoint": {
 				"lat": 25.93000030517578,
 				"lon": 51.606666564941406,
 				"country": "Qatar",
 				"timeZone": "Asia/Qatar"
 			},
+			"locode": "QA  RLF",
 			"upstreamID": "QA0009"
 		}, {
 			"mmxId": "L_IT_Taran",
@@ -2016,6 +2202,7 @@
 				"country": "Italy",
 				"timeZone": "Europe/Rome"
 			},
+			"locode": "IT  TAR",
 			"upstreamID": "IT0194"
 		}, {
 			"mmxId": "L_RU_Drovy",
@@ -2037,6 +2224,7 @@
 				"country": "Russian Federation",
 				"timeZone": "Asia/Vladivostok"
 			},
+			"locode": "RU  PGN",
 			"upstreamID": "RU0293"
 		}, {
 			"mmxId": "L_RU_Shtok",
@@ -2048,6 +2236,7 @@
 				"country": "Russian Federation",
 				"timeZone": "Europe/Moscow"
 			},
+			"locode": "RU  MMK",
 			"upstreamID": "RU0102"
 		}, {
 			"mmxId": "L_RU_Vladi",
@@ -2058,6 +2247,7 @@
 				"country": "Russian Federation",
 				"timeZone": "Asia/Vladivostok"
 			},
+			"locode": "RU  VVO",
 			"upstreamID": "RU0218"
 		}, {
 			"mmxId": "L_RU_Vybor",
@@ -2068,6 +2258,7 @@
 				"country": "Russian Federation",
 				"timeZone": "Europe/Moscow"
 			},
+			"locode": "RU  VYG",
 			"upstreamID": "RU0225"
 		}, {
 			"mmxId": "L_TZ_Dar-e",
@@ -2078,6 +2269,7 @@
 				"country": "Tanzania",
 				"timeZone": "Africa/Dar_es_Salaam"
 			},
+			"locode": "TZ  DAR",
 			"upstreamID": "TZ0002"
 		}, {
 			"mmxId": "L_SG_Juron",
@@ -2089,6 +2281,7 @@
 				"country": "Singapore",
 				"timeZone": "Asia/Singapore"
 			},
+			"locode": "SG  JUR",
 			"upstreamID": "SG0048"
 		}, {
 			"mmxId": "L_ID_Panja",
@@ -2099,6 +2292,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Singapore"
 			},
+			"locode": "ID  PNJ",
 			"upstreamID": "ID0199"
 		}, {
 			"mmxId": "L_SI_Koper",
@@ -2109,6 +2303,7 @@
 				"country": "Slovenia",
 				"timeZone": "Europe/Ljubljana"
 			},
+			"locode": "SI  KOP",
 			"upstreamID": "SI0002"
 		}, {
 			"mmxId": "L_ZA_CapeT",
@@ -2119,6 +2314,7 @@
 				"country": "South Africa",
 				"timeZone": "Africa/Johannesburg"
 			},
+			"locode": "ZA  CPT",
 			"upstreamID": "ZA0006"
 		}, {
 			"mmxId": "L_ZA_Coega",
@@ -2129,6 +2325,7 @@
 				"country": "South Africa",
 				"timeZone": "Africa/Johannesburg"
 			},
+			"locode": "ZA  ZBA",
 			"upstreamID": "ZA0026"
 		}, {
 			"mmxId": "L_ZA_Mosse",
@@ -2139,6 +2336,7 @@
 				"country": "South Africa",
 				"timeZone": "Africa/Johannesburg"
 			},
+			"locode": "ZA  MZY",
 			"upstreamID": "ZA0013"
 		}, {
 			"mmxId": "L_KR_Dangj",
@@ -2149,6 +2347,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  TAN",
 			"upstreamID": "KR0042"
 		}, {
 			"mmxId": "L_KR_Dongh",
@@ -2159,6 +2358,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  TGH",
 			"upstreamID": "KR0033"
 		}, {
 			"mmxId": "L_KR_Inche",
@@ -2170,6 +2370,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  INC",
 			"upstreamID": "KR0012"
 		}, {
 			"mmxId": "L_KR_TongY",
@@ -2181,6 +2382,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  TYG",
 			"upstreamID": "KR0041"
 		}, {
 			"mmxId": "L_ES_Barce",
@@ -2191,6 +2393,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  BCN",
 			"upstreamID": "ES0200"
 		}, {
 			"mmxId": "L_ES_Bilba",
@@ -2201,6 +2404,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  BIO",
 			"upstreamID": "ES0168"
 		}, {
 			"mmxId": "L_ES_Carta",
@@ -2211,6 +2415,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  CAR",
 			"upstreamID": "ES0201"
 		}, {
 			"mmxId": "L_ES_Huelv",
@@ -2221,6 +2426,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  HUV",
 			"upstreamID": "ES0073"
 		}, {
 			"mmxId": "L_ES_Sagun",
@@ -2231,6 +2437,7 @@
 				"country": "Spain",
 				"timeZone": "Europe/Madrid"
 			},
+			"locode": "ES  SAG",
 			"upstreamID": "ES0199"
 		}, {
 			"mmxId": "L_TW_Taich",
@@ -2241,6 +2448,7 @@
 				"country": "Taiwan",
 				"timeZone": "Asia/Taipei"
 			},
+			"locode": "TW  TXG",
 			"upstreamID": "TW0022"
 		}, {
 			"mmxId": "L_TW_YungA",
@@ -2252,6 +2460,7 @@
 				"country": "Taiwan",
 				"timeZone": "Asia/Taipei"
 			},
+			"locode": "TW  YAN",
 			"upstreamID": "TW0024"
 		}, {
 			"mmxId": "L_TH_MapTa",
@@ -2262,6 +2471,7 @@
 				"country": "Thailand",
 				"timeZone": "Asia/Bangkok"
 			},
+			"locode": "TH  MTP",
 			"upstreamID": "TH0017"
 		}, {
 			"mmxId": "L_TT_Point2",
@@ -2272,6 +2482,7 @@
 				"country": "Trinidad and Tobago",
 				"timeZone": "America/Port_of_Spain"
 			},
+			"locode": "TT  PTF",
 			"upstreamID": "TT0008"
 		}, {
 			"mmxId": "L_TR_Aliag",
@@ -2282,6 +2493,7 @@
 				"country": "Turkey",
 				"timeZone": "Europe/Istanbul"
 			},
+			"locode": "TR  ALI",
 			"upstreamID": "TR0183"
 		}, {
 			"mmxId": "L_TR_Marma",
@@ -2293,6 +2505,7 @@
 				"country": "Turkey",
 				"timeZone": "Europe/Istanbul"
 			},
+			"locode": "TR  MAR",
 			"upstreamID": "TR0098"
 		}, {
 			"mmxId": "L_GB_Drago",
@@ -2303,6 +2516,7 @@
 				"country": "United Kingdom",
 				"timeZone": "Europe/London"
 			},
+			"locode": "GB  PED",
 			"upstreamID": "GB0753"
 		}, {
 			"mmxId": "L_GB_Holyh",
@@ -2313,6 +2527,7 @@
 				"country": "United Kingdom",
 				"timeZone": "Europe/London"
 			},
+			"locode": "GB  HLY",
 			"upstreamID": "GB0220"
 		}, {
 			"mmxId": "L_GB_South",
@@ -2324,6 +2539,7 @@
 				"country": "United Kingdom",
 				"timeZone": "Europe/London"
 			},
+			"locode": "GB  MLF",
 			"upstreamID": "GB0752"
 		}, {
 			"mmxId": "L_GB_Teesi",
@@ -2335,6 +2551,7 @@
 				"country": "United Kingdom",
 				"timeZone": "Europe/London"
 			},
+			"locode": "GB  TEE",
 			"upstreamID": "GB0755"
 		}, {
 			"mmxId": "L_GB_Isleo",
@@ -2345,6 +2562,7 @@
 				"country": "United Kingdom",
 				"timeZone": "Europe/London"
 			},
+			"locode": "GB  IOG",
 			"upstreamID": "GB0244"
 		}, {
 			"mmxId": "L_US_Brown",
@@ -2355,6 +2573,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  BRO",
 			"upstreamID": "US0104"
 		}, {
 			"mmxId": "L_US_Camer",
@@ -2365,6 +2584,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US CMU",
 			"upstreamID": "US1232"
 		}, {
 			"mmxId": "L_US_CoosB",
@@ -2375,6 +2595,7 @@
 				"country": "United States",
 				"timeZone": "America/Los_Angeles"
 			},
+			"locode": "US  COB",
 			"upstreamID": "US0185"
 		}, {
 			"mmxId": "L_US_Corpu",
@@ -2385,6 +2606,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  CRP",
 			"upstreamID": "US0190"
 		}, {
 			"mmxId": "L_US_Pasca",
@@ -2396,6 +2618,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  PGL",
 			"upstreamID": "US0566"
 		}, {
 			"mmxId": "L_US_Plaqu",
@@ -2406,6 +2629,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  SUL",
 			"upstreamID": "US0645"
 		}, {
 			"mmxId": "L_US_PortA",
@@ -2417,6 +2641,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  POA",
 			"upstreamID": "US0613"
 		}, {
 			"mmxId": "L_US_PortD",
@@ -2428,6 +2653,7 @@
 				"country": "United States",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US  TPA",
 			"upstreamID": "US0799"
 		}, {
 			"mmxId": "L_BR_RioGr",
@@ -2438,6 +2664,7 @@
 				"country": "Brazil",
 				"timeZone": "America/Monterrey"
 			},
+			"locode": "BR  RIG",
 			"upstreamID": "BR0124"
 		}, {
 			"mmxId": "L_US_CoveP",
@@ -2449,6 +2676,7 @@
 				"country": "United States",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US  CP6",
 			"upstreamID": "US0976"
 		}, {
 			"mmxId": "L_US_Elba",
@@ -2460,6 +2688,7 @@
 				"country": "United States",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US  SAV",
 			"upstreamID": "US0977"
 		}, {
 			"mmxId": "L_US_Evere",
@@ -2470,6 +2699,7 @@
 				"country": "United States",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US EVT",
 			"upstreamID": "US0243"
 		}, {
 			"mmxId": "L_US_Freep",
@@ -2480,6 +2710,7 @@
 				"country": "United States",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US  FPO",
 			"upstreamID": "US1245"
 		}, {
 			"mmxId": "L_US_Golde",
@@ -2501,6 +2732,7 @@
 				"country": "United States",
 				"timeZone": "America/Anchorage"
 			},
+			"locode": "US  ENA",
 			"upstreamID": "US1220"
 		}, {
 			"mmxId": "L_US_LakeC",
@@ -2512,6 +2744,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  LCH",
 			"upstreamID": "US0978"
 		}, {
 			"mmxId": "L_US_Sabin",
@@ -2522,6 +2755,7 @@
 				"country": "United States",
 				"timeZone": "America/Chicago"
 			},
+			"locode": "US  NSS",
 			"upstreamID": "US1238"
 		}, {
 			"mmxId": "L_UM_GulfG",
@@ -2544,6 +2778,7 @@
 				"country": "United States Minor Outlying Islands",
 				"timeZone": "America/New_York"
 			},
+			"locode": "US  9NT",
 			"upstreamID": "UM0042"
 		}, {
 			"mmxId": "L_UM_North",
@@ -2565,6 +2800,7 @@
 				"country": "Ukraine",
 				"timeZone": "Europe/Kiev"
 			},
+			"locode": "UA  YUZ",
 			"upstreamID": "UA0039"
 		}, {
 			"mmxId": "L_AE_AbuDh",
@@ -2576,6 +2812,7 @@
 				"country": "United Arab Emirates",
 				"timeZone": "Asia/Dubai"
 			},
+			"locode": "AE  DAS",
 			"upstreamID": "AE0010"
 		}, {
 			"mmxId": "L_AE_Fujai",
@@ -2586,6 +2823,7 @@
 				"country": "United Arab Emirates",
 				"timeZone": "Asia/Dubai"
 			},
+			"locode": "AE  FJR",
 			"upstreamID": "AE0014"
 		}, {
 			"mmxId": "L_AE_Jebel",
@@ -2597,6 +2835,7 @@
 				"country": "United Arab Emirates",
 				"timeZone": "Asia/Dubai"
 			},
+			"locode": "AE  JEA",
 			"upstreamID": "AE0084"
 		}, {
 			"mmxId": "L_UY_Monte",
@@ -2607,6 +2846,7 @@
 				"country": "Uruguay",
 				"timeZone": "America/Montevideo"
 			},
+			"locode": "UY  MVD",
 			"upstreamID": "UY0011"
 		}, {
 			"mmxId": "L_VN_CaiMe",
@@ -2617,6 +2857,7 @@
 				"country": "Vietnam",
 				"timeZone": "Asia/Ho_Chi_Minh"
 			},
+			"locode": "VN  CMT",
 			"upstreamID": "VN0090"
 		}, {
 			"mmxId": "L_VN_HoChi",
@@ -2628,6 +2869,7 @@
 				"country": "Vietnam",
 				"timeZone": "Asia/Ho_Chi_Minh"
 			},
+			"locode": "VN  SGN",
 			"upstreamID": "VN0099"
 		}, {
 			"mmxId": "L_YE_BalHa",
@@ -2639,6 +2881,7 @@
 				"country": "Yemen",
 				"timeZone": "Asia/Aden"
 			},
+			"locode": "YE  BLH",
 			"upstreamID": "YE0035"
 		}, {
 			"mmxId": "L_CP_PortS",
@@ -2649,6 +2892,7 @@
 				"country": "Egypt",
 				"timeZone": "Africa/Cairo"
 			},
+			"locode": "EG  PSD",
 			"upstreamID": "CP2800"
 		}, {
 			"mmxId": "L_CP_Balbo",
@@ -2659,6 +2903,7 @@
 				"country": "Panama",
 				"timeZone": "America/Panama"
 			},
+			"locode": "PA  BLB",
 			"upstreamID": "CP1550"
 		}, {
 			"mmxId": "L_MY_Lahad",
@@ -2669,6 +2914,7 @@
 				"country": "Malaysia",
 				"timeZone": "Asia/Kuching"
 			},
+			"locode": "MY  LDU",
 			"upstreamID": "MY0048"
 		}, {
 			"mmxId": "L_PR_Guaya",
@@ -2680,6 +2926,7 @@
 				"country": "Puerto Rico",
 				"timeZone": "America/Puerto_Rico"
 			},
+			"locode": "PR  GMA",
 			"upstreamID": "PR0007"
 		}, {
 			"mmxId": "L_KR_Borye",
@@ -2690,6 +2937,7 @@
 				"country": "South Korea",
 				"timeZone": "Asia/Seoul"
 			},
+			"locode": "KR  BOR",
 			"upstreamID": "KR0058"
 		}, {
 			"mmxId": "L_AU_Onslo",
@@ -2701,6 +2949,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Perth"
 			},
+			"locode": "AU  ONS",
 			"upstreamID": "AU0197"
 		}, {
 			"mmxId": "L_JP_Hibik",
@@ -2712,6 +2961,7 @@
 				"country": "Japan",
 				"timeZone": "Asia/Tokyo"
 			},
+			"locode": "JP  HBK",
 			"upstreamID": "JP0055"
 		}, {
 			"mmxId": "L_AU_Prelu",
@@ -2732,6 +2982,7 @@
 				"country": "Australia",
 				"timeZone": "Australia/Darwin"
 			},
+			"locode": "AU  ITH",
 			"upstreamID": "AU0329"
 		}, {
 			"mmxId": "L_AU_Bladi",
@@ -2754,6 +3005,7 @@
 				"country": "Indonesia",
 				"timeZone": "Asia/Makassar"
 			},
+			"locode": "ID  LUW",
 			"upstreamID": "ID0476"
 		},    
     {
@@ -2765,6 +3017,7 @@
         "country": "South Korea",
         "timeZone": "Asia/Seoul"
       },
+      "locode": "KR  YOS",
       "upstreamID": "KR0054"
     },
     {
@@ -2776,6 +3029,7 @@
         "country": "South Korea",
         "timeZone": "Asia/Seoul"
       },
+      "locode": "KR  KUV",
       "upstreamID": "KR0010"
     },
     {
@@ -2787,6 +3041,7 @@
         "country": "Indonesia",
         "timeZone": "Asia/Jakarta"
       },
+      "locode": "ID  DPS",
       "upstreamID": "ID0348"
     },
     {
@@ -2798,6 +3053,7 @@
         "country": "Indonesia",
         "timeZone": "Asia/Makassar"
       },
+      "locode": "ID  BPN",
       "upstreamID": "ID0025"
     },
     {
@@ -2809,6 +3065,7 @@
 		"country": "Taiwan",
         "timeZone": "Asia/Taipei"
       },
+      "locode": "TW  KHH",
       "upstreamID": "TW0006"
     },
     {
@@ -2820,6 +3077,7 @@
         "country": "Philippines",
         "timeZone": "Asia/Manila"
       },
+      "locode": "PH  MNN",
       "upstreamID": "PH0238"
     },
     {
@@ -2831,6 +3089,7 @@
         "country": "China",
         "timeZone": "Asia/Hong_Kong"
       },
+      "locode": "HK  HKG",
       "upstreamID": "CN0041"
     },
     {
@@ -2842,6 +3101,7 @@
         "country": "Malaysia",
         "timeZone": "Asia/Kuching"
       },
+      "locode": "MY  LBU",
       "upstreamID": "MY0046"
     },
     {
@@ -2853,6 +3113,7 @@
         "country": "Japan",
         "timeZone": "Asia/Tokyo"
       },
+      "locode": "JP  IHA",
       "upstreamID": "JP0205"
     },
     {

@@ -29,8 +29,10 @@ public class BasicLocation {
 
 	private GeographicPoint geographicPoint;
 
-	public static BasicLocation of(String name, String mmxId, String upstreamID) {
-		BasicLocation result = new BasicLocation();
+	private String locode;
+
+	public static BasicLocation of(final String name, final String mmxId, final String upstreamID) {
+		final BasicLocation result = new BasicLocation();
 		result.setName(name);
 		result.setMmxId(mmxId);
 		result.setUpstreamID(upstreamID);
@@ -42,7 +44,7 @@ public class BasicLocation {
 		return upstreamID;
 	}
 
-	public void setUpstreamID(String upstreamID) {
+	public void setUpstreamID(final String upstreamID) {
 		this.upstreamID = upstreamID;
 	}
 
@@ -50,7 +52,7 @@ public class BasicLocation {
 		return mmxId;
 	}
 
-	public void setMmxId(String mmxId) {
+	public void setMmxId(final String mmxId) {
 		this.mmxId = mmxId;
 	}
 
@@ -62,11 +64,11 @@ public class BasicLocation {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setAliases(List<String> aliases) {
+	public void setAliases(final List<String> aliases) {
 		this.aliases = aliases;
 	}
 
@@ -74,7 +76,7 @@ public class BasicLocation {
 		return geographicPoint;
 	}
 
-	public void setGeographicPoint(GeographicPoint geographicPoint) {
+	public void setGeographicPoint(final GeographicPoint geographicPoint) {
 		this.geographicPoint = geographicPoint;
 	}
 
@@ -82,7 +84,7 @@ public class BasicLocation {
 		return virtual;
 	}
 
-	public void setVirtual(boolean virtual) {
+	public void setVirtual(final boolean virtual) {
 		this.virtual = virtual;
 	}
 
@@ -90,7 +92,7 @@ public class BasicLocation {
 		return fallbackUpstreamId;
 	}
 
-	public void setFallbackUpstreamId(String fallbackUpstreamId) {
+	public void setFallbackUpstreamId(final String fallbackUpstreamId) {
 		this.fallbackUpstreamId = fallbackUpstreamId;
 	}
 
@@ -100,13 +102,13 @@ public class BasicLocation {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		BasicLocation port = (BasicLocation) o;
+		final BasicLocation port = (BasicLocation) o;
 
 		if (!mmxId.equals(port.mmxId))
 			return false;
@@ -118,5 +120,13 @@ public class BasicLocation {
 		int result = mmxId.hashCode();
 		result = 31 * result + name.hashCode();
 		return result;
+	}
+
+	public String getLocode() {
+		return locode;
+	}
+
+	public void setLocode(final String locode) {
+		this.locode = locode;
 	}
 }

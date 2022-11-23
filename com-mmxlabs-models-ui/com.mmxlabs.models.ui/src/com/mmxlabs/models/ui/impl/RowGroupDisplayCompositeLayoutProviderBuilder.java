@@ -29,7 +29,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
  */
 public class RowGroupDisplayCompositeLayoutProviderBuilder {
 
-	private int maxFeatures = 0;
+	private int maxFeatures = 1;
 	private List<RowBuilder> rows = new LinkedList<>();
 
 	public class RowBuilder {
