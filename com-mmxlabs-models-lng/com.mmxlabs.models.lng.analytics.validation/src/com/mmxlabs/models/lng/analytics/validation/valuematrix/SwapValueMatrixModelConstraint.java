@@ -59,6 +59,13 @@ public class SwapValueMatrixModelConstraint extends AbstractModelMultiConstraint
 				failures.add(dsd);
 			}
 
+			if (valueMatrixModel.getMarketMinPrice() > valueMatrixModel.getMarketMaxPrice()) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Min price must not be greater than max price"));
+				dsd.addEObjectAndFeature(valueMatrixModel, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMinPrice());
+				dsd.addEObjectAndFeature(valueMatrixModel, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMaxPrice());
+				failures.add(dsd);
+			}
+
 			if (valueMatrixModel.getMarketMinPrice() < valueMatrixModel.getSwapFee()) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Swap fee must not be greater than market min price"));
 				dsd.addEObjectAndFeature(valueMatrixModel, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket());
