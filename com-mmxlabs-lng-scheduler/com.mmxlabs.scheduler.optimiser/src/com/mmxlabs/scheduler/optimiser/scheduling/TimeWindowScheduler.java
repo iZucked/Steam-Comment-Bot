@@ -95,7 +95,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 	private CacheMode cacheMode;
 
 	@Inject
-	@Named("hint-lngtransformer-disable-caches")
+	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
 	private boolean hintEnableCache;
 
 	private final @NonNull LoadingCache<CacheKey, Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData>> cache;

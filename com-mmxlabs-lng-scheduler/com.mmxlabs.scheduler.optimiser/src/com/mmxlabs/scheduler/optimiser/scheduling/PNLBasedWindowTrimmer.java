@@ -105,7 +105,7 @@ public class PNLBasedWindowTrimmer {
 	private CacheMode cacheMode;
 
 	@Inject
-	@Named("hint-lngtransformer-disable-caches")
+	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
 	private boolean hintDisableCache;
 
 	private final LoadingCache<PNLTrimmerShippedCacheKey, ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>>> shippedCache;

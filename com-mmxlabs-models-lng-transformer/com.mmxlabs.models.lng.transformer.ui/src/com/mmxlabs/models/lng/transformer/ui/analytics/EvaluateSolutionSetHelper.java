@@ -59,7 +59,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.common.ScheduleToSequencesTransformer;
@@ -71,6 +70,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 public class EvaluateSolutionSetHelper {
 	final ScheduleSpecificationHelper scheduleSpecificationHelper;
@@ -145,7 +145,7 @@ public class EvaluateSolutionSetHelper {
 
 	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, IProgressMonitor monitor) {
 
-		List<String> hints = Lists.newArrayList(LNGTransformerHelper.HINT_DISABLE_CACHES //
+		List<String> hints = Lists.newArrayList(SchedulerConstants.HINT_DISABLE_CACHES //
 		// LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, //
 		);
 
