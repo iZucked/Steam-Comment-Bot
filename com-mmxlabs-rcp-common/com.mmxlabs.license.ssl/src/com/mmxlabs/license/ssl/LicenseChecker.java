@@ -61,7 +61,7 @@ public final class LicenseChecker {
 	public enum LicenseState {
 		Valid, //
 		Expired("License has expired. Please contact Minimax Labs."), //
-		Unknown("Unkown problem validating license file."), //
+		Unknown("Unknown problem validating license file."), //
 		NotYetValid("License is not valid yet. Please contact Minimax Labs."), //
 		KeystoreNotFound("Unable to find license file");
 
