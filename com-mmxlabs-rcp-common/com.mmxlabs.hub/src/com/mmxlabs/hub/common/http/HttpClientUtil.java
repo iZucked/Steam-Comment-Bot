@@ -18,6 +18,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -118,6 +119,47 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		return builder;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromLocalTrustStore() throws Exception {
+
+		final List<CertInfo> infos = new LinkedList<>();
+		{
+			final Pair<KeyStore, char[]> trustStorePair = LicenseChecker.loadLocalTruststore();
+
+			if (trustStorePair != null) {
+				KeyStore defaultStore = trustStorePair.getFirst();
+				final Enumeration<String> enumerator = defaultStore.aliases();
+				while (enumerator.hasMoreElements()) {
+					final String alias = enumerator.nextElement();
+
+					final X509Certificate cert = (X509Certificate) defaultStore.getCertificate(alias);
+					final CertInfo info = CertInfo.from(cert);
+					infos.add(info);
+				}
+			}
+		}
+
+		return infos;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromWindowsTrustStore() throws Exception {
+
+		final List<CertInfo> infos = new LinkedList<>();
+
+		final KeyStore defaultStore = KeyStore.getInstance("Windows-ROOT");
+		defaultStore.load(null);
+
+		final Enumeration<String> enumerator = defaultStore.aliases();
+		while (enumerator.hasMoreElements()) {
+			final String alias = enumerator.nextElement();
+
+			final X509Certificate cert = (X509Certificate) defaultStore.getCertificate(alias);
+			final CertInfo info = CertInfo.from(cert);
+			infos.add(info);
+		}
+
+		return infos;
 	}
 
 	public static List<CertInfo> extractSSLInfoFromLocalStore() throws Exception {

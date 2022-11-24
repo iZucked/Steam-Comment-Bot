@@ -415,13 +415,21 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		btnCheckRemoteSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		final Button btnCheckLocalSSL = new Button(debugComposite, SWT.PUSH);
-		btnCheckLocalSSL.setText("Check Local certificates");
+		btnCheckLocalSSL.setText("List Local certificates");
 		btnCheckLocalSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		final Button btnCheckHubSSLCompatibility = new Button(debugComposite, SWT.PUSH);
 		btnCheckHubSSLCompatibility.setText("Check remote SSL compatibility");
 		btnCheckHubSSLCompatibility.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
+		final Button btnCheckLocalTrustedSSL = new Button(debugComposite, SWT.PUSH);
+		btnCheckLocalTrustedSSL.setText("List Local trusted certificates");
+		btnCheckLocalTrustedSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+		
+		final Button btnCheckWindowsTrustedSSL = new Button(debugComposite, SWT.PUSH);
+		btnCheckWindowsTrustedSSL.setText("List Windows trusted certificates");
+		btnCheckWindowsTrustedSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
+		
 		final Text lbl = new Text(debugComposite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		lbl.setText("");
 		lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 5).minSize(250, 300).hint(250, 300).create());
@@ -466,6 +474,48 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					e1.printStackTrace();
 				}
 
+			}
+		});
+		btnCheckLocalTrustedSSL.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				try {
+					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromLocalTrustStore();
+					
+					final StringBuilder sb = new StringBuilder();
+					int counter = 1;
+					for (final CertInfo info : infos) {
+						sb.append("Certificate " + counter++ + "\n");
+						sb.append(info);
+						sb.append("\n");
+					}
+					lbl.setText(sb.toString());
+				} catch (final Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnCheckWindowsTrustedSSL.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				try {
+					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromWindowsTrustStore();
+					
+					final StringBuilder sb = new StringBuilder();
+					int counter = 1;
+					for (final CertInfo info : infos) {
+						sb.append("Certificate " + counter++ + "\n");
+						sb.append(info);
+						sb.append("\n");
+					}
+					lbl.setText(sb.toString());
+				} catch (final Exception e1) {
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 
