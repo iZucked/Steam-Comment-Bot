@@ -61,7 +61,6 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -80,6 +79,7 @@ import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCh
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -302,7 +302,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				.make());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
@@ -341,7 +341,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				.make());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
@@ -385,7 +385,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();

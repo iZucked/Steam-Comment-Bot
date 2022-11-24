@@ -107,4 +107,9 @@ public final class SchedulerConstants {
 	 * Threshold for the complex "LDD" cargoes
 	 */
 	public static final int COMPLEX_CARGO_SLOTS_THRESHOLD = 2;
+
+	/*
+	 * Injection hints
+	 */
+	public static final String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
 }

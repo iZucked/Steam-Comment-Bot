@@ -71,7 +71,7 @@ public class LNGEvaluationModule extends AbstractModule {
 
 	public LNGEvaluationModule(@NonNull final Collection<String> hints) {
 		this.hints = hints;
-		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		this.hintEnableCache = !hints.contains(SchedulerConstants.HINT_DISABLE_CACHES);
 	}
 
 	@Override

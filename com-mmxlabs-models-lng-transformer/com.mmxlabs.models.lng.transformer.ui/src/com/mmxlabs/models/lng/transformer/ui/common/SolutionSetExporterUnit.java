@@ -53,7 +53,6 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.TraderBasedInsertionHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleModelToScheduleSpecification;
@@ -67,6 +66,7 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.insertion.SequencesUndoSpotHelper;
 
 public class SolutionSetExporterUnit {
@@ -146,7 +146,7 @@ public class SolutionSetExporterUnit {
 						@NonNull
 						final Collection<@NonNull String> hints = new LinkedList<>(dataTransformer.getHints());
 
-						hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+						hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 
 						final BreakEvenOptimisationStage stageSettings = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
 						stageSettings.setName("portfolio-be");

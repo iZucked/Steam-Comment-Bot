@@ -58,7 +58,6 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 	public static final @NonNull String HINT_SPOT_CARGO_MARKETS = "hint-lngtransformer-spot-cargo-markets";
 
-	public static final @NonNull String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
 	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "hint-portfolio-breakeven";
 	public static final @NonNull String HINT_NOMINAL_ADP = "hint-nominal-adp";
 	
