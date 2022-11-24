@@ -47,6 +47,7 @@ import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class SandboxOptimiserRunner {
@@ -59,7 +60,7 @@ public class SandboxOptimiserRunner {
 	private final EditingDomain originalEditingDomain;
 
 	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-			LNGTransformerHelper.HINT_DISABLE_CACHES, //
+			SchedulerConstants.HINT_DISABLE_CACHES, //
 			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //

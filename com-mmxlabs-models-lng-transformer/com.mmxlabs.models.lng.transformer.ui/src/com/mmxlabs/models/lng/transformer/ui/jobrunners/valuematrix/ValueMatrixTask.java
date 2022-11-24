@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SwapValueMatrixUnit;
@@ -45,6 +44,7 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelReferenceThread;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 public class ValueMatrixTask {
 	@NonNull
@@ -129,7 +129,7 @@ public class ValueMatrixTask {
 				helper.processExtraDataProvider(mapper.getExtraDataProvider());
 
 				final List<String> hints = new LinkedList<>();
-				hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+				hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 				final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
 				final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();

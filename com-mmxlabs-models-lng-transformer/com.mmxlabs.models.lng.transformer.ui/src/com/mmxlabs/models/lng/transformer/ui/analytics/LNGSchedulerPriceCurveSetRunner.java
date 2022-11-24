@@ -58,6 +58,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -87,7 +88,7 @@ public class LNGSchedulerPriceCurveSetRunner {
 
 		@NonNull
 		final Collection<@NonNull String> hints = new LinkedList<>(initialHints);
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		hints.add(LNGTransformerHelper.HINT_EVALUATION_ONLY);
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();

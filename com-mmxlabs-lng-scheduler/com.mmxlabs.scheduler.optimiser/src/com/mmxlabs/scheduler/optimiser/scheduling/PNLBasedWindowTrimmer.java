@@ -105,8 +105,8 @@ public class PNLBasedWindowTrimmer {
 	private CacheMode cacheMode;
 
 	@Inject
-	@Named("hint-lngtransformer-disable-caches")
-	private boolean hintEnableCache;
+	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
+	private boolean hintDisableCache;
 
 	private final LoadingCache<PNLTrimmerShippedCacheKey, ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>>> shippedCache;
 
@@ -358,7 +358,7 @@ public class PNLBasedWindowTrimmer {
 	}
 
 	public ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> computeVoyagePlanResults(final PNLTrimmerShippedCacheKey key) {
-		if (cacheMode == CacheMode.Off) {
+		if (hintDisableCache || cacheMode == CacheMode.Off) {
 			return doComputeVoyagePlanResults(key);
 		} else {
 			final ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> result = shippedCache.getUnchecked(key);
