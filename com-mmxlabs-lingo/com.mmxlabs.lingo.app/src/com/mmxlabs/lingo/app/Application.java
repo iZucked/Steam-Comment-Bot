@@ -13,6 +13,13 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.KeyStore;
+import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -38,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
@@ -70,7 +78,7 @@ public class Application implements IApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-	private AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+	private final AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
 	private Object applicationExitCode;
 
@@ -158,8 +166,8 @@ public class Application implements IApplication {
 	 *         IApplication.EXIT_OK
 	 * @throws Exception
 	 */
-	public Object startupTasks(Display display, IProgressMonitor monitor) throws Exception {
-		var subMonitor = SubMonitor.convert(monitor, 5);
+	public Object startupTasks(final Display display, final IProgressMonitor monitor) throws Exception {
+		final var subMonitor = SubMonitor.convert(monitor, 5);
 
 		datahubLogin(subMonitor.split(1));
 		if (!datahubPermissionCheck(display, subMonitor.split(1))) {
@@ -170,6 +178,14 @@ public class Application implements IApplication {
 		if (!licenseCheck(subMonitor.split(1))) {
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
 			return IApplication.EXIT_OK;
+		}
+		{
+			Date c = null;
+			if ((c = licenseCheckExpiresSoon(14, subMonitor.split(1))) != null) {
+				final LocalDate d = LocalDate.ofInstant(c.toInstant(), ZoneId.systemDefault());
+				MessageDialog.openWarning(display.getActiveShell(), "License expiring", String.format("LiNGO license expires soon (%s - %d days). Please check for updates or contact Minimax Labs.",
+						d.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)), Days.between(LocalDate.now(), d)));
+			}
 		}
 
 		// Don't abort LiNGO if p2 garbage collect fails.
@@ -206,15 +222,15 @@ public class Application implements IApplication {
 	 * @param monitor
 	 * @throws Exception
 	 */
-	private void reencryptWorkspace(Display display, IProgressMonitor monitor) throws Exception {
-		var encryptionMonitor = SubMonitor.convert(monitor, 1);
+	private void reencryptWorkspace(final Display display, final IProgressMonitor monitor) throws Exception {
+		final var encryptionMonitor = SubMonitor.convert(monitor, 1);
 		encryptionMonitor.setTaskName("Checking if encryption migration is needed");
 
 		{
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
 				if (p != null) {
 					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher cipher) {
+					if (sharedCipher instanceof final DelegatingEMFCipher cipher) {
 						final var reencrypter = new WorkspaceReencrypter();
 						// Add in standard paths.
 						reencrypter.addDefaultPaths();
@@ -236,13 +252,13 @@ public class Application implements IApplication {
 	 * @return true if there is a valid license, false other
 	 * @throws IOException
 	 */
-	private boolean licenseCheck(IProgressMonitor monitor) throws IOException {
-		var licenseMonitor = SubMonitor.convert(monitor, 1);
+	private boolean licenseCheck(final IProgressMonitor monitor) throws IOException {
+		final var licenseMonitor = SubMonitor.convert(monitor, 1);
 		licenseMonitor.setTaskName("Validating the license");
 
 		// check if the datahub license management is active and if hub license is valid
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_LICENSE_MANAGEMENT)) {
-			KeyStore licenseKeystore = LicenseManager.getLicenseFromDatahub();
+			final KeyStore licenseKeystore = LicenseManager.getLicenseFromDatahub();
 			if (licenseKeystore != null) {
 				final LicenseState validity = LicenseChecker.doCheckLicense(licenseKeystore);
 				if (validity == LicenseState.Valid) {
@@ -256,12 +272,29 @@ public class Application implements IApplication {
 		return validity == LicenseState.Valid;
 	}
 
+	private Date licenseCheckExpiresSoon(final int withinDays, final IProgressMonitor monitor) throws IOException {
+		final var licenseMonitor = SubMonitor.convert(monitor, 1);
+		licenseMonitor.setTaskName("Checking license expiry");
+
+		X509Certificate cert = null;
+		try {
+			cert = LicenseChecker.getClientLicense();
+			final Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, withinDays);
+			cert.getNotAfter().before(c.getTime());
+			return cert.getNotAfter();
+		} catch (final Exception e) {
+			LOG.error("Unable to load license: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
 	/**
 	 * Check if the DataHub is online. If it is, start the authentication prompt
 	 * then re-check the online status
 	 */
-	private void datahubLogin(IProgressMonitor monitor) {
-		var loginMonitor = SubMonitor.convert(monitor, 1);
+	private void datahubLogin(final IProgressMonitor monitor) {
+		final var loginMonitor = SubMonitor.convert(monitor, 1);
 		loginMonitor.setTaskName("Logging into the DataHub");
 		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 
@@ -280,8 +313,8 @@ public class Application implements IApplication {
 	 * @param display
 	 * @return true if the user has the correct permission, false otherwise
 	 */
-	private boolean datahubPermissionCheck(Display display, IProgressMonitor monitor) {
-		var permissionMonitor = SubMonitor.convert(monitor, 1);
+	private boolean datahubPermissionCheck(final Display display, final IProgressMonitor monitor) {
+		final var permissionMonitor = SubMonitor.convert(monitor, 1);
 		permissionMonitor.setTaskName("Checking the DataHub permissions");
 		var success = false;
 
@@ -357,12 +390,12 @@ public class Application implements IApplication {
 	 * @param display
 	 */
 	private void displayProgressMonitor(final Display display) {
-		var progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+		final var progressDialog = new ProgressMonitorDialog(display.getActiveShell());
 		try {
 			progressDialog.run(false, false, monitor -> {
 				try {
 					applicationExitCode = startupTasks(display, monitor);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					LOG.error("failed to start LiNGO: " + e.getMessage());
 				}
 				monitor.done();
@@ -379,8 +412,8 @@ public class Application implements IApplication {
 	 * @param display
 	 */
 	private void waitForHub() {
-		var timeoutInSeconds = 30;
-		var msInASecond = 1000;
+		final var timeoutInSeconds = 30;
+		final var msInASecond = 1000;
 
 		for (int i = 0; i < timeoutInSeconds; ++i) {
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -397,8 +430,8 @@ public class Application implements IApplication {
 
 	/**
 	 */
-	private void cleanupP2(IProgressMonitor monitor) {
-		var cleanupMonitor = SubMonitor.convert(monitor, 1);
+	private void cleanupP2(final IProgressMonitor monitor) {
+		final var cleanupMonitor = SubMonitor.convert(monitor, 1);
 		cleanupMonitor.setTaskName("Cleaning up the eclipse p2 files");
 
 		final var context = FrameworkUtil.getBundle(Application.class).getBundleContext();
