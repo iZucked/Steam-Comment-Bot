@@ -276,13 +276,13 @@ public class Application implements IApplication {
 		final var licenseMonitor = SubMonitor.convert(monitor, 1);
 		licenseMonitor.setTaskName("Checking license expiry");
 
-		X509Certificate cert = null;
 		try {
-			cert = LicenseChecker.getClientLicense();
+			X509Certificate cert = LicenseChecker.getClientLicense();
 			final Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, withinDays);
-			cert.getNotAfter().before(c.getTime());
-			return cert.getNotAfter();
+			if (cert.getNotAfter().before(c.getTime())) {
+				return cert.getNotAfter();
+			}
 		} catch (final Exception e) {
 			LOG.error("Unable to load license: " + e.getMessage(), e);
 		}
