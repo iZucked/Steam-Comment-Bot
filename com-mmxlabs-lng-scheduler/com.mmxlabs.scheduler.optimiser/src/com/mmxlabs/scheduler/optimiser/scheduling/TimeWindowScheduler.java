@@ -96,7 +96,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 	@Inject
 	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
-	private boolean hintEnableCache;
+	private boolean hintDisableCache;
 
 	private final @NonNull LoadingCache<CacheKey, Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData>> cache;
 
@@ -144,7 +144,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 			List<IPortTimeWindowsRecord> list;
 			@NonNull
 			final ISequence sequence = sequences.getSequence(resource);
-			if (hintEnableCache && cacheMode != CacheMode.Off) {
+			if (!hintDisableCache && cacheMode != CacheMode.Off) {
 
 				@Nullable
 				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = cache.getUnchecked(new CacheKey(resource, sequence, data.copy(), sequences.getProviders()));
