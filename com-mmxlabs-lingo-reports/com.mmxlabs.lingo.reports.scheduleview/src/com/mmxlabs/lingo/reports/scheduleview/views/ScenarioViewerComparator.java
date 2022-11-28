@@ -190,7 +190,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		} else if (obj instanceof InventoryEvents) {
 			return Type.INVENTORY;
 		} else if (obj instanceof PositionsSequence p) {
-			return Type.DES ;
+			return Type.DES;
 //			return p.isBuy() ? Type.DES : Type.FOB;
 		}
 		return Type.FLEET;
@@ -299,86 +299,81 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
-			if ((e1 instanceof Sequence || e1 instanceof CombinedSequence || e1 instanceof InventoryEvents)
-					&& (e2 instanceof Sequence || e2 instanceof CombinedSequence || e2 instanceof InventoryEvents)) {
+			// Group by fleet/spot
+			final Type s1Type = getSequenceType(e1);
+			final Type s2Type = getSequenceType(e2);
 
-				// Group by fleet/spot
-				final Type s1Type = getSequenceType(e1);
-				final Type s2Type = getSequenceType(e2);
+			if (s1Type != s2Type) {
+				return s1Type.ordinal() - s2Type.ordinal();
+			}
+			if (category == Category.BY_SIZE) {
 
-				if (s1Type != s2Type) {
-					return s1Type.ordinal() - s2Type.ordinal();
+				// Sort by capacity
+				final int s1Value = getSequenceCapacity(e1);
+				final int s2Value = getSequenceCapacity(e2);
+
+				final int c = -Integer.compare(s1Value, s2Value);
+				if (c != 0) {
+					return c;
 				}
-				if (category == Category.BY_SIZE) {
+			}
 
-					// Sort by capacity
-					final int s1Value = getSequenceCapacity(e1);
-					final int s2Value = getSequenceCapacity(e2);
+			// if (category == WithCategory.BY_NAME)
+			{
+				// Sort by name
+				final String s1Name = getSequenceName(e1);
+				final String s2Name = getSequenceName(e2);
 
-					final int c = -Integer.compare(s1Value, s2Value);
-					if (c != 0) {
-						return c;
-					}
-
+				final int c = s1Name.compareTo(s2Name);
+				if (c != 0) {
+					return c;
 				}
+			}
+			{
+				// Add scenario instance name to field if multiple scenarios are selected
+				final Object input = viewer.getInput();
+				if (input instanceof Collection<?> collection) {
 
-				// if (category == WithCategory.BY_NAME)
-				{
-					// Sort by name
-					final String s1Name = getSequenceName(e1);
-					final String s2Name = getSequenceName(e2);
+					if (collection.size() > 1) {
+						if (selectedScenariosService.getPinned() != null) {
+							final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+							if (selectedDataProvider != null) {
 
-					final int c = s1Name.compareTo(s2Name);
-					if (c != 0) {
-						return c;
-					}
-				}
-				{
-					// Add scenario instance name to field if multiple scenarios are selected
-					final Object input = viewer.getInput();
-					if (input instanceof Collection<?> collection) {
-
-						if (collection.size() > 1) {
-							if (selectedScenariosService.getPinned() != null) {
-								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-								if (selectedDataProvider != null) {
-
-									final EObject e1Obj;
-									if (e1 instanceof CombinedSequence combinedSequence) {
-										if (!combinedSequence.getSequences().isEmpty()) {
-											e1Obj = combinedSequence.getSequences().get(0);
-										} else {
-											e1Obj = null;
-										}
-									} else if (e1 instanceof EObject eo) {
-										e1Obj = eo;
+								final EObject e1Obj;
+								if (e1 instanceof CombinedSequence combinedSequence) {
+									if (!combinedSequence.getSequences().isEmpty()) {
+										e1Obj = combinedSequence.getSequences().get(0);
 									} else {
 										e1Obj = null;
 									}
+								} else if (e1 instanceof EObject eo) {
+									e1Obj = eo;
+								} else {
+									e1Obj = null;
+								}
 
-									final EObject e2Obj;
+								final EObject e2Obj;
 
-									if (e2 instanceof CombinedSequence combinedSequence) {
-										if (!combinedSequence.getSequences().isEmpty()) {
-											e2Obj = combinedSequence.getSequences().get(0);
-										} else {
-											e2Obj = null;
-										}
-									} else if (e2 instanceof EObject eo) {
-										e2Obj = eo;
+								if (e2 instanceof CombinedSequence combinedSequence) {
+									if (!combinedSequence.getSequences().isEmpty()) {
+										e2Obj = combinedSequence.getSequences().get(0);
 									} else {
 										e2Obj = null;
 									}
+								} else if (e2 instanceof EObject eo) {
+									e2Obj = eo;
+								} else {
+									e2Obj = null;
+								}
 
-									final boolean s1Pinned = e1Obj != null && selectedDataProvider.isPinnedObject(e1Obj);
-									final boolean s2Pinned = e2Obj != null && selectedDataProvider.isPinnedObject(e2Obj);
+								final boolean s1Pinned = e1Obj != null && selectedDataProvider.isPinnedObject(e1Obj);
+								final boolean s2Pinned = e2Obj != null && selectedDataProvider.isPinnedObject(e2Obj);
 
-									if (s1Pinned != s2Pinned) {
-										if (s1Pinned) {
-											return -1;
-										} else {
-											return 1;
-										}
+								if (s1Pinned != s2Pinned) {
+									if (s1Pinned) {
+										return -1;
+									} else {
+										return 1;
 									}
 								}
 							}
