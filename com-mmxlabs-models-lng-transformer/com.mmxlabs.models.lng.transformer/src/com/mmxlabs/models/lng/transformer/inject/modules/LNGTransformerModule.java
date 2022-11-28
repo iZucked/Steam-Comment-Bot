@@ -103,7 +103,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean hintEvaluationMode;
 
-	private final boolean hintEnableCache;
+	private final boolean hintDisableCache;
 	private final boolean portfolioBreakEven;
 
 	private final boolean withCharterLength;
@@ -131,7 +131,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.scenario = (LNGScenarioModel) scenarioDataProvider.getScenario();
 		this.userSettings = userSettings;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
-		this.hintEnableCache = !hints.contains(SchedulerConstants.HINT_DISABLE_CACHES);
+		this.hintDisableCache = hints.contains(SchedulerConstants.HINT_DISABLE_CACHES);
 		this.portfolioBreakEven = hints.contains(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN);
 		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
@@ -152,7 +152,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_LONG_TERM)).toInstance(userSettings.getMode() == OptimisationMode.LONG_TERM);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.HINT_DISABLE_CACHES)).toInstance(hintDisableCache);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(portfolioBreakEven);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_EVALUATION_ONLY)).toInstance(hintEvaluationMode);

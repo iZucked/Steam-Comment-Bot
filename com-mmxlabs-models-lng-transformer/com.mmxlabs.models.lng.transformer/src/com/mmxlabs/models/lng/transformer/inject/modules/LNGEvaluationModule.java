@@ -67,11 +67,11 @@ public class LNGEvaluationModule extends AbstractModule {
 
 	private final @NonNull Collection<String> hints;
 
-	private final boolean hintEnableCache;
+	private final boolean hintDisableCache;
 
 	public LNGEvaluationModule(@NonNull final Collection<String> hints) {
 		this.hints = hints;
-		this.hintEnableCache = !hints.contains(SchedulerConstants.HINT_DISABLE_CACHES);
+		this.hintDisableCache = hints.contains(SchedulerConstants.HINT_DISABLE_CACHES);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class LNGEvaluationModule extends AbstractModule {
 			@Named(SchedulerConstants.Key_VoyagePlanEvaluatorCache) CacheMode cacheMode //
 	) {
 
-		if (cacheMode == CacheMode.Off || !hintEnableCache) {
+		if (cacheMode == CacheMode.Off || hintDisableCache) {
 			return delegate;
 		} else {
 			final CachingVoyagePlanEvaluator cache = new CachingVoyagePlanEvaluator(delegate, concurrencyLevel);
