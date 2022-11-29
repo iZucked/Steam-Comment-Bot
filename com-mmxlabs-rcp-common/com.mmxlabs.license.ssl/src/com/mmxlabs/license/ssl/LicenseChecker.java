@@ -142,17 +142,17 @@ public final class LicenseChecker {
 
 		try {
 			// Load keystore
-			final KeyStore keyStore = KeyStore.getInstance("JKS");
+			final KeyStore trustStore = KeyStore.getInstance("JKS");
 			// TODO: Load from bundle resource
-			final URL keyStoreUrl = Activator.getDefault().getBundle().getResource("keystore.jks");
-			if (keyStoreUrl == null) {
+			final URL trustStoreUrl = Activator.getDefault().getBundle().getResource("keystore.jks");
+			if (trustStoreUrl == null) {
 				return LicenseState.KeystoreNotFound;
 			}
-			try (final InputStream astream = keyStoreUrl.openStream()) {
-				keyStore.load(astream, password.toCharArray());
+			try (final InputStream astream = trustStoreUrl.openStream()) {
+				trustStore.load(astream, password.toCharArray());
 			}
 
-			final Certificate rootCertificate = keyStore.getCertificate("rootca");
+			final Certificate rootCertificate = trustStore.getCertificate("rootca");
 			if (rootCertificate == null) {
 				return LicenseState.Unknown;
 			}
@@ -177,8 +177,8 @@ public final class LicenseChecker {
 			// Load in existing certificates from default store. We replace the default
 			// store with our own, so make sure other bits of the app using a truststore
 			// still work.
-			populateDefaultKeystore(keyStore);
-			createKeystoreCopies(keyStore, licenseKeystore);
+			populateDefaultTrustStore(trustStore);
+			createKeystoreCopies(trustStore, licenseKeystore);
 
 			return LicenseState.Valid;
 		} catch (final CertificateExpiredException e) {
@@ -195,26 +195,27 @@ public final class LicenseChecker {
 	 * Create copies of the default & license keystores and place them in a known
 	 * place on the filesystem so we can reference them later
 	 *
+	 * @param trustStore
 	 * @param keyStore
-	 * @param licenseKeystore
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 * @throws CertificateException
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyStoreException
 	 */
-	public static void createKeystoreCopies(KeyStore keyStore, KeyStore licenseKeystore) throws FileNotFoundException, IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
+	public static void createKeystoreCopies(KeyStore trustStore, KeyStore keyStore) throws FileNotFoundException, IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
 		final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
 		final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 
 		try (FileOutputStream stream = new FileOutputStream(keyStoreFile)) {
-			licenseKeystore.store(stream, password.toCharArray());
-		}
-		try (FileOutputStream stream = new FileOutputStream(trustStoreFile)) {
 			keyStore.store(stream, password.toCharArray());
+
 			System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
 			System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
 			System.setProperty("javax.net.ssl.keyStorePassword", password);
+		}
+		try (FileOutputStream stream = new FileOutputStream(trustStoreFile)) {
+			trustStore.store(stream, password.toCharArray());
 
 			System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
 			System.setProperty("javax.net.ssl.trustStorePassword", password);
@@ -231,7 +232,7 @@ public final class LicenseChecker {
 	 * @throws IOException
 	 * @throws KeyStoreException
 	 */
-	private static void populateDefaultKeystore(KeyStore keyStore) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+	private static void populateDefaultTrustStore(KeyStore keyStore) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
 		String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
 		String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
 
