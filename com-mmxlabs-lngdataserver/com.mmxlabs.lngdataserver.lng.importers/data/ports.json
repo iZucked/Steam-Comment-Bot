@@ -2102,7 +2102,7 @@
 			},
 			"locode": "PK  BQM",
 			"upstreamID": "PK0021",
-			"fallbackUpstreamId": "PK0004"	
+			"fallbackUpstreamId": "PK0004"
 		}, {
 			"mmxId": "L_CP_Colon",
 			"name": "Colon",
