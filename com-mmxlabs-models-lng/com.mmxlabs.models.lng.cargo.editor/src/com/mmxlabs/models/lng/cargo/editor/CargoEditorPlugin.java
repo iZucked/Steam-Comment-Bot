@@ -14,6 +14,10 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
+
 public final class CargoEditorPlugin extends AbstractUIPlugin {
 
 	public static final String COLOR_CARGO_DES = "cargo.des";
@@ -23,6 +27,7 @@ public final class CargoEditorPlugin extends AbstractUIPlugin {
 	public static final String IMAGE_CARGO_LOCK = "cargo.lock";
 	public static final String IMAGE_CARGO_NOTES = "cargo.notes";
 	public static final String IMAGE_CARGO_TRANSFER = "cargo.transfer";
+	public static final String IMAGE_CARGO_NOTES_AND_TRANSFER = "cargo.transfer.notes";
 
 	public static final String IMAGE_CARGO_SWAP = "cargo.swap";
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
@@ -80,8 +85,9 @@ public final class CargoEditorPlugin extends AbstractUIPlugin {
 	private void initImageRegistry(final ImageRegistry imageRegistry) {
 		imageRegistry.put(IMAGE_CARGO_LINK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/wired.gif"));
 		imageRegistry.put(IMAGE_CARGO_LOCK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/assigned.gif"));
-		imageRegistry.put(IMAGE_CARGO_NOTES, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/small_notes.png"));
-		imageRegistry.put(IMAGE_CARGO_TRANSFER, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/small_transfer.png"));
+		imageRegistry.put(IMAGE_CARGO_NOTES, CommonImages.getImageDescriptor(IconPaths.Notes_12, IconMode.Enabled));
+		imageRegistry.put(IMAGE_CARGO_TRANSFER, CommonImages.getImageDescriptor(IconPaths.Transfer_12, IconMode.Enabled));
+		imageRegistry.put(IMAGE_CARGO_NOTES_AND_TRANSFER, CommonImages.getImageDescriptor(IconPaths.NotesAndTransfer, IconMode.Enabled));
 		{
 			final ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/swap.gif");
 			imageRegistry.put(IMAGE_CARGO_SWAP, swapImageDescriptor);

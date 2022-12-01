@@ -251,6 +251,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private final Image notesImage;
 	private final Image transferImage;
+	private final Image notesAndTransferImage;
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -283,6 +284,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
 		transferImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_TRANSFER);
+		notesAndTransferImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES_AND_TRANSFER);
 
 		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
 			if (p == null) {
@@ -1071,7 +1073,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ls, getScenarioModel());
 							if (ls.getNotes() != null && !ls.getNotes().isEmpty()) {
 								if (slotTransferred) {
-									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+									return notesAndTransferImage;
 								}
 								return notesImage;
 							}
@@ -1263,7 +1265,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ds, getScenarioModel());
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
 								if (slotTransferred) {
-									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+									return notesAndTransferImage;
 								}
 								return notesImage;
 							}

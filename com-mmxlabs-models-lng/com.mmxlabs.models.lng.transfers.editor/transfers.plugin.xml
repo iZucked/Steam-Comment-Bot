@@ -21,7 +21,7 @@
           category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
           id="com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView"
-          icon="icons/full/obj16/small_transfers.png"
+          icon="icons:/icons/16x16/transfer.png"
           name="Transfer Records"
           restorable="true">
     </view>
