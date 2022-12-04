@@ -135,31 +135,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_businessUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		if (true) {
-			TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();//{
-//				@Override
-//				public NativeTabularDataInlineEditor build(final EStructuralFeature f) {
-//					return new NativeTabularDataInlineEditor(f, this) {
-//						@Override
-//						protected void updateDisplay(final Object value) {
-//							if (input != null) {
-//								input.eAdapters().remove(adapter);
-//							}
-//
-//							if (!tableViewer.getControl().isDisposed()) {
-//
-//
-//
-//								tableViewer.setInput(value);
-//
-//								if (input instanceof EObject) {
-//									input.eAdapters().add(adapter);
-//								}
-//
-//							}
-//						}
-//					};
-//				}
-//			};
+			TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 			b.withShowHeaders(true);
 			b.withLabel("Business Units");
 			b.withContentProvider(new ArrayContentProvider());

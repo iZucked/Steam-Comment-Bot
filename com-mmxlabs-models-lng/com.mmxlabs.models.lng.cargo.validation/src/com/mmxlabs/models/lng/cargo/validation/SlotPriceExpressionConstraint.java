@@ -62,7 +62,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 						failures.add(dsd);
 					}
 					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
-						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.PRICING_BASIS, name, slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
+						validatePrice(ctx, failures, slot.getPricingBasis(), PriceIndexType.PRICING_BASIS, name, slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
 					}
 					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
 						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.COMMODITY, name, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);

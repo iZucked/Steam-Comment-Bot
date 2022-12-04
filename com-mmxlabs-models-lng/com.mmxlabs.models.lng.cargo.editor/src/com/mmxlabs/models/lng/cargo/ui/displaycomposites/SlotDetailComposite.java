@@ -40,6 +40,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -48,6 +50,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.ExpandableSet.ExpansionListener;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -477,19 +480,25 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					return gd;
 				}
 				
-//				if (feature == CargoPackage.Literals.SLOT__PRICING_BASIS) {
-//					final Label label = editor.getLabel();
-//					if (label != null && value instanceof final MMXObject mmxEo) {
-//						final Contract c = (Contract) mmxEo.eGet(Contract);
-//						//c.eGet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS);
-//						final String pe = (String) mmxEo.eGet(PriceExpression);
-//						final String pb = (String) mmxEo.eGet(PricingBasis);
-//						
-//						
-//						label.setText("Hello");
-//					}
-//					editor.setLabel(null);
-//				}
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
+					if (feature == CargoPackage.Literals.SLOT__PRICING_BASIS) {
+						final Label label = editor.getLabel();
+						if (label != null && value instanceof final MMXObject mmxEo) {
+							final Contract c = (Contract) mmxEo.eGet(Contract);
+							if (c != null) {
+								String t = "";
+								final Object eo = c.eGet(CommercialPackage.eINSTANCE.getContract_PriceInfo());
+								if (eo instanceof ExpressionPriceParameters epp) {
+									if (epp.getPreferredPBs() != null && !epp.getPreferredPBs().isEmpty()) {
+										t = epp.getPreferredPBs().get(0).getName();
+									}
+								}
+								label.setText(String.format("Preferred PB: %s :", t));
+								editor.setLabel(null);
+							}
+						}
+					}
+				}
 
 				return super.createEditorLayoutData(root, value, editor, control);
 			}
