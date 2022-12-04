@@ -1,38 +1,38 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
+
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.BusinessUnit} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ExpressionPriceParametersItemProvider
-	extends LNGPriceCalculatorParametersItemProvider {
+public class BusinessUnitItemProvider extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExpressionPriceParametersItemProvider(AdapterFactory adapterFactory) {
+	public BusinessUnitItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -47,27 +47,26 @@ public class ExpressionPriceParametersItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPriceExpressionPropertyDescriptor(object);
-			addPricingBasisPropertyDescriptor(object);
-			addPreferredPBsPropertyDescriptor(object);
+			addDescriptionPropertyDescriptor(object);
+			addDefaultPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Price Expression feature.
+	 * This adds a property descriptor for the Description feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPriceExpressionPropertyDescriptor(Object object) {
+	protected void addDescriptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ExpressionPriceParameters_priceExpression_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_priceExpression_feature", "_UI_ExpressionPriceParameters_type"),
-				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION,
+				 getString("_UI_BusinessUnit_description_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BusinessUnit_description_feature", "_UI_BusinessUnit_type"),
+				 CommercialPackage.Literals.BUSINESS_UNIT__DESCRIPTION,
 				 true,
 				 false,
 				 false,
@@ -77,73 +76,52 @@ public class ExpressionPriceParametersItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Pricing Basis feature.
+	 * This adds a property descriptor for the Default feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPricingBasisPropertyDescriptor(Object object) {
+	protected void addDefaultPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ExpressionPriceParameters_pricingBasis_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_pricingBasis_feature", "_UI_ExpressionPriceParameters_type"),
-				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS,
+				 getString("_UI_BusinessUnit_default_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BusinessUnit_default_feature", "_UI_BusinessUnit_type"),
+				 CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Preferred PBs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPreferredPBsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ExpressionPriceParameters_preferredPBs_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_preferredPBs_feature", "_UI_ExpressionPriceParameters_type"),
-				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns ExpressionPriceParameters.gif.
+	 * This returns BusinessUnit.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ExpressionPriceParameters"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BusinessUnit"));
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ExpressionPriceParameters)object).getPriceExpression();
+		String label = ((BusinessUnit)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ExpressionPriceParameters_type") :
-			label;
+			getString("_UI_BusinessUnit_type") :
+			getString("_UI_BusinessUnit_type") + " " + label;
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -156,9 +134,9 @@ public class ExpressionPriceParametersItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ExpressionPriceParameters.class)) {
-			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
-			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS:
+		switch (notification.getFeatureID(BusinessUnit.class)) {
+			case CommercialPackage.BUSINESS_UNIT__DESCRIPTION:
+			case CommercialPackage.BUSINESS_UNIT__DEFAULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

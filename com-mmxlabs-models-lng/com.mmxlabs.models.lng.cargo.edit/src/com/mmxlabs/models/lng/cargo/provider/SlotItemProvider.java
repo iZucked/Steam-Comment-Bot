@@ -92,6 +92,7 @@ public class SlotItemProvider
 			addCancelledPropertyDescriptor(object);
 			addWindowCounterPartyPropertyDescriptor(object);
 			addPricingBasisPropertyDescriptor(object);
+			addBusinessUnitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1038,6 +1039,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Business Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBusinessUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_businessUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_businessUnit_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__BUSINESS_UNIT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

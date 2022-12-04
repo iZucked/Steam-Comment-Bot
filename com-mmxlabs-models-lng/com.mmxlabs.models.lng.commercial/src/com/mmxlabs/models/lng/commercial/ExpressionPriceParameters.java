@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
+import org.eclipse.emf.common.util.EList;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Expression Price Parameters</b></em>'.
@@ -15,6 +17,7 @@ package com.mmxlabs.models.lng.commercial;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredPBs <em>Preferred PBs</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters()
@@ -71,6 +74,18 @@ public interface ExpressionPriceParameters extends LNGPriceCalculatorParameters 
 	 * @generated
 	 */
 	void setPricingBasis(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Preferred PBs</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Preferred PBs</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters_PreferredPBs()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PreferredPricingBasesWrapper> getPreferredPBs();
 
 } // end of  ExpressionPriceParameters
 

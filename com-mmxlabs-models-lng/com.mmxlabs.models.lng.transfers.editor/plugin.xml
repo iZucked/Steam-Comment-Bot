@@ -70,6 +70,18 @@
           ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
           referenceEClass="com.mmxlabs.models.lng.transfers.TransferAgreement">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.transfers.TransferAgreement"
+          referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.transfers.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.transfers.TransferRecord"
+          referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
+    </valueProvider>
        <valueProvider
              factory="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"
              id="com.mmxlabs.models.lng.transfers.ui.valueproviders.LHSReferenceValueProviderFactory"

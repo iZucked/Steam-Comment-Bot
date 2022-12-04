@@ -243,6 +243,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createRegasPricingParamsAdapter();
 			}
 			@Override
+			public Adapter caseBusinessUnit(BusinessUnit object) {
+				return createBusinessUnitAdapter();
+			}
+			@Override
+			public Adapter casePreferredPricingBasesWrapper(PreferredPricingBasesWrapper object) {
+				return createPreferredPricingBasesWrapperAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -761,6 +769,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRegasPricingParamsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BusinessUnit <em>Business Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BusinessUnit
+	 * @generated
+	 */
+	public Adapter createBusinessUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper <em>Preferred Pricing Bases Wrapper</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper
+	 * @generated
+	 */
+	public Adapter createPreferredPricingBasesWrapperAdapter() {
 		return null;
 	}
 

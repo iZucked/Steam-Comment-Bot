@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
@@ -74,6 +75,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1832,6 +1834,28 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean isSetPricingBasis();
+
+	/**
+	 * Returns the value of the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Business Unit</em>' reference.
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_BusinessUnit()
+	 * @model
+	 * @generated
+	 */
+	BusinessUnit getBusinessUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Business Unit</em>' reference.
+	 * @see #getBusinessUnit()
+	 * @generated
+	 */
+	void setBusinessUnit(BusinessUnit value);
 
 	/**
 	 * <!-- begin-user-doc -->

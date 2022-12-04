@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -97,6 +98,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
  *
  * @generated
@@ -1052,6 +1054,16 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean pricingBasisESet;
+
+	/**
+	 * The cached value of the '{@link #getBusinessUnit() <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBusinessUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit businessUnit;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2704,6 +2716,46 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getBusinessUnit() {
+		if (businessUnit != null && businessUnit.eIsProxy()) {
+			InternalEObject oldBusinessUnit = (InternalEObject)businessUnit;
+			businessUnit = (BusinessUnit)eResolveProxy(oldBusinessUnit);
+			if (businessUnit != oldBusinessUnit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit));
+			}
+		}
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetBusinessUnit() {
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBusinessUnit(BusinessUnit newBusinessUnit) {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		businessUnit = newBusinessUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -3066,6 +3118,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isWindowCounterParty();
 			case CargoPackage.SLOT__PRICING_BASIS:
 				return getPricingBasis();
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				if (resolve) return getBusinessUnit();
+				return basicGetBusinessUnit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3211,6 +3266,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PRICING_BASIS:
 				setPricingBasis((String)newValue);
 				return;
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				setBusinessUnit((BusinessUnit)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3351,6 +3409,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PRICING_BASIS:
 				unsetPricingBasis();
 				return;
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				setBusinessUnit((BusinessUnit)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3465,6 +3526,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
 			case CargoPackage.SLOT__PRICING_BASIS:
 				return isSetPricingBasis();
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				return businessUnit != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -39,6 +39,9 @@
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/companyStatus"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/pricingBasis"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/bufferDays"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/fromBU"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/toBU"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/preferredPBs"/>
     </genClasses>
     <genClasses ecoreClass="transfers.ecore#//TransferRecord">
       <genFeatures notify="false" createChild="false" propertyDescription="Underlying agreement"
@@ -56,12 +59,16 @@
       <genFeatures createChild="false" propertyDescription="Notes" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/notes"/>
       <genFeatures createChild="false" propertyDescription="Stale" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/stale"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/pricingBasis"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/fromBU"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/toBU"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getFromEntity"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getToEntity"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getCompanyStatus"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePriceExpression"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateIncoterm"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePricingBasis"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateFromBU"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateToBU"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

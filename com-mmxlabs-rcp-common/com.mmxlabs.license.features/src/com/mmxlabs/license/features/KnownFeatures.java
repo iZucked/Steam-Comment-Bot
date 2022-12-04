@@ -140,6 +140,10 @@ public final class KnownFeatures {
 	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
 	
 	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
+	
+	public static final String FEATURE_PREFERRED_PRICING_BASES = "features:preferred-pricing-bases";
+	
+	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";
 
 	/**
 	 * Scenario repair features

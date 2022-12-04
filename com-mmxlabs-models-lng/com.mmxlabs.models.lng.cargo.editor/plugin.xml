@@ -236,6 +236,12 @@
            referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
      </valueProvider>
      <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotBusinessUnitValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotBusinessUnitValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+           referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
+     </valueProvider>
+     <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselCharter"
            referenceEClass="com.mmxlabs.models.lng.cargo.VesselCharter">

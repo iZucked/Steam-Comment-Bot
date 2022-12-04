@@ -8,7 +8,10 @@ package com.mmxlabs.models.lng.transfers;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,6 +29,9 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCompanyStatus <em>Company Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredPBs <em>Preferred PBs</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement()
@@ -220,5 +226,61 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	boolean isSetBufferDays();
+
+	/**
+	 * Returns the value of the '<em><b>From BU</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>From BU</em>' reference.
+	 * @see #setFromBU(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_FromBU()
+	 * @model
+	 * @generated
+	 */
+	BusinessUnit getFromBU();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>From BU</em>' reference.
+	 * @see #getFromBU()
+	 * @generated
+	 */
+	void setFromBU(BusinessUnit value);
+
+	/**
+	 * Returns the value of the '<em><b>To BU</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>To BU</em>' reference.
+	 * @see #setToBU(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_ToBU()
+	 * @model
+	 * @generated
+	 */
+	BusinessUnit getToBU();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>To BU</em>' reference.
+	 * @see #getToBU()
+	 * @generated
+	 */
+	void setToBU(BusinessUnit value);
+
+	/**
+	 * Returns the value of the '<em><b>Preferred PBs</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Preferred PBs</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PreferredPBs()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PreferredPricingBasesWrapper> getPreferredPBs();
 
 } // TransferAgreement

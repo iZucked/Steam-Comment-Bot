@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -38,6 +39,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#isStale <em>Stale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToBU <em>To BU</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord()
@@ -458,6 +461,104 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	boolean isSetPricingBasis();
 
 	/**
+	 * Returns the value of the '<em><b>From BU</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>From BU</em>' reference.
+	 * @see #isSetFromBU()
+	 * @see #unsetFromBU()
+	 * @see #setFromBU(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_FromBU()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	BusinessUnit getFromBU();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>From BU</em>' reference.
+	 * @see #isSetFromBU()
+	 * @see #unsetFromBU()
+	 * @see #getFromBU()
+	 * @generated
+	 */
+	void setFromBU(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetFromBU()
+	 * @see #getFromBU()
+	 * @see #setFromBU(BusinessUnit)
+	 * @generated
+	 */
+	void unsetFromBU();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>From BU</em>' reference is set.
+	 * @see #unsetFromBU()
+	 * @see #getFromBU()
+	 * @see #setFromBU(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetFromBU();
+
+	/**
+	 * Returns the value of the '<em><b>To BU</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>To BU</em>' reference.
+	 * @see #isSetToBU()
+	 * @see #unsetToBU()
+	 * @see #setToBU(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_ToBU()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	BusinessUnit getToBU();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToBU <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>To BU</em>' reference.
+	 * @see #isSetToBU()
+	 * @see #unsetToBU()
+	 * @see #getToBU()
+	 * @generated
+	 */
+	void setToBU(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToBU <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetToBU()
+	 * @see #getToBU()
+	 * @see #setToBU(BusinessUnit)
+	 * @generated
+	 */
+	void unsetToBU();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToBU <em>To BU</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>To BU</em>' reference is set.
+	 * @see #unsetToBU()
+	 * @see #getToBU()
+	 * @see #setToBU(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetToBU();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -504,5 +605,21 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	String getRecordOrDelegatePricingBasis();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getRecordOrDelegateFromBU();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getRecordOrDelegateToBU();
 
 } // TransferRecord

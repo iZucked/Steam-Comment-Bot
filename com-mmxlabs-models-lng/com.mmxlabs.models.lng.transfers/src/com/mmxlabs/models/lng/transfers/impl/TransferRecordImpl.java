@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.transfers.CompanyStatus;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferIncoterm;
@@ -50,6 +51,8 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#isStale <em>Stale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getFromBU <em>From BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getToBU <em>To BU</em>}</li>
  * </ul>
  *
  * @generated
@@ -318,6 +321,44 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @ordered
 	 */
 	protected boolean pricingBasisESet;
+
+	/**
+	 * The cached value of the '{@link #getFromBU() <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFromBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit fromBU;
+
+	/**
+	 * This is true if the From BU reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fromBUESet;
+
+	/**
+	 * The cached value of the '{@link #getToBU() <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit toBU;
+
+	/**
+	 * This is true if the To BU reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean toBUESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -829,6 +870,140 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getFromBU() {
+		if (fromBU != null && fromBU.eIsProxy()) {
+			InternalEObject oldFromBU = (InternalEObject)fromBU;
+			fromBU = (BusinessUnit)eResolveProxy(oldFromBU);
+			if (fromBU != oldFromBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_RECORD__FROM_BU, oldFromBU, fromBU));
+			}
+		}
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetFromBU() {
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFromBU(BusinessUnit newFromBU) {
+		BusinessUnit oldFromBU = fromBU;
+		fromBU = newFromBU;
+		boolean oldFromBUESet = fromBUESet;
+		fromBUESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__FROM_BU, oldFromBU, fromBU, !oldFromBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetFromBU() {
+		BusinessUnit oldFromBU = fromBU;
+		boolean oldFromBUESet = fromBUESet;
+		fromBU = null;
+		fromBUESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_RECORD__FROM_BU, oldFromBU, null, oldFromBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetFromBU() {
+		return fromBUESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getToBU() {
+		if (toBU != null && toBU.eIsProxy()) {
+			InternalEObject oldToBU = (InternalEObject)toBU;
+			toBU = (BusinessUnit)eResolveProxy(oldToBU);
+			if (toBU != oldToBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_RECORD__TO_BU, oldToBU, toBU));
+			}
+		}
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetToBU() {
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setToBU(BusinessUnit newToBU) {
+		BusinessUnit oldToBU = toBU;
+		toBU = newToBU;
+		boolean oldToBUESet = toBUESet;
+		toBUESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__TO_BU, oldToBU, toBU, !oldToBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetToBU() {
+		BusinessUnit oldToBU = toBU;
+		boolean oldToBUESet = toBUESet;
+		toBU = null;
+		toBUESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_RECORD__TO_BU, oldToBU, null, oldToBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetToBU() {
+		return toBUESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -898,6 +1073,26 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getRecordOrDelegateFromBU() {
+		return (BusinessUnit) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getRecordOrDelegateToBU() {
+		return (BusinessUnit) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__TO_BU).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -930,6 +1125,12 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return isStale();
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 				return getPricingBasis();
+			case TransfersPackage.TRANSFER_RECORD__FROM_BU:
+				if (resolve) return getFromBU();
+				return basicGetFromBU();
+			case TransfersPackage.TRANSFER_RECORD__TO_BU:
+				if (resolve) return getToBU();
+				return basicGetToBU();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -977,6 +1178,12 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return;
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 				setPricingBasis((String)newValue);
+				return;
+			case TransfersPackage.TRANSFER_RECORD__FROM_BU:
+				setFromBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_RECORD__TO_BU:
+				setToBU((BusinessUnit)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1026,6 +1233,12 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 				unsetPricingBasis();
 				return;
+			case TransfersPackage.TRANSFER_RECORD__FROM_BU:
+				unsetFromBU();
+				return;
+			case TransfersPackage.TRANSFER_RECORD__TO_BU:
+				unsetToBU();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1062,6 +1275,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return stale != STALE_EDEFAULT;
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 				return isSetPricingBasis();
+			case TransfersPackage.TRANSFER_RECORD__FROM_BU:
+				return isSetFromBU();
+			case TransfersPackage.TRANSFER_RECORD__TO_BU:
+				return isSetToBU();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1118,6 +1335,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return getRecordOrDelegateIncoterm();
 			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS:
 				return getRecordOrDelegatePricingBasis();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_FROM_BU:
+				return getRecordOrDelegateFromBU();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU:
+				return getRecordOrDelegateToBU();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1163,6 +1384,10 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
 		} else if (transferPackage.getTransferRecord_PricingBasis() == feature) {
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PricingBasis(),"");
+		} else if (transferPackage.getTransferRecord_FromBU() == feature) {
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_FromBU(), "");
+		} else if (transferPackage.getTransferRecord_ToBU() == feature) {
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_ToBU(), "");
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

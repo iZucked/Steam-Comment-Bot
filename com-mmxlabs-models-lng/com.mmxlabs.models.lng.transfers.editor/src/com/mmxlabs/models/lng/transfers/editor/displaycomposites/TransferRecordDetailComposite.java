@@ -42,6 +42,9 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_TO_ENTITY,//
 				
+				TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU,//
+				TransfersPackage.Literals.TRANSFER_RECORD__TO_BU,//
+				
 				TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE,//
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS, //
 				
@@ -85,6 +88,11 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD___GET_FROM_ENTITY) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD___GET_TO_ENTITY) //
+				.makeRow() //
+				//
+				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__TO_BU) //
 				.makeRow() //
 				//
 				.withRow() //

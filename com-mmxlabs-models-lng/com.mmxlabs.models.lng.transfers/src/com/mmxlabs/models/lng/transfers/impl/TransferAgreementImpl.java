@@ -8,6 +8,8 @@ package com.mmxlabs.models.lng.transfers.impl;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.transfers.CompanyStatus;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferIncoterm;
@@ -15,12 +17,17 @@ import com.mmxlabs.models.lng.transfers.TransfersPackage;
 
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +44,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getCompanyStatus <em>Company Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getBufferDays <em>Buffer Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getFromBU <em>From BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getToBU <em>To BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPreferredPBs <em>Preferred PBs</em>}</li>
  * </ul>
  *
  * @generated
@@ -170,6 +180,36 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @ordered
 	 */
 	protected boolean bufferDaysESet;
+
+	/**
+	 * The cached value of the '{@link #getFromBU() <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFromBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit fromBU;
+
+	/**
+	 * The cached value of the '{@link #getToBU() <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit toBU;
+
+	/**
+	 * The cached value of the '{@link #getPreferredPBs() <em>Preferred PBs</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPreferredPBs()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PreferredPricingBasesWrapper> preferredPBs;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -418,6 +458,113 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @generated
 	 */
 	@Override
+	public BusinessUnit getFromBU() {
+		if (fromBU != null && fromBU.eIsProxy()) {
+			InternalEObject oldFromBU = (InternalEObject)fromBU;
+			fromBU = (BusinessUnit)eResolveProxy(oldFromBU);
+			if (fromBU != oldFromBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_AGREEMENT__FROM_BU, oldFromBU, fromBU));
+			}
+		}
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetFromBU() {
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFromBU(BusinessUnit newFromBU) {
+		BusinessUnit oldFromBU = fromBU;
+		fromBU = newFromBU;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__FROM_BU, oldFromBU, fromBU));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getToBU() {
+		if (toBU != null && toBU.eIsProxy()) {
+			InternalEObject oldToBU = (InternalEObject)toBU;
+			toBU = (BusinessUnit)eResolveProxy(oldToBU);
+			if (toBU != oldToBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_AGREEMENT__TO_BU, oldToBU, toBU));
+			}
+		}
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetToBU() {
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setToBU(BusinessUnit newToBU) {
+		BusinessUnit oldToBU = toBU;
+		toBU = newToBU;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__TO_BU, oldToBU, toBU));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<PreferredPricingBasesWrapper> getPreferredPBs() {
+		if (preferredPBs == null) {
+			preferredPBs = new EObjectContainmentEList<PreferredPricingBasesWrapper>(PreferredPricingBasesWrapper.class, this, TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS);
+		}
+		return preferredPBs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return ((InternalEList<?>)getPreferredPBs()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TransfersPackage.TRANSFER_AGREEMENT__FROM_ENTITY:
@@ -436,6 +583,14 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return getPricingBasis();
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				return getBufferDays();
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				if (resolve) return getFromBU();
+				return basicGetFromBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				if (resolve) return getToBU();
+				return basicGetToBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return getPreferredPBs();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -445,6 +600,7 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -468,6 +624,16 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return;
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				setBufferDays((Integer)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				setFromBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				setToBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				getPreferredPBs().clear();
+				getPreferredPBs().addAll((Collection<? extends PreferredPricingBasesWrapper>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -502,6 +668,15 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				unsetBufferDays();
 				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				setFromBU((BusinessUnit)null);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				setToBU((BusinessUnit)null);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				getPreferredPBs().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -528,6 +703,12 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return PRICING_BASIS_EDEFAULT == null ? pricingBasis != null : !PRICING_BASIS_EDEFAULT.equals(pricingBasis);
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				return isSetBufferDays();
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				return fromBU != null;
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				return toBU != null;
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return preferredPBs != null && !preferredPBs.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

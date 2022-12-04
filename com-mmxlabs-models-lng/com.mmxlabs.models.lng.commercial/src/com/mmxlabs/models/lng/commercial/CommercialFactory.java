@@ -258,6 +258,24 @@ public interface CommercialFactory extends EFactory {
 	RegasPricingParams createRegasPricingParams();
 
 	/**
+	 * Returns a new object of class '<em>Business Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Business Unit</em>'.
+	 * @generated
+	 */
+	BusinessUnit createBusinessUnit();
+
+	/**
+	 * Returns a new object of class '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * @generated
+	 */
+	PreferredPricingBasesWrapper createPreferredPricingBasesWrapper();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

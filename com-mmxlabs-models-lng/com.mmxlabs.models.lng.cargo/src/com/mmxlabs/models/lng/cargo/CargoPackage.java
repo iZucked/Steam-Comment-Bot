@@ -979,13 +979,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__PRICING_BASIS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1625,6 +1634,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__BUSINESS_UNIT = SLOT__BUSINESS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2372,6 +2390,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__BUSINESS_UNIT = SLOT__BUSINESS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -3184,6 +3211,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__PRICING_BASIS = LOAD_SLOT__PRICING_BASIS;
 
 	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__BUSINESS_UNIT = LOAD_SLOT__BUSINESS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3938,6 +3974,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__PRICING_BASIS = DISCHARGE_SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__BUSINESS_UNIT = DISCHARGE_SLOT__BUSINESS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -8116,6 +8161,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PricingBasis();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Business Unit</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_BusinessUnit();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10963,6 +11019,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__PRICING_BASIS = eINSTANCE.getSlot_PricingBasis();
+
+		/**
+		 * The meta object literal for the '<em><b>Business Unit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__BUSINESS_UNIT = eINSTANCE.getSlot_BusinessUnit();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.

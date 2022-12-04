@@ -207,13 +207,22 @@ public interface CommercialPackage extends EPackage {
 	int BASE_LEGAL_ENTITY__THIRD_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Business Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__BUSINESS_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Base Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -287,6 +296,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEGAL_ENTITY__THIRD_PARTY = BASE_LEGAL_ENTITY__THIRD_PARTY;
+
+	/**
+	 * The feature id for the '<em><b>Business Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__BUSINESS_UNITS = BASE_LEGAL_ENTITY__BUSINESS_UNITS;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -1321,13 +1339,22 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Preferred PBs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
@@ -2679,6 +2706,98 @@ public interface CommercialPackage extends EPackage {
 	int REGAS_PRICING_PARAMS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BusinessUnitImpl <em>Business Unit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.BusinessUnitImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBusinessUnit()
+	 * @generated
+	 */
+	int BUSINESS_UNIT = 35;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUSINESS_UNIT__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUSINESS_UNIT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUSINESS_UNIT__DESCRIPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Default</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUSINESS_UNIT__DEFAULT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Business Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUSINESS_UNIT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl <em>Preferred Pricing Bases Wrapper</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredPricingBasesWrapper()
+	 * @generated
+	 */
+	int PREFERRED_PRICING_BASES_WRAPPER = 36;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PREFERRED_PRICING_BASES_WRAPPER__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PREFERRED_PRICING_BASES_WRAPPER__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Preferred Pricing Bases Wrapper</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PREFERRED_PRICING_BASES_WRAPPER_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2686,7 +2805,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 35;
+	int CONTRACT_TYPE = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2696,7 +2815,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 36;
+	int PRICING_EVENT = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2706,7 +2825,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 37;
+	int NEXT_PORT_TYPE = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}' enum.
@@ -2716,7 +2835,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 38;
+	int EVESSEL_TANK_STATE = 40;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -2825,6 +2944,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getBaseLegalEntity_ThirdParty();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getBusinessUnits <em>Business Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Business Units</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getBusinessUnits()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EReference getBaseLegalEntity_BusinessUnits();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
@@ -3302,6 +3432,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getExpressionPriceParameters_PricingBasis();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredPBs <em>Preferred PBs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Preferred PBs</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredPBs()
+	 * @see #getExpressionPriceParameters()
+	 * @generated
+	 */
+	EReference getExpressionPriceParameters_PreferredPBs();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters <em>Volume Tier Price Parameters</em>}'.
@@ -4125,6 +4266,48 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getRegasPricingParams_NumPricingDays();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BusinessUnit <em>Business Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Business Unit</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BusinessUnit
+	 * @generated
+	 */
+	EClass getBusinessUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.BusinessUnit#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BusinessUnit#getDescription()
+	 * @see #getBusinessUnit()
+	 * @generated
+	 */
+	EAttribute getBusinessUnit_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.BusinessUnit#isDefault <em>Default</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BusinessUnit#isDefault()
+	 * @see #getBusinessUnit()
+	 * @generated
+	 */
+	EAttribute getBusinessUnit_Default();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper <em>Preferred Pricing Bases Wrapper</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper
+	 * @generated
+	 */
+	EClass getPreferredPricingBasesWrapper();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4269,6 +4452,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASE_LEGAL_ENTITY__THIRD_PARTY = eINSTANCE.getBaseLegalEntity_ThirdParty();
+
+		/**
+		 * The meta object literal for the '<em><b>Business Units</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_LEGAL_ENTITY__BUSINESS_UNITS = eINSTANCE.getBaseLegalEntity_BusinessUnits();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -4635,6 +4826,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = eINSTANCE.getExpressionPriceParameters_PricingBasis();
+
+		/**
+		 * The meta object literal for the '<em><b>Preferred PBs</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS = eINSTANCE.getExpressionPriceParameters_PreferredPBs();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
@@ -5303,6 +5502,42 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REGAS_PRICING_PARAMS__NUM_PRICING_DAYS = eINSTANCE.getRegasPricingParams_NumPricingDays();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BusinessUnitImpl <em>Business Unit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.BusinessUnitImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBusinessUnit()
+		 * @generated
+		 */
+		EClass BUSINESS_UNIT = eINSTANCE.getBusinessUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUSINESS_UNIT__DESCRIPTION = eINSTANCE.getBusinessUnit_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Default</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUSINESS_UNIT__DEFAULT = eINSTANCE.getBusinessUnit_Default();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl <em>Preferred Pricing Bases Wrapper</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredPricingBasesWrapper()
+		 * @generated
+		 */
+		EClass PREFERRED_PRICING_BASES_WRAPPER = eINSTANCE.getPreferredPricingBasesWrapper();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

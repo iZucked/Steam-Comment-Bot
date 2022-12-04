@@ -686,6 +686,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.BusinessUnit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BusinessUnitItemProvider businessUnitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.BusinessUnit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBusinessUnitAdapter() {
+		if (businessUnitItemProvider == null) {
+			businessUnitItemProvider = new BusinessUnitItemProvider(this);
+		}
+
+		return businessUnitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PreferredPricingBasesWrapperItemProvider preferredPricingBasesWrapperItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPreferredPricingBasesWrapperAdapter() {
+		if (preferredPricingBasesWrapperItemProvider == null) {
+			preferredPricingBasesWrapperItemProvider = new PreferredPricingBasesWrapperItemProvider(this);
+		}
+
+		return preferredPricingBasesWrapperItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -843,6 +889,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
 		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 		if (regasPricingParamsItemProvider != null) regasPricingParamsItemProvider.dispose();
+		if (businessUnitItemProvider != null) businessUnitItemProvider.dispose();
+		if (preferredPricingBasesWrapperItemProvider != null) preferredPricingBasesWrapperItemProvider.dispose();
 	}
 
 }
