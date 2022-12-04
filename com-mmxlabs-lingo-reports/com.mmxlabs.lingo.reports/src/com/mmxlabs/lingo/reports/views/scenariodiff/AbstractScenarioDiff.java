@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.ecore.EClass;
@@ -30,6 +31,8 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -68,7 +71,9 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -77,6 +82,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -112,6 +118,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 	private static final String KEY_CHARTER_OUT_MARKETS = "CharterOutMarkets";
 	private static final String KEY_DES_PURCHASE_MARKETS = "Cargo_Markets_Des_Purchase";
 	private static final String KEY_DES_SALE_MARKETS = "Cargo_Markets_Des_Sales";
+	private static final String KEY_ENTITIES = "Entities";
 	private static final String KEY_FOB_PURCHASE_MARKETS = "Cargo_Markets_Fob_Purchase";
 	private static final String KEY_FOB_SALE_MARKETS = "Cargo_Markets_Fob_Sales";
 	private static final String KEY_PORTS = "Ports";
@@ -120,6 +127,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 	private static final String KEY_TRADES = "Trades";
 	private static final String KEY_VESSELS = "Vessls";
 	private static final String KEY_VESSEL_EVENTS = "VesselEvents";
+	private static final String KEY_VESSEL_CHARTERS = "VesselCharters";
 
 	private static final String VALUE_NOT_APPLICABLE = "n/a";
 	private static final String VALUE_PRESENT = "Present";
@@ -146,6 +154,8 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 	protected Image pinImage;
 
 	private boolean hideNotes = false;
+
+	private boolean showOnlyMatches = false;
 
 	@NonNull
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -187,12 +197,28 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 
 		viewer.getLabelProvider().dispose();
 		viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.addTreeListener(new ITreeViewerListener() {
+
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				for (final GridColumn col : viewer.getGrid().getColumns()) {
+					col.pack();
+				}
+			}
+
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+				for (final GridColumn col : viewer.getGrid().getColumns()) {
+					col.pack();
+				}
+			}
+		});
 
 		ViewerHelper.setInput(viewer, true, rowElements);
 
 		if (!rowElements.isEmpty() && packColumnsAction != null) {
 			packColumnsAction.run();
-		}	
+		}
 	}
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
@@ -370,6 +396,9 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 				@Override
 				public void run() {
 					viewer.expandAll();
+					for (final GridColumn col : viewer.getGrid().getColumns()) {
+						col.pack();
+					}
 				}
 			};
 
@@ -389,10 +418,14 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 
 				@Override
 				protected void populate(Menu menu) {
-					final RunnableAction toggleHideNotes = new RunnableAction("Hide notes diff", AbstractScenarioDiff.this::doHideNotesToggle);
+					final RunnableAction toggleHideNotes = new RunnableAction("Hide notes", AbstractScenarioDiff.this::doHideNotesToggle);
 					toggleHideNotes.setToolTipText("Toggle diffing of notes");
 					toggleHideNotes.setChecked(hideNotes);
+					final RunnableAction toggleShowOnlyMatches = new RunnableAction("Show only matches", AbstractScenarioDiff.this::doShowOnlyMatchesToggle);
+					toggleShowOnlyMatches.setToolTipText("Only diff elements present in both scenarios");
+					toggleShowOnlyMatches.setChecked(showOnlyMatches);
 					addActionToMenu(toggleHideNotes, menu);
+					addActionToMenu(toggleShowOnlyMatches, menu);
 				}
 
 			};
@@ -404,6 +437,11 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 
 	private void doHideNotesToggle() {
 		hideNotes = !hideNotes;
+		ViewerHelper.runIfViewerValid(viewer, true, () -> refreshDiffViewer(selectedScenariosService.getCurrentSelectedDataProvider()));
+	}
+
+	private void doShowOnlyMatchesToggle() {
+		showOnlyMatches = !showOnlyMatches;
 		ViewerHelper.runIfViewerValid(viewer, true, () -> refreshDiffViewer(selectedScenariosService.getCurrentSelectedDataProvider()));
 	}
 
@@ -459,9 +497,14 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		// For subclasses to override if they need to respond to selection changes
 	}
 
-	private<R extends NamedObject> ScenarioDiffData findDiffs(final R pinnedNamedObject, final R nonPinnedNamedObject) {
+	private <R extends EObject> ScenarioDiffData findDiffs(final R pinnedNamedObject, final R nonPinnedNamedObject, final Function<R, String> labelProvider) {
 		Set<EStructuralFeature> blackList1 = new HashSet<>();
 		blackList1.add(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+		blackList1.add(CargoPackage.eINSTANCE.getAssignableElement_SequenceHint());
+		blackList1.add(FleetPackage.eINSTANCE.getVessel_MmxReference());
+		blackList1.add(PortPackage.eINSTANCE.getLocation_MmxId());
+		blackList1.add(FleetPackage.eINSTANCE.getVessel_MmxId());
+		blackList1.add(CargoPackage.eINSTANCE.getVesselCharter_ForceHireCostOnlyEndRule());
 		if (hideNotes) {
 			blackList1.add(CargoPackage.eINSTANCE.getSlot_Notes());
 			blackList1.add(CommercialPackage.eINSTANCE.getContract_Notes());
@@ -473,7 +516,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		parentMap.put(KEY_PINNED, "");
 		parentMap.put("", "");
 
-		final ScenarioDiffData result = new ScenarioDiffData(parentMap, ((NamedObject) pinnedNamedObject).getName());
+		final ScenarioDiffData result = new ScenarioDiffData(parentMap, labelProvider.apply(pinnedNamedObject));
 		final List<ScenarioDiffData> childrenList = new ArrayList<>();
 
 		final Set<EStructuralFeature> featureSet = new HashSet<>();
@@ -523,6 +566,8 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		} else if (pinnedNamedObject instanceof FOBSalesMarket) {
 			featureSet.addAll(SpotMarketsPackage.eINSTANCE.getSpotMarket().getEAllStructuralFeatures());
 			featureSet.addAll(SpotMarketsPackage.eINSTANCE.getFOBSalesMarket().getEAllStructuralFeatures());
+		} else if (pinnedNamedObject.eClass() == nonPinnedNamedObject.eClass()) {
+			featureSet.addAll(pinnedNamedObject.eClass().getEAllStructuralFeatures());
 		}
 
 		final List<EStructuralFeature> featureList = new ArrayList<>(featureSet);
@@ -595,6 +640,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		res.put(KEY_CHARTER_OUT_MARKETS, new ArrayList<>());
 
 		res.put(KEY_VESSEL_EVENTS, new ArrayList<>());
+		res.put(KEY_ENTITIES, new ArrayList<>());
 
 		res.put(KEY_PURCHASE_CONTRACTS, new ArrayList<>());
 		res.put(KEY_SALES_CONTRACTS, new ArrayList<>());
@@ -603,6 +649,8 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		res.put(KEY_DES_SALE_MARKETS, new ArrayList<>());
 		res.put(KEY_FOB_PURCHASE_MARKETS, new ArrayList<>());
 		res.put(KEY_FOB_SALE_MARKETS, new ArrayList<>());
+
+		res.put(KEY_VESSEL_CHARTERS, new ArrayList<>());
 
 		if (pinnedScenarioModel != null && nonPinnedScenarioModel != null) {
 			List<LoadSlot> pinnedLoadSlots = pinnedScenarioModel.getCargoModel().getLoadSlots();
@@ -625,6 +673,11 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 			List<VesselEvent> pinnedVesselEvents = pinnedScenarioModel.getCargoModel().getVesselEvents();
 			List<VesselEvent> nonPinnedVesselEvents = nonPinnedScenarioModel.getCargoModel().getVesselEvents();
 
+			List<VesselCharter> pinnedVesselCharters = pinnedScenarioModel.getCargoModel().getVesselCharters();
+			List<VesselCharter> nonPinnedVesselCharters = nonPinnedScenarioModel.getCargoModel().getVesselCharters();
+
+			List<BaseLegalEntity> pinnedEntities = pinnedScenarioModel.getReferenceModel().getCommercialModel().getEntities();
+			List<BaseLegalEntity> nonPinnedEEntities = nonPinnedScenarioModel.getReferenceModel().getCommercialModel().getEntities();
 			List<PurchaseContract> pinnedPurchaseContracts = pinnedScenarioModel.getReferenceModel().getCommercialModel().getPurchaseContracts();
 			List<PurchaseContract> nonPinnedPurchaseContracts = nonPinnedScenarioModel.getReferenceModel().getCommercialModel().getPurchaseContracts();
 			List<SalesContract> pinnedSalesContracts = pinnedScenarioModel.getReferenceModel().getCommercialModel().getSalesContracts();
@@ -642,11 +695,17 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 			populateDiffData(res, KEY_TRADES, pinnedLoadSlots, nonPinnedLoadSlots);
 			populateDiffData(res, KEY_TRADES, pinnedDischargeSlots, nonPinnedDischargeSlots);
 			populateDiffData(res, KEY_VESSELS, pinnedVessels, nonPinnedVessels);
+			populateDiffData(res, KEY_VESSEL_CHARTERS, pinnedVesselCharters, nonPinnedVesselCharters, (vc1, vc2) -> {
+				final Vessel vessel1 = vc1.getVessel();
+				final Vessel vessel2 = vc2.getVessel();
+				return vc1.getCharterNumber() == vc2.getCharterNumber() && vessel1 != null && vessel2 != null && vessel1.getName().equals(vessel2.getName());
+			}, vc -> ScenarioElementNameHelper.getName(vc.getVessel(), "(unknown)"));
 			populateDiffData(res, KEY_VESSEL_EVENTS, pinnedVesselEvents, nonPinnedVesselEvents);
 			populateDiffData(res, KEY_CHARTER_IN_MARKETS, pinnedCharterInMarkets, nonPinnedCharterInMarkets);
 			populateDiffData(res, KEY_CHARTER_OUT_MARKETS, pinnedCharterOutMarkets, nonPinnedCharterOutMarkets);
 			populateDiffData(res, KEY_PURCHASE_CONTRACTS, pinnedPurchaseContracts, nonPinnedPurchaseContracts);
 			populateDiffData(res, KEY_SALES_CONTRACTS, pinnedSalesContracts, nonPinnedSalesContracts);
+			populateDiffData(res, KEY_ENTITIES, pinnedEntities, nonPinnedEEntities);
 			populateDiffData(res, KEY_PORTS, pinnedPorts, nonPinnedPorts);
 			populateDiffData(res, KEY_DES_PURCHASE_MARKETS, pinnedDesPurchaseMarkets, nonPinnedDesPurchaseMarkets);
 			populateDiffData(res, KEY_DES_SALE_MARKETS, pinnedDesSaleMarkets, nonPinnedDesSaleMarkets);
@@ -657,46 +716,54 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		return res;
 	}
 
-	private <R extends NamedObject> void populateDiffData(@NonNull final Map<String, List<ScenarioDiffData>> diffData, @NonNull final String diffDataKey, @NonNull final List<R> pinnedNamedObjects,
-			@NonNull final List<R> nonPinnedNamedObjects) {
-		for (final R pinnedNamedObject : pinnedNamedObjects) {
-			final String pinnedName = pinnedNamedObject.getName();
-			final Optional<R> optNonPinnedNamedObject = nonPinnedNamedObjects.stream() //
-					.filter(nonPinnedNamedObject -> nonPinnedNamedObject.getName().equals(pinnedName)) //
-					.findFirst();
-			if (optNonPinnedNamedObject.isEmpty()) {
-				final Map<String, String> parentMap = new HashMap<>();
-				parentMap.put(KEY_PINNED, VALUE_PRESENT);
-				parentMap.put(KEY_NON_PINNED, VALUE_NOT_APPLICABLE);
-				final ScenarioDiffData localDiffData = new ScenarioDiffData(parentMap, pinnedName);
-				diffData.get(diffDataKey).add(localDiffData);
+	private <@NonNull R extends EObject> void populateDiffData(@NonNull final Map<String, List<ScenarioDiffData>> diffData, @NonNull final String diffDataKey, @NonNull final List<R> pinnedObjects,
+			@NonNull List<R> nonPinnedObjects, @NonNull final Matcher<R> matcher, @NonNull final Function<R, String> labelProvider) {
+		if (!showOnlyMatches) {
+			for (final R pinnedObject : pinnedObjects) {
+				final Optional<R> optNonPinnedObject = nonPinnedObjects.stream() //
+						.filter(nonPinnedObject -> matcher.matches(pinnedObject, nonPinnedObject)) //
+						.findFirst();
+				if (optNonPinnedObject.isEmpty()) {
+					final Map<String, String> parentMap = new HashMap<>();
+					parentMap.put(KEY_PINNED, VALUE_PRESENT);
+					parentMap.put(KEY_NON_PINNED, VALUE_NOT_APPLICABLE);
+					final ScenarioDiffData localDiffData = new ScenarioDiffData(parentMap, labelProvider.apply(pinnedObject));
+					diffData.get(diffDataKey).add(localDiffData);
+				}
+			}
+			for (final R nonPinnedObject : nonPinnedObjects) {
+				final Optional<R> optPinnedObject = pinnedObjects.stream() //
+						.filter(pinnedObject -> matcher.matches(nonPinnedObject, pinnedObject)) //
+						.findFirst();
+				if (optPinnedObject.isEmpty()) {
+					final Map<String, String> parentMap = new HashMap<>();
+					parentMap.put(KEY_PINNED, VALUE_NOT_APPLICABLE);
+					parentMap.put(KEY_NON_PINNED, VALUE_PRESENT);
+					final ScenarioDiffData localDiffData = new ScenarioDiffData(parentMap, labelProvider.apply(nonPinnedObject));
+					diffData.get(diffDataKey).add(localDiffData);
+				}
 			}
 		}
-		for (final R nonPinnedNamedObject : nonPinnedNamedObjects) {
-			final String nonPinnedName = nonPinnedNamedObject.getName();
-			final Optional<R> optPinnedNamedObject = pinnedNamedObjects.stream() //
-					.filter(pinnedNamedObject -> pinnedNamedObject.getName().equals(nonPinnedName)) //
+		for (final R pinnedObject : pinnedObjects) {
+			final Optional<R> optNonPinnedObject = nonPinnedObjects.stream() //
+					.filter(nonPinnedObject -> matcher.matches(pinnedObject, nonPinnedObject)) //
 					.findFirst();
-			if (optPinnedNamedObject.isEmpty()) {
-				final Map<String, String> parentMap = new HashMap<>();
-				parentMap.put(KEY_PINNED, VALUE_NOT_APPLICABLE);
-				parentMap.put(KEY_NON_PINNED, VALUE_PRESENT);
-				final ScenarioDiffData localDiffData = new ScenarioDiffData(parentMap, nonPinnedName);
-				diffData.get(diffDataKey).add(localDiffData);
-			}
-		}
-		for (final R pinnedNamedObject : pinnedNamedObjects) {
-			final String pinnedName = pinnedNamedObject.getName();
-			final Optional<R> optNonPinnedNamedObject = nonPinnedNamedObjects.stream() //
-					.filter(nonPinnedNamedObject -> nonPinnedNamedObject.getName().equals(pinnedName)) //
-					.findFirst();
-			if (optNonPinnedNamedObject.isPresent() && !isJSONEqual(pinnedNamedObject, optNonPinnedNamedObject.get())) {
-				final ScenarioDiffData localDiffData = findDiffs(pinnedNamedObject, optNonPinnedNamedObject.get());
+			if (optNonPinnedObject.isPresent() && !isJSONEqual(pinnedObject, optNonPinnedObject.get())) {
+				final ScenarioDiffData localDiffData = findDiffs(pinnedObject, optNonPinnedObject.get(), labelProvider);
 				if (localDiffData != null) {
 					diffData.get(diffDataKey).add(localDiffData);
 				}
 			}
 		}
+	}
+
+	private <R extends NamedObject> void populateDiffData(@NonNull final Map<String, List<ScenarioDiffData>> diffData, @NonNull final String diffDataKey, @NonNull final List<R> pinnedNamedObjects,
+			@NonNull final List<R> nonPinnedNamedObjects) {
+		populateDiffData(diffData, diffDataKey, pinnedNamedObjects, nonPinnedNamedObjects, (ob1, ob2) -> {
+			final String ob1Name = ob1.getName();
+			final String ob2Name = ob2.getName();
+			return ob1Name != null && ob2Name != null && ob1Name.equals(ob2Name);
+		}, ob -> ScenarioElementNameHelper.getName(ob, "(unknown)"));
 	}
 
 	private final ObjectMapper mapper = new ObjectMapper();
@@ -717,19 +784,17 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		if (o1 == o2) {
 			return true;
 		}
-		if ((o1 == null && o2 != null) //
-				|| (o1 != null && o2 == null)) {
-			return false;
-		}
-		mapper.registerModule(new EMFJacksonModule());
-		try {
-			String o1Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o1);
-			o1Str = filterIDs(o1Str);
-			String o2Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o2);
-			o2Str = filterIDs(o2Str);
-			return o1Str.equals(o2Str);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+		if (o1 != null && o2 != null) {
+			mapper.registerModule(new EMFJacksonModule());
+			try {
+				String o1Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o1);
+				o1Str = filterIDs(o1Str);
+				String o2Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o2);
+				o2Str = filterIDs(o2Str);
+				return o1Str.equals(o2Str);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -883,6 +948,17 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 							}
 							parentRes.add(result);
 						}
+						if (!res1.get(KEY_VESSEL_CHARTERS).isEmpty()) {
+							Map<String, String> parentMap = new HashMap<>();
+							parentMap.put(KEY_PINNED, "");
+							parentMap.put(KEY_NON_PINNED, "");
+							ScenarioDiffData result = new ScenarioDiffData(parentMap, "Vessel Charters");
+							for (ScenarioDiffData sdd : res1.get(KEY_VESSEL_CHARTERS)) {
+								result.children.add(sdd);
+								sdd.parent = result;
+							}
+							parentRes.add(result);
+						}
 						if (!res1.get(KEY_VESSEL_EVENTS).isEmpty()) {
 							Map<String, String> parentMap = new HashMap<>();
 							parentMap.put(KEY_PINNED, "");
@@ -927,7 +1003,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 							}
 							parentRes.add(result);
 						}
-						if (!res1.get(KEY_PURCHASE_CONTRACTS).isEmpty() || !res1.get(KEY_SALES_CONTRACTS).isEmpty()) {
+						if (!res1.get(KEY_PURCHASE_CONTRACTS).isEmpty() || !res1.get(KEY_SALES_CONTRACTS).isEmpty() || !res1.get(KEY_ENTITIES).isEmpty()) {
 
 							Map<String, String> parentMap = new HashMap<>();
 							parentMap.put(KEY_PINNED, "");
@@ -951,6 +1027,18 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 								subParentMap.put(KEY_NON_PINNED, "");
 								ScenarioDiffData subResult = new ScenarioDiffData(parentMap, "Sales Contracts");
 								for (ScenarioDiffData sdd : res1.get(KEY_SALES_CONTRACTS)) {
+									subResult.children.add(sdd);
+									sdd.parent = subResult;
+								}
+								result.children.add(subResult);
+								subResult.parent = result;
+							}
+							if (!res1.get(KEY_ENTITIES).isEmpty()) {
+								Map<String, String> subParentMap = new HashMap<>();
+								subParentMap.put(KEY_PINNED, "");
+								subParentMap.put(KEY_NON_PINNED, "");
+								ScenarioDiffData subResult = new ScenarioDiffData(parentMap, "Entities");
+								for (ScenarioDiffData sdd : res1.get(KEY_ENTITIES)) {
 									subResult.children.add(sdd);
 									sdd.parent = subResult;
 								}

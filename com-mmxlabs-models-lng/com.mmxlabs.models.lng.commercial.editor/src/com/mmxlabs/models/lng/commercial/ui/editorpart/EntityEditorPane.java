@@ -13,6 +13,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
@@ -37,6 +39,13 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		defaultSetTitle("Entities");
+		
+		final ToolBarManager toolbar = getToolBarManager();
+		final ActionContributionItem filter = filterField.getContribution();
+		if (toolbar != null && filter != null) {
+			toolbar.remove(filter);
+			toolbar.update(true);
+		}
 	}
 
 	@Override
@@ -71,5 +80,10 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 				return false;
 			}
 		};
+	}
+	
+	@Override
+	protected Action createCopyToClipboardAction() {
+		return null;
 	}
 }

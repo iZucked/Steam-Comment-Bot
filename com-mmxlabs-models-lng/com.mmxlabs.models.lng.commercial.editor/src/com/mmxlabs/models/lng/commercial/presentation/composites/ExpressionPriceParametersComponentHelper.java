@@ -50,7 +50,7 @@ public class ExpressionPriceParametersComponentHelper extends DefaultComponentHe
 
 			editors.forEach(detailComposite::addInlineEditor);
 			
-			if (true) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
 				TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 				b.withShowHeaders(true);
 				b.withLabel("Preffered PBs");

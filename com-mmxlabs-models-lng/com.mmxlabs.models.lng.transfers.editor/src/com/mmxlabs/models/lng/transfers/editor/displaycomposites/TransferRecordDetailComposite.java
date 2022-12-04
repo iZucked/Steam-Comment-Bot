@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transfers.editor.displaycomposites;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -69,7 +70,7 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //

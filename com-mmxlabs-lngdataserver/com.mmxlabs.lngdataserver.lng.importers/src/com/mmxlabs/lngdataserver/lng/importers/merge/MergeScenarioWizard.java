@@ -49,12 +49,13 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private MergeScenarioWizardDataMapperPage charterInMarketMapperPage;
 	private MergeScenarioWizardDataMapperPage charterOutMarketMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselCharterMapperPage;
+	private MergeScenarioWizardDataMapperPage vesselEventsMapperPage;
 	private MergeScenarioWizardDataMapperPage loadSlotMapperPage;
 	private MergeScenarioWizardDataMapperPage dischargeSlotMapperPage;
-		
+
 	private ScenarioInstance targetScenario;
 	private ScenarioInstance sourceScenario;
-	
+
 	public MergeScenarioWizard(ScenarioInstance targetScenario) {
 		this.targetScenario = targetScenario;
 	}
@@ -64,95 +65,83 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		setWindowTitle("Scenario merge wizard");
 		sourceSelectorPage = new MergeScenarioWizardSourceSelectorPage(selection);
 
-		//Entities
-		entitiesMapperPage = new MergeScenarioWizardDataMapperPage("Map entities to target", 
-				s -> ScenarioModelUtil.getCommercialModel(s).getEntities(), s -> ScenarioModelUtil.getCommercialModel(s),
+		// Entities
+		entitiesMapperPage = new MergeScenarioWizardDataMapperPage("Map entities to target", s -> ScenarioModelUtil.getCommercialModel(s).getEntities(), s -> ScenarioModelUtil.getCommercialModel(s),
 				CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
-		
-		//Curves
-		baseFuelCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map base fuel curves to target",
-				s -> ScenarioModelUtil.getPricingModel(s).getBunkerFuelCurves(), s -> ScenarioModelUtil.getPricingModel(s),
-				PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
-		charteringCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map chartering curves to target",
-				s -> ScenarioModelUtil.getPricingModel(s).getCharterCurves(), s -> ScenarioModelUtil.getPricingModel(s),
-				PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES);
-		commodityCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map commodity curves to target",
-				s -> ScenarioModelUtil.getPricingModel(s).getCommodityCurves(), s -> ScenarioModelUtil.getPricingModel(s),
-				PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
-		currencyCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map currency curves to target",
-				s -> ScenarioModelUtil.getPricingModel(s).getCurrencyCurves(), s -> ScenarioModelUtil.getPricingModel(s),
-				PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
-		
-		//Charter terms.
-		charterTermsMapperPage = new MergeScenarioWizardDataMapperPage("Map charter terms to target", 
-				s ->  ScenarioModelUtil.getCommercialModel(s).getCharterContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
-				CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS);
-		
-		//Contracts.
-		purchaseContractMapperPage = new MergeScenarioWizardDataMapperPage("Map purchase contracts of cargoes to target", 
-				s ->  ScenarioModelUtil.getCommercialModel(s).getPurchaseContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
-				CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
-		salesContractMapperPage = new MergeScenarioWizardDataMapperPage("Map sales contracts of cargoes to target", 
-				s ->  ScenarioModelUtil.getCommercialModel(s).getSalesContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
-				CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
 
-		//Vessels.
-		vesselMapperPage = new MergeScenarioWizardDataMapperPage("Map vessels to target", 
-				s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVessels(), s -> ScenarioModelUtil.getFleetModel(s), 
-				FleetPackage.Literals.FLEET_MODEL__VESSELS); 
-		baseFuelCostMapperPage = new MergeScenarioWizardBaseFuelCostMapperPage("Map vessel base fuel expressions to target"); 
-				
-		//Vessel groups.
-		vesselGroupsMapperPage = new MergeScenarioWizardDataMapperPage("Map vessel groups to target", 
-				s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVesselGroups(), s -> ScenarioModelUtil.getFleetModel(s), 
-				FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS); 
-		
+		// Curves
+		baseFuelCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map base fuel curves to target", s -> ScenarioModelUtil.getPricingModel(s).getBunkerFuelCurves(),
+				ScenarioModelUtil::getPricingModel, PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES);
+		charteringCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map chartering curves to target", s -> ScenarioModelUtil.getPricingModel(s).getCharterCurves(),
+				ScenarioModelUtil::getPricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES);
+		commodityCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map commodity curves to target", s -> ScenarioModelUtil.getPricingModel(s).getCommodityCurves(),
+				ScenarioModelUtil::getPricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
+		currencyCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map currency curves to target", s -> ScenarioModelUtil.getPricingModel(s).getCurrencyCurves(),
+				ScenarioModelUtil::getPricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
+
+		// Charter terms.
+		charterTermsMapperPage = new MergeScenarioWizardDataMapperPage("Map charter terms to target", s -> ScenarioModelUtil.getCommercialModel(s).getCharterContracts(),
+				ScenarioModelUtil::getCommercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS);
+
+		// Contracts.
+		purchaseContractMapperPage = new MergeScenarioWizardDataMapperPage("Map purchase contracts of cargoes to target", s -> ScenarioModelUtil.getCommercialModel(s).getPurchaseContracts(),
+				ScenarioModelUtil::getCommercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+		salesContractMapperPage = new MergeScenarioWizardDataMapperPage("Map sales contracts of cargoes to target", s -> ScenarioModelUtil.getCommercialModel(s).getSalesContracts(),
+				ScenarioModelUtil::getCommercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
+
+		// Vessels.
+		vesselMapperPage = new MergeScenarioWizardDataMapperPage("Map vessels to target", s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVessels(),
+				ScenarioModelUtil::getFleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS);
+		baseFuelCostMapperPage = new MergeScenarioWizardBaseFuelCostMapperPage("Map vessel base fuel expressions to target");
+
+		// Vessel groups.
+		vesselGroupsMapperPage = new MergeScenarioWizardDataMapperPage("Map vessel groups to target", s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVesselGroups(),
+				ScenarioModelUtil::getFleetModel, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
+
 		routeCostsMapperPage = new MergeScenarioWizardRouteCostMapperPage("Map route costs to target");
-		
-		//Ports mapper page
+
+		// Ports mapper page
 		portsMapperPage = new MergeScenarioWizardPortMapperPage("Map ports to target");
-		//TODO Port groups etc
-		
-		//Vessel charter page.
+		// TODO Port groups etc
+
+		// Vessel charter page.
 		vesselCharterMapperPage = new MergeScenarioWizardVesselChartersMapperPage("Map fleet charters to target");
-		
-		//Spot markets.
-		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket(), 
+
+		vesselEventsMapperPage = new MergeScenarioWizardDataMapperPage("Map vessel events to target", s -> ScenarioModelUtil.getCargoModel(s).getVesselEvents(),
+				ScenarioModelUtil::getCargoModel, CargoPackage.eINSTANCE.getCargoModel_VesselEvents());
+
+		// Spot markets.
+		fobBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB buy spot markets to target",
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobPurchasesSpotMarket(),
 				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
-		fobSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket(), 
-				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
-		desBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES buy spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket(), 
-				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
-		desSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES sell spot markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket(), 
-				SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
-		
-		//Charter markets.
-		charterInMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter in markets to target",  
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getCharterInMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
-		charterOutMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter out markets to target", 
-				s -> ScenarioModelUtil.getSpotMarketsModel(s).getCharterOutMarkets(), s -> ScenarioModelUtil.getSpotMarketsModel(s), 
-				SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);		
-		
-		//Load + discharge slots.
-		loadSlotMapperPage = new MergeScenarioWizardDataMapperPage("Map load slots of cargoes to target",
-				s ->  s.getCargoModel().getLoadSlots(), s -> ScenarioModelUtil.getCargoModel(s), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS);
-		dischargeSlotMapperPage = new MergeScenarioWizardDataMapperPage("Map discharge slots of cargoes to target",  
-				s ->  s.getCargoModel().getDischargeSlots(), s -> ScenarioModelUtil.getCargoModel(s), CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS);
+		fobSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map FOB sell spot markets to target", s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket().getMarkets(),
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getFobSalesSpotMarket(), SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
+		desBuySpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES buy spot markets to target", s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket().getMarkets(),
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesPurchaseSpotMarket(), SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
+		desSellSpotMarketsMapperPage = new MergeScenarioWizardDataMapperPage("Map DES sell spot markets to target", s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket().getMarkets(),
+				s -> ScenarioModelUtil.getSpotMarketsModel(s).getDesSalesSpotMarket(), SpotMarketsPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
+
+		// Charter markets.
+		charterInMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter in markets to target", s -> ScenarioModelUtil.getSpotMarketsModel(s).getCharterInMarkets(),
+				ScenarioModelUtil::getSpotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
+		charterOutMarketMapperPage = new MergeScenarioWizardDataMapperPage("Map charter out markets to target", s -> ScenarioModelUtil.getSpotMarketsModel(s).getCharterOutMarkets(),
+				ScenarioModelUtil::getSpotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+
+		// Load + discharge slots.
+		loadSlotMapperPage = new MergeScenarioWizardDataMapperPage("Map load slots of cargoes to target", s -> s.getCargoModel().getLoadSlots(), ScenarioModelUtil::getCargoModel,
+				CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS);
+		dischargeSlotMapperPage = new MergeScenarioWizardDataMapperPage("Map discharge slots of cargoes to target", s -> s.getCargoModel().getDischargeSlots(), ScenarioModelUtil::getCargoModel,
+				CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS);
 	}
 
 	@Override
 	public void addPages() {
 		super.addPages();
-			
+
 		addPage(sourceSelectorPage);
-		
+
 		addPage(entitiesMapperPage);
-		
+
 		addPage(baseFuelCurvesMapperPage);
 		addPage(charteringCurvesMapperPage);
 		addPage(commodityCurvesMapperPage);
@@ -161,14 +150,15 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		addPage(charterTermsMapperPage);
 		addPage(purchaseContractMapperPage);
 		addPage(salesContractMapperPage);
-		
+
 		addPage(vesselMapperPage);
 		addPage(baseFuelCostMapperPage);
 		addPage(vesselGroupsMapperPage);
 		addPage(routeCostsMapperPage);
 		addPage(portsMapperPage);
 		addPage(vesselCharterMapperPage);
-		
+		addPage(vesselEventsMapperPage);
+
 		addPage(fobBuySpotMarketsMapperPage);
 		addPage(fobSellSpotMarketsMapperPage);
 		addPage(desBuySpotMarketsMapperPage);
@@ -176,11 +166,11 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 
 		addPage(charterInMarketMapperPage);
 		addPage(charterOutMarketMapperPage);
-		
+
 		addPage(loadSlotMapperPage);
 		addPage(dischargeSlotMapperPage);
 	}
-	
+
 	@Override
 	public boolean performFinish() {
 		sourceScenario = sourceSelectorPage.getScenarioInstance();
@@ -193,13 +183,11 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 			@Override
 			public void run() {
 				try (MergeHelper mergeHelper = new MergeHelper(getSourceScenarioInstance(), getTargetScenarioInstance())) {
-					CompoundCommand cmd = new CompoundCommand(String.format("Merge %s into %s",getSourceScenarioInstance().getName(), getTargetScenarioInstance().getName()));
-					for (IWizardPage page : pages) {			
-						if (page instanceof MergeScenarioWizardDataMapperPage) {
-							MergeScenarioWizardDataMapperPage mapperPage = (MergeScenarioWizardDataMapperPage)page;
+					CompoundCommand cmd = new CompoundCommand(String.format("Merge %s into %s", getSourceScenarioInstance().getName(), getTargetScenarioInstance().getName()));
+					for (IWizardPage page : pages) {
+						if (page instanceof MergeScenarioWizardDataMapperPage mapperPage) {
 							mapperPage.merge(cmd, mergeHelper);
-						} else if (page instanceof MergeScenarioWizardPortMapperPage) {
-							MergeScenarioWizardPortMapperPage portPage = (MergeScenarioWizardPortMapperPage) page;
+						} else if (page instanceof MergeScenarioWizardPortMapperPage portPage) {
 							portPage.merge(cmd, mergeHelper);
 						}
 					}
@@ -228,7 +216,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	public ScenarioInstance getTargetScenarioInstance() {
 		return targetScenario;
 	}
-	
+
 	public ScenarioInstance getSourceScenarioInstance() {
 		return sourceScenario;
 	}

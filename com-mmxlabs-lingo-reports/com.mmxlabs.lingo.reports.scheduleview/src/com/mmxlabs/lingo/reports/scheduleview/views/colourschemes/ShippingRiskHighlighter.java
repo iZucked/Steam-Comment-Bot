@@ -9,6 +9,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourS
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
 import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.lingo.reports.ColourPalette;
@@ -35,21 +36,20 @@ public class ShippingRiskHighlighter extends ColourScheme {
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		int tightLeewayInDays = prefs.getInt(PreferenceConstants.P_LEEWAY_DAYS, 1);
 
-		if (element instanceof Journey) {
-			final Journey journey = (Journey) element;
-
+		if (element instanceof Journey journey) {
 			if (isJourneyTight(journey, tightLeewayInDays * 24)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background);
 			}
-		} else if (element instanceof Idle) {
-			final Idle idle = (Idle) element;
-
+		} else if (element instanceof Idle idle) {
 			if (isJourneyTight(findJourneyForIdle(idle), tightLeewayInDays * 24)) {
-
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background);
 			}
 		}
 		return null;
 	}
-
+	
+	@Override
+	public SpecialDrawModes getSpecialDrawMode(Object element) {
+		return SpecialDrawModes.NONE;
+	}
 }

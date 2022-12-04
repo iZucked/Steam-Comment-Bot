@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -23,7 +24,7 @@ public class VolumeTierDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //

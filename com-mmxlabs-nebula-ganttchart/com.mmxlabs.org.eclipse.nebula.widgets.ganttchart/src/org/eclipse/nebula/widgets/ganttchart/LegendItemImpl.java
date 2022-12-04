@@ -24,4 +24,10 @@ public class LegendItemImpl implements ILegendItem {
 	public Color[] getColours() {
 		return colours;
 	}
+	
+	@Override
+	public Object getItem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

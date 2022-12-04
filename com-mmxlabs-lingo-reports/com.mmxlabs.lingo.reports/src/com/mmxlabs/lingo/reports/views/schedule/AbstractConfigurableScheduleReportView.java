@@ -486,8 +486,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	public void processInputs(final List<Row> result, final TransformedSelectedDataProvider currentSelectedDataProvider) {
 		clearInputEquivalents();
 		for (final Object obj : result) {
-			if (obj instanceof Row) {
-				final Row row = (Row) obj;
+			if (obj instanceof Row row) {
 				setInputEquivalents(row, row.getInputEquivalents());
 				final ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(row.getSchedule());
 				if (scenarioResult != null) {

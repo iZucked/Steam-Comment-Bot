@@ -277,7 +277,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override

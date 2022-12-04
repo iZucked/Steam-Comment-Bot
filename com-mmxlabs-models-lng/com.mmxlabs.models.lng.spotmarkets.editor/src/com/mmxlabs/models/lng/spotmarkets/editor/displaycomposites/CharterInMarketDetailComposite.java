@@ -7,9 +7,11 @@ package com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -60,7 +62,7 @@ public class CharterInMarketDetailComposite extends DefaultDetailComposite imple
 	}
 
 	@Override
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //

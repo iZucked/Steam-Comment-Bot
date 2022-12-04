@@ -69,6 +69,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Country", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getCommandHandler())),
 				PortPackage.eINSTANCE.getPort_Location());
+		addTypicalColumn("UN/Locode", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Locode(), getCommandHandler())),
+				PortPackage.eINSTANCE.getPort_Location());
 		// addTypicalColumn("MMX ID ", new
 		// BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(),
 		// getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());

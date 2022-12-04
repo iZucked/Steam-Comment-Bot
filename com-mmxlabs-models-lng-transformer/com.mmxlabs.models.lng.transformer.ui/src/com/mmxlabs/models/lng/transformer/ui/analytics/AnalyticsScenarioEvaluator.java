@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import javax.inject.Singleton;
@@ -28,7 +26,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
@@ -36,6 +33,7 @@ import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -63,7 +61,6 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -75,13 +72,14 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindow
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.pricesensitivity.PriceSensitivityTask;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxTask;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.valuematrix.ValueMatrixTask;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -304,7 +302,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				.make());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
@@ -343,7 +341,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				.make());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
@@ -375,6 +373,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
+	public void evaluateSwapValueMatrixSandbox(@NonNull final ScenarioInstance scenarioInstance, @NonNull final SwapValueMatrixModel model) {
+		ValueMatrixTask.submit(scenarioInstance, model);
+	}
+
+	@Override
 	public void evaluateBreakEvenSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			final BreakEvenAnalysisModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final CompoundCommand cmd) {
 
@@ -382,12 +385,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
 
 		final List<String> hints = new LinkedList<>();
-		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-	
-	
+
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final BreakEvenSanboxUnit unit = new BreakEvenSanboxUnit(scenarioDataProvider, dataTransformer, "break-even-sandbox", userSettings, constraints, jobExecutorFactory,
@@ -406,4 +408,5 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void runPriceSensitivity(final ScenarioInstance scenarioInstance, final SensitivityModel model) {
 		PriceSensitivityTask.submit(scenarioInstance, model, LocalJobManager.INSTANCE);
 	}
+
 }

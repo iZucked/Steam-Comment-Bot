@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.app;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -14,9 +13,13 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.KeyStore;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
+import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -29,7 +32,6 @@ import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -43,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
@@ -63,7 +66,6 @@ import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.DataStreamReencrypter;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.WorkspaceReencrypter;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCipher;
@@ -76,7 +78,7 @@ public class Application implements IApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-	private AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+	private final AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 
 	private Object applicationExitCode;
 
@@ -88,8 +90,6 @@ public class Application implements IApplication {
 	 */
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
-
-		final String[] appLineArgs = Platform.getApplicationArgs();
 
 		cleanUpTemporaryFolder();
 
@@ -166,8 +166,8 @@ public class Application implements IApplication {
 	 *         IApplication.EXIT_OK
 	 * @throws Exception
 	 */
-	public Object startupTasks(Display display, IProgressMonitor monitor) throws Exception {
-		var subMonitor = SubMonitor.convert(monitor, 5);
+	public Object startupTasks(final Display display, final IProgressMonitor monitor) throws Exception {
+		final var subMonitor = SubMonitor.convert(monitor, 5);
 
 		datahubLogin(subMonitor.split(1));
 		if (!datahubPermissionCheck(display, subMonitor.split(1))) {
@@ -178,6 +178,14 @@ public class Application implements IApplication {
 		if (!licenseCheck(subMonitor.split(1))) {
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
 			return IApplication.EXIT_OK;
+		}
+		{
+			Date c = null;
+			if ((c = licenseCheckExpiresSoon(14, subMonitor.split(1))) != null) {
+				final LocalDate d = LocalDate.ofInstant(c.toInstant(), ZoneId.systemDefault());
+				MessageDialog.openWarning(display.getActiveShell(), "License expiring", String.format("LiNGO license expires soon (%s - %d days). Please check for updates or contact Minimax Labs.",
+						d.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)), Days.between(LocalDate.now(), d)));
+			}
 		}
 
 		// Don't abort LiNGO if p2 garbage collect fails.
@@ -214,15 +222,15 @@ public class Application implements IApplication {
 	 * @param monitor
 	 * @throws Exception
 	 */
-	private void reencryptWorkspace(Display display, IProgressMonitor monitor) throws Exception {
-		var encryptionMonitor = SubMonitor.convert(monitor, 1);
+	private void reencryptWorkspace(final Display display, final IProgressMonitor monitor) throws Exception {
+		final var encryptionMonitor = SubMonitor.convert(monitor, 1);
 		encryptionMonitor.setTaskName("Checking if encryption migration is needed");
 
 		{
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
 				if (p != null) {
 					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher cipher) {
+					if (sharedCipher instanceof final DelegatingEMFCipher cipher) {
 						final var reencrypter = new WorkspaceReencrypter();
 						// Add in standard paths.
 						reencrypter.addDefaultPaths();
@@ -244,13 +252,13 @@ public class Application implements IApplication {
 	 * @return true if there is a valid license, false other
 	 * @throws IOException
 	 */
-	private boolean licenseCheck(IProgressMonitor monitor) throws IOException {
-		var licenseMonitor = SubMonitor.convert(monitor, 1);
+	private boolean licenseCheck(final IProgressMonitor monitor) throws IOException {
+		final var licenseMonitor = SubMonitor.convert(monitor, 1);
 		licenseMonitor.setTaskName("Validating the license");
 
 		// check if the datahub license management is active and if hub license is valid
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_LICENSE_MANAGEMENT)) {
-			KeyStore licenseKeystore = LicenseManager.getLicenseFromDatahub();
+			final KeyStore licenseKeystore = LicenseManager.getLicenseFromDatahub();
 			if (licenseKeystore != null) {
 				final LicenseState validity = LicenseChecker.doCheckLicense(licenseKeystore);
 				if (validity == LicenseState.Valid) {
@@ -264,12 +272,29 @@ public class Application implements IApplication {
 		return validity == LicenseState.Valid;
 	}
 
+	private Date licenseCheckExpiresSoon(final int withinDays, final IProgressMonitor monitor) throws IOException {
+		final var licenseMonitor = SubMonitor.convert(monitor, 1);
+		licenseMonitor.setTaskName("Checking license expiry");
+
+		try {
+			X509Certificate cert = LicenseChecker.getClientLicense();
+			final Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, withinDays);
+			if (cert.getNotAfter().before(c.getTime())) {
+				return cert.getNotAfter();
+			}
+		} catch (final Exception e) {
+			LOG.error("Unable to load license: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
 	/**
 	 * Check if the DataHub is online. If it is, start the authentication prompt
 	 * then re-check the online status
 	 */
-	private void datahubLogin(IProgressMonitor monitor) {
-		var loginMonitor = SubMonitor.convert(monitor, 1);
+	private void datahubLogin(final IProgressMonitor monitor) {
+		final var loginMonitor = SubMonitor.convert(monitor, 1);
 		loginMonitor.setTaskName("Logging into the DataHub");
 		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 
@@ -288,8 +313,8 @@ public class Application implements IApplication {
 	 * @param display
 	 * @return true if the user has the correct permission, false otherwise
 	 */
-	private boolean datahubPermissionCheck(Display display, IProgressMonitor monitor) {
-		var permissionMonitor = SubMonitor.convert(monitor, 1);
+	private boolean datahubPermissionCheck(final Display display, final IProgressMonitor monitor) {
+		final var permissionMonitor = SubMonitor.convert(monitor, 1);
 		permissionMonitor.setTaskName("Checking the DataHub permissions");
 		var success = false;
 
@@ -324,56 +349,6 @@ public class Application implements IApplication {
 		}
 
 		return success;
-	}
-
-	/**
-	 * Get the heap size from the JVM runtime arguments
-	 *
-	 * @param appLineArgs
-	 * @return heap size as a string
-	 */
-	private String getHeapSize(final String[] appLineArgs) {
-		String heapSize = null;
-
-		if (appLineArgs != null && appLineArgs.length > 0) {
-			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
-			// could get here through a relaunch)
-			boolean skipAutoMemory = false;
-			for (final String arg : appLineArgs) {
-				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
-					skipAutoMemory = true;
-					break;
-				}
-			}
-
-			if (!skipAutoMemory) {
-				for (final String arg : appLineArgs) {
-					if (arg.equals(CMD_AUTO_MEM)) {
-
-						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-						try {
-							// Get total physical memory
-							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
-							if (totalMemory != null) {
-								// Convert to gigabytes
-								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
-								if (gigabytes < 1) {
-									heapSize = "-Xmx512m";
-								} else if (gigabytes < 3) {
-									heapSize = "-Xmx1G";
-								} else {
-									heapSize = String.format("-Xmx%dG", gigabytes - 2);
-								}
-							}
-						} catch (final Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-
-		return heapSize;
 	}
 
 	/**
@@ -415,12 +390,12 @@ public class Application implements IApplication {
 	 * @param display
 	 */
 	private void displayProgressMonitor(final Display display) {
-		var progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+		final var progressDialog = new ProgressMonitorDialog(display.getActiveShell());
 		try {
 			progressDialog.run(false, false, monitor -> {
 				try {
 					applicationExitCode = startupTasks(display, monitor);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					LOG.error("failed to start LiNGO: " + e.getMessage());
 				}
 				monitor.done();
@@ -437,8 +412,8 @@ public class Application implements IApplication {
 	 * @param display
 	 */
 	private void waitForHub() {
-		var timeoutInSeconds = 30;
-		var msInASecond = 1000;
+		final var timeoutInSeconds = 30;
+		final var msInASecond = 1000;
 
 		for (int i = 0; i < timeoutInSeconds; ++i) {
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -455,8 +430,8 @@ public class Application implements IApplication {
 
 	/**
 	 */
-	private void cleanupP2(IProgressMonitor monitor) {
-		var cleanupMonitor = SubMonitor.convert(monitor, 1);
+	private void cleanupP2(final IProgressMonitor monitor) {
+		final var cleanupMonitor = SubMonitor.convert(monitor, 1);
 		cleanupMonitor.setTaskName("Cleaning up the eclipse p2 files");
 
 		final var context = FrameworkUtil.getBundle(Application.class).getBundleContext();
@@ -523,87 +498,5 @@ public class Application implements IApplication {
 				workbench.close();
 			}
 		});
-	}
-	//////////////////////
-
-	private static final String PROP_VM = "eclipse.vm";
-
-	private static final String PROP_VMARGS = "eclipse.vmargs";
-
-	private static final String PROP_COMMANDS = "eclipse.commands";
-
-	private static final String CMD_VMARGS = "-vmargs";
-
-	private static final String CMD_AUTO_MEM = "-automem";
-	private static final String CMD_NO_AUTO_MEM = "-noautomem";
-
-	private static final String NEW_LINE = "\n";
-
-	/**
-	 * Reconstruct command line arguments and modify to suit
-	 *
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This
-	 * required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds,
-	 * not from within eclipse.
-	 *
-	 *
-	 */
-	private String buildCommandLine(final String memory) {
-		final var result = new StringBuffer(512);
-
-		String property = System.getProperty(PROP_VM);
-		if (property != null) {
-			result.append(property);
-			result.append(NEW_LINE);
-		}
-
-		// append the vmargs and commands. Assume that these already end in \n
-		// Note: We need to do this twice for some reason. This is the first time
-		final String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs != null) {
-			// Strip any existing mem params
-			result.append(vmargs.replaceAll("-Xmx[0-9*][a-zA-Z]", ""));
-		}
-
-		// append the rest of the args, replacing or adding -no-auto-mem / -auto-mem as
-		// required
-		property = System.getProperty(PROP_COMMANDS);
-		if (property == null) {
-
-		} else {
-			// Strip any existing mem params
-			property = property.replaceAll("-Xmx[0-9*][a-zA-Z]", "");
-			// Remove the auto-mem command
-			property = property.replaceAll(CMD_AUTO_MEM, "");
-
-			result.append(property);
-		}
-		result.append(NEW_LINE);
-		result.append(CMD_NO_AUTO_MEM);
-		result.append(NEW_LINE);
-
-		// put the vmargs back at the very end (the eclipse.commands property
-		// already contains the -vm arg)
-		if (result.charAt(result.length() - 1) != '\n') {
-			result.append('\n');
-		}
-		result.append(CMD_VMARGS);
-		result.append(NEW_LINE);
-		if (vmargs != null) {
-			// Note: We need to do this twice for some reason. This is the second time
-			// Strip any existing mem params
-			result.append(vmargs.replaceAll("-Xmx[0-9*][a-zA-Z]", ""));
-		}
-
-		result.append(memory);
-		result.append(NEW_LINE);
-
-		@NonNull
-		String cmdLine = result.toString();
-
-		// Strip duplicate newlines
-		cmdLine = cmdLine.replace("\n\n", "\n");
-
-		return cmdLine;
 	}
 }

@@ -70,9 +70,13 @@ public class ExposuresCalculator {
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
+	
+	@Inject(optional = true)
+	@Named(SchedulerConstants.IGNORE_EXPOSURES)
+	private boolean exposuresIgnored = false;
 
 	public List<BasicExposureRecord> calculateExposures(final ICargoValueAnnotation cargoValueAnnotation, final IPortSlot portSlot) {
-		if (exposuresEnabled) {
+		if (exposuresEnabled && !exposuresIgnored) {
 
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
 

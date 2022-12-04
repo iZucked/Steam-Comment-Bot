@@ -163,12 +163,6 @@
           id="com.mmxlabs.models.lng.port.ui.editors.ContingencyMatrixDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
-    <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.port.Port"
-          factory="com.mmxlabs.models.lng.port.ui.editors.PortDetailCompositeFactory"
-          id="com.mmxlabs.models.lng.port.ui.editors.PortDetailCompositeFactory"
-          inheritable="true">
-    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">

@@ -716,6 +716,7 @@ public class LNGSchedulerJobUtils {
 		analyticsModel.getOptimisations().clear();
 		analyticsModel.getOptionModels().clear();
 		analyticsModel.getBreakevenModels().clear();
+		analyticsModel.getSwapValueMatrixModels().clear();
 
 		analyticsModel.setViabilityModel(null);
 		analyticsModel.setMtmModel(null);

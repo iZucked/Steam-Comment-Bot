@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,5 +30,17 @@ public class CharterMarketEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		defaultSetTitle("Charter Terms");
+		
+		final ToolBarManager toolbar = getToolBarManager();
+		final ActionContributionItem filter = filterField.getContribution();
+		if (toolbar != null && filter != null) {
+			toolbar.remove(filter);
+			toolbar.update(true);
+		}
+	}
+	
+	@Override
+	protected Action createCopyToClipboardAction() {
+		return null;
 	}
 }

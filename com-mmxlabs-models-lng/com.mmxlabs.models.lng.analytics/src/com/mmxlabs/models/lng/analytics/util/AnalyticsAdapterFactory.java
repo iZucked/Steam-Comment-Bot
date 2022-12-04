@@ -364,6 +364,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createCargoPnLResultAdapter();
 			}
 			@Override
+			public Adapter caseSwapValueMatrixModel(SwapValueMatrixModel object) {
+				return createSwapValueMatrixModelAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixResult(SwapValueMatrixResult object) {
+				return createSwapValueMatrixResultAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixResultSet(SwapValueMatrixResultSet object) {
+				return createSwapValueMatrixResultSetAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -1344,6 +1356,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCargoPnLResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel <em>Swap Value Matrix Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult <em>Swap Value Matrix Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet <em>Swap Value Matrix Result Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixResultSetAdapter() {
 		return null;
 	}
 

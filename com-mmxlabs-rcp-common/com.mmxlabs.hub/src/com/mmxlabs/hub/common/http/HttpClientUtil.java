@@ -18,6 +18,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -118,6 +119,47 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		return builder;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromLocalTrustStore() throws Exception {
+
+		final List<CertInfo> infos = new LinkedList<>();
+		{
+			final Pair<KeyStore, char[]> trustStorePair = LicenseChecker.loadLocalTruststore();
+
+			if (trustStorePair != null) {
+				KeyStore defaultStore = trustStorePair.getFirst();
+				final Enumeration<String> enumerator = defaultStore.aliases();
+				while (enumerator.hasMoreElements()) {
+					final String alias = enumerator.nextElement();
+
+					final X509Certificate cert = (X509Certificate) defaultStore.getCertificate(alias);
+					final CertInfo info = CertInfo.from(cert);
+					infos.add(info);
+				}
+			}
+		}
+
+		return infos;
+	}
+
+	public static List<CertInfo> extractSSLInfoFromWindowsTrustStore() throws Exception {
+
+		final List<CertInfo> infos = new LinkedList<>();
+
+		final KeyStore defaultStore = KeyStore.getInstance("Windows-ROOT");
+		defaultStore.load(null);
+
+		final Enumeration<String> enumerator = defaultStore.aliases();
+		while (enumerator.hasMoreElements()) {
+			final String alias = enumerator.nextElement();
+
+			final X509Certificate cert = (X509Certificate) defaultStore.getCertificate(alias);
+			final CertInfo info = CertInfo.from(cert);
+			infos.add(info);
+		}
+
+		return infos;
 	}
 
 	public static List<CertInfo> extractSSLInfoFromLocalStore() throws Exception {
@@ -229,9 +271,9 @@ public class HttpClientUtil {
 
 		public static CertInfo from(final X509Certificate cert) {
 			final CertInfo certInfo = new CertInfo();
-			certInfo.subject = cert.getSubjectDN().toString();
-			certInfo.serial = cert.getSerialNumber().toString();
-			certInfo.issuer = cert.getIssuerDN().toString();
+			certInfo.subject = cert.getSubjectX500Principal().toString();
+			certInfo.serial = byteToString(cert.getSerialNumber().toByteArray(), ":");
+			certInfo.issuer = cert.getIssuerX500Principal().toString();
 			try {
 				certInfo.altNames = cert.getSubjectAlternativeNames() == null ? ""
 						: cert.getSubjectAlternativeNames().stream() //
@@ -261,6 +303,21 @@ public class HttpClientUtil {
 			return new String(hexChars);
 		}
 
+		public static String byteToString(final byte[] bytes, final String separator) {
+
+			final StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for (final byte b : bytes) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(separator);
+				}
+				sb.append(String.format("%02X", b));
+			}
+			return sb.toString();
+		}
+		
 		@Override
 		public @NonNull String toString() {
 			final StringBuilder sb = new StringBuilder();

@@ -23,15 +23,11 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory {
 
-	/**
-	 */
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		return new DefaultTopLevelComposite(parent, SWT.NONE, dialogContext, toolkit);
 	}
 
-	/**
-	 */
 	@Override
 	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		return new DefaultDetailComposite(parent, SWT.NONE, toolkit);
@@ -39,7 +35,7 @@ public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory 
 
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
-		final ArrayList<EObject> external = new ArrayList<EObject>();
+		final ArrayList<EObject> external = new ArrayList<>();
 
 		for (final IComponentHelper helper : Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(value.eClass())) {
 			external.addAll(helper.getExternalEditingRange(root, value));

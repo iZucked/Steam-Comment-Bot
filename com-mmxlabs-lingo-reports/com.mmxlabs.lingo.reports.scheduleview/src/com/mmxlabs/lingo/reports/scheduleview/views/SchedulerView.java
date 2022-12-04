@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -61,6 +63,7 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
@@ -101,19 +104,25 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.SelectionToSandboxUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.MultiEvent;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
@@ -169,7 +178,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
-	private static final List<ILegendItem> legendItems = Lists.newArrayList( //
+	/**
+	 * Basic colour only items. Other are rendered directly once the ganttchart has
+	 * been created
+	 */
+	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourPalette.ColourElements.Background)),
 			new LegendItemImpl("Ballast travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourPalette.ColourElements.Background),
@@ -181,6 +194,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			new LegendItemImpl("Dry-dock/Maintenance", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourPalette.ColourElements.Background)),
 			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourPalette.ColourElements.Background)));
+	private final List<ILegendItem> legendItems = new LinkedList<>();
 
 	@Override
 	public void init(final IViewSite site, IMemento memento) throws PartInitException {
@@ -240,6 +254,51 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		final IColorManager colourManager = createGanttColourManager();
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
+
+			@Override
+			protected List<Object> getSelectionFromObjects(final List<GanttEvent> allSelectedEvents) {
+
+				// Use reverse map to get underlying objects
+				final List<Object> selectedObjects = new ArrayList<>(allSelectedEvents.size());
+
+				for (final GanttEvent ge : allSelectedEvents) {
+
+					final Object obj = ge.getData();
+
+					if (obj != null) {
+						if (obj instanceof final MultiEvent me) {
+							selectedObjects.addAll(me.getElements());
+						} else {
+							selectedObjects.add(obj);
+						}
+
+//						selectedObjects.add(obj);
+					}
+
+				}
+
+				return selectedObjects;
+			}
+
+			@Override
+			public void setSelection(final ISelection selection) {
+
+				if (selection instanceof final IStructuredSelection ss) {
+
+					final List<Object> n = new LinkedList<>();
+					for (final var e : ss.toList()) {
+						if (e instanceof final MultiEvent me) {
+							n.addAll(me.getElements());
+						} else {
+							n.add(e);
+						}
+					}
+					super.setSelection(new StructuredSelection(n));
+					return;
+				}
+
+				super.setSelection(selection);
+			}
 
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List providedSelection, final boolean reveal) {
@@ -334,13 +393,13 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 					selectedEvents = new ArrayList<>(l.size());
 
 					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
-						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
-							final GanttEvent ganttEvent = (GanttEvent) ge;
-							final Event evt = (Event) ganttEvent.getData();
+						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
 							ganttEvent.setStatusAlpha(130);
-							// Change alpha for pinned elements
-							if (currentSelectedDataProvider.isPinnedObject(evt)) {
-								ganttEvent.setStatusAlpha(50);
+							if (ganttEvent.getData() instanceof final EObject evt) {
+								// Change alpha for pinned elements
+								if (currentSelectedDataProvider.isPinnedObject(evt)) {
+									ganttEvent.setStatusAlpha(50);
+								}
 							}
 						}
 					}
@@ -526,10 +585,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				final Object[] result = super.getChildren(parent);
 				if (result != null) {
-					for (final Object event : result) {
-						if (event instanceof final SlotVisit slotVisit) {
-							setInputEquivalents(event, Lists.newArrayList(slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation()));
 
+					final Function<Object, List<Object>> generator = event -> {
+						if (event instanceof final SlotVisit slotVisit) {
+							return Lists.newArrayList(slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation());
 						} else if (event instanceof final CargoAllocation allocation) {
 
 							final List<Object> localEquivalents = new ArrayList<>();
@@ -539,12 +598,27 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							}
 							localEquivalents.addAll(allocation.getEvents());
 
-							setInputEquivalents(allocation, localEquivalents);
+							return localEquivalents;
 
 						} else if (event instanceof final VesselEventVisit vev) {
-							setInputEquivalents(event, Collections.singletonList(vev.getVesselEvent()));
+							return Collections.singletonList(vev.getVesselEvent());
+						} else if (event instanceof final OpenSlotAllocation sa) {
+							return Collections.singletonList(sa.getSlot());
 						} else {
-							setInputEquivalents(event, Collections.emptyList());
+							return Collections.emptyList();
+						}
+					};
+
+					for (final Object event : result) {
+						if (event instanceof final MultiEvent me) {
+							final List<Object> localEquivalents = new ArrayList<>();
+							for (final var e : me.getElements()) {
+								localEquivalents.addAll(generator.apply(e));
+							}
+							localEquivalents.addAll(me.getElements());
+							setInputEquivalents(event, localEquivalents);
+						} else {
+							setInputEquivalents(event, generator.apply(event));
 						}
 					}
 				}
@@ -593,6 +667,124 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 		viewer.setLabelProvider(labelProvider);
 		viewerComparator = new ScenarioViewerComparator(scenarioComparisonService);
+
+		// Legend (after label provider has been set)
+		legendItems.addAll(basiclegendItems);
+		legendItems.add(make("FOB, open, multi", () -> {
+
+			final List<Object> l = new LinkedList<>();
+			// FOB Purchase,
+			{
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+				s.setDESPurchase(false);
+				s.setOptional(true);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			// FOB Purchase open, non-optional
+			{
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+				s.setDESPurchase(false);
+				s.setOptional(false);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			// Multiple FOB's
+			{
+
+				final List<Object> l2 = new LinkedList<>();
+				{
+
+					final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+					final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+					s.setDESPurchase(false);
+					s.setOptional(true);
+					sa.setSlot(s);
+					l2.add(sa);
+				}
+				{
+
+					final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+					final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+					s.setDESPurchase(false);
+					s.setOptional(true);
+					sa.setSlot(s);
+					l2.add(sa);
+				}
+				l.add(new MultiEvent(l2));
+			}
+			return l;
+		}));
+		legendItems.add(make("DES, open, multi", () -> {
+
+			final List<Object> l = new LinkedList<>();
+			{
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final DischargeSlot s = CargoFactory.eINSTANCE.createDischargeSlot();
+				s.setFOBSale(false);
+				s.setOptional(true);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			{
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final DischargeSlot s = CargoFactory.eINSTANCE.createDischargeSlot();
+				s.setFOBSale(false);
+				s.setOptional(false);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			// Multiple DES's
+			{
+
+				final List<Object> l2 = new LinkedList<>();
+				{
+
+					final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+					final DischargeSlot s = CargoFactory.eINSTANCE.createDischargeSlot();
+					s.setFOBSale(false);
+					s.setOptional(true);
+					sa.setSlot(s);
+					l2.add(sa);
+				}
+				{
+
+					final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+					final DischargeSlot s = CargoFactory.eINSTANCE.createDischargeSlot();
+					s.setFOBSale(false);
+					s.setOptional(true);
+					sa.setSlot(s);
+					l2.add(sa);
+				}
+				l.add(new MultiEvent(l2));
+			}
+			return l;
+		}));
+		legendItems.add(make("Mixed FOB/DES", () -> {
+
+			final List<Object> l = new LinkedList<>();
+			{
+
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+				s.setDESPurchase(false);
+				s.setOptional(true);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			{
+
+				final OpenSlotAllocation sa = ScheduleFactory.eINSTANCE.createOpenSlotAllocation();
+				final LoadSlot s = CargoFactory.eINSTANCE.createLoadSlot();
+				s.setDESPurchase(true);
+				s.setOptional(true);
+				sa.setSlot(s);
+				l.add(sa);
+			}
+			return new MultiEvent(l);
+		}));
 
 		// Restore sort mode settings
 		{
@@ -832,12 +1024,12 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 			@Override
 			public int getEventsTopSpacer() {
-				return 3;
+				return 0;
 			}
 
 			@Override
 			public int getEventsBottomSpacer() {
-				return 5;
+				return 0;
 			}
 
 			@Override
@@ -1255,5 +1447,70 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			ViewerHelper.setSelection(viewer, true, selection);
 		}
 	};
+
+	private ILegendItem make(final String lbl, final Supplier<Object> object) {
+		return make(lbl, object.get());
+	}
+
+	private ILegendItem make(final String lbl, final Object object) {
+
+		if (object instanceof final List<?> l) {
+			final List<Object> l2 = new LinkedList<>();
+			for (final var e : l) {
+				final GanttEvent ge = new GanttEvent(SchedulerView.this.viewer.getGanttChart(), "");
+				final Rectangle b = new Rectangle(0, 0, 1, 12);
+				ge.setBounds(b);
+
+				ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), e));
+				ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), e));
+				ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), e));
+				l2.add(ge);
+			}
+
+			return new ILegendItem() {
+
+				@Override
+				public Object getItem() {
+					return l2;
+				}
+
+				@Override
+				public String getDescription() {
+					return lbl;
+				}
+
+				@Override
+				public Color[] getColours() {
+					return new Color[0];
+				}
+			};
+		}
+
+		final GanttEvent ge = new GanttEvent(SchedulerView.this.viewer.getGanttChart(), "");
+		final Rectangle b = new Rectangle(0, 0, 1, 12);
+		ge.setBounds(b);
+
+		ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), object));
+		ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), object));
+		ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), object));
+
+		return new ILegendItem() {
+
+			@Override
+			public Object getItem() {
+				return ge;
+			}
+
+			@Override
+			public String getDescription() {
+				return lbl;
+			}
+
+			@Override
+			public Color[] getColours() {
+				return new Color[0];
+			}
+		};
+	}
 
 }

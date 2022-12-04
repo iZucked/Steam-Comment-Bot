@@ -182,6 +182,10 @@
             feature="break-even-table"
             plugin.xml="break-even-table.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="sandbox-value-matrix"
+            plugin.xml="sandbox-value-matrix.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -247,12 +251,47 @@
             </visibleWhen>
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+         <command
+               commandId="com.mmxlabs.models.lng.analytics.editor.createValueMatrixSandbox"
+               icon="icons:/16/sandbox"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <test
+                        args="features:sandbox-value-matrix"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createSandbox"
             name="Create sandbox">
+      </command>
+      <command
+            id="com.mmxlabs.models.lng.analytics.editor.createValueMatrixSandbox"
+            name="Create value matrix">
       </command>
       <command
             id="com.mmxlabs.models.lng.analytics.editor.createBreakEven"
@@ -353,6 +392,50 @@
                           </and>
             </activeWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.CreateValueMatrixHandler"
+            commandId="com.mmxlabs.models.lng.analytics.editor.createValueMatrixSandbox">
+         <enabledWhen>
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                           </test>
+                        </not>
+                     </and>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </enabledWhen>
+         <activeWhen>
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </iterate>
+               </with>
+               <count
+                     value="1">
+               </count>
+            </and>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
@@ -402,6 +485,13 @@
                type="com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler">
          </adapter>
       </factory>
+      <factory
+            adaptableType="com.mmxlabs.models.lng.analytics.SwapValueMatrixModel"
+            class="com.mmxlabs.models.lng.analytics.ui.views.valuematrix.ValueMatrixScenarioAdapterFactory">
+         <adapter
+               type="com.mmxlabs.scenario.service.model.util.IScenarioFragmentOpenHandler">
+         </adapter>
+     </factory>
    </extension>
 
 </plugin>

@@ -40,10 +40,10 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 		return values;
 	}
 
-	@Override
-	protected Control createValueControl(final Composite parent) {
-		final Composite composite = toolkit.createComposite(parent, parent.getStyle());
-		composite.setLayout(new GridLayout(2, false));
-		return super.createValueControl(composite);
-	}
+//	@Override
+//	protected Control createValueControl(final Composite parent) {
+//		final Composite composite = toolkit.createComposite(parent, parent.getStyle());
+//		composite.setLayout(new GridLayout(2, false));
+//		return super.createValueControl(composite);
+//	}
 }

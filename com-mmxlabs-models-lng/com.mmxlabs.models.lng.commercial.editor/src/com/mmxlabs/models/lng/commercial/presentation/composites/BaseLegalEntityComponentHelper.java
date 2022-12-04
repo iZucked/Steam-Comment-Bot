@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.BusinessUnit;
@@ -134,7 +135,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_businessUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (true) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
 			TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
 			b.withShowHeaders(true);
 			b.withLabel("Business Units");

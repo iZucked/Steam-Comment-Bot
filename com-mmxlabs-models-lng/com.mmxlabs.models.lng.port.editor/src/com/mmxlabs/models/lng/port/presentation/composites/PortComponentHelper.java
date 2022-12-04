@@ -24,9 +24,11 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
+import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -35,7 +37,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
  * @generated
  */
 public class PortComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+	protected List<IComponentHelper> superClassesHelpers = new ArrayList<>();
 
 	/**
 	 * Construct a new instance, using the platform adapter manager
@@ -63,17 +65,19 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PortPackage.Literals.PORT);	
+		addEditorsToComposite(detailComposite, PortPackage.Literals.PORT);
 	}
 
 	/**
-	 * Create the editors for features on this class directly, and superclass' features.
+	 * Create the editors for features on this class directly, and superclass'
+	 * features.
 	 * 
 	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_shortNameEditor(detailComposite, topClass);
 		add_locationEditor(detailComposite, topClass);
 		add_capabilitiesEditor(detailComposite, topClass);
@@ -103,7 +107,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the capabilities feature on Port
 	 * 
-	 * @generated NO port capability enum editor factory not connected up, and the NSURI will change each release so will just override here.
+	 * @generated NO port capability enum editor factory not connected up, and the
+	 *            NSURI will change each release so will just override here.
 	 */
 	protected void add_capabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final PortCapability capability : PortCapability.values()) {
@@ -117,7 +122,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the loadDuration feature on Port
 	 * 
-	 * @generated NO Load duration is disabled if the port does not have load capability
+	 * @generated NO Load duration is disabled if the port does not have load
+	 *            capability
 	 */
 	protected void add_loadDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOAD_DURATION);
@@ -204,7 +210,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the minCvValue feature on Port
 	 *
-	 * @generated NO minCvValue is disabled if the port does not have discharge capability
+	 * @generated NO minCvValue is disabled if the port does not have discharge
+	 *            capability
 	 */
 	protected void add_minCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MIN_CV_VALUE);
@@ -214,7 +221,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the maxCvValue feature on Port
 	 *
-	 * @generated NO minCvValue is disabled if the port does not have discharge capability
+	 * @generated NO minCvValue is disabled if the port does not have discharge
+	 *            capability
 	 */
 	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MAX_CV_VALUE);
@@ -249,7 +257,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Simple class to enable an editor field only when a port has a particular capability.
+	 * Simple class to enable an editor field only when a port has a particular
+	 * capability.
 	 * 
 	 * @generated NOT
 	 */
@@ -257,12 +266,11 @@ public class PortComponentHelper extends BaseComponentHelper {
 		private final PortCapability capability;
 
 		/**
-		 * Return an inline editor which is enabled only when the linked port has a particular capability.
+		 * Return an inline editor which is enabled only when the linked port has a
+		 * particular capability.
 		 * 
-		 * @param capability
-		 *            The capability required to enable this GUI editor field.
-		 * @param wrapped
-		 *            The editor field to enable / disable.
+		 * @param capability The capability required to enable this GUI editor field.
+		 * @param wrapped    The editor field to enable / disable.
 		 */
 		public PortCapabilityEditorWrapper(final PortCapability capability, final IInlineEditor wrapped) {
 			super(wrapped);
@@ -280,11 +288,78 @@ public class PortComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public Object createLayoutData(MMXRootObject root, EObject value,
-				Control control) {
-			// TODO Auto-generated method stub
+		public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 			return null;
 		}
-
 	}
+
+	@Override
+	public IDisplayCompositeLayoutProvider createLayoutProvider() {
+
+		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
+				.withRow() //
+				.withLabel("Window") //
+				.withFeature(PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE) //
+				.withFeature(PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS) //
+				.makeRow() //
+				//
+				.withRow() //
+				.withLabel("Vessel capacity") //
+				.withFeature(PortPackage.Literals.PORT__MIN_VESSEL_SIZE) //
+				.withFeature(PortPackage.Literals.PORT__MAX_VESSEL_SIZE) //
+				.makeRow() //
+				//
+				.withRow() //
+				.withLabel("CV Range") //
+				.withFeature(PortPackage.Literals.PORT__MIN_CV_VALUE) //
+				.withFeature(PortPackage.Literals.PORT__MAX_CV_VALUE) //
+				.makeRow() //
+				//
+				.make() //
+		;
+//		
+//		return new DefaultDisplayCompositeLayoutProvider() {
+//			@Override
+//			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
+//
+//				// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a
+//				// label,
+//				// we want the editor to take up two cells rather than one.
+//				return new GridLayout(4, false);
+//			}
+//
+//			@Override
+//			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
+//
+//				// Special case for min/max volumes - ensure text box has enough width for
+//				// around 7 digits.
+//				// Note: Should really render the font to get width - this is ok on my system,
+//				// but other systems (default font & size, resolution, dpi etc) could make this
+//				// wrong
+//				final var feature = editor.getFeature();
+//
+//				if (feature == PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE || feature == PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS) {
+//					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+//					// FIXME: Hack pending proper APi to manipulate labels
+//					if (feature == PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE) {
+//						gd.widthHint = 150;
+//						final Label label = editor.getLabel();
+//						if (label != null) {
+//							label.setText("Window");
+//						}
+//						editor.setLabel(null);
+//					} else {
+//						editor.setLabel(null);
+//					}
+//					return gd;
+//				}
+//
+//				// Anything else needs to fill the space.
+//				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+//				gd.horizontalSpan = 3;
+//				return gd;
+//			}
+//		};
+	}
+
 }

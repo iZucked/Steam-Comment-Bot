@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
 import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -76,4 +77,6 @@ public interface IScheduleViewColourScheme {
 	Color getBorderColour(Object element);
 
 	int getBorderWidth(Object element);
+
+	SpecialDrawModes getSpecialDrawMode(Object element);
 }

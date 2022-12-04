@@ -839,7 +839,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		maximizePartAction = null;
 		minimizePartAction = null;
 		switchToEditorAction = null;
-		quickAccessAction.dispose();
+		if (quickAccessAction != null) {
+			quickAccessAction.dispose();
+		}
 		quickAccessAction = null;
 		// backwardHistoryAction = null;
 		// forwardHistoryAction = null;

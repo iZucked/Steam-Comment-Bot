@@ -36,4 +36,6 @@ public interface IGanttChartContentProvider extends ITreeContentProvider {
 	 * 
 	 */
 	Object getElementDependency(Object element);
+
+	int getEventAlignment(Object element);
 }
