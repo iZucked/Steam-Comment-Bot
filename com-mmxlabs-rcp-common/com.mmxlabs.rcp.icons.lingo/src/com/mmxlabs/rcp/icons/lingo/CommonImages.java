@@ -53,6 +53,7 @@ public final class CommonImages {
 		// 12x12
 		Transfer_12(12, "icons/12x12/transfer.png"), //
 		Notes_12(12, "icons/12x12/notes.png"), //
+		HeelCarry_12(12, "icons/12x12/heel_carry.png"), //
 
 		// 16x16
 		BaseFlag(16, "icons/16x16/base_flag.png"), //

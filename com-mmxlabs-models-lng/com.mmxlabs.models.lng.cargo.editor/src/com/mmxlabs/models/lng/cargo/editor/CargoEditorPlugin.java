@@ -28,6 +28,7 @@ public final class CargoEditorPlugin extends AbstractUIPlugin {
 	public static final String IMAGE_CARGO_NOTES = "cargo.notes";
 	public static final String IMAGE_CARGO_TRANSFER = "cargo.transfer";
 	public static final String IMAGE_CARGO_NOTES_AND_TRANSFER = "cargo.transfer.notes";
+	public static final String IMAGE_CARGO_HEEL_CARRY = "cargo.heel.carry";
 
 	public static final String IMAGE_CARGO_SWAP = "cargo.swap";
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
@@ -88,6 +89,7 @@ public final class CargoEditorPlugin extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_CARGO_NOTES, CommonImages.getImageDescriptor(IconPaths.Notes_12, IconMode.Enabled));
 		imageRegistry.put(IMAGE_CARGO_TRANSFER, CommonImages.getImageDescriptor(IconPaths.Transfer_12, IconMode.Enabled));
 		imageRegistry.put(IMAGE_CARGO_NOTES_AND_TRANSFER, CommonImages.getImageDescriptor(IconPaths.NotesAndTransfer, IconMode.Enabled));
+		imageRegistry.put(IMAGE_CARGO_HEEL_CARRY, CommonImages.getImageDescriptor(IconPaths.HeelCarry_12, IconMode.Enabled));
 		{
 			final ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/swap.gif");
 			imageRegistry.put(IMAGE_CARGO_SWAP, swapImageDescriptor);
