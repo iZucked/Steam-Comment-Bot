@@ -100,7 +100,8 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		}
 		assert cargoValueAnnotation != null;
 		final long[] metrics = new long[MetricType.values().length];
-		metrics[MetricType.PNL.ordinal()] += cargoValueAnnotation.getTotalProfitAndLoss();
+		MetricType.increment(metrics, MetricType.PNL, cargoValueAnnotation.getTotalProfitAndLoss());
+
 		metrics[MetricType.CAPACITY.ordinal()] += vp.getWeightedVoyagePlanMetrics();
 		metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
@@ -218,7 +219,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselCharter vesselCharter, final int vesselStartTime,
 			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
 			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results) {
-		final Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> hook = vpList -> {
+		return vpList -> {
 
 			final long[] metrics = new long[MetricType.values().length];
 
@@ -264,7 +265,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 				VoyagePlanRecord vpr = null;
 				if (cargoValueAnnotation != null) {
-					metrics[MetricType.PNL.ordinal()] += cargoValueAnnotation.getTotalProfitAndLoss();
+					MetricType.increment(metrics, MetricType.PNL, cargoValueAnnotation.getTotalProfitAndLoss());
 					pp.setSecond(cargoValueAnnotation);
 					final int numSlots = cargoValueAnnotation.getSlots().size();
 					final IPortSlot lastSlot = cargoValueAnnotation.getSlots().get(numSlots - 1);
@@ -297,7 +298,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 							firstLoadPort, lastHeelPricePerMMBTU, heelVolumeRecords, annotatedSolution);
 
 					lastHeelVolumeInM3 = vp.getRemainingHeelInM3();
-					metrics[MetricType.PNL.ordinal()] += p.getSecond();
+					MetricType.increment(metrics, MetricType.PNL, p.getSecond());
 
 					// Lookup last heel price
 					for (final IPortSlot slot : ptr.getSlots()) {
@@ -361,7 +362,6 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 			results.add(result);
 		};
-		return hook;
 	}
 
 	private boolean computeHeelVolumeRecords(final PreviousHeelRecord previousHeelRecord, final VoyagePlan vp, @Nullable final IAllocationAnnotation allocationAnnotation,

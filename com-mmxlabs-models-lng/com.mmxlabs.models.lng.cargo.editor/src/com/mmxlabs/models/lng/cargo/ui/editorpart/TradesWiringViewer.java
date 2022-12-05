@@ -692,8 +692,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 				final GridColumn column = grid.getColumn(mousePoint);
-
-				final IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
+				final IStructuredSelection selection = getScenarioViewer().getStructuredSelection();
 
 				if (selection.size() <= 1) {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
@@ -1071,7 +1070,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					if (element instanceof final RowData rowDataItem) {
 						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof final LoadSlot ls) {
-							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) // 
+							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) //
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ls, getScenarioModel());
 							if (ls.getNotes() != null && !ls.getNotes().isEmpty()) {
 								if (slotTransferred) {
@@ -1288,7 +1287,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof DischargeSlot ds) {
 
-							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) // 
+							final boolean slotTransferred = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) //
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ds, getScenarioModel());
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
 								if (slotTransferred) {
