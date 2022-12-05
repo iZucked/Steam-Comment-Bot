@@ -22,4 +22,8 @@ public enum MetricType {
 		}
 		return false;
 	}
+
+	public static void increment(long[] metrics, MetricType type, long value) {
+		metrics[type.ordinal()] = Math.addExact(metrics[type.ordinal()], value);
+	}
 }
