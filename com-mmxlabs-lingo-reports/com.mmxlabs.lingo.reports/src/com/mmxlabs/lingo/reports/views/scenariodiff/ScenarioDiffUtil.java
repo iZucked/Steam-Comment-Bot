@@ -216,6 +216,9 @@ public class ScenarioDiffUtil {
 		List<ScenarioDiffData> result = new ArrayList<>();
 		if (features != null && !features.isEmpty()) {
 			for (EStructuralFeature f : features) {
+				if (blackList1.contains(f)) {
+					continue;
+				}
 				if (f instanceof EAttribute) {
 					if ((eo1 == null || eo1.eGet(f) == null) && (eo2 != null && eo2.eGet(f) != null)) {
 
