@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EClass;
  */
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -82,6 +82,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 	@Override
 	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
+					
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override
@@ -182,6 +183,30 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					return gd;
 				}
 				
+				if (feature == MMXCorePackage.Literals.NAMED_OBJECT__NAME 
+						|| feature == CommercialPackage.Literals.CONTRACT__CODE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
+				 
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS 
+						|| feature == CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
+					
+					return gd;
+				}
+			if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE 
+					|| feature == CommercialPackage.Literals.CONTRACT__ENTITY) {
+				final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+				// 64 - magic constant from MultiDetailDialog
+				gd.horizontalSpan = 4;
+				
+				return gd;
+			}
 				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS 
 						|| feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
@@ -218,6 +243,23 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					}
 					return gd;
 				}
+				
+				if (feature == CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION //
+						|| feature == CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE //
+					|| feature == CommercialPackage.Literals.SALES_CONTRACT__FOB_SALE_DEAL_TYPE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__PRICING_EVENT
+						|| feature == CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
+					return gd;
+				}
+				
 				
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 9;
