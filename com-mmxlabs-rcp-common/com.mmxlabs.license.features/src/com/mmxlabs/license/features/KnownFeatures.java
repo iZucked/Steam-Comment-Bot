@@ -141,6 +141,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
 
+	public static final String FEATURE_MARKETABLE_WINDOWS = "features:marketability";
+	
 	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
 
 	/**
@@ -161,4 +163,5 @@ public final class KnownFeatures {
 	public static final String FEATURE_HEADLINE_IDLE_DAYS = "features:headline-idle-days";
 	public static final String FEATURE_HEADLINE_PURCHASE_COST = "features:headline-purchase-cost";
 
+	
 }
