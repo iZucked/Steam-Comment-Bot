@@ -156,7 +156,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				.span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
-				.numColumns(5) //
+				.numColumns(1) //
 				.spacing(10, 10) //
 				.create());
 		{
@@ -184,6 +184,10 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 					.margins(10, 10)
 					.spacing(20, 20) //
 					.create());
+			final Runnable recalculateScrollbar = () -> {
+				centralComposite.layout(true);
+				centralScrolledComposite.setMinSize(centralComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			};
 
 			final IExpansionListener centralExpansionListener = new ExpansionAdapter() {
 
@@ -229,7 +233,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				lockedListeners.add(locked -> valueMatrixDataComponent.setEditingLock(locked));
 			}
 			{
-				valueMatrixResultsComponent = new ValueMatrixResultsComponent(ValueMatrixModellerView.this, this::getModel);
+				valueMatrixResultsComponent = new ValueMatrixResultsComponent(ValueMatrixModellerView.this, this::getModel, recalculateScrollbar);
 				hook.accept(valueMatrixResultsComponent, true);
 			}
 		}
