@@ -1123,6 +1123,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityModelItemProvider marketabilityModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityModelAdapter() {
+		if (marketabilityModelItemProvider == null) {
+			marketabilityModelItemProvider = new MarketabilityModelItemProvider(this);
+		}
+
+		return marketabilityModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityRowItemProvider marketabilityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityRowAdapter() {
+		if (marketabilityRowItemProvider == null) {
+			marketabilityRowItemProvider = new MarketabilityRowItemProvider(this);
+		}
+
+		return marketabilityRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityResultItemProvider marketabilityResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityResultAdapter() {
+		if (marketabilityResultItemProvider == null) {
+			marketabilityResultItemProvider = new MarketabilityResultItemProvider(this);
+		}
+
+		return marketabilityResultItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ViabilityRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1834,6 +1903,9 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (fleetVesselAllocationDescriptorItemProvider != null) fleetVesselAllocationDescriptorItemProvider.dispose();
 		if (positionDescriptorItemProvider != null) positionDescriptorItemProvider.dispose();
 		if (viabilityModelItemProvider != null) viabilityModelItemProvider.dispose();
+		if (marketabilityModelItemProvider != null) marketabilityModelItemProvider.dispose();
+		if (marketabilityRowItemProvider != null) marketabilityRowItemProvider.dispose();
+		if (marketabilityResultItemProvider != null) marketabilityResultItemProvider.dispose();
 		if (viabilityRowItemProvider != null) viabilityRowItemProvider.dispose();
 		if (viabilityResultItemProvider != null) viabilityResultItemProvider.dispose();
 		if (mtmModelItemProvider != null) mtmModelItemProvider.dispose();

@@ -466,6 +466,33 @@ public interface AnalyticsFactory extends EFactory {
 	ViabilityModel createViabilityModel();
 
 	/**
+	 * Returns a new object of class '<em>Marketability Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Model</em>'.
+	 * @generated
+	 */
+	MarketabilityModel createMarketabilityModel();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Row</em>'.
+	 * @generated
+	 */
+	MarketabilityRow createMarketabilityRow();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Result</em>'.
+	 * @generated
+	 */
+	MarketabilityResult createMarketabilityResult();
+
+	/**
 	 * Returns a new object of class '<em>Viability Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

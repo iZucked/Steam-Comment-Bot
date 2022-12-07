@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
+import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.ViabilityModel;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getMtmModel <em>Mtm Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getBreakevenModels <em>Breakeven Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSwapValueMatrixModels <em>Swap Value Matrix Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getMarketabilityModel <em>Marketability Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -102,6 +104,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<SwapValueMatrixModel> swapValueMatrixModels;
+
+	/**
+	 * The cached value of the '{@link #getMarketabilityModel() <em>Marketability Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketabilityModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected MarketabilityModel marketabilityModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -270,6 +282,51 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @generated
 	 */
 	@Override
+	public MarketabilityModel getMarketabilityModel() {
+		return marketabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMarketabilityModel(MarketabilityModel newMarketabilityModel, NotificationChain msgs) {
+		MarketabilityModel oldMarketabilityModel = marketabilityModel;
+		marketabilityModel = newMarketabilityModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL, oldMarketabilityModel, newMarketabilityModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMarketabilityModel(MarketabilityModel newMarketabilityModel) {
+		if (newMarketabilityModel != marketabilityModel) {
+			NotificationChain msgs = null;
+			if (marketabilityModel != null)
+				msgs = ((InternalEObject)marketabilityModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL, null, msgs);
+			if (newMarketabilityModel != null)
+				msgs = ((InternalEObject)newMarketabilityModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL, null, msgs);
+			msgs = basicSetMarketabilityModel(newMarketabilityModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL, newMarketabilityModel, newMarketabilityModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
@@ -284,6 +341,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return ((InternalEList<?>)getBreakevenModels()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
 				return ((InternalEList<?>)getSwapValueMatrixModels()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL:
+				return basicSetMarketabilityModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -308,6 +367,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getBreakevenModels();
 			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
 				return getSwapValueMatrixModels();
+			case AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL:
+				return getMarketabilityModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -343,6 +404,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getSwapValueMatrixModels().clear();
 				getSwapValueMatrixModels().addAll((Collection<? extends SwapValueMatrixModel>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL:
+				setMarketabilityModel((MarketabilityModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -373,6 +437,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
 				getSwapValueMatrixModels().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL:
+				setMarketabilityModel((MarketabilityModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -397,6 +464,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return breakevenModels != null && !breakevenModels.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__SWAP_VALUE_MATRIX_MODELS:
 				return swapValueMatrixModels != null && !swapValueMatrixModels.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__MARKETABILITY_MODEL:
+				return marketabilityModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

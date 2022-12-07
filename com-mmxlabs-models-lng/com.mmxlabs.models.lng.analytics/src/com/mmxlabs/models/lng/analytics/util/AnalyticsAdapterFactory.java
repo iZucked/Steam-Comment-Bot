@@ -296,6 +296,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createViabilityModelAdapter();
 			}
 			@Override
+			public Adapter caseMarketabilityModel(MarketabilityModel object) {
+				return createMarketabilityModelAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityRow(MarketabilityRow object) {
+				return createMarketabilityRowAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResult(MarketabilityResult object) {
+				return createMarketabilityResultAdapter();
+			}
+			@Override
 			public Adapter caseViabilityRow(ViabilityRow object) {
 				return createViabilityRowAdapter();
 			}
@@ -1118,6 +1130,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createViabilityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel <em>Marketability Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityModel
+	 * @generated
+	 */
+	public Adapter createMarketabilityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow <em>Marketability Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow
+	 * @generated
+	 */
+	public Adapter createMarketabilityRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult <em>Marketability Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult
+	 * @generated
+	 */
+	public Adapter createMarketabilityResultAdapter() {
 		return null;
 	}
 

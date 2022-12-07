@@ -26,6 +26,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/mtmModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/breakevenModels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/swapValueMatrixModels"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalyticsModel/marketabilityModel"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
     <genClasses ecoreClass="analytics.ecore#//SellOption"/>
@@ -283,6 +284,31 @@
     <genClasses ecoreClass="analytics.ecore#//ViabilityModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ViabilityModel/rows"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ViabilityModel/markets"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MarketabilityModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityModel/rows"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityModel/markets"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MarketabilityRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/buyOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/sellOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/shipping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/lhsResults"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/rhsResults"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityRow/price"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityRow/eta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityRow/referencePrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityRow/startVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//MarketabilityResult">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResult/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestETA"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestETA"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestPrice"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ViabilityRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ViabilityRow/buyOption"/>

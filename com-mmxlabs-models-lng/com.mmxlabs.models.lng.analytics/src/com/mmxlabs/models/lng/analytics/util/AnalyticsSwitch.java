@@ -499,6 +499,28 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.MARKETABILITY_MODEL: {
+				MarketabilityModel marketabilityModel = (MarketabilityModel)theEObject;
+				T result = caseMarketabilityModel(marketabilityModel);
+				if (result == null) result = caseAbstractAnalysisModel(marketabilityModel);
+				if (result == null) result = caseUUIDObject(marketabilityModel);
+				if (result == null) result = caseNamedObject(marketabilityModel);
+				if (result == null) result = caseMMXObject(marketabilityModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_ROW: {
+				MarketabilityRow marketabilityRow = (MarketabilityRow)theEObject;
+				T result = caseMarketabilityRow(marketabilityRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_RESULT: {
+				MarketabilityResult marketabilityResult = (MarketabilityResult)theEObject;
+				T result = caseMarketabilityResult(marketabilityResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.VIABILITY_ROW: {
 				ViabilityRow viabilityRow = (ViabilityRow)theEObject;
 				T result = caseViabilityRow(viabilityRow);
@@ -1418,6 +1440,51 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseViabilityModel(ViabilityModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Marketability Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Marketability Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketabilityModel(MarketabilityModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Marketability Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Marketability Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketabilityRow(MarketabilityRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Marketability Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Marketability Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketabilityResult(MarketabilityResult object) {
 		return null;
 	}
 

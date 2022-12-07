@@ -111,6 +111,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.FLEET_VESSEL_ALLOCATION_DESCRIPTOR: return createFleetVesselAllocationDescriptor();
 			case AnalyticsPackage.POSITION_DESCRIPTOR: return createPositionDescriptor();
 			case AnalyticsPackage.VIABILITY_MODEL: return createViabilityModel();
+			case AnalyticsPackage.MARKETABILITY_MODEL: return createMarketabilityModel();
+			case AnalyticsPackage.MARKETABILITY_ROW: return createMarketabilityRow();
+			case AnalyticsPackage.MARKETABILITY_RESULT: return createMarketabilityResult();
 			case AnalyticsPackage.VIABILITY_ROW: return createViabilityRow();
 			case AnalyticsPackage.VIABILITY_RESULT: return createViabilityResult();
 			case AnalyticsPackage.MTM_MODEL: return createMTMModel();
@@ -662,6 +665,39 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public ViabilityModel createViabilityModel() {
 		ViabilityModelImpl viabilityModel = new ViabilityModelImpl();
 		return viabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityModel createMarketabilityModel() {
+		MarketabilityModelImpl marketabilityModel = new MarketabilityModelImpl();
+		return marketabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityRow createMarketabilityRow() {
+		MarketabilityRowImpl marketabilityRow = new MarketabilityRowImpl();
+		return marketabilityRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityResult createMarketabilityResult() {
+		MarketabilityResultImpl marketabilityResult = new MarketabilityResultImpl();
+		return marketabilityResult;
 	}
 
 	/**
