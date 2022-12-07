@@ -66,6 +66,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -201,6 +202,8 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		listenToSelectionsFrom();
 
 		listenToScenarioSelection();
+
+
 	}
 
 	@Override

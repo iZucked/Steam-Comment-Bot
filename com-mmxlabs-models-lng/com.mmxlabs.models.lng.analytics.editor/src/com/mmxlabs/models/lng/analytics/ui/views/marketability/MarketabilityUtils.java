@@ -35,11 +35,11 @@ public final class MarketabilityUtils {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
 		final SpotMarketsModel spotModel = ScenarioModelUtil.getSpotMarketsModel(sm);
 
-		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
-			buy.setSlot(slot);
-			model.getBuys().add(buy);
-		}
+//		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+//			final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
+//			buy.setSlot(slot);
+//			model.getBuys().add(buy);
+//		}
 		final SpotMarketGroup smgDS = spotModel.getDesSalesSpotMarket();
 		if (smgDS != null) {
 			for (final SpotMarket spotMarket : smgDS.getMarkets()) {
@@ -56,14 +56,13 @@ public final class MarketabilityUtils {
 				}
 			}
 		}
-		for(Cargo c : cargoModel.getCargoes()) {
-			Optional<@NonNull LoadSlot> loadSlot = c.getSlots().stream().filter(LoadSlot.class::isInstance).map(LoadSlot.class::cast).findAny();
-			if(loadSlot.isEmpty()) continue;
-			if(c.getVesselAssignmentType() instanceof VesselCharter vesselCharter) {
+		cargoModel.getLoadSlots().stream().forEach( loadSlot -> {
+			Cargo c = loadSlot.getCargo();
+			if(c != null && c.getVesselAssignmentType() instanceof VesselCharter vesselCharter) {
 				final ExistingVesselCharterOption evco = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 				evco.setVesselCharter(vesselCharter);
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
-				buy.setSlot(loadSlot.get());
+				buy.setSlot(loadSlot);
 				model.getBuys().add(buy);
 				model.getShippingTemplates().add(evco);
 				
@@ -72,7 +71,7 @@ public final class MarketabilityUtils {
 				row.setShipping(evco);
 				model.getRows().add(row);
 			}
-		}
+		});
 //		populateModel(model);
 		return model;
 	}

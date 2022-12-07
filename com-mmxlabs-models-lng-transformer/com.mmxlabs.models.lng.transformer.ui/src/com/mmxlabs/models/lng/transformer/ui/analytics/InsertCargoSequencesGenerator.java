@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -35,8 +36,6 @@ public class InsertCargoSequencesGenerator {
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 	
-	@Inject
-	private @NonNull ViabilityWindowTrimmer trimmer;
 
 	public void generateOptions(final ISequences sequences, final List<ISequenceElement> orderedCargoElements,
 			final IResource targetResource, final ViabilityWindowTrimmer trimmer,
@@ -78,8 +77,9 @@ public class InsertCargoSequencesGenerator {
 		}
 	}
 	
+	@NonNullByDefault
 	public void generateOptionsTemp(final ISequences sequences, final List<@NonNull ISequenceElement> orderedCargoElements,
-			final @NonNull IResource targetResource,
+			final IResource targetResource, ViabilityWindowTrimmer trimmer,
 			final IPortSlot portSlot, final ToBooleanFunction<ISequences> action) {
 
 		for (final ISequenceElement e : orderedCargoElements) {
@@ -89,15 +89,15 @@ public class InsertCargoSequencesGenerator {
 		}
 		final ISequence seq = sequences.getSequence(targetResource);
 		final ISequenceElement load = orderedCargoElements.get(0);
-		final ISequenceElement discharge = orderedCargoElements.get(orderedCargoElements.size() - 1);
-		assert discharge != null;
+		final ISequenceElement salesMarket = orderedCargoElements.get(orderedCargoElements.size() - 1);
+		assert salesMarket != null;
 		final ModifiableSequences newSequences = new ModifiableSequences(sequences);
 		final IModifiableSequence modifiableSequence = newSequences.getModifiableSequence(targetResource);
-		for(int i = 0; i < seq.size()-1; i++) {
+		for(int i = 0; i < seq.size() - 1; i++) {
 			final ISequenceElement elem = seq.get(i);
 			if(elem.equals(load)) {
-				modifiableSequence.remove(i+1);
-				modifiableSequence.insert(i+1, discharge);
+				modifiableSequence.remove(i + 1);
+				modifiableSequence.insert(i + 1, salesMarket);
 				trimmer.setTrim(portSlot, ViabilityWindowTrimmer.Mode.EARLIEST, 0);
 				final boolean earliestValid = action.accept(newSequences);
 				trimmer.setTrim(portSlot, ViabilityWindowTrimmer.Mode.LATEST, 0);
@@ -109,6 +109,7 @@ public class InsertCargoSequencesGenerator {
 						if (newValid) break;
 					}
 				}
+				break;
 			}
 		}
 	}

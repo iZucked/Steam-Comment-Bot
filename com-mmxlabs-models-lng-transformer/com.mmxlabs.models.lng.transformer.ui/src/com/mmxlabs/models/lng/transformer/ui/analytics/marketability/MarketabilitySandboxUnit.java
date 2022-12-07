@@ -371,7 +371,7 @@ public class MarketabilitySandboxUnit {
 		final ViabilityWindowTrimmer trimmer = injector.getInstance(ViabilityWindowTrimmer.class);
 		final InsertCargoSequencesGenerator generator = injector.getInstance(InsertCargoSequencesGenerator.class);
 
-		generator.generateOptionsTemp(initialSequences, cargoSegment, resource, portSlot, (solution) -> {
+		generator.generateOptionsTemp(initialSequences, cargoSegment, resource, trimmer, portSlot, (solution) -> {
 			final SingleResult result = evaluator.evaluate(resource, solution, portSlot);
 			ret.merge(result);
 			return result != null;
