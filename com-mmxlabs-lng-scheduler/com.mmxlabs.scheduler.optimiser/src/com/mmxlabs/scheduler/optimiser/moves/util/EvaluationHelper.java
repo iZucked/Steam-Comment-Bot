@@ -293,10 +293,10 @@ public class EvaluationHelper {
 			assert element != null;
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			assert portSlot != null;
-			sumPNL += Math.addExact(sumPNL, scheduledSequences.getUnusedSlotGroupValue(portSlot));
+			sumPNL = Math.addExact(sumPNL, scheduledSequences.getUnusedSlotGroupValue(portSlot));
 		}
 
-		sumPNL += Math.addExact(sumPNL, computePaperPnL(scheduledSequences));
+		sumPNL = Math.addExact(sumPNL, computePaperPnL(scheduledSequences));
 
 		return sumPNL;
 	}
