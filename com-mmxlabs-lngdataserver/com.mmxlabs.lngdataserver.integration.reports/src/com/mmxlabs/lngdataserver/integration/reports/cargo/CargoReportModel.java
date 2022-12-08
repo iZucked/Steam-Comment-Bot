@@ -4,45 +4,97 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.cargo;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.google.common.io.Files;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
+import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubSummary;
+import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
+@SchemaVersion(1)
 public class CargoReportModel {
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public LocalDateTime loadScheduledDate;
-	
-	public String loadName;
-	public double loadVolumeM3;
-	public double loadVolumeMMBTU;
-	public double loadPrice;
-	public String loadPortName;
-	public String purchaseContract;
-	public String purchaseCounterparty; 
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public LocalDateTime dischargeScheduledDate;
-	
-	public String dischargeName;
-	public double dischargeVolumeM3; // M3
-	public double dischargeVolumeMMBTU; // MMMBtu
-	public double dischargePrice;
-	public String dischargePortName;
-	public String saleContract;
-	public String saleCounterparty; 
-	
-	public String vesselName;
-	
-	public String loadComment;
-	public String dischargeComment;
-	
+
+	@ColumnName("Type")
 	public String cargoType;
+
+	@ColumnName("Vessel")
+	@HubSummary(name="Vessel", index=4)
+	public String vesselName;
+
+	@ColumnName("ID")
+	public String loadName;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@HubFormat("DD/MM/YYYY hh:mm")
+	@ColumnName("Date")
+	@HubSummary(name="Date", index=2)
+	public LocalDateTime loadScheduledDate;
+
+	@ColumnName("Port")
+	@HubSummary(name="Port", index=1)
+	public String loadPortName;
+
+	public double loadVolumeM3;
+	@ColumnName("Volume")
+	@HubFormat("{ \"thousandSeparated\": true }")
+	public double loadVolumeMMBTU;
+
+	@ColumnName("Buy at")
+	@HubSummary(name="Buy at", index=3)
+	public String purchaseContract;
+	@ColumnName("C/P")
+	public String purchaseCounterparty;
+
+	@ColumnName("Buy Price")
+	@HubFormat("{\"thousandSeparated\": true, \"decimals\": 2}")
+	public double loadPrice;
+
+	@ColumnName("ID")
+	public String dischargeName;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@HubFormat("DD/MM/YYYY hh:mm")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@ColumnName("Date")
+	@HubSummary(name="Date", index=6)
+	public LocalDateTime dischargeScheduledDate;
+
+	@ColumnName("Port")
+	@HubSummary(name="Port", index=5)
+	public String dischargePortName;
+
+	public double dischargeVolumeM3; // M3
 	
+	@ColumnName("Volume")
+	@HubFormat("{ \"thousandSeparated\": true }")
+	public double dischargeVolumeMMBTU; // MMMBtu
+
+	@ColumnName("Sell at")
+	@HubSummary(name="Sell at", index=7)
+	public String saleContract;
+
+	@ColumnName("C/P")
+	public String saleCounterparty;
+
+	@ColumnName("Sell Price")
+	@HubFormat("{\"thousandSeparated\": true, \"decimals\": 2}")
+	public double dischargePrice;
+
+	@ColumnName("Buy Notes")
+	public String loadComment;
+
+	@ColumnName("Sell Notes")
+	public String dischargeComment;
+
 	public long profitAndLoss;
 
 	public LocalDateTime getLoadScheduledDate() {
@@ -211,5 +263,12 @@ public class CargoReportModel {
 
 	public void setProfitAndLoss(long profitAndLoss) {
 		this.profitAndLoss = profitAndLoss;
+	}
+	
+	
+	public static void main(String[] args) throws Exception {
+		String schema = new SchemaGenerator().generateHubSchema(CargoReportModel.class, Mode.SUMMARY);
+		System.out.println(schema);
+		Files.write(schema, new File("target/cargo.json"), StandardCharsets.UTF_8);
 	}
 }

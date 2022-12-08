@@ -4,12 +4,21 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.inventory;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.google.common.io.Files;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
+import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
+
+@SchemaVersion(1)
 public class InventoryExportModel {
-	List<InventoryInput> input = null;
-	List<InventoryOutput> output = null;
-	List<InventoryLevelPerDay> levels = null;
+	
+	public List<InventoryInput> input = null;
+	public List<InventoryOutput> output = null;
+	public List<InventoryLevelPerDay> levels = null;
 	public int minVolume = 0;
 	public int maxVolume = 0;
 
@@ -42,5 +51,12 @@ public class InventoryExportModel {
 	}
 	public void setMaxVolume(int maxVolume) {
 		this.maxVolume = maxVolume;
+	}
+	
+
+	public static void main(String[] args) throws Exception {
+		String schema = new SchemaGenerator().generateHubSchema(InventoryExportModel.class, Mode.SUMMARY);
+		System.out.println(schema);
+		Files.write(schema, new File("target/invent.json"), StandardCharsets.UTF_8);
 	}
 }
