@@ -59,7 +59,7 @@ public class StandardVesselSummaryColumnFactory implements IVesselSummaryColumnF
 					new SimpleEmfBlockColumnFactory(columnID, "Vessel", "Vessel name", ColumnType.NORMAL, new VesselAssignmentFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.canalcosts":
-			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal ($)", "Total route costs", ColumnType.NORMAL,
 					new CanalCostFormatter(ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
