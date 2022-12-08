@@ -98,6 +98,7 @@
     </eOperations>
     <eOperations name="getSchedulingTimeWindow" eType="#//SchedulingTimeWindow"/>
     <eOperations name="getSlotOrDelegateDaysBuffer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrDelegateBusinessUnit" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         unsettable="true">
       <eGenericType eTypeParameter="#//Slot/T"/>
@@ -251,7 +252,8 @@
         <details key="type" value="pricingBasis"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="businessUnit" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="businessUnit" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride"/>

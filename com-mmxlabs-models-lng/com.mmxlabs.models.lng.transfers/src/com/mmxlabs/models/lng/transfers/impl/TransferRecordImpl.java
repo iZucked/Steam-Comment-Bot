@@ -10,8 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -29,6 +31,7 @@ import com.mmxlabs.models.lng.transfers.TransferStatus;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
@@ -1385,9 +1388,57 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 		} else if (transferPackage.getTransferRecord_PricingBasis() == feature) {
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PricingBasis(),"");
 		} else if (transferPackage.getTransferRecord_FromBU() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_FromBU(), "");
+			return new DelegateInformation(null, null, null) {
+
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU);
+				}
+
+				@Override
+				public Object getValue(final EObject object) {
+					if (getTransferAgreement() != null && getTransferAgreement().eIsSet(transferPackage.getTransferAgreement_FromBU())) {
+						return getTransferAgreement().getFromBU();
+					} else if (getFromEntity() != null) {
+						final BaseLegalEntity entity = getFromEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return ECollections.emptyEList();
+				}
+			};
 		} else if (transferPackage.getTransferRecord_ToBU() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_ToBU(), "");
+			return new DelegateInformation(null, null, null) {
+
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == TransfersPackage.Literals.TRANSFER_RECORD__TO_BU);
+				}
+
+				@Override
+				public Object getValue(final EObject object) {
+					if (getTransferAgreement() != null && getTransferAgreement().eIsSet(transferPackage.getTransferAgreement_ToBU())) {
+						return getTransferAgreement().getToBU();
+					} if (getToEntity() != null) {
+						final BaseLegalEntity entity = getToEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return ECollections.emptyEList();
+				}
+			};
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

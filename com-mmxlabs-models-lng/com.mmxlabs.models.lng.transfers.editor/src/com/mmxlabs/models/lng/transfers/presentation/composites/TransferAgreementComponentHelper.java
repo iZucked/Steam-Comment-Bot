@@ -13,8 +13,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;

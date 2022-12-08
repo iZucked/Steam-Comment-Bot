@@ -308,13 +308,31 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_AGREEMENT___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
 
 	/**
+	 * The operation id for the '<em>Get Agreement Or Delegate From BU</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_FROM_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Agreement Or Delegate To BU</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_TO_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Transfer Agreement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+	int TRANSFER_AGREEMENT_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl <em>Transfer Record</em>}' class.
@@ -771,6 +789,26 @@ public interface TransfersPackage extends EPackage {
 	EReference getTransferAgreement_PreferredPBs();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateFromBU() <em>Get Agreement Or Delegate From BU</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Agreement Or Delegate From BU</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateFromBU()
+	 * @generated
+	 */
+	EOperation getTransferAgreement__GetAgreementOrDelegateFromBU();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateToBU() <em>Get Agreement Or Delegate To BU</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Agreement Or Delegate To BU</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateToBU()
+	 * @generated
+	 */
+	EOperation getTransferAgreement__GetAgreementOrDelegateToBU();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.transfers.TransferRecord <em>Transfer Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1157,6 +1195,20 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TRANSFER_AGREEMENT__PREFERRED_PBS = eINSTANCE.getTransferAgreement_PreferredPBs();
+		/**
+		 * The meta object literal for the '<em><b>Get Agreement Or Delegate From BU</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_FROM_BU = eINSTANCE.getTransferAgreement__GetAgreementOrDelegateFromBU();
+		/**
+		 * The meta object literal for the '<em><b>Get Agreement Or Delegate To BU</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_TO_BU = eINSTANCE.getTransferAgreement__GetAgreementOrDelegateToBU();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl <em>Transfer Record</em>}' class.
 		 * <!-- begin-user-doc -->

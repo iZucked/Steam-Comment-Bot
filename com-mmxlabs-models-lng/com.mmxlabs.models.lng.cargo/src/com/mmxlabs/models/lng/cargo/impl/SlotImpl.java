@@ -1066,6 +1066,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected BusinessUnit businessUnit;
 
 	/**
+	 * This is true if the Business Unit reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean businessUnitESet;
+
+	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
 	 * @generated NOT
 	 */
@@ -2749,8 +2758,35 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public void setBusinessUnit(BusinessUnit newBusinessUnit) {
 		BusinessUnit oldBusinessUnit = businessUnit;
 		businessUnit = newBusinessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnitESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit, !oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBusinessUnit() {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnit = null;
+		businessUnitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, null, oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBusinessUnit() {
+		return businessUnitESet;
 	}
 
 	/**
@@ -2814,6 +2850,16 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public int getSlotOrDelegateDaysBuffer() {
 		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getSlotOrDelegateBusinessUnit() {
+		return (BusinessUnit) eGetWithDefault(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
 	}
 
 	/**
@@ -3410,7 +3456,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				unsetPricingBasis();
 				return;
 			case CargoPackage.SLOT__BUSINESS_UNIT:
-				setBusinessUnit((BusinessUnit)null);
+				unsetBusinessUnit();
 				return;
 		}
 		super.eUnset(featureID);
@@ -3527,7 +3573,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__PRICING_BASIS:
 				return isSetPricingBasis();
 			case CargoPackage.SLOT__BUSINESS_UNIT:
-				return businessUnit != null;
+				return isSetBusinessUnit();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3645,6 +3691,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSchedulingTimeWindow();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER:
 				return getSlotOrDelegateDaysBuffer();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT:
+				return getSlotOrDelegateBusinessUnit();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3841,6 +3889,30 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedVesselsArePermissive(), Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
+		} else if (feature == CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
+			return new DelegateInformation(null, null, null) {
+				
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__BUSINESS_UNIT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					if (getSlotOrDelegateEntity() != null) {
+						final BaseLegalEntity entity = getSlotOrDelegateEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return ECollections.emptyEList();
+				}
+			};
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

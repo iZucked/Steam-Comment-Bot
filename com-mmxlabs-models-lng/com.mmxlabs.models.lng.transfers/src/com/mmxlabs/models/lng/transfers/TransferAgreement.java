@@ -232,9 +232,11 @@ public interface TransferAgreement extends NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>From BU</em>' reference.
+	 * @see #isSetFromBU()
+	 * @see #unsetFromBU()
 	 * @see #setFromBU(BusinessUnit)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_FromBU()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	BusinessUnit getFromBU();
@@ -244,19 +246,46 @@ public interface TransferAgreement extends NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>From BU</em>' reference.
+	 * @see #isSetFromBU()
+	 * @see #unsetFromBU()
 	 * @see #getFromBU()
 	 * @generated
 	 */
 	void setFromBU(BusinessUnit value);
 
 	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetFromBU()
+	 * @see #getFromBU()
+	 * @see #setFromBU(BusinessUnit)
+	 * @generated
+	 */
+	void unsetFromBU();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>From BU</em>' reference is set.
+	 * @see #unsetFromBU()
+	 * @see #getFromBU()
+	 * @see #setFromBU(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetFromBU();
+
+	/**
 	 * Returns the value of the '<em><b>To BU</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>To BU</em>' reference.
+	 * @see #isSetToBU()
+	 * @see #unsetToBU()
 	 * @see #setToBU(BusinessUnit)
 	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_ToBU()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	BusinessUnit getToBU();
@@ -266,10 +295,35 @@ public interface TransferAgreement extends NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>To BU</em>' reference.
+	 * @see #isSetToBU()
+	 * @see #unsetToBU()
 	 * @see #getToBU()
 	 * @generated
 	 */
 	void setToBU(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetToBU()
+	 * @see #getToBU()
+	 * @see #setToBU(BusinessUnit)
+	 * @generated
+	 */
+	void unsetToBU();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>To BU</em>' reference is set.
+	 * @see #unsetToBU()
+	 * @see #getToBU()
+	 * @see #setToBU(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetToBU();
 
 	/**
 	 * Returns the value of the '<em><b>Preferred PBs</b></em>' containment reference list.
@@ -282,5 +336,21 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	EList<PreferredPricingBasesWrapper> getPreferredPBs();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getAgreementOrDelegateFromBU();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getAgreementOrDelegateToBU();
 
 } // TransferAgreement

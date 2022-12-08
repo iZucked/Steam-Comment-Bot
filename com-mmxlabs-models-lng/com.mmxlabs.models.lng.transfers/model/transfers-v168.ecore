@@ -9,6 +9,8 @@
         eType="#//TransferRecord" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TransferAgreement" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eOperations name="getAgreementOrDelegateFromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eOperations name="getAgreementOrDelegateToBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -26,8 +28,10 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bufferDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPBs" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PreferredPricingBasesWrapper"
         containment="true"/>

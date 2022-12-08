@@ -16,8 +16,6 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -32,7 +30,7 @@ import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
-import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
@@ -151,10 +149,10 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 			.withRMMaker((ed, rvp) -> new StringAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DESCRIPTION, ed)) //
 			.build();
 
-//			b.buildColumn("Default", CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT) //
-//			.withWidth(50) //
-//			.withRMMaker((ed, rvp) -> new BooleanAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT, ed)) //
-//			.build();
+			b.buildColumn("Default", CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT) //
+			.withWidth(50) //
+			.withRMMaker((ed, rvp) -> new BooleanFlagAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT, ed)) //
+			.build();
 
 			// Add action
 			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
@@ -172,7 +170,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 				}
 			}, false, (btn, sel) -> btn.setEnabled(!sel.isEmpty()));
 
-			detailComposite.addInlineEditor(b.build(CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS));
+			detailComposite.addInlineEditor(new BusinessUnitsEditorWrapper(b.build(CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS)));
 		}
 	}
 }

@@ -1840,9 +1840,11 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
 	 * @see #setBusinessUnit(BusinessUnit)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_BusinessUnit()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	BusinessUnit getBusinessUnit();
@@ -1852,10 +1854,35 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
 	 * @see #getBusinessUnit()
 	 * @generated
 	 */
 	void setBusinessUnit(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	void unsetBusinessUnit();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Business Unit</em>' reference is set.
+	 * @see #unsetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetBusinessUnit();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2026,6 +2053,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	int getSlotOrDelegateDaysBuffer();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getSlotOrDelegateBusinessUnit();
 
 } // end of  Slot
 

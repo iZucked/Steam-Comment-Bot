@@ -302,6 +302,26 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EOperation getTransferAgreement__GetAgreementOrDelegateFromBU() {
+		return transferAgreementEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTransferAgreement__GetAgreementOrDelegateToBU() {
+		return transferAgreementEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTransferRecord() {
 		return transferRecordEClass;
 	}
@@ -590,6 +610,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__FROM_BU);
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__TO_BU);
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__PREFERRED_PBS);
+		createEOperation(transferAgreementEClass, TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_FROM_BU);
+		createEOperation(transferAgreementEClass, TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_TO_BU);
 
 		transferRecordEClass = createEClass(TRANSFER_RECORD);
 		createEReference(transferRecordEClass, TRANSFER_RECORD__TRANSFER_AGREEMENT);
@@ -672,9 +694,13 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferAgreement_CompanyStatus(), this.getCompanyStatus(), "companyStatus", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferAgreement_BufferDays(), ecorePackage.getEInt(), "bufferDays", "0", 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferAgreement_FromBU(), theCommercialPackage.getBusinessUnit(), null, "fromBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferAgreement_ToBU(), theCommercialPackage.getBusinessUnit(), null, "toBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferAgreement_FromBU(), theCommercialPackage.getBusinessUnit(), null, "fromBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransferAgreement_ToBU(), theCommercialPackage.getBusinessUnit(), null, "toBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferAgreement_PreferredPBs(), theCommercialPackage.getPreferredPricingBasesWrapper(), null, "preferredPBs", null, 0, -1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getTransferAgreement__GetAgreementOrDelegateFromBU(), theCommercialPackage.getBusinessUnit(), "getAgreementOrDelegateFromBU", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getTransferAgreement__GetAgreementOrDelegateToBU(), theCommercialPackage.getBusinessUnit(), "getAgreementOrDelegateToBU", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(transferRecordEClass, TransferRecord.class, "TransferRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTransferRecord_TransferAgreement(), this.getTransferAgreement(), null, "transferAgreement", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
