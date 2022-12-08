@@ -29,6 +29,8 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
@@ -224,9 +226,20 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 
 		allElements.add(sequenceElement);
 		{
-			final Port port = modelSlot.getPort();
-			if (port != null) {
-				portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
+			if (modelSlot instanceof final SpotSlot spotSlot) {
+				final SpotMarket market = spotSlot.getMarket();
+				Set<Port> ports = new HashSet<>();
+				if (market instanceof final DESPurchaseMarket desMarket) {
+					ports = SetUtils.getObjects(desMarket.getDestinationPorts());
+				} else if (market instanceof final FOBSalesMarket fobMarket) {
+					ports = SetUtils.getObjects(fobMarket.getOriginPorts());
+				}
+				ports.forEach(port -> portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement));
+			} else {
+				final Port port = modelSlot.getPort();
+				if (port != null) {
+					portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
+				}
 			}
 		}
 		{

@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
-import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -137,7 +136,6 @@ public class EvaluationHelper {
 		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-
 			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
