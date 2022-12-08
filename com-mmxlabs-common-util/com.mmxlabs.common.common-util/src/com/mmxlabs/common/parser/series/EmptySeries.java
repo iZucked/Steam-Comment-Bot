@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public class EmptySeries implements ISeries {
 
-	public static @NonNull ISeries INSTANCE = new EmptySeries();
+	public static final @NonNull ISeries INSTANCE = new EmptySeries();
 
 	private final int[] changePoints = new int[0];
 
