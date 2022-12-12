@@ -43,6 +43,9 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -55,6 +58,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisatio
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.InsertCargoSequencesGenerator;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
@@ -71,14 +75,20 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LazyFollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.PanamaBookingsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 
@@ -194,7 +204,7 @@ public class MarketabilitySandboxUnit {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}
 
-	public synchronized void run(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor) {
+	public synchronized void run(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final LNGScenarioToOptimiserBridge bridge) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
@@ -206,7 +216,6 @@ public class MarketabilitySandboxUnit {
 
 			final @NonNull ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<Future<Runnable>> futures = new LinkedList<>();
-
 			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
 			// Block until all futures completed
 			for (final Future<Runnable> f : futures) {
@@ -226,7 +235,7 @@ public class MarketabilitySandboxUnit {
 			monitor.done();
 		}
 	}
-
+	
 	private void createFutureJobs(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
 			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final MarketabilityRow row : model.getRows()) {
@@ -284,6 +293,7 @@ public class MarketabilitySandboxUnit {
 
 		final InternalResult ret = new InternalResult();
 		String timeZone = "UTC";
+		// Selects sales markets in the next 4 months from the load slot
 		for (int i = 0; i < 4; ++i) {
 			Pair<Boolean, DischargeSlot> pair = getShippedAndDischarge(mapper, load, market, i);
 			if (pair.getSecond() == null) {

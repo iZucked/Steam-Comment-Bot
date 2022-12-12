@@ -55,6 +55,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -336,8 +337,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					@Override
 					protected void configure() {
 
-						bind(MarketabilityWindowTrimmer.class).in(Singleton.class);
-						bind(ICustomTimeWindowTrimmer.class).to(MarketabilityWindowTrimmer.class);
+						bind(ViabilityWindowTrimmer.class).in(Singleton.class);
+						bind(ICustomTimeWindowTrimmer.class).to(ViabilityWindowTrimmer.class);
 					}
 
 				})//
@@ -357,14 +358,17 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
-
+		
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+		
+		
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
-			unit.run(model, mapper, shippingMap, progressMonitor);
+			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
 		});
 		
 	}
