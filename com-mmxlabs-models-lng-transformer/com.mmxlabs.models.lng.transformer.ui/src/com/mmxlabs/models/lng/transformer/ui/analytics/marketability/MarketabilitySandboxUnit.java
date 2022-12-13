@@ -207,7 +207,7 @@ public class MarketabilitySandboxUnit {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}
 
-	public synchronized void run(final MarketabilityModel model, final Schedule schedule, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final LNGScenarioToOptimiserBridge bridge) {
+	public synchronized void run(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final LNGScenarioToOptimiserBridge bridge) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
@@ -236,34 +236,6 @@ public class MarketabilitySandboxUnit {
 			}
 		} finally {
 			monitor.done();
-		}
-		
-		addScheduleEventsToModel(model, schedule, mapper);
-	}
-	
-	private void addScheduleEventsToModel(final MarketabilityModel model, final Schedule schedule, final IMapperClass mapper) {
-		for (final MarketabilityRow row : model.getRows()) {
-			if(row.getBuyOption() != null) {
-				final LoadSlot load = mapper.getOriginal(row.getBuyOption());
-				final DischargeSlot discharge = mapper.getOriginal(row.getSellOption());
-				//schedule.getse
-				if(load != null) {
-					SlotAllocation slotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == load).findAny().get();
-					row.setBuySlotAllocation(slotAllocation);
-				}
-				if(discharge != null) {
-					SlotAllocation slotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == discharge).findAny().get();
-					row.setSellSlotAllocation(slotAllocation);
-					Event nextEvent = slotAllocation.getSlotVisit().getNextEvent();
-					while(nextEvent != null) {
-						if(nextEvent instanceof SlotVisit slotVisit) {
-							row.setNextSlotVisit(slotVisit);
-							break;
-						}
-						nextEvent = nextEvent.getNextEvent();
-					}
-				}
-			}
 		}
 	}
 	

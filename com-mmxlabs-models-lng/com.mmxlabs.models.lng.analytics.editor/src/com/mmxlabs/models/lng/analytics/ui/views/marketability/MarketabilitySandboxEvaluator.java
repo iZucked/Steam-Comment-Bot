@@ -196,12 +196,8 @@ public class MarketabilitySandboxEvaluator {
 
 	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
 		final Set<String> usedIDs = new HashSet<>();
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream().map(LoadSlot::getName).collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
 		return usedIDs;
 	}
 
@@ -239,7 +235,7 @@ public class MarketabilitySandboxEvaluator {
 				vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselCharter.setOptional(true);
-				vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+				vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 						optionalAvailabilityShippingOption.getBallastBonus()));
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					vesselCharter.setStartAt(optionalAvailabilityShippingOption.getStartPort());
@@ -302,7 +298,7 @@ public class MarketabilitySandboxEvaluator {
 				mapper.addMapping(eva, va);
 			} else if (shipping instanceof ExistingCharterMarketOption ecmo) {
 				final CharterInMarket charter = ecmo.getCharterInMarket();
-				
+
 				availabilitiesMap.put(ecmo, charter);
 				mapper.addMapping(ecmo, charter);
 			}
@@ -318,10 +314,10 @@ public class MarketabilitySandboxEvaluator {
 		final long timeBefore = System.currentTimeMillis();
 		singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
 		final long timeAfter = System.currentTimeMillis();
-		
+
 		System.out.printf("Eval %d\n", timeAfter - timeBefore);
 	}
-	
+
 	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
 			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
 
@@ -335,10 +331,11 @@ public class MarketabilitySandboxEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
+		ServiceHelper.<IAnalyticsScenarioEvaluator>withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
 			evaluator.evaluateMarketabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor);
 		});
 	}
 
-	private MarketabilitySandboxEvaluator() {}
+	private MarketabilitySandboxEvaluator() {
+	}
 }

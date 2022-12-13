@@ -66,7 +66,6 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -94,7 +93,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private ICommandHandler localCommandHandler;
 
 	private MainTableCompoment mainTableComponent;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(MarketabilityView.class);
 
 	@Override
@@ -107,60 +106,61 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		mainTableComponent = new MainTableCompoment();
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
-		
+
 		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> {
-		
-		if (modelRecord != null) {
-			try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
-				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
-				sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
-					try {
-						dialog.run(true, false, m -> {
-							try {
-								LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
-								if (foo == null) {
-									foo = ScenarioModelUtil.findScenarioModel(sdp);
-								}
-								final LNGScenarioModel scenarioModel = foo;
-								final ScenarioInstance scenarioInstance = getScenarioInstance();
-								if (scenarioModel == null) {
-									return;
-								}
-								final ExecutorService executor = Executors.newFixedThreadPool(1);
+			if (modelRecord != null) {
+				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
+					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+
+					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
+						try {
+							dialog.run(true, false, m -> {
 								try {
-									executor.submit(() -> {
-										final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket");
-										MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
+									LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
+									if (foo == null) {
+										foo = ScenarioModelUtil.findScenarioModel(sdp);
+									}
+									final LNGScenarioModel scenarioModel = foo;
+									final ScenarioInstance scenarioInstance = getScenarioInstance();
+									if (scenarioModel == null) {
+										return;
+									}
+									final ExecutorService executor = Executors.newFixedThreadPool(1);
+									try {
+										executor.submit(() -> {
+											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket");
+											MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
 
-										RunnerHelper.asyncExec(() -> {
-											final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-											final EditingDomain editingDomain = sdp.getEditingDomain();
+											RunnerHelper.asyncExec(() -> {
+												final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+												final EditingDomain editingDomain = sdp.getEditingDomain();
 
-											final CompoundCommand cmd = new CompoundCommand("Create marketability matrix");
-											cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel(), model));
-											editingDomain.getCommandStack().execute(cmd);
+												final CompoundCommand cmd = new CompoundCommand("Create marketability matrix");
+												cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel(), model));
+												editingDomain.getCommandStack().execute(cmd);
 
-											doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
-										});
-									}).get();
-								} finally {
-									executor.shutdown();
+												doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+											});
+										}).get();
+									} finally {
+										executor.shutdown();
+									}
+								} catch (final InterruptedException | ExecutionException e) {
+									e.printStackTrace();
 								}
-							} catch (final InterruptedException | ExecutionException e) {
-								e.printStackTrace();
-							}
-						});
-					} catch (final InvocationTargetException | InterruptedException e) {
-						LOG.error(e.getMessage(), e);
-					}
+							});
+						} catch (final InvocationTargetException | InterruptedException e) {
+							LOG.error(e.getMessage(), e);
+						}
 
-				});
-			} catch (final Exception e) {
-				throw new RuntimeException("Unable to mark scenario to market", e);
+					});
+				} catch (final Exception e) {
+					throw new RuntimeException("Unable to mark scenario to market", e);
+				}
 			}
-		}});
-		
+		});
+
 		CommonImages.setImageDescriptors(go, IconPaths.Play);
 		getViewSite().getActionBars().getToolBarManager().add(go);
 
@@ -185,7 +185,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 				}
 			}
 		});
-		
+
 		CommonImages.setImageDescriptors(remove, IconPaths.Delete);
 		getViewSite().getActionBars().getToolBarManager().add(remove);
 
@@ -202,7 +202,6 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		listenToSelectionsFrom();
 
 		listenToScenarioSelection();
-
 
 	}
 
@@ -336,7 +335,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			if (doDisplay) {
 				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
-		};
+		}
 
 		public void reallyNotifyChanged(Notification notification) {
 			if (notification.isTouch()) {

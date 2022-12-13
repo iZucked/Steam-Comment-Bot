@@ -319,7 +319,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			unit.run(model, mapper, shippingMap, progressMonitor);
 		});
 	}
-	
+
 	@Override
 	public void evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
 			MarketabilityModel model, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor) {
@@ -358,25 +358,18 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
-		
+
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-		
-		
+
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
-			Schedule schedule = null;
-			if(!scheduleModel.isDirty()) {
-				schedule = scheduleModel.getSchedule();
-			} else {
-				schedule = bridge.createOptimiserInitialSchedule();
-			}
-			unit.run(model, schedule, mapper, shippingMap, progressMonitor, bridge);
+			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
 		});
-		
+
 	}
 
 	@Override
@@ -471,7 +464,5 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	public void runPriceSensitivity(final ScenarioInstance scenarioInstance, final SensitivityModel model) {
 		PriceSensitivityTask.submit(scenarioInstance, model, LocalJobManager.INSTANCE);
 	}
-
-	
 
 }
