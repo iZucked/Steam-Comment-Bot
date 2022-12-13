@@ -893,52 +893,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LumpSumContractDetailsItemProvider lumpSumContractDetailsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLumpSumContractDetailsAdapter() {
-		if (lumpSumContractDetailsItemProvider == null) {
-			lumpSumContractDetailsItemProvider = new LumpSumContractDetailsItemProvider(this);
-		}
-
-		return lumpSumContractDetailsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NotionalJourneyContractDetailsItemProvider notionalJourneyContractDetailsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNotionalJourneyContractDetailsAdapter() {
-		if (notionalJourneyContractDetailsItemProvider == null) {
-			notionalJourneyContractDetailsItemProvider = new NotionalJourneyContractDetailsItemProvider(this);
-		}
-
-		return notionalJourneyContractDetailsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1519,8 +1473,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (eventGroupingItemProvider != null) eventGroupingItemProvider.dispose();
 		if (portVisitLatenessItemProvider != null) portVisitLatenessItemProvider.dispose();
 		if (exposureDetailItemProvider != null) exposureDetailItemProvider.dispose();
-		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
-		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
 		if (canalJourneyEventItemProvider != null) canalJourneyEventItemProvider.dispose();
 		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();

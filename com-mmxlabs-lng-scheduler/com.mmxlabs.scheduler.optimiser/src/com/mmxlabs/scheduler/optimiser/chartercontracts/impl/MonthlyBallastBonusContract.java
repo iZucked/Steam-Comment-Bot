@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.MonthlyBallastBonu
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -24,11 +25,12 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	}
 
 	@Override
-	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final VesselStartState vesselStartState,
+			PreviousHeelRecord heelRecord) {
 		if (portSlot.getPortType() == PortType.End) {
 			final IBallastBonusTerm matchingRule = getMatchingRule(portTimesRecord, portSlot, vesselCharter, vesselStartState);
 			if (matchingRule != null) {
-				return matchingRule.calculateCost(portTimesRecord, vesselCharter, vesselStartState);
+				return matchingRule.calculateCost(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 			}
 		}
 		return 0L;
@@ -58,7 +60,8 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	}
 
 	@Override
-	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
+	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final VesselStartState vesselStartState,
+			PreviousHeelRecord heelRecord) {
 
 		final CharterContractAnnotation ballastBonusAnnotation = new CharterContractAnnotation();
 		if (portSlot.getPortType() == PortType.End) {
@@ -66,9 +69,9 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 			if (rule == null) {
 				throw new UserFeedbackException("Missing matching monthly ballast bonus contract rule.");
 			}
-			ballastBonusAnnotation.cost = rule.calculateCost(portTimesRecord, vesselCharter, vesselStartState);
+			ballastBonusAnnotation.cost = rule.calculateCost(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 			ballastBonusAnnotation.matchedPort = portSlot.getPort();
-			ballastBonusAnnotation.termAnnotation = rule.annotate(portTimesRecord, vesselCharter, vesselStartState);
+			ballastBonusAnnotation.termAnnotation = rule.annotate(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 		}
 		return ballastBonusAnnotation;
 	}

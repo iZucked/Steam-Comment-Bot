@@ -164,6 +164,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/includeCanal"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/includeCanalTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/lumpSumPriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/priceOnLastLNGPrice"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//BallastBonusTerm">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusTerm/redeliveryPorts"/>

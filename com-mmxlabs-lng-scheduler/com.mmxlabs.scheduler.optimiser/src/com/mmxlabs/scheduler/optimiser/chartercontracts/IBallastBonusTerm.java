@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -30,8 +31,8 @@ public interface IBallastBonusTerm {
 	 */
 	boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, VesselStartState vesselStartState);
 
-	long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, VesselStartState vesselStartState);
+	long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, VesselStartState vesselStartState, PreviousHeelRecord heelRecord);
 
 	@Nullable
-	ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, VesselStartState vesselStartState);
+	ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, VesselStartState vesselStartState, PreviousHeelRecord heelRecord);
 }

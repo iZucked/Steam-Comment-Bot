@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
@@ -135,7 +136,7 @@ public class ShippingCostHelper {
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
 
-	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselCharter vesselCharter, final VesselStartState vesselStartState, final PreviousHeelRecord heelRecord) {
 
 		boolean applyContractCosts;
 		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
@@ -147,7 +148,7 @@ public class ShippingCostHelper {
 		if (applyContractCosts) {
 			final @Nullable ICharterContract charterContract = vesselCharter.getCharterContract();
 			if (charterContract != null) {
-				return charterContract.calculateBBCost(portTimesRecord, portSlot, vesselCharter, vesselStartState);
+				return charterContract.calculateBBCost(portTimesRecord, portSlot, vesselCharter, vesselStartState, heelRecord);
 			}
 		}
 
@@ -175,7 +176,7 @@ public class ShippingCostHelper {
 
 	}
 
-	public void annotateBB(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
+	public void annotateBB(final IPortTimesRecord portTimesRecord, final DetailTree shippingDetails, final IPortSlot portSlot, @NonNull final IVesselCharter vesselCharter, final VesselStartState vesselStartState, final PreviousHeelRecord heelRecord) {
 		boolean applyContractCosts;
 		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			applyContractCosts = portSlot.getPortType() == PortType.Discharge || portSlot.getPortType() == PortType.Round_Trip_Cargo_End;
@@ -186,13 +187,13 @@ public class ShippingCostHelper {
 		if (applyContractCosts) {
 			final @Nullable ICharterContract charterContract = vesselCharter.getCharterContract();
 			if (charterContract != null) {
-				ICharterContractAnnotation annotation = charterContract.annotateBB(portTimesRecord, portSlot, vesselCharter, vesselStartState);
+				final ICharterContractAnnotation annotation = charterContract.annotateBB(portTimesRecord, portSlot, vesselCharter, vesselStartState, heelRecord);
 				shippingDetails.addChild(CharterContractConstants.BALLAST_BONUS_KEY, annotation);
 			}
 		}
 	}
 
-	public void annotateRF(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselCharter vesselCharter) {
+	public void annotateRF(final IPortTimesRecord portTimesRecord, final DetailTree shippingDetails, final IPortSlot portSlot, @NonNull final IVesselCharter vesselCharter) {
 		boolean applyContractCosts;
 		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			applyContractCosts = portSlot.getPortType() == PortType.Load;
@@ -203,7 +204,7 @@ public class ShippingCostHelper {
 		if (applyContractCosts) {
 			final @Nullable ICharterContract charterContract = vesselCharter.getCharterContract();
 			if (charterContract != null) {
-				ICharterContractAnnotation annotation = charterContract.annotateRF(portTimesRecord, vesselCharter);
+				final ICharterContractAnnotation annotation = charterContract.annotateRF(portTimesRecord, vesselCharter);
 				shippingDetails.addChild(CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
 			}
 		}

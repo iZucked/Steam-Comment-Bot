@@ -134,8 +134,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.EVENT_GROUPING: return createEventGrouping();
 			case SchedulePackage.PORT_VISIT_LATENESS: return createPortVisitLateness();
 			case SchedulePackage.EXPOSURE_DETAIL: return createExposureDetail();
-			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
-			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
 			case SchedulePackage.CANAL_JOURNEY_EVENT: return createCanalJourneyEvent();
 			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
@@ -607,28 +605,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public ExposureDetail createExposureDetail() {
 		ExposureDetailImpl exposureDetail = new ExposureDetailImpl();
 		return exposureDetail;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LumpSumContractDetails createLumpSumContractDetails() {
-		LumpSumContractDetailsImpl lumpSumContractDetails = new LumpSumContractDetailsImpl();
-		return lumpSumContractDetails;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
-		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
-		return notionalJourneyContractDetails;
 	}
 
 	/**

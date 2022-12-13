@@ -1424,6 +1424,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getNotionalJourneyTerm_PriceOnLastLNGPrice() {
+		return (EAttribute)notionalJourneyTermEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getBallastBonusTerm() {
 		return ballastBonusTermEClass;
 	}
@@ -1902,6 +1912,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalJourneyTermEClass, NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL);
 		createEAttribute(notionalJourneyTermEClass, NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME);
 		createEAttribute(notionalJourneyTermEClass, NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION);
+		createEAttribute(notionalJourneyTermEClass, NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE);
 
 		ballastBonusTermEClass = createEClass(BALLAST_BONUS_TERM);
 		createEReference(ballastBonusTermEClass, BALLAST_BONUS_TERM__REDELIVERY_PORTS);
@@ -2154,6 +2165,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalJourneyTerm_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyTerm_IncludeCanalTime(), ecorePackage.getEBoolean(), "includeCanalTime", "true", 0, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyTerm_LumpSumPriceExpression(), ecorePackage.getEString(), "lumpSumPriceExpression", null, 1, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyTerm_PriceOnLastLNGPrice(), ecorePackage.getEBoolean(), "priceOnLastLNGPrice", null, 0, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ballastBonusTermEClass, BallastBonusTerm.class, "BallastBonusTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());

@@ -38,7 +38,6 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -69,7 +68,7 @@ public class BallastBonusTermsTableCreator {
 				dialogContext.getDialogController().validate();
 				eViewer.refresh();
 			}
-		});
+		}).getColumn().setHeaderTooltip("The end at ports used to match against this line. A blank entry means any port. Rules are checked in order and the first match is applied.");
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
 				CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression(),
@@ -104,7 +103,7 @@ public class BallastBonusTermsTableCreator {
 					return "-";
 				}
 			}
-		});
+		}).getColumn().setHeaderTooltip("A lumpsum value to be added to the total cost.");
 
 		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), commandHandler) {
 
@@ -195,15 +194,15 @@ public class BallastBonusTermsTableCreator {
 				}
 			}
 
-		});
+		}).getColumn().setHeaderTooltip("The set of ports used for the notional ballast calcuations. The port resulting in the lowest cost will be used.");
 
-		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
+		var fuelCostCol = eViewer.addTypicalColumn("Fuel Cost ($/MT)",
+				new FuelCostManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
 
 					@Override
-					public void runSetCommand(final Object object, final Object value) {
+					public void doSetValue(final Object object, final Object value) {
 						if (object instanceof NotionalJourneyBallastBonusTerm) {
-							super.runSetCommand(object, value);
+							super.doSetValue(object, value);
 
 							dialogContext.getDialogController().validate();
 							eViewer.refresh();
@@ -237,13 +236,15 @@ public class BallastBonusTermsTableCreator {
 						}
 					}
 
-				});
+				})
+				;
+		fuelCostCol.getColumn().setHeaderTooltip("Voyage fuel consumption is based on consumption at the notional speed. This can be bunkers only at the given price or base-fuel equivalent of LNG at the last sales price.");
 
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
+				new PriceAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
 
 					@Override
-					public void runSetCommand(final Object object, final Object value) {
+					public void runSetCommand(final Object object, final String value) {
 						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
@@ -320,8 +321,7 @@ public class BallastBonusTermsTableCreator {
 				}
 			}
 
-		});
-
+		}).getColumn().setHeaderTooltip("Include canal transit fees");
 
 		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), commandHandler) {
 
@@ -361,7 +361,7 @@ public class BallastBonusTermsTableCreator {
 					return "-";
 				}
 			}
-		});
+		}).getColumn().setHeaderTooltip("Include canal transit time in hire cost and fuel consumptions. Panama waiting days are not included.");
 		final WrappingColumnHeaderRenderer chr = new WrappingColumnHeaderRenderer();
 		chr.setWordWrap(true);
 		for (final GridColumn gridColumn : eViewer.getGrid().getColumns()) {

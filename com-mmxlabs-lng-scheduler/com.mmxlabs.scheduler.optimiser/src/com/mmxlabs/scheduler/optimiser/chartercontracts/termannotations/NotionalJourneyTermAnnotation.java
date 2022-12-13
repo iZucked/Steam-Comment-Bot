@@ -15,9 +15,15 @@ public abstract class NotionalJourneyTermAnnotation implements ICharterContractT
 	public long lumpSum = 0;
 	public int distance = 0;
 	public int totalTimeInHours = 0;
+	
 	public long totalFuelUsed = 0;
 	public int fuelPrice = 0;
 	public long totalFuelCost = 0;
+	
+	public long totalLNGUsed = 0;
+	public long lngPrice = 0;
+	public long totalLNGCost = 0;
+	
 	public long hireRate = 0;
 	public long totalHireCost = 0;
 	public ERouteOption route = null;

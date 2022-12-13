@@ -421,24 +421,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: {
-				LumpSumContractDetails lumpSumContractDetails = (LumpSumContractDetails)theEObject;
-				T result = caseLumpSumContractDetails(lumpSumContractDetails);
-				if (result == null) result = caseMatchingContractDetails(lumpSumContractDetails);
-				if (result == null) result = caseUUIDObject(lumpSumContractDetails);
-				if (result == null) result = caseMMXObject(lumpSumContractDetails);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: {
-				NotionalJourneyContractDetails notionalJourneyContractDetails = (NotionalJourneyContractDetails)theEObject;
-				T result = caseNotionalJourneyContractDetails(notionalJourneyContractDetails);
-				if (result == null) result = caseMatchingContractDetails(notionalJourneyContractDetails);
-				if (result == null) result = caseUUIDObject(notionalJourneyContractDetails);
-				if (result == null) result = caseMMXObject(notionalJourneyContractDetails);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: {
 				CharterAvailableToEvent charterAvailableToEvent = (CharterAvailableToEvent)theEObject;
 				T result = caseCharterAvailableToEvent(charterAvailableToEvent);
@@ -1165,36 +1147,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMatchingContractDetails(MatchingContractDetails object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Contract Details</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLumpSumContractDetails(LumpSumContractDetails object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Contract Details</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNotionalJourneyContractDetails(NotionalJourneyContractDetails object) {
 		return null;
 	}
 

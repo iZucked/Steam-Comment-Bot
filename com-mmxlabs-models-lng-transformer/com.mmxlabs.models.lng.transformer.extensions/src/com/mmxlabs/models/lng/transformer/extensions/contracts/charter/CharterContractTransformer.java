@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
@@ -58,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.MonthlyBallastBonus
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultLumpSumBallastBonusContractTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultLumpSumRepositioningFeeContractTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultNotionalJourneyBallastBonusContractTerm;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultNotionalJourneyBallastBonusContractTerm.FuelCalculationMode;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultOriginPortRepositioningFeeContractTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.MonthlyBallastBonusContractTerm;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -199,15 +201,17 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 
 				final String priceExpression = t.getLumpSumPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-				final String fuelPriceExpression = t.getFuelPriceExpression();
-				final ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
 				final String charterPriceExpression = t.getHirePriceExpression();
 				final ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
 				final Set<IPort> returnPorts = transformPorts(t.getReturnPorts());
 				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
 				final boolean includeCanalTime = t.isIncludeCanalTime();
 
-				tt = new DefaultNotionalJourneyBallastBonusContractTerm(redeliveryPorts, lumpSumCurve, fuelCurve, //
+				FuelCalculationMode fuelCalculationMode = t.isPriceOnLastLNGPrice() ? FuelCalculationMode.LNG_ONLY_WITH_LAST_PRICE : FuelCalculationMode.BUNKERS_ONLY_WITH_CURVE_PRICE;
+				final String fuelPriceExpression = t.getFuelPriceExpression();
+				final ICurve fuelCurve = t.isPriceOnLastLNGPrice() ? new ConstantValueCurve(0) : getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
+
+				tt = new DefaultNotionalJourneyBallastBonusContractTerm(redeliveryPorts, lumpSumCurve, fuelCurve, fuelCalculationMode, //
 						charterCurve, returnPorts, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");

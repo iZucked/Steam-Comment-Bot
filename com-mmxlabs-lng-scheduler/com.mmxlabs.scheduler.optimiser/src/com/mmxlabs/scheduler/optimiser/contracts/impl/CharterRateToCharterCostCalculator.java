@@ -12,9 +12,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 
 public class CharterRateToCharterCostCalculator implements ICharterCostCalculator {
 
-	IVesselCharter vesselCharter;
-	ICharterRateCalculator charterRateCalculator;
-	
+	private IVesselCharter vesselCharter;
+	private ICharterRateCalculator charterRateCalculator;
+
 	@Override
 	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
 		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselCharter, voyagePlanStartTime);

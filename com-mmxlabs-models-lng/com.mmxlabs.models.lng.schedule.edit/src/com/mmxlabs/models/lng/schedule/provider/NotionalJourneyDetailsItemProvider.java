@@ -50,6 +50,9 @@ public class NotionalJourneyDetailsItemProvider extends MatchingContractDetailsI
 			super.getPropertyDescriptors(object);
 
 			addDistancePropertyDescriptor(object);
+			addTotalLNGUsedPropertyDescriptor(object);
+			addLngPricePropertyDescriptor(object);
+			addTotalLNGCostPropertyDescriptor(object);
 			addTotalTimeInDaysPropertyDescriptor(object);
 			addTotalFuelUsedPropertyDescriptor(object);
 			addFuelPricePropertyDescriptor(object);
@@ -77,6 +80,72 @@ public class NotionalJourneyDetailsItemProvider extends MatchingContractDetailsI
 				 getString("_UI_NotionalJourneyDetails_distance_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyDetails_distance_feature", "_UI_NotionalJourneyDetails_type"),
 				 SchedulePackage.Literals.NOTIONAL_JOURNEY_DETAILS__DISTANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total LNG Used feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalLNGUsedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyDetails_totalLNGUsed_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyDetails_totalLNGUsed_feature", "_UI_NotionalJourneyDetails_type"),
+				 SchedulePackage.Literals.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Lng Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLngPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyDetails_lngPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyDetails_lngPrice_feature", "_UI_NotionalJourneyDetails_type"),
+				 SchedulePackage.Literals.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total LNG Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalLNGCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyDetails_totalLNGCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyDetails_totalLNGCost_feature", "_UI_NotionalJourneyDetails_type"),
+				 SchedulePackage.Literals.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST,
 				 true,
 				 false,
 				 false,
@@ -322,6 +391,9 @@ public class NotionalJourneyDetailsItemProvider extends MatchingContractDetailsI
 
 		switch (notification.getFeatureID(NotionalJourneyDetails.class)) {
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__DISTANCE:
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED:
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE:
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST:
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS:
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_USED:
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__FUEL_PRICE:

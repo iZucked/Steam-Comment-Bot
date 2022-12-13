@@ -17,6 +17,9 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGUsed <em>Total LNG Used</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getLngPrice <em>Lng Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGCost <em>Total LNG Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalTimeInDays <em>Total Time In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalFuelUsed <em>Total Fuel Used</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getFuelPrice <em>Fuel Price</em>}</li>
@@ -55,6 +58,75 @@ public interface NotionalJourneyDetails extends MatchingContractDetails {
 	 * @generated
 	 */
 	void setDistance(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Total LNG Used</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Total LNG Used</em>' attribute.
+	 * @see #setTotalLNGUsed(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNotionalJourneyDetails_TotalLNGUsed()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	int getTotalLNGUsed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGUsed <em>Total LNG Used</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Total LNG Used</em>' attribute.
+	 * @see #getTotalLNGUsed()
+	 * @generated
+	 */
+	void setTotalLNGUsed(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Lng Price</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lng Price</em>' attribute.
+	 * @see #setLngPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNotionalJourneyDetails_LngPrice()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	double getLngPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getLngPrice <em>Lng Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lng Price</em>' attribute.
+	 * @see #getLngPrice()
+	 * @generated
+	 */
+	void setLngPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Total LNG Cost</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Total LNG Cost</em>' attribute.
+	 * @see #setTotalLNGCost(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNotionalJourneyDetails_TotalLNGCost()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	int getTotalLNGCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGCost <em>Total LNG Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Total LNG Cost</em>' attribute.
+	 * @see #getTotalLNGCost()
+	 * @generated
+	 */
+	void setTotalLNGCost(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Total Time In Days</b></em>' attribute.

@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.SlotHeelVolumeRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -248,7 +249,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Calculate additional P&L
 		idx = 0;
 		for (final IPortSlot slot : slots) {
-			if (slot instanceof ILoadOption loadOption) {
+			if (slot instanceof final ILoadOption loadOption) {
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
 				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselCharter, plan,
@@ -307,8 +308,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					// Repos
 					final long additionalCost1 = shippingCostHelper.calculateRFRevenue(currentAllocation, firstPortSlot, vesselCharter);
 					// Ballast Bonus
-					VesselStartState ballastBonusStartState = new VesselStartState(vesselStartTime, returnSlot.getPort());
-					final long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, ballastBonusStartState);
+					final IPortSlot lastSlot = slots.get(slots.size() - 1);
+					final VesselStartState ballastBonusStartState = new VesselStartState(vesselStartTime, returnSlot.getPort());
+					// Forced cooldown?
+					final boolean forcedCooldown = false; //TODO: 
+					final PreviousHeelRecord heelRecord = new PreviousHeelRecord(currentAllocation.getRemainingHeelVolumeInM3(), cargoPNLData.getSlotPricePerMMBTu(lastSlot), cargoPNLData.getSlotCargoCV(lastSlot), forcedCooldown);
+					final long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, ballastBonusStartState, heelRecord);
 
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost1);
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost2);
@@ -321,7 +326,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						shippingCostHelper.annotateRF(currentAllocation, shippingDetails, firstPortSlot, vesselCharter);
 
 						// Add in ballast bonus
-						shippingCostHelper.annotateBB(currentAllocation, shippingDetails, returnSlot, vesselCharter, ballastBonusStartState);
+						shippingCostHelper.annotateBB(currentAllocation, shippingDetails, returnSlot, vesselCharter, ballastBonusStartState, heelRecord);
 					}
 				}
 
@@ -471,11 +476,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
 			// Hacky first slot check...
-			if (slot instanceof ILoadOption ls) {
+			if (slot instanceof final ILoadOption ls) {
 				loadOption = ls;
 				loadEntity = cargoPNLData.getSlotEntity(slot);
 			}
-			if (slot instanceof IDischargeOption ds) {
+			if (slot instanceof final IDischargeOption ds) {
 				dischargeOption = ds;
 				dischargeEntity = cargoPNLData.getSlotEntity(slot);
 			}
@@ -486,7 +491,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		assert loadEntity != null;
 		assert dischargeEntity != null;
 
-		boolean isTransferred = (transferModelDataProvider.isSlotTransferred(loadOption) || transferModelDataProvider.isSlotTransferred(dischargeOption));
+		final boolean isTransferred = (transferModelDataProvider.isSlotTransferred(loadOption) || transferModelDataProvider.isSlotTransferred(dischargeOption));
 
 		final List<BasicTransferRecord> records = getSortedTransferRecords(loadOption, dischargeOption, loadEntity, dischargeEntity);
 
@@ -506,17 +511,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			TranferRecordAnnotation prevAnnotation = null;
 			for (final BasicTransferRecord currentRecord : records) {
 
-				int tpPrice = getTransferPrice(currentRecord);
+				final int tpPrice = getTransferPrice(currentRecord);
 
-				TranferRecordAnnotation annotation = new TranferRecordAnnotation();
+				final TranferRecordAnnotation annotation = new TranferRecordAnnotation();
 				annotation.transferRecord = currentRecord;
 				annotation.fromEntity = currentRecord.getFromEntity();
 				annotation.toEntity = currentRecord.getToEntity();
 				annotation.tpPrice = tpPrice;
 
 				long purchaseCost = loadPurchaseCost;
-				long saleRevenue = dischargeSaleRevenue;
-				long volumeTPValue = Calculator.costFromVolume(volumeInMMBTu, tpPrice);
+				final long saleRevenue = dischargeSaleRevenue;
+				final long volumeTPValue = Calculator.costFromVolume(volumeInMMBTu, tpPrice);
 				if (previousRecord != null && prevAnnotation != null) {
 					purchaseCost = volumeTPValue;
 					prevAnnotation.toEntityRevenue = volumeTPValue;
@@ -658,9 +663,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 			// Ballast bonus on end event
 			if (firstPortSlot.getPortType() == PortType.End) {
-				additionalCost += shippingCostHelper.calculateBBCost(portTimesRecord, firstPortSlot, vesselCharter, vesselStartState);
+				int cargoCV = 0;
+				boolean forcedCooldown = false;
+				final PreviousHeelRecord heelRecord = new PreviousHeelRecord(plan.getRemainingHeelInM3(), 
+						lastHeelPricePerMMBTU, 
+						cargoCV,
+						forcedCooldown);
+
+				additionalCost += shippingCostHelper.calculateBBCost(portTimesRecord, firstPortSlot, vesselCharter, vesselStartState, heelRecord);
 				if (annotatedSolution != null) {
-					shippingCostHelper.annotateBB(portTimesRecord, shippingDetails, firstPortSlot, vesselCharter, vesselStartState);
+					shippingCostHelper.annotateBB(portTimesRecord, shippingDetails, firstPortSlot, vesselCharter, vesselStartState, heelRecord);
 				}
 			}
 

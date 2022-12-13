@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#isIncludeCanal <em>Include Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#isIncludeCanalTime <em>Include Canal Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#getReturnPorts <em>Return Ports</em>}</li>
  * </ul>
  *
@@ -165,6 +166,26 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 	 * @ordered
 	 */
 	protected String lumpSumPriceExpression = LUMP_SUM_PRICE_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PRICE_ON_LAST_LNG_PRICE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean priceOnLastLNGPrice = PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getReturnPorts() <em>Return Ports</em>}' reference list.
@@ -339,6 +360,29 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 	 * @generated
 	 */
 	@Override
+	public boolean isPriceOnLastLNGPrice() {
+		return priceOnLastLNGPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPriceOnLastLNGPrice(boolean newPriceOnLastLNGPrice) {
+		boolean oldPriceOnLastLNGPrice = priceOnLastLNGPrice;
+		priceOnLastLNGPrice = newPriceOnLastLNGPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE, oldPriceOnLastLNGPrice, priceOnLastLNGPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<APortSet<Port>> getReturnPorts() {
 		if (returnPorts == null) {
 			returnPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS);
@@ -366,6 +410,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				return isIncludeCanalTime();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return getLumpSumPriceExpression();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return isPriceOnLastLNGPrice();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				return getReturnPorts();
 		}
@@ -398,6 +444,9 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				return;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression((String)newValue);
+				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice((Boolean)newValue);
 				return;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				getReturnPorts().clear();
@@ -433,6 +482,9 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression(LUMP_SUM_PRICE_EXPRESSION_EDEFAULT);
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice(PRICE_ON_LAST_LNG_PRICE_EDEFAULT);
+				return;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				getReturnPorts().clear();
 				return;
@@ -460,6 +512,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				return includeCanalTime != INCLUDE_CANAL_TIME_EDEFAULT;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return LUMP_SUM_PRICE_EXPRESSION_EDEFAULT == null ? lumpSumPriceExpression != null : !LUMP_SUM_PRICE_EXPRESSION_EDEFAULT.equals(lumpSumPriceExpression);
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return priceOnLastLNGPrice != PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				return returnPorts != null && !returnPorts.isEmpty();
 		}
@@ -481,6 +535,7 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL: return CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL;
 				case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME: return CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME;
 				case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION: return CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION;
+				case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE: return CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE;
 				default: return -1;
 			}
 		}
@@ -502,6 +557,7 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL: return CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL;
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME: return CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME;
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION: return CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION;
+				case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE: return CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE;
 				default: return -1;
 			}
 		}
@@ -530,6 +586,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 		result.append(includeCanalTime);
 		result.append(", lumpSumPriceExpression: ");
 		result.append(lumpSumPriceExpression);
+		result.append(", priceOnLastLNGPrice: ");
+		result.append(priceOnLastLNGPrice);
 		result.append(')');
 		return result.toString();
 	}
