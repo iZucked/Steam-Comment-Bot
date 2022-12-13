@@ -6,9 +6,9 @@ package com.mmxlabs.scheduler.optimiser.chartercontracts;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -20,9 +20,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 @NonNullByDefault
 public interface ICharterContract {
 
-	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, int vesselStartTime, final IPort firstLoadPort);
+	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, VesselStartState vesselStartState);
 
-	long calculateBBCost(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, int vesselStartTime, final IPort firstLoadPort);
+	long calculateBBCost(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, VesselStartState vesselStartState);
 	
 	ICharterContractAnnotation annotateRF(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter);
 

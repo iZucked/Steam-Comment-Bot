@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,12 +19,13 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.Notional
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -63,7 +63,7 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	}
 
 	@Override
-	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 		return (slot.getPortType() == PortType.End || slot.getPortType() == PortType.Round_Trip_Cargo_End)
 
@@ -75,18 +75,18 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	}
 
 	@Override
-	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
-		var result = calculateCost(portTimesRecord, vesselCharter, vesselStartTime, vesselStartPort, false);
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
+		var result = calculateCost(portTimesRecord, vesselCharter, vesselStartState, false);
 		return result == null ? 0L : result.totalCost;
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, final VesselStartState vesselStartState) {
 
-		return calculateCost(portTimesRecord, vesselCharter, vesselStartTime, vesselStartPort, true);
+		return calculateCost(portTimesRecord, vesselCharter, vesselStartState, true);
 	}
 
-	private NotionalJourneyBallastBonusTermAnnotation calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort, boolean fullDetails) {
+	private NotionalJourneyBallastBonusTermAnnotation calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, final VesselStartState vesselStartState, boolean fullDetails) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 
 		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);

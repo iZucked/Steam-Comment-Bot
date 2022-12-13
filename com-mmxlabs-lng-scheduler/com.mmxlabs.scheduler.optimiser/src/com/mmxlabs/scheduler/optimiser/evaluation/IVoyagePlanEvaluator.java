@@ -16,8 +16,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -25,11 +25,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 @NonNullByDefault
 public interface IVoyagePlanEvaluator {
 
-	public ImmutableList<ScheduledVoyagePlanResult> evaluateShipped(IResource resource, //
+	ImmutableList<ScheduledVoyagePlanResult> evaluateShipped(IResource resource, //
 			IVesselCharter vesselCharter, //
 			ICharterCostCalculator charterCostCalculator, //
-			int vesselStartTime, //
-			@Nullable IPort firstLoadPort, PreviousHeelRecord previousHeelRecord, //
+			VesselStartState vesselStartState, //
+			PreviousHeelRecord previousHeelRecord, //
 			IPortTimesRecord portTimesRecord, //
 			boolean lastPlan, //
 			boolean returnAll, //
@@ -37,7 +37,7 @@ public interface IVoyagePlanEvaluator {
 			ISequencesAttributesProvider sequencesAttributesProvider, //
 			@Nullable IAnnotatedSolution annotatedSolution);
 
-	public ImmutableList<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
+	ImmutableList<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
 			IVesselCharter vesselCharter, //
 			ICharterCostCalculator charterCostCalculator, //
 			IPortTimesRecord portTimesRecord, //
@@ -47,11 +47,10 @@ public interface IVoyagePlanEvaluator {
 			@Nullable IAnnotatedSolution annotatedSolution);
 
 	ScheduledVoyagePlanResult evaluateNonShipped(IResource resource, IVesselCharter vesselCharter, IPortTimesRecord portTimesRecord, boolean keepDetails,
-			ISequencesAttributesProvider sequencesAttributesProvider,
-			@Nullable IAnnotatedSolution annotatedSolution);
-	
-	public Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(final IResource resource, final IVesselCharter vesselCharter, final int vesselStartTime,
-			final @Nullable IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord initialPortTimesRecord, final boolean lastPlan, final boolean keepDetails,
-			final @Nullable IAnnotatedSolution annotatedSolution, final List<ScheduledVoyagePlanResult> results);
+			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution);
+
+	Consumer<List<@NonNull Pair<VoyagePlan, IPortTimesRecord>>> evaluateVoyagePlan(IResource resource, IVesselCharter vesselCharter, VesselStartState vesselStartState,
+			PreviousHeelRecord previousHeelRecord, IPortTimesRecord initialPortTimesRecord, boolean lastPlan, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution,
+			List<ScheduledVoyagePlanResult> results);
 
 }

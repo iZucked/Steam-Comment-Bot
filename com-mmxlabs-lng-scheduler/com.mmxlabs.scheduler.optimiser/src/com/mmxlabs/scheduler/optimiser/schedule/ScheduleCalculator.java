@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -200,8 +201,9 @@ public class ScheduleCalculator {
 
 		ScheduledVoyagePlanResult lastResult = null;
 
-		IPort firstLoadPort = getFirstLoadPort(records);
-
+		@Nullable IPort firstLoadPort = getFirstLoadPort(records);
+		VesselStartState vesselStartState = new VesselStartState(vesselStartTime, firstLoadPort);
+		
 		for (int idx = 0; idx < records.size(); idx++) {
 
 			final IPortTimesRecord portTimeWindowsRecord = records.get(idx);
@@ -211,8 +213,7 @@ public class ScheduleCalculator {
 
 			final List<@NonNull ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
 					vesselCharter.getCharterCostCalculator(), //
-					vesselStartTime, //
-					firstLoadPort, //
+					vesselStartState, //
 					previousHeelRecord, //
 					portTimeWindowsRecord, //
 					lastPlan, //
@@ -229,10 +230,10 @@ public class ScheduleCalculator {
 		}
 		
 		if (retainHeel && vesselCharter.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
-			retainHeelPairwise(resource, vesselCharter, records, annotatedSolution, vesselStartTime, voyagePlans, firstLoadPort);
+			retainHeelPairwise(resource, vesselCharter, records, annotatedSolution, vesselStartState, voyagePlans);
 		}
 
-		return new VolumeAllocatedSequence(resource, sequence, vesselStartTime, voyagePlans);
+		return new VolumeAllocatedSequence(resource, sequence, vesselStartState.startTime(), voyagePlans);
 	}
 	
 	@FunctionalInterface
@@ -569,7 +570,7 @@ public class ScheduleCalculator {
 	// Create a list of pairwise VPRs and keep only the ones where heel can be retained
 	private void retainHeelPairwise(final IResource resource, final IVesselCharter vesselCharter, final List<IPortTimesRecord> records, 
 			final @Nullable IAnnotatedSolution annotatedSolution,
-			final int vesselStartTime, final List<VoyagePlanRecord> voyagePlans, @Nullable IPort firstLoadPort) {
+			final VesselStartState vesselStartState, final List<VoyagePlanRecord> voyagePlans) {
 	
 		final List<RetentionPair> allPairs = new LinkedList<>();
 		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
@@ -600,7 +601,7 @@ public class ScheduleCalculator {
 
 				// Recompute the new voyage plan
 				final List<@NonNull ScheduledVoyagePlanResult> otherResults = new LinkedList<>();
-				voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselCharter, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
+				voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselCharter, vesselStartState, new PreviousHeelRecord(), 
 						tempRecord, false, true, annotatedSolution, otherResults).accept(otherVoyagePlansAndPortTimeRecords);
 
 				voyagePlans.clear();

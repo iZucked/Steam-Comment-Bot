@@ -46,10 +46,10 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -306,8 +306,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					final int vesselStartTime = currentAllocation.getFirstSlotTime();
 					// Repos
 					final long additionalCost1 = shippingCostHelper.calculateRFRevenue(currentAllocation, firstPortSlot, vesselCharter);
-					// Ballast
-					final long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, vesselStartTime, returnSlot.getPort());
+					// Ballast Bonus
+					VesselStartState ballastBonusStartState = new VesselStartState(vesselStartTime, returnSlot.getPort());
+					final long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselCharter, ballastBonusStartState);
 
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost1);
 					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost2);
@@ -320,7 +321,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						shippingCostHelper.annotateRF(currentAllocation, shippingDetails, firstPortSlot, vesselCharter);
 
 						// Add in ballast bonus
-						shippingCostHelper.annotateBB(currentAllocation, shippingDetails, returnSlot, vesselCharter, vesselStartTime, returnSlot.getPort());
+						shippingCostHelper.annotateBB(currentAllocation, shippingDetails, returnSlot, vesselCharter, ballastBonusStartState);
 					}
 				}
 
@@ -611,13 +612,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselCharter vesselCharter,
-			final int vesselStartTime, final int planStartTime, @Nullable final IPort firstLoadPort, final int lastHeelPricePerMMBTU, final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+			final VesselStartState vesselStartState, final int lastHeelPricePerMMBTU, final Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselCharter(vesselCharter);
 		if (shippingEntity == null) {
 			// May be null during unit tests
 			return Pair.of(Collections.emptyMap(), 0L);
 		}
+
+		final int planStartTime = portTimesRecord.getFirstSlotTime();
 
 		final long revenue;
 		long additionalCost = 0;
@@ -656,9 +658,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 			// Ballast bonus on end event
 			if (firstPortSlot.getPortType() == PortType.End) {
-				additionalCost += shippingCostHelper.calculateBBCost(portTimesRecord, firstPortSlot, vesselCharter, vesselStartTime, firstLoadPort);
+				additionalCost += shippingCostHelper.calculateBBCost(portTimesRecord, firstPortSlot, vesselCharter, vesselStartState);
 				if (annotatedSolution != null) {
-					shippingCostHelper.annotateBB(portTimesRecord, shippingDetails, firstPortSlot, vesselCharter, vesselStartTime, firstLoadPort);
+					shippingCostHelper.annotateBB(portTimesRecord, shippingDetails, firstPortSlot, vesselCharter, vesselStartState);
 				}
 			}
 

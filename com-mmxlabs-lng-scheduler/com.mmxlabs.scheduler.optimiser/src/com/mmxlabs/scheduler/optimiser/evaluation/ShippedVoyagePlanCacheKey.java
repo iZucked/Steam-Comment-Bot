@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -34,8 +35,7 @@ public final class ShippedVoyagePlanCacheKey {
 
 	public final Object vesselKey;
 	public final ICharterCostCalculator charterCostCalculator;
-	public final int vesselStartTime;
-	public final @Nullable IPort firstLoadPort;
+	public final VesselStartState vesselStartState;
 	public final PreviousHeelRecord previousHeelRecord;
 	public final IPortTimesRecord portTimesRecord;
 	public final boolean lastPlan;
@@ -54,8 +54,7 @@ public final class ShippedVoyagePlanCacheKey {
 	// Not part of cache
 	public final IResource resource;
 
-	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
-			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
+	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, ICharterCostCalculator charterCostCalculator, final VesselStartState vesselStartState, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		this.sequencesAttributesProvider = sequencesAttributesProvider;
@@ -68,8 +67,7 @@ public final class ShippedVoyagePlanCacheKey {
 		}
 		//
 		this.charterCostCalculator = charterCostCalculator;
-		this.vesselStartTime = vesselStartTime;
-		this.firstLoadPort = firstLoadPort;
+		this.vesselStartState = vesselStartState;
 		this.previousHeelRecord = previousHeelRecord;
 		this.portTimesRecord = portTimesRecord;
 		this.lastPlan = lastPlan;
@@ -94,7 +92,7 @@ public final class ShippedVoyagePlanCacheKey {
 		this.hash = Objects.hash(lastPlan, keepDetails, //
 				vesselKey, // Vessel
 				// charterCostCalculator, // Charter costs
-				getPortName(firstLoadPort), previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
+				getPortName(vesselStartState.startPort()), previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
 				slotsIds, //
 				slotTimes, // Slot times.
 				canalBookings, voyageKeys);
@@ -125,7 +123,7 @@ public final class ShippedVoyagePlanCacheKey {
 			final ShippedVoyagePlanCacheKey other = (ShippedVoyagePlanCacheKey) obj;
 			// Do quick simple checks first
 			final boolean partA = keepDetails == other.keepDetails //
-					&& Objects.equals(getPortName(firstLoadPort), getPortName(other.firstLoadPort)) && lastPlan == other.lastPlan //
+					&& Objects.equals(vesselStartState, other.vesselStartState) && lastPlan == other.lastPlan //
 					&& previousHeelRecord.heelVolumeInM3 == other.previousHeelRecord.heelVolumeInM3 //
 					&& effectiveLastHeelCV == other.effectiveLastHeelCV //
 					&& effectiveLastHeelPricePerMMBTU == other.effectiveLastHeelPricePerMMBTU //
