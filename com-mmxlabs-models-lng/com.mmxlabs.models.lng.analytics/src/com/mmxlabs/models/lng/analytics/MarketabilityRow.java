@@ -2,6 +2,9 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.util.EList;
@@ -27,6 +30,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getEta <em>Eta</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getReferencePrice <em>Reference Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getStartVolume <em>Start Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit <em>Next Slot Visit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow()
@@ -233,5 +239,71 @@ public interface MarketabilityRow extends EObject {
 	 * @generated
 	 */
 	void setStartVolume(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Buy Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Buy Slot Allocation</em>' reference.
+	 * @see #setBuySlotAllocation(SlotAllocation)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_BuySlotAllocation()
+	 * @model
+	 * @generated
+	 */
+	SlotAllocation getBuySlotAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Buy Slot Allocation</em>' reference.
+	 * @see #getBuySlotAllocation()
+	 * @generated
+	 */
+	void setBuySlotAllocation(SlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Sell Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sell Slot Allocation</em>' reference.
+	 * @see #setSellSlotAllocation(SlotAllocation)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_SellSlotAllocation()
+	 * @model
+	 * @generated
+	 */
+	SlotAllocation getSellSlotAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation <em>Sell Slot Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sell Slot Allocation</em>' reference.
+	 * @see #getSellSlotAllocation()
+	 * @generated
+	 */
+	void setSellSlotAllocation(SlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Next Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Next Slot Visit</em>' reference.
+	 * @see #setNextSlotVisit(SlotVisit)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_NextSlotVisit()
+	 * @model
+	 * @generated
+	 */
+	SlotVisit getNextSlotVisit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit <em>Next Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Next Slot Visit</em>' reference.
+	 * @see #getNextSlotVisit()
+	 * @generated
+	 */
+	void setNextSlotVisit(SlotVisit value);
 
 } // MarketabilityRow

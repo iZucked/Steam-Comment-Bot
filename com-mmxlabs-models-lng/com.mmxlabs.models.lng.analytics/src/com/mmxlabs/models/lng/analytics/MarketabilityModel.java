@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 import org.eclipse.emf.common.util.EList;

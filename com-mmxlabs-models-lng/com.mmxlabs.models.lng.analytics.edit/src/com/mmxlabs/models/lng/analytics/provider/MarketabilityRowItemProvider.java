@@ -72,6 +72,9 @@ public class MarketabilityRowItemProvider
 			addEtaPropertyDescriptor(object);
 			addReferencePricePropertyDescriptor(object);
 			addStartVolumePropertyDescriptor(object);
+			addBuySlotAllocationPropertyDescriptor(object);
+			addSellSlotAllocationPropertyDescriptor(object);
+			addNextSlotVisitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -248,6 +251,72 @@ public class MarketabilityRowItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Buy Slot Allocation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBuySlotAllocationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityRow_buySlotAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_buySlotAllocation_feature", "_UI_MarketabilityRow_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sell Slot Allocation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSellSlotAllocationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityRow_sellSlotAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_sellSlotAllocation_feature", "_UI_MarketabilityRow_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Next Slot Visit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNextSlotVisitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityRow_nextSlotVisit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_nextSlotVisit_feature", "_UI_MarketabilityRow_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_ROW__NEXT_SLOT_VISIT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

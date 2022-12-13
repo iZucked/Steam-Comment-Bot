@@ -3836,13 +3836,40 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_ROW__START_VOLUME = 9;
 
 	/**
+	 * The feature id for the '<em><b>Buy Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__BUY_SLOT_ALLOCATION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Sell Slot Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__SELL_SLOT_ALLOCATION = 11;
+
+	/**
+	 * The feature id for the '<em><b>Next Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__NEXT_SLOT_VISIT = 12;
+
+	/**
 	 * The number of structural features of the '<em>Marketability Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW_FEATURE_COUNT = 10;
+	int MARKETABILITY_ROW_FEATURE_COUNT = 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.
@@ -7915,6 +7942,39 @@ s	 * <!-- end-user-doc -->
 	EAttribute getMarketabilityRow_StartVolume();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Buy Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation()
+	 * @see #getMarketabilityRow()
+	 * @generated
+	 */
+	EReference getMarketabilityRow_BuySlotAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation <em>Sell Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sell Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation()
+	 * @see #getMarketabilityRow()
+	 * @generated
+	 */
+	EReference getMarketabilityRow_SellSlotAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit <em>Next Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Next Slot Visit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit()
+	 * @see #getMarketabilityRow()
+	 * @generated
+	 */
+	EReference getMarketabilityRow_NextSlotVisit();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult <em>Marketability Result</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11194,6 +11254,30 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MARKETABILITY_ROW__START_VOLUME = eINSTANCE.getMarketabilityRow_StartVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Buy Slot Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ROW__BUY_SLOT_ALLOCATION = eINSTANCE.getMarketabilityRow_BuySlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Sell Slot Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ROW__SELL_SLOT_ALLOCATION = eINSTANCE.getMarketabilityRow_SellSlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Next Slot Visit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ROW__NEXT_SLOT_VISIT = eINSTANCE.getMarketabilityRow_NextSlotVisit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.

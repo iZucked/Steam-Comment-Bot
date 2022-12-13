@@ -368,7 +368,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
-			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
+			Schedule schedule = null;
+			if(!scheduleModel.isDirty()) {
+				schedule = scheduleModel.getSchedule();
+			} else {
+				schedule = bridge.createOptimiserInitialSchedule();
+			}
+			unit.run(model, schedule, mapper, shippingMap, progressMonitor, bridge);
 		});
 		
 	}

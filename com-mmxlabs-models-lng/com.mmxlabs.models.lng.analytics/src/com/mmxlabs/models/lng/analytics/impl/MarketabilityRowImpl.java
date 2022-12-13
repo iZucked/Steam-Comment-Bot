@@ -10,6 +10,9 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
 
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import java.time.LocalDate;
 
 import java.util.Collection;
@@ -47,6 +50,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getEta <em>Eta</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getReferencePrice <em>Reference Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getStartVolume <em>Start Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getNextSlotVisit <em>Next Slot Visit</em>}</li>
  * </ul>
  *
  * @generated
@@ -191,6 +197,36 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @ordered
 	 */
 	protected long startVolume = START_VOLUME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getBuySlotAllocation() <em>Buy Slot Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBuySlotAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotAllocation buySlotAllocation;
+
+	/**
+	 * The cached value of the '{@link #getSellSlotAllocation() <em>Sell Slot Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSellSlotAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotAllocation sellSlotAllocation;
+
+	/**
+	 * The cached value of the '{@link #getNextSlotVisit() <em>Next Slot Visit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNextSlotVisit()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotVisit nextSlotVisit;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -495,6 +531,126 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @generated
 	 */
 	@Override
+	public SlotAllocation getBuySlotAllocation() {
+		if (buySlotAllocation != null && buySlotAllocation.eIsProxy()) {
+			InternalEObject oldBuySlotAllocation = (InternalEObject)buySlotAllocation;
+			buySlotAllocation = (SlotAllocation)eResolveProxy(oldBuySlotAllocation);
+			if (buySlotAllocation != oldBuySlotAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION, oldBuySlotAllocation, buySlotAllocation));
+			}
+		}
+		return buySlotAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotAllocation basicGetBuySlotAllocation() {
+		return buySlotAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBuySlotAllocation(SlotAllocation newBuySlotAllocation) {
+		SlotAllocation oldBuySlotAllocation = buySlotAllocation;
+		buySlotAllocation = newBuySlotAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION, oldBuySlotAllocation, buySlotAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SlotAllocation getSellSlotAllocation() {
+		if (sellSlotAllocation != null && sellSlotAllocation.eIsProxy()) {
+			InternalEObject oldSellSlotAllocation = (InternalEObject)sellSlotAllocation;
+			sellSlotAllocation = (SlotAllocation)eResolveProxy(oldSellSlotAllocation);
+			if (sellSlotAllocation != oldSellSlotAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION, oldSellSlotAllocation, sellSlotAllocation));
+			}
+		}
+		return sellSlotAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotAllocation basicGetSellSlotAllocation() {
+		return sellSlotAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSellSlotAllocation(SlotAllocation newSellSlotAllocation) {
+		SlotAllocation oldSellSlotAllocation = sellSlotAllocation;
+		sellSlotAllocation = newSellSlotAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION, oldSellSlotAllocation, sellSlotAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SlotVisit getNextSlotVisit() {
+		if (nextSlotVisit != null && nextSlotVisit.eIsProxy()) {
+			InternalEObject oldNextSlotVisit = (InternalEObject)nextSlotVisit;
+			nextSlotVisit = (SlotVisit)eResolveProxy(oldNextSlotVisit);
+			if (nextSlotVisit != oldNextSlotVisit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT, oldNextSlotVisit, nextSlotVisit));
+			}
+		}
+		return nextSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotVisit basicGetNextSlotVisit() {
+		return nextSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNextSlotVisit(SlotVisit newNextSlotVisit) {
+		SlotVisit oldNextSlotVisit = nextSlotVisit;
+		nextSlotVisit = newNextSlotVisit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT, oldNextSlotVisit, nextSlotVisit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
@@ -537,6 +693,15 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 				return getReferencePrice();
 			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
 				return getStartVolume();
+			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
+				if (resolve) return getBuySlotAllocation();
+				return basicGetBuySlotAllocation();
+			case AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION:
+				if (resolve) return getSellSlotAllocation();
+				return basicGetSellSlotAllocation();
+			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
+				if (resolve) return getNextSlotVisit();
+				return basicGetNextSlotVisit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -582,6 +747,15 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
 				setStartVolume((Long)newValue);
 				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
+				setBuySlotAllocation((SlotAllocation)newValue);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION:
+				setSellSlotAllocation((SlotAllocation)newValue);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
+				setNextSlotVisit((SlotVisit)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -624,6 +798,15 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
 				setStartVolume(START_VOLUME_EDEFAULT);
 				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
+				setBuySlotAllocation((SlotAllocation)null);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION:
+				setSellSlotAllocation((SlotAllocation)null);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
+				setNextSlotVisit((SlotVisit)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -656,6 +839,12 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 				return referencePrice != REFERENCE_PRICE_EDEFAULT;
 			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
 				return startVolume != START_VOLUME_EDEFAULT;
+			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
+				return buySlotAllocation != null;
+			case AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION:
+				return sellSlotAllocation != null;
+			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
+				return nextSlotVisit != null;
 		}
 		return super.eIsSet(featureID);
 	}

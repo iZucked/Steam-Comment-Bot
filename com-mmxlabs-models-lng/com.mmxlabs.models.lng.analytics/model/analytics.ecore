@@ -463,6 +463,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buySlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResult">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>

@@ -42,6 +42,8 @@ import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -148,6 +150,12 @@ public class MainTableCompoment {
 			@Override
 			public void update(final ViewerCell cell) {
 				cell.setText("");
+				if (cell.getElement() instanceof MarketabilityRow row) {
+
+					if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
+						cell.setText(row.getNextSlotVisit().getSlotAllocation().getName());
+					}
+				}
 			}
 		}, "ID", nextEventColumn);
 
@@ -155,6 +163,12 @@ public class MainTableCompoment {
 			@Override
 			public void update(final ViewerCell cell) {
 				cell.setText("");
+				if (cell.getElement() instanceof MarketabilityRow row) {
+
+					if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
+						cell.setText(row.getNextSlotVisit().getPort().getName());
+					}
+				}
 			}
 		}, "Port", nextEventColumn);
 
@@ -162,6 +176,12 @@ public class MainTableCompoment {
 			@Override
 			public void update(final ViewerCell cell) {
 				cell.setText("");
+				if (cell.getElement() instanceof MarketabilityRow row) {
+
+					if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
+						cell.setText(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getNextSlotVisit().getStart()));
+					}
+				}
 			}
 		}, "Nom Date", nextEventColumn);
 
@@ -206,8 +226,9 @@ public class MainTableCompoment {
 			public void update(final ViewerCell cell) {
 				cell.setText("");
 				if (cell.getElement() instanceof MarketabilityRow row) {
-					// TODO: PLACEHOLDER
-					cell.setText(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
+					if (row.getBuyOption() instanceof BuyReference) {
+						cell.setText(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getBuySlotAllocation().getSlotVisit().getStart()));
+					}
 				}
 			}
 		}, "Nom Date", portColumn);
@@ -218,11 +239,10 @@ public class MainTableCompoment {
 			public void update(final ViewerCell cell) {
 				cell.setText("");
 				if (cell.getElement() instanceof MarketabilityRow row) {
-					int duration = 0;
 					if (row.getBuyOption() instanceof BuyReference bo) {
-						duration = bo.getSlot().getDuration();
+						int duration = bo.getSlot().getDuration();
+						cell.setText(formatDuration(duration));
 					}
-					cell.setText(formatDuration(duration));
 				}
 			}
 		}, "Duration", portColumn);
@@ -244,7 +264,7 @@ public class MainTableCompoment {
 		GridColumnGroup portColumn = new GridColumnGroup(parent, SWT.CENTER);
 		GridViewerHelper.configureLookAndFeel(portColumn);
 		portColumn.getHeaderRenderer().setHorizontalAlignment(SWT.CENTER);
-		portColumn.setText("Load");
+		portColumn.setText("Discharge");
 		createChildColumn(tableViewer, new ColumnLabelProvider() {
 
 			@Override
@@ -265,8 +285,9 @@ public class MainTableCompoment {
 			public void update(final ViewerCell cell) {
 				cell.setText("");
 				if (cell.getElement() instanceof MarketabilityRow row) {
-					// TODO: PLACEHOLDER
-					cell.setText(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
+					if (row.getBuyOption() instanceof BuyReference) {
+						cell.setText(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getSellSlotAllocation().getSlotVisit().getStart()));
+					}
 				}
 			}
 		}, "Nom Date", portColumn);
