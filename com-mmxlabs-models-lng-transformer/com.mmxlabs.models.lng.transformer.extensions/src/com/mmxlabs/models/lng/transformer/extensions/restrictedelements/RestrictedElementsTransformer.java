@@ -150,8 +150,6 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 
 	@Override
 	public void finishTransforming() {
-		// Set of slots to make sure we do not process spot market slots twice
-		final Set<Slot> seenSlots = new HashSet<>();
 		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		if (commercialModel != null) {
 			final CargoModel cargoModel = rootObject.getCargoModel();
@@ -217,11 +215,11 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		// Record spot slots as not all of them are attached to the model
-		if (modelSlot instanceof LoadSlot) {
-			loadSlots.add((LoadSlot) modelSlot);
+		if (modelSlot instanceof final LoadSlot ls) {
+			loadSlots.add(ls);
 		}
-		if (modelSlot instanceof DischargeSlot) {
-			dischargeSlots.add((DischargeSlot) modelSlot);
+		if (modelSlot instanceof final DischargeSlot ds) {
+			dischargeSlots.add(ds);
 		}
 
 		allElements.add(sequenceElement);
@@ -235,12 +233,12 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 					ports = SetUtils.getObjects(fobMarket.getOriginPorts());
 				}
 				ports.forEach(port -> portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement));
-			} else {
-				final Port port = modelSlot.getPort();
-				if (port != null) {
-					portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
-				}
 			}
+			final Port port = modelSlot.getPort();
+			if (port != null) {
+				portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
+			}
+			
 		}
 		{
 			final Contract contract = modelSlot.getContract();
