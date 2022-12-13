@@ -389,5 +389,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/toEntityRevenue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//TransferRecordPNLDetails/toEntityCost"/>
     </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//SandboxReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SandboxReference/reference"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

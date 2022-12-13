@@ -501,6 +501,15 @@ public interface ScheduleFactory extends EFactory {
 	TransferRecordPNLDetails createTransferRecordPNLDetails();
 
 	/**
+	 * Returns a new object of class '<em>Sandbox Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sandbox Reference</em>'.
+	 * @generated
+	 */
+	SandboxReference createSandboxReference();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

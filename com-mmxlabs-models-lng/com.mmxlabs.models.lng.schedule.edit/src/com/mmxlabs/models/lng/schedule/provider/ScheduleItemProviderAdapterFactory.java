@@ -1330,6 +1330,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SandboxReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SandboxReferenceItemProvider sandboxReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.SandboxReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSandboxReferenceAdapter() {
+		if (sandboxReferenceItemProvider == null) {
+			sandboxReferenceItemProvider = new SandboxReferenceItemProvider(this);
+		}
+
+		return sandboxReferenceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1515,6 +1538,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (notionalJourneyBallastBonusTermDetailsItemProvider != null) notionalJourneyBallastBonusTermDetailsItemProvider.dispose();
 		if (originPortRepositioningFeeTermDetailsItemProvider != null) originPortRepositioningFeeTermDetailsItemProvider.dispose();
 		if (transferRecordPNLDetailsItemProvider != null) transferRecordPNLDetailsItemProvider.dispose();
+		if (sandboxReferenceItemProvider != null) sandboxReferenceItemProvider.dispose();
 	}
 
 }

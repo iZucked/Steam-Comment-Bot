@@ -106,8 +106,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleSwitch<@Nullable Adapter> modelSwitch =
-		new ScheduleSwitch<@Nullable Adapter>() {
+	protected ScheduleSwitch<Adapter> modelSwitch =
+		new ScheduleSwitch<Adapter>() {
 			@Override
 			public Adapter caseScheduleModel(ScheduleModel object) {
 				return createScheduleModelAdapter();
@@ -331,6 +331,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseTransferRecordPNLDetails(TransferRecordPNLDetails object) {
 				return createTransferRecordPNLDetailsAdapter();
+			}
+			@Override
+			public Adapter caseSandboxReference(SandboxReference object) {
+				return createSandboxReferenceAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -1153,6 +1157,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTransferRecordPNLDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.SandboxReference <em>Sandbox Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.SandboxReference
+	 * @generated
+	 */
+	public Adapter createSandboxReferenceAdapter() {
 		return null;
 	}
 

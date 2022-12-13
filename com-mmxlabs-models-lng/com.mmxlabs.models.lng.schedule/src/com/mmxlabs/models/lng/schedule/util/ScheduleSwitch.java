@@ -64,7 +64,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage
  * @generated
  */
-public class ScheduleSwitch<@Nullable T> extends Switch<T> {
+public class ScheduleSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -585,6 +585,12 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				TransferRecordPNLDetails transferRecordPNLDetails = (TransferRecordPNLDetails)theEObject;
 				T result = caseTransferRecordPNLDetails(transferRecordPNLDetails);
 				if (result == null) result = caseGeneralPNLDetails(transferRecordPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SANDBOX_REFERENCE: {
+				SandboxReference sandboxReference = (SandboxReference)theEObject;
+				T result = caseSandboxReference(sandboxReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1429,6 +1435,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTransferRecordPNLDetails(TransferRecordPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sandbox Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sandbox Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSandboxReference(SandboxReference object) {
 		return null;
 	}
 

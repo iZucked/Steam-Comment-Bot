@@ -8075,6 +8075,43 @@ public interface SchedulePackage extends EPackage {
 	int TRANSFER_RECORD_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl <em>Sandbox Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSandboxReference()
+	 * @generated
+	 */
+	int SANDBOX_REFERENCE = 56;
+
+	/**
+	 * The feature id for the '<em><b>Reference</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE__REFERENCE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Sandbox Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Sandbox Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8082,7 +8119,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 58;
+	int FUEL_UNIT = 59;
 
 
 	/**
@@ -8093,7 +8130,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 57;
+	int FUEL = 58;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -8103,7 +8140,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 56;
+	int SEQUENCE_TYPE = 57;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -8113,7 +8150,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 59;
+	int CAPACITY_VIOLATION_TYPE = 60;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -8123,7 +8160,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 60;
+	int PORT_VISIT_LATENESS_TYPE = 61;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -8133,7 +8170,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 61;
+	int SLOT_ALLOCATION_TYPE = 62;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -8143,7 +8180,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 62;
+	int PANAMA_BOOKING_PERIOD = 63;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -8153,7 +8190,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 63;
+	int CALENDAR = 64;
 
 
 	/**
@@ -8164,7 +8201,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 64;
+	int ITERABLE = 65;
 
 
 	/**
@@ -8175,7 +8212,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 65;
+	int OBJECT = 66;
 
 
 	/**
@@ -11116,6 +11153,27 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getTransferRecordPNLDetails_ToEntityCost();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SandboxReference <em>Sandbox Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sandbox Reference</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SandboxReference
+	 * @generated
+	 */
+	EClass getSandboxReference();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SandboxReference#getReference <em>Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SandboxReference#getReference()
+	 * @see #getSandboxReference()
+	 * @generated
+	 */
+	EReference getSandboxReference_Reference();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13535,6 +13593,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = eINSTANCE.getTransferRecordPNLDetails_ToEntityCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl <em>Sandbox Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSandboxReference()
+		 * @generated
+		 */
+		EClass SANDBOX_REFERENCE = eINSTANCE.getSandboxReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SANDBOX_REFERENCE__REFERENCE = eINSTANCE.getSandboxReference_Reference();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

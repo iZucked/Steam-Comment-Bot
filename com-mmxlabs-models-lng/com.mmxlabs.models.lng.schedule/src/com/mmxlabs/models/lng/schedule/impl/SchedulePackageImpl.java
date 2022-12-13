@@ -73,6 +73,7 @@ import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
+import com.mmxlabs.models.lng.schedule.SandboxReference;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -488,6 +489,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass transferRecordPNLDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sandboxReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3368,6 +3376,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EClass getSandboxReference() {
+		return sandboxReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSandboxReference_Reference() {
+		return (EReference)sandboxReferenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -3819,6 +3847,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_REVENUE);
 		createEAttribute(transferRecordPNLDetailsEClass, TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST);
+
+		sandboxReferenceEClass = createEClass(SANDBOX_REFERENCE);
+		createEReference(sandboxReferenceEClass, SANDBOX_REFERENCE__REFERENCE);
 
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
@@ -4292,6 +4323,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getTransferRecordPNLDetails_ToEntity(), theCommercialPackage.getBaseLegalEntity(), null, "toEntity", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_ToEntityRevenue(), ecorePackage.getEInt(), "toEntityRevenue", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransferRecordPNLDetails_ToEntityCost(), ecorePackage.getEInt(), "toEntityCost", null, 0, 1, TransferRecordPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sandboxReferenceEClass, SandboxReference.class, "SandboxReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSandboxReference_Reference(), ecorePackage.getEObject(), null, "reference", null, 0, 1, SandboxReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
