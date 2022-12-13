@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonusContractTerm {
+
 	private final @NonNull ILongCurve lumpSumCurve;
 	private final @NonNull ICurve fuelPriceCurve;
 	private final @NonNull ILongCurve charterRateCurve;
@@ -75,99 +76,76 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 
 	@Override
 	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
+		var result = calculateCost(portTimesRecord, vesselCharter, vesselStartTime, vesselStartPort, false);
+		return result == null ? 0L : result.totalCost;
+	}
+
+	@Override
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort) {
+
+		return calculateCost(portTimesRecord, vesselCharter, vesselStartTime, vesselStartPort, true);
+	}
+
+	private NotionalJourneyBallastBonusTermAnnotation calculateCost(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPort, boolean fullDetails) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
 
 		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
 
 		final long lumpSum = computeLumpSum(vesselEndTime);
-		long minCost = Long.MAX_VALUE;
+
+		NotionalJourneyBallastBonusTermAnnotation bestResult = null;
 		for (final IPort returnPort : getReturnPorts()) {
-			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
-					AvailableRouteChoices.OPTIMAL);
+
+			final @NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort,
+					speedInKnots, AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
 			int hireTime = quickestTravelTime.getSecond();
 			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
 			long fuelUsedCanal = 0L;
+
 			if (this.includeCanalTime) {
 				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
+
 			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselCharter.getVessel(), vesselEndTime, CostType.Ballast);
 			final long hireCost = (charterRateCurve.getValueAtPoint(vesselEndTime) * hireTime) / 24L;
 			final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(vesselEndTime));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
-			minCost = Math.min(minCost, cost);
-		}
-		return minCost;
-	}
 
-	@Override
-	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, int vesselStartTime, IPort vesselStartPorte) {
-		IPortSlot slot = portTimesRecord.getFirstSlot();
+			NotionalJourneyBallastBonusTermAnnotation annotation = new NotionalJourneyBallastBonusTermAnnotation();
+			annotation.totalCost = cost;
 
-		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+			if (fullDetails) {
 
-		final long lumpSum = computeLumpSum(vesselEndTime);
-		long minTotalCost = Long.MAX_VALUE;
-		Pair<@NonNull ERouteOption, @NonNull Integer> minTravel = null;
-		long minfuelUsed = Long.MAX_VALUE;
-		long minCanalCost = Long.MAX_VALUE;
-		long minHireCost = Long.MAX_VALUE;
-		long minFuelCost = Long.MAX_VALUE;
-		IPort minReturnPort = null;
-		for (final IPort returnPort : getReturnPorts()) {
-			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot.getPort(), returnPort, speedInKnots,
-					AvailableRouteChoices.OPTIMAL);
-			final ERouteOption route = quickestTravelTime.getFirst();
-			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
-			final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;
-			int hireTime = quickestTravelTime.getSecond();
-			final long fuelUsedJourney = Calculator.quantityFromRateTime(vesselCharter.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots), journeyTravelTime) / 24L;
-			long fuelUsedCanal = 0L;
-
-			if (this.includeCanalTime) {
-				fuelUsedCanal = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(route, vesselCharter.getVessel(), VesselState.Ballast), routeTransitTime) / 24L;
-			} else {
-				hireTime = journeyTravelTime;
-			}
-			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselCharter.getVessel(), vesselEndTime, CostType.Ballast);
-			final long hireCost = (charterRateCurve.getValueAtPoint(vesselEndTime) * hireTime) / 24L;
-			final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(vesselEndTime));
-			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
-			if (cost < minTotalCost) {
-				minTotalCost = cost;
-				minfuelUsed = fuelUsedJourney + fuelUsedCanal;
+				Pair<@NonNull ERouteOption, @NonNull Integer> minTravel;
 				if (!this.includeCanalTime) {
 					minTravel = Pair.of(quickestTravelTime.getFirst(), journeyTravelTime);
 				} else {
 					minTravel = quickestTravelTime;
 				}
-				minCanalCost = canalCost;
-				minHireCost = hireCost;
-				minFuelCost = fuelCost;
-				minReturnPort = returnPort;
+
+				annotation.lumpSum = lumpSum;
+				annotation.returnPort = returnPort;
+				annotation.distance = distanceProvider.getDistance(minTravel.getFirst(), slot.getPort(), returnPort, vesselCharter.getVessel());
+				annotation.totalTimeInHours = minTravel.getSecond();
+				annotation.totalFuelUsed = fuelUsedJourney + fuelUsedCanal;
+				annotation.fuelPrice = fuelPriceCurve.getValueAtPoint(vesselEndTime);
+				annotation.totalFuelCost = fuelCost;
+				annotation.hireRate = charterRateCurve.getValueAtPoint(vesselEndTime);
+				annotation.totalHireCost = hireCost;
+				annotation.route = minTravel.getFirst();
+				annotation.canalCost = canalCost;
+			}
+
+			if (bestResult == null || annotation.totalCost < bestResult.totalCost) {
+				bestResult = annotation;
 			}
 		}
-		NotionalJourneyBallastBonusTermAnnotation notionalJourneyBallastBonusRuleAnnotation = null;
-		if (minReturnPort != null) {
-			notionalJourneyBallastBonusRuleAnnotation = new NotionalJourneyBallastBonusTermAnnotation();
-			notionalJourneyBallastBonusRuleAnnotation.lumpSum = lumpSum;
-			notionalJourneyBallastBonusRuleAnnotation.returnPort = minReturnPort;
-			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), slot.getPort(), minReturnPort, vesselCharter.getVessel());
-			notionalJourneyBallastBonusRuleAnnotation.totalTimeInHours = minTravel.getSecond();
-			notionalJourneyBallastBonusRuleAnnotation.totalFuelUsed = minfuelUsed;
-			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = fuelPriceCurve.getValueAtPoint(vesselEndTime);
-			notionalJourneyBallastBonusRuleAnnotation.totalFuelCost = minFuelCost;
-			notionalJourneyBallastBonusRuleAnnotation.hireRate = charterRateCurve.getValueAtPoint(vesselEndTime);
-			notionalJourneyBallastBonusRuleAnnotation.totalHireCost = minHireCost;
-			notionalJourneyBallastBonusRuleAnnotation.route = minTravel.getFirst();
-			notionalJourneyBallastBonusRuleAnnotation.canalCost = minCanalCost;
-		}
-		return notionalJourneyBallastBonusRuleAnnotation;
+		return bestResult;
 	}
+
 }

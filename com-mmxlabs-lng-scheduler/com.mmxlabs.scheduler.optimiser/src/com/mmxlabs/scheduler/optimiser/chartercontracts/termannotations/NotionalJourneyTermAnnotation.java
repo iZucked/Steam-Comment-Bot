@@ -22,4 +22,6 @@ public abstract class NotionalJourneyTermAnnotation implements ICharterContractT
 	public long totalHireCost = 0;
 	public ERouteOption route = null;
 	public long canalCost = 0;
+	
+	public long totalCost = 0;
 }

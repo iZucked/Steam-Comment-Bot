@@ -169,12 +169,10 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 			final int speed = OptimiserUnitConvertor.convertToInternalSpeed(term.getSpeed());
 			final boolean includeCanalTime = term.isIncludeCanalTime();
 
-			Set<IPort> returnPorts = null;
-
-			switch (ballastBonusTo) {
-			case NEAREST_HUB -> returnPorts = transformPorts(hubs);
-			case LOAD_PORT -> returnPorts = null;
-			}
+			final Set<IPort> returnPorts = switch (ballastBonusTo) {
+			case NEAREST_HUB -> transformPorts(hubs);
+			case LOAD_PORT -> null;
+			};
 
 			final IBallastBonusTerm tt = new MonthlyBallastBonusContractTerm(oStartYMInclusive, oEndYMExclusive, oPctCharterRate, //
 					oPctFuelRate, redeliveryPorts, lumpSumCurve, fuelCurve, charterCurve, returnPorts, term.isIncludeCanal(), includeCanalTime, speed);
@@ -193,12 +191,12 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		for (final BallastBonusTerm term : ballastBonus.getTerms()) {
 			final Set<IPort> redeliveryPorts = transformPorts(term.getRedeliveryPorts());
 			IBallastBonusTerm tt = null;
-			if (term instanceof LumpSumBallastBonusTerm) {
-				final String priceExpression = ((LumpSumBallastBonusTerm) term).getPriceExpression();
+			if (term instanceof LumpSumBallastBonusTerm t) {
+				final String priceExpression = t.getPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 				tt = new DefaultLumpSumBallastBonusContractTerm(redeliveryPorts, lumpSumCurve);
-			} else if (term instanceof NotionalJourneyBallastBonusTerm) {
-				final NotionalJourneyBallastBonusTerm t = (NotionalJourneyBallastBonusTerm) term;
+			} else if (term instanceof NotionalJourneyBallastBonusTerm t) {
+
 				final String priceExpression = t.getLumpSumPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 				final String fuelPriceExpression = t.getFuelPriceExpression();
@@ -208,6 +206,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				final Set<IPort> returnPorts = transformPorts(t.getReturnPorts());
 				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
 				final boolean includeCanalTime = t.isIncludeCanalTime();
+
 				tt = new DefaultNotionalJourneyBallastBonusContractTerm(redeliveryPorts, lumpSumCurve, fuelCurve, //
 						charterCurve, returnPorts, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
