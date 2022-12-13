@@ -258,6 +258,22 @@ public class MTMSanboxUnit {
 					lmtm.remove(best);
 					row.getRhsResults().removeAll(lmtm);
 				}
+				
+				grouped = row.getLhsResults().stream().collect(Collectors.groupingBy(MTMResult::getTarget));
+
+				for (final Map.Entry<SpotMarket, List<MTMResult>> entry : grouped.entrySet()) {
+					double price = -Double.MAX_VALUE;
+					final List<MTMResult> lmtm = entry.getValue();
+					MTMResult best = null;
+					for (final MTMResult result : lmtm) {
+						if (price < result.getEarliestPrice()) {
+							price = result.getEarliestPrice();
+							best = result;
+						}
+					}
+					lmtm.remove(best);
+					row.getLhsResults().removeAll(lmtm);
+				}
 			}
 		}
 	}

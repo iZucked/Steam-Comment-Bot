@@ -573,18 +573,20 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	 * @param saleVolume
 	 */
 	private static void chooseNewBestBuy(final MTMResult result, final MtMSellCriterion criterion, int saleVolume) {
-		double purchaseCost = criterion.buyPrice * criterion.purchaseVolume;
-		double shippingCost = criterion.shippingMargin * saleVolume;
+		int volume = Math.min(saleVolume, criterion.purchaseVolume);
+		volume = Math.min(volume, result.getEarliestVolume());
+		double purchaseCost = criterion.buyPrice * volume;//criterion.purchaseVolume;
+		double shippingCost = criterion.shippingMargin * volume;
 		double buyPlusShip = purchaseCost + shippingCost;
-		double mtm = buyPlusShip / (double) saleVolume;
+		double mtm = buyPlusShip / (double) volume;
 
-		double cPurchaseCost = result.getEarliestPrice() * result.getEarliestVolume();
-		double cShippingCost = result.getShippingCost() * result.getEarliestVolume();
+		double cPurchaseCost = result.getEarliestPrice() * volume;//result.getEarliestVolume();
+		double cShippingCost = result.getShippingCost() * volume;
 		double cBuyPlusShip = cPurchaseCost + cShippingCost;
-		double cMtM = cBuyPlusShip / (double) saleVolume;
+		double cMtM = cBuyPlusShip / (double) volume;
 
-		if (mtm < cMtM) {
-			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+		if (mtm > cMtM) {
+			criterion.setNewValues(result.getEarliestPrice(), volume, result.getShippingCost(), result);
 		}
 	}
 
