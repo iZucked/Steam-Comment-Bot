@@ -3863,13 +3863,31 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_ROW__NEXT_SLOT_VISIT = 12;
 
 	/**
+	 * The feature id for the '<em><b>Laden Panama</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__LADEN_PANAMA = 13;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Panama</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__BALLAST_PANAMA = 14;
+
+	/**
 	 * The number of structural features of the '<em>Marketability Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW_FEATURE_COUNT = 13;
+	int MARKETABILITY_ROW_FEATURE_COUNT = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.
@@ -7975,6 +7993,28 @@ s	 * <!-- end-user-doc -->
 	EReference getMarketabilityRow_NextSlotVisit();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getLadenPanama <em>Laden Panama</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Laden Panama</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getLadenPanama()
+	 * @see #getMarketabilityRow()
+	 * @generated
+	 */
+	EReference getMarketabilityRow_LadenPanama();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBallastPanama <em>Ballast Panama</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Panama</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getBallastPanama()
+	 * @see #getMarketabilityRow()
+	 * @generated
+	 */
+	EReference getMarketabilityRow_BallastPanama();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult <em>Marketability Result</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11278,6 +11318,22 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference MARKETABILITY_ROW__NEXT_SLOT_VISIT = eINSTANCE.getMarketabilityRow_NextSlotVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Panama</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ROW__LADEN_PANAMA = eINSTANCE.getMarketabilityRow_LadenPanama();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Panama</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ROW__BALLAST_PANAMA = eINSTANCE.getMarketabilityRow_BallastPanama();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.

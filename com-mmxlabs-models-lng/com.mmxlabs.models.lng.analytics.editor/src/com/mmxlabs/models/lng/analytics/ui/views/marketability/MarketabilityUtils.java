@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -51,6 +53,7 @@ public final class MarketabilityUtils {
 				}
 			}
 		}
+		
 		final Schedule schedule = ScenarioModelUtil.findSchedule(sm);
 		for (Cargo c : cargoModel.getCargoes()) {
 			Slot<?> slot1 = c.getSortedSlots().get(0);
@@ -74,21 +77,42 @@ public final class MarketabilityUtils {
 				row.setShipping(evco);
 				model.getRows().add(row);
 				if (schedule != null) {
-					addScheduleEventsToRow(row, loadSlot, dischargeSlot, schedule);
+					SlotAllocation loadSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == loadSlot).findAny().orElseThrow();
+					SlotAllocation dischargeSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).findAny().orElseThrow();
+					
+					
+					row.setBuySlotAllocation(loadSlotAllocation);
+					row.setSellSlotAllocation(dischargeSlotAllocation);
+					row.setLadenPanama(findNextPanama(loadSlotAllocation.getSlotVisit()));
+					Journey ballastPanama = findNextPanama(dischargeSlotAllocation.getSlotVisit());
+					row.setBallastPanama(ballastPanama);
+					// TODO CHANGE: next slot visit event is after panama visit
+					if(ballastPanama != null) {
+						addNextEventToRow(row, ballastPanama);
+					}
+					else {
+						addNextEventToRow(row, dischargeSlotAllocation.getSlotVisit());
+					}
 				}
 			}
 		}
 		return model;
 	}
 
-	private static void addScheduleEventsToRow(final MarketabilityRow row, final LoadSlot load, final DischargeSlot discharge, final Schedule schedule) {
+	private static @Nullable Journey findNextPanama(final @NonNull Event start) {
+		Event nextEvent = start.getNextEvent();
+		while(!(nextEvent == null || nextEvent instanceof SlotVisit)) {
+			if(nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
+				return journey;
+			}
+			nextEvent = nextEvent.getNextEvent();
+		}
+		return null;
+	}
+	
+	private static void addNextEventToRow(final @NonNull MarketabilityRow row, final @NonNull Event start) {
 
-		SlotAllocation buySlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == load).findAny().get();
-		row.setBuySlotAllocation(buySlotAllocation);
-
-		SlotAllocation dischargeSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == discharge).findAny().get();
-		row.setSellSlotAllocation(dischargeSlotAllocation);
-		Event nextEvent = dischargeSlotAllocation.getSlotVisit().getNextEvent();
+		Event nextEvent = start.getNextEvent();
 		while (nextEvent != null) {
 			if (nextEvent instanceof SlotVisit slotVisit) {
 				row.setNextSlotVisit(slotVisit);

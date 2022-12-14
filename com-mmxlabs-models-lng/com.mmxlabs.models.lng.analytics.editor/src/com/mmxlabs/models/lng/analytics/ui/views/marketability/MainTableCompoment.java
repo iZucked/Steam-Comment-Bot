@@ -186,7 +186,7 @@ public class MainTableCompoment {
 		}, "Port", portColumn);
 
 		createChildColumn(tableViewer, row -> {
-			if (row.getBuyOption() instanceof BuyReference) {
+			if (row.getBuySlotAllocation() != null) {
 				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getBuySlotAllocation().getSlotVisit().getStart()));
 			}
 			return "";
@@ -200,8 +200,10 @@ public class MainTableCompoment {
 			return "";
 		}, "Duration", portColumn);
 		createChildColumn(tableViewer, row -> {
-			// TODO: PLACEHOLDER
-			return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
+			if(row.getLadenPanama() != null) {
+				return formatDate(row.getLadenPanama().getCanalArrivalTime().toLocalDate());
+			}
+			return "";
 		}, "Panama", portColumn);
 
 		return portColumn;
@@ -227,8 +229,10 @@ public class MainTableCompoment {
 			return "";
 		}, "Nom Date", portColumn);
 		createChildColumn(tableViewer, row -> {
-			// TODO: PLACEHOLDER
-			return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now());
+			if(row.getBallastPanama() != null) {
+				return formatDate(row.getBallastPanama().getCanalArrivalTime().toLocalDate());
+			}
+			return "";
 		}, "Panama", portColumn);
 
 		return portColumn;

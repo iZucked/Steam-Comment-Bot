@@ -2862,6 +2862,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getMarketabilityRow_LadenPanama() {
+		return (EReference)marketabilityRowEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMarketabilityRow_BallastPanama() {
+		return (EReference)marketabilityRowEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMarketabilityResult() {
 		return marketabilityResultEClass;
 	}
@@ -4550,6 +4570,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__BUY_SLOT_ALLOCATION);
 		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__SELL_SLOT_ALLOCATION);
 		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__NEXT_SLOT_VISIT);
+		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__LADEN_PANAMA);
+		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__BALLAST_PANAMA);
 
 		marketabilityResultEClass = createEClass(MARKETABILITY_RESULT);
 		createEReference(marketabilityResultEClass, MARKETABILITY_RESULT__TARGET);
@@ -5090,6 +5112,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getMarketabilityRow_BuySlotAllocation(), theSchedulePackage.getSlotAllocation(), null, "buySlotAllocation", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketabilityRow_SellSlotAllocation(), theSchedulePackage.getSlotAllocation(), null, "sellSlotAllocation", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketabilityRow_NextSlotVisit(), theSchedulePackage.getSlotVisit(), null, "nextSlotVisit", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketabilityRow_LadenPanama(), theSchedulePackage.getJourney(), null, "ladenPanama", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketabilityRow_BallastPanama(), theSchedulePackage.getJourney(), null, "ballastPanama", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityResultEClass, MarketabilityResult.class, "MarketabilityResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityResult_Target(), theSpotMarketsPackage.getSpotMarket(), null, "target", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

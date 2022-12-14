@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ViabilityResult;
 
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import java.time.LocalDate;
@@ -53,6 +54,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getNextSlotVisit <em>Next Slot Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getLadenPanama <em>Laden Panama</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getBallastPanama <em>Ballast Panama</em>}</li>
  * </ul>
  *
  * @generated
@@ -227,6 +230,26 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @ordered
 	 */
 	protected SlotVisit nextSlotVisit;
+
+	/**
+	 * The cached value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenPanama()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ladenPanama;
+
+	/**
+	 * The cached value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastPanama()
+	 * @generated
+	 * @ordered
+	 */
+	protected Journey ballastPanama;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -651,6 +674,86 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @generated
 	 */
 	@Override
+	public Journey getLadenPanama() {
+		if (ladenPanama != null && ladenPanama.eIsProxy()) {
+			InternalEObject oldLadenPanama = (InternalEObject)ladenPanama;
+			ladenPanama = (Journey)eResolveProxy(oldLadenPanama);
+			if (ladenPanama != oldLadenPanama) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA, oldLadenPanama, ladenPanama));
+			}
+		}
+		return ladenPanama;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetLadenPanama() {
+		return ladenPanama;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLadenPanama(Journey newLadenPanama) {
+		Journey oldLadenPanama = ladenPanama;
+		ladenPanama = newLadenPanama;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA, oldLadenPanama, ladenPanama));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Journey getBallastPanama() {
+		if (ballastPanama != null && ballastPanama.eIsProxy()) {
+			InternalEObject oldBallastPanama = (InternalEObject)ballastPanama;
+			ballastPanama = (Journey)eResolveProxy(oldBallastPanama);
+			if (ballastPanama != oldBallastPanama) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA, oldBallastPanama, ballastPanama));
+			}
+		}
+		return ballastPanama;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey basicGetBallastPanama() {
+		return ballastPanama;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBallastPanama(Journey newBallastPanama) {
+		Journey oldBallastPanama = ballastPanama;
+		ballastPanama = newBallastPanama;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA, oldBallastPanama, ballastPanama));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
@@ -702,6 +805,12 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
 				if (resolve) return getNextSlotVisit();
 				return basicGetNextSlotVisit();
+			case AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA:
+				if (resolve) return getLadenPanama();
+				return basicGetLadenPanama();
+			case AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA:
+				if (resolve) return getBallastPanama();
+				return basicGetBallastPanama();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -756,6 +865,12 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
 				setNextSlotVisit((SlotVisit)newValue);
 				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA:
+				setLadenPanama((Journey)newValue);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA:
+				setBallastPanama((Journey)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -807,6 +922,12 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
 				setNextSlotVisit((SlotVisit)null);
 				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA:
+				setLadenPanama((Journey)null);
+				return;
+			case AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA:
+				setBallastPanama((Journey)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -845,6 +966,10 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 				return sellSlotAllocation != null;
 			case AnalyticsPackage.MARKETABILITY_ROW__NEXT_SLOT_VISIT:
 				return nextSlotVisit != null;
+			case AnalyticsPackage.MARKETABILITY_ROW__LADEN_PANAMA:
+				return ladenPanama != null;
+			case AnalyticsPackage.MARKETABILITY_ROW__BALLAST_PANAMA:
+				return ballastPanama != null;
 		}
 		return super.eIsSet(featureID);
 	}

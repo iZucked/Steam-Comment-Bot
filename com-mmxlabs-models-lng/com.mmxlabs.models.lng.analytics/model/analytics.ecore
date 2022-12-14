@@ -466,6 +466,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="buySlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nextSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResult">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>

@@ -75,6 +75,8 @@ public class MarketabilityRowItemProvider
 			addBuySlotAllocationPropertyDescriptor(object);
 			addSellSlotAllocationPropertyDescriptor(object);
 			addNextSlotVisitPropertyDescriptor(object);
+			addLadenPanamaPropertyDescriptor(object);
+			addBallastPanamaPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -313,6 +315,50 @@ public class MarketabilityRowItemProvider
 				 getString("_UI_MarketabilityRow_nextSlotVisit_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_nextSlotVisit_feature", "_UI_MarketabilityRow_type"),
 				 AnalyticsPackage.Literals.MARKETABILITY_ROW__NEXT_SLOT_VISIT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Laden Panama feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLadenPanamaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityRow_ladenPanama_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_ladenPanama_feature", "_UI_MarketabilityRow_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_ROW__LADEN_PANAMA,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ballast Panama feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastPanamaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityRow_ballastPanama_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_ballastPanama_feature", "_UI_MarketabilityRow_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_ROW__BALLAST_PANAMA,
 				 true,
 				 false,
 				 true,
