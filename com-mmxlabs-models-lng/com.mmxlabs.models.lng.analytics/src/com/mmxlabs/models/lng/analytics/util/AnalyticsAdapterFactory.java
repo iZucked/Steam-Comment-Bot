@@ -192,10 +192,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createAbstractAnalysisModelAdapter();
 			}
 			@Override
-			public Adapter caseMarketabilityResultContainer(MarketabilityResultContainer object) {
-				return createMarketabilityResultContainerAdapter();
-			}
-			@Override
 			public Adapter caseOptionAnalysisModel(OptionAnalysisModel object) {
 				return createOptionAnalysisModelAdapter();
 			}
@@ -310,6 +306,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseMarketabilityResult(MarketabilityResult object) {
 				return createMarketabilityResultAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResultContainer(MarketabilityResultContainer object) {
+				return createMarketabilityResultContainerAdapter();
 			}
 			@Override
 			public Adapter caseViabilityRow(ViabilityRow object) {

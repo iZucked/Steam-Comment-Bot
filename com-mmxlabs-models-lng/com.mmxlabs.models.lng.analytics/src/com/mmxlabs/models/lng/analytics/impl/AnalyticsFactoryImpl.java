@@ -88,7 +88,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.ANALYSIS_RESULT_DETAIL: return createAnalysisResultDetail();
 			case AnalyticsPackage.PROFIT_AND_LOSS_RESULT: return createProfitAndLossResult();
 			case AnalyticsPackage.BREAK_EVEN_RESULT: return createBreakEvenResult();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: return createOptionAnalysisModel();
 			case AnalyticsPackage.SANDBOX_RESULT: return createSandboxResult();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
@@ -115,6 +114,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.MARKETABILITY_MODEL: return createMarketabilityModel();
 			case AnalyticsPackage.MARKETABILITY_ROW: return createMarketabilityRow();
 			case AnalyticsPackage.MARKETABILITY_RESULT: return createMarketabilityResult();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
 			case AnalyticsPackage.VIABILITY_ROW: return createViabilityRow();
 			case AnalyticsPackage.VIABILITY_RESULT: return createViabilityResult();
 			case AnalyticsPackage.MTM_MODEL: return createMTMModel();

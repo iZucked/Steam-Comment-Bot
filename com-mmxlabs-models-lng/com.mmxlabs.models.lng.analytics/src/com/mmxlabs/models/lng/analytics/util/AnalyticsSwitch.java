@@ -305,12 +305,6 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: {
-				MarketabilityResultContainer marketabilityResultContainer = (MarketabilityResultContainer)theEObject;
-				T result = caseMarketabilityResultContainer(marketabilityResultContainer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)theEObject;
 				T result = caseOptionAnalysisModel(optionAnalysisModel);
@@ -524,6 +518,12 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 			case AnalyticsPackage.MARKETABILITY_RESULT: {
 				MarketabilityResult marketabilityResult = (MarketabilityResult)theEObject;
 				T result = caseMarketabilityResult(marketabilityResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: {
+				MarketabilityResultContainer marketabilityResultContainer = (MarketabilityResultContainer)theEObject;
+				T result = caseMarketabilityResultContainer(marketabilityResultContainer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

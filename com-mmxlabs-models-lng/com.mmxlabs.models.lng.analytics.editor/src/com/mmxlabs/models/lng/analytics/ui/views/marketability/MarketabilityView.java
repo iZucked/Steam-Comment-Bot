@@ -259,7 +259,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 						vesselName += va.getVessel().getName();
 					}
 
-					for (final MarketabilityResult vr : row.getRhsResults()) {
+					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
 						if (vr.getEarliestETA() == null) {
 							continue;
 						}
@@ -298,7 +298,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 						vesselName += v.getName();
 					}
 
-					for (final MarketabilityResult vr : row.getRhsResults()) {
+					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
 						if (vr.getEarliestETA() == null) {
 							continue;
 						}

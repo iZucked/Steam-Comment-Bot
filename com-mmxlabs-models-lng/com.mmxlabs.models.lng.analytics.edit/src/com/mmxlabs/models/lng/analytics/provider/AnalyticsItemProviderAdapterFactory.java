@@ -1903,7 +1903,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
 		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
 		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();
-		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
 		if (optionAnalysisModelItemProvider != null) optionAnalysisModelItemProvider.dispose();
 		if (sandboxResultItemProvider != null) sandboxResultItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
@@ -1930,6 +1929,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (marketabilityModelItemProvider != null) marketabilityModelItemProvider.dispose();
 		if (marketabilityRowItemProvider != null) marketabilityRowItemProvider.dispose();
 		if (marketabilityResultItemProvider != null) marketabilityResultItemProvider.dispose();
+		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
 		if (viabilityRowItemProvider != null) viabilityRowItemProvider.dispose();
 		if (viabilityResultItemProvider != null) viabilityResultItemProvider.dispose();
 		if (mtmModelItemProvider != null) mtmModelItemProvider.dispose();

@@ -68,11 +68,6 @@ public class MarketabilityRowItemProvider
 			addBuyOptionPropertyDescriptor(object);
 			addSellOptionPropertyDescriptor(object);
 			addShippingPropertyDescriptor(object);
-			addBuySlotAllocationPropertyDescriptor(object);
-			addSellSlotAllocationPropertyDescriptor(object);
-			addNextSlotVisitPropertyDescriptor(object);
-			addLadenPanamaPropertyDescriptor(object);
-			addBallastPanamaPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -144,116 +139,6 @@ public class MarketabilityRowItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Buy Slot Allocation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBuySlotAllocationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityRow_buySlotAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_buySlotAllocation_feature", "_UI_MarketabilityRow_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Sell Slot Allocation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSellSlotAllocationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityRow_sellSlotAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_sellSlotAllocation_feature", "_UI_MarketabilityRow_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Next Slot Visit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNextSlotVisitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityRow_nextSlotVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_nextSlotVisit_feature", "_UI_MarketabilityRow_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_ROW__NEXT_SLOT_VISIT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Laden Panama feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLadenPanamaPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityRow_ladenPanama_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_ladenPanama_feature", "_UI_MarketabilityRow_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_ROW__LADEN_PANAMA,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Ballast Panama feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBallastPanamaPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityRow_ballastPanama_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityRow_ballastPanama_feature", "_UI_MarketabilityRow_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_ROW__BALLAST_PANAMA,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -265,7 +150,7 @@ public class MarketabilityRowItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.MARKETABILITY_ROW__RHS_RESULTS);
+			childrenFeatures.add(AnalyticsPackage.Literals.MARKETABILITY_ROW__RESULT);
 		}
 		return childrenFeatures;
 	}
@@ -318,7 +203,7 @@ public class MarketabilityRowItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MarketabilityRow.class)) {
-			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
+			case AnalyticsPackage.MARKETABILITY_ROW__RESULT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -338,8 +223,8 @@ public class MarketabilityRowItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.MARKETABILITY_ROW__RHS_RESULTS,
-				 AnalyticsFactory.eINSTANCE.createMarketabilityResult()));
+				(AnalyticsPackage.Literals.MARKETABILITY_ROW__RESULT,
+				 AnalyticsFactory.eINSTANCE.createMarketabilityResultContainer()));
 	}
 
 	/**

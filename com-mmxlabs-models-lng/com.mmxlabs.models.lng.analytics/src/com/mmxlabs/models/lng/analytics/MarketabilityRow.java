@@ -24,12 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getShipping <em>Shipping</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getRhsResults <em>Rhs Results</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit <em>Next Slot Visit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getLadenPanama <em>Laden Panama</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBallastPanama <em>Ballast Panama</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getResult <em>Result</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow()
@@ -104,125 +99,25 @@ public interface MarketabilityRow extends EObject {
 	void setShipping(ShippingOption value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Results</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.MarketabilityResult}.
+	 * Returns the value of the '<em><b>Result</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Results</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_RhsResults()
+	 * @return the value of the '<em>Result</em>' containment reference.
+	 * @see #setResult(MarketabilityResultContainer)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_Result()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<MarketabilityResult> getRhsResults();
+	MarketabilityResultContainer getResult();
 
 	/**
-	 * Returns the value of the '<em><b>Buy Slot Allocation</b></em>' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getResult <em>Result</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Buy Slot Allocation</em>' reference.
-	 * @see #setBuySlotAllocation(SlotAllocation)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_BuySlotAllocation()
-	 * @model
+	 * @param value the new value of the '<em>Result</em>' containment reference.
+	 * @see #getResult()
 	 * @generated
 	 */
-	SlotAllocation getBuySlotAllocation();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Buy Slot Allocation</em>' reference.
-	 * @see #getBuySlotAllocation()
-	 * @generated
-	 */
-	void setBuySlotAllocation(SlotAllocation value);
-
-	/**
-	 * Returns the value of the '<em><b>Sell Slot Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sell Slot Allocation</em>' reference.
-	 * @see #setSellSlotAllocation(SlotAllocation)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_SellSlotAllocation()
-	 * @model
-	 * @generated
-	 */
-	SlotAllocation getSellSlotAllocation();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getSellSlotAllocation <em>Sell Slot Allocation</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Sell Slot Allocation</em>' reference.
-	 * @see #getSellSlotAllocation()
-	 * @generated
-	 */
-	void setSellSlotAllocation(SlotAllocation value);
-
-	/**
-	 * Returns the value of the '<em><b>Next Slot Visit</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Next Slot Visit</em>' reference.
-	 * @see #setNextSlotVisit(SlotVisit)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_NextSlotVisit()
-	 * @model
-	 * @generated
-	 */
-	SlotVisit getNextSlotVisit();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getNextSlotVisit <em>Next Slot Visit</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Next Slot Visit</em>' reference.
-	 * @see #getNextSlotVisit()
-	 * @generated
-	 */
-	void setNextSlotVisit(SlotVisit value);
-
-	/**
-	 * Returns the value of the '<em><b>Laden Panama</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Laden Panama</em>' reference.
-	 * @see #setLadenPanama(Journey)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_LadenPanama()
-	 * @model
-	 * @generated
-	 */
-	Journey getLadenPanama();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getLadenPanama <em>Laden Panama</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Laden Panama</em>' reference.
-	 * @see #getLadenPanama()
-	 * @generated
-	 */
-	void setLadenPanama(Journey value);
-
-	/**
-	 * Returns the value of the '<em><b>Ballast Panama</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ballast Panama</em>' reference.
-	 * @see #setBallastPanama(Journey)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityRow_BallastPanama()
-	 * @model
-	 * @generated
-	 */
-	Journey getBallastPanama();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBallastPanama <em>Ballast Panama</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ballast Panama</em>' reference.
-	 * @see #getBallastPanama()
-	 * @generated
-	 */
-	void setBallastPanama(Journey value);
+	void setResult(MarketabilityResultContainer value);
 
 } // MarketabilityRow

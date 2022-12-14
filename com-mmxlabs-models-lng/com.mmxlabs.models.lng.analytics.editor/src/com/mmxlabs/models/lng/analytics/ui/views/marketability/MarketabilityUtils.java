@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
+import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -54,7 +55,7 @@ public final class MarketabilityUtils {
 			}
 		}
 		
-		final Schedule schedule = ScenarioModelUtil.findSchedule(sm);
+		final Schedule schedule = null;
 		for (Cargo c : cargoModel.getCargoes()) {
 			Slot<?> slot1 = c.getSortedSlots().get(0);
 			Slot<?> slot2 = c.getSortedSlots().get(1);
@@ -76,24 +77,27 @@ public final class MarketabilityUtils {
 				row.setSellOption(sell);
 				row.setShipping(evco);
 				model.getRows().add(row);
+
+				final MarketabilityResultContainer container = AnalyticsFactory.eINSTANCE.createMarketabilityResultContainer();
 				if (schedule != null) {
 					SlotAllocation loadSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == loadSlot).findAny().orElseThrow();
 					SlotAllocation dischargeSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).findAny().orElseThrow();
 					
 					
-					row.setBuySlotAllocation(loadSlotAllocation);
-					row.setSellSlotAllocation(dischargeSlotAllocation);
-					row.setLadenPanama(findNextPanama(loadSlotAllocation.getSlotVisit()));
+					container.setBuySlotAllocation(loadSlotAllocation);
+					container.setSellSlotAllocation(dischargeSlotAllocation);
+					container.setLadenPanama(findNextPanama(loadSlotAllocation.getSlotVisit()));
 					Journey ballastPanama = findNextPanama(dischargeSlotAllocation.getSlotVisit());
-					row.setBallastPanama(ballastPanama);
+					container.setBallastPanama(ballastPanama);
 					// TODO CHANGE: next slot visit event is after panama visit
 					if(ballastPanama != null) {
-						addNextEventToRow(row, ballastPanama);
+						addNextEventToRow(container, ballastPanama);
 					}
 					else {
-						addNextEventToRow(row, dischargeSlotAllocation.getSlotVisit());
+						addNextEventToRow(container, dischargeSlotAllocation.getSlotVisit());
 					}
 				}
+				row.setResult(container);
 			}
 		}
 		return model;
@@ -110,17 +114,17 @@ public final class MarketabilityUtils {
 		return null;
 	}
 	
-	private static void addNextEventToRow(final @NonNull MarketabilityRow row, final @NonNull Event start) {
+	private static void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
 
 		Event nextEvent = start.getNextEvent();
 		while (nextEvent != null) {
 			if (nextEvent instanceof SlotVisit slotVisit) {
-				row.setNextSlotVisit(slotVisit);
+				container.setNextSlotVisit(slotVisit);
 				return;
 			}
 			nextEvent = nextEvent.getNextEvent();
 		}
-		row.setNextSlotVisit(null);
+		container.setNextSlotVisit(null);
 
 	}
 

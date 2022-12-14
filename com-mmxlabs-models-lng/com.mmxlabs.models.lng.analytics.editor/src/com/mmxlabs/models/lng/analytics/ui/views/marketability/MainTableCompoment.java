@@ -102,7 +102,7 @@ public class MainTableCompoment {
 					public void update(ViewerCell cell) {
 						cell.setText("");
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							row.getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getEarliestETA())));
+							row.getResult().getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getEarliestETA())));
 						}
 					}
 				}, "Earliest", datesGroup);
@@ -113,7 +113,7 @@ public class MainTableCompoment {
 					public void update(ViewerCell cell) {
 						cell.setText("");
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							row.getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getLatestETA())));
+							row.getResult().getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getLatestETA())));
 						}
 
 					}
@@ -141,24 +141,24 @@ public class MainTableCompoment {
 		nextEventColumn.setText("Next Event");
 
 		createChildColumn(tableViewer, row -> {
-			if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
-				return (row.getNextSlotVisit().getSlotAllocation().getName());
+			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
+				return (row.getResult().getNextSlotVisit().getSlotAllocation().getName());
 			}
 			return "";
 		}, "ID", nextEventColumn);
 
 		createChildColumn(tableViewer, row -> {
 
-			if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
-				return (row.getNextSlotVisit().getPort().getName());
+			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
+				return (row.getResult().getNextSlotVisit().getPort().getName());
 			}
 			return "";
 		}, "Port", nextEventColumn);
 
 		createChildColumn(tableViewer, row -> {
 
-			if (row.getSellOption() != null && row.getNextSlotVisit() != null) {
-				return (formatDate(row.getNextSlotVisit().getStart().toLocalDate()));
+			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
+				return (formatDate(row.getResult().getNextSlotVisit().getStart().toLocalDate()));
 			}
 			return "";
 		}, "Nom Date", nextEventColumn);
@@ -186,8 +186,8 @@ public class MainTableCompoment {
 		}, "Port", portColumn);
 
 		createChildColumn(tableViewer, row -> {
-			if (row.getBuySlotAllocation() != null) {
-				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getBuySlotAllocation().getSlotVisit().getStart()));
+			if (row.getResult().getBuySlotAllocation() != null) {
+				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getResult().getBuySlotAllocation().getSlotVisit().getStart()));
 			}
 			return "";
 		}, "Nom Date", portColumn);
@@ -200,8 +200,8 @@ public class MainTableCompoment {
 			return "";
 		}, "Duration", portColumn);
 		createChildColumn(tableViewer, row -> {
-			if(row.getLadenPanama() != null) {
-				return formatDate(row.getLadenPanama().getCanalArrivalTime().toLocalDate());
+			if(row.getResult().getLadenPanama() != null) {
+				return formatDate(row.getResult().getLadenPanama().getCanalArrivalTime().toLocalDate());
 			}
 			return "";
 		}, "Panama", portColumn);
@@ -223,14 +223,14 @@ public class MainTableCompoment {
 		}, "C/P", portColumn);
 
 		createChildColumn(tableViewer, row -> {
-			if (row.getBuyOption() instanceof BuyReference) {
-				return (formatDate(row.getSellSlotAllocation().getSlotVisit().getStart().toLocalDate()));
+			if (row.getResult().getSellSlotAllocation() != null) {
+				return (formatDate(row.getResult().getSellSlotAllocation().getSlotVisit().getStart().toLocalDate()));
 			}
 			return "";
 		}, "Nom Date", portColumn);
 		createChildColumn(tableViewer, row -> {
-			if(row.getBallastPanama() != null) {
-				return formatDate(row.getBallastPanama().getCanalArrivalTime().toLocalDate());
+			if(row.getResult().getBallastPanama() != null) {
+				return formatDate(row.getResult().getBallastPanama().getCanalArrivalTime().toLocalDate());
 			}
 			return "";
 		}, "Panama", portColumn);

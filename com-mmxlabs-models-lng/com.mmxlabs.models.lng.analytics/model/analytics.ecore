@@ -261,7 +261,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="commodityCurves" upperBound="-1"
         eType="#//CommodityCurveOption" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResultContainer"/>
   <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" eType="#//BaseCase"
         containment="true"/>
@@ -454,13 +453,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
-        eType="#//MarketabilityResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buySlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sellSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nextSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//MarketabilityResultContainer"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResult">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
@@ -474,6 +468,15 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPrice" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResultContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
+        eType="#//MarketabilityResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buySlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Journey"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViabilityRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
