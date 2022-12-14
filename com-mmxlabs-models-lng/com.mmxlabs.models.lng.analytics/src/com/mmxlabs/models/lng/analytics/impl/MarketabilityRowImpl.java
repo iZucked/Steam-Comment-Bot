@@ -44,13 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getShipping <em>Shipping</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getLhsResults <em>Lhs Results</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getRhsResults <em>Rhs Results</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getPrice <em>Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getEta <em>Eta</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getReferencePrice <em>Reference Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getStartVolume <em>Start Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl#getNextSlotVisit <em>Next Slot Visit</em>}</li>
@@ -92,16 +86,6 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	protected ShippingOption shipping;
 
 	/**
-	 * The cached value of the '{@link #getLhsResults() <em>Lhs Results</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLhsResults()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<MarketabilityResult> lhsResults;
-
-	/**
 	 * The cached value of the '{@link #getRhsResults() <em>Rhs Results</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -110,96 +94,6 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @ordered
 	 */
 	protected EList<MarketabilityResult> rhsResults;
-
-	/**
-	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTarget()
-	 * @generated
-	 * @ordered
-	 */
-	protected EObject target;
-
-	/**
-	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double price = PRICE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEta() <em>Eta</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEta()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate ETA_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getEta() <em>Eta</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEta()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate eta = ETA_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getReferencePrice() <em>Reference Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReferencePrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double REFERENCE_PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getReferencePrice() <em>Reference Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReferencePrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double referencePrice = REFERENCE_PRICE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getStartVolume() <em>Start Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long START_VOLUME_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getStartVolume() <em>Start Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected long startVolume = START_VOLUME_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getBuySlotAllocation() <em>Buy Slot Allocation</em>}' reference.
@@ -396,156 +290,11 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	 * @generated
 	 */
 	@Override
-	public EList<MarketabilityResult> getLhsResults() {
-		if (lhsResults == null) {
-			lhsResults = new EObjectContainmentEList<MarketabilityResult>(MarketabilityResult.class, this, AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS);
-		}
-		return lhsResults;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<MarketabilityResult> getRhsResults() {
 		if (rhsResults == null) {
 			rhsResults = new EObjectContainmentEList<MarketabilityResult>(MarketabilityResult.class, this, AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS);
 		}
 		return rhsResults;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EObject getTarget() {
-		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject)target;
-			target = eResolveProxy(oldTarget);
-			if (target != oldTarget) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_ROW__TARGET, oldTarget, target));
-			}
-		}
-		return target;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject basicGetTarget() {
-		return target;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTarget(EObject newTarget) {
-		EObject oldTarget = target;
-		target = newTarget;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__TARGET, oldTarget, target));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getPrice() {
-		return price;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPrice(double newPrice) {
-		double oldPrice = price;
-		price = newPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__PRICE, oldPrice, price));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalDate getEta() {
-		return eta;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEta(LocalDate newEta) {
-		LocalDate oldEta = eta;
-		eta = newEta;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__ETA, oldEta, eta));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getReferencePrice() {
-		return referencePrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setReferencePrice(double newReferencePrice) {
-		double oldReferencePrice = referencePrice;
-		referencePrice = newReferencePrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__REFERENCE_PRICE, oldReferencePrice, referencePrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getStartVolume() {
-		return startVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStartVolume(long newStartVolume) {
-		long oldStartVolume = startVolume;
-		startVolume = newStartVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME, oldStartVolume, startVolume));
 	}
 
 	/**
@@ -756,8 +505,6 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
-				return ((InternalEList<?>)getLhsResults()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
 				return ((InternalEList<?>)getRhsResults()).basicRemove(otherEnd, msgs);
 		}
@@ -781,21 +528,8 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__SHIPPING:
 				if (resolve) return getShipping();
 				return basicGetShipping();
-			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
-				return getLhsResults();
 			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
 				return getRhsResults();
-			case AnalyticsPackage.MARKETABILITY_ROW__TARGET:
-				if (resolve) return getTarget();
-				return basicGetTarget();
-			case AnalyticsPackage.MARKETABILITY_ROW__PRICE:
-				return getPrice();
-			case AnalyticsPackage.MARKETABILITY_ROW__ETA:
-				return getEta();
-			case AnalyticsPackage.MARKETABILITY_ROW__REFERENCE_PRICE:
-				return getReferencePrice();
-			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
-				return getStartVolume();
 			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
 				if (resolve) return getBuySlotAllocation();
 				return basicGetBuySlotAllocation();
@@ -833,28 +567,9 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__SHIPPING:
 				setShipping((ShippingOption)newValue);
 				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
-				getLhsResults().clear();
-				getLhsResults().addAll((Collection<? extends MarketabilityResult>)newValue);
-				return;
 			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
 				getRhsResults().clear();
 				getRhsResults().addAll((Collection<? extends MarketabilityResult>)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__TARGET:
-				setTarget((EObject)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__PRICE:
-				setPrice((Double)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__ETA:
-				setEta((LocalDate)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__REFERENCE_PRICE:
-				setReferencePrice((Double)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
-				setStartVolume((Long)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
 				setBuySlotAllocation((SlotAllocation)newValue);
@@ -892,26 +607,8 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 			case AnalyticsPackage.MARKETABILITY_ROW__SHIPPING:
 				setShipping((ShippingOption)null);
 				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
-				getLhsResults().clear();
-				return;
 			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
 				getRhsResults().clear();
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__TARGET:
-				setTarget((EObject)null);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__PRICE:
-				setPrice(PRICE_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__ETA:
-				setEta(ETA_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__REFERENCE_PRICE:
-				setReferencePrice(REFERENCE_PRICE_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
-				setStartVolume(START_VOLUME_EDEFAULT);
 				return;
 			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
 				setBuySlotAllocation((SlotAllocation)null);
@@ -946,20 +643,8 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 				return sellOption != null;
 			case AnalyticsPackage.MARKETABILITY_ROW__SHIPPING:
 				return shipping != null;
-			case AnalyticsPackage.MARKETABILITY_ROW__LHS_RESULTS:
-				return lhsResults != null && !lhsResults.isEmpty();
 			case AnalyticsPackage.MARKETABILITY_ROW__RHS_RESULTS:
 				return rhsResults != null && !rhsResults.isEmpty();
-			case AnalyticsPackage.MARKETABILITY_ROW__TARGET:
-				return target != null;
-			case AnalyticsPackage.MARKETABILITY_ROW__PRICE:
-				return price != PRICE_EDEFAULT;
-			case AnalyticsPackage.MARKETABILITY_ROW__ETA:
-				return ETA_EDEFAULT == null ? eta != null : !ETA_EDEFAULT.equals(eta);
-			case AnalyticsPackage.MARKETABILITY_ROW__REFERENCE_PRICE:
-				return referencePrice != REFERENCE_PRICE_EDEFAULT;
-			case AnalyticsPackage.MARKETABILITY_ROW__START_VOLUME:
-				return startVolume != START_VOLUME_EDEFAULT;
 			case AnalyticsPackage.MARKETABILITY_ROW__BUY_SLOT_ALLOCATION:
 				return buySlotAllocation != null;
 			case AnalyticsPackage.MARKETABILITY_ROW__SELL_SLOT_ALLOCATION:
@@ -972,28 +657,6 @@ public class MarketabilityRowImpl extends EObjectImpl implements MarketabilityRo
 				return ballastPanama != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (price: ");
-		result.append(price);
-		result.append(", eta: ");
-		result.append(eta);
-		result.append(", referencePrice: ");
-		result.append(referencePrice);
-		result.append(", startVolume: ");
-		result.append(startVolume);
-		result.append(')');
-		return result.toString();
 	}
 
 } //MarketabilityRowImpl

@@ -686,6 +686,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityResultContainerItemProvider marketabilityResultContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityResultContainerAdapter() {
+		if (marketabilityResultContainerItemProvider == null) {
+			marketabilityResultContainerItemProvider = new MarketabilityResultContainerItemProvider(this);
+		}
+
+		return marketabilityResultContainerItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1880,6 +1903,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
 		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
 		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();
+		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
 		if (optionAnalysisModelItemProvider != null) optionAnalysisModelItemProvider.dispose();
 		if (sandboxResultItemProvider != null) sandboxResultItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();

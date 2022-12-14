@@ -1891,6 +1891,25 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl <em>Marketability Result Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResultContainer()
+	 * @generated
+	 */
+	int MARKETABILITY_RESULT_CONTAINER = 29;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Result Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER_FEATURE_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1898,7 +1917,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 29;
+	int OPTION_ANALYSIS_MODEL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2034,7 +2053,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 31;
+	int BASE_CASE = 32;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
@@ -2044,7 +2063,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 32;
+	int PARTIAL_CASE = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
@@ -2054,7 +2073,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 33;
+	int EXISTING_CHARTER_MARKET_OPTION = 34;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
@@ -2064,7 +2083,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ABSTRACT_SOLUTION_SET = 34;
+	int ABSTRACT_SOLUTION_SET = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -2074,7 +2093,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 35;
+	int ACTIONABLE_SET_PLAN = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
@@ -2084,7 +2103,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 36;
+	int SLOT_INSERTION_OPTIONS = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
@@ -2094,7 +2113,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
 	 * @generated
 	 */
-	int SOLUTION_OPTION = 37;
+	int SOLUTION_OPTION = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
@@ -2104,7 +2123,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
 	 * @generated
 	 */
-	int CHANGE_DESCRIPTION = 41;
+	int CHANGE_DESCRIPTION = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
@@ -2114,7 +2133,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
 	 * @generated
 	 */
-	int CHANGE = 42;
+	int CHANGE = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
@@ -2124,7 +2143,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
 	 * @generated
 	 */
-	int OPEN_SLOT_CHANGE = 43;
+	int OPEN_SLOT_CHANGE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
@@ -2134,7 +2153,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
 	 * @generated
 	 */
-	int CARGO_CHANGE = 44;
+	int CARGO_CHANGE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
@@ -2144,7 +2163,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
 	 * @generated
 	 */
-	int VESSEL_EVENT_CHANGE = 45;
+	int VESSEL_EVENT_CHANGE = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
@@ -2154,7 +2173,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
 	 * @generated
 	 */
-	int VESSEL_EVENT_DESCRIPTOR = 46;
+	int VESSEL_EVENT_DESCRIPTOR = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
@@ -2164,7 +2183,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
 	 * @generated
 	 */
-	int SLOT_DESCRIPTOR = 47;
+	int SLOT_DESCRIPTOR = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
@@ -2174,7 +2193,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
 	 * @generated
 	 */
-	int REAL_SLOT_DESCRIPTOR = 48;
+	int REAL_SLOT_DESCRIPTOR = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
@@ -2184,7 +2203,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
 	 * @generated
 	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 49;
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 50;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
@@ -2194,7 +2213,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 50;
+	int VESSEL_ALLOCATION_DESCRIPTOR = 51;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
@@ -2204,7 +2223,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 51;
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 52;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
@@ -2214,7 +2233,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 52;
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 53;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
@@ -2224,7 +2243,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
 	 * @generated
 	 */
-	int POSITION_DESCRIPTOR = 53;
+	int POSITION_DESCRIPTOR = 54;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
@@ -2234,7 +2253,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
 	 * @generated
 	 */
-	int OPTIMISATION_RESULT = 38;
+	int OPTIMISATION_RESULT = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
@@ -2244,7 +2263,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
 	 * @generated
 	 */
-	int DUAL_MODE_SOLUTION_OPTION = 39;
+	int DUAL_MODE_SOLUTION_OPTION = 40;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2389,7 +2408,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSandboxResult()
 	 * @generated
 	 */
-	int SANDBOX_RESULT = 30;
+	int SANDBOX_RESULT = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3155,7 +3174,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	int SOLUTION_OPTION_MICRO_CASE = 40;
+	int SOLUTION_OPTION_MICRO_CASE = 41;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
@@ -3525,7 +3544,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
 	 * @generated
 	 */
-	int VIABILITY_MODEL = 54;
+	int VIABILITY_MODEL = 55;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3634,7 +3653,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityModel()
 	 * @generated
 	 */
-	int MARKETABILITY_MODEL = 55;
+	int MARKETABILITY_MODEL = 56;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3743,7 +3762,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityRow()
 	 * @generated
 	 */
-	int MARKETABILITY_ROW = 56;
+	int MARKETABILITY_ROW = 57;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3773,67 +3792,13 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_ROW__SHIPPING = 2;
 
 	/**
-	 * The feature id for the '<em><b>Lhs Results</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__LHS_RESULTS = 3;
-
-	/**
 	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__RHS_RESULTS = 4;
-
-	/**
-	 * The feature id for the '<em><b>Target</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__TARGET = 5;
-
-	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__PRICE = 6;
-
-	/**
-	 * The feature id for the '<em><b>Eta</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__ETA = 7;
-
-	/**
-	 * The feature id for the '<em><b>Reference Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__REFERENCE_PRICE = 8;
-
-	/**
-	 * The feature id for the '<em><b>Start Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__START_VOLUME = 9;
+	int MARKETABILITY_ROW__RHS_RESULTS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Buy Slot Allocation</b></em>' reference.
@@ -3842,7 +3807,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__BUY_SLOT_ALLOCATION = 10;
+	int MARKETABILITY_ROW__BUY_SLOT_ALLOCATION = 4;
 
 	/**
 	 * The feature id for the '<em><b>Sell Slot Allocation</b></em>' reference.
@@ -3851,7 +3816,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__SELL_SLOT_ALLOCATION = 11;
+	int MARKETABILITY_ROW__SELL_SLOT_ALLOCATION = 5;
 
 	/**
 	 * The feature id for the '<em><b>Next Slot Visit</b></em>' reference.
@@ -3860,7 +3825,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__NEXT_SLOT_VISIT = 12;
+	int MARKETABILITY_ROW__NEXT_SLOT_VISIT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Laden Panama</b></em>' reference.
@@ -3869,7 +3834,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__LADEN_PANAMA = 13;
+	int MARKETABILITY_ROW__LADEN_PANAMA = 7;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Panama</b></em>' reference.
@@ -3878,7 +3843,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW__BALLAST_PANAMA = 14;
+	int MARKETABILITY_ROW__BALLAST_PANAMA = 8;
 
 	/**
 	 * The number of structural features of the '<em>Marketability Row</em>' class.
@@ -3887,7 +3852,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_ROW_FEATURE_COUNT = 15;
+	int MARKETABILITY_ROW_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.
@@ -3897,7 +3862,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResult()
 	 * @generated
 	 */
-	int MARKETABILITY_RESULT = 57;
+	int MARKETABILITY_RESULT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3979,7 +3944,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 58;
+	int VIABILITY_ROW = 59;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4088,7 +4053,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 59;
+	int VIABILITY_RESULT = 60;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4170,7 +4135,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 60;
+	int MTM_MODEL = 61;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4288,7 +4253,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 61;
+	int MTM_RESULT = 62;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4361,7 +4326,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 62;
+	int MTM_ROW = 63;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4461,7 +4426,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 63;
+	int BREAK_EVEN_ANALYSIS_MODEL = 64;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4570,7 +4535,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 64;
+	int BREAK_EVEN_ANALYSIS_ROW = 65;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4652,7 +4617,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 65;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 66;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -4698,7 +4663,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 66;
+	int BREAK_EVEN_ANALYSIS_RESULT = 67;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4753,7 +4718,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
 	 * @generated
 	 */
-	int LOCAL_DATE_TIME_HOLDER = 67;
+	int LOCAL_DATE_TIME_HOLDER = 68;
 
 	/**
 	 * The feature id for the '<em><b>Date Time</b></em>' attribute.
@@ -4781,7 +4746,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OPTION = 68;
+	int COMMODITY_CURVE_OPTION = 69;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
@@ -4800,7 +4765,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OVERLAY = 69;
+	int COMMODITY_CURVE_OVERLAY = 70;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4855,7 +4820,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
 	 * @generated
 	 */
-	int SENSITIVITY_MODEL = 70;
+	int SENSITIVITY_MODEL = 71;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4910,7 +4875,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
 	 * @generated
 	 */
-	int SENSITIVITY_SOLUTION_SET = 71;
+	int SENSITIVITY_SOLUTION_SET = 72;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5073,7 +5038,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
 	 * @generated
 	 */
-	int ABSTRACT_SENSITIVITY_RESULT = 72;
+	int ABSTRACT_SENSITIVITY_RESULT = 73;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5146,7 +5111,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
 	 * @generated
 	 */
-	int PORTFOLIO_SENSITIVITY_RESULT = 73;
+	int PORTFOLIO_SENSITIVITY_RESULT = 74;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5219,7 +5184,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
 	 * @generated
 	 */
-	int CARGO_PN_LRESULT = 74;
+	int CARGO_PN_LRESULT = 75;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5301,7 +5266,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixModel()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_MODEL = 75;
+	int SWAP_VALUE_MATRIX_MODEL = 76;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5509,7 +5474,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT = 76;
+	int SWAP_VALUE_MATRIX_RESULT = 77;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5636,7 +5601,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResultSet()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_SET = 77;
+	int SWAP_VALUE_MATRIX_RESULT_SET = 78;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5709,7 +5674,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 78;
+	int VOLUME_MODE = 79;
 
 
 	/**
@@ -5720,7 +5685,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 79;
+	int SLOT_TYPE = 80;
 
 
 	/**
@@ -7125,6 +7090,16 @@ s	 * <!-- end-user-doc -->
 	EReference getAbstractAnalysisModel_CommodityCurves();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer <em>Marketability Result Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Marketability Result Container</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer
+	 * @generated
+	 */
+	EClass getMarketabilityResultContainer();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7883,17 +7858,6 @@ s	 * <!-- end-user-doc -->
 	EReference getMarketabilityRow_Shipping();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getLhsResults <em>Lhs Results</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Lhs Results</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getLhsResults()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EReference getMarketabilityRow_LhsResults();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getRhsResults <em>Rhs Results</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7903,61 +7867,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getMarketabilityRow_RhsResults();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getTarget <em>Target</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Target</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getTarget()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EReference getMarketabilityRow_Target();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getPrice <em>Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getPrice()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EAttribute getMarketabilityRow_Price();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getEta <em>Eta</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Eta</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getEta()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EAttribute getMarketabilityRow_Eta();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getReferencePrice <em>Reference Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Reference Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getReferencePrice()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EAttribute getMarketabilityRow_ReferencePrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getStartVolume <em>Start Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow#getStartVolume()
-	 * @see #getMarketabilityRow()
-	 * @generated
-	 */
-	EAttribute getMarketabilityRow_StartVolume();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow#getBuySlotAllocation <em>Buy Slot Allocation</em>}'.
@@ -10626,6 +10535,16 @@ s	 * <!-- end-user-doc -->
 		EReference ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES = eINSTANCE.getAbstractAnalysisModel_CommodityCurves();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl <em>Marketability Result Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResultContainer()
+		 * @generated
+		 */
+		EClass MARKETABILITY_RESULT_CONTAINER = eINSTANCE.getMarketabilityResultContainer();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11240,60 +11159,12 @@ s	 * <!-- end-user-doc -->
 		EReference MARKETABILITY_ROW__SHIPPING = eINSTANCE.getMarketabilityRow_Shipping();
 
 		/**
-		 * The meta object literal for the '<em><b>Lhs Results</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MARKETABILITY_ROW__LHS_RESULTS = eINSTANCE.getMarketabilityRow_LhsResults();
-
-		/**
 		 * The meta object literal for the '<em><b>Rhs Results</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference MARKETABILITY_ROW__RHS_RESULTS = eINSTANCE.getMarketabilityRow_RhsResults();
-
-		/**
-		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MARKETABILITY_ROW__TARGET = eINSTANCE.getMarketabilityRow_Target();
-
-		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_ROW__PRICE = eINSTANCE.getMarketabilityRow_Price();
-
-		/**
-		 * The meta object literal for the '<em><b>Eta</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_ROW__ETA = eINSTANCE.getMarketabilityRow_Eta();
-
-		/**
-		 * The meta object literal for the '<em><b>Reference Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_ROW__REFERENCE_PRICE = eINSTANCE.getMarketabilityRow_ReferencePrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Start Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_ROW__START_VOLUME = eINSTANCE.getMarketabilityRow_StartVolume();
 
 		/**
 		 * The meta object literal for the '<em><b>Buy Slot Allocation</b></em>' reference feature.

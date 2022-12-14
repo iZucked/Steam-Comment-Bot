@@ -88,6 +88,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.ANALYSIS_RESULT_DETAIL: return createAnalysisResultDetail();
 			case AnalyticsPackage.PROFIT_AND_LOSS_RESULT: return createProfitAndLossResult();
 			case AnalyticsPackage.BREAK_EVEN_RESULT: return createBreakEvenResult();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: return createOptionAnalysisModel();
 			case AnalyticsPackage.SANDBOX_RESULT: return createSandboxResult();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
@@ -456,6 +457,17 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public BreakEvenResult createBreakEvenResult() {
 		BreakEvenResultImpl breakEvenResult = new BreakEvenResultImpl();
 		return breakEvenResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityResultContainer createMarketabilityResultContainer() {
+		MarketabilityResultContainerImpl marketabilityResultContainer = new MarketabilityResultContainerImpl();
+		return marketabilityResultContainer;
 	}
 
 	/**

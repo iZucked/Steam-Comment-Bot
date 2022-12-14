@@ -243,7 +243,6 @@ public class MarketabilitySandboxUnit {
 			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final MarketabilityRow row : model.getRows()) {
 			row.getRhsResults().clear();
-			row.getLhsResults().clear();
 
 			ShippingOption shipping = row.getShipping();
 

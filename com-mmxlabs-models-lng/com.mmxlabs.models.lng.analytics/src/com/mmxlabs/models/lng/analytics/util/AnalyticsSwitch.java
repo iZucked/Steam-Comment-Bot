@@ -305,6 +305,12 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: {
+				MarketabilityResultContainer marketabilityResultContainer = (MarketabilityResultContainer)theEObject;
+				T result = caseMarketabilityResultContainer(marketabilityResultContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)theEObject;
 				T result = caseOptionAnalysisModel(optionAnalysisModel);
@@ -1110,6 +1116,21 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAbstractAnalysisModel(AbstractAnalysisModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Marketability Result Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Marketability Result Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketabilityResultContainer(MarketabilityResultContainer object) {
 		return null;
 	}
 

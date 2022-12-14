@@ -259,6 +259,15 @@ public interface AnalyticsFactory extends EFactory {
 	BreakEvenResult createBreakEvenResult();
 
 	/**
+	 * Returns a new object of class '<em>Marketability Result Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Result Container</em>'.
+	 * @generated
+	 */
+	MarketabilityResultContainer createMarketabilityResultContainer();
+
+	/**
 	 * Returns a new object of class '<em>Option Analysis Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
