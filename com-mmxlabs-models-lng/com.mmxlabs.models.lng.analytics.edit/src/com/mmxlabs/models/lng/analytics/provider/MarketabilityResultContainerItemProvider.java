@@ -61,8 +61,8 @@ public class MarketabilityResultContainerItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBuySlotAllocationPropertyDescriptor(object);
-			addSellSlotAllocationPropertyDescriptor(object);
+			addBuySlotVisitPropertyDescriptor(object);
+			addSellSlotVisitPropertyDescriptor(object);
 			addNextSlotVisitPropertyDescriptor(object);
 			addLadenPanamaPropertyDescriptor(object);
 			addBallastPanamaPropertyDescriptor(object);
@@ -71,19 +71,19 @@ public class MarketabilityResultContainerItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Buy Slot Allocation feature.
+	 * This adds a property descriptor for the Buy Slot Visit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addBuySlotAllocationPropertyDescriptor(Object object) {
+	protected void addBuySlotVisitPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MarketabilityResultContainer_buySlotAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_buySlotAllocation_feature", "_UI_MarketabilityResultContainer_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_ALLOCATION,
+				 getString("_UI_MarketabilityResultContainer_buySlotVisit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_buySlotVisit_feature", "_UI_MarketabilityResultContainer_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT,
 				 true,
 				 false,
 				 true,
@@ -93,19 +93,19 @@ public class MarketabilityResultContainerItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Sell Slot Allocation feature.
+	 * This adds a property descriptor for the Sell Slot Visit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSellSlotAllocationPropertyDescriptor(Object object) {
+	protected void addSellSlotVisitPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MarketabilityResultContainer_sellSlotAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_sellSlotAllocation_feature", "_UI_MarketabilityResultContainer_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_ALLOCATION,
+				 getString("_UI_MarketabilityResultContainer_sellSlotVisit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_sellSlotVisit_feature", "_UI_MarketabilityResultContainer_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT,
 				 true,
 				 false,
 				 true,

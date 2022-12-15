@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.ui.analytics.marketability;
 
 import java.time.YearMonth;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResult;
+import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
@@ -43,10 +44,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -69,7 +70,6 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -78,20 +78,14 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LazyFollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.impl.PanamaBookingsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 
@@ -207,7 +201,7 @@ public class MarketabilitySandboxUnit {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}
 
-	public synchronized void run(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final LNGScenarioToOptimiserBridge bridge) {
+	public synchronized void run(final @NonNull MarketabilityModel model, final @NonNull IMapperClass mapper, final @NonNull Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final @NonNull LNGScenarioToOptimiserBridge bridge) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
@@ -219,6 +213,7 @@ public class MarketabilitySandboxUnit {
 
 			final @NonNull ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<Future<Runnable>> futures = new LinkedList<>();
+			createSchedule(model, bridge, mapper);
 			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
 			// Block until all futures completed
 			for (final Future<Runnable> f : futures) {
@@ -239,10 +234,61 @@ public class MarketabilitySandboxUnit {
 		}
 	}
 	
+	@NonNullByDefault
+	private void createSchedule(final MarketabilityModel model, final LNGScenarioToOptimiserBridge bridge, final IMapperClass mapper) {
+		final Schedule schedule = bridge.createOptimiserInitialSchedule();
+
+		for(final MarketabilityRow row : model.getRows()) {
+			LoadSlot loadSlot = mapper.getOriginal(row.getBuyOption());
+			DischargeSlot dischargeSlot = mapper.getOriginal(row.getSellOption());
+			MarketabilityResultContainer container = row.getResult();
+			SlotVisit loadSlotVisit = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == loadSlot).map(SlotAllocation::getSlotVisit).findAny().orElseThrow();
+			SlotVisit dischargeSlotVisit = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).map(SlotAllocation::getSlotVisit).findAny().orElseThrow();
+			assert loadSlotVisit != null;
+			assert dischargeSlotVisit != null;
+			container.setBuySlotVisit(loadSlotVisit);
+			container.setSellSlotVisit(dischargeSlotVisit);
+			container.setLadenPanama(findNextPanama(loadSlotVisit));
+			CanalJourneyEvent ballastPanama = findNextPanama(dischargeSlotVisit);
+			container.setBallastPanama(ballastPanama);
+			if(ballastPanama != null) {
+				addNextEventToRow(container, ballastPanama);
+			}
+			else {
+				addNextEventToRow(container, dischargeSlotVisit);
+			}
+		}
+	}
+	
+	private @Nullable CanalJourneyEvent findNextPanama(final @NonNull Event start) {
+		Event nextEvent = start.getNextEvent();
+		while(!(nextEvent == null || nextEvent instanceof SlotVisit)) {
+			if(nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
+				return journey.getCanalJourneyEvent();
+			}
+			nextEvent = nextEvent.getNextEvent();
+		}
+		return null;
+	}
+	
+	private void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
+
+		Event nextEvent = start.getNextEvent();
+		while (nextEvent != null) {
+			if (nextEvent instanceof SlotVisit slotVisit) {
+				container.setNextSlotVisit(slotVisit);
+				return;
+			}
+			nextEvent = nextEvent.getNextEvent();
+		}
+		container.setNextSlotVisit(null);
+
+	}
+	
 	private void createFutureJobs(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
 			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final MarketabilityRow row : model.getRows()) {
-			row.getRhsResults().clear();
+			row.getResult().getRhsResults().clear();
 
 			ShippingOption shipping = row.getShipping();
 
@@ -265,7 +311,7 @@ public class MarketabilitySandboxUnit {
 						try {
 							final MarketabilityResult result = generateMarketabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market);
 							return () -> {
-								row.getRhsResults().add(result);
+								row.getResult().getRhsResults().add(result);
 							};
 						} finally {
 							monitor.worked(1);
@@ -356,26 +402,16 @@ public class MarketabilitySandboxUnit {
 		final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
 		final IPortSlot b = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
 
-		if (vesselAssignment instanceof VesselCharter) {
-			resource = SequenceHelper.getResource(dataTransformer, (VesselCharter) vesselAssignment);
-		} else if (vesselAssignment instanceof CharterInMarket) {
-			resource = SequenceHelper.getResource(dataTransformer, (CharterInMarket) vesselAssignment, vesselSpotIndex);
+		if (vesselAssignment instanceof VesselCharter vesselCharter) {
+			resource = SequenceHelper.getResource(dataTransformer, vesselCharter);
+		} else if (vesselAssignment instanceof CharterInMarket charterInMarket) {
+			resource = SequenceHelper.getResource(dataTransformer, charterInMarket, vesselSpotIndex);
 		} else {
 			return null;
 		}
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 		final List<@NonNull ISequenceElement> cargoSegment = Lists.newArrayList(portSlotProvider.getElement(a), portSlotProvider.getElement(b));
 		final InternalResult ret = new InternalResult();
-
-//		final @NonNull ISequence seq = initialSequences.getSequence(resource);
-//		Iterator<@NonNull ISequenceElement> iter = seq.iterator();
-//		while (iter.hasNext()) {
-//			@NonNull ISequenceElement ise = iter.next();
-//			for (final ISequenceElement e : cargoSegment) {
-//				if (ise.equals(e))
-//					return ret;
-//			}
-//		}
 
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
 

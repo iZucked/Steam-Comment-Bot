@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -18,8 +19,8 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getRhsResults <em>Rhs Results</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotAllocation <em>Buy Slot Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotAllocation <em>Sell Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit <em>Buy Slot Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit <em>Sell Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextSlotVisit <em>Next Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama <em>Laden Panama</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama <em>Ballast Panama</em>}</li>
@@ -44,48 +45,48 @@ public interface MarketabilityResultContainer extends EObject {
 	EList<MarketabilityResult> getRhsResults();
 
 	/**
-	 * Returns the value of the '<em><b>Buy Slot Allocation</b></em>' reference.
+	 * Returns the value of the '<em><b>Buy Slot Visit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Buy Slot Allocation</em>' reference.
-	 * @see #setBuySlotAllocation(SlotAllocation)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_BuySlotAllocation()
+	 * @return the value of the '<em>Buy Slot Visit</em>' reference.
+	 * @see #setBuySlotVisit(SlotVisit)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_BuySlotVisit()
 	 * @model
 	 * @generated
 	 */
-	SlotAllocation getBuySlotAllocation();
+	SlotVisit getBuySlotVisit();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotAllocation <em>Buy Slot Allocation</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit <em>Buy Slot Visit</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Buy Slot Allocation</em>' reference.
-	 * @see #getBuySlotAllocation()
+	 * @param value the new value of the '<em>Buy Slot Visit</em>' reference.
+	 * @see #getBuySlotVisit()
 	 * @generated
 	 */
-	void setBuySlotAllocation(SlotAllocation value);
+	void setBuySlotVisit(SlotVisit value);
 
 	/**
-	 * Returns the value of the '<em><b>Sell Slot Allocation</b></em>' reference.
+	 * Returns the value of the '<em><b>Sell Slot Visit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sell Slot Allocation</em>' reference.
-	 * @see #setSellSlotAllocation(SlotAllocation)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_SellSlotAllocation()
+	 * @return the value of the '<em>Sell Slot Visit</em>' reference.
+	 * @see #setSellSlotVisit(SlotVisit)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_SellSlotVisit()
 	 * @model
 	 * @generated
 	 */
-	SlotAllocation getSellSlotAllocation();
+	SlotVisit getSellSlotVisit();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotAllocation <em>Sell Slot Allocation</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit <em>Sell Slot Visit</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Sell Slot Allocation</em>' reference.
-	 * @see #getSellSlotAllocation()
+	 * @param value the new value of the '<em>Sell Slot Visit</em>' reference.
+	 * @see #getSellSlotVisit()
 	 * @generated
 	 */
-	void setSellSlotAllocation(SlotAllocation value);
+	void setSellSlotVisit(SlotVisit value);
 
 	/**
 	 * Returns the value of the '<em><b>Next Slot Visit</b></em>' reference.
@@ -114,12 +115,12 @@ public interface MarketabilityResultContainer extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden Panama</em>' reference.
-	 * @see #setLadenPanama(Journey)
+	 * @see #setLadenPanama(CanalJourneyEvent)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_LadenPanama()
 	 * @model
 	 * @generated
 	 */
-	Journey getLadenPanama();
+	CanalJourneyEvent getLadenPanama();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama <em>Laden Panama</em>}' reference.
@@ -129,19 +130,19 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getLadenPanama()
 	 * @generated
 	 */
-	void setLadenPanama(Journey value);
+	void setLadenPanama(CanalJourneyEvent value);
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Panama</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Panama</em>' reference.
-	 * @see #setBallastPanama(Journey)
+	 * @see #setBallastPanama(CanalJourneyEvent)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_BallastPanama()
 	 * @model
 	 * @generated
 	 */
-	Journey getBallastPanama();
+	CanalJourneyEvent getBallastPanama();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama <em>Ballast Panama</em>}' reference.
@@ -151,5 +152,5 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getBallastPanama()
 	 * @generated
 	 */
-	void setBallastPanama(Journey value);
+	void setBallastPanama(CanalJourneyEvent value);
 } // MarketabilityResultContainer

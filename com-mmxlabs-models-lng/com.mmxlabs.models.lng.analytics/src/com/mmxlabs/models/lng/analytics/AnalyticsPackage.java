@@ -3892,22 +3892,22 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Buy Slot Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Buy Slot Visit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_ALLOCATION = 1;
+	int MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Sell Slot Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Sell Slot Visit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_ALLOCATION = 2;
+	int MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Next Slot Visit</b></em>' reference.
@@ -7120,26 +7120,26 @@ s	 * <!-- end-user-doc -->
 	EReference getMarketabilityResultContainer_RhsResults();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotAllocation <em>Buy Slot Allocation</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit <em>Buy Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Buy Slot Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotAllocation()
+	 * @return the meta object for the reference '<em>Buy Slot Visit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit()
 	 * @see #getMarketabilityResultContainer()
 	 * @generated
 	 */
-	EReference getMarketabilityResultContainer_BuySlotAllocation();
+	EReference getMarketabilityResultContainer_BuySlotVisit();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotAllocation <em>Sell Slot Allocation</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit <em>Sell Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Sell Slot Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotAllocation()
+	 * @return the meta object for the reference '<em>Sell Slot Visit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit()
 	 * @see #getMarketabilityResultContainer()
 	 * @generated
 	 */
-	EReference getMarketabilityResultContainer_SellSlotAllocation();
+	EReference getMarketabilityResultContainer_SellSlotVisit();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextSlotVisit <em>Next Slot Visit</em>}'.
@@ -10573,20 +10573,20 @@ s	 * <!-- end-user-doc -->
 		EReference MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = eINSTANCE.getMarketabilityResultContainer_RhsResults();
 
 		/**
-		 * The meta object literal for the '<em><b>Buy Slot Allocation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Buy Slot Visit</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_ALLOCATION = eINSTANCE.getMarketabilityResultContainer_BuySlotAllocation();
+		EReference MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT = eINSTANCE.getMarketabilityResultContainer_BuySlotVisit();
 
 		/**
-		 * The meta object literal for the '<em><b>Sell Slot Allocation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Sell Slot Visit</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_ALLOCATION = eINSTANCE.getMarketabilityResultContainer_SellSlotAllocation();
+		EReference MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT = eINSTANCE.getMarketabilityResultContainer_SellSlotVisit();
 
 		/**
 		 * The meta object literal for the '<em><b>Next Slot Visit</b></em>' reference feature.

@@ -79,53 +79,11 @@ public final class MarketabilityUtils {
 				model.getRows().add(row);
 
 				final MarketabilityResultContainer container = AnalyticsFactory.eINSTANCE.createMarketabilityResultContainer();
-				if (schedule != null) {
-					SlotAllocation loadSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == loadSlot).findAny().orElseThrow();
-					SlotAllocation dischargeSlotAllocation = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).findAny().orElseThrow();
-					
-					
-					container.setBuySlotAllocation(loadSlotAllocation);
-					container.setSellSlotAllocation(dischargeSlotAllocation);
-					container.setLadenPanama(findNextPanama(loadSlotAllocation.getSlotVisit()));
-					Journey ballastPanama = findNextPanama(dischargeSlotAllocation.getSlotVisit());
-					container.setBallastPanama(ballastPanama);
-					// TODO CHANGE: next slot visit event is after panama visit
-					if(ballastPanama != null) {
-						addNextEventToRow(container, ballastPanama);
-					}
-					else {
-						addNextEventToRow(container, dischargeSlotAllocation.getSlotVisit());
-					}
-				}
+				
 				row.setResult(container);
 			}
 		}
 		return model;
-	}
-
-	private static @Nullable Journey findNextPanama(final @NonNull Event start) {
-		Event nextEvent = start.getNextEvent();
-		while(!(nextEvent == null || nextEvent instanceof SlotVisit)) {
-			if(nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
-				return journey;
-			}
-			nextEvent = nextEvent.getNextEvent();
-		}
-		return null;
-	}
-	
-	private static void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
-
-		Event nextEvent = start.getNextEvent();
-		while (nextEvent != null) {
-			if (nextEvent instanceof SlotVisit slotVisit) {
-				container.setNextSlotVisit(slotVisit);
-				return;
-			}
-			nextEvent = nextEvent.getNextEvent();
-		}
-		container.setNextSlotVisit(null);
-
 	}
 
 	private MarketabilityUtils() {

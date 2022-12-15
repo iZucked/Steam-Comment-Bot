@@ -306,8 +306,8 @@
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//MarketabilityResultContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/rhsResults"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/buySlotAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/sellSlotAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/buySlotVisit"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/sellSlotVisit"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/nextSlotVisit"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/ladenPanama"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/ballastPanama"/>
