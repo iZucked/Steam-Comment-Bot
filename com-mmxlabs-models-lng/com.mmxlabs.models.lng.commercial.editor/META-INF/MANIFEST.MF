@@ -36,8 +36,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.pricing,
  com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.models.lng.port.editor,
- com.mmxlabs.models.common;bundle-version="5.11.2"
+ com.mmxlabs.models.common;bundle-version="5.11.2",
+ com.mmxlabs.models.lng.transfers.editor
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.inject;version="1.4.0",
- com.mmxlabs.models.lng.transfers.ui.editorpart,
  javax.inject;version="1.0.0"

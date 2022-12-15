@@ -45,16 +45,21 @@ public class ExpressionPriceParametersConstraint extends AbstractPriceParameters
 		if (pricingParams.eIsSet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS)) {
 			validatePrice(ctx, failures, pricingParams, pricingParams.getPricingBasis(), factory, PriceIndexType.PRICING_BASIS, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS);
 		}
+		if (pricingParams.getPreferredPBs() != null && !pricingParams.getPreferredPBs().isEmpty()) {
+			pricingParams.getPreferredPBs().forEach( w -> {
+				validatePrice(ctx, failures, w, w.getName(), factory, PriceIndexType.PRICING_BASIS, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS);
+			});
+		}
 	}
 	
-	private void validatePrice(final IValidationContext ctx, final List<IStatus> failures, final ExpressionPriceParameters pricingParams,//
-			final String price, //
+	private void validatePrice(final IValidationContext ctx, final List<IStatus> failures, final EObject target,//
+			final String pricingExpression, //
 			final DetailConstraintStatusFactory factory, final PriceIndexType type, final EStructuralFeature feature) {
-		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, pricingParams, feature, price, type);
+		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, feature, pricingExpression, type);
 		if (!result.isOk()) {
 			factory.copyName()//
 					.withMessage(result.getErrorDetails()) //
-					.withObjectAndFeature(pricingParams, feature) //
+					.withObjectAndFeature(target, feature) //
 					.make(ctx, failures);
 		}
 	}

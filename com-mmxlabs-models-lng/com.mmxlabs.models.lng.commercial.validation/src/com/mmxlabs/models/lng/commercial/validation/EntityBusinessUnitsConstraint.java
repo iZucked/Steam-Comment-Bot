@@ -36,6 +36,12 @@ public class EntityBusinessUnitsConstraint extends AbstractModelMultiConstraint 
 				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
 				failures.add(dsd);
 			}
+			if (defaultCounter[0] == 0) {
+				String failureMessage = String.format("Entity '%s' has %d default business units. At least one should be present.", entity.getName(), defaultCounter[0]);
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
+				failures.add(dsd);
+			}
 		}
 	}
 }

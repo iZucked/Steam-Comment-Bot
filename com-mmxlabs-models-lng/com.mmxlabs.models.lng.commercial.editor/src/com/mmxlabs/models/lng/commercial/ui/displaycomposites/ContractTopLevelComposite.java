@@ -19,8 +19,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractDetailComposite.ContractDetailGroup;
+import com.mmxlabs.models.lng.transfers.editor.displaycomposites.PreferredPricingBasisTableCreator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -107,21 +114,15 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		
 		topLevel.display(dialogContext, root, object, range, dbc);
 		restrictionsLevel.display(dialogContext, root, object, range, dbc);
-
-		//
-		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
-//		this.setLayout(new GridLayout(3, false));
+		doDisplay(object, middle);
 	}
-
-	// @Override
-	// protected boolean shouldDisplay(final EReference ref) {
-	// return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
-	// }
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
 		super.displayValidationStatus(status);
 		restrictionsLevel.displayValidationStatus(status);
+		this.status = status;
+		statusProvider.fireStatusChanged(status);
 	}
 
 	@Override
@@ -131,4 +132,35 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		}
 		super.setEditorWrapper(wrapper);
 	}
+	
+	protected void doDisplay(final EObject object, final Composite parent) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES) && //
+				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
+			if (!this.dialogContext.isMultiEdit() && object instanceof final Contract c) {
+				if (c.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
+					PreferredPricingBasisTableCreator.createPrefferedPBsTable(parent, toolkit, dialogContext, commandHandler, epp, //
+							CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS, //
+							statusProvider, resizeAction);
+				}
+			}
+			resizeAction.run();
+		}
+	}
+	
+	private Runnable resizeAction = () -> {
+		if (!ContractTopLevelComposite.this.isDisposed()) {
+			ContractTopLevelComposite.this.layout(true, true);
+		}
+	};
+	private IStatus status;
+	public IDialogEditingContext getDialogContext() {
+		return dialogContext;
+	}
+	
+	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
+		@Override
+		public IStatus getStatus() {
+			return status;
+		}
+	};
 }

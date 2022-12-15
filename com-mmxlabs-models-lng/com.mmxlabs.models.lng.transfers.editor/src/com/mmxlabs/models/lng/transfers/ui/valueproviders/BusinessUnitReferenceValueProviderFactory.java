@@ -47,7 +47,6 @@ public class BusinessUnitReferenceValueProviderFactory implements IReferenceValu
 							final List<Pair<String, EObject>> results = new LinkedList<>();
 							BaseLegalEntity entity = null;
 							if (target instanceof TransferAgreement ta) {
-								//final BaseLegalEntity entity;
 								if (field == TransfersPackage.eINSTANCE.getTransferAgreement_FromBU()) {
 									entity = ta.getFromEntity();
 								} else {

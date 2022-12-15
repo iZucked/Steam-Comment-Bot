@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersFactory;
@@ -88,9 +89,23 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Next transfer", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Rhs(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
-				getCommandHandler()));
-		addTypicalColumn("Basis", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PricingBasis(), //
-				getCommandHandler()));
+				getCommandHandler()) {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof TransferRecord tr) {
+					if (tr.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
+						return tr.getPriceExpression();
+					} else if (tr.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS)){
+						return tr.getPricingBasis();
+					} else if (tr.getRecordOrDelegatePriceExpression() != null && !tr.getRecordOrDelegatePriceExpression().isBlank()) {
+						return tr.getRecordOrDelegatePriceExpression();
+					} else if (tr.getRecordOrDelegatePricingBasis() != null && !tr.getRecordOrDelegatePricingBasis().isBlank()) {
+						return tr.getRecordOrDelegatePricingBasis();
+					}
+				}
+				return null;
+			}
+		}).setEditingSupport(null);
 		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Incoterm(), //
 				getCommandHandler()));
 		addTypicalColumn("Status", new TransferStatusEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Status(), //
