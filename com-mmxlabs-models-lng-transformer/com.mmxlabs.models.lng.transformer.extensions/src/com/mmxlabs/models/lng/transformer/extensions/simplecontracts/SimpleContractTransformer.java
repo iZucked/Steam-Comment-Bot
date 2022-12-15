@@ -16,7 +16,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -32,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 
 /**
  * 
@@ -61,14 +64,14 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		if (priceInfo instanceof final ExpressionPriceParameters expressionPriceInfo) {
 			final boolean isBasis = isBasis(expressionPriceInfo);
-			return createPriceExpressionContract(isBasis ? expressionPriceInfo.getPricingBasis() : expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve, isBasis);
+			return createPriceExpressionContract(isBasis ? expressionPriceInfo.getPricingBasis() : expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve, isBasis);
 
 		} else if (priceInfo instanceof final DateShiftExpressionPriceParameters expressionPriceInfo) {
 			if (expressionPriceInfo.getValue() == 0) {
 				// No shift set, return simple variant.
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve, false);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve, false);
 			} else {
-				Function<ISeries, ICurve> curveFactory;
+				Function<ISeries, IParameterisedCurve> curveFactory;
 				if (expressionPriceInfo.isSpecificDay()) {
 					curveFactory = parsed -> dateHelper.generateShiftedCurve(parsed, date -> date.minusMonths(1L).withDayOfMonth(expressionPriceInfo.getValue()).withHour(0));
 				} else {
@@ -108,12 +111,12 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *         the optimiser
 	 */
 	protected PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
-		return createPriceExpressionContract(priceExpression, dateHelper::generateExpressionCurve, false);
+		return createPriceExpressionContract(priceExpression, dateHelper::generateParameterisedExpressionCurve, false);
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, ICurve> curveFactory, final boolean isBasis) {
+	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, IParameterisedCurve> curveFactory, final boolean isBasis) {
 
-		final var p = dateHelper.createCurveAndIntervals(isBasis ? pricingBasisParser : indices, priceExpression, curveFactory);
+		final Pair<IParameterisedCurve, IIntegerIntervalCurve> p = dateHelper.createCurveAndIntervals(isBasis ? pricingBasisParser : indices, priceExpression, curveFactory);
 
 		final PriceExpressionContract contract = new PriceExpressionContract(p.getFirst(), p.getSecond());
 		injector.injectMembers(contract);

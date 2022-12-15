@@ -112,11 +112,11 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 
 		final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0, Collections.emptyMap()).doubleValue()));
 		} else {
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i, Collections.emptyMap()).doubleValue()));
 			}
 		}
 		return curve;
