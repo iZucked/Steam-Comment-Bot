@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Collections;
 import java.util.TreeMap;
 
 import org.eclipse.jdt.annotation.NonNull;

@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
@@ -48,6 +50,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SandboxReference;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -85,6 +88,10 @@ public class CreateSandboxFromResultAction extends Action {
 
 //		final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
 //		final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
+		final Map<BuyOption, BuyOption> sandboxBuyOptions = new HashMap<>();
+		final Map<SellOption, SellOption> sandboxSellOptions = new HashMap<>();
+		final Map<VesselEventOption, VesselEventOption> sandboxEventOptions = new HashMap<>();
+
 		final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 		final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
@@ -98,22 +105,37 @@ public class CreateSandboxFromResultAction extends Action {
 			return opt;
 		};
 
+		final UnaryOperator<BuyOption> sandboxBuyGetter = opt -> sandboxBuyOptions.computeIfAbsent(opt, b -> {
+			var copy = EcoreUtil.copy(b);
+			newModel.getBuys().add(copy);
+			return copy;
+		});
+		final UnaryOperator<SellOption> sandboxSellGetter = opt -> sandboxSellOptions.computeIfAbsent(opt, b -> {
+			var copy = EcoreUtil.copy(b);
+			newModel.getSells().add(copy);
+			return copy;
+		});
+		final UnaryOperator<VesselEventOption> sandboxEventGetter = opt -> sandboxEventOptions.computeIfAbsent(opt, b -> {
+			var copy = EcoreUtil.copy(b);
+			newModel.getVesselEvents().add(copy);
+			return copy;
+		});
+
 		final Function<LoadSlot, BuyOption> buyGetter = slot -> buyOptions.computeIfAbsent(slot, s -> {
 			if (s == null) {
 				final OpenBuy op = AnalyticsFactory.eINSTANCE.createOpenBuy();
 				newModel.getBuys().add(op);
 				return op;
 			} else {
-				if (s instanceof SpotSlot) {
-					final SpotSlot spotSlot = (SpotSlot) s;
+				if (s instanceof SpotSlot spotSlot) {
 //					return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
-						final SpotMarket mkt = spotSlot.getMarket();
-						final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
-						m.setMarket(mkt);
-						m.setMonth(YearMonth.from(s.getWindowStart()));
-						newModel.getBuys().add(m);
+					final SpotMarket mkt = spotSlot.getMarket();
+					final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
+					m.setMarket(mkt);
+					m.setMonth(YearMonth.from(s.getWindowStart()));
+					newModel.getBuys().add(m);
 
-						return m;
+					return m;
 //					});
 				} else {
 					final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
@@ -129,16 +151,15 @@ public class CreateSandboxFromResultAction extends Action {
 				newModel.getSells().add(op);
 				return op;
 			} else {
-				if (s instanceof SpotSlot) {
-					final SpotSlot spotSlot = (SpotSlot) s;
+				if (s instanceof SpotSlot spotSlot) {
 //					return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
-						final SpotMarket mkt = spotSlot.getMarket();
-						final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-						m.setMarket(mkt);
-						m.setMonth(YearMonth.from(s.getWindowStart()));
-						newModel.getSells().add(m);
+					final SpotMarket mkt = spotSlot.getMarket();
+					final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
+					m.setMarket(mkt);
+					m.setMonth(YearMonth.from(s.getWindowStart()));
+					newModel.getSells().add(m);
 
-						return m;
+					return m;
 //					});
 				} else {
 					final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
@@ -174,7 +195,8 @@ public class CreateSandboxFromResultAction extends Action {
 								roundTripMap.put(key, option);
 								return Optional.of(option);
 							} else {
-								// We do not expect a charter in market outside the spot markets model - unless it is roundtrip.
+								// We do not expect a charter in market outside the spot markets model - unless
+								// it is roundtrip.
 								throw new IllegalStateException();
 							}
 						} else {
@@ -213,12 +235,32 @@ public class CreateSandboxFromResultAction extends Action {
 						final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
 						if (loadAllocation != null) {
 							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
-							bRow.setBuyOption(buyGetter.apply(slot));
+
+							boolean foundSandbox = false;
+							for (var ext : loadAllocation.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOption opt) {
+									bRow.setBuyOption(sandboxBuyGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								bRow.setBuyOption(buyGetter.apply(slot));
+							}
 						}
 						final Event evt = lhsData.getLhsEvent();
-						if (evt instanceof VesselEventVisit) {
-							final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
-							bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
+							boolean foundSandbox = false;
+							for (var ext : vesselEventVisit.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof VesselEventOption opt) {
+									bRow.setVesselEventOption(sandboxEventGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
+							}
 						}
 					}
 					final ChangeSetRowData rhsData = row.getLhsBefore();
@@ -235,7 +277,17 @@ public class CreateSandboxFromResultAction extends Action {
 					final SlotAllocation dischargeAllocation = rhsData.getDischargeAllocation();
 					if (dischargeAllocation != null) {
 						final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
-						bRow.setSellOption(sellGetter.apply(slot));
+						boolean foundSandbox = false;
+						for (var ext : dischargeAllocation.getExtensions()) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOption opt) {
+								bRow.setSellOption(sandboxSellGetter.apply(opt));
+								foundSandbox = true;
+								break;
+							}
+						}
+						if (!foundSandbox) {
+							bRow.setSellOption(sellGetter.apply(slot));
+						}
 					}
 				}
 				if (bRow.getBuyOption() instanceof BuyMarket && bRow.getSellOption() == null) {
@@ -262,18 +314,38 @@ public class CreateSandboxFromResultAction extends Action {
 					if (lhsData != null) {
 
 						final Event evt = lhsData.getLhsEvent();
-						if (evt instanceof VesselEventVisit) {
-							final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
-							pRow.getVesselEventOptions().add(eventGetter.apply(vesselEventVisit.getVesselEvent()));
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
+							boolean foundSandbox = false;
+
+							for (var ext : vesselEventVisit.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof VesselEventOption opt) {
+									pRow.getVesselEventOptions().add(sandboxEventGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								pRow.getVesselEventOptions().add(eventGetter.apply(vesselEventVisit.getVesselEvent()));
+							}
 						}
 
 						final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
 						if (loadAllocation != null) {
-							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
-							// TODO: Not sure why we have a null check here, it may be a bug
-							// as this will avoid creating an OpenBuy
-							if (slot != null) {
-								pRow.getBuyOptions().add(buyGetter.apply(slot));
+							boolean foundSandbox = false;
+							for (var ext : loadAllocation.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOption opt) {
+									pRow.getBuyOptions().add(sandboxBuyGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+								// TODO: Not sure why we have a null check here, it may be a bug
+								// as this will avoid creating an OpenBuy
+								if (slot != null) {
+									pRow.getBuyOptions().add(buyGetter.apply(slot));
+								}
 							}
 						}
 					}
@@ -283,8 +355,20 @@ public class CreateSandboxFromResultAction extends Action {
 					if (rhsData != null) {
 						final SlotAllocation dischargeAllocation = rhsData.getDischargeAllocation();
 						if (dischargeAllocation != null) {
-							final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
-							pRow.getSellOptions().add(sellGetter.apply(slot));
+							boolean foundSandbox = false;
+
+							for (var ext : dischargeAllocation.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOption opt) {
+									pRow.getSellOptions().add(sandboxSellGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+
+							if (!foundSandbox) {
+								final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
+								pRow.getSellOptions().add(sellGetter.apply(slot));
+							}
 						}
 					}
 				}

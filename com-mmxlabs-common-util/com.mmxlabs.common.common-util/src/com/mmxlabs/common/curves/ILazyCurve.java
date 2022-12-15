@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.common.curves;
 
-public interface ILazyCurve extends ICurve {
+public interface ILazyCurve extends IParameterisedCurve {
 	void initialise();
 
 	void clear();

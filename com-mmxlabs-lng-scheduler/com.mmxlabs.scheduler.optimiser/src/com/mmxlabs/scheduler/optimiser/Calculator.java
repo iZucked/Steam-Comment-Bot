@@ -96,6 +96,10 @@ public final class Calculator {
 	public static long convertMTToM3(final long mt, final int cargoCV, final int equivalenceFactor) {
 		return cargoCV == 0 ? 0 : Math.multiplyExact((long) mt, equivalenceFactor) / (long) cargoCV;
 	}
+	
+	public static long convertMTtoMMBTu(final long mt, final int equivalenceFactor) {
+		return Math.multiplyExact((long) mt, equivalenceFactor) / HighScaleFactor;
+	}
 
 	/**
 	 * Convert a $/MMBTu price to a $/m3 price

@@ -6,8 +6,11 @@ package com.mmxlabs.models.lng.transformer.extensions.contracts.regas;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -19,10 +22,10 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILazyCurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.curves.LazyStepwiseIntegerCurve;
-import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
+import com.mmxlabs.common.curves.ParameterisedIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -80,17 +83,17 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 			throw new IllegalStateException("Number of pricing days must be greater than zero");
 		}
 		@NonNull
-		final Pair<@NonNull ICurve, @NonNull IIntegerIntervalCurve> curveAndIntervals = createCurveAndIntervals(priceExpression, numPricingDays);
+		final Pair<@NonNull IParameterisedCurve, @NonNull IIntegerIntervalCurve> curveAndIntervals = createCurveAndIntervals(priceExpression, numPricingDays);
 		final PriceExpressionContract contract = new PriceExpressionContract(curveAndIntervals.getFirst(), curveAndIntervals.getSecond());
 		injector.injectMembers(contract);
 		return contract;
 	}
 
-	private @NonNull Pair<@NonNull ICurve, @NonNull IIntegerIntervalCurve> createCurveAndIntervals(@NonNull final String priceExpression, final int numPricingDays) {
-		final Function<@NonNull ISeries, @NonNull ICurve> curveFactory = makeCurveCreator(numPricingDays);
+	private @NonNull Pair<@NonNull IParameterisedCurve, @NonNull IIntegerIntervalCurve> createCurveAndIntervals(@NonNull final String priceExpression, final int numPricingDays) {
+		final Function<@NonNull ISeries, @NonNull IParameterisedCurve> curveFactory = makeCurveCreator(numPricingDays);
 		final Function<@NonNull ISeries, @NonNull IIntegerIntervalCurve> priceIntervalFactory = makePriceIntervalCreator(numPricingDays);
 
-		final @NonNull ICurve curve;
+		final @NonNull IParameterisedCurve curve;
 		final @NonNull IIntegerIntervalCurve priceIntervals;
 
 		final IExpression<ISeries> expression = commodityIndices.asIExpression(priceExpression);
@@ -110,16 +113,19 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		return Pair.of(curve, priceIntervals);
 	}
 
-	private Function<@NonNull ISeries, @NonNull ICurve> makeCurveCreator(final int numPricingDays) {
+	private Function<@NonNull ISeries, @NonNull IParameterisedCurve> makeCurveCreator(final int numPricingDays) {
 		return parsed -> {
-			final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
-			if (parsed.getChangePoints().length == 0) {
-				curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
-			} else {
-				curve.setDefaultValue(0);
-				regasPriceCurveLoopingCalculator(numPricingDays, parsed, curve::setValueAfter);
-			}
-			return curve;
+			return new ParameterisedIntegerCurve(params -> {
+				if (parsed.getChangePoints().length == 0) {
+					final int v = OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0, params).doubleValue());
+					return Pair.of(v, new TreeMap<>());
+				} else {
+					final TreeMap<Integer, Integer> values = new TreeMap<>();
+					regasPriceCurveLoopingCalculator(numPricingDays, parsed, params, values::put);
+					return Pair.of(0, values);
+				}
+
+			}, parsed.getParameters());
 		};
 	}
 
@@ -129,19 +135,20 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 				return monthIntervalsInHoursCurve;
 			} else {
 				final List<@NonNull Integer> changePointsList = new LinkedList<>();
-				regasPriceCurveLoopingCalculator(numPricingDays, parsed, (hour, internalPrice) -> changePointsList.add(hour));
+				regasPriceCurveLoopingCalculator(numPricingDays, parsed, Collections.emptyMap(), (hour, internalPrice) -> changePointsList.add(hour));
 				final int[] changePoints = new int[changePointsList.size()];
 				int i = 0;
 				for (final int changePoint : changePointsList) {
 					changePoints[i] = changePoint;
 					++i;
 				}
-				return DateAndCurveHelper.getSplitMonthDatesForChangePoint(changePoints);
+				return DateAndCurveHelper.getIntegerIntervalCurveForChangePoints(changePoints);
 			}
 		};
 	}
 
-	private void regasPriceCurveLoopingCalculator(final int numPricingDays, @NonNull final ISeries parsed, @NonNull final BiConsumer<@NonNull Integer, @NonNull Integer> consumer) {
+	private void regasPriceCurveLoopingCalculator(final int numPricingDays, @NonNull final ISeries parsed, final Map<String, String> params,
+			@NonNull final BiConsumer<@NonNull Integer, @NonNull Integer> consumer) {
 		final int maxChangePointHour = parsed.getChangePoints()[parsed.getChangePoints().length - 1];
 		final int minChangePointHour = parsed.getChangePoints()[0];
 		int previousInternalPrice = 0;
@@ -152,7 +159,7 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		// calculate at least one (could add after)
 		// TODO: make loop work in steps of 24 hours
 		for (int currentHour = minStartHour; currentHour <= maxChangePointHour; ++currentHour) {
-			final double nextPrice = calculateAveragePrice(currentHour, numPricingDays, parsed);
+			final double nextPrice = calculateAveragePrice(currentHour, numPricingDays, parsed, params);
 			final int nextInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(nextPrice);
 			if (previousInternalPrice != nextInternalPrice) {
 				consumer.accept(currentHour, nextInternalPrice);
@@ -161,11 +168,11 @@ public class RegasContractTransformer extends SimpleContractTransformer {
 		}
 	}
 
-	private double calculateAveragePrice(final int startingHour, final int numDays, final ISeries parsed) {
+	private double calculateAveragePrice(final int startingHour, final int numDays, final ISeries parsed, final Map<String, String> params) {
 		final int lastHour = startingHour + numDays * 24;
 		double sum = 0.0;
 		for (int currentHour = startingHour; currentHour < lastHour; currentHour = currentHour + 24) {
-			sum += parsed.evaluate(currentHour).doubleValue();
+			sum += parsed.evaluate(currentHour, params).doubleValue();
 		}
 		return sum / numDays;
 	}

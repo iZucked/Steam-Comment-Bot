@@ -55,6 +55,7 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 			addIncludeCanalPropertyDescriptor(object);
 			addIncludeCanalTimePropertyDescriptor(object);
 			addLumpSumPriceExpressionPropertyDescriptor(object);
+			addPriceOnLastLNGPricePropertyDescriptor(object);
 			addReturnPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -193,6 +194,28 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 	}
 
 	/**
+	 * This adds a property descriptor for the Price On Last LNG Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceOnLastLNGPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyTerm_priceOnLastLNGPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyTerm_priceOnLastLNGPrice_feature", "_UI_NotionalJourneyTerm_type"),
+				 CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Return Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -256,6 +279,7 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

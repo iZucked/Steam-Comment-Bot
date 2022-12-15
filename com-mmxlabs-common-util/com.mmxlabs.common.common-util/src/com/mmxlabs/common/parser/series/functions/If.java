@@ -5,6 +5,7 @@
 package com.mmxlabs.common.parser.series.functions;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
@@ -14,12 +15,12 @@ public class If extends SimpleSeriesFunction {
 	}
 
 	@Override
-	public Number evaluate(int point) {
-		final Number cond = arguments.get(0).evaluate(point);
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+		final Number cond = arguments.get(0).evaluate(timePoint, params);
 		if (cond.doubleValue() == 0) {
-			return arguments.get(2).evaluate(point);
+			return arguments.get(2).evaluate(timePoint, params);
 		} else {
-			return arguments.get(1).evaluate(point);
+			return arguments.get(1).evaluate(timePoint, params);
 		}
 	}
 }

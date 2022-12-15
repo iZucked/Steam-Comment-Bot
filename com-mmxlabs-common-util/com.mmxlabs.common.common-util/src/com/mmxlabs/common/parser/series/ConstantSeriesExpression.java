@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
 
 public class ConstantSeriesExpression implements IExpression<ISeries> {
 	protected static final int[] NONE = new int[0];
-	private Number constant;
+	private final Number constant;
 
 	public ConstantSeriesExpression(final Number constant) {
 		this.constant = constant;
@@ -19,13 +23,24 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 	@Override
 	public @NonNull ISeries evaluate() {
 		return new ISeries() {
+
+			@Override
+			public boolean isParameterised() {
+				return false;
+			}
+
+			@Override
+			public Set<String> getParameters() {
+				return Collections.emptySet();
+			}
+
 			@Override
 			public int[] getChangePoints() {
 				return NONE;
 			}
 
 			@Override
-			public Number evaluate(int point) {
+			public Number evaluate(final int timePoint, final Map<String, String> params) {
 				return constant;
 			}
 		};
@@ -38,7 +53,6 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 
 	@Override
 	public boolean canEvaluate() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

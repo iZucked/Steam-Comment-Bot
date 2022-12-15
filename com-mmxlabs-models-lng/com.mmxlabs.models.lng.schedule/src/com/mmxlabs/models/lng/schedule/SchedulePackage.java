@@ -5353,7 +5353,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterContractFeeDetails()
 	 * @generated
 	 */
-	int CHARTER_CONTRACT_FEE_DETAILS = 48;
+	int CHARTER_CONTRACT_FEE_DETAILS = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MatchingContractDetailsImpl <em>Matching Contract Details</em>}' class.
@@ -5438,278 +5438,6 @@ public interface SchedulePackage extends EPackage {
 	int MATCHING_CONTRACT_DETAILS_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.LumpSumContractDetailsImpl <em>Lump Sum Contract Details</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.LumpSumContractDetailsImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumContractDetails()
-	 * @generated
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS = 37;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS__EXTENSIONS = MATCHING_CONTRACT_DETAILS__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS__UUID = MATCHING_CONTRACT_DETAILS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Matched Port</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS__MATCHED_PORT = MATCHING_CONTRACT_DETAILS__MATCHED_PORT;
-
-	/**
-	 * The feature id for the '<em><b>Lump Sum</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS__LUMP_SUM = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Lump Sum Contract Details</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MATCHING_CONTRACT_DETAILS___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MATCHING_CONTRACT_DETAILS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS___ECONTAINER_OP = MATCHING_CONTRACT_DETAILS___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Lump Sum Contract Details</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_CONTRACT_DETAILS_OPERATION_COUNT = MATCHING_CONTRACT_DETAILS_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl <em>Notional Journey Contract Details</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS = 38;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__EXTENSIONS = MATCHING_CONTRACT_DETAILS__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__UUID = MATCHING_CONTRACT_DETAILS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Matched Port</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__MATCHED_PORT = MATCHING_CONTRACT_DETAILS__MATCHED_PORT;
-
-	/**
-	 * The feature id for the '<em><b>Return Port</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__RETURN_PORT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Distance</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__DISTANCE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Total Time In Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_TIME_IN_DAYS = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Total Fuel Used</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_USED = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__FUEL_PRICE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Total Fuel Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_RATE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Route Taken</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Lump Sum</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 10;
-
-	/**
-	 * The number of structural features of the '<em>Notional Journey Contract Details</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 11;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MATCHING_CONTRACT_DETAILS___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MATCHING_CONTRACT_DETAILS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS___ECONTAINER_OP = MATCHING_CONTRACT_DETAILS___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Notional Journey Contract Details</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_CONTRACT_DETAILS_OPERATION_COUNT = MATCHING_CONTRACT_DETAILS_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterAvailableToEventImpl <em>Charter Available To Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5717,7 +5445,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterAvailableToEvent()
 	 * @generated
 	 */
-	int CHARTER_AVAILABLE_TO_EVENT = 39;
+	int CHARTER_AVAILABLE_TO_EVENT = 37;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5907,7 +5635,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCanalJourneyEvent()
 	 * @generated
 	 */
-	int CANAL_JOURNEY_EVENT = 40;
+	int CANAL_JOURNEY_EVENT = 38;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6124,7 +5852,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterAvailableFromEvent()
 	 * @generated
 	 */
-	int CHARTER_AVAILABLE_FROM_EVENT = 41;
+	int CHARTER_AVAILABLE_FROM_EVENT = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupedCharterLengthEventImpl <em>Grouped Charter Length Event</em>}' class.
@@ -6134,7 +5862,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterLengthEvent()
 	 * @generated
 	 */
-	int GROUPED_CHARTER_LENGTH_EVENT = 43;
+	int GROUPED_CHARTER_LENGTH_EVENT = 41;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6324,7 +6052,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterOutEvent()
 	 * @generated
 	 */
-	int GROUPED_CHARTER_OUT_EVENT = 42;
+	int GROUPED_CHARTER_OUT_EVENT = 40;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6748,7 +6476,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryEvents()
 	 * @generated
 	 */
-	int INVENTORY_EVENTS = 44;
+	int INVENTORY_EVENTS = 42;
 
 	/**
 	 * The feature id for the '<em><b>Facility</b></em>' reference.
@@ -6794,7 +6522,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryChangeEvent()
 	 * @generated
 	 */
-	int INVENTORY_CHANGE_EVENT = 45;
+	int INVENTORY_CHANGE_EVENT = 43;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6912,7 +6640,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocation()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION = 46;
+	int PAPER_DEAL_ALLOCATION = 44;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7012,7 +6740,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocationEntry()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION_ENTRY = 47;
+	int PAPER_DEAL_ALLOCATION_ENTRY = 45;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -7175,7 +6903,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_DETAILS = 49;
+	int LUMP_SUM_DETAILS = 47;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7266,7 +6994,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumBallastBonusTermDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_BALLAST_BONUS_TERM_DETAILS = 50;
+	int LUMP_SUM_BALLAST_BONUS_TERM_DETAILS = 48;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7357,7 +7085,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumRepositioningFeeTermDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS = 51;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS = 49;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7448,7 +7176,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyDetails()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_DETAILS = 52;
+	int NOTIONAL_JOURNEY_DETAILS = 50;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7487,13 +7215,40 @@ public interface SchedulePackage extends EPackage {
 	int NOTIONAL_JOURNEY_DETAILS__DISTANCE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Total LNG Used</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Lng Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_DETAILS__LNG_PRICE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Total LNG Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Total Time In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 1;
+	int NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Total Fuel Used</b></em>' attribute.
@@ -7502,7 +7257,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_USED = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 2;
+	int NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_USED = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Price</b></em>' attribute.
@@ -7511,7 +7266,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__FUEL_PRICE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 3;
+	int NOTIONAL_JOURNEY_DETAILS__FUEL_PRICE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Total Fuel Cost</b></em>' attribute.
@@ -7520,7 +7275,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 4;
+	int NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
@@ -7529,7 +7284,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__HIRE_RATE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 5;
+	int NOTIONAL_JOURNEY_DETAILS__HIRE_RATE = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -7538,7 +7293,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__HIRE_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 6;
+	int NOTIONAL_JOURNEY_DETAILS__HIRE_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Route Taken</b></em>' attribute.
@@ -7547,7 +7302,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__ROUTE_TAKEN = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 7;
+	int NOTIONAL_JOURNEY_DETAILS__ROUTE_TAKEN = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
@@ -7556,7 +7311,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__CANAL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 8;
+	int NOTIONAL_JOURNEY_DETAILS__CANAL_COST = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Lump Sum</b></em>' attribute.
@@ -7565,7 +7320,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS__LUMP_SUM = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 9;
+	int NOTIONAL_JOURNEY_DETAILS__LUMP_SUM = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Notional Journey Details</em>' class.
@@ -7574,7 +7329,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 10;
+	int NOTIONAL_JOURNEY_DETAILS_FEATURE_COUNT = MATCHING_CONTRACT_DETAILS_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7620,7 +7375,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyBallastBonusTermDetails()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS = 53;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS = 51;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7657,6 +7412,33 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS__DISTANCE = NOTIONAL_JOURNEY_DETAILS__DISTANCE;
+
+	/**
+	 * The feature id for the '<em><b>Total LNG Used</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS__TOTAL_LNG_USED = NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED;
+
+	/**
+	 * The feature id for the '<em><b>Lng Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS__LNG_PRICE = NOTIONAL_JOURNEY_DETAILS__LNG_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Total LNG Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS__TOTAL_LNG_COST = NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST;
 
 	/**
 	 * The feature id for the '<em><b>Total Time In Days</b></em>' attribute.
@@ -7801,7 +7583,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getOriginPortRepositioningFeeTermDetails()
 	 * @generated
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS = 54;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS = 52;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7838,6 +7620,33 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__DISTANCE = NOTIONAL_JOURNEY_DETAILS__DISTANCE;
+
+	/**
+	 * The feature id for the '<em><b>Total LNG Used</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__TOTAL_LNG_USED = NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED;
+
+	/**
+	 * The feature id for the '<em><b>Lng Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__LNG_PRICE = NOTIONAL_JOURNEY_DETAILS__LNG_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Total LNG Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS__TOTAL_LNG_COST = NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST;
 
 	/**
 	 * The feature id for the '<em><b>Total Time In Days</b></em>' attribute.
@@ -7982,7 +7791,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getTransferRecordPNLDetails()
 	 * @generated
 	 */
-	int TRANSFER_RECORD_PNL_DETAILS = 55;
+	int TRANSFER_RECORD_PNL_DETAILS = 53;
 
 	/**
 	 * The feature id for the '<em><b>Transfer Record</b></em>' reference.
@@ -8075,6 +7884,43 @@ public interface SchedulePackage extends EPackage {
 	int TRANSFER_RECORD_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl <em>Sandbox Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSandboxReference()
+	 * @generated
+	 */
+	int SANDBOX_REFERENCE = 54;
+
+	/**
+	 * The feature id for the '<em><b>Reference</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE__REFERENCE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Sandbox Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Sandbox Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SANDBOX_REFERENCE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8082,7 +7928,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 58;
+	int FUEL_UNIT = 57;
 
 
 	/**
@@ -8093,7 +7939,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 57;
+	int FUEL = 56;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -8103,7 +7949,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 56;
+	int SEQUENCE_TYPE = 55;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -8113,7 +7959,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 59;
+	int CAPACITY_VIOLATION_TYPE = 58;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -8123,7 +7969,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 60;
+	int PORT_VISIT_LATENESS_TYPE = 59;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -8133,7 +7979,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 61;
+	int SLOT_ALLOCATION_TYPE = 60;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -8143,7 +7989,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 62;
+	int PANAMA_BOOKING_PERIOD = 61;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -8153,7 +7999,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 63;
+	int CALENDAR = 62;
 
 
 	/**
@@ -8164,7 +8010,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 64;
+	int ITERABLE = 63;
 
 
 	/**
@@ -8175,7 +8021,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 65;
+	int OBJECT = 64;
 
 
 	/**
@@ -10265,158 +10111,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getMatchingContractDetails_MatchedPort();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails <em>Lump Sum Contract Details</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Lump Sum Contract Details</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.LumpSumContractDetails
-	 * @generated
-	 */
-	EClass getLumpSumContractDetails();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails#getLumpSum <em>Lump Sum</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lump Sum</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.LumpSumContractDetails#getLumpSum()
-	 * @see #getLumpSumContractDetails()
-	 * @generated
-	 */
-	EAttribute getLumpSumContractDetails_LumpSum();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails <em>Notional Journey Contract Details</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Notional Journey Contract Details</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails
-	 * @generated
-	 */
-	EClass getNotionalJourneyContractDetails();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getReturnPort <em>Return Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Return Port</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getReturnPort()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_ReturnPort();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getDistance <em>Distance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getDistance()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_Distance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalTimeInDays <em>Total Time In Days</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Total Time In Days</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalTimeInDays()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_TotalTimeInDays();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalFuelUsed <em>Total Fuel Used</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Total Fuel Used</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalFuelUsed()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_TotalFuelUsed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getFuelPrice <em>Fuel Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fuel Price</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getFuelPrice()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_FuelPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalFuelCost <em>Total Fuel Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Total Fuel Cost</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getTotalFuelCost()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_TotalFuelCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getHireRate <em>Hire Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Rate</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getHireRate()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_HireRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getHireCost <em>Hire Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getHireCost()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_HireCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getRouteTaken <em>Route Taken</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route Taken</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getRouteTaken()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_RouteTaken();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getCanalCost <em>Canal Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal Cost</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getCanalCost()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_CanalCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum <em>Lump Sum</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lump Sum</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails#getLumpSum()
-	 * @see #getNotionalJourneyContractDetails()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyContractDetails_LumpSum();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterAvailableToEvent <em>Charter Available To Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10877,6 +10571,39 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getNotionalJourneyDetails_Distance();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGUsed <em>Total LNG Used</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total LNG Used</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGUsed()
+	 * @see #getNotionalJourneyDetails()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyDetails_TotalLNGUsed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getLngPrice <em>Lng Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lng Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getLngPrice()
+	 * @see #getNotionalJourneyDetails()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyDetails_LngPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGCost <em>Total LNG Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total LNG Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalLNGCost()
+	 * @see #getNotionalJourneyDetails()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyDetails_TotalLNGCost();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails#getTotalTimeInDays <em>Total Time In Days</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11114,6 +10841,27 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTransferRecordPNLDetails_ToEntityCost();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SandboxReference <em>Sandbox Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Sandbox Reference</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SandboxReference
+	 * @generated
+	 */
+	EClass getSandboxReference();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SandboxReference#getReference <em>Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SandboxReference#getReference()
+	 * @see #getSandboxReference()
+	 * @generated
+	 */
+	EReference getSandboxReference_Reference();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -12869,122 +12617,6 @@ public interface SchedulePackage extends EPackage {
 		EAttribute MATCHING_CONTRACT_DETAILS__MATCHED_PORT = eINSTANCE.getMatchingContractDetails_MatchedPort();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.LumpSumContractDetailsImpl <em>Lump Sum Contract Details</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.LumpSumContractDetailsImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumContractDetails()
-		 * @generated
-		 */
-		EClass LUMP_SUM_CONTRACT_DETAILS = eINSTANCE.getLumpSumContractDetails();
-
-		/**
-		 * The meta object literal for the '<em><b>Lump Sum</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LUMP_SUM_CONTRACT_DETAILS__LUMP_SUM = eINSTANCE.getLumpSumContractDetails_LumpSum();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl <em>Notional Journey Contract Details</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.NotionalJourneyContractDetailsImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyContractDetails()
-		 * @generated
-		 */
-		EClass NOTIONAL_JOURNEY_CONTRACT_DETAILS = eINSTANCE.getNotionalJourneyContractDetails();
-
-		/**
-		 * The meta object literal for the '<em><b>Return Port</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__RETURN_PORT = eINSTANCE.getNotionalJourneyContractDetails_ReturnPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__DISTANCE = eINSTANCE.getNotionalJourneyContractDetails_Distance();
-
-		/**
-		 * The meta object literal for the '<em><b>Total Time In Days</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_TIME_IN_DAYS = eINSTANCE.getNotionalJourneyContractDetails_TotalTimeInDays();
-
-		/**
-		 * The meta object literal for the '<em><b>Total Fuel Used</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_USED = eINSTANCE.getNotionalJourneyContractDetails_TotalFuelUsed();
-
-		/**
-		 * The meta object literal for the '<em><b>Fuel Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__FUEL_PRICE = eINSTANCE.getNotionalJourneyContractDetails_FuelPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Total Fuel Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_COST = eINSTANCE.getNotionalJourneyContractDetails_TotalFuelCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_RATE = eINSTANCE.getNotionalJourneyContractDetails_HireRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_COST = eINSTANCE.getNotionalJourneyContractDetails_HireCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Route Taken</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN = eINSTANCE.getNotionalJourneyContractDetails_RouteTaken();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST = eINSTANCE.getNotionalJourneyContractDetails_CanalCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Lump Sum</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__LUMP_SUM = eINSTANCE.getNotionalJourneyContractDetails_LumpSum();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterAvailableToEventImpl <em>Charter Available To Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13355,6 +12987,30 @@ public interface SchedulePackage extends EPackage {
 		EAttribute NOTIONAL_JOURNEY_DETAILS__DISTANCE = eINSTANCE.getNotionalJourneyDetails_Distance();
 
 		/**
+		 * The meta object literal for the '<em><b>Total LNG Used</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED = eINSTANCE.getNotionalJourneyDetails_TotalLNGUsed();
+
+		/**
+		 * The meta object literal for the '<em><b>Lng Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_DETAILS__LNG_PRICE = eINSTANCE.getNotionalJourneyDetails_LngPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Total LNG Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST = eINSTANCE.getNotionalJourneyDetails_TotalLNGCost();
+
+		/**
 		 * The meta object literal for the '<em><b>Total Time In Days</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13535,6 +13191,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSFER_RECORD_PNL_DETAILS__TO_ENTITY_COST = eINSTANCE.getTransferRecordPNLDetails_ToEntityCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl <em>Sandbox Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.SandboxReferenceImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSandboxReference()
+		 * @generated
+		 */
+		EClass SANDBOX_REFERENCE = eINSTANCE.getSandboxReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SANDBOX_REFERENCE__REFERENCE = eINSTANCE.getSandboxReference_Reference();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.paperdeals;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -217,7 +218,7 @@ public class PaperDealsCalculator {
 					final LocalDate end = LocalDate.of(month.getYear(), month.getMonthValue(), month.lengthOfMonth());
 					final int startTime = dateProvider.convertTime(start);
 					final ISeries series = commodityIndices.getSeries(flatCurve).get();
-					double price = series.evaluate(startTime).doubleValue();
+					double price = series.evaluate(startTime, Collections.emptyMap()).doubleValue();
 					final int paperUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 
 					final BasicInstrumentData instrument = null;
@@ -377,7 +378,7 @@ public class PaperDealsCalculator {
 		while (!start.isAfter(extEnd)) {
 			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
 			if (!isWeekend) {
-				double price = series.evaluate(dateProvider.convertTime(start)).doubleValue();
+				double price = series.evaluate(dateProvider.convertTime(start), Collections.emptyMap()).doubleValue();
 				boolean settled = false;
 				if (settledPrices != null) {
 					final Double settledPrice = settledPrices.get(start);

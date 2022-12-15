@@ -30,8 +30,7 @@ public class MigrateToV168 extends AbstractMigrationUnit {
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
 		// Do nothing
-		// Adds Pricing basis to contracts and slots
-		// Adds Pricing basis exposures computation support
-		// Adds pricing-bases feature to control the UI and evaluation
+
+		// Adds SandboxReference to Schedule model
 	}
 }

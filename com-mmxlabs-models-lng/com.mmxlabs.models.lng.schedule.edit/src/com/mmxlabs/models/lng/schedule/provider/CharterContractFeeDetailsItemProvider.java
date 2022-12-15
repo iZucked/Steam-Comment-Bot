@@ -173,16 +173,6 @@ public class CharterContractFeeDetailsItemProvider extends UUIDObjectItemProvide
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.CHARTER_CONTRACT_FEE_DETAILS__MATCHING_CONTRACT_DETAILS,
-				 ScheduleFactory.eINSTANCE.createLumpSumContractDetails()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.CHARTER_CONTRACT_FEE_DETAILS__MATCHING_CONTRACT_DETAILS,
-				 ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.CHARTER_CONTRACT_FEE_DETAILS__MATCHING_CONTRACT_DETAILS,
 				 ScheduleFactory.eINSTANCE.createLumpSumDetails()));
 
 		newChildDescriptors.add

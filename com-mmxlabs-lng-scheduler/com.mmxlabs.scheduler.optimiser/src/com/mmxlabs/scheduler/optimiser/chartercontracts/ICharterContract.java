@@ -5,10 +5,12 @@
 package com.mmxlabs.scheduler.optimiser.chartercontracts;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -20,10 +22,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 @NonNullByDefault
 public interface ICharterContract {
 
-	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, int vesselStartTime, final IPort firstLoadPort);
+	@Nullable
+	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, VesselStartState vesselStartState, PreviousHeelRecord heelRecord);
 
-	long calculateBBCost(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, int vesselStartTime, final IPort firstLoadPort);
-	
+	long calculateBBCost(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselCharter vesselCharter, VesselStartState vesselStartState, PreviousHeelRecord heelRecord);
+
+	@Nullable
 	ICharterContractAnnotation annotateRF(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter);
 
 	long calculateRFRevenue(IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter);

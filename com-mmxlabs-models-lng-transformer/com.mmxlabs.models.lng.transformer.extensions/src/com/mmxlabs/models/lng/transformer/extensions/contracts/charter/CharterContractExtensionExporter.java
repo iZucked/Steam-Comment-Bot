@@ -132,6 +132,9 @@ public class CharterContractExtensionExporter implements IExporterExtension {
 						notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
 						notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
 						notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));
+						notionalJourneyContractDetails.setLngPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.lngPrice));
+						notionalJourneyContractDetails.setTotalLNGUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalLNGUsed));
+						notionalJourneyContractDetails.setTotalLNGCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalLNGCost));
 
 						notionalJourneyContractDetails.setTotalTimeInDays(((double) ruleA.totalTimeInHours) / 24.0);
 						notionalJourneyContractDetails.setHireRate(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.hireRate));

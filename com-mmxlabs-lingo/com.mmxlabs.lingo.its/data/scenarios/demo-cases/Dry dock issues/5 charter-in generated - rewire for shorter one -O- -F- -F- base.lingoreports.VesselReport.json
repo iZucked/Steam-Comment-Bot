@@ -1,7 +1,7 @@
 [ {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "22,916",
-  "Route ($)" : "519,542",
+  "Canal ($)" : "519,542",
   "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
   "Charter Out (virtual)" : {
@@ -21,7 +21,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "52,083",
-  "Route ($)" : "495,840",
+  "Canal ($)" : "495,840",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
   "Charter Out (virtual)" : {
@@ -41,7 +41,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "1,593,276",
-  "Route ($)" : "30,000",
+  "Canal ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,424",
   "Charter Out (virtual)" : {
@@ -61,7 +61,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "52,083",
-  "Route ($)" : "80,000",
+  "Canal ($)" : "80,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
   "Charter Out (virtual)" : {
@@ -81,7 +81,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "2,083",
-  "Route ($)" : "30,000",
+  "Canal ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
   "Charter Out (virtual)" : {
@@ -101,7 +101,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "0",
-  "Route ($)" : "493,280",
+  "Canal ($)" : "493,280",
   "Charter ($)" : "24,604,163",
   "Cooldown ($)" : "0",
   "Charter Out (virtual)" : {
@@ -121,7 +121,7 @@
 }, {
   "Ballast bonus ($)" : "0",
   "Base Fuel ($)" : "0",
-  "Route ($)" : "0",
+  "Canal ($)" : "0",
   "Charter ($)" : "2,870,833",
   "Cooldown ($)" : "0",
   "Charter Out (virtual)" : {

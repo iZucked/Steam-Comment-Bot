@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
@@ -36,16 +39,24 @@ public class ShiftedSeries implements ISeries {
 	}
 
 	@Override
-	public int[] getChangePoints() {
-
-		return changePoints;
-
+	public boolean isParameterised() {
+		return shiftee.isParameterised();
 	}
 
 	@Override
-	public Number evaluate(final int point) {
-		final int newTimePoint = mapper.mapTimePoint(point, ldt -> ShiftFunctionASTNode.mapTime(ldt, shift));
-		return shiftee.evaluate(newTimePoint);
+	public Set<String> getParameters() {
+		return shiftee.getParameters();
+	}
+
+	@Override
+	public int[] getChangePoints() {
+		return changePoints;
+	}
+
+	@Override
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+		final int newTimePoint = mapper.mapTimePoint(timePoint, ldt -> ShiftFunctionASTNode.mapTime(ldt, shift));
+		return shiftee.evaluate(newTimePoint, params);
 	}
 
 }

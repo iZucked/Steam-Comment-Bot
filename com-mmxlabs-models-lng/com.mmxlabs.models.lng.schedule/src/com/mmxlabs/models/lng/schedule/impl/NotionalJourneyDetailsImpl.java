@@ -24,6 +24,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getTotalLNGUsed <em>Total LNG Used</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getLngPrice <em>Lng Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getTotalLNGCost <em>Total LNG Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getTotalTimeInDays <em>Total Time In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getTotalFuelUsed <em>Total Fuel Used</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl#getFuelPrice <em>Fuel Price</em>}</li>
@@ -57,6 +60,66 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 	 * @ordered
 	 */
 	protected int distance = DISTANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTotalLNGUsed() <em>Total LNG Used</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalLNGUsed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TOTAL_LNG_USED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTotalLNGUsed() <em>Total LNG Used</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalLNGUsed()
+	 * @generated
+	 * @ordered
+	 */
+	protected int totalLNGUsed = TOTAL_LNG_USED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLngPrice() <em>Lng Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLngPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double LNG_PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getLngPrice() <em>Lng Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLngPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double lngPrice = LNG_PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTotalLNGCost() <em>Total LNG Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalLNGCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TOTAL_LNG_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTotalLNGCost() <em>Total LNG Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalLNGCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int totalLNGCost = TOTAL_LNG_COST_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getTotalTimeInDays() <em>Total Time In Days</em>}' attribute.
@@ -286,6 +349,75 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 	 * @generated
 	 */
 	@Override
+	public int getTotalLNGUsed() {
+		return totalLNGUsed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTotalLNGUsed(int newTotalLNGUsed) {
+		int oldTotalLNGUsed = totalLNGUsed;
+		totalLNGUsed = newTotalLNGUsed;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED, oldTotalLNGUsed, totalLNGUsed));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getLngPrice() {
+		return lngPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLngPrice(double newLngPrice) {
+		double oldLngPrice = lngPrice;
+		lngPrice = newLngPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE, oldLngPrice, lngPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getTotalLNGCost() {
+		return totalLNGCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTotalLNGCost(int newTotalLNGCost) {
+		int oldTotalLNGCost = totalLNGCost;
+		totalLNGCost = newTotalLNGCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST, oldTotalLNGCost, totalLNGCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getTotalTimeInDays() {
 		return totalTimeInDays;
 	}
@@ -497,6 +629,12 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 		switch (featureID) {
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__DISTANCE:
 				return getDistance();
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED:
+				return getTotalLNGUsed();
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE:
+				return getLngPrice();
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST:
+				return getTotalLNGCost();
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS:
 				return getTotalTimeInDays();
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_USED:
@@ -529,6 +667,15 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 		switch (featureID) {
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__DISTANCE:
 				setDistance((Integer)newValue);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED:
+				setTotalLNGUsed((Integer)newValue);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE:
+				setLngPrice((Double)newValue);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST:
+				setTotalLNGCost((Integer)newValue);
 				return;
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS:
 				setTotalTimeInDays((Double)newValue);
@@ -572,6 +719,15 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED:
+				setTotalLNGUsed(TOTAL_LNG_USED_EDEFAULT);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE:
+				setLngPrice(LNG_PRICE_EDEFAULT);
+				return;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST:
+				setTotalLNGCost(TOTAL_LNG_COST_EDEFAULT);
+				return;
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS:
 				setTotalTimeInDays(TOTAL_TIME_IN_DAYS_EDEFAULT);
 				return;
@@ -613,6 +769,12 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 		switch (featureID) {
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_USED:
+				return totalLNGUsed != TOTAL_LNG_USED_EDEFAULT;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__LNG_PRICE:
+				return lngPrice != LNG_PRICE_EDEFAULT;
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_LNG_COST:
+				return totalLNGCost != TOTAL_LNG_COST_EDEFAULT;
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_TIME_IN_DAYS:
 				return totalTimeInDays != TOTAL_TIME_IN_DAYS_EDEFAULT;
 			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS__TOTAL_FUEL_USED:
@@ -647,6 +809,12 @@ public class NotionalJourneyDetailsImpl extends MatchingContractDetailsImpl impl
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (distance: ");
 		result.append(distance);
+		result.append(", totalLNGUsed: ");
+		result.append(totalLNGUsed);
+		result.append(", lngPrice: ");
+		result.append(lngPrice);
+		result.append(", totalLNGCost: ");
+		result.append(totalLNGCost);
 		result.append(", totalTimeInDays: ");
 		result.append(totalTimeInDays);
 		result.append(", totalFuelUsed: ");

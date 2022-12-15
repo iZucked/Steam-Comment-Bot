@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -63,8 +64,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 		final IPort startPort = getFirstPort(vesselCharter, portTimesRecord);
 		assert startPort != null;
 
-		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots,
-				AvailableRouteChoices.OPTIMAL);
+		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots, AvailableRouteChoices.OPTIMAL);
 
 		final ERouteOption route = quickestTravelTime.getFirst();
 		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
@@ -98,8 +98,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 		final IPort startPort = getFirstPort(vesselCharter, portTimesRecord);
 		assert startPort != null;
 
-		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots,
-				AvailableRouteChoices.OPTIMAL);
+		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), originPort, startPort, speedInKnots, AvailableRouteChoices.OPTIMAL);
 		final ERouteOption route = quickestTravelTime.getFirst();
 		final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselCharter.getVessel());
 		final int journeyTravelTime = quickestTravelTime.getSecond() - routeTransitTime;

@@ -53,11 +53,11 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CharterContractValidationUtils {
-	public static void validateMonthlyBallastBonus(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, 
-			final GenericCharterContract contract, final LocalDate scheduleStart, final MonthlyBallastBonusContainer bbContract, String topFeatureMessage) {
+	public static void validateMonthlyBallastBonus(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final GenericCharterContract contract,
+			final LocalDate scheduleStart, final MonthlyBallastBonusContainer bbContract, String topFeatureMessage) {
 		LocalDate earliestRule = LocalDate.MAX;
 		if (bbContract.getHubs().isEmpty()) {
-			addValidationError(ctx, failures, contract, String.format("%s - %s", topFeatureMessage, "Hubs list should not be empty!"), 
+			addValidationError(ctx, failures, contract, String.format("%s - %s", topFeatureMessage, "Hubs list should not be empty!"),
 					CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__HUBS);
 		}
 		for (final MonthlyBallastBonusTerm monthlyRule : bbContract.getTerms()) {
@@ -68,20 +68,20 @@ public class CharterContractValidationUtils {
 					earliestRule = ymStart;
 				}
 			} else {
-				addValidationError(ctx, failures, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);			
+				addValidationError(ctx, failures, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 			}
 			String mbbMessage = String.format("%s - %s:", topFeatureMessage, ym.format(DateTimeFormatter.ofPattern("yyyy-MMM")));
 			monthlyBallastBonusTermsValidation(ctx, extraContext, failures, mbbMessage, monthlyRule);
 		}
 
 		if (scheduleStart.isBefore(earliestRule)) {
-			String earliestRuleStr = (earliestRule != LocalDate.MAX) ? ", "+earliestRule.toString()+")" : ",]";
-			addValidationError(ctx, failures, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
+			String earliestRuleStr = (earliestRule != LocalDate.MAX) ? ", " + earliestRule.toString() + ")" : ",]";
+			addValidationError(ctx, failures, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr,
+					CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 		}
 	}
 
-	private static void addValidationError(final IValidationContext ctx, final List<IStatus> statuses, final GenericCharterContract contract, final String errorMsg,
-			EStructuralFeature... features) {
+	private static void addValidationError(final IValidationContext ctx, final List<IStatus> statuses, final GenericCharterContract contract, final String errorMsg, EStructuralFeature... features) {
 		final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 				(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter contract] - monthly ballast bonus term has the following issue: %s", errorMsg)));
 		for (EStructuralFeature feature : features) {
@@ -119,9 +119,9 @@ public class CharterContractValidationUtils {
 
 		return scheduleStartDate;
 	}
-	
-	public static void monthlyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, 
-			final GenericCharterContract contract, final IBallastBonus ballastBonusContract, String topFeatureMessage) {
+
+	public static void monthlyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, final GenericCharterContract contract,
+			final IBallastBonus ballastBonusContract, String topFeatureMessage) {
 		final EObject rootObject = extraContext.getRootObject();
 		final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
 		final LocalDate scheduleStart = getStartOfSchedule(scenario);
@@ -145,29 +145,25 @@ public class CharterContractValidationUtils {
 				}
 			}
 		}
-		
+
 		if (atLeastOneProblem) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-				(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a ballast bonus containter with at least one error", topFeatureMessage)));
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a ballast bonus containter with at least one error", topFeatureMessage)));
 			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
 			failures.add(dcsd);
 		}
 	}
 
-
-	
-	public static boolean originPortValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
-			final OriginPortRepositioningFeeTerm term) {
+	public static boolean originPortValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final OriginPortRepositioningFeeTerm term) {
 		if (term.getOriginPort() == null) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("Origin port is not set"));
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Origin port is not set"));
 			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT);
 			failures.add(dcsd);
 			return false;
 		}
 		return true;
 	}
-	
+
 	public static void simpleRepositioningFeeValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
 			final SimpleRepositioningFeeContainer repositioningFeeContainer, final EObject topLevelEObject, final EStructuralFeature topFeature, String topFeatureMessage,
 			final @Nullable YearMonth earliestDate) {
@@ -184,10 +180,9 @@ public class CharterContractValidationUtils {
 							final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || date.isAfter(earliestDate)) {
 								final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-										(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] : There is no charter cost pricing data before %s %04d for curve %s",
-												topFeatureMessage, date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()),
-												date.getYear(), index.getName())));
-									dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+										(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] : There is no charter cost pricing data before %s %04d for curve %s", topFeatureMessage,
+												date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
+								dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
 								failures.add(dcsd);
 							}
 						}
@@ -210,24 +205,24 @@ public class CharterContractValidationUtils {
 		}
 		if (atLeastOneProblem) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-				(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a repositioning fee containter with at least one error", topFeatureMessage)));
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a repositioning fee containter with at least one error", topFeatureMessage)));
 			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
 			failures.add(dcsd);
 		}
 		if (lsAnyPort > 1) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Only one lump sum repositioning fee rule with no defined start ports is allowed", topFeatureMessage)));
-				dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
-				failures.add(dcsd);
+			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+			failures.add(dcsd);
 		}
 		if (opAnyPort > 1) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Only one origin port repositioning fee rule with no defined start ports is allowed", topFeatureMessage)));
-				dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
-				failures.add(dcsd);
+			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+			failures.add(dcsd);
 		}
 	}
-	
+
 	public static void durationValidation(final IValidationContext ctx, final List<IStatus> statuses, final GenericCharterContract contract, String message) {
 		if (contract.isSetMinDuration() && contract.isSetMaxDuration()) {
 			if (contract.getMinDuration() > contract.getMaxDuration()) {
@@ -239,11 +234,10 @@ public class CharterContractValidationUtils {
 			}
 		}
 	}
-	
-	private static boolean lumpSumValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, String topFeatureMessage,
-			final LumpSumTerm term) {
-		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, term, CommercialPackage.Literals.LUMP_SUM_TERM__PRICE_EXPRESSION,
-				term.getPriceExpression(), PriceExpressionUtils.getPriceIndexType(CommercialPackage.Literals.LUMP_SUM_TERM__PRICE_EXPRESSION));
+
+	private static boolean lumpSumValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, String topFeatureMessage, final LumpSumTerm term) {
+		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, term, CommercialPackage.Literals.LUMP_SUM_TERM__PRICE_EXPRESSION, term.getPriceExpression(),
+				PriceExpressionUtils.getPriceIndexType(CommercialPackage.Literals.LUMP_SUM_TERM__PRICE_EXPRESSION));
 		if (!result.isOk()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Lump sum is invalid", topFeatureMessage)));
@@ -253,18 +247,20 @@ public class CharterContractValidationUtils {
 		}
 		return true;
 	}
-	
+
 	private static boolean notionalJourneyTermsValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, String topFeatureMessage,
 			final NotionalJourneyTerm term) {
 		boolean valid = true;
-		final ValidationResult fuelResult = PriceExpressionUtils.validatePriceExpression(ctx, term, CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION,
-				term.getFuelPriceExpression(), PriceIndexType.BUNKERS);
-		if (!fuelResult.isOk()) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: fuel price is invalid", topFeatureMessage)));
-			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION);
-			failures.add(dcsd);
-			valid = false;
+		if (!term.isPriceOnLastLNGPrice()) {
+			final ValidationResult fuelResult = PriceExpressionUtils.validatePriceExpression(ctx, term, CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION,
+					term.getFuelPriceExpression(), PriceIndexType.BUNKERS);
+			if (!fuelResult.isOk()) {
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: fuel price is invalid", topFeatureMessage)));
+				dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION);
+				failures.add(dcsd);
+				valid = false;
+			}
 		}
 		final ValidationResult hireResult = PriceExpressionUtils.validatePriceExpression(ctx, term, CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__HIRE_PRICE_EXPRESSION,
 				term.getHirePriceExpression(), PriceIndexType.CHARTER);
@@ -285,7 +281,8 @@ public class CharterContractValidationUtils {
 				valid = false;
 			}
 		}
-		// Determine real vessel ballast speed range. Note as notional, we are not limited to the min/max speed defined on the class.
+		// Determine real vessel ballast speed range. Note as notional, we are not
+		// limited to the min/max speed defined on the class.
 
 		// Default range if no data exists.
 		double minSpeed = 5.0;
@@ -299,9 +296,9 @@ public class CharterContractValidationUtils {
 			} else {
 				ref = CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS;
 			}
-			
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-					String.format("[%s]: speed must be between %.01f and %.01f knots on a notional journey", topFeatureMessage, minSpeed, maxSpeed)));
+
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: speed must be between %.01f and %.01f knots on a notional journey", topFeatureMessage, minSpeed, maxSpeed)));
 			dcsd.addEObjectAndFeature(term, ref);
 			failures.add(dcsd);
 			valid = false;
@@ -309,11 +306,11 @@ public class CharterContractValidationUtils {
 
 		return valid;
 	}
-	
-	private static boolean monthlyBallastBonusTermsValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, 
-			String topFeatureMessage, final MonthlyBallastBonusTerm term) {
+
+	private static boolean monthlyBallastBonusTermsValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, String topFeatureMessage,
+			final MonthlyBallastBonusTerm term) {
 		notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, term);
-		
+
 		boolean valid = true;
 
 		if (term.getBallastBonusPctCharter() == null || term.getBallastBonusPctCharter().isEmpty()) {
@@ -332,7 +329,7 @@ public class CharterContractValidationUtils {
 		}
 		return valid;
 	}
-	
+
 	public static void ballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
 			final List<IStatus> failures, final VesselCharter va, final SimpleBallastBonusContainer ballastBonusContainer) {
 		final Set<APortSet<Port>> coveredPorts = new HashSet<>();

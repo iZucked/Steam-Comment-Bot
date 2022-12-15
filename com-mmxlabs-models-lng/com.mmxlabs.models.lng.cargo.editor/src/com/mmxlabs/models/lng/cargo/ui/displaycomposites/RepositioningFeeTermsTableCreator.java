@@ -185,10 +185,10 @@ public class RepositioningFeeTermsTableCreator {
 
 		});
 
-		eViewer.addTypicalColumn("Fuel Cost ($/MT)", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
+		eViewer.addTypicalColumn("Fuel Cost ($/MT)", new PriceAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
 
 			@Override
-			public void runSetCommand(final Object object, final Object value) {
+			public void runSetCommand(final Object object, final String value) {
 				if (object instanceof OriginPortRepositioningFeeTerm) {
 					super.runSetCommand(object, value);
 
@@ -226,10 +226,10 @@ public class RepositioningFeeTermsTableCreator {
 
 		});
 
-		eViewer.addTypicalColumn("Hire Cost ($/day)", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
+		eViewer.addTypicalColumn("Hire Cost ($/day)", new PriceAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
 
 			@Override
-			public void runSetCommand(final Object object, final Object value) {
+			public void runSetCommand(final Object object, final String value) {
 				if (object instanceof OriginPortRepositioningFeeTerm) {
 					super.runSetCommand(object, value);
 
