@@ -66,8 +66,7 @@ public class MainTableCompoment {
 	public void createControls(final Composite mainParent, final MarketabilityView breakEvenModellerView) {
 
 		Control control = createViewer(mainParent);
-		//control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		control.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(true, true).create());
+		control.setLayoutData(GridDataFactory.fillDefaults().minSize(300, 300).grab(true, true).create());
 	}
 
 	private Control createViewer(final Composite parent) {
