@@ -49,6 +49,11 @@ public final class CommonImages {
 		// 8x8
 		Pin_8(8, "icons/8x8/pin.png"), //
 		PinnedRow(8, "icons/8x8/pin.png"), //
+		
+		// 12x12
+		Transfer_12(12, "icons/12x12/transfer.png"), //
+		Notes_12(12, "icons/12x12/notes.png"), //
+		HeelCarry_12(12, "icons/12x12/heel_carry.png"), //
 
 		// 16x16
 		BaseFlag(16, "icons/16x16/base_flag.png"), //
@@ -79,6 +84,7 @@ public final class CommonImages {
 		Local(16, "icons/16x16/local.png"), //
 		Nominations(16, "icons/16x16/nominations.png"), //
 		NominationSpecifications(16, "icons/16x16/nomination_specifications.png"), //
+		Notes_16(16, "icons/16x16/notes.png"), //
 		OptimisationResult(16, "icons/16x16/optimisation_result.png"), //
 		Pack(16, "icons/16x16/pack.png"), //
 		Paste(16, "icons/16x16/paste.png"), //
@@ -91,9 +97,11 @@ public final class CommonImages {
 		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
+		ScenarioDiff(16, "icons/16x16/scenario_diff.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
 		Sigma(16, "icons/16x16/sigma.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
+		Transfer_16(16, "icons/16x16/transfer.png"), //
 		ZoomIn(16, "icons/16x16/zoom_in.png"), //
 		ZoomOut(16, "icons/16x16/zoom_out.png"), //
 
@@ -102,12 +110,16 @@ public final class CommonImages {
 		Information(16, "icons/legacy/16x16/information.gif"), //
 		Warning(16, "icons/legacy/16x16/warning.gif"), //
 		
-		Read(16, "icons/legacy/16x16/read_obj.gif"),
+		Read(16, "icons/legacy/16x16/read_obj.gif"), //
 
+		// 24x12
+		NotesAndTransfer(24, "icons/24x12/notes_and_transfer.png"), //
+		
 		// 24x24
 		Cloud_24(24, "icons/24x24/cloud.png"), //
 		CloudPlay_24(24, "icons/24x24/cloud_run_beta.png"), //
 		Compare_24(24, "icons/24x24/compare.png"), //
+		DischargeTrigger(24, "icons/24x24/discharge_trigger.png"), //
 		Evaluate(24, "icons/24x24/evaluate_schedule.png"), //
 		Fork(24, "icons/24x24/fork.png"), //
 		Hub_24(24, "icons/24x24/hub.png"), //
