@@ -81,4 +81,9 @@ public class VersionHelper {
 	public boolean isWorkspaceVersion() {
 		return workspaceVersion;
 	}
+
+	public void setClientCode(String code) {
+		this.code = code;
+		
+	}
 }
