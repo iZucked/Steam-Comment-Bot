@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
@@ -96,9 +96,9 @@ public class HttpClientUtil {
 		});
 
 		try {
-
-			final Pair<KeyStore, char[]> trustStorePair = LicenseChecker.loadLocalTruststore();
-			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
+			TrustStoreManager.refresh();
+			final Pair<KeyStore, char[]> trustStorePair = TrustStoreManager.loadLocalTruststore();
+			final Pair<KeyStore, char[]> keyStorePair = TrustStoreManager.loadLocalKeystore();
 
 			if (trustStorePair != null && keyStorePair != null) {
 
@@ -125,7 +125,7 @@ public class HttpClientUtil {
 
 		final List<CertInfo> infos = new LinkedList<>();
 		{
-			final Pair<KeyStore, char[]> trustStorePair = LicenseChecker.loadLocalTruststore();
+			final Pair<KeyStore, char[]> trustStorePair = TrustStoreManager.loadLocalTruststore();
 
 			if (trustStorePair != null) {
 				KeyStore defaultStore = trustStorePair.getFirst();
@@ -191,7 +191,7 @@ public class HttpClientUtil {
 			final String userHome = System.getProperty("eclipse.home.location");
 
 			try {
-				File f = LicenseChecker.getCACertsFileFromEclipseHomeURL(userHome);
+				File f = TrustStoreManager.getCACertsFileFromEclipseHomeURL(userHome);
 				if (f != null && f.exists() && f.isDirectory()) {
 					for (final File certFile : f.listFiles()) {
 						if (certFile.isFile()) {
@@ -231,7 +231,7 @@ public class HttpClientUtil {
 			final String hostStr = matcher.group(1);
 			final String portStr = matcher.groupCount() > 1 ? matcher.group(2) : null;
 
-			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalTruststore();
+			final Pair<KeyStore, char[]> keyStorePair = TrustStoreManager.loadLocalTruststore();
 			final KeyStore keyStore = keyStorePair.getFirst();
 
 			final SSLContext sslContext = SSLContext.getInstance("TLS");

@@ -43,7 +43,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 import okhttp3.OkHttpClient;
@@ -126,7 +126,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 	private boolean isDevLicense() {
 		X509Certificate cert = null;
 		try {
-			cert = LicenseChecker.getClientLicense();
+			cert = LicenseManager.getClientLicense(LicenseManager.getLicenseKeystore());
 		} catch (final Exception e) {
 			return false;
 		}

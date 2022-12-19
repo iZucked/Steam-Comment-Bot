@@ -49,7 +49,7 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
-import com.mmxlabs.hub.license.LicenseManager;
+import com.mmxlabs.hub.license.HubLicenseManager;
 import com.mmxlabs.lingo.its.datahub.HubTestHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
@@ -198,8 +198,11 @@ class LicenseTests {
 	void getLicenseFromDatahub() throws IOException {
 		log.info(Boolean.toString(basicAuthenticationManager.isAuthenticated(upstreamUrl)));
 		setCurrentLicense();
-		KeyStore keystore = LicenseManager.getLicenseFromDatahub();
-		Assertions.assertNotNull(keystore);
+		
+		File keystoreFile = HubLicenseManager.getLicenseFromDatahub();
+		// TODO: Update test - this may be an old file!
+		Assertions.assertNotNull(keystoreFile);
+		Assertions.assertTrue(keystoreFile.exists());
 	}
 
 }

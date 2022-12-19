@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.rcp.common.tests.internal.Activator;
 
 class LicenseCheckerTests {
@@ -35,7 +37,7 @@ class LicenseCheckerTests {
 		try {
 			String location = "file:///" + tempDir.toString().replaceAll("\\\\", "/");
 			System.out.println(location);
-			File f = LicenseChecker.getCACertsFileFromEclipseHomeURL(location);
+			File f = TrustStoreManager.getCACertsFileFromEclipseHomeURL(location);
 
 			Assertions.assertNotNull(f);
 		} finally {
@@ -53,7 +55,7 @@ class LicenseCheckerTests {
 				keystore.load(inStream, "helloworld".toCharArray());
 
 				Assertions.assertNull(keystore.getCertificate("lingo"));
-				LicenseChecker.importExtraCertsFromHome(keystore);
+				TrustStoreManager.importExtraCertsFromHome(keystore);
 
 				Assertions.assertNotNull(keystore.getCertificate("cert.pem"));
 			} catch (NoSuchAlgorithmException | IOException e) {
@@ -63,8 +65,8 @@ class LicenseCheckerTests {
 	}
 
 	@Test
-	void licenseFromSystemProperty() throws CertificateException {
-		Assertions.assertNotNull(LicenseChecker.getLicenseFromSystemProperty());
+	void licenseFromSystemProperty() throws Exception {
+		Assertions.assertNotNull(LicenseManager.getLicenseFromSystemProperty());
 	}
 
 	// TODO add user.home and eclipse.home.location properties to build job
@@ -97,7 +99,7 @@ class LicenseCheckerTests {
 				Assertions.assertNull(keyStoreFile);
 				Assertions.assertNull(trustStoreFile);
 
-				LicenseChecker.createKeystoreCopies(keystore, license);
+				TrustStoreManager.createKeystoreCopiesAndSetSysProps(keystore, keyStoreFile, license, trustStoreFile);
 
 				Assertions.assertNotNull(keyStoreFile);
 				Assertions.assertNotNull(trustStoreFile);

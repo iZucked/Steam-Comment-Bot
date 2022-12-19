@@ -49,13 +49,15 @@ import com.mmxlabs.common.time.Days;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
-import com.mmxlabs.hub.license.LicenseManager;
+import com.mmxlabs.hub.license.HubLicenseManager;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
-import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.license.ssl.LicenseState;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -188,6 +190,8 @@ public class Application implements IApplication {
 			}
 		}
 
+		TrustStoreManager.refresh();
+		
 		// Don't abort LiNGO if p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
 		try {
@@ -256,16 +260,7 @@ public class Application implements IApplication {
 		final var licenseMonitor = SubMonitor.convert(monitor, 1);
 		licenseMonitor.setTaskName("Validating the license");
 
-		// check if the datahub license management is active and if hub license is valid
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_LICENSE_MANAGEMENT)) {
-			final KeyStore licenseKeystore = LicenseManager.getLicenseFromDatahub();
-			if (licenseKeystore != null) {
-				final LicenseState validity = LicenseChecker.doCheckLicense(licenseKeystore);
-				if (validity == LicenseState.Valid) {
-					return true;
-				}
-			}
-		}
+		HubLicenseManager.refreshHubLicense();
 
 		// check if the other licenses are valid
 		final LicenseState validity = LicenseChecker.checkLicense();
@@ -277,7 +272,8 @@ public class Application implements IApplication {
 		licenseMonitor.setTaskName("Checking license expiry");
 
 		try {
-			X509Certificate cert = LicenseChecker.getClientLicense();
+			final KeyStore licenseKeystore = LicenseManager.getLicenseKeystore();
+			X509Certificate cert = LicenseManager.getClientLicense(licenseKeystore);
 			final Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, withinDays);
 			if (cert.getNotAfter().before(c.getTime())) {
