@@ -143,16 +143,21 @@ public final class LicenseChecker {
 		try {
 			// Load keystore
 			final KeyStore trustStore = KeyStore.getInstance("JKS");
-			// TODO: Load from bundle resource
-			final URL trustStoreUrl = Activator.getDefault().getBundle().getResource("keystore.jks");
+			trustStore.load(null, null);
+
+			// Load from bundle resource
+			final URL trustStoreUrl = Activator.getDefault().getBundle().getResource("clientauthca.pem");
 			if (trustStoreUrl == null) {
 				return LicenseState.KeystoreNotFound;
 			}
-			try (final InputStream astream = trustStoreUrl.openStream()) {
-				trustStore.load(astream, password.toCharArray());
+			Certificate rootCertificate = null;
+			try (InputStream inStream = trustStoreUrl.openStream()) {
+				final CertificateFactory factory = CertificateFactory.getInstance("X.509");
+				rootCertificate = factory.generateCertificate(inStream);
+			} catch (final Exception e) {
+				LOG.error("Unable to import certificate", e);
 			}
 
-			final Certificate rootCertificate = trustStore.getCertificate("rootca");
 			if (rootCertificate == null) {
 				return LicenseState.Unknown;
 			}
@@ -167,8 +172,7 @@ public final class LicenseChecker {
 			licenseCertificate.verify(rootCertificate.getPublicKey());
 
 			// Check dates are valid. We expect a X509 certificate
-			if (licenseCertificate instanceof X509Certificate) {
-				final X509Certificate x509Certificate = (X509Certificate) licenseCertificate;
+			if (licenseCertificate instanceof X509Certificate x509Certificate) {
 				x509Certificate.checkValidity();
 			} else {
 				return LicenseState.Unknown;
@@ -233,40 +237,74 @@ public final class LicenseChecker {
 	 * @throws KeyStoreException
 	 */
 	private static void populateDefaultTrustStore(KeyStore keyStore) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
-		String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
-		String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
 
-		// Windows - use system truststore by default if not specified otherwise
-		if (defaultStorePath == null && defaultStoreType == null) {
-			if (Objects.equals(Platform.getOS(), Platform.OS_WIN32)) {
-				defaultStorePath = "NUL";
-				defaultStoreType = "Windows-ROOT";
+		{
+			String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
+			String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
+			if (defaultStorePath != null) {
+
+				if (defaultStoreType == null) {
+					defaultStoreType = CACERTS_TYPE;
+				}
+
+				final String defaultStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
+				final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
+
+				final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
+				try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
+					defaultStore.load(fis, pass);
+				}
+
+				final Enumeration<String> enumerator = defaultStore.aliases();
+				while (enumerator.hasMoreElements()) {
+					final String alias = enumerator.nextElement();
+					keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+				}
 			}
-		}
 
-		if (defaultStorePath == null) {
-			defaultStorePath = CACERTS_PATH;
 		}
-		if (defaultStoreType == null) {
-			defaultStoreType = CACERTS_TYPE;
-		}
+		// Import java trust store
+		{
 
-		final String defaultStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
-		final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
+			String defaultStorePath = CACERTS_PATH;
+			String defaultStoreType = CACERTS_TYPE;
 
-		final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
-		if (Objects.equals("NUL", defaultStorePath)) {
-			defaultStore.load(null);
-		} else {
+			final char[] pass = null;
+
+			final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
 			try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
 				defaultStore.load(fis, pass);
 			}
+
+			final Enumeration<String> enumerator = defaultStore.aliases();
+			while (enumerator.hasMoreElements()) {
+				final String alias = enumerator.nextElement();
+				keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+			}
 		}
 
-		final Enumeration<String> enumerator = defaultStore.aliases();
-		while (enumerator.hasMoreElements()) {
-			final String alias = enumerator.nextElement();
-			keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+		// Import windows trust store
+		if (Objects.equals(Platform.getOS(), Platform.OS_WIN32))
+
+		{
+			String defaultStorePath = "NUL";
+			String defaultStoreType = "Windows-ROOT";
+
+			final char[] pass = null;
+
+			final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
+			if (Objects.equals("NUL", defaultStorePath)) {
+				defaultStore.load(null);
+			} else {
+				try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
+					defaultStore.load(fis, pass);
+				}
+			}
+			final Enumeration<String> enumerator = defaultStore.aliases();
+			while (enumerator.hasMoreElements()) {
+				final String alias = enumerator.nextElement();
+				keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+			}
 		}
 
 		importExtraCertsFromHome(keyStore);
