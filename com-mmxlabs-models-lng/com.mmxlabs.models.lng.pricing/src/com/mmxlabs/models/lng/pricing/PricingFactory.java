@@ -105,6 +105,15 @@ public interface PricingFactory extends EFactory {
 	PortCostEntry createPortCostEntry();
 
 	/**
+	 * Returns a new object of class '<em>Cooldown Price Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cooldown Price Entry</em>'.
+	 * @generated
+	 */
+	CooldownPriceEntry createCooldownPriceEntry();
+
+	/**
 	 * Returns a new object of class '<em>Cooldown Price</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

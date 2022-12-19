@@ -265,8 +265,7 @@ public class ScenarioBuilder {
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioDataProvider);
 		final CooldownPrice cp = PricingFactory.eINSTANCE.createCooldownPrice();
 		cp.getPorts().add(portFinder.getCapabilityPortsGroup(PortCapability.LOAD));
-		cp.setLumpsum(true);
-		cp.setExpression(expr);
+		cp.setLumpsumExpression(expr);
 		costModel.getCooldownCosts().add(cp);
 
 		return this;

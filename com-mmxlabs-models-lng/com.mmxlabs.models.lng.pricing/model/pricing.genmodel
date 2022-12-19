@@ -82,9 +82,15 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCostEntry/activity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCostEntry/cost"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//CooldownPrice">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//CooldownPrice/lumpsum"/>
+    <genClasses ecoreClass="pricing.ecore#//CooldownPriceEntry">
+      <genFeatures notify="false" createChild="false" propertyDescription="The ports this cost item applies to."
+          propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CooldownPriceEntry/ports"/>
+      <genFeatures createChild="false" propertyDescription="A lumpsum $ cost to add to total the cooldown cost"
+          ecoreFeature="ecore:EAttribute pricing.ecore#//CooldownPriceEntry/lumpsumExpression"/>
+      <genFeatures createChild="false" propertyDescription="A $/mmbtu price for the cooldown cost. If specified this is multiplied by the port CV and vessel cooling volume."
+          ecoreFeature="ecore:EAttribute pricing.ecore#//CooldownPriceEntry/volumeExpression"/>
     </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//CooldownPrice"/>
     <genClasses ecoreClass="pricing.ecore#//PortsExpressionMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortsExpressionMap/ports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortsExpressionMap/expression"/>

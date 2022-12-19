@@ -78,6 +78,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
+			case PricingPackage.COOLDOWN_PRICE_ENTRY: return createCooldownPriceEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
@@ -206,6 +207,17 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortCostEntry createPortCostEntry() {
 		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
 		return portCostEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CooldownPriceEntry createCooldownPriceEntry() {
+		CooldownPriceEntryImpl cooldownPriceEntry = new CooldownPriceEntryImpl();
+		return cooldownPriceEntry;
 	}
 
 	/**

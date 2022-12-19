@@ -42,7 +42,7 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	 */
 	public CooldownPriceComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(PricingPackage.Literals.PORTS_EXPRESSION_MAP));
+		superClassesHelpers.addAll(registry.getComponentHelpers(PricingPackage.Literals.COOLDOWN_PRICE_ENTRY));
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_lumpsumEditor(detailComposite, topClass);
+//		add_lumpsumEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -81,6 +81,6 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_lumpsumEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COOLDOWN_PRICE__LUMPSUM));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION));
 	}
 }

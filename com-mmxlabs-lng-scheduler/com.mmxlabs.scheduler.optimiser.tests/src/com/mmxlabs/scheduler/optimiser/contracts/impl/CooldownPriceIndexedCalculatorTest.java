@@ -36,7 +36,7 @@ public class CooldownPriceIndexedCalculatorTest {
 		final IPort mockPort = Mockito.mock(IPort.class);
 		// create a cooldown calculator and avoid using injection
 		// TODO Use injection
-		final CooldownPriceIndexedCalculator lsc = createCooldownPriceIndexedCalculator(curve);
+		CooldownCalculator lsc = createCooldownPriceIndexedCalculator(curve);
 
 		// create prices for different times (to test UTC)
 		final int priceA = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
@@ -77,9 +77,9 @@ public class CooldownPriceIndexedCalculatorTest {
 
 	}
 
-	private CooldownPriceIndexedCalculator createCooldownPriceIndexedCalculator(final ICurve curve) {
-		final CooldownPriceIndexedCalculator contract = new CooldownPriceIndexedCalculator(curve);
-
+ 
+	private CooldownCalculator createCooldownPriceIndexedCalculator(final ICurve curve) {
+		CooldownCalculator contract = new CooldownCalculator(null, curve);
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override

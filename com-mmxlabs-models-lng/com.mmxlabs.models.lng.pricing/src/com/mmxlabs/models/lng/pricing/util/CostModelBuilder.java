@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -117,18 +118,22 @@ public class CostModelBuilder {
 		costModel.getRouteCosts().add(routeCost);
 	}
 
-	public void setAllExistingCooldownCosts(boolean lumpsum, @NonNull final String expression) {
-		for (CooldownPrice cost : costModel.getCooldownCosts()) {
-			cost.setExpression(expression);
-			cost.setLumpsum(lumpsum);
+	public void setAllExistingCooldownCosts(final @Nullable String lumpSumExpression, final @Nullable String volumeExpression) {
+		for (CooldownPrice cooldownPrice : costModel.getCooldownCosts()) {
+			cooldownPrice.setLumpsumExpression(lumpSumExpression);
+			cooldownPrice.setVolumeExpression(volumeExpression);
 		}
 	}
 
-	public @NonNull CooldownPrice createCooldownPrice(@NonNull final String expression, final boolean isLumpsum, @NonNull final Collection<? extends APortSet<Port>> ports) {
+	public @NonNull CooldownPrice createCooldownPrice(final @Nullable String lumpSumExpression, final @Nullable String volumeExpression, @NonNull final Collection<? extends APortSet<Port>> ports) {
 
 		final CooldownPrice cooldownPrice = PricingFactory.eINSTANCE.createCooldownPrice();
-		cooldownPrice.setExpression(expression);
-		cooldownPrice.setLumpsum(isLumpsum);
+		if (lumpSumExpression != null) {
+			cooldownPrice.setLumpsumExpression(lumpSumExpression);
+		}
+		if (volumeExpression != null) {
+			cooldownPrice.setVolumeExpression(volumeExpression);
+		}
 		cooldownPrice.getPorts().addAll(ports);
 
 		costModel.getCooldownCosts().add(cooldownPrice);
@@ -174,7 +179,8 @@ public class CostModelBuilder {
 	public PanamaCanalTariff createSimplePanamaCanalTariff(double fixedCost) {
 
 		PanamaCanalTariff panamaCanalTariff = PricingFactory.eINSTANCE.createPanamaCanalTariff();
-		// Cost is m3 * band price. To make fixed cost apply cost only to first 1m3 of capacity
+		// Cost is m3 * band price. To make fixed cost apply cost only to first 1m3 of
+		// capacity
 		{
 			PanamaCanalTariffBand band = PricingFactory.eINSTANCE.createPanamaCanalTariffBand();
 			band.setBandEnd(1);

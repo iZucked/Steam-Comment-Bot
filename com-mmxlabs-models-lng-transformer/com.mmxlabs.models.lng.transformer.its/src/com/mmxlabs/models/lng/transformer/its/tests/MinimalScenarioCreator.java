@@ -234,7 +234,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final CommodityCurve cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
-		price.setExpression(cooldownIndex.getName());
+		price.setVolumeExpression(cooldownIndex.getName());
 		for (final Port port : portModel.getPorts()) {
 			price.getPorts().add(port);
 		}
@@ -250,8 +250,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
-		price.setExpression(expression);
-		price.setLumpsum(true);
+		price.setLumpsumExpression(expression);
 		for (final Port port : portModel.getPorts()) {
 			price.getPorts().add(port);
 		}

@@ -154,10 +154,17 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.COOLDOWN_PRICE_ENTRY: {
+				CooldownPriceEntry cooldownPriceEntry = (CooldownPriceEntry)theEObject;
+				T result = caseCooldownPriceEntry(cooldownPriceEntry);
+				if (result == null) result = caseMMXObject(cooldownPriceEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PricingPackage.COOLDOWN_PRICE: {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
-				if (result == null) result = casePortsExpressionMap(cooldownPrice);
+				if (result == null) result = caseCooldownPriceEntry(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -499,6 +506,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortCostEntry(PortCostEntry object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cooldown Price Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cooldown Price Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCooldownPriceEntry(CooldownPriceEntry object) {
 		return null;
 	}
 
