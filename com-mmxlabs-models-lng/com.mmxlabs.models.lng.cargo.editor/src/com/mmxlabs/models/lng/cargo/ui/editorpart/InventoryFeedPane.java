@@ -46,11 +46,6 @@ public class InventoryFeedPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), getCommandHandler()));
 		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), getCommandHandler()));
 		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), getCommandHandler()));
-
-		addTypicalColumn("Volume High (m³)",
-				new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeHigh(), getCommandHandler())));
-		addTypicalColumn("Volume Low (m³)",
-				new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeLow(), getCommandHandler())));
 		addTypicalColumn("Forecast", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_ForecastDate(), getCommandHandler()));
 
 		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), getCommandHandler()));
