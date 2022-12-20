@@ -22,18 +22,29 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 	private InventoryReport report;
 	private Menu lastMenu = null;
 	private boolean showingCargoes;
+	private boolean showingOpenSlots;
 	private final Action showCargoesAction;
+	private final Action showOpenSlotsAction;
 
 	public ChartColourSchemeAction(final InventoryReport report) {
 		super("Colour Scheme", IAction.AS_DROP_DOWN_MENU);
 		this.report = report;
 		showingCargoes = true;
-		showCargoesAction = new Action("Show Cargoes", IAction.AS_CHECK_BOX) {
+		showingOpenSlots = true;
+		showCargoesAction = new Action("Show cargoes", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
 				showingCargoes = !showingCargoes;
 				setChecked(showingCargoes);
 				report.setCargoVisibilityInInventoryChart(showingCargoes);
+			}
+		};
+		showOpenSlotsAction = new Action("Show open", IAction.AS_CHECK_BOX) {
+			@Override
+			public void run() {
+				showingOpenSlots = !showingOpenSlots;
+				setChecked(showingOpenSlots);
+				report.setOpenSlotVisibilityInInventoryChart(showingOpenSlots);
 			}
 		};
 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Label, IconMode.Enabled));
@@ -74,12 +85,19 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 
 	private void createMenuItems(final Menu menu) {
 		showCargoesAction.setChecked(showingCargoes);
-		final ActionContributionItem actionContributionItem = new ActionContributionItem(showCargoesAction);
-		actionContributionItem.fill(menu, 0);
+		final ActionContributionItem showCargoesAci = new ActionContributionItem(showCargoesAction);
+		showCargoesAci.fill(menu, 0);
+		showOpenSlotsAction.setChecked(showingOpenSlots);
+		final ActionContributionItem showOpenSlotsAci = new ActionContributionItem(showOpenSlotsAction);
+		showOpenSlotsAci.fill(menu, 0);
+
 	}
 
 	public boolean isShowingCargoes() {
 		return this.showingCargoes;
 	}
 
+	public boolean isShowingOpenSlots() {
+		return this.showingOpenSlots;
+	}
 }
