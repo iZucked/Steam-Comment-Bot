@@ -5,14 +5,21 @@
 package com.mmxlabs.hub.preferences;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -38,6 +45,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +102,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		if (editor != null) {
 			editor.dispose();
 		}
-		
+
 		super.dispose();
 	}
 
@@ -171,8 +181,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		setForceBasicAuthEnabled();
 	};
 
-	private @NonNull
-	final IDataHubStateChangeListener stateChangeListener = new IDataHubStateChangeListener() {
+	private @NonNull final IDataHubStateChangeListener stateChangeListener = new IDataHubStateChangeListener() {
 
 		@Override
 		public void hubStateChanged(final boolean online, final boolean loggedin, final boolean changedToOnlineAndLoggedIn) {
@@ -425,11 +434,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		final Button btnCheckLocalTrustedSSL = new Button(debugComposite, SWT.PUSH);
 		btnCheckLocalTrustedSSL.setText("List Local trusted certificates");
 		btnCheckLocalTrustedSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
-		
+
 		final Button btnCheckWindowsTrustedSSL = new Button(debugComposite, SWT.PUSH);
 		btnCheckWindowsTrustedSSL.setText("List Windows trusted certificates");
 		btnCheckWindowsTrustedSSL.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
-		
+
 		final Text lbl = new Text(debugComposite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		lbl.setText("");
 		lbl.setLayoutData(GridDataFactory.fillDefaults().span(2, 5).minSize(250, 300).hint(250, 300).create());
@@ -439,20 +448,65 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				try {
-					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromHost(editor.getStringValue());
+					final Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+					final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
+					proxyTracker.open();
+					try {
+						final StringBuilder sb = new StringBuilder();
 
-					final StringBuilder sb = new StringBuilder();
-					int counter = 1;
-					for (final CertInfo info : infos) {
-						sb.append("Certificate " + counter++ + "\n");
-						sb.append(info);
-						sb.append("\n");
+						final IProxyService service = proxyTracker.getService();
+						if (service != null) {
+							if (service.isProxiesEnabled()) {
+								sb.append("Proxy server configuration detected\n\n");
+								sb.append("Direct connection info\n\n");
+							}
+						}
+						try {
+							final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromHost(editor.getStringValue(), null);
+							int counter = 1;
+							for (final CertInfo info : infos) {
+								sb.append("Certificate " + counter++ + "\n");
+								sb.append(info);
+								sb.append("\n");
+							}
+						} catch (final Exception ex) {
+							sb.append("Error getting direct connection certificates\n");
+							LOG.error("Error getting direct connection certificates", ex);
+						}
+						if (service != null && service.isProxiesEnabled()) {
+							try {
+								final IProxyData[] data = service.select(new URI(editor.getStringValue()));
+								if (data != null && data.length > 0) {
+									for (final var pd : data) {
+										if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
+											sb.append("Proxy connection via " + pd.getHost() + "\n\n");
+
+											final Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(pd.getHost(), pd.getPort()));
+											final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromHost(editor.getStringValue(), proxy);
+											int counter = 1;
+											for (final CertInfo info : infos) {
+												sb.append("Certificate " + counter++ + "\n");
+												sb.append(info);
+												sb.append("\n");
+											}
+										}
+									}
+								}
+							} catch (final URISyntaxException uriex) {
+								// Ignore URI issues
+							} catch (final Exception ex) {
+								sb.append("Error getting proxy connection certificates\n");
+								LOG.error("Error getting proxy connection certificates", ex);
+							}
+						}
+
+						lbl.setText(sb.toString());
+					} finally {
+						proxyTracker.close();
 					}
-					lbl.setText(sb.toString());
 				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
-
 			}
 		});
 		btnCheckLocalSSL.addSelectionListener(new SelectionAdapter() {
@@ -477,12 +531,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			}
 		});
 		btnCheckLocalTrustedSSL.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				try {
 					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromLocalTrustStore();
-					
+
 					final StringBuilder sb = new StringBuilder();
 					int counter = 1;
 					for (final CertInfo info : infos) {
@@ -494,16 +548,16 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 		btnCheckWindowsTrustedSSL.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				try {
 					final List<CertInfo> infos = HttpClientUtil.extractSSLInfoFromWindowsTrustStore();
-					
+
 					final StringBuilder sb = new StringBuilder();
 					int counter = 1;
 					for (final CertInfo info : infos) {
@@ -515,7 +569,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 

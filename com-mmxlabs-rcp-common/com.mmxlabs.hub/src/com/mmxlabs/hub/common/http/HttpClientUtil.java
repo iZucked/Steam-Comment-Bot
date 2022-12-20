@@ -7,6 +7,9 @@ package com.mmxlabs.hub.common.http;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -38,10 +41,12 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.TrustStoreManager;
 
 import okhttp3.CipherSuite;
@@ -214,7 +219,7 @@ public class HttpClientUtil {
 		return infos;
 	}
 
-	public static List<CertInfo> extractSSLInfoFromHost(final String url) throws Exception {
+	public static List<CertInfo> extractSSLInfoFromHost(final String url, @Nullable Proxy proxy) throws Exception {
 
 		if (url.startsWith("http:")) {
 			return Collections.emptyList();
@@ -227,6 +232,7 @@ public class HttpClientUtil {
 		if (!matcher.matches()) {
 			matcher = Pattern.compile(pattern).matcher(url);
 		}
+
 		if (matcher.matches()) {
 			final String hostStr = matcher.group(1);
 			final String portStr = matcher.groupCount() > 1 ? matcher.group(2) : null;
@@ -247,12 +253,26 @@ public class HttpClientUtil {
 
 			final int port = portStr == null ? 443 : Integer.parseInt(portStr.substring(1));
 
-			try (SSLSocket createSocket = (SSLSocket) socketFactory.createSocket(hostStr, port)) {
-				createSocket.startHandshake();
-				final SSLSession session = createSocket.getSession();
-				for (final java.security.cert.Certificate c : session.getPeerCertificates()) {
-					final X509Certificate cert = (X509Certificate) c;
-					infos.add(CertInfo.from(cert));
+			if (proxy != null) {
+				try (Socket socket = new Socket(proxy)) {
+					socket.connect(new InetSocketAddress(hostStr, port));
+					try (SSLSocket createSocket = (SSLSocket) socketFactory.createSocket(socket, hostStr, port, true)) {
+						createSocket.startHandshake();
+						final SSLSession session = createSocket.getSession();
+						for (final java.security.cert.Certificate c : session.getPeerCertificates()) {
+							final X509Certificate cert = (X509Certificate) c;
+							infos.add(CertInfo.from(cert));
+						}
+					}
+				}
+			} else {
+				try (SSLSocket createSocket = (SSLSocket) socketFactory.createSocket(hostStr, port)) {
+					createSocket.startHandshake();
+					final SSLSession session = createSocket.getSession();
+					for (final java.security.cert.Certificate c : session.getPeerCertificates()) {
+						final X509Certificate cert = (X509Certificate) c;
+						infos.add(CertInfo.from(cert));
+					}
 				}
 			}
 		}
@@ -317,7 +337,7 @@ public class HttpClientUtil {
 			}
 			return sb.toString();
 		}
-		
+
 		@Override
 		public @NonNull String toString() {
 			final StringBuilder sb = new StringBuilder();
