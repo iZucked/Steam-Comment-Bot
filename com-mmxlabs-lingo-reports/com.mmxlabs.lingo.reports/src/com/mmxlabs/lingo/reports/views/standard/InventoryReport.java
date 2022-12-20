@@ -347,14 +347,10 @@ public class InventoryReport extends ViewPart {
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
 				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
-				createColumn("Forecast low", 150, o -> String.format("%,d", o.volumeLow));
-				createColumn("Forecast high", 150, o -> String.format("%,d", o.volumeHigh));
 				createColumn("Total Feed Out", 150, o -> String.format("%,d", o.feedOut));
 				createColumn("Total Cargo Out", 150, o -> String.format("%,d", o.cargoOut));
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
-				createColumn("Level low", 150, o -> String.format("%,d", o.ttlLow));
-				createColumn("Level high", 150, o -> String.format("%,d", o.ttlHigh));
 				createColumn("Vessel", 150, o -> o.vessel);
 				createColumn("D-ID", 150, o -> o.dischargeId);
 				createColumn("Buyer", 150, o -> o.salesContract);
