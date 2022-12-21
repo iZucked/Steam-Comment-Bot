@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
@@ -130,18 +131,18 @@ public class CloudOptimisationDataService {
 		}
 	}
 
-	public void delete(final Collection<String> jobIdsToDelete) throws IOException {
+	public void delete(final Collection<String> jobIdsToDelete) throws IOException, URISyntaxException {
 		updater.deleteDownloaded(jobIdsToDelete);
 		for (String jobid : jobIdsToDelete) {
 			client.abort(jobid);
 		}
 	}
 
-	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, URISyntaxException {
 		return client.getOptimisationServerPublicKey(pubkey);
 	}
 
-	public String getInfo() throws IOException {
+	public String getInfo() throws IOException, URISyntaxException {
 		return client.getInfo();
 	}
 

@@ -5,23 +5,54 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpMessage;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jetty.server.HostHeaderCustomizer;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,35 +61,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
-import com.mmxlabs.hub.common.http.ProgressRequestBody;
-import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
+import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugContants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.GatewayResponseMaker;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.MultipartBody.Builder;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Okio;
-
 public class CloudOptimisationDataServiceClient {
-
-	// public CloudOptimisationDataServiceClient() {
-	// preferences =
-	// InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.optimisation.service.url");
-	// optimisationServiceURL = preferences.get("URL", OPTI_CLOUD_BASE_URL);
-	// }
 
 	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationDataServiceClient.class);
 
@@ -70,17 +85,8 @@ public class CloudOptimisationDataServiceClient {
 	private static final String PUBLIC_KEY_URL = "/publickey";
 	private static final String INFO_URL = "/info";
 	private static final String ABORT_URL = "/abort";
-	// private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com";
-	// // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
-	// private final IEclipsePreferences preferences;
-	// private final String optimisationServiceURL;
 
 	private String userid;
-
-	private final OkHttpClient httpClient = com.mmxlabs.hub.common.http.HttpClientUtil.basicBuilder() //
-			.build();
-
-	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 
 	private final Instant lastSuccessfulAccess = Instant.EPOCH.plusNanos(1);
 
@@ -88,24 +94,56 @@ public class CloudOptimisationDataServiceClient {
 		return this.lastSuccessfulAccess;
 	}
 
-	private Request.Builder makeRequestBuilder(final String baseUrl, final String urlPath) {
+	private HttpClientBuilder createHttpBuilder(final URI url) {
+		final var builder = HttpClientBuilder.create();
 
-		if (baseUrl == null) {
-			return null;
+		final var sslBuilder = SSLContexts.custom();
+		if (url.getHost().contains("gw.minimaxlabs.com")) {
+			try {
+				LicenseManager.loadLicenseKeystore(sslBuilder);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
+			}
 		}
-
-		if (!baseUrl.startsWith("https://")) {
-			return null;
+		try {
+			final Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
+			if (p != null) {
+				sslBuilder.loadTrustMaterial(p.getFirst(), null);
+			}
+			builder.setSSLContext(sslBuilder.build());
+		} catch (final Exception e1) {
+			e1.printStackTrace();
 		}
+		{
 
-		final String credential = Credentials.basic(getUsername(), getPassword(), StandardCharsets.UTF_8);
-
-		final Request.Builder builder = new Request.Builder() //
-				.url(baseUrl + urlPath) //
-				.header("Authorization", credential);
+			final Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
+			proxyTracker.open();
+			try {
+				final IProxyService service = proxyTracker.getService();
+				if (service != null && service.isProxiesEnabled()) {
+					final IProxyData[] data = service.select(url);
+					if (data != null && data.length > 0) {
+						for (final var pd : data) {
+							if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
+								final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
+								final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+								builder.setRoutePlanner(routePlanner);
+							}
+						}
+					}
+				}
+			} finally {
+				proxyTracker.close();
+			}
+		}
 
 		return builder;
 
+	}
+
+	private void withAuthHeader(final URI url, final HttpMessage b) {
+		b.addHeader("Authorization", HttpClientUtil.basicAuthHeader(getUsername(), getPassword()));
 	}
 
 	private String getUsername() {
@@ -129,165 +167,181 @@ public class CloudOptimisationDataServiceClient {
 	}
 
 	public String getUserId() {
-		// if (this.userid == null and CloudOptimisationDataService.INSTANCE.ex) {
-		// CloudOptimisationDataService.INSTANCE.start();
-		// }
 		return this.userid;
 	}
 
-	public String getInfo() throws IOException {
-		final String requestURL = String.format("%s", INFO_URL);
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
-		if (requestBuilder == null) {
+	public String getInfo() throws IOException, URISyntaxException {
+		final String gateway = getGateway();
+		if (gateway == null) {
 			return null;
 		}
+		final URI url = new URI(String.format("%s%s", getGateway(), INFO_URL));
 
-		final Request request = requestBuilder.build();
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (response.isSuccessful()) {
-				return response.body().string();
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			withAuthHeader(url, request);
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				if (response.getStatusLine().getStatusCode() == 200) {
+					return EntityUtils.toString(response.getEntity());
+				}
+				throw new IOException("Unexpected code: " + response);
 			}
-			throw new IOException("Unexpected code: " + response);
-		} catch (final UnknownHostException e) {
-			throw new IOException("Could not resolve host: " + e.getLocalizedMessage());
 		}
 	}
 
 	public String upload(final File scenario, //
 			final String checksum, //
 			final String scenarioName, //
-			final IProgressListener progressListener, final File encryptedSymmetricKey) throws IOException {
-		final Builder builder = new MultipartBody.Builder() //
-				.setType(MultipartBody.FORM) //
-				.addFormDataPart("sha256", checksum) //
-				.addFormDataPart("scenario", scenarioName + ".zip", RequestBody.create(mediaType, scenario)) //
-				.addFormDataPart("encryptedsymkey", "aes.key.enc", RequestBody.create(mediaType, encryptedSymmetricKey)) //
-		;
-		RequestBody requestBody = builder.build();
-
-		if (progressListener != null) {
-			requestBody = new ProgressRequestBody(requestBody, progressListener);
-		}
-
-		final String uploadURL = String.format("%s/%s", SCENARIO_CLOUD_UPLOAD_URL, getUserId());
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), uploadURL);
-		if (requestBuilder == null) {
+			final IProgressListener progressListener, final File encryptedSymmetricKey) throws IOException, URISyntaxException {
+		final String gateway = getGateway();
+		if (gateway == null) {
 			return null;
 		}
 
-		final Request request = requestBuilder //
-				.post(requestBody).build();
+		final URI url = new URI(String.format("%s%s/%s", getGateway(), SCENARIO_CLOUD_UPLOAD_URL, getUserId()));
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		// Check the response
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
+		try (var httpClient = builder.build()) {
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.addTextBody("sha256", checksum);
+			formDataBuilder.addBinaryBody("scenario", scenario, ContentType.DEFAULT_BINARY, scenarioName + ".zip");
+			formDataBuilder.addBinaryBody("encryptedsymkey", encryptedSymmetricKey, ContentType.DEFAULT_BINARY, "aes.key.enc");
+			final HttpEntity entity = formDataBuilder.build();
+			final HttpPost request = new HttpPost(url);
+			withAuthHeader(url, request);
+			// Wrap entity for progress monitor
+			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode >= 200 && statusCode < 300) {
+					return EntityUtils.toString(response.getEntity());
+				}
 				// 400 - missing data or data filename in request
 				// 415 - archive was not a zip file
 				throw new IOException("Unexpected code " + response);
 			}
-			return response.body().string();
 		}
 	}
 
-	public IGatewayResponse downloadTo(final String jobid, int resultIdx, final File file, final IProgressListener progressListener) throws IOException {
-		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
-		if (progressListener != null) {
-			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-				@Override
-				public Response intercept(final Chain chain) throws IOException {
-					final Response originalResponse = chain.proceed(chain.request());
-					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
-				}
-			});
-		}
-		final OkHttpClient localHttpClient = clientBuilder //
-				.build();
+	/**
+	 * Download the job result. Note we expect the original request to return a 302 redirect into an AWS s3 bucket. Apache will follow the redirect, but we need to ensure the auth header is removed.
+	 * 
+	 */
+	public IGatewayResponse downloadTo(final String jobid, final int resultIdx, final File file, final IProgressListener progressListener) throws IOException, URISyntaxException {
 
-		final String requestURL = String.format("%s/%s/%s/%d", SCENARIO_RESULT_URL, jobid, getUserId(), resultIdx);
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
-		if (requestBuilder == null) {
+		final String gateway = getGateway();
+		if (gateway == null) {
 			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
 				LOG.trace("Download Result (%s): null requestBuilder", jobid);
 			}
 			return null;
 		}
+		final URI url = new URI(String.format("%s%s/%s/%s/%d", getGateway(), SCENARIO_RESULT_URL, jobid, getUserId(), resultIdx));
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		final Request request = requestBuilder //
-				.build();
-
-		try (Response response = localHttpClient.newCall(request).execute()) {
-
-			if (response.code() != 200) {
-				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-					LOG.trace("Download Result (%s): Error response code is %d", jobid, response.code());
+		builder.setRedirectStrategy(new DefaultRedirectStrategy() {
+			@Override
+			public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws org.apache.http.ProtocolException {
+				HttpUriRequest redirectRequest = super.getRedirect(request, response, context);
+				if (redirectRequest.getURI().getHost().contains("amazon")) {
+					// We need to add a header to stop the Auth header being passed to AWS as this
+					// results in a 400 bad request.
+					redirectRequest.addHeader("unused", "unused");
 				}
-
-				return GatewayResponseMaker.makeGatewayResponse(response);
-//				throw new IOException("Unexpected code: " + response);
+				return redirectRequest;
 			}
-			try (BufferedSource bufferedSource = response.body().source()) {
-				try (final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
-					bufferedSink.writeAll(bufferedSource);
+		});
+
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			withAuthHeader(url, request);
+
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != 200) {
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Error response code is %d", jobid, statusCode);
+					}
+					return GatewayResponseMaker.makeGatewayResponse(response);
 				}
-				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
-					LOG.trace("Download Result (%s): Completed", jobid);
+
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+					w.writeTo(fos);
+
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace("Download Result (%s): Completed", jobid);
+					}
+					return GatewayResponseMaker.makeGatewayResponse(response);
+
 				}
-				return GatewayResponseMaker.makeGatewayResponse(response);
 			}
 		}
 	}
 
-	public String getJobStatus(final @NonNull String jobid) throws IOException {
-		final String requestURL = String.format("%s/%s/%s", JOB_STATUS_URL, jobid, getUserId());
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
-		if (requestBuilder == null) {
+	public String getJobStatus(final @NonNull String jobid) throws Exception {
+
+		final String gateway = getGateway();
+		if (gateway == null) {
 			return null;
 		}
+		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), JOB_STATUS_URL, jobid, getUserId()));
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		final Request request = requestBuilder //
-				.build();
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			withAuthHeader(url, request);
 
-		try (Response response = httpClient.newCall(request).execute()) {
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != 200) {
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
+						LOG.trace("Status Result (%s): Response code is %d", jobid, statusCode);
+					}
 
-			if (!response.isSuccessful()) {
+					if (statusCode == 404) {
+						return "{ \"status\": \"" + ResultStatus.STATUS_NOTFOUND + "\" }";
+					}
+					throw new IOException("Unexpected code: " + response);
 
+				}
+
+				final String str = EntityUtils.toString(response.getEntity());
 				if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
-					LOG.trace("Status Result (%s): Response code is %d", jobid, response.code());
+					LOG.trace("Status Result (%s): Response body is %s", jobid, str);
 				}
-
-				if (response.code() == 404) {
-					return "{ \"status\": \"" + ResultStatus.STATUS_NOTFOUND + "\" }";// return "Scenario and results are not in s3, please submit again";
-				}
-				throw new IOException("Unexpected code: " + response);
+				return str;
 			}
-			String str = response.body().string();
-			if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
-				LOG.trace("Status Result (%s): Response body is %s", jobid, str);
-			}
-			return str;
 		}
 	}
 
-	public RSAPublicKey getOptimisationServerPublicKey(final File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-		final String requestURL = String.format("%s/%s", PUBLIC_KEY_URL, getUserId());
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
-		if (requestBuilder == null) {
+	public RSAPublicKey getOptimisationServerPublicKey(final File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, URISyntaxException {
+
+		final String gateway = getGateway();
+		if (gateway == null) {
 			return null;
 		}
+		final URI url = new URI(String.format("%s%s/%s", getGateway(), PUBLIC_KEY_URL, getUserId()));
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		final Request request = requestBuilder.build();
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			withAuthHeader(url, request);
 
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code: " + response);
-			}
-			try (var bufferedSource = response.body().source()) {
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != 200) {
+					if (Platform.getDebugBoolean(CloudOptiDebugContants.DEBUG_POLL)) {
+						throw new IOException("Unexpected code: " + response);
+					}
 
-				try (var bufferedSink = Okio.buffer(Okio.sink(pubkey))) {
-					bufferedSink.writeAll(bufferedSource);
 				}
-
+				try (FileOutputStream fos = new FileOutputStream(pubkey)) {
+					response.getEntity().writeTo(fos);
+				}
 				final KeyFactory factory = KeyFactory.getInstance("RSA");
 
 				try (FileReader keyReader = new FileReader(pubkey); PemReader pemReader = new PemReader(keyReader)) {
@@ -301,28 +355,31 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public boolean abort(final String jobid) throws IOException {
-		final String requestURL = String.format("%s/%s/%s", ABORT_URL, jobid, getUserId());
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
-		if (requestBuilder == null) {
+	public boolean abort(final String jobid) throws IOException, URISyntaxException {
+		final String gateway = getGateway();
+		if (gateway == null) {
 			return false;
 		}
+		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), ABORT_URL, jobid, getUserId()));
+		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		final Request request = requestBuilder //
-				.build();
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			withAuthHeader(url, request);
 
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 500) {
-					LOG.error("failed to abort remote optimisation job");
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != 200) {
+					if (statusCode == 500) {
+						LOG.error("failed to abort remote optimisation job");
+					}
+					return false;
 				}
-				return false;
+				return true;
 			}
-			return true;
 		}
 	}
 
-	//
 	private static final TypeReference<List<CloudOptimisationDataResultRecord>> TYPE_GDR_LIST = new TypeReference<List<CloudOptimisationDataResultRecord>>() {
 	};
 

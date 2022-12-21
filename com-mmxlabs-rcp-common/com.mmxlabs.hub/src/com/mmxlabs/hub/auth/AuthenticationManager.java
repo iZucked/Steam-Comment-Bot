@@ -7,16 +7,15 @@ package com.mmxlabs.hub.auth;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.http.client.methods.HttpRequestBase;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import okhttp3.Request;
-import okhttp3.Request.Builder;
 
 public class AuthenticationManager {
 
@@ -108,31 +107,20 @@ public class AuthenticationManager {
 		}
 	}
 
-	public static Request.Builder buildRequestWithoutAuthentication() {
-		return new Request.Builder().header("Cache-Control", "no-store, max-age=0");
-	}
-
-	public Request.Builder buildRequest() {
+	public void addAuthToRequest(@NonNull HttpRequestBase request) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			Optional<Builder> buildRequestWithToken = oauthManager.buildRequestWithToken();
-			if (buildRequestWithToken.isPresent()) {
-				return buildRequestWithToken.get();
-			} else {
-				// Invalidate?
-			}
+			oauthManager.buildRequestWithToken(request);
+
 		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication.get()) {
-			Optional<Builder> buildRequestWithBasicAuth = basicAuthenticationManager.buildRequestWithBasicAuth();
-			if (buildRequestWithBasicAuth.isPresent()) {
-				return buildRequestWithBasicAuth.get();
-			} else {
-				// Invalidate?
-			}
+			basicAuthenticationManager.buildRequestWithBasicAuth(request);
+		} else {
+			request.addHeader("Cache-Control", "no-store, max-age=0");
 		}
-		return buildRequestWithoutAuthentication();
 	}
 
 	public void storeInSecurePreferences(String key, String value) {
-		// returns node corresponding to the path specified. If such node does not exist, a new node is created
+		// returns node corresponding to the path specified. If such node does not
+		// exist, a new node is created
 		try {
 			final ISecurePreferences node = PREFERENCES.node(PREFERENCES_NODE);
 			node.put(key, value, true);

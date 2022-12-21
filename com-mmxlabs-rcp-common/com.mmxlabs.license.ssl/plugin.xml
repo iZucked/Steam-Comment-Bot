@@ -16,20 +16,5 @@
             category="com.mmxlabs.lingo.app.preferences.InformationPreferencesPage">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.ecf.provider.filetransfer.retrieveFileTransferProtocolFactory">
-      <retrieveFileTransferProtocolFactory
-            class="com.mmxlabs.license.ssl.internal.HttpClientRetrieveFileTransferFactory"
-            protocol="https"
-            priority="10">
-      </retrieveFileTransferProtocolFactory>
-   </extension>
-   <extension
-         point="org.eclipse.ecf.provider.filetransfer.browseFileTransferProtocolFactory">
-      <browseFileTransferProtocolFactory
-            class="com.mmxlabs.license.ssl.internal.HttpClientBrowseFileTransferFactory"
-            priority="10"
-            protocol="https">
-      </browseFileTransferProtocolFactory>
-   </extension>
+ 
 </plugin>

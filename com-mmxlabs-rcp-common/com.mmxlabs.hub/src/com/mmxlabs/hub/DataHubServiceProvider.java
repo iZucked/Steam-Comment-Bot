@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -20,8 +22,6 @@ import com.mmxlabs.hub.services.users.IUserNameMapping;
 import com.mmxlabs.hub.services.users.IUserNameProvider;
 import com.mmxlabs.hub.services.users.UserNameUpdater;
 import com.mmxlabs.hub.services.users.UsernameProvider;
-
-import okhttp3.Request.Builder;
 
 /**
  * A central place to access Data Hub services
@@ -75,7 +75,7 @@ public class DataHubServiceProvider {
 		this.loggedIn = loggedIn;
 
 		System.out.printf("Hub State - Online: %s Logged In %s\n", online, loggedIn);
-		
+
 		if (changedToOnlineAndLoggedIn) {
 			// We have changed to online + logged in, so refresh some state
 
@@ -131,12 +131,8 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public @Nullable Builder makeRequestBuilder(String urlPath) {
-		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(urlPath);
-	}
-	
-	public @Nullable Builder makeRequestBuilder(String baseUrl, String urlPath) {
-		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(baseUrl, urlPath);
+	public @Nullable CloseableHttpClient makeRequest(String urlPath, HttpRequestBase request) {
+		return UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, request);
 	}
 
 	public synchronized void setOnlineState(final boolean newOnline) {

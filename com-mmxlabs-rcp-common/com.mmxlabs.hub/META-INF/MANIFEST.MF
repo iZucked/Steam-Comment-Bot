@@ -33,11 +33,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.model.workbench;bundle-version="2.1.600.v20191106-1503",
  javax.annotation;bundle-version="1.2.0",
  org.eclipse.e4.core.di,
- wrapped.com.squareup.okhttp3.okhttp;bundle-version="3.14.2";visibility:=reexport,
- wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="3.7.101",
  com.mmxlabs.rcp.icons.lingo,
- org.eclipse.core.net
+ org.apache.httpcomponents.httpcore,
+ org.eclipse.core.net,
+ org.apache.httpcomponents.httpclient,
+ com.google.guava
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered

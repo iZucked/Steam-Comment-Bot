@@ -10,10 +10,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import org.apache.http.ssl.SSLContextBuilder;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
@@ -92,6 +96,11 @@ public final class LicenseManager {
 		return licenseKeystore;
 	}
 
+	public static void loadLicenseKeystore(SSLContextBuilder builder) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
+		builder.loadKeyMaterial(getLicenseKeystore(), KEYSTORE_CODE.toCharArray());
+
+	}
+
 	/**
 	 * Get license keystore from user's mmxlabs directory
 	 *
@@ -164,8 +173,6 @@ public final class LicenseManager {
 		return rootCertificate;
 
 	}
-
- 
 
 	public static void updateHubLicense(File hubLicense) {
 		LicenseManager.hubLicense = hubLicense;

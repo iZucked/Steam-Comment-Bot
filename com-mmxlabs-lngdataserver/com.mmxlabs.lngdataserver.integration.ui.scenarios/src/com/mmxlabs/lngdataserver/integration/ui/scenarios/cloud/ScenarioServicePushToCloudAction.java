@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
@@ -329,7 +330,7 @@ public class ScenarioServicePushToCloudAction {
 				keyStore.delete();
 			}
 			throw new CloudOptimisationPushException(MSG_ERROR_SAVE_ENCRYPTION_KEY, Type.FAILED_TO_SAVE_ENCRYPTION_KEY, new IllegalStateException("Unexpected error: " + e.getMessage()));
-		} catch (IOException | GeneralSecurityException e) {
+		} catch (IOException | GeneralSecurityException | URISyntaxException e) {
 			LOG.error(e.getMessage(), e);
 			if (encryptedSymmetricKey != null) {
 				encryptedSymmetricKey.delete();
