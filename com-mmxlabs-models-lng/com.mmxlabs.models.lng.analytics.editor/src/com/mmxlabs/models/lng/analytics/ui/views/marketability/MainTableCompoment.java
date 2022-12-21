@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -28,13 +29,13 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
@@ -42,6 +43,9 @@ import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -71,13 +75,13 @@ public class MainTableCompoment {
 
 	private Control createViewer(final Composite parent) {
 		tableViewer = new GridTreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-		// ColumnViewerToolTipSupport.enableFor(tableViewer);
+		ColumnViewerToolTipSupport.enableFor(tableViewer);
 
 		assert tableViewer != null;
 		GridViewerHelper.configureLookAndFeel(tableViewer);
 		tableViewer.getGrid().setHeaderVisible(true);
 		tableViewer.getGrid().setAutoHeight(true);
-		// tableViewer.getGrid().setRowHeaderVisible(true);
+
 		createColumn(tableViewer, "Vessel", new ShippingOptionDescriptionFormatter(), false).getColumn();
 		createLoadSlotColumn(tableViewer.getGrid());
 		createDischargeSlotColumn(tableViewer.getGrid());
@@ -144,25 +148,40 @@ public class MainTableCompoment {
 		nextEventColumn.setText("Next Event");
 
 		createChildColumn(tableViewer, "ID", nextEventColumn, row -> {
-			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
-				return (row.getResult().getNextSlotVisit().getSlotAllocation().getName());
+			if (row.getSellOption() != null) {
+				if(row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable ) {
+					if (assignable.getElement() instanceof VesselEvent event) {
+						return (event.getName());
+					} else if(assignable.getElement() instanceof Cargo cargo) {
+						return (cargo.getLoadName());
+					}
+				}
 			}
 			return "";
 		});
 
 		createChildColumn(tableViewer, "Port", nextEventColumn, row -> {
 
-			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
-				return (row.getResult().getNextSlotVisit().getPort().getName());
+			if (row.getSellOption() != null) {
+				if(row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable ) {
+					Port p = null;
+					if (assignable.getElement() instanceof VesselEvent event) {
+						p = event.getPort();
+					} else if(assignable.getElement() instanceof Cargo cargo) {
+						p = cargo.getSortedSlots().get(0).getPort();
+					}
+					return (p != null) ? p.getName() : "";
+				}
 			}
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Nom Date", nextEventColumn, row -> {
+		createChildColumn(tableViewer, "Date", nextEventColumn, row -> {
 
-			if (row.getSellOption() != null && row.getResult().getNextSlotVisit() != null) {
-				return (formatDate(row.getResult().getNextSlotVisit().getStart().toLocalDate()));
-			}
+			if (row.getSellOption() != null && row.getResult() != null) {
+				if(row.getResult().getNextEvent() != null) {
+					return formatDate(row.getResult().getNextEvent().getStart().toLocalDate());
+				}			}
 			return "";
 		});
 
@@ -188,23 +207,15 @@ public class MainTableCompoment {
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Nom Date", portColumn, row -> {
-			if (row.getResult().getBuySlotVisit() != null) {
-				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getResult().getBuySlotVisit().getStart()));
-			}
-			return "";
-		});
-
-		createChildColumn(tableViewer, "Duration", portColumn, row -> {
-			if (row.getBuyOption() instanceof BuyReference bo) {
-				int duration = bo.getSlot().getDuration();
-				return (formatDuration(duration));
+		createChildColumn(tableViewer, "Date", portColumn, row -> {
+			if (row.getResult().getBuyDate() != null) {
+				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getResult().getBuyDate()));
 			}
 			return "";
 		});
 		createChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getLadenPanama() != null) {
-				return formatDate(row.getResult().getLadenPanama().getStart().toLocalDate());
+				return formatDate(row.getResult().getLadenPanama());
 			}
 			return "";
 		});
@@ -225,15 +236,15 @@ public class MainTableCompoment {
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Nom Date", portColumn, row -> {
-			if (row.getResult().getBuySlotVisit() != null) {
-				return (formatDate(row.getResult().getBuySlotVisit().getStart().toLocalDate()));
+		createChildColumn(tableViewer, "Date", portColumn, row -> {
+			if (row.getResult().getSellDate() != null) {
+				return (formatDate(row.getResult().getSellDate()));
 			}
 			return "";
 		});
 		createChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getBallastPanama() != null) {
-				return formatDate(row.getResult().getBallastPanama().getStart().toLocalDate());
+				return formatDate(row.getResult().getBallastPanama());
 			}
 			return "";
 		});
@@ -241,13 +252,8 @@ public class MainTableCompoment {
 		return portColumn;
 	}
 
-	private String formatDuration(final int duration) {
-		return String.format("%dh", duration);
-	}
-
 	@SuppressWarnings("null")
-	@NonNull
-	private String formatDate(final LocalDate date) {
+	private @NonNull String formatDate(final LocalDate date) {
 		if (date == null) {
 			return "";
 		}
@@ -282,7 +288,6 @@ public class MainTableCompoment {
 		gvc.getColumn().setTree(false);
 		GridViewerHelper.configureLookAndFeel(gvc);
 		gvc.getColumn().setText(name);
-		// FIXME: DOESN'T SCROLL WHEN USING A LARGER COLUMN DEFAULT WIDTH
 		gvc.getColumn().setWidth(90);
 		gvc.getColumn().setDetail(true);
 		gvc.getColumn().setSummary(true);

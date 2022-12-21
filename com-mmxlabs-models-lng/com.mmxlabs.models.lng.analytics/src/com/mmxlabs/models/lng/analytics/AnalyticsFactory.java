@@ -268,6 +268,33 @@ public interface AnalyticsFactory extends EFactory {
 	MarketabilityResultContainer createMarketabilityResultContainer();
 
 	/**
+	 * Returns a new object of class '<em>Marketability Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Event</em>'.
+	 * @generated
+	 */
+	MarketabilityEvent createMarketabilityEvent();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Assignable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Assignable Element</em>'.
+	 * @generated
+	 */
+	MarketabilityAssignableElement createMarketabilityAssignableElement();
+
+	/**
+	 * Returns a new object of class '<em>Marketability End Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability End Event</em>'.
+	 * @generated
+	 */
+	MarketabilityEndEvent createMarketabilityEndEvent();
+
+	/**
 	 * Returns a new object of class '<em>Option Analysis Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

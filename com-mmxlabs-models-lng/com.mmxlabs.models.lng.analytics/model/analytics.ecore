@@ -472,12 +472,20 @@
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResultContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
         eType="#//MarketabilityResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buySlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sellSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nextSlotVisit" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotVisit"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CanalJourneyEvent"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastPanama" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CanalJourneyEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextEvent" eType="#//MarketabilityEvent"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buyDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sellDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenPanama" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastPanama" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityAssignableElement" eSuperTypes="#//MarketabilityEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//AssignableElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityEndEvent" eSuperTypes="#//MarketabilityEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="ViabilityRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>

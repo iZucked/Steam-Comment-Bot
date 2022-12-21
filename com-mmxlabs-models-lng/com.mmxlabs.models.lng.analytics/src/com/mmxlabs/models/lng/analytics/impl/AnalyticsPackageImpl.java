@@ -48,6 +48,9 @@ import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMResult;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor;
+import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
+import com.mmxlabs.models.lng.analytics.MarketabilityEndEvent;
+import com.mmxlabs.models.lng.analytics.MarketabilityEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
@@ -322,6 +325,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass marketabilityResultContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketabilityEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketabilityAssignableElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass marketabilityEndEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2080,7 +2104,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getMarketabilityResultContainer_BuySlotVisit() {
+	public EReference getMarketabilityResultContainer_NextEvent() {
 		return (EReference)marketabilityResultContainerEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2090,8 +2114,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getMarketabilityResultContainer_SellSlotVisit() {
-		return (EReference)marketabilityResultContainerEClass.getEStructuralFeatures().get(2);
+	public EAttribute getMarketabilityResultContainer_LadenPanama() {
+		return (EAttribute)marketabilityResultContainerEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -2100,8 +2124,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getMarketabilityResultContainer_NextSlotVisit() {
-		return (EReference)marketabilityResultContainerEClass.getEStructuralFeatures().get(3);
+	public EAttribute getMarketabilityResultContainer_BallastPanama() {
+		return (EAttribute)marketabilityResultContainerEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2110,8 +2134,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getMarketabilityResultContainer_LadenPanama() {
-		return (EReference)marketabilityResultContainerEClass.getEStructuralFeatures().get(4);
+	public EClass getMarketabilityEvent() {
+		return marketabilityEventEClass;
 	}
 
 	/**
@@ -2120,8 +2144,58 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getMarketabilityResultContainer_BallastPanama() {
-		return (EReference)marketabilityResultContainerEClass.getEStructuralFeatures().get(5);
+	public EAttribute getMarketabilityEvent_Start() {
+		return (EAttribute)marketabilityEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarketabilityAssignableElement() {
+		return marketabilityAssignableElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMarketabilityAssignableElement_Element() {
+		return (EReference)marketabilityAssignableElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarketabilityEndEvent() {
+		return marketabilityEndEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarketabilityResultContainer_BuyDate() {
+		return (EAttribute)marketabilityResultContainerEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarketabilityResultContainer_SellDate() {
+		return (EAttribute)marketabilityResultContainerEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -4541,11 +4615,19 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		marketabilityResultContainerEClass = createEClass(MARKETABILITY_RESULT_CONTAINER);
 		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS);
-		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT);
-		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT);
-		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT);
-		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA);
-		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA);
+		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT);
+		createEAttribute(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__BUY_DATE);
+		createEAttribute(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__SELL_DATE);
+		createEAttribute(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA);
+		createEAttribute(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA);
+
+		marketabilityEventEClass = createEClass(MARKETABILITY_EVENT);
+		createEAttribute(marketabilityEventEClass, MARKETABILITY_EVENT__START);
+
+		marketabilityAssignableElementEClass = createEClass(MARKETABILITY_ASSIGNABLE_ELEMENT);
+		createEReference(marketabilityAssignableElementEClass, MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT);
+
+		marketabilityEndEventEClass = createEClass(MARKETABILITY_END_EVENT);
 
 		viabilityRowEClass = createEClass(VIABILITY_ROW);
 		createEReference(viabilityRowEClass, VIABILITY_ROW__BUY_OPTION);
@@ -4778,6 +4860,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		fleetVesselAllocationDescriptorEClass.getESuperTypes().add(this.getVesselAllocationDescriptor());
 		viabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		marketabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
+		marketabilityAssignableElementEClass.getESuperTypes().add(this.getMarketabilityEvent());
+		marketabilityEndEventEClass.getESuperTypes().add(this.getMarketabilityEvent());
 		mtmModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		breakEvenAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		commodityCurveOverlayEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
@@ -5080,11 +5164,19 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(marketabilityResultContainerEClass, MarketabilityResultContainer.class, "MarketabilityResultContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityResultContainer_RhsResults(), this.getMarketabilityResult(), null, "rhsResults", null, 0, -1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarketabilityResultContainer_BuySlotVisit(), theSchedulePackage.getSlotVisit(), null, "buySlotVisit", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarketabilityResultContainer_SellSlotVisit(), theSchedulePackage.getSlotVisit(), null, "sellSlotVisit", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarketabilityResultContainer_NextSlotVisit(), theSchedulePackage.getSlotVisit(), null, "nextSlotVisit", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarketabilityResultContainer_LadenPanama(), theSchedulePackage.getCanalJourneyEvent(), null, "ladenPanama", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMarketabilityResultContainer_BallastPanama(), theSchedulePackage.getCanalJourneyEvent(), null, "ballastPanama", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketabilityResultContainer_NextEvent(), this.getMarketabilityEvent(), null, "nextEvent", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityResultContainer_BuyDate(), theDateTimePackage.getLocalDate(), "buyDate", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityResultContainer_SellDate(), theDateTimePackage.getLocalDate(), "sellDate", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityResultContainer_LadenPanama(), theDateTimePackage.getLocalDate(), "ladenPanama", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityResultContainer_BallastPanama(), theDateTimePackage.getLocalDate(), "ballastPanama", null, 0, 1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(marketabilityEventEClass, MarketabilityEvent.class, "MarketabilityEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarketabilityEvent_Start(), theDateTimePackage.getDateTime(), "start", null, 0, 1, MarketabilityEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(marketabilityAssignableElementEClass, MarketabilityAssignableElement.class, "MarketabilityAssignableElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMarketabilityAssignableElement_Element(), theCargoPackage.getAssignableElement(), null, "element", null, 0, 1, MarketabilityAssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(marketabilityEndEventEClass, MarketabilityEndEvent.class, "MarketabilityEndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(viabilityRowEClass, ViabilityRow.class, "ViabilityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getViabilityRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, ViabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

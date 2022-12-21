@@ -3892,34 +3892,34 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Buy Slot Visit</b></em>' reference.
+	 * The feature id for the '<em><b>Next Event</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT = 1;
+	int MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Sell Slot Visit</b></em>' reference.
+	 * The feature id for the '<em><b>Buy Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT = 2;
+	int MARKETABILITY_RESULT_CONTAINER__BUY_DATE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Next Slot Visit</b></em>' reference.
+	 * The feature id for the '<em><b>Sell Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT = 3;
+	int MARKETABILITY_RESULT_CONTAINER__SELL_DATE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Laden Panama</b></em>' reference.
+	 * The feature id for the '<em><b>Laden Panama</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3928,7 +3928,7 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA = 4;
 
 	/**
-	 * The feature id for the '<em><b>Ballast Panama</b></em>' reference.
+	 * The feature id for the '<em><b>Ballast Panama</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3946,6 +3946,99 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_RESULT_CONTAINER_FEATURE_COUNT = 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl <em>Marketability Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEvent()
+	 * @generated
+	 */
+	int MARKETABILITY_EVENT = 59;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_EVENT__START = 0;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_EVENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl <em>Marketability Assignable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityAssignableElement()
+	 * @generated
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT = 60;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT__START = MARKETABILITY_EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>Element</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Assignable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl <em>Marketability End Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEndEvent()
+	 * @generated
+	 */
+	int MARKETABILITY_END_EVENT = 61;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_END_EVENT__START = MARKETABILITY_EVENT__START;
+
+	/**
+	 * The number of structural features of the '<em>Marketability End Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_END_EVENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3953,7 +4046,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 59;
+	int VIABILITY_ROW = 62;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4062,7 +4155,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 60;
+	int VIABILITY_RESULT = 63;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4144,7 +4237,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 61;
+	int MTM_MODEL = 64;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4262,7 +4355,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 62;
+	int MTM_RESULT = 65;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4335,7 +4428,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 63;
+	int MTM_ROW = 66;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4435,7 +4528,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 64;
+	int BREAK_EVEN_ANALYSIS_MODEL = 67;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4544,7 +4637,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 65;
+	int BREAK_EVEN_ANALYSIS_ROW = 68;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4626,7 +4719,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 66;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 69;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -4672,7 +4765,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 67;
+	int BREAK_EVEN_ANALYSIS_RESULT = 70;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4727,7 +4820,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
 	 * @generated
 	 */
-	int LOCAL_DATE_TIME_HOLDER = 68;
+	int LOCAL_DATE_TIME_HOLDER = 71;
 
 	/**
 	 * The feature id for the '<em><b>Date Time</b></em>' attribute.
@@ -4755,7 +4848,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OPTION = 69;
+	int COMMODITY_CURVE_OPTION = 72;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
@@ -4774,7 +4867,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OVERLAY = 70;
+	int COMMODITY_CURVE_OVERLAY = 73;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4829,7 +4922,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
 	 * @generated
 	 */
-	int SENSITIVITY_MODEL = 71;
+	int SENSITIVITY_MODEL = 74;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4884,7 +4977,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
 	 * @generated
 	 */
-	int SENSITIVITY_SOLUTION_SET = 72;
+	int SENSITIVITY_SOLUTION_SET = 75;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5047,7 +5140,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
 	 * @generated
 	 */
-	int ABSTRACT_SENSITIVITY_RESULT = 73;
+	int ABSTRACT_SENSITIVITY_RESULT = 76;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5120,7 +5213,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
 	 * @generated
 	 */
-	int PORTFOLIO_SENSITIVITY_RESULT = 74;
+	int PORTFOLIO_SENSITIVITY_RESULT = 77;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5193,7 +5286,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
 	 * @generated
 	 */
-	int CARGO_PN_LRESULT = 75;
+	int CARGO_PN_LRESULT = 78;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5275,7 +5368,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixModel()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_MODEL = 76;
+	int SWAP_VALUE_MATRIX_MODEL = 79;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5483,7 +5576,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT = 77;
+	int SWAP_VALUE_MATRIX_RESULT = 80;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5610,7 +5703,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResultSet()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_SET = 78;
+	int SWAP_VALUE_MATRIX_RESULT_SET = 81;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5683,7 +5776,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 79;
+	int VOLUME_MODE = 82;
 
 
 	/**
@@ -5694,7 +5787,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 80;
+	int SLOT_TYPE = 83;
 
 
 	/**
@@ -7120,59 +7213,111 @@ s	 * <!-- end-user-doc -->
 	EReference getMarketabilityResultContainer_RhsResults();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit <em>Buy Slot Visit</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextEvent <em>Next Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Buy Slot Visit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuySlotVisit()
+	 * @return the meta object for the containment reference '<em>Next Event</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextEvent()
 	 * @see #getMarketabilityResultContainer()
 	 * @generated
 	 */
-	EReference getMarketabilityResultContainer_BuySlotVisit();
+	EReference getMarketabilityResultContainer_NextEvent();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit <em>Sell Slot Visit</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama <em>Laden Panama</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Sell Slot Visit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellSlotVisit()
-	 * @see #getMarketabilityResultContainer()
-	 * @generated
-	 */
-	EReference getMarketabilityResultContainer_SellSlotVisit();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextSlotVisit <em>Next Slot Visit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Next Slot Visit</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getNextSlotVisit()
-	 * @see #getMarketabilityResultContainer()
-	 * @generated
-	 */
-	EReference getMarketabilityResultContainer_NextSlotVisit();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama <em>Laden Panama</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Panama</em>'.
+	 * @return the meta object for the attribute '<em>Laden Panama</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama()
 	 * @see #getMarketabilityResultContainer()
 	 * @generated
 	 */
-	EReference getMarketabilityResultContainer_LadenPanama();
+	EAttribute getMarketabilityResultContainer_LadenPanama();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama <em>Ballast Panama</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama <em>Ballast Panama</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Panama</em>'.
+	 * @return the meta object for the attribute '<em>Ballast Panama</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama()
 	 * @see #getMarketabilityResultContainer()
 	 * @generated
 	 */
-	EReference getMarketabilityResultContainer_BallastPanama();
+	EAttribute getMarketabilityResultContainer_BallastPanama();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEvent <em>Marketability Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Marketability Event</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEvent
+	 * @generated
+	 */
+	EClass getMarketabilityEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityEvent#getStart <em>Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEvent#getStart()
+	 * @see #getMarketabilityEvent()
+	 * @generated
+	 */
+	EAttribute getMarketabilityEvent_Start();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement <em>Marketability Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Marketability Assignable Element</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement
+	 * @generated
+	 */
+	EClass getMarketabilityAssignableElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement#getElement <em>Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Element</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement#getElement()
+	 * @see #getMarketabilityAssignableElement()
+	 * @generated
+	 */
+	EReference getMarketabilityAssignableElement_Element();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEndEvent <em>Marketability End Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Marketability End Event</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEndEvent
+	 * @generated
+	 */
+	EClass getMarketabilityEndEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuyDate <em>Buy Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Buy Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuyDate()
+	 * @see #getMarketabilityResultContainer()
+	 * @generated
+	 */
+	EAttribute getMarketabilityResultContainer_BuyDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellDate <em>Sell Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sell Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellDate()
+	 * @see #getMarketabilityResultContainer()
+	 * @generated
+	 */
+	EAttribute getMarketabilityResultContainer_SellDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
@@ -10573,44 +10718,90 @@ s	 * <!-- end-user-doc -->
 		EReference MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = eINSTANCE.getMarketabilityResultContainer_RhsResults();
 
 		/**
-		 * The meta object literal for the '<em><b>Buy Slot Visit</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Next Event</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT = eINSTANCE.getMarketabilityResultContainer_BuySlotVisit();
+		EReference MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT = eINSTANCE.getMarketabilityResultContainer_NextEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>Sell Slot Visit</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Laden Panama</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT = eINSTANCE.getMarketabilityResultContainer_SellSlotVisit();
+		EAttribute MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA = eINSTANCE.getMarketabilityResultContainer_LadenPanama();
 
 		/**
-		 * The meta object literal for the '<em><b>Next Slot Visit</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Ballast Panama</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT = eINSTANCE.getMarketabilityResultContainer_NextSlotVisit();
+		EAttribute MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA = eINSTANCE.getMarketabilityResultContainer_BallastPanama();
 
 		/**
-		 * The meta object literal for the '<em><b>Laden Panama</b></em>' reference feature.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl <em>Marketability Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEvent()
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA = eINSTANCE.getMarketabilityResultContainer_LadenPanama();
+		EClass MARKETABILITY_EVENT = eINSTANCE.getMarketabilityEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>Ballast Panama</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Start</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA = eINSTANCE.getMarketabilityResultContainer_BallastPanama();
+		EAttribute MARKETABILITY_EVENT__START = eINSTANCE.getMarketabilityEvent_Start();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl <em>Marketability Assignable Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityAssignableElement()
+		 * @generated
+		 */
+		EClass MARKETABILITY_ASSIGNABLE_ELEMENT = eINSTANCE.getMarketabilityAssignableElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Element</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT = eINSTANCE.getMarketabilityAssignableElement_Element();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl <em>Marketability End Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEndEvent()
+		 * @generated
+		 */
+		EClass MARKETABILITY_END_EVENT = eINSTANCE.getMarketabilityEndEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Buy Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKETABILITY_RESULT_CONTAINER__BUY_DATE = eINSTANCE.getMarketabilityResultContainer_BuyDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Sell Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKETABILITY_RESULT_CONTAINER__SELL_DATE = eINSTANCE.getMarketabilityResultContainer_SellDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.

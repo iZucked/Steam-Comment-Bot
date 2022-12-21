@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.MarketabilityEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 
@@ -10,6 +11,7 @@ import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import java.time.LocalDate;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -31,9 +33,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getRhsResults <em>Rhs Results</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getBuySlotVisit <em>Buy Slot Visit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getSellSlotVisit <em>Sell Slot Visit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getNextSlotVisit <em>Next Slot Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getNextEvent <em>Next Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getBuyDate <em>Buy Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getSellDate <em>Sell Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getLadenPanama <em>Laden Panama</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultContainerImpl#getBallastPanama <em>Ballast Panama</em>}</li>
  * </ul>
@@ -51,50 +53,87 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 */
 	protected EList<MarketabilityResult> rhsResults;
 	/**
-	 * The cached value of the '{@link #getBuySlotVisit() <em>Buy Slot Visit</em>}' reference.
+	 * The cached value of the '{@link #getNextEvent() <em>Next Event</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBuySlotVisit()
+	 * @see #getNextEvent()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotVisit buySlotVisit;
+	protected MarketabilityEvent nextEvent;
 	/**
-	 * The cached value of the '{@link #getSellSlotVisit() <em>Sell Slot Visit</em>}' reference.
+	 * The default value of the '{@link #getBuyDate() <em>Buy Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSellSlotVisit()
+	 * @see #getBuyDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotVisit sellSlotVisit;
+	protected static final LocalDate BUY_DATE_EDEFAULT = null;
 	/**
-	 * The cached value of the '{@link #getNextSlotVisit() <em>Next Slot Visit</em>}' reference.
+	 * The cached value of the '{@link #getBuyDate() <em>Buy Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getNextSlotVisit()
+	 * @see #getBuyDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotVisit nextSlotVisit;
+	protected LocalDate buyDate = BUY_DATE_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' reference.
+	 * The default value of the '{@link #getSellDate() <em>Sell Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSellDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate SELL_DATE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getSellDate() <em>Sell Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSellDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate sellDate = SELL_DATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getLadenPanama()
 	 * @generated
 	 * @ordered
 	 */
-	protected CanalJourneyEvent ladenPanama;
+	protected static final LocalDate LADEN_PANAMA_EDEFAULT = null;
 	/**
-	 * The cached value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' reference.
+	 * The cached value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenPanama()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate ladenPanama = LADEN_PANAMA_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getBallastPanama()
 	 * @generated
 	 * @ordered
 	 */
-	protected CanalJourneyEvent ballastPanama;
+	protected static final LocalDate BALLAST_PANAMA_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastPanama()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate ballastPanama = BALLAST_PANAMA_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,25 +173,23 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public SlotVisit getBuySlotVisit() {
-		if (buySlotVisit != null && buySlotVisit.eIsProxy()) {
-			InternalEObject oldBuySlotVisit = (InternalEObject)buySlotVisit;
-			buySlotVisit = (SlotVisit)eResolveProxy(oldBuySlotVisit);
-			if (buySlotVisit != oldBuySlotVisit) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT, oldBuySlotVisit, buySlotVisit));
-			}
+	public MarketabilityEvent getNextEvent() {
+		return nextEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetNextEvent(MarketabilityEvent newNextEvent, NotificationChain msgs) {
+		MarketabilityEvent oldNextEvent = nextEvent;
+		nextEvent = newNextEvent;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT, oldNextEvent, newNextEvent);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return buySlotVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotVisit basicGetBuySlotVisit() {
-		return buySlotVisit;
+		return msgs;
 	}
 
 	/**
@@ -161,38 +198,18 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setBuySlotVisit(SlotVisit newBuySlotVisit) {
-		SlotVisit oldBuySlotVisit = buySlotVisit;
-		buySlotVisit = newBuySlotVisit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT, oldBuySlotVisit, buySlotVisit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SlotVisit getSellSlotVisit() {
-		if (sellSlotVisit != null && sellSlotVisit.eIsProxy()) {
-			InternalEObject oldSellSlotVisit = (InternalEObject)sellSlotVisit;
-			sellSlotVisit = (SlotVisit)eResolveProxy(oldSellSlotVisit);
-			if (sellSlotVisit != oldSellSlotVisit) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT, oldSellSlotVisit, sellSlotVisit));
-			}
+	public void setNextEvent(MarketabilityEvent newNextEvent) {
+		if (newNextEvent != nextEvent) {
+			NotificationChain msgs = null;
+			if (nextEvent != null)
+				msgs = ((InternalEObject)nextEvent).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT, null, msgs);
+			if (newNextEvent != null)
+				msgs = ((InternalEObject)newNextEvent).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT, null, msgs);
+			msgs = basicSetNextEvent(newNextEvent, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
-		return sellSlotVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotVisit basicGetSellSlotVisit() {
-		return sellSlotVisit;
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT, newNextEvent, newNextEvent));
 	}
 
 	/**
@@ -201,77 +218,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setSellSlotVisit(SlotVisit newSellSlotVisit) {
-		SlotVisit oldSellSlotVisit = sellSlotVisit;
-		sellSlotVisit = newSellSlotVisit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT, oldSellSlotVisit, sellSlotVisit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SlotVisit getNextSlotVisit() {
-		if (nextSlotVisit != null && nextSlotVisit.eIsProxy()) {
-			InternalEObject oldNextSlotVisit = (InternalEObject)nextSlotVisit;
-			nextSlotVisit = (SlotVisit)eResolveProxy(oldNextSlotVisit);
-			if (nextSlotVisit != oldNextSlotVisit) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT, oldNextSlotVisit, nextSlotVisit));
-			}
-		}
-		return nextSlotVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotVisit basicGetNextSlotVisit() {
-		return nextSlotVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setNextSlotVisit(SlotVisit newNextSlotVisit) {
-		SlotVisit oldNextSlotVisit = nextSlotVisit;
-		nextSlotVisit = newNextSlotVisit;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT, oldNextSlotVisit, nextSlotVisit));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CanalJourneyEvent getLadenPanama() {
-		if (ladenPanama != null && ladenPanama.eIsProxy()) {
-			InternalEObject oldLadenPanama = (InternalEObject)ladenPanama;
-			ladenPanama = (CanalJourneyEvent)eResolveProxy(oldLadenPanama);
-			if (ladenPanama != oldLadenPanama) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA, oldLadenPanama, ladenPanama));
-			}
-		}
-		return ladenPanama;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CanalJourneyEvent basicGetLadenPanama() {
+	public LocalDate getLadenPanama() {
 		return ladenPanama;
 	}
 
@@ -281,8 +228,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setLadenPanama(CanalJourneyEvent newLadenPanama) {
-		CanalJourneyEvent oldLadenPanama = ladenPanama;
+	public void setLadenPanama(LocalDate newLadenPanama) {
+		LocalDate oldLadenPanama = ladenPanama;
 		ladenPanama = newLadenPanama;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA, oldLadenPanama, ladenPanama));
@@ -294,24 +241,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public CanalJourneyEvent getBallastPanama() {
-		if (ballastPanama != null && ballastPanama.eIsProxy()) {
-			InternalEObject oldBallastPanama = (InternalEObject)ballastPanama;
-			ballastPanama = (CanalJourneyEvent)eResolveProxy(oldBallastPanama);
-			if (ballastPanama != oldBallastPanama) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA, oldBallastPanama, ballastPanama));
-			}
-		}
-		return ballastPanama;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CanalJourneyEvent basicGetBallastPanama() {
+	public LocalDate getBallastPanama() {
 		return ballastPanama;
 	}
 
@@ -321,11 +251,57 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setBallastPanama(CanalJourneyEvent newBallastPanama) {
-		CanalJourneyEvent oldBallastPanama = ballastPanama;
+	public void setBallastPanama(LocalDate newBallastPanama) {
+		LocalDate oldBallastPanama = ballastPanama;
 		ballastPanama = newBallastPanama;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA, oldBallastPanama, ballastPanama));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalDate getBuyDate() {
+		return buyDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBuyDate(LocalDate newBuyDate) {
+		LocalDate oldBuyDate = buyDate;
+		buyDate = newBuyDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE, oldBuyDate, buyDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalDate getSellDate() {
+		return sellDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSellDate(LocalDate newSellDate) {
+		LocalDate oldSellDate = sellDate;
+		sellDate = newSellDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE, oldSellDate, sellDate));
 	}
 
 	/**
@@ -338,6 +314,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS:
 				return ((InternalEList<?>)getRhsResults()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
+				return basicSetNextEvent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -352,21 +330,16 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS:
 				return getRhsResults();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT:
-				if (resolve) return getBuySlotVisit();
-				return basicGetBuySlotVisit();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT:
-				if (resolve) return getSellSlotVisit();
-				return basicGetSellSlotVisit();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT:
-				if (resolve) return getNextSlotVisit();
-				return basicGetNextSlotVisit();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
+				return getNextEvent();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
+				return getBuyDate();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
+				return getSellDate();
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA:
-				if (resolve) return getLadenPanama();
-				return basicGetLadenPanama();
+				return getLadenPanama();
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA:
-				if (resolve) return getBallastPanama();
-				return basicGetBallastPanama();
+				return getBallastPanama();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -384,20 +357,20 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 				getRhsResults().clear();
 				getRhsResults().addAll((Collection<? extends MarketabilityResult>)newValue);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT:
-				setBuySlotVisit((SlotVisit)newValue);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
+				setNextEvent((MarketabilityEvent)newValue);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT:
-				setSellSlotVisit((SlotVisit)newValue);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
+				setBuyDate((LocalDate)newValue);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT:
-				setNextSlotVisit((SlotVisit)newValue);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
+				setSellDate((LocalDate)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA:
-				setLadenPanama((CanalJourneyEvent)newValue);
+				setLadenPanama((LocalDate)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA:
-				setBallastPanama((CanalJourneyEvent)newValue);
+				setBallastPanama((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -414,20 +387,20 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS:
 				getRhsResults().clear();
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT:
-				setBuySlotVisit((SlotVisit)null);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
+				setNextEvent((MarketabilityEvent)null);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT:
-				setSellSlotVisit((SlotVisit)null);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
+				setBuyDate(BUY_DATE_EDEFAULT);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT:
-				setNextSlotVisit((SlotVisit)null);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
+				setSellDate(SELL_DATE_EDEFAULT);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA:
-				setLadenPanama((CanalJourneyEvent)null);
+				setLadenPanama(LADEN_PANAMA_EDEFAULT);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA:
-				setBallastPanama((CanalJourneyEvent)null);
+				setBallastPanama(BALLAST_PANAMA_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -443,18 +416,40 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS:
 				return rhsResults != null && !rhsResults.isEmpty();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT:
-				return buySlotVisit != null;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT:
-				return sellSlotVisit != null;
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT:
-				return nextSlotVisit != null;
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
+				return nextEvent != null;
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
+				return BUY_DATE_EDEFAULT == null ? buyDate != null : !BUY_DATE_EDEFAULT.equals(buyDate);
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
+				return SELL_DATE_EDEFAULT == null ? sellDate != null : !SELL_DATE_EDEFAULT.equals(sellDate);
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA:
-				return ladenPanama != null;
+				return LADEN_PANAMA_EDEFAULT == null ? ladenPanama != null : !LADEN_PANAMA_EDEFAULT.equals(ladenPanama);
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA:
-				return ballastPanama != null;
+				return BALLAST_PANAMA_EDEFAULT == null ? ballastPanama != null : !BALLAST_PANAMA_EDEFAULT.equals(ballastPanama);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (buyDate: ");
+		result.append(buyDate);
+		result.append(", sellDate: ");
+		result.append(sellDate);
+		result.append(", ladenPanama: ");
+		result.append(ladenPanama);
+		result.append(", ballastPanama: ");
+		result.append(ballastPanama);
+		result.append(')');
+		return result.toString();
 	}
 
 } //MarketabilityResultContainerImpl

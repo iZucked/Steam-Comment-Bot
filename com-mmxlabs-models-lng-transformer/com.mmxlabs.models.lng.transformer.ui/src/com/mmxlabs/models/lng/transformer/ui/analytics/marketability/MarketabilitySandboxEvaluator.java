@@ -55,7 +55,7 @@ public class MarketabilitySandboxEvaluator {
 		if (p1 == null) {
 			return null;
 		}
-
+		
 		final ProfitAndLossSequences profitAndLossSequences = evaluationHelper.evaluateSequences(currentFullSequences, p1);
 		assert profitAndLossSequences != null;
 

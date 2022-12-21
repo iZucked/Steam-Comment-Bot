@@ -32,6 +32,9 @@ import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
+import com.mmxlabs.models.lng.analytics.MarketabilityEndEvent;
+import com.mmxlabs.models.lng.analytics.MarketabilityEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
@@ -42,14 +45,17 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -246,17 +252,17 @@ public class MarketabilitySandboxUnit {
 			SlotVisit dischargeSlotVisit = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).map(SlotAllocation::getSlotVisit).findAny().orElseThrow();
 			assert loadSlotVisit != null;
 			assert dischargeSlotVisit != null;
-			container.setBuySlotVisit(loadSlotVisit);
-			container.setSellSlotVisit(dischargeSlotVisit);
-			container.setLadenPanama(findNextPanama(loadSlotVisit));
+			CanalJourneyEvent ladenPanama = findNextPanama(loadSlotVisit);
 			CanalJourneyEvent ballastPanama = findNextPanama(dischargeSlotVisit);
-			container.setBallastPanama(ballastPanama);
+			container.setBuyDate(loadSlotVisit.getStart().toLocalDate());
+			container.setSellDate(dischargeSlotVisit.getStart().toLocalDate());
+			if(ladenPanama != null) {
+				container.setLadenPanama(ladenPanama.getStart().toLocalDate());
+			}
 			if(ballastPanama != null) {
-				addNextEventToRow(container, ballastPanama);
+				container.setBallastPanama(ballastPanama.getStart().toLocalDate());
 			}
-			else {
-				addNextEventToRow(container, dischargeSlotVisit);
-			}
+			addNextEventToRow(container, dischargeSlotVisit);
 		}
 	}
 	
@@ -275,13 +281,30 @@ public class MarketabilitySandboxUnit {
 
 		Event nextEvent = start.getNextEvent();
 		while (nextEvent != null) {
-			if (nextEvent instanceof SlotVisit slotVisit) {
-				container.setNextSlotVisit(slotVisit);
+			if (nextEvent instanceof VesselEventVisit vesselEventVisit) {
+				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
+				marketabilityEvent.setStart(nextEvent.getStart());
+				marketabilityEvent.setElement(vesselEventVisit.getVesselEvent());
+				container.setNextEvent(marketabilityEvent);
+				return;
+			} else if(nextEvent instanceof SlotVisit slotVisit) {
+				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
+				marketabilityEvent.setStart(nextEvent.getStart());
+				marketabilityEvent.setElement(slotVisit.getSlotAllocation().getSlot().getCargo());
+				container.setNextEvent(marketabilityEvent);
 				return;
 			}
-			nextEvent = nextEvent.getNextEvent();
+			else if (nextEvent instanceof EndEvent endEvent) {
+				MarketabilityEndEvent marketabilityEndEvent = AnalyticsFactory.eINSTANCE.createMarketabilityEndEvent();
+				marketabilityEndEvent.setStart(nextEvent.getStart());
+				container.setNextEvent(marketabilityEndEvent);
+				
+				return;
+
+			} else {
+				nextEvent = nextEvent.getNextEvent();
+			}
 		}
-		container.setNextSlotVisit(null);
 
 	}
 	

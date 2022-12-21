@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
@@ -22,10 +24,17 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.impl.ClampedSpeedVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselCharter;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.scheduling.ICustomTimeWindowTrimmer;
 
 public class InsertCargoSequencesGenerator {
@@ -35,6 +44,9 @@ public class InsertCargoSequencesGenerator {
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
+	
+	@Inject
+	private @NonNull IVesselProviderEditor vesselProvider;
 	
 
 	public void generateOptions(final ISequences sequences, final List<ISequenceElement> orderedCargoElements,
@@ -93,6 +105,13 @@ public class InsertCargoSequencesGenerator {
 		assert salesMarket != null;
 		final ModifiableSequences newSequences = new ModifiableSequences(sequences);
 		final IModifiableSequence modifiableSequence = newSequences.getModifiableSequence(targetResource);
+		
+		//final ModifiableSequences testSequences = new ModifiableSequences(sequences);
+//		IVesselCharter oldVesselCharter = vesselProvider.getVesselCharter(targetResource);
+//		IVessel newVessel = new ClampedSpeedVessel(oldVesselCharter.getVessel(), 17);
+//		IVesselCharter newVesselCharter = new DefaultVesselCharter(newVessel, oldVesselCharter.getVesselInstanceType());
+//		vesselProvider.setVesselCharterResource(targetResource, newVesselCharter);
+		
 		for(int i = 0; i < seq.size() - 1; i++) {
 			final ISequenceElement elem = seq.get(i);
 			if(elem.equals(load)) {
@@ -112,5 +131,7 @@ public class InsertCargoSequencesGenerator {
 				break;
 			}
 		}
+		//new Resource(new SimpleIndexingContext(), null);
+//		vesselProvider.setVesselCharterResource(targetResource, oldVesselCharter);
 	}
 }

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.provider;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -61,79 +63,12 @@ public class MarketabilityResultContainerItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBuySlotVisitPropertyDescriptor(object);
-			addSellSlotVisitPropertyDescriptor(object);
-			addNextSlotVisitPropertyDescriptor(object);
+			addBuyDatePropertyDescriptor(object);
+			addSellDatePropertyDescriptor(object);
 			addLadenPanamaPropertyDescriptor(object);
 			addBallastPanamaPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Buy Slot Visit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBuySlotVisitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResultContainer_buySlotVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_buySlotVisit_feature", "_UI_MarketabilityResultContainer_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__BUY_SLOT_VISIT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Sell Slot Visit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSellSlotVisitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResultContainer_sellSlotVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_sellSlotVisit_feature", "_UI_MarketabilityResultContainer_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__SELL_SLOT_VISIT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Next Slot Visit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNextSlotVisitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResultContainer_nextSlotVisit_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_nextSlotVisit_feature", "_UI_MarketabilityResultContainer_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__NEXT_SLOT_VISIT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -153,7 +88,7 @@ public class MarketabilityResultContainerItemProvider
 				 true,
 				 false,
 				 true,
-				 null,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -175,7 +110,51 @@ public class MarketabilityResultContainerItemProvider
 				 true,
 				 false,
 				 true,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Buy Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBuyDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityResultContainer_buyDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_buyDate_feature", "_UI_MarketabilityResultContainer_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__BUY_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sell Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSellDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketabilityResultContainer_sellDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResultContainer_sellDate_feature", "_UI_MarketabilityResultContainer_type"),
+				 AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__SELL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -193,6 +172,7 @@ public class MarketabilityResultContainerItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS);
+			childrenFeatures.add(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT);
 		}
 		return childrenFeatures;
 	}
@@ -229,7 +209,11 @@ public class MarketabilityResultContainerItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_MarketabilityResultContainer_type");
+		LocalDate labelValue = ((MarketabilityResultContainer)object).getBuyDate();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_MarketabilityResultContainer_type") :
+			getString("_UI_MarketabilityResultContainer_type") + " " + label;
 	}
 
 
@@ -245,7 +229,12 @@ public class MarketabilityResultContainerItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MarketabilityResultContainer.class)) {
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS:
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -267,6 +256,21 @@ public class MarketabilityResultContainerItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS,
 				 AnalyticsFactory.eINSTANCE.createMarketabilityResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT,
+				 AnalyticsFactory.eINSTANCE.createMarketabilityEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT,
+				 AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT,
+				 AnalyticsFactory.eINSTANCE.createMarketabilityEndEvent()));
 	}
 
 	/**

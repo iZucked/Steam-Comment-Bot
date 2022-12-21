@@ -312,6 +312,18 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createMarketabilityResultContainerAdapter();
 			}
 			@Override
+			public Adapter caseMarketabilityEvent(MarketabilityEvent object) {
+				return createMarketabilityEventAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityAssignableElement(MarketabilityAssignableElement object) {
+				return createMarketabilityAssignableElementAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityEndEvent(MarketabilityEndEvent object) {
+				return createMarketabilityEndEventAdapter();
+			}
+			@Override
 			public Adapter caseViabilityRow(ViabilityRow object) {
 				return createViabilityRowAdapter();
 			}
@@ -840,6 +852,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMarketabilityResultContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEvent <em>Marketability Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEvent
+	 * @generated
+	 */
+	public Adapter createMarketabilityEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement <em>Marketability Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement
+	 * @generated
+	 */
+	public Adapter createMarketabilityAssignableElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEndEvent <em>Marketability End Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEndEvent
+	 * @generated
+	 */
+	public Adapter createMarketabilityEndEventAdapter() {
 		return null;
 	}
 
