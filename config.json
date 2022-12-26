@@ -1,4 +1,5 @@
 {
     "api_key": "YOUR_API_KEY",
-    "login_secure_cookie": "YOUR_LOGIN_SECURE_COOKIE"
+    "login_secure_cookie": "YOUR_LOGIN_SECURE_COOKIE",
+    "session_id": "YOUR_SESSION_ID_COOKIE"
 }
