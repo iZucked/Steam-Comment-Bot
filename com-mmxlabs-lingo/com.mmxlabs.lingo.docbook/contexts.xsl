@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
