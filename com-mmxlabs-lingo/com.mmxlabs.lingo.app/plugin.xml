@@ -127,7 +127,7 @@
          </property>
 	 <property
         name="aboutText"
-        value="LiNGO&#x0A;Copyright 2010 - 2022&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
+        value="LiNGO&#x0A;Copyright 2010 - 2023&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
        </property>
   <property
         name="startupForegroundColor"
