@@ -13,15 +13,8 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>52</version>
+		<version>53</version>
 	</parent>
-
-	<properties>
-		<!-- Tycho version to use -->
-		<tycho.version>3.0.1</tycho.version>
-		<tycho-extras-version>3.0.1</tycho-extras-version>
-
-	</properties>
 
 	<scm>
 		<connection>scm:git:git@gitlab.com:mmxlabs/LiNGO/LiNGO.git</connection>
