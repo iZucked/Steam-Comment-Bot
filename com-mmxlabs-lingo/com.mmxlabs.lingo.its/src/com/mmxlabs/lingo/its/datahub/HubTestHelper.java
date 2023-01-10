@@ -321,8 +321,6 @@ public class HubTestHelper {
 		final Region region = Region.of("eu-west-2");
 
 		// Create a Secrets Manager client
-		// Can't use okhttp unfortunatly, limitied to http clients described here:
-		// https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
 		final SecretsManagerClient client = SecretsManagerClient.builder() //
 				.region(region) //
 				.httpClient(ApacheHttpClient.create()) //
