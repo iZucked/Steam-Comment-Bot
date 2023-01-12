@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,9 +33,6 @@ import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.app.updater.model.Version;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -59,9 +56,9 @@ public class HubTestHelper {
 	private static final int CONNECTION_TIMEOUT_IN_SECONDS = 5;
 	private static final int READ_TIMEOUT_IN_SECONDS = 1;
 	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
-	private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
+//	private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
 
-	public static void configureHub(String url, boolean enableBaseCase, boolean enableTeam) {
+	public static void configureHub(final String url, final boolean enableBaseCase, final boolean enableTeam) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, url);
 	}
 
@@ -90,7 +87,7 @@ public class HubTestHelper {
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 
-	public static void setDatahubUrl(String upstreamUrl) {
+	public static void setDatahubUrl(final String upstreamUrl) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, upstreamUrl);
 	}
 
@@ -102,10 +99,10 @@ public class HubTestHelper {
 	 * @param timeout
 	 * @return port number or -1 if no ports are available
 	 */
-	public static int waitForAvailablePort(List<Integer> portPool, int timeout) {
+	public static int waitForAvailablePort(final List<Integer> portPool, final int timeout) {
 		int availablePort = -1;
-		long start = System.currentTimeMillis();
-		long end = start + timeout;
+		final long start = System.currentTimeMillis();
+		final long end = start + timeout;
 		while (availablePort == -1 && System.currentTimeMillis() < end) {
 			availablePort = getAvailablePort(portPool);
 		}
@@ -118,7 +115,7 @@ public class HubTestHelper {
 	 * @param portPool
 	 * @return port number or -1 if no ports from the pool are available
 	 */
-	public static int getAvailablePort(List<Integer> portPool) {
+	public static int getAvailablePort(final List<Integer> portPool) {
 		Optional<Integer> availablePort;
 		// @formatter:off
 		availablePort = portPool.stream()
@@ -143,11 +140,11 @@ public class HubTestHelper {
 	 * @return true if the port is available and false otherwise. Could also return
 	 *         false if the bind operation fails
 	 */
-	public static boolean isTcpPortAvailable(String host, int port) {
+	public static boolean isTcpPortAvailable(final String host, final int port) {
 		try (ServerSocket socket = new ServerSocket()) {
 			socket.bind(new InetSocketAddress(InetAddress.getByName(host), port));
 			return true;
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			logger.info(String.format("socket of port %s is already bound", port));
 			return false;
 		}
@@ -160,14 +157,14 @@ public class HubTestHelper {
 		}
 		try {
 			return HubTestHelper.buildDatahubContainerString(client);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.error(e.getMessage());
 			System.exit(-1);
 		}
 		return "";
 	}
 
-	public static String buildDatahubContainerString(String client) throws IOException, Exception {
+	public static String buildDatahubContainerString(final String client) throws IOException, Exception {
 		String version;
 		if (isReleaseTest()) {
 			version = getVersionFromDynamodb(client);
@@ -182,26 +179,26 @@ public class HubTestHelper {
 		}
 	}
 
-	public static String getVersionFromDynamodb(String client) throws IOException {
-		HashMap<String, AttributeValue> keyToGet = new HashMap<String, AttributeValue>();
+	public static String getVersionFromDynamodb(final String client) throws IOException {
+		final HashMap<String, AttributeValue> keyToGet = new HashMap<>();
 		String version = "";
 
-		DynamoDbClient ddb = DynamoDbClient.builder() //
+		final DynamoDbClient ddb = DynamoDbClient.builder() //
 				.httpClient(ApacheHttpClient.create()) //
 				.build();
 
 		keyToGet.put(DYNAMODB_KEY, AttributeValue.builder().s(client).build());
 
-		GetItemRequest request = GetItemRequest.builder().key(keyToGet).tableName(DYNAMODB_TABLE_NAME).build();
+		final GetItemRequest request = GetItemRequest.builder().key(keyToGet).tableName(DYNAMODB_TABLE_NAME).build();
 
 		try {
-			Map<String, AttributeValue> returnedItem = ddb.getItem(request).item();
+			final Map<String, AttributeValue> returnedItem = ddb.getItem(request).item();
 
 			if (returnedItem != null) {
-				Set<String> keys = returnedItem.keySet();
+				final Set<String> keys = returnedItem.keySet();
 				logger.info("Amazon DynamoDB table attributes: \n");
 
-				for (String key1 : keys) {
+				for (final String key1 : keys) {
 					logger.info("%s: %s\n", key1, returnedItem.get(key1).toString());
 					if ("version".equals(key1)) {
 						// TODO fallback on go server value?
@@ -212,15 +209,15 @@ public class HubTestHelper {
 			} else {
 				logger.info("No item found with the key %s!\n", DYNAMODB_KEY);
 			}
-		} catch (DynamoDbException e) {
+		} catch (final DynamoDbException e) {
 			logger.error(e.getMessage());
 			System.exit(1);
 		}
 		return version;
 	}
 
-	public static String getLatestVersionFromContainerRegistry(String client) {
-		List<Version> versions = getAvailableContainerVersionsFromRegistry(client);
+	public static String getLatestVersionFromContainerRegistry(final String client) {
+		final List<Version> versions = getAvailableContainerVersionsFromRegistry(client);
 		// sort the versions
 		Collections.sort(versions);
 		versions.stream().forEach(System.out::print);
@@ -233,44 +230,42 @@ public class HubTestHelper {
 		return null;
 	}
 
-	public static List<Version> getAvailableContainerVersionsFromRegistry(String client) {
+	public static List<Version> getAvailableContainerVersionsFromRegistry(final String client) {
 
-		try {
-			String url = String.format("https://docker.mmxlabs.com/v2/datahub-%s/tags/list", client);
-			Request request = new Request.Builder() //
-					.url(url) //
-					.build();
+		final HttpGet request = new HttpGet(String.format("https://docker.mmxlabs.com/v2/datahub-%s/tags/list", client));
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(request)) {
+			try (var response = httpClient.execute(request)) {
+				final int responseCode = response.getStatusLine().getStatusCode();
 
-			try (Response response = httpClient.newCall(request).execute()) {
-				if (response.isSuccessful()) {
-					ObjectMapper objectMapper = new ObjectMapper();
-					DockerVersions versions = objectMapper.readValue(response.body().string(), DockerVersions.class);
+				if (HttpClientUtil.isSuccessful(responseCode)) {
+					final ObjectMapper objectMapper = new ObjectMapper();
+					final DockerVersions versions = objectMapper.readValue(response.getEntity().getContent(), DockerVersions.class);
 					return versions.tags;
 				} else {
 					logger.error("request to docker.mmxlabs.com failed");
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		return new ArrayList<Version>();
+		return new ArrayList<>();
 	}
 
 	public static boolean isReleaseTest() {
-		String releaseVersion = System.getenv("RELEASE_VERSION");
+		final String releaseVersion = System.getenv("RELEASE_VERSION");
 		return (releaseVersion != null && !releaseVersion.isBlank());
 	}
 
 	static class DockerVersions {
 		public String name;
-		ArrayList<Version> tags = new ArrayList<Version>();
+		ArrayList<Version> tags = new ArrayList<>();
 
 		public String getName() {
 			return name;
 		}
 
-		public void setName(String name) {
+		public void setName(final String name) {
 			this.name = name;
 		}
 
@@ -278,7 +273,7 @@ public class HubTestHelper {
 			return tags;
 		}
 
-		public void setTags(ArrayList<Version> tags) {
+		public void setTags(final ArrayList<Version> tags) {
 			this.tags = tags;
 		}
 	}
@@ -315,32 +310,31 @@ public class HubTestHelper {
 	// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-samples.html#prerequisites
 
 	public static String getSecret() {
-		
-		// Copy env vars to system properties as the SDK can fail to read them for some reason in the ITS runs.
-		Map<String, String> getenv = System.getenv();
+
+		// Copy env vars to system properties as the SDK can fail to read them for some
+		// reason in the ITS runs.
+		final Map<String, String> getenv = System.getenv();
 		System.setProperty("aws.accessKeyId", getenv.get("AWS_ACCESS_KEY_ID"));
 		System.setProperty("aws.secretAccessKey", getenv.get("AWS_SECRET_ACCESS_KEY"));
-		
-		String secretName = "lingo/hub-test";
-		Region region = Region.of("eu-west-2");
+
+		final String secretName = "lingo/hub-test";
+		final Region region = Region.of("eu-west-2");
 
 		// Create a Secrets Manager client
-		// Can't use okhttp unfortunatly, limitied to http clients described here:
-		// https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
-		SecretsManagerClient client = SecretsManagerClient.builder() //
+		final SecretsManagerClient client = SecretsManagerClient.builder() //
 				.region(region) //
 				.httpClient(ApacheHttpClient.create()) //
 				.build();
 
 		String secret;
-		GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
+		final GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
 				.secretId(secretName) //
 				.build();
 		GetSecretValueResponse getSecretValueResponse = null;
 
 		try {
 			getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
-		} catch (SecretsManagerException e) {
+		} catch (final SecretsManagerException e) {
 			logger.error(e.awsErrorDetails().errorMessage());
 			System.exit(1);
 		}
@@ -354,38 +348,39 @@ public class HubTestHelper {
 			try {
 				awsSecret = new ObjectMapper().readValue(secret, AWSSecret.class);
 				return awsSecret.password;
-			} catch (JsonProcessingException e) {
+			} catch (final JsonProcessingException e) {
 				logger.error(e.getLocalizedMessage());
 			}
 		}
 
 		throw new RuntimeException("Coudn't get secret from AWS");
 	}
+
 	public static AWSSecret getSecrets() {
-		String secretName = "lingo/hub-test";
-		Region region = Region.of("eu-west-2");
-		
+		final String secretName = "lingo/hub-test";
+		final Region region = Region.of("eu-west-2");
+
 		// Create a Secrets Manager client
 		// Can't use okhttp unfortunatly, limitied to http clients described here:
 		// https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration.html
-		SecretsManagerClient client = SecretsManagerClient.builder() //
+		final SecretsManagerClient client = SecretsManagerClient.builder() //
 				.region(region) //
 				.httpClient(ApacheHttpClient.create()) //
 				.build();
-		
+
 		String secret;
-		GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
+		final GetSecretValueRequest getSecretValueRequest = GetSecretValueRequest.builder() //
 				.secretId(secretName) //
 				.build();
 		GetSecretValueResponse getSecretValueResponse = null;
-		
+
 		try {
 			getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
-		} catch (SecretsManagerException e) {
+		} catch (final SecretsManagerException e) {
 			logger.error(e.awsErrorDetails().errorMessage());
 			System.exit(1);
 		}
-		
+
 		// Decrypts secret using the associated KMS key.
 		// Depending on whether the secret is a string or binary, one of these fields
 		// will be populated.
@@ -395,11 +390,11 @@ public class HubTestHelper {
 			try {
 				awsSecret = new ObjectMapper().readValue(secret, AWSSecret.class);
 				return awsSecret;
-			} catch (JsonProcessingException e) {
+			} catch (final JsonProcessingException e) {
 				logger.error(e.getLocalizedMessage());
 			}
 		}
-		
+
 		throw new RuntimeException("Coudn't get secret from AWS");
 	}
 
@@ -414,12 +409,13 @@ public class HubTestHelper {
 		String tenant_id;
 	}
 
-	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
+	// we need a fixed port for this test because we cannot programmatically modify
+	// the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer createDataHubContainer( String CONTAINER, int availablePort, int DATAHUB_PORT, boolean oauth) {
-		
-		AWSSecret secrets = getSecrets();
-		
+	public static GenericContainer createDataHubContainer(final String CONTAINER, final int availablePort, final int DATAHUB_PORT, final boolean oauth) {
+
+		final AWSSecret secrets = getSecrets();
+
 		// @formatter:off
 	return new FixedHostPortGenericContainer(CONTAINER)
 		.withFixedExposedPort(availablePort, DATAHUB_PORT)
@@ -437,5 +433,5 @@ public class HubTestHelper {
 		.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
 		.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
 			// @formatter:on
-		}
+	}
 }

@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.apache.http.client.methods.HttpGet;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -62,12 +63,6 @@ import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
 import com.mmxlabs.license.features.LicenseFeatures;
-
-import okhttp3.CipherSuite;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.TlsVersion;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -384,25 +379,26 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					url = url.substring(0, url.length() - 1);
 				}
 
-				Request pingRequest = null;
+				HttpGet pingRequest = null;
 				try {
-					pingRequest = new Request.Builder().url(url + "/ping").get().build();
+					pingRequest = new HttpGet(url + "/ping");
 				} catch (final IllegalArgumentException e) {
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Invalid URL");
 					return;
 				}
 
-				final OkHttpClient client = HttpClientUtil.basicBuilder().build();
+				try (final var client = HttpClientUtil.createBasicHttpClient(pingRequest)) {
 
-				try (final Response pingResponse = client.newCall(pingRequest).execute()) {
-					if (pingResponse.isSuccessful()) {
-						MessageDialog.openConfirm(getShell(), "Data Hub connection checker", "Connected successfully.");
-						DataHubServiceProvider.getInstance().setOnlineState(true);
-					} else {
-						MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - error code is " + pingResponse.message());
-						DataHubServiceProvider.getInstance().setOnlineState(false);
+					try (final var pingResponse = client.execute(pingRequest)) {
+						final int responseCode = pingResponse.getStatusLine().getStatusCode();
+						if (HttpClientUtil.isSuccessful(responseCode)) {
+							MessageDialog.openConfirm(getShell(), "Data Hub connection checker", "Connected successfully.");
+							DataHubServiceProvider.getInstance().setOnlineState(true);
+						} else {
+							MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - error code is " + pingResponse.getStatusLine().getReasonPhrase());
+							DataHubServiceProvider.getInstance().setOnlineState(false);
+						}
 					}
-
 				} catch (final UnknownHostException e) {
 					MessageDialog.openError(getShell(), "Data Hub connection checker", "Connection failed - Unknown host");
 				} catch (final SSLPeerUnverifiedException e) {
@@ -457,7 +453,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 						final IProxyService service = proxyTracker.getService();
 						if (service != null) {
 							if (service.isProxiesEnabled()) {
-								sb.append("Proxy server configuration detected\n\n");
 								sb.append("Direct connection info\n\n");
 							}
 						}
@@ -477,6 +472,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 							try {
 								final IProxyData[] data = service.select(new URI(editor.getStringValue()));
 								if (data != null && data.length > 0) {
+									sb.append("Proxy server configuration detected\n\n");
 									for (final var pd : data) {
 										if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
 											sb.append("Proxy connection via " + pd.getHost() + "\n\n");
@@ -588,8 +584,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 						return;
 					}
 
-					final CipherSuite[] selectedCipher = new CipherSuite[1];
-					final TlsVersion[] selectedTlsVersion = new TlsVersion[1];
+					final String[] selectedCipher = new String[1];
+					final String[] selectedTlsVersion = new String[1];
 					HttpClientUtil.getSelectedProtocolAndVersion(url, selectedTlsVersion, selectedCipher);
 
 					if (selectedCipher[0] != null && selectedTlsVersion[0] != null) {
@@ -603,20 +599,20 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 					try {
 
-						final Set<TlsVersion> supportedVersion = new HashSet<>();
-						final Set<CipherSuite> supportedCiphers = new HashSet<>();
+						final Set<String> supportedVersion = new HashSet<>();
+						final Set<String> supportedCiphers = new HashSet<>();
 						HttpClientUtil.extractSSLCompatibilityFromHost(url, (tlsVersion, cipher) -> {
 							supportedVersion.add(tlsVersion);
 							supportedCiphers.add(cipher);
 						});
 						sb.append("Supported TLS Versions\n");
-						for (final TlsVersion info : supportedVersion) {
+						for (final String info : supportedVersion) {
 							sb.append(info);
 							sb.append("\n");
 						}
 						sb.append("\n");
 						sb.append("Supported Ciphers\n");
-						for (final CipherSuite info : supportedCiphers) {
+						for (final String info : supportedCiphers) {
 							sb.append(info);
 							sb.append("\n");
 						}

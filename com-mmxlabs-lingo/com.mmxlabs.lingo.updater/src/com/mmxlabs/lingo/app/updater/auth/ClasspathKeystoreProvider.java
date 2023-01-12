@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.app.updater.auth;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -35,6 +35,9 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONObject;
 
@@ -45,10 +48,6 @@ import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public abstract class ClasspathKeystoreProvider implements IUpdateAuthenticationProvider {
 
@@ -63,7 +62,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 
 	@Override
 	@Nullable
-	public Pair<String, String> provideAuthenticationHeader(final URL url) throws Exception {
+	public Pair<String, String> provideAuthenticationHeader(final URI url) throws Exception {
 
 		if (!UPDATE_MINIMAXLABS_COM.equals(url.getHost())) {
 			return null;
@@ -238,23 +237,20 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 
 	public void checkAuthWorks(final String code) throws Exception {
 
-		final URL url = new URL(String.format("https://update.minimaxlabs.com/LiNGO/%s/latest/version.json", code));
-		final OkHttpClient localHttpClient = new OkHttpClient.Builder().build();
+		final URI url = new URI(String.format("https://update.minimaxlabs.com/LiNGO/%s/latest/version.json", code));
+		final HttpClientBuilder localHttpClient = HttpClientBuilder.create();
 
-		final Request.Builder requestBuilder = new Request.Builder() //
-				.url(url) //
-		;
+		final HttpGet request = new HttpGet(url);
 
 		VersionHelper.getInstance().setClientCode(code);
 		final Pair<String, String> header = provideAuthenticationHeader(url);
 		if (header != null) {
-			requestBuilder.addHeader(header.getFirst(), header.getSecond());
+			request.addHeader(header.getFirst(), header.getSecond());
 		}
-
-		final Request request = requestBuilder //
-				.build();
-		try (Response response = localHttpClient.newCall(request).execute()) {
-			System.out.println(response.body().string());
+		try (var httpClient = localHttpClient.build()) {
+			try (var response = httpClient.execute(request)) {
+				System.out.println(EntityUtils.toString(response.getEntity()));
+			}
 		}
 	}
 }

@@ -16,16 +16,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.hub.common.http.HttpClientUtil;
-
-import okhttp3.OkHttpClient;
 
 abstract class AbstractAuthenticationManager {
 
 	static final Logger LOGGER = LoggerFactory.getLogger(AbstractAuthenticationManager.class);
 
-	static final OkHttpClient httpClient = HttpClientUtil.basicBuilder()
-			.build();
 
 	static final ISecurePreferences PREFERENCES = SecurePreferencesFactory.getDefault();
 

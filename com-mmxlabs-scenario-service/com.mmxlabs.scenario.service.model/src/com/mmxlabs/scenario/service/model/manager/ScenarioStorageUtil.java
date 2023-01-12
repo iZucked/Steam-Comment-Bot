@@ -224,7 +224,6 @@ public class ScenarioStorageUtil {
 		}
 	}
 
-
 	public static void storeCopyToFile(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull File file) throws IOException {
 
 		final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(file.getName(), scenarioDataProvider);
@@ -300,7 +299,6 @@ public class ScenarioStorageUtil {
 		}
 
 	}
-
 
 	public static void storeToURI(final String uuid, final @NonNull URI sourceURI, final Map<String, URI> extraDataURIs, final Manifest manifest, final @NonNull URI archiveURI,
 			final @Nullable IScenarioCipherProvider scenarioCipherProvider) throws IOException {
@@ -640,10 +638,10 @@ public class ScenarioStorageUtil {
 										resource.save(os, options);
 										// There should be no need to do this as the #checkModelConsistency should
 										// produce the same info
-//										EList<Diagnostic> errors = resource.getErrors();
-//										for (var e : errors) {
-//											System.out.println(e.getMessage());
-//										}
+										// EList<Diagnostic> errors = resource.getErrors();
+										// for (var e : errors) {
+										// System.out.println(e.getMessage());
+										// }
 									}
 									fos.flush();
 									scenarioContent = fos.toByteArray();
@@ -873,10 +871,37 @@ public class ScenarioStorageUtil {
 		return null;
 	}
 
+	public static @Nullable Manifest loadManifestChecked(final File scenarioFile) throws Exception {
+		return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			return loadManifestChecked(scenarioFile, scenarioCipherProvider);
+		});
+	}
+	
+	public static @Nullable Manifest loadManifestChecked(final File scenarioFile, final IScenarioCipherProvider scenarioCipherProvider) throws Exception {
+		final URI fileURI = URI.createFileURI(scenarioFile.toString());
+		
+		final URI manifestURI = ScenarioStorageUtil.createArtifactURI(fileURI, ScenarioStorageUtil.PATH_MANIFEST_OBJECT);
+		
+		assert manifestURI != null;
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+		assert resourceSet != null;
+		
+			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
+			if (resource.getContents().size() == 1) {
+				final EObject top = resource.getContents().get(0);
+				if (top instanceof Manifest manifest) {
+					return manifest;
+				}
+			}
+		 
+		return null;
+	}
+
 	public static Map<String, String> extractScenarioDataVersions(final Manifest manifest) {
 
 		if (manifest != null) {
-			return manifest.getModelDependencies().stream() //
+			return manifest.getModelDependencies()
+					.stream() //
 					.filter(m -> m.getKey() != null) //
 					.filter(m -> m.getDataVersion() != null) //
 					.collect(Collectors.toMap(ModelArtifact::getKey, ModelArtifact::getDataVersion));

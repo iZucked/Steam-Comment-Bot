@@ -7,17 +7,17 @@ package com.mmxlabs.hub.auth;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.apache.http.HttpMessage;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
-
-import okhttp3.Request;
-import okhttp3.Response;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 public class OAuthManager extends AbstractAuthenticationManager {
 
@@ -61,22 +61,12 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	/**
 	 * Create a request builder with Authorization header.
 	 */
-	public Optional<Request.Builder> buildRequestWithToken() {
+	public void buildRequestWithToken(final HttpMessage msg) {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
-		Optional<Request.Builder> builder;
-
 		if (token.isPresent()) {
-			// @formatter:off
-			builder = Optional.of( //
-					new Request.Builder() //
-					.header("Cookie", token.get()) //
-					.header("Cache-Control", "no-store, max-age=0")); //
-			// @formatter:on
-		} else {
-			builder = Optional.empty();
+			msg.addHeader("Cookie", token.get());
+			msg.addHeader("Cache-Control", "no-store, max-age=0");
 		}
-
-		return builder;
 	}
 
 	public boolean hasToken() {
@@ -92,7 +82,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 			});
 			try {
 				authenticationShell.open();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// Make sure we have cleared the setting.
 				authenticationShellIsOpen.set(false);
 				throw e;
@@ -101,7 +91,8 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	}
 
 	/**
-	 * Checks if the SSO token (in the form of a cookie) is valid by making a request to the hub
+	 * Checks if the SSO token (in the form of a cookie) is valid by making a
+	 * request to the hub
 	 *
 	 * @param upstreamURL
 	 * @return true is the token is valid, false otherwise
@@ -109,13 +100,15 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	public boolean isTokenValid(final String upstreamURL) {
 		boolean valid = false;
 
-		final Optional<Request.Builder> builder = buildRequestWithToken();
-
-		if (builder.isPresent()) {
-			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION).build();
-
-			try (Response response = httpClient.newCall(request).execute()) {
-				if (response.isSuccessful()) {
+		final HttpGet request = new HttpGet(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION);
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()))) {
+			if (httpClient == null) {
+				return valid;
+			}
+			buildRequestWithToken(request);
+			try (var response = httpClient.execute(request)) {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (HttpClientUtil.isSuccessful(responseCode)) {
 					valid = true;
 				} else {
 					// token is expired, log the user out
@@ -124,6 +117,8 @@ public class OAuthManager extends AbstractAuthenticationManager {
 			} catch (final IOException e) {
 				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 			}
+		} catch (final IOException e) {
+			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 
 		return valid;
@@ -146,8 +141,8 @@ public class OAuthManager extends AbstractAuthenticationManager {
 //		Browser.setCookie("authenticated=;", url + "/authenticated");
 	}
 
-	public void setPreferEdgeBrowser(boolean preferEdgeBrowser) {
+	public void setPreferEdgeBrowser(final boolean preferEdgeBrowser) {
 		this.preferEdgeBrowser = preferEdgeBrowser;
-		
+
 	}
 }

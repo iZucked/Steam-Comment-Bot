@@ -1535,20 +1535,6 @@
          unpack="false"/>
 
    <plugin
-         id="wrapped.com.squareup.okio.okio"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="wrapped.com.squareup.okhttp3.okhttp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.google.guava.failureaccess"
          download-size="0"
          install-size="0"

@@ -6,7 +6,9 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -35,6 +37,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SandboxReference;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -99,8 +102,7 @@ public class ExportScheduleHelper {
 
 		final ClonedScenarioDataProvider scenarioDataProvider = ClonedScenarioDataProvider.make(scenarioModel, scenarioResult.getScenarioDataProvider());
 
-		@NonNull
-		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+		final @NonNull EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
@@ -121,8 +123,7 @@ public class ExportScheduleHelper {
 
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
-				if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+				if (event instanceof VesselEventVisit vesselEventVisit) {
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 					if (!(vesselEvent.eContainer() instanceof CargoModel)) {
 						cargoModel.getVesselEvents().add(vesselEvent);
@@ -160,6 +161,31 @@ public class ExportScheduleHelper {
 
 		}
 
+		// Remove any sandbox references
+		{
+			// Gather references then remove later to avoid breaking the iterator
+			Set<SandboxReference> toRemove = new HashSet<>();
+			final var itr = schedule.eAllContents();
+			while (itr.hasNext()) {
+				final EObject obj = itr.next();
+				if (obj instanceof SandboxReference ref) {
+					toRemove.add(ref);
+				}
+			}
+
+			for (final SandboxReference slot : toRemove) {
+				if (slot.eContainer() != null) {
+					final EReference ref = slot.eContainmentFeature();
+					if (ref.isMany()) {
+						final List<EObject> l = (List<EObject>) slot.eContainer().eGet(ref);
+						l.remove(slot);
+					} else {
+						slot.eContainer().eUnset(ref);
+					}
+				}
+			}
+		}
+
 		// Clear any insertion plans - assume no longer relevant
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
@@ -175,8 +201,7 @@ public class ExportScheduleHelper {
 		// Re-check after the customiser has run.
 		for (final Cargo cargo : cargoModel.getCargoes()) {
 			VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				if (charterInMarket.eContainer() == null) {
 					spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 				}
@@ -186,8 +211,7 @@ public class ExportScheduleHelper {
 		// Spot market slots should only have one month window
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
-				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) event;
+				if (event instanceof SlotVisit slotVisit) {
 					final LocalDate date = slotVisit.getStart().toLocalDate();
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					if (slotAllocation != null) {

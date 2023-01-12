@@ -238,8 +238,7 @@ public class ScenarioInstanceMigrator {
 
 				unit.migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 
-				if (unit instanceof IClientMigrationUnit) {
-					final IClientMigrationUnit clientMigrationUnit = (IClientMigrationUnit) unit;
+				if (unit instanceof IClientMigrationUnit clientMigrationUnit) {
 					// Only return real version numbers - ignore snapshot versions
 					if (clientMigrationUnit.getClientDestinationVersion() >= 0) {
 						clientVersion = clientMigrationUnit.getClientDestinationVersion();

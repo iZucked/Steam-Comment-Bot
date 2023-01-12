@@ -5,28 +5,27 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.api;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Okio;
 
 public class ReportsServiceClient {
 
@@ -34,39 +33,36 @@ public class ReportsServiceClient {
 
 	private File baseCaseFolder;
 
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
-			.build();
-
-	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-
 	public @Nullable String uploadReportData(String type, String version, String content, String uuid, String uploadURL, String fileExtension) throws IOException {
 
-		RequestBody requestBody = new MultipartBody.Builder() //
-				.setType(MultipartBody.FORM) //
-				.addFormDataPart("version", version) //
-				.addFormDataPart("report", type + fileExtension, RequestBody.create(mediaType, content))//
-				.build();
-
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(uploadURL + "/" + uuid + "/" + type);
-		if (requestBuilder == null) {
+		HttpPost request = new HttpPost();
+		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(uploadURL + "/" + uuid + "/" + type, request);
+		if (httpClient == null) {
 			return null;
 		}
 
-		Request request = requestBuilder //
-				.post(requestBody).build();
+		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+		formDataBuilder.addTextBody("version", version);
+		formDataBuilder.addBinaryBody("report", content.getBytes(StandardCharsets.UTF_8), ContentType.DEFAULT_BINARY, type + fileExtension);
+
+		final HttpEntity entity = formDataBuilder.build();
+
+		request.setEntity(entity);
 
 		// Check the response
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 404) {
+		try (var response = httpClient.execute(request)) {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				if (responseCode == 404) {
 					// 404: Endpoint not defined - old server version
 					return "404: Endpoint not defined - old server version";
-				} else if (response.code() == 405) {
+				} else if (responseCode == 405) {
 					// POST return a 405 instead of 404
 					// 405: Endpoint not defined - old server version
 					return "405: Endpoint not defined - old server version";
 				}
-				if (response.code() == 503) {
+				if (responseCode == 503) {
 					// 503: Service unavailable - not configured on server, so do not report an
 					// error for this code.
 					return "503: Service unavailable - not configured on server, so do not report an error for this code";
@@ -74,40 +70,36 @@ public class ReportsServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 
-			String responseStr = response.body().string();
-			return responseStr;
+			return EntityUtils.toString(response.getEntity());
 		}
 	}
 
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 
 		final String requestURL = String.format("%s/%s", REPORT_GET_URL, uuid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
-		if (requestBuilder == null) {
+
+		final HttpGet request = new HttpGet();
+		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
+		if (httpClient == null) {
 			return false;
 		}
 
-		Request request = requestBuilder //
-				.build();
-
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
+		try (var response = httpClient.execute(request)) {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			try (BufferedSource bufferedSource = response.body().source()) {
-				try (BufferedSink bufferedSink = Okio.buffer(Okio.sink(file))) {
-					bufferedSink.writeAll(bufferedSource);
-				}
+			try (FileOutputStream fos = new FileOutputStream(file)) {
+				response.getEntity().writeTo(fos);
 			}
 			// TODO: Is it a valid .lingo file?
-			String date = response.headers().get("MMX-CreationDate");
+			final String date = HttpClientUtil.getHeaderValue(response, "MMX-CreationDate");
 			if (date != null) {
 				Instant creationDate = Instant.ofEpochSecond(Long.parseLong(date));
 				callback.accept(file, creationDate);
 				return true;
 			}
 
-			// , Long.toString(baseCaseRecord.getCreationDate().getEpochSecond())");
 			return false;
 		}
 	}

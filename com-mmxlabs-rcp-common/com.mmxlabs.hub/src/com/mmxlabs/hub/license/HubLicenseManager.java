@@ -5,8 +5,10 @@
 package com.mmxlabs.hub.license;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.http.client.methods.HttpGet;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.slf4j.Logger;
@@ -16,17 +18,11 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseManager;
-
-import okhttp3.OkHttpClient;
-import okio.Okio;
 
 public final class HubLicenseManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HubLicenseManager.class);
-
-	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
 	static final String LICENSE_FOLDER = "license";
 	private static final String DATAHUB_LICENSE_KEYSTORE = "datahub.p12";
@@ -56,20 +52,21 @@ public final class HubLicenseManager {
 		// try save response to file
 		final File licenseFile = new File(licenseFolderPath.toFile(), DATAHUB_LICENSE_KEYSTORE);
 
-		final var requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LICENSE_ENDPOINT);
-		if (requestBuilder == null) {
+		final HttpGet request = new HttpGet();
+		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(LICENSE_ENDPOINT, request);
+		if (httpClient == null) {
 			if (licenseFile.exists()) {
 				return licenseFile;
 			}
 			return null;
 		}
 		try {
-			final var request = requestBuilder.build();
-			try (var response = httpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					if (response.code() == 401) {
+			try (var response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(statusCode)) {
+					if (statusCode == 401) {
 						LOG.error("insufficient permissions to retrieve license from DataHub");
-					} else if (response.code() == 404) {
+					} else if (statusCode == 404) {
 						LOG.error("there is currently no selected license on the DataHub");
 					} else {
 						LOG.error("unable to retrieve license from DataHub, unexpected code: " + response);
@@ -79,7 +76,7 @@ public final class HubLicenseManager {
 					// have a license. Maybe the license has been removed or the lingo permission
 					// has been revoked. Other error code (e.g. 5xx) may just be temporary failures
 					// such as a DataHub restart.
-					if (response.code() >= 400 && response.code() < 500) {
+					if (statusCode >= 400 && statusCode < 500) {
 						if (licenseFile.exists()) {
 							licenseFile.delete();
 						}
@@ -88,15 +85,14 @@ public final class HubLicenseManager {
 					return null;
 				}
 
-				try (var bufferedSource = response.body().source()) {
-
-					try (var bufferedSink = Okio.buffer(Okio.sink(licenseFile))) {
-						bufferedSink.writeAll(bufferedSource);
-					}
-					return licenseFile;
+				try (FileOutputStream fos = new FileOutputStream(licenseFile)) {
+					response.getEntity().writeTo(fos);
 				}
+				return licenseFile;
 			}
-		} catch (final IOException e) {
+		} catch (
+
+		final IOException e) {
 			LOG.error("Error downloading license: " + e.getMessage(), e);
 			if (licenseFile.exists()) {
 				return licenseFile;
