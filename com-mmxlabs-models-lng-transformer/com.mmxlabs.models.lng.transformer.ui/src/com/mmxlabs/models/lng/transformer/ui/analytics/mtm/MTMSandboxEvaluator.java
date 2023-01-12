@@ -22,8 +22,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
-import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -50,7 +48,7 @@ public class MTMSandboxEvaluator {
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
 
-	public @Nullable SingleResult evaluate(IResource resource, final ISequences currentRawSequences, final IPortSlot target) {
+	public @Nullable SingleResult evaluate(IResource resource, final ISequences currentRawSequences, final IPortSlot target, final IPortSlot originalSlot) {
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
 		final @NonNull IModifiableSequences currentFullSequences = manipulator.createManipulatedSequences(currentRawSequences);
@@ -77,34 +75,30 @@ public class MTMSandboxEvaluator {
 
 		final int arrivalTime = vpr.getPortTimesRecord().getSlotTime(target);
 		final long volumeInMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(target);
+		final long oVolumeInMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(originalSlot);
 		VoyagePlan voyagePlan = vpr.getVoyagePlan();
 		assert voyagePlan != null;
-		final long shippingCost = shippingCostHelper.getShippingCosts(voyagePlan, va, true);
+		final long totalShippingCost = shippingCostHelper.getShippingCosts(voyagePlan, va, true);
 
 		final int slotPricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(target);
+		final int oSlotPricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(originalSlot);
 
-		final int shippingCostPerMMBTu = volumeInMMBTU == 0 ? 0 : Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(shippingCost, volumeInMMBTU);
-
-		// might want different volume for the shipping cost
-		if (target instanceof LoadOption) {
-			return saveResult(slotPricePerMMBTu, arrivalTime, volumeInMMBTU, shippingCost);
-		}
-		if (target instanceof DischargeOption) {
-			return saveResult(slotPricePerMMBTu, arrivalTime, volumeInMMBTU, shippingCost);
-		}
+		final int shippingCostPerMMBTu = volumeInMMBTU == 0 ? 0 : Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(totalShippingCost, volumeInMMBTU);
 
 		if (cargoValueAnnotation != null) {
-			return saveResult(cargoValueAnnotation.getSlotPricePerMMBTu(target), arrivalTime, volumeInMMBTU, shippingCost);
+			return saveResult(slotPricePerMMBTu, arrivalTime, volumeInMMBTU, totalShippingCost, oSlotPricePerMMBTu, oVolumeInMMBTU);
 		}
 		return null;
 	}
-
-	private SingleResult saveResult(final int price, final int arrivalTime, final long volumeInMMBTU, final long shippingCost) {
+	
+	private SingleResult saveResult(final int price, final int arrivalTime, final long volumeInMMBTU, final long shippingCost, final int oPrice, final long oVolumeInMMBTU) {
 		final SingleResult result = new SingleResult();
 		result.price = price;
 		result.arrivalTime = arrivalTime;
 		result.volumeInMMBTU = volumeInMMBTU;
-		result.shippingCost = shippingCost;
+		result.totalShippingCost = shippingCost;
+		result.oPrice = oPrice;
+		result.oVolumeInMMBTU = oVolumeInMMBTU;
 		return result;
 	}
 

@@ -86,14 +86,20 @@ public class MTMSanboxUnit {
 		int arrivalTime = Integer.MAX_VALUE;
 		int price;
 		long volumeInMMBTU;
-		long shippingCost;
+		long totalShippingCost;
+		
+		int oPrice;
+		long oVolumeInMMBTU;
 	}
 
 	static class InternalResult {
 		int arrivalTime = Integer.MAX_VALUE;
 		int netbackPrice;
 		long volumeInMMBTU;
-		long shippingCost;
+		long totalShippingCost;
+		
+		int oPrice;
+		long oVolumeInMMBTU;
 
 		public void merge(@Nullable final InternalResult other) {
 			if (other != null) {
@@ -101,7 +107,10 @@ public class MTMSanboxUnit {
 					this.arrivalTime = other.arrivalTime;
 					this.netbackPrice = other.netbackPrice;
 					this.volumeInMMBTU = other.volumeInMMBTU;
-					this.shippingCost = other.shippingCost;
+					this.totalShippingCost = other.totalShippingCost;
+					
+					this.oPrice = other.oPrice;
+					this.oVolumeInMMBTU = other.oVolumeInMMBTU;
 				}
 			}
 		}
@@ -112,7 +121,10 @@ public class MTMSanboxUnit {
 					this.arrivalTime = other.arrivalTime;
 					this.netbackPrice = other.price;
 					this.volumeInMMBTU = other.volumeInMMBTU;
-					this.shippingCost = other.shippingCost;
+					this.totalShippingCost = other.totalShippingCost;
+					
+					this.oPrice = other.oPrice;
+					this.oVolumeInMMBTU = other.oVolumeInMMBTU;
 				}
 			}
 		}
@@ -382,7 +394,10 @@ public class MTMSanboxUnit {
 							mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
 							mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
 							mtmResult.setShippingCost(OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
-							Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+							Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.totalShippingCost, ret.volumeInMMBTU)));
+							mtmResult.setTotalShippingCost(OptimiserUnitConvertor.convertToExternalFixedCost(ret.totalShippingCost));
+							mtmResult.setOriginalPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.oPrice));
+							mtmResult.setOriginalVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.oVolumeInMMBTU));
 						}
 
 						return new Runnable() {
@@ -420,8 +435,12 @@ public class MTMSanboxUnit {
 			SequenceHelper.addSequence(solution, injector, charterInMarket, -1, load, discharge);
 		}
 		final MTMSandboxEvaluator evaluator = injector.getInstance(MTMSandboxEvaluator.class);
-		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-
-		return evaluator.evaluate(resource, solution, portSlot);
+		final IPortSlot beTarget = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
+		final IPortSlot buy = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
+		final IPortSlot sell = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
+		
+		final boolean isBuyMTM = beTarget.equals(buy);
+		
+		return evaluator.evaluate(resource, solution, beTarget, isBuyMTM ? buy : sell);
 	}
 }
