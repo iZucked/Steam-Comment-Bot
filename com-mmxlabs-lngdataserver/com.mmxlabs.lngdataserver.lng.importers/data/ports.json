@@ -3140,6 +3140,19 @@
        "timeZone": "Asia/Kuala_Lumpur"
       },
       "upstreamID": "MY0189"
+    },
+    {
+     "mmxId": "L_US_CALCA",
+     "name": "Calcasieu Pass",
+     "aliases": [],
+     "geographicPoint": {
+       "lat": 29.795183181762695,
+       "lon":  -93.32554626464844,
+       "country": "United States",
+       "timeZone": "America/Chicago"
+      },
+      "locode": "US  CAU",
+      "upstreamID": "US0121"
     }
 	],
 	"routingPoints": [{

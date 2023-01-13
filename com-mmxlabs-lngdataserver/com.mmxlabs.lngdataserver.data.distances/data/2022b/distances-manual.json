@@ -1,0 +1,14 @@
+[
+  {
+    "version" : "Boryeong-to-pyeongtaek",
+    "from" : "KR0058",
+    "to" : "KR0079",
+    "distance" : 200.00
+  },
+  {
+    "version" : "Boryeong-to-Guangdong",
+    "from" : "KR0058",
+    "to" : "CN0204",
+    "distance" : 1312.842
+  }
+]
