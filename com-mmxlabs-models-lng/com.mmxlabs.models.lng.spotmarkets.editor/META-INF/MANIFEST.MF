@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spot Markets Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.editor;singleton:=true
-Bundle-Version: 6.1.2.qualifier
+Bundle-Version: 6.1.2.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
