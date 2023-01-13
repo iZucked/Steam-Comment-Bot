@@ -44,8 +44,8 @@ public class CooldownCostsPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPriceEntry_Ports(), getReferenceValueProviderCache(), getCommandHandler(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		addTypicalColumn("Lumpsum", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getCooldownPriceEntry_LumpsumExpression(), getCommandHandler()));
-		addTypicalColumn("Vol. Expression", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getCooldownPriceEntry_VolumeExpression(), getCommandHandler()));
+		addTypicalColumn("Lump sum", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getCooldownPriceEntry_LumpsumExpression(), getCommandHandler()));
+		addTypicalColumn("Vol. expression", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getCooldownPriceEntry_VolumeExpression(), getCommandHandler()));
 		defaultSetTitle("Cooldown Costs");
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CooldownCosts");
