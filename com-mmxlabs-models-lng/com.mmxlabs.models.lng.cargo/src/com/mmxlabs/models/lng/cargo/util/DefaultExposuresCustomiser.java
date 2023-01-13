@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.RegasPricingParams;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class DefaultExposuresCustomiser implements IExposuresCustomiser{
@@ -26,17 +27,18 @@ public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 			final Contract contract = slot.getContract();
 			if (contract != null) {
 				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
-				if (priceInfo instanceof ExpressionPriceParameters) {
-					return ((ExpressionPriceParameters) priceInfo).getPriceExpression();
+				if (priceInfo instanceof ExpressionPriceParameters epp) {
+					return epp.getPriceExpression();
+				} else if (priceInfo instanceof RegasPricingParams rpp) {
+					return rpp.getPriceExpression();
 				}
 			}
-		} else if (slot instanceof SpotSlot) {
-			final SpotSlot sslot = (SpotSlot) slot;
+		} else if (slot instanceof SpotSlot sslot) {
 			final SpotMarket spotMarket = sslot.getMarket();
 			if (spotMarket != null) {
 				final LNGPriceCalculatorParameters priceInfo = spotMarket.getPriceInfo();
-				if (priceInfo instanceof DateShiftExpressionPriceParameters) {
-					return ((DateShiftExpressionPriceParameters) priceInfo).getPriceExpression();
+				if (priceInfo instanceof DateShiftExpressionPriceParameters dsepp) {
+					return dsepp.getPriceExpression();
 				}
 			}
 		}
