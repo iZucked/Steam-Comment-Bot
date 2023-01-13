@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.rcp.common.feature"
       label="RCP Common Feature"
-      version="5.12.2.qualifier"
+      version="6.1.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
