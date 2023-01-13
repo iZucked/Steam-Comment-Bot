@@ -255,6 +255,9 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject object, Collection<EObject> range, EMFDataBindingContext dbc) {
 		final EClass eClass = object.eClass();
 		this.object = object;
+		if (layoutProvider == null) {
+			layoutProvider = createLayoutProvider(eClass);
+		}
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
 			clear();
