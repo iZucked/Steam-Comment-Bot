@@ -159,44 +159,35 @@ class LicenseTests {
 	}
 
 	public void setCurrentLicense() throws IOException {
+
 		try {
-
-			final String postLicenseURL = "/license";
-			HttpPost request = new HttpPost();
-			final CloseableHttpClient client = DataHubServiceProvider.getInstance().makeRequest(postLicenseURL, request);
-
-			if (client == null) {
-				throw new IllegalStateException();
-			}
-
 			File license = createLicense();
 
-			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-			formDataBuilder.addBinaryBody("license", license, ContentType.DEFAULT_BINARY, "license.p12");
-			final HttpEntity entity = formDataBuilder.build();
+			final String postLicenseURL = "/license";
+			DataHubServiceProvider.getInstance().doPostRequest(postLicenseURL, request -> {
 
-			// Add file to post request
-			request.setEntity(entity);
+				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+				formDataBuilder.addBinaryBody("license", license, ContentType.DEFAULT_BINARY, "license.p12");
+				final HttpEntity entity = formDataBuilder.build();
 
-			if (client != null) {
-
+				// Add file to post request
+				request.setEntity(entity);
 				// Replace any auth header for test purposes
 				final byte[] encodedAuth = Base64.getEncoder().encode(String.format("%s:%s", "test", "test").getBytes(StandardCharsets.UTF_8));
 				final String authHeader = "Basic " + new String(encodedAuth);
 				request.setHeader("Authorization", authHeader);
-
+			}, response -> {
 				// Check the response
-				try (var response = client.execute(request)) {
-					int statusCode = response.getStatusLine().getStatusCode();
-					if (statusCode < 200 || statusCode >= 400) {
-						log.error(EntityUtils.toString(response.getEntity()));
-					}
-					log.info(EntityUtils.toString(response.getEntity()));
+				int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode < 200 || statusCode >= 400) {
+					log.error(EntityUtils.toString(response.getEntity()));
 				}
-			}
+				log.info(EntityUtils.toString(response.getEntity()));
+				return null;
+			});
 		} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException | CertificateException | OperatorCreationException | IOException e) {
-			// TODO Auto-generated catch block
+			// // TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

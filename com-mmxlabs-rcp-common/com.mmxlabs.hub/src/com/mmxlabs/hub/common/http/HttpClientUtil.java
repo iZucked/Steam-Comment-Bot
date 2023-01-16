@@ -11,7 +11,6 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -33,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -46,9 +44,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.client.fluent.Response;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIUtils;
@@ -70,7 +66,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.license.ssl.TrustStoreManager;
 
 public class HttpClientUtil {
@@ -604,7 +599,7 @@ SSLConnectionSocketFactory f = new SSLConnectionSocketFactory(
 		return "Basic " + new String(encodedAuth);
 	}
 
-	public static @Nullable String getHeaderValue(final @NonNull CloseableHttpResponse response, final @NonNull String name) {
+	public static @Nullable String getHeaderValue(final @NonNull HttpResponse response, final @NonNull String name) {
 		final Header header = response.getLastHeader(name);
 		if (header != null) {
 			return header.getValue();

@@ -35,23 +35,18 @@ public class ReportsServiceClient {
 
 	public @Nullable String uploadReportData(String type, String version, String content, String uuid, String uploadURL, String fileExtension) throws IOException {
 
-		HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(uploadURL + "/" + uuid + "/" + type, request);
-		if (httpClient == null) {
-			return null;
-		}
+		return DataHubServiceProvider.getInstance().doRequest(uploadURL + "/" + uuid + "/" + type, HttpPost::new, request -> {
 
-		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		formDataBuilder.addTextBody("version", version);
-		formDataBuilder.addBinaryBody("report", content.getBytes(StandardCharsets.UTF_8), ContentType.DEFAULT_BINARY, type + fileExtension);
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.addTextBody("version", version);
+			formDataBuilder.addBinaryBody("report", content.getBytes(StandardCharsets.UTF_8), ContentType.DEFAULT_BINARY, type + fileExtension);
+	
+			final HttpEntity entity = formDataBuilder.build();
+	
+			request.setEntity(entity);
+		}, response -> {
 
-		final HttpEntity entity = formDataBuilder.build();
-
-		request.setEntity(entity);
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
@@ -71,20 +66,13 @@ public class ReportsServiceClient {
 			}
 
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 
 		final String requestURL = String.format("%s/%s", REPORT_GET_URL, uuid);
-
-		final HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(requestURL, HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
@@ -101,7 +89,8 @@ public class ReportsServiceClient {
 			}
 
 			return false;
-		}
+		});
+
 	}
 
 	private ScheduledThreadPoolExecutor pollTaskExecutor;
@@ -153,18 +142,6 @@ public class ReportsServiceClient {
 
 		}, 0, 5, TimeUnit.MINUTES);
 
-	}
-
-	private void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void updateScenarioModel(File target) {
-		// TODO Auto-generated method stub
-		RunnerHelper.asyncExec(() -> {
-			// Update scenario model
-		});
 	}
 
 	public void stop() {

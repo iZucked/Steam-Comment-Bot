@@ -39,37 +39,26 @@ public class DataServiceClient {
 	};
 
 	public void upload(final TypeRecord typeRecord, final String json, final IProgressListener progressListener) throws IOException {
-		final HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(typeRecord.getUploadURL(), request);
-		if (httpClient == null) {
-			return;
-		}
-
-		final StringEntity requestEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
-		request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doRequest(typeRecord.getUploadURL(), HttpPost::new, request -> {
+			final StringEntity requestEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
+			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
+		}, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
 					// Data version already exists, we didn't need to upload again....
 					// throw new IOException("Data already exists");
-					return;
+					return null;
 				}
 				throw new IOException("Unexpected code " + response);
 			}
-		}
+			return null;
+		});
 	}
 
 	public void downloadTo(final TypeRecord typeRecord, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
-		final HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(typeRecord.getDownloadURL(uuid), request);
-		if (httpClient == null) {
-			return;
-		}
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getDownloadURL(uuid), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
@@ -80,23 +69,17 @@ public class DataServiceClient {
 					typeRecord.writeHeader(os);
 					w.writeTo(os);
 				});
+
+			} catch (Exception e) {
+				throw new IOException(e);
 			}
-		}
+			return null;
+		});
 	}
 
 	public @Nullable Pair<String, Instant> getRecords(final TypeRecord typeRecord) throws IOException {
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return null;
-		}
-
-		final HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(typeRecord.getListURL(), request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(typeRecord.getListURL(), HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
@@ -104,23 +87,16 @@ public class DataServiceClient {
 			final Instant lastModified = Instant.now();
 			final String jsonData = EntityUtils.toString(response.getEntity());
 			return new Pair<>(jsonData, lastModified);
-		}
+		});
 	}
 
 	public void deleteData(final TypeRecord typeRecord, final String uuid) throws IOException {
-
-		final HttpDelete request = new HttpDelete();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(typeRecord.getDeleteURL(uuid), request);
-		if (httpClient == null) {
-			return;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doDeleteRequest(typeRecord.getDeleteURL(uuid), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
-		}
+		});
 	}
 
 	public String getCurrentVersion(final TypeRecord typeRecord) throws IOException {
@@ -129,13 +105,7 @@ public class DataServiceClient {
 			return null;
 		}
 
-		final HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(typeRecord.getCurrentURL(), request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(typeRecord.getCurrentURL(), HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current pricing version
@@ -145,7 +115,7 @@ public class DataServiceClient {
 				return "";
 			}
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public @Nullable List<GeneralDataRecord> parseRecordsJSONData(final TypeRecord typeRecord, final String jsonData) {

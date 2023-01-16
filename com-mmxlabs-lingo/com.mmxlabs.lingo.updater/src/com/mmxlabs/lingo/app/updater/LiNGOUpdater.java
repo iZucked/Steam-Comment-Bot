@@ -35,14 +35,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.client.methods.HttpRequestWrapper;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.protocol.HttpContext;
@@ -379,21 +380,8 @@ public class LiNGOUpdater {
 
 		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		builder.setRedirectStrategy(new DefaultRedirectStrategy() {
-			@Override
-			public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws org.apache.http.ProtocolException {
-				HttpUriRequest redirectRequest = super.getRedirect(request, response, context);
-				if (redirectRequest.getURI().getHost().contains("amazon")) {
-					// We need to add a header to stop the Auth header being passed to AWS as this
-					// results in a 400 bad request.
-					redirectRequest.addHeader("unused", "unused");
-				}
-				return redirectRequest;
-			}
-		});
 		try (var httpClient = builder.build()) {
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				response.setEntity(new ProgressHttpEntityWrapper(response.getEntity(), progressListener));
 				if (response.getStatusLine().getStatusCode() != 200) {
@@ -409,24 +397,24 @@ public class LiNGOUpdater {
 		}
 	}
 
-	private HttpClientBuilder createHttpBuilder(URI url) {
-		var builder = HttpClientBuilder.create();
+	private HttpClientBuilder createHttpBuilder(final URI url) {
+		final var builder = HttpClientBuilder.create();
 
-		var sslBuilder = SSLContexts.custom();
+		final var sslBuilder = SSLContexts.custom();
 		if (url.getHost().equals("updates.minimaxlabs.com")) {
 			try {
 				LicenseManager.loadLicenseKeystore(sslBuilder);
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
 		}
 		try {
-			Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
+			final Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
 			if (p != null) {
 				sslBuilder.loadTrustMaterial(p.getFirst(), null);
 			}
 			builder.setSSLContext(sslBuilder.build());
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
 		{
@@ -441,8 +429,8 @@ public class LiNGOUpdater {
 					if (data != null && data.length > 0) {
 						for (final var pd : data) {
 							if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-								HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-								DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+								final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
+								final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 								builder.setRoutePlanner(routePlanner);
 							}
 						}
@@ -452,6 +440,25 @@ public class LiNGOUpdater {
 				proxyTracker.close();
 			}
 		}
+
+		builder.addInterceptorFirst(new HttpRequestInterceptor() {
+
+			@Override
+			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				try {
+					URI uri = new URI(request.getRequestLine().getUri());
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal().getRequestLine().getUri());
+					}
+					if (uri.getHost().contains("update.minimaxlabs.com")) {
+						withAuthHeader(url, request);
+					}
+				} catch (final URISyntaxException e) {
+					throw new IOException(e);
+				}
+			}
+
+		});
 
 		return builder;
 
@@ -468,24 +475,11 @@ public class LiNGOUpdater {
 
 		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		builder.setRedirectStrategy(new DefaultRedirectStrategy() {
-			@Override
-			public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws org.apache.http.ProtocolException {
-				HttpUriRequest redirectRequest = super.getRedirect(request, response, context);
-				if (redirectRequest.getURI().getHost().contains("amazon")) {
-					// We need to add a header to stop the Auth header being passed to AWS as this
-					// results in a 400 bad request.
-					redirectRequest.addHeader("unused", "unused");
-				}
-				return redirectRequest;
-			}
-		});
-
 		try (var httpClient = builder.build()) {
 			final HttpGet request = new HttpGet(url);
 			withAuthHeader(url, request);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+				final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
 				response.setEntity(w);
 
 				final int statusCode = response.getStatusLine().getStatusCode();
@@ -513,35 +507,30 @@ public class LiNGOUpdater {
 		if (url.toString().startsWith("http")) {
 
 			final HttpClientBuilder builder = createHttpBuilder(url);
-			if (url.getHost().equals("update.minimaxlabs.com")) {
-				// Add a custom redirect strategy to add in the Range header once we have the s3
-				// url
-				builder.setRedirectStrategy(new DefaultRedirectStrategy() {
-					@Override
-					public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws org.apache.http.ProtocolException {
+			builder.addInterceptorFirst(new HttpRequestInterceptor() {
 
-						HttpUriRequest redirectRequest = super.getRedirect(request, response, context);
-						if (redirectRequest.getURI().getHost().contains("amazon")) {
-							// Adding a header also means the original request headers are discarded.
-							redirectRequest.addHeader("Range", "bytes=0-512");
+				@Override
+				public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+					try {
+						URI uri = new URI(request.getRequestLine().getUri());
+						if (request instanceof HttpRequestWrapper w) {
+							uri = new URI(w.getOriginal().getRequestLine().getUri());
 						}
-						return redirectRequest;
+						if (!uri.getHost().contains("update.minimaxlabs.com")) {
+							// Adding a header also means the original request headers are discarded.
+							request.addHeader(HttpHeaders.RANGE, "bytes=0-512");
+						}
+					} catch (final URISyntaxException e) {
+						throw new IOException(e);
 					}
-				});
-			}
+				}
+
+			});
 
 			try (var httpClient = builder//
 					.build()) {
 
 				final HttpGet request = new HttpGet(url);
-				withAuthHeader(url, request);
-				// Adding the Range header to the default update sites caused problems with the
-				// AWS redirection and needs to be added during the redirect process. If we are
-				// using a different URL then we add in the header now.
-				if (!url.getHost().equals("update.minimaxlabs.com")) {
-					request.addHeader("Range", "bytes=0-512");
-				}
-
 				try (CloseableHttpResponse response = httpClient.execute(request)) {
 					final int statusCode = response.getStatusLine().getStatusCode();
 					if (statusCode < 200 && statusCode >= 300) {

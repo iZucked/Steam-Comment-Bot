@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
@@ -19,25 +18,22 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.HttpRequestWrapper;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.protocol.HttpContext;
@@ -49,7 +45,6 @@ import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jetty.server.HostHeaderCustomizer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
@@ -242,23 +237,27 @@ public class CloudOptimisationDataServiceClient {
 		final URI url = new URI(String.format("%s%s/%s/%s/%d", getGateway(), SCENARIO_RESULT_URL, jobid, getUserId(), resultIdx));
 		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		builder.setRedirectStrategy(new DefaultRedirectStrategy() {
+		builder.addInterceptorFirst(new HttpRequestInterceptor() {
 			@Override
-			public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws org.apache.http.ProtocolException {
-				HttpUriRequest redirectRequest = super.getRedirect(request, response, context);
-				if (redirectRequest.getURI().getHost().contains("amazon")) {
-					// We need to add a header to stop the Auth header being passed to AWS as this
-					// results in a 400 bad request.
-					redirectRequest.addHeader("unused", "unused");
+			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+				try {
+					URI uri = new URI(request.getRequestLine().getUri());
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal()
+								.getRequestLine().getUri());
+					}
+					if (uri.getHost().contains("gw.minimaxlabs.com")) {
+						withAuthHeader(uri, request);
+					}
+				} catch (URISyntaxException e) {
+					throw new IOException(e);
 				}
-				return redirectRequest;
 			}
+
 		});
 
 		try (var httpClient = builder.build()) {
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
-
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != 200) {

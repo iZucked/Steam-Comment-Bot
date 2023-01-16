@@ -40,56 +40,45 @@ public class UserNameUpdater {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
 
-		final HttpPost request = new HttpPost();
-		final CloseableHttpClient httpClient = DataHubServiceProvider.getInstance().makeRequest("/user/displayname", request);
-		if (httpClient == null) {
-			return userId;
-		}
+		try {
+			return DataHubServiceProvider.getInstance().doPostRequest("/user/displayname", request -> {
 
-		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		formDataBuilder.addTextBody("userId", userId);
-		final HttpEntity entity = formDataBuilder.build();
+				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+				formDataBuilder.addTextBody("userId", userId);
+				final HttpEntity entity = formDataBuilder.build();
 
-		request.setEntity(entity);
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (!HttpClientUtil.isSuccessful(responseCode)) {
-				if (responseCode == 404) {
-					// Assume older hub without this endpoint
-					return userId;
+				request.setEntity(entity);
+			}, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					if (responseCode == 404) {
+						// Assume older hub without this endpoint
+						return userId;
+					}
+					if (responseCode == 204) {
+						// Endpoint supported, but no mapping found
+						return userId;
+					}
+					return null;
 				}
-				if (responseCode == 204) {
-					// Endpoint supported, but no mapping found
-					return userId;
-				}
-				return null;
-			}
-			final UserNameRecord userNameRecord = mapper.readValue(response.getEntity().getContent(), UserNameRecord.class);
-			return userNameRecord.getDisplayName();
+				final UserNameRecord userNameRecord = mapper.readValue(response.getEntity().getContent(), UserNameRecord.class);
+				return userNameRecord.getDisplayName();
+			});
 		} catch (final Exception e) {
 			// ignore
 		}
-
 		return userId;
 	}
 
 	private static String getCurrentUserId() throws Exception {
 
-		final HttpGet request = new HttpGet();
-		final CloseableHttpClient httpClient = DataHubServiceProvider.getInstance().makeRequest("/user/id", request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doGetRequest("/user/id", response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 }

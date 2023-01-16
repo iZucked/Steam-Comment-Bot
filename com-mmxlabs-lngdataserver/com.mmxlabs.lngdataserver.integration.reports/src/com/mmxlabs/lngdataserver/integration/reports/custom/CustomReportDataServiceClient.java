@@ -12,13 +12,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -41,24 +41,18 @@ public class CustomReportDataServiceClient {
 	public String upload(final String uuid, final String contentType, final File file, final IProgressListener progressListener) throws IOException {
 
 		final String requestURL = String.format("%s/%s", SCENARIO_UPLOAD_URL, uuid);
-		final HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return null;
-		}
+		return DataHubServiceProvider.getInstance().doPostRequest(requestURL, request -> {
 
-		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-		formDataBuilder.addTextBody("uuid", uuid);
-		formDataBuilder.addTextBody("contentType", contentType);
-		formDataBuilder.addBinaryBody("report", file, ContentType.DEFAULT_BINARY, "data.json");
+			formDataBuilder.addTextBody("uuid", uuid);
+			formDataBuilder.addTextBody("contentType", contentType);
+			formDataBuilder.addBinaryBody("report", file, ContentType.DEFAULT_BINARY, "data.json");
 
-		final HttpEntity entity = formDataBuilder.build();
-		request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
+			final HttpEntity entity = formDataBuilder.build();
+			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
+		}, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
@@ -68,40 +62,28 @@ public class CustomReportDataServiceClient {
 				throw new IOException("Unexpected code " + response);
 			}
 			return uuid;
-		}
+		});
 	}
 
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
 
-		HttpGet request = new HttpGet();
 		final String requestURL = String.format("%s/%s", SCENARIO_ENDPOINT_URL, uuid);
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(requestURL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
-			ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+			final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
 			try (FileOutputStream fos = new FileOutputStream(file)) {
 				w.writeTo(fos);
 				return true;
 			}
-		}
+		});
 	}
 
 	public Pair<String, Instant> getRecords() throws IOException {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(SCENARIO_ENDPOINT_URL, request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_ENDPOINT_URL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
@@ -113,41 +95,32 @@ public class CustomReportDataServiceClient {
 			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
 			final String jsonData = EntityUtils.toString(response.getEntity());
 			return new Pair<>(jsonData, lastModified);
-		}
+		});
 	}
 
 	public void deleteData(final String uuid) throws IOException {
 
 		final String requestURL = String.format("%s/%s", SCENARIO_DELETE_URL, uuid);
-		HttpDelete request = new HttpDelete();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doDeleteRequest(requestURL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
-		}
+		});
 	}
 
-	public Instant getLastModified() {
+	public @Nullable Instant getLastModified() {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(SCENARIO_LAST_MODIFIED_URL, request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (HttpClientUtil.isSuccessful(responseCode)) {
-				final String date = EntityUtils.toString(response.getEntity());
-				final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-				return lastModified;
-			}
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (HttpClientUtil.isSuccessful(responseCode)) {
+					final String date = EntityUtils.toString(response.getEntity());
+					final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+					return lastModified;
+				}
+				return null;
+			});
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

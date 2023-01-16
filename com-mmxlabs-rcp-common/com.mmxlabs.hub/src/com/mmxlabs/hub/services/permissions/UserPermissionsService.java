@@ -68,11 +68,12 @@ public class UserPermissionsService implements IUserPermissionsService {
 
 	public synchronized void updateUserPermissions() throws IOException {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, request);
-		if (httpClient == null) {
+		final var p = DataHubServiceProvider.getInstance().makeRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, HttpGet::new);
+		if (p == null) {
 			return;
 		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
 
 		hubSupportsPermissions = true;
 
