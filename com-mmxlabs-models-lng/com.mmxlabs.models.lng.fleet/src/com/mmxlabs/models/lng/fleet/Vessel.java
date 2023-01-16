@@ -55,6 +55,9 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMarker <em>Marker</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1121,6 +1124,72 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setMarker(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Base Fuel Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Base Fuel Emission Rate</em>' attribute.
+	 * @see #setBaseFuelEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BaseFuelEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='##0.###'"
+	 * @generated
+	 */
+	double getBaseFuelEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Fuel Emission Rate</em>' attribute.
+	 * @see #getBaseFuelEmissionRate()
+	 * @generated
+	 */
+	void setBaseFuelEmissionRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Bog Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Bog Emission Rate</em>' attribute.
+	 * @see #setBogEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BogEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/m\263' formatString='##0.###'"
+	 * @generated
+	 */
+	double getBogEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Bog Emission Rate</em>' attribute.
+	 * @see #getBogEmissionRate()
+	 * @generated
+	 */
+	void setBogEmissionRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Pilot Light Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pilot Light Emission Rate</em>' attribute.
+	 * @see #setPilotLightEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PilotLightEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='##0.###'"
+	 * @generated
+	 */
+	double getPilotLightEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pilot Light Emission Rate</em>' attribute.
+	 * @see #getPilotLightEmissionRate()
+	 * @generated
+	 */
+	void setPilotLightEmissionRate(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

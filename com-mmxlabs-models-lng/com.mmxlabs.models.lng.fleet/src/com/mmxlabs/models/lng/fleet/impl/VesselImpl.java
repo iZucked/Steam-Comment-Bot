@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.EmissionParameters;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
@@ -74,6 +75,9 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMmxReference <em>Mmx Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMarker <em>Marker</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -850,6 +854,66 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean marker = MARKER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBaseFuelEmissionRate() <em>Base Fuel Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuelEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double BASE_FUEL_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getBaseFuelEmissionRate() <em>Base Fuel Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuelEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double baseFuelEmissionRate = BASE_FUEL_EMISSION_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBogEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double BOG_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBogEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PILOT_LIGHT_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2109,6 +2173,75 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
+	public double getBaseFuelEmissionRate() {
+		return baseFuelEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBaseFuelEmissionRate(double newBaseFuelEmissionRate) {
+		double oldBaseFuelEmissionRate = baseFuelEmissionRate;
+		baseFuelEmissionRate = newBaseFuelEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, baseFuelEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getBogEmissionRate() {
+		return bogEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBogEmissionRate(double newBogEmissionRate) {
+		double oldBogEmissionRate = bogEmissionRate;
+		bogEmissionRate = newBogEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, bogEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getPilotLightEmissionRate() {
+		return pilotLightEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPilotLightEmissionRate(double newPilotLightEmissionRate) {
+		double oldPilotLightEmissionRate = pilotLightEmissionRate;
+		pilotLightEmissionRate = newPilotLightEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, pilotLightEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getScnt() {
 		return scnt;
 	}
@@ -2640,6 +2773,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isMmxReference();
 			case FleetPackage.VESSEL__MARKER:
 				return isMarker();
+			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
+				return getBaseFuelEmissionRate();
+			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
+				return getBogEmissionRate();
+			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
+				return getPilotLightEmissionRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2763,6 +2902,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker((Boolean)newValue);
 				return;
+			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
+				setBaseFuelEmissionRate((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
+				setBogEmissionRate((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
+				setPilotLightEmissionRate((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2882,6 +3030,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker(MARKER_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
+				setBaseFuelEmissionRate(BASE_FUEL_EMISSION_RATE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
+				setBogEmissionRate(BOG_EMISSION_RATE_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
+				setPilotLightEmissionRate(PILOT_LIGHT_EMISSION_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2965,6 +3122,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return mmxReference != MMX_REFERENCE_EDEFAULT;
 			case FleetPackage.VESSEL__MARKER:
 				return marker != MARKER_EDEFAULT;
+			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
+				return baseFuelEmissionRate != BASE_FUEL_EMISSION_RATE_EDEFAULT;
+			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
+				return bogEmissionRate != BOG_EMISSION_RATE_EDEFAULT;
+			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
+				return pilotLightEmissionRate != PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3032,6 +3195,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(mmxReference);
 		result.append(", marker: ");
 		result.append(marker);
+		result.append(", baseFuelEmissionRate: ");
+		result.append(baseFuelEmissionRate);
+		result.append(", bogEmissionRate: ");
+		result.append(bogEmissionRate);
+		result.append(", pilotLightEmissionRate: ");
+		result.append(pilotLightEmissionRate);
 		result.append(')');
 		return result.toString();
 	}
