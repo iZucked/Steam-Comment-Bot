@@ -75,6 +75,9 @@
       <genFeatures createChild="false" propertyDescription="" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/mmxReference"/>
       <genFeatures createChild="false" propertyDescription="Flag indicating a vessel with little or no fuel consumption data and can be used only for non-shipped cargoes"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/marker"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/baseFuelEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/bogEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/pilotLightEmissionRate"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessiblePorts"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessibleRoutes"/>
