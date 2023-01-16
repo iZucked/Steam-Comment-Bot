@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
@@ -85,7 +86,7 @@ public class CargoEmissionAccountingReportModelV1{
 	public static void main(String args[]) throws Exception {
 
 		SchemaGenerator gen = new SchemaGenerator();
-		String json = gen.generateHubSchema(CargoEmissionAccountingReportModelV1.class);
+		String json = gen.generateHubSchema(CargoEmissionAccountingReportModelV1.class, Mode.FULL);
 		System.out.println(json);
 	}
 }
