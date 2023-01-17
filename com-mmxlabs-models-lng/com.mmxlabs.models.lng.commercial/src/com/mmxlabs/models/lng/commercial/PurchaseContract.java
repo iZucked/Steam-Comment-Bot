@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract()
@@ -81,6 +82,28 @@ public interface PurchaseContract extends Contract {
 	 * @generated
 	 */
 	boolean isSetCargoCV();
+
+	/**
+	 * Returns the value of the '<em><b>Upstream Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #setUpstreamEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_UpstreamEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MMBtu' formatString='##0.###'"
+	 * @generated
+	 */
+	double getUpstreamEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 */
+	void setUpstreamEmissionRate(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Sales Delivery Type</b></em>' attribute.

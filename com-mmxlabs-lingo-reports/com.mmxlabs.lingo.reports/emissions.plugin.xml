@@ -25,6 +25,13 @@
             class="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView"
             id="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView">
       </view>
+      <view
+            name="Second Cargo Emissions"
+            icon="icons:/icons/16x16/lateness.png"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.emissions.SecondCargoEmissionAccountingReportView"
+            id="com.mmxlabs.lingo.reports.emissions.SecondCargoEmissionAccountingReportView">
+      </view>
 	</extension>
 
 </plugin>

@@ -864,6 +864,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPurchaseContract_UpstreamEmissionRate() {
+		return (EAttribute)purchaseContractEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getPurchaseContract_SalesDeliveryType() {
 		return (EAttribute)purchaseContractEClass.getEStructuralFeatures().get(0);
 	}
@@ -1839,6 +1849,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(purchaseContractEClass, PURCHASE_CONTRACT__SALES_DELIVERY_TYPE);
 		createEAttribute(purchaseContractEClass, PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE);
 		createEAttribute(purchaseContractEClass, PURCHASE_CONTRACT__CARGO_CV);
+		createEAttribute(purchaseContractEClass, PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE);
 
 		taxRateEClass = createEClass(TAX_RATE);
 		createEAttribute(taxRateEClass, TAX_RATE__DATE);
@@ -2089,6 +2100,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getPurchaseContract_SalesDeliveryType(), theTypesPackage.getCargoDeliveryType(), "salesDeliveryType", "Any", 1, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPurchaseContract_DesPurchaseDealType(), theTypesPackage.getDESPurchaseDealType(), "desPurchaseDealType", null, 0, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPurchaseContract_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 0, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPurchaseContract_UpstreamEmissionRate(), ecorePackage.getEDouble(), "upstreamEmissionRate", null, 0, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taxRateEClass, TaxRate.class, "TaxRate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTaxRate_Date(), theDateTimePackage.getLocalDate(), "date", null, 1, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2311,6 +2323,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			   "unit", "mmBtu/m\u00b3",
 			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getPurchaseContract_UpstreamEmissionRate(),
+		   source,
+		   new String[] {
+			   "unit", "kg/MMBtu",
+			   "formatString", "##0.###"
 		   });
 		addAnnotation
 		  (getDateShiftExpressionPriceParameters_Value(),

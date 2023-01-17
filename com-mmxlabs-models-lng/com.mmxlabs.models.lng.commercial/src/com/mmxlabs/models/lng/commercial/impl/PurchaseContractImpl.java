@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -92,6 +93,24 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * @ordered
 	 */
 	protected boolean cargoCVESet;
+	/**
+	 * The default value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double UPSTREAM_EMISSION_RATE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double upstreamEmissionRate = UPSTREAM_EMISSION_RATE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -167,6 +186,29 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * @generated
 	 */
 	@Override
+	public double getUpstreamEmissionRate() {
+		return upstreamEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUpstreamEmissionRate(double newUpstreamEmissionRate) {
+		double oldUpstreamEmissionRate = upstreamEmissionRate;
+		upstreamEmissionRate = newUpstreamEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE, oldUpstreamEmissionRate, upstreamEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CargoDeliveryType getSalesDeliveryType() {
 		return salesDeliveryType;
 	}
@@ -221,6 +263,8 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return getDesPurchaseDealType();
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return getCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				return getUpstreamEmissionRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -241,6 +285,9 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return;
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				setCargoCV((Double)newValue);
+				return;
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				setUpstreamEmissionRate((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -263,6 +310,9 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				unsetCargoCV();
 				return;
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				setUpstreamEmissionRate(UPSTREAM_EMISSION_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -281,6 +331,8 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return desPurchaseDealType != DES_PURCHASE_DEAL_TYPE_EDEFAULT;
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return isSetCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				return upstreamEmissionRate != UPSTREAM_EMISSION_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -301,6 +353,8 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 		result.append(desPurchaseDealType);
 		result.append(", cargoCV: ");
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
+		result.append(", upstreamEmissionRate: ");
+		result.append(upstreamEmissionRate);
 		result.append(')');
 		return result.toString();
 	}

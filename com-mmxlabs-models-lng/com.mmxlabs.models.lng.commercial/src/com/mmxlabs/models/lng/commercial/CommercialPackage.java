@@ -1192,13 +1192,22 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Upstream Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE = CONTRACT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -3235,6 +3244,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getPurchaseContract_CargoCV();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Upstream Emission Rate</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_UpstreamEmissionRate();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4584,6 +4604,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PURCHASE_CONTRACT__CARGO_CV = eINSTANCE.getPurchaseContract_CargoCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Upstream Emission Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE = eINSTANCE.getPurchaseContract_UpstreamEmissionRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Sales Delivery Type</b></em>' attribute feature.
