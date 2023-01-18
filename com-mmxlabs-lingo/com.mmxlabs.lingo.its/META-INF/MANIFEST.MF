@@ -139,6 +139,7 @@ Import-Package: com.sun.jna;version="4.5.1",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.its.internal.Activator
 Export-Package: com.mmxlabs.lingo.its,
+ com.mmxlabs.lingo.its.datahub,
  com.mmxlabs.lingo.its.dynamic,
  com.mmxlabs.lingo.its.tests,
  com.mmxlabs.lingo.its.tests.category,
