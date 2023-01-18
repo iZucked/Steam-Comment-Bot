@@ -74,10 +74,11 @@ public class UserPermissionsService implements IUserPermissionsService {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
 		hubSupportsPermissions = true;
 
-		try (var response = httpClient.execute(request)) {
+		try (var response = httpClient.execute(request, ctx)) {
 			int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {

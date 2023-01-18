@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.KeyFactory;
-import java.security.KeyStore;
 import java.security.Security;
 import java.security.Signature;
 import java.security.interfaces.RSAPublicKey;
@@ -30,7 +29,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -44,13 +42,10 @@ import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestWrapper;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.SSLContexts;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -72,22 +67,19 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.json.JSONObject;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
-import com.mmxlabs.license.ssl.LicenseManager;
-import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.lingo.app.updater.auth.IUpdateAuthenticationProvider;
 import com.mmxlabs.lingo.app.updater.model.UpdateVersion;
 import com.mmxlabs.lingo.app.updater.model.Version;
@@ -398,70 +390,10 @@ public class LiNGOUpdater {
 	}
 
 	private HttpClientBuilder createHttpBuilder(final URI url) {
-		final var builder = HttpClientBuilder.create();
-
-		final var sslBuilder = SSLContexts.custom();
-		if (url.getHost().equals("updates.minimaxlabs.com")) {
-			try {
-				LicenseManager.loadLicenseKeystore(sslBuilder);
-			} catch (final Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-		try {
-			final Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
-			if (p != null) {
-				sslBuilder.loadTrustMaterial(p.getFirst(), null);
-			}
-			builder.setSSLContext(sslBuilder.build());
-		} catch (final Exception e1) {
-			e1.printStackTrace();
-		}
-		{
-
-			final Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
-			proxyTracker.open();
-			try {
-				final IProxyService service = proxyTracker.getService();
-				if (service != null && service.isProxiesEnabled()) {
-					final IProxyData[] data = service.select(url);
-					if (data != null && data.length > 0) {
-						for (final var pd : data) {
-							if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-								final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-								final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-								builder.setRoutePlanner(routePlanner);
-							}
-						}
-					}
-				}
-			} finally {
-				proxyTracker.close();
-			}
-		}
-
-		builder.addInterceptorFirst(new HttpRequestInterceptor() {
-
-			@Override
-			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
-				try {
-					URI uri = new URI(request.getRequestLine().getUri());
-					if (request instanceof HttpRequestWrapper w) {
-						uri = new URI(w.getOriginal().getRequestLine().getUri());
-					}
-					if (uri.getHost().contains("update.minimaxlabs.com")) {
-						withAuthHeader(url, request);
-					}
-				} catch (final URISyntaxException e) {
-					throw new IOException(e);
-				}
-			}
-
-		});
-
-		return builder;
-
+		
+		final boolean needsClientAuth = url.getHost().contains("updates.minimaxlabs.com");
+		final HttpHost httpHost = URIUtils.extractHost(url);
+		return HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
 	}
 
 	private void downloadVersionSignature(final URI baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {

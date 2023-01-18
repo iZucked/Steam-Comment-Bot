@@ -9,9 +9,7 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.security.KeyStore;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,22 +25,16 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
-import org.apache.http.ssl.SSLContexts;
-import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Shell;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,13 +44,13 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
-import com.mmxlabs.license.ssl.TrustStoreManager;
+import com.mmxlabs.hub.preferences.TLSPreferenceConstants;
 
 /**
  * This class manages connections to the data hub.
@@ -81,7 +73,6 @@ public class UpstreamUrlProvider {
 	private static final int CONNECTION_TIMEOUT_IN_SECONDS = 5;
 	private static final int READ_TIMEOUT_IN_SECONDS = 1;
 	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
-//	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
 
 	// Avoids repeated error reporting
 	private static final ConcurrentHashMap<String, Object> reportedError = new ConcurrentHashMap<>();
@@ -133,7 +124,15 @@ public class UpstreamUrlProvider {
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
 		OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER)));
+		
+		
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
+		
+		HttpClientUtil.setUseJavaTrustStore(Boolean.TRUE.equals(preferenceStore.getBoolean(TLSPreferenceConstants.P_TLS_USE_JAVA_TRUSTSTORE)));
+		HttpClientUtil.setUseWindowsTrustStore(Boolean.TRUE.equals(preferenceStore.getBoolean(TLSPreferenceConstants.P_TLS_USE_WINDOWS_TRUSTSTORE)));
+		
+		// Any changes to the http client config will clear the client cache
+		HttpClientUtil.addInvalidationListener(cache::invalidateAll);
 	}
 
 	public void start() {
@@ -176,6 +175,16 @@ public class UpstreamUrlProvider {
 			break;
 		case DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER:
 			OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(event.getNewValue()));
+			fireChangedListeners();
+			break;
+		case TLSPreferenceConstants.P_TLS_USE_JAVA_TRUSTSTORE:
+			HttpClientUtil.setUseJavaTrustStore(Boolean.TRUE.equals(event.getNewValue()));
+			isUpstreamAvailable();
+			fireChangedListeners();
+			break;
+		case TLSPreferenceConstants.P_TLS_USE_WINDOWS_TRUSTSTORE:
+			HttpClientUtil.setUseWindowsTrustStore(Boolean.TRUE.equals(event.getNewValue()));
+			isUpstreamAvailable();
 			fireChangedListeners();
 			break;
 		default:
@@ -381,9 +390,9 @@ public class UpstreamUrlProvider {
 		}
 
 		final HttpGet pingRequest = new HttpGet(url + "/ping");
-		CloseableHttpClient httpClient = cache.getUnchecked(URIUtils.extractHost(pingRequest.getURI()));
+		final CloseableHttpClient httpClient = cache.getUnchecked(URIUtils.extractHost(pingRequest.getURI()));
 		try (final var pingResponse = httpClient.execute(pingRequest)) {
-			int reponseCode = pingResponse.getStatusLine().getStatusCode();
+			final int reponseCode = pingResponse.getStatusLine().getStatusCode();
 			if (HttpClientUtil.isSuccessful(reponseCode)) {
 				// Clear any logged errors
 				reportedError.remove(url);
@@ -476,13 +485,13 @@ public class UpstreamUrlProvider {
 		baseUrl = stripTrailingForwardSlash(baseUrl);
 		final URI url = new URI(baseUrl + INFORMATION_ENDPOINT);
 
-		CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(url));
+		final CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(url));
 		if (client == null) {
 			return datahubInformation;
 		}
 		final HttpGet request = new HttpGet(url);
 		try (var response = client.execute(request)) {
-			int statusCode = response.getStatusLine().getStatusCode();
+			final int statusCode = response.getStatusLine().getStatusCode();
 			if (HttpClientUtil.isSuccessful(statusCode)) {
 				// bind response to pojo
 				final ObjectMapper objectMapper = new ObjectMapper();
@@ -497,14 +506,14 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	private LoadingCache<HttpHost, CloseableHttpClient> cache = CacheBuilder.newBuilder() //
+	private final LoadingCache<HttpHost, CloseableHttpClient> cache = CacheBuilder.newBuilder() //
 
 			.removalListener(new RemovalListener<HttpHost, CloseableHttpClient>() {
 				@Override
-				public void onRemoval(RemovalNotification<HttpHost, CloseableHttpClient> notification) {
+				public void onRemoval(final RemovalNotification<HttpHost, CloseableHttpClient> notification) {
 					try {
 						notification.getValue().close();
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 				}
@@ -512,70 +521,28 @@ public class UpstreamUrlProvider {
 
 				@Override
 				public CloseableHttpClient load(final HttpHost baseUrl) throws Exception {
-					final HttpClientBuilder builder = HttpClientBuilder.create();
-
-					var sslBuilder = SSLContexts.custom();
-//					if (url.getHost().equals("updates.minimaxlabs.com")) {
-//						try {
-//							LicenseManager.loadLicenseKeystore(sslBuilder);
-//						} catch (Exception e1) {
-//							e1.printStackTrace();
-//						}
-//					}
-					try {
-						TrustStoreManager.refresh();
-						Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
-						if (p != null) {
-							sslBuilder.loadTrustMaterial(p.getFirst(), null);
-						}
-						builder.setSSLContext(sslBuilder.build());
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					{
-
-						final Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-						final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
-						proxyTracker.open();
-						try {
-							final IProxyService service = proxyTracker.getService();
-							if (service != null && service.isProxiesEnabled()) {
-								final IProxyData[] data = service.select(new URI(baseUrl.toURI()));
-								if (data != null && data.length > 0) {
-									for (final var pd : data) {
-										if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-											HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-											DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-											builder.setRoutePlanner(routePlanner);
-										}
-									}
-								}
-							}
-						} finally {
-							proxyTracker.close();
-						}
-					}
-
+					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, false);
 					return builder.build();
 				}
 
 			});
 
-	public <T extends HttpRequestBase> @Nullable Pair<CloseableHttpClient, T> makeRequest(@NonNull final String uriFragment, @NonNull Function<URI, T> func) {
-
+	public <T extends HttpRequestBase> @Nullable Triple<CloseableHttpClient, T, HttpClientContext> makeRequest(@NonNull final String uriFragment, @NonNull final Function<URI, T> func) {
 		final String baseUrlIfAvailable = getBaseUrlIfAvailable();
+
 		if (baseUrlIfAvailable.isEmpty()) {
 			return null;
 		}
 		try {
-			URI requestURI = new URI(baseUrlIfAvailable + uriFragment);
-			CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(requestURI));
+			final URI requestURI = new URI(baseUrlIfAvailable + uriFragment);
+			final CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(requestURI));
 			if (client != null) {
-				T request = func.apply(requestURI);
-				authenticationManager.addAuthToRequest(request);
-				return Pair.of(client, request);
+				final T request = func.apply(requestURI);
+				final HttpClientContext ctx = new HttpClientContext();
+				authenticationManager.addAuthToRequest(request, ctx);
+				return Triple.of(client, request, ctx);
 			}
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			return null;
 		}
 		return null;

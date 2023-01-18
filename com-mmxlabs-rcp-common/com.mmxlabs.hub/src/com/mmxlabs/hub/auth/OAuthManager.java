@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.hub.auth;
 
-import java.io.IOException;
 import java.util.Optional;
 
-import org.apache.http.HttpMessage;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -61,10 +63,17 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	/**
 	 * Create a request builder with Authorization header.
 	 */
-	public void buildRequestWithToken(final HttpMessage msg) {
+	public void buildRequestWithToken(final HttpRequestBase msg, final HttpClientContext ctx) {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 		if (token.isPresent()) {
-			msg.addHeader("Cookie", token.get());
+			final String tkn = token.get();
+			final BasicCookieStore store = new BasicCookieStore();
+			final BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", tkn.replace("JSESSIONID=", ""));
+			cookie.setDomain(msg.getURI().getHost());
+			cookie.setPath("/");
+
+			store.addCookie(cookie);
+			ctx.setCookieStore(store);
 			msg.addHeader("Cache-Control", "no-store, max-age=0");
 		}
 	}
@@ -91,8 +100,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	}
 
 	/**
-	 * Checks if the SSO token (in the form of a cookie) is valid by making a
-	 * request to the hub
+	 * Checks if the SSO token (in the form of a cookie) is valid by making a request to the hub
 	 *
 	 * @param upstreamURL
 	 * @return true is the token is valid, false otherwise
@@ -101,11 +109,13 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		boolean valid = false;
 
 		final HttpGet request = new HttpGet(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION);
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()))) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
 			if (httpClient == null) {
 				return valid;
 			}
-			buildRequestWithToken(request);
+			final HttpClientContext ctx = new HttpClientContext();
+
+			buildRequestWithToken(request, ctx);
 
 			valid = httpClient.execute(request, response -> {
 				final int responseCode = response.getStatusLine().getStatusCode();
@@ -116,7 +126,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
 				return false;
-			});
+			}, ctx);
 		} catch (final Exception e) {
 			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
@@ -137,8 +147,8 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		deleteFromSecurePreferences(COOKIE);
 		// delete cookie from swt browser
 		// doesn't work if the user clicks "stay logged in"
-//		Browser.setCookie("JSESSIONID=;", url);
-//		Browser.setCookie("authenticated=;", url + "/authenticated");
+		// Browser.setCookie("JSESSIONID=;", url);
+		// Browser.setCookie("authenticated=;", url + "/authenticated");
 	}
 
 	public void setPreferEdgeBrowser(final boolean preferEdgeBrowser) {

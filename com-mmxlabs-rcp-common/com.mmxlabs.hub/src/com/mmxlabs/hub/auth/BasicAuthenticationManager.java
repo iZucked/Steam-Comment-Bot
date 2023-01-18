@@ -72,7 +72,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 		HttpGet request = new HttpGet(url + UpstreamUrlProvider.BASIC_LOGIN_PATH);
 
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()))) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
 			if (httpClient == null) {
 				return false;
 			}

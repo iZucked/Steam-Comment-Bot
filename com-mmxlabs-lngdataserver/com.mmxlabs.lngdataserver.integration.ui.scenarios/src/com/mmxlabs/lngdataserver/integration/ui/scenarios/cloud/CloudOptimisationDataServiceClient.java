@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyFactory;
-import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -19,35 +18,29 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestWrapper;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,12 +49,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.common.Pair;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
-import com.mmxlabs.license.ssl.LicenseManager;
-import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugContants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.GatewayResponseMaker;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
@@ -85,60 +80,60 @@ public class CloudOptimisationDataServiceClient {
 
 	private final Instant lastSuccessfulAccess = Instant.EPOCH.plusNanos(1);
 
+	private final LoadingCache<HttpHost, CloseableHttpClient> cache = CacheBuilder.newBuilder() //
+
+			.removalListener(new RemovalListener<HttpHost, CloseableHttpClient>() {
+				@Override
+				public void onRemoval(final RemovalNotification<HttpHost, CloseableHttpClient> notification) {
+					try {
+						notification.getValue().close();
+					} catch (final IOException e) {
+						e.printStackTrace();
+					}
+				}
+			})
+			.build(new CacheLoader<HttpHost, CloseableHttpClient>() {
+
+				@Override
+				public CloseableHttpClient load(final HttpHost baseUrl) throws Exception {
+					final boolean needsClientAuth = baseUrl.getHostName().contains("gw.minimaxlabs.com");
+
+					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, needsClientAuth);
+					builder.addInterceptorFirst(new HttpRequestInterceptor() {
+						@Override
+						public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+							try {
+								URI uri = new URI(request.getRequestLine().getUri());
+								if (request instanceof final HttpRequestWrapper w) {
+									uri = new URI(w.getOriginal().getRequestLine().getUri());
+								}
+								if (uri.getHost().contains("gw.minimaxlabs.com")) {
+									request.addHeader(HttpHeaders.AUTHORIZATION, HttpClientUtil.basicAuthHeader(getUsername(), getPassword()));
+								}
+							} catch (final URISyntaxException e) {
+								throw new IOException(e);
+							}
+						}
+
+					});
+
+					return builder.build();
+				}
+
+			});
+
+	public CloudOptimisationDataServiceClient() {
+		// Any changes to the http client config will clear the client cache
+		HttpClientUtil.addInvalidationListener(cache::invalidateAll);
+	}
+
 	public Instant getLastSuccessfulAccess() {
 		return this.lastSuccessfulAccess;
 	}
 
-	private HttpClientBuilder createHttpBuilder(final URI url) {
-		final var builder = HttpClientBuilder.create();
-
-		final var sslBuilder = SSLContexts.custom();
-		if (url.getHost().contains("gw.minimaxlabs.com")) {
-			try {
-				LicenseManager.loadLicenseKeystore(sslBuilder);
-			} catch (final Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-		try {
-			final Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
-			if (p != null) {
-				sslBuilder.loadTrustMaterial(p.getFirst(), null);
-			}
-			builder.setSSLContext(sslBuilder.build());
-		} catch (final Exception e1) {
-			e1.printStackTrace();
-		}
-		{
-
-			final Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
-			proxyTracker.open();
-			try {
-				final IProxyService service = proxyTracker.getService();
-				if (service != null && service.isProxiesEnabled()) {
-					final IProxyData[] data = service.select(url);
-					if (data != null && data.length > 0) {
-						for (final var pd : data) {
-							if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-								final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-								final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-								builder.setRoutePlanner(routePlanner);
-							}
-						}
-					}
-				}
-			} finally {
-				proxyTracker.close();
-			}
-		}
-
-		return builder;
-
-	}
-
-	private void withAuthHeader(final URI url, final HttpMessage b) {
-		b.addHeader("Authorization", HttpClientUtil.basicAuthHeader(getUsername(), getPassword()));
+	private CloseableHttpClient getHttpClient(final URI url) {
+		final HttpHost httpHost = URIUtils.extractHost(url);
+		return cache.getUnchecked(httpHost);
 	}
 
 	private String getUsername() {
@@ -172,17 +167,13 @@ public class CloudOptimisationDataServiceClient {
 		}
 		final URI url = new URI(String.format("%s%s", getGateway(), INFO_URL));
 
-		final HttpClientBuilder builder = createHttpBuilder(url);
-
-		try (var httpClient = builder.build()) {
-			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
-			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				if (response.getStatusLine().getStatusCode() == 200) {
-					return EntityUtils.toString(response.getEntity());
-				}
-				throw new IOException("Unexpected code: " + response);
+		final var httpClient = getHttpClient(url);
+		final HttpGet request = new HttpGet(url);
+		try (CloseableHttpResponse response = httpClient.execute(request)) {
+			if (response.getStatusLine().getStatusCode() == 200) {
+				return EntityUtils.toString(response.getEntity());
 			}
+			throw new IOException("Unexpected code: " + response);
 		}
 	}
 
@@ -196,9 +187,9 @@ public class CloudOptimisationDataServiceClient {
 		}
 
 		final URI url = new URI(String.format("%s%s/%s", getGateway(), SCENARIO_CLOUD_UPLOAD_URL, getUserId()));
-		final HttpClientBuilder builder = createHttpBuilder(url);
 
-		try (var httpClient = builder.build()) {
+		final var httpClient = getHttpClient(url);
+		{
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 			formDataBuilder.addTextBody("sha256", checksum);
@@ -206,7 +197,6 @@ public class CloudOptimisationDataServiceClient {
 			formDataBuilder.addBinaryBody("encryptedsymkey", encryptedSymmetricKey, ContentType.DEFAULT_BINARY, "aes.key.enc");
 			final HttpEntity entity = formDataBuilder.build();
 			final HttpPost request = new HttpPost(url);
-			withAuthHeader(url, request);
 			// Wrap entity for progress monitor
 			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
@@ -235,28 +225,8 @@ public class CloudOptimisationDataServiceClient {
 			return null;
 		}
 		final URI url = new URI(String.format("%s%s/%s/%s/%d", getGateway(), SCENARIO_RESULT_URL, jobid, getUserId(), resultIdx));
-		final HttpClientBuilder builder = createHttpBuilder(url);
-
-		builder.addInterceptorFirst(new HttpRequestInterceptor() {
-			@Override
-			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-				try {
-					URI uri = new URI(request.getRequestLine().getUri());
-					if (request instanceof HttpRequestWrapper w) {
-						uri = new URI(w.getOriginal()
-								.getRequestLine().getUri());
-					}
-					if (uri.getHost().contains("gw.minimaxlabs.com")) {
-						withAuthHeader(uri, request);
-					}
-				} catch (URISyntaxException e) {
-					throw new IOException(e);
-				}
-			}
-
-		});
-
-		try (var httpClient = builder.build()) {
+		final var httpClient = getHttpClient(url);
+		{
 			final HttpGet request = new HttpGet(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
@@ -288,12 +258,9 @@ public class CloudOptimisationDataServiceClient {
 			return null;
 		}
 		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), JOB_STATUS_URL, jobid, getUserId()));
-		final HttpClientBuilder builder = createHttpBuilder(url);
-
-		try (var httpClient = builder.build()) {
+		final var httpClient = getHttpClient(url);
+		{
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
-
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != 200) {
@@ -324,12 +291,9 @@ public class CloudOptimisationDataServiceClient {
 			return null;
 		}
 		final URI url = new URI(String.format("%s%s/%s", getGateway(), PUBLIC_KEY_URL, getUserId()));
-		final HttpClientBuilder builder = createHttpBuilder(url);
-
-		try (var httpClient = builder.build()) {
+		final var httpClient = getHttpClient(url);
+		{
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
-
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != 200) {
@@ -360,12 +324,9 @@ public class CloudOptimisationDataServiceClient {
 			return false;
 		}
 		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), ABORT_URL, jobid, getUserId()));
-		final HttpClientBuilder builder = createHttpBuilder(url);
-
-		try (var httpClient = builder.build()) {
+		final var httpClient = getHttpClient(url);
+		{
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
-
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != 200) {

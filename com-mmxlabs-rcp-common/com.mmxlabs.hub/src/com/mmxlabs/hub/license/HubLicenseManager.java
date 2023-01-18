@@ -60,9 +60,10 @@ public final class HubLicenseManager {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
 		try {
-			try (var response = httpClient.execute(request)) {
+			try (var response = httpClient.execute(request, ctx)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (!HttpClientUtil.isSuccessful(statusCode)) {
 					if (statusCode == 401) {

@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,16 +46,20 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.ssl.SSLContexts;
+import org.apache.http.ssl.TrustStrategy;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -65,136 +70,151 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
+import com.google.common.collect.Sets;
+import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.license.ssl.TrustStoreManager;
 
 public class HttpClientUtil {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientUtil.class);
-//
 
 	private static boolean disableSSLHostnameCheck = true;
+	private static boolean useJavaTrustStore = true;
+	private static boolean useWindowsTrustStore = true;
 
 	public static void setDisableSSLHostnameCheck(final boolean b) {
 		disableSSLHostnameCheck = b;
+		fireInvalidationListeners();
 	}
 
-//
-//	public static OkHttpClient.Builder basicBuilder() {
-//		// Set generous timeouts. Library defaults are 10 seconds
-//		return basicBuilder(20, 1, 1);
-//	}
-//
+	public static void setUseWindowsTrustStore(final boolean b) {
+		useWindowsTrustStore = b;
+		fireInvalidationListeners();
 
-	public static CloseableHttpClient createBasicHttpClient(HttpRequestBase request) {
-		return createBasicHttpClient(URIUtils.extractHost(request.getURI()));
 	}
 
-	public static CloseableHttpClient createBasicHttpClient(HttpHost httpHost) {
+	public static void setUseJavaTrustStore(final boolean b) {
+		useJavaTrustStore = b;
+		fireInvalidationListeners();
+
+	}
+
+	private static void fireInvalidationListeners() {
+		invalidationListeners.forEach(r -> {
+			try {
+				r.run();
+			} catch (final Exception e) {
+				LOGGER.error(e.getMessage(), e);
+			}
+		});
+	}
+
+	private static final Set<Runnable> invalidationListeners = Sets.newConcurrentHashSet();
+
+	public static void addInvalidationListener(final Runnable r) {
+		invalidationListeners.add(r);
+	}
+
+	public static void removeInvalidationListener(final Runnable r) {
+		invalidationListeners.remove(r);
+	}
+
+	public static HttpClientBuilder createBasicHttpClient(final HttpRequestBase request, final boolean withKeystore) {
+		return createBasicHttpClient(URIUtils.extractHost(request.getURI()), withKeystore);
+	}
+
+	public static HttpClientBuilder createBasicHttpClient(final HttpHost httpHost, final boolean withKeystore) {
 
 		final HttpClientBuilder builder = HttpClientBuilder.create();
 
-		var sslBuilder = SSLContexts.custom();
-//			if (url.getHost().equals("updates.minimaxlabs.com")) {
-//				try {
-//					LicenseManager.loadLicenseKeystore(sslBuilder);
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-//			}
-		try {
-			Pair<KeyStore, char[]> p = TrustStoreManager.loadLocalTruststore();
-			if (p != null) {
-				sslBuilder.loadTrustMaterial(p.getFirst(), null);
+		// Trying to reproduce okhttp timeouts
+		// builder.connectTimeout(connectTimeout, TimeUnit.SECONDS) //
+		// .readTimeout(readTimeout, TimeUnit.MINUTES) //
+		// .writeTimeout(writeTimeout, TimeUnit.MINUTES) //
+		final RequestConfig config = RequestConfig.custom() //
+				.setConnectTimeout(20 * 1000) //
+				.setConnectionRequestTimeout(20 * 1000) //
+				.setSocketTimeout(20 * 1000)//
+				.build();
+
+		builder.setDefaultRequestConfig(config);
+
+		final var sslBuilder = SSLContexts.custom();
+		if (withKeystore) {
+			try {
+				LicenseManager.loadLicenseKeystore(sslBuilder);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
 			}
-			builder.setSSLContext(sslBuilder.build());
-		} catch (Exception e1) {
+		}
+
+		try {
+			final KeyStore p = TrustStoreManager.loadTruststore(true, useJavaTrustStore, useWindowsTrustStore);
+			if (p != null) {
+				sslBuilder.loadTrustMaterial(p, null);
+			}
+
+			final SSLContext sslContext = sslBuilder.build();
+			builder.setSSLContext(sslContext);
+
+			if (disableSSLHostnameCheck) {
+				final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+				builder.setSSLSocketFactory(sslsf);
+			} else {
+				final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new DefaultHostnameVerifier());
+				builder.setSSLSocketFactory(sslsf);
+			}
+			
+//			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+////			cm.set
+////			BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
+//			builder.setConnectionManager( cm );
+			
+		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
 		configureProxyServer(httpHost, builder);
 
-		return builder.build();
+		return builder;
 	}
 
-	private static void configureProxyServer(HttpHost httpHost, final HttpClientBuilder builder) {
+	public static void configureProxyServer(final HttpHost httpHost, final HttpClientBuilder builder) {
 		final Bundle bundle = FrameworkUtil.getBundle(HttpClientUtil.class);
 		final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
 		proxyTracker.open();
 		try {
 			final IProxyService service = proxyTracker.getService();
+
+			if (service != null) {
+				service.addProxyChangeListener(e -> fireInvalidationListeners());
+			}
+
 			if (service != null && service.isProxiesEnabled()) {
 				final IProxyData[] data = service.select(new URI(httpHost.toURI()));
 				if (data != null && data.length > 0) {
 					for (final var pd : data) {
 						if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-							HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-							DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+							final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
+							final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 							builder.setRoutePlanner(routePlanner);
 						}
 					}
 				}
 			}
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			e.printStackTrace();
 		} finally {
 			proxyTracker.close();
 		}
 	}
 
-//	public static OkHttpClient.Builder basicBuilder(final int connectTimeout, final int readTimeout, final int writeTimeout) {
-//		final OkHttpClient.Builder builder = CLIENT.newBuilder();
-//
-//		builder.connectTimeout(connectTimeout, TimeUnit.SECONDS) //
-//				.readTimeout(readTimeout, TimeUnit.MINUTES) //
-//				.writeTimeout(writeTimeout, TimeUnit.MINUTES) //
-//		;
-//
-//		builder.hostnameVerifier(new HostnameVerifier() {
-//
-//			@Override
-//			public boolean verify(final String hostname, final SSLSession session) {
-//
-//				if (!disableSSLHostnameCheck) {
-//					return OkHostnameVerifier.INSTANCE.verify(hostname, session);
-//				}
-//				return true;
-//			}
-//		});
-//
-//		try {
-//			TrustStoreManager.refresh();
-//			final Pair<KeyStore, char[]> trustStorePair = TrustStoreManager.loadLocalTruststore();
-//			final Pair<KeyStore, char[]> keyStorePair = TrustStoreManager.loadLocalKeystore();
-//
-//			if (trustStorePair != null && keyStorePair != null) {
-//
-//				final SSLContext sslContext = SSLContext.getInstance("TLS");
-//
-//				final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-//				trustManagerFactory.init(trustStorePair.getFirst());
-//
-//				final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-//				keyManagerFactory.init(keyStorePair.getFirst(), keyStorePair.getSecond());
-//				sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
-//
-//				final TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-//				// All examples show first entry to be the X509 one...
-//				builder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0]);
-//			}
-//		} catch (final Exception e) {
-//			e.printStackTrace();
-//		}
-//		return builder;
-//	}
-
 	public static List<CertInfo> extractSSLInfoFromLocalTrustStore() throws Exception {
 
 		final List<CertInfo> infos = new LinkedList<>();
 		{
-			final Pair<KeyStore, char[]> trustStorePair = TrustStoreManager.loadLocalTruststore();
+			final KeyStore defaultStore = TrustStoreManager.loadTruststore(true, useJavaTrustStore, useWindowsTrustStore);
 
-			if (trustStorePair != null) {
-				KeyStore defaultStore = trustStorePair.getFirst();
+			if (defaultStore != null) {
 				final Enumeration<String> enumerator = defaultStore.aliases();
 				while (enumerator.hasMoreElements()) {
 					final String alias = enumerator.nextElement();
@@ -257,7 +277,7 @@ public class HttpClientUtil {
 			final String userHome = System.getProperty("eclipse.home.location");
 
 			try {
-				File f = TrustStoreManager.getCACertsFileFromEclipseHomeURL(userHome);
+				final File f = TrustStoreManager.getCACertsFileFromEclipseHomeURL(userHome);
 				if (f != null && f.exists() && f.isDirectory()) {
 					for (final File certFile : f.listFiles()) {
 						if (certFile.isFile()) {
@@ -280,7 +300,7 @@ public class HttpClientUtil {
 		return infos;
 	}
 
-	public static List<CertInfo> extractSSLInfoFromHost(final String url, @Nullable Proxy proxy) throws Exception {
+	public static List<CertInfo> extractSSLInfoFromHost(final String url, @Nullable final Proxy proxy) throws Exception {
 
 		if (url.startsWith("http:")) {
 			return Collections.emptyList();
@@ -298,8 +318,7 @@ public class HttpClientUtil {
 			final String hostStr = matcher.group(1);
 			final String portStr = matcher.groupCount() > 1 ? matcher.group(2) : null;
 
-			final Pair<KeyStore, char[]> keyStorePair = TrustStoreManager.loadLocalTruststore();
-			final KeyStore keyStore = keyStorePair.getFirst();
+			final KeyStore keyStore = TrustStoreManager.loadTruststore(true, useJavaTrustStore, useWindowsTrustStore);
 
 			final SSLContext sslContext = SSLContext.getInstance("TLS");
 
@@ -307,7 +326,7 @@ public class HttpClientUtil {
 			trustManagerFactory.init(keyStore);
 
 			final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			keyManagerFactory.init(keyStore, keyStorePair.getSecond());
+			keyManagerFactory.init(keyStore, null);
 			sslContext.init(keyManagerFactory.getKeyManagers(), new TrustManager[] { new TrustingTrustManager() }, new SecureRandom());
 
 			final SSLSocketFactory socketFactory = sslContext.getSocketFactory();
@@ -357,8 +376,10 @@ public class HttpClientUtil {
 			certInfo.issuer = cert.getIssuerX500Principal().toString();
 			try {
 				certInfo.altNames = cert.getSubjectAlternativeNames() == null ? ""
-						: cert.getSubjectAlternativeNames().stream() //
-								.map(Object::toString).collect(Collectors.joining(", "));
+						: cert.getSubjectAlternativeNames()
+								.stream() //
+								.map(Object::toString)
+								.collect(Collectors.joining(", "));
 			} catch (final CertificateParsingException e) {
 				e.printStackTrace();
 			}
@@ -445,20 +466,20 @@ public class HttpClientUtil {
 			return false;
 		}
 
-		var spec = SSLContexts.createSystemDefault().getSupportedSSLParameters();
-//		SSLFaConnectionSocketFactory f = SSLConnectionSocketFactory.getSystemSocketFactory();
-//		// Modern is the default in okhttp.
-//		for (final ConnectionSpec spec : new ConnectionSpec[] { ConnectionSpec.MODERN_TLS }) {
-//SSLContext c;//.getInstance(url, null)
-//org.apache.http.conn.ssl.SSLContexts.createDefault().getSupportedSSLParameters().getCipherSuites()
-			for (final String tlsVersion : spec.getProtocols()) {
-				for (final String cipherSuite : spec.getCipherSuites()) {
-					if (checkCompatibility(url, null, tlsVersion, cipherSuite)) {
-						action.accept(tlsVersion, cipherSuite);
-					}
+		final var spec = SSLContexts.createSystemDefault().getSupportedSSLParameters();
+		// SSLFaConnectionSocketFactory f = SSLConnectionSocketFactory.getSystemSocketFactory();
+		// // Modern is the default in okhttp.
+		// for (final ConnectionSpec spec : new ConnectionSpec[] { ConnectionSpec.MODERN_TLS }) {
+		// SSLContext c;//.getInstance(url, null)
+		// org.apache.http.conn.ssl.SSLContexts.createDefault().getSupportedSSLParameters().getCipherSuites()
+		for (final String tlsVersion : spec.getProtocols()) {
+			for (final String cipherSuite : spec.getCipherSuites()) {
+				if (checkCompatibility(url, null, tlsVersion, cipherSuite)) {
+					action.accept(tlsVersion, cipherSuite);
 				}
 			}
-//		}
+		}
+		// }
 		return true;
 	}
 
@@ -466,45 +487,38 @@ public class HttpClientUtil {
 	 * Method to extract the selected protocol and cipher for the request.
 	 * 
 	 * @param url
-	 * @param selectedTlsVersion Output - expected length = 1
-	 * @param selectedCipher     Output - expected length = 1
+	 * @param selectedTlsVersion
+	 *            Output - expected length = 1
+	 * @param selectedCipher
+	 *            Output - expected length = 1
 	 * @return
 	 */
 	public static boolean getSelectedProtocolAndVersion(final String url, final String[] selectedTlsVersion, final String[] selectedCipher) {
 
-//		TODO -- procy!
-		
-		HttpClientBuilder builder = HttpClientBuilder.create();
+		// TODO -- procy!
+
+		final HttpClientBuilder builder = HttpClientBuilder.create();
 		// Ignore any hostname issues here
 		builder.setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE);
-//		
+		//
 
-		SSLContext sslContext = SSLContexts.createSystemDefault();
+		final SSLContext sslContext = SSLContexts.createSystemDefault();
 
 		builder.setSslcontext(sslContext);
 
 		final HttpGet request = new HttpGet(url);
-		
+
 		configureProxyServer(URIUtils.extractHost(request.getURI()), builder);
 
 		try (CloseableHttpClient client = builder.build()) {
 			try (var response = client.execute(request)) {
 
-				SSLSessionContext sslSessionContext = sslContext.getClientSessionContext();
-				Enumeration<byte[]> sessionIds = sslSessionContext.getIds();
+				final SSLSessionContext sslSessionContext = sslContext.getClientSessionContext();
+				final Enumeration<byte[]> sessionIds = sslSessionContext.getIds();
 				while (sessionIds.hasMoreElements()) {
-					SSLSession sslSession = sslSessionContext.getSession(sessionIds.nextElement());
-//			            print("Client: " + sslSession.getPeerHost() + ":" + sslSession.getPeerPort());
-//			            print("\tProtocol: " + sslSession.getProtocol());
+					final SSLSession sslSession = sslSessionContext.getSession(sessionIds.nextElement());
 					selectedTlsVersion[0] = sslSession.getProtocol();
-//			            print("\tSessionID: " + byteArrayToHex(sslSession.getId()));
 					selectedCipher[0] = sslSession.getCipherSuite();
-//			            for (X509Certificate certificate : sslSession.getPeerCertificateChain()) {
-//			                print("\tX509 Certificate: " + certificate.getSubjectDN());
-//			                print("\t\tIssuer: " + certificate.getIssuerDN().getName());
-//			                print("\t\tAlgorithm: " + certificate.getSigAlgName());
-//			                print("\t\tValidity: " + certificate.getNotAfter());
-//			            }
 				}
 
 				return true;
@@ -516,81 +530,39 @@ public class HttpClientUtil {
 	}
 
 	private static boolean checkCompatibility(final String url, final String connectionSpec, final String tlsVersion, final String cipherSuite) {
-		
-		
-//		TODO -- procy!
-		
+
 		try {
-		
-		HttpClientBuilder builder = HttpClientBuilder.create();
-		// Ignore any hostname issues here
-		builder.setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE);
-//		
-//
-		SSLContext sslContext = SSLContexts.custom()
-				.loadTrustMaterial(TrustAllStrategy.INSTANCE)
-				.build();
-//				.us
-//				
-//				createSystemDefault();
 
+			final HttpClientBuilder builder = HttpClientBuilder.create();
+			// Ignore any hostname issues here
+			builder.setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE);
+			final SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
 
-SSLConnectionSocketFactory f = new SSLConnectionSocketFactory(
-    sslContext,
-    new String[]{tlsVersion},   
-    new String[]{cipherSuite},   
-    AllowAllHostnameVerifier.INSTANCE);
+			final SSLConnectionSocketFactory f = new SSLConnectionSocketFactory( //
+					sslContext, //
+					new String[] { tlsVersion }, //
+					new String[] { cipherSuite }, //
+					AllowAllHostnameVerifier.INSTANCE);
 
-//		sslContext.s
-		builder.setSslcontext(sslContext);
-		builder.setSSLSocketFactory(f);
+			builder.setSslcontext(sslContext);
+			builder.setSSLSocketFactory(f);
 
-		final HttpGet request = new HttpGet(url);
-		configureProxyServer(URIUtils.extractHost(request.getURI()), builder);
-		
-		try (CloseableHttpClient client = builder.build()) {
-			try (var response = client.execute(request)) {
-//
-//				SSLSessionContext sslSessionContext = sslContext.getClientSessionContext();
-//				Enumeration<byte[]> sessionIds = sslSessionContext.getIds();
-//				while (sessionIds.hasMoreElements()) {
-//					SSLSession sslSession = sslSessionContext.getSession(sessionIds.nextElement());
-////			            print("Client: " + sslSession.getPeerHost() + ":" + sslSession.getPeerPort());
-////			            print("\tProtocol: " + sslSession.getProtocol());
-//					selectedTlsVersion[0] = sslSession.getProtocol();
-////			            print("\tSessionID: " + byteArrayToHex(sslSession.getId()));
-//					selectedCipher[0] = sslSession.getCipherSuite();
-////			            for (X509Certificate certificate : sslSession.getPeerCertificateChain()) {
-////			                print("\tX509 Certificate: " + certificate.getSubjectDN());
-////			                print("\t\tIssuer: " + certificate.getIssuerDN().getName());
-////			                print("\t\tAlgorithm: " + certificate.getSigAlgName());
-////			                print("\t\tValidity: " + certificate.getNotAfter());
-////			            }
-				return true;
+			final HttpGet request = new HttpGet(url);
+			configureProxyServer(URIUtils.extractHost(request.getURI()), builder);
+
+			try (CloseableHttpClient client = builder.build()) {
+				try (var response = client.execute(request)) {
+					return true;
 				}
-		}
+			}
 		} catch (final Exception e) {
 			// Log.e("error", e.toString());
 		}
-//
-//		final ConnectionSpec spec = new ConnectionSpec.Builder(connectionSpec) //
-//				.tlsVersions(tlsVersion) //
-//				.cipherSuites(cipherSuite) //
-//				.build();
-//		builder.connectionSpecs(Collections.singletonList(spec));
-//
-//		final Request request = new Request.Builder().url(url).get().build();
-//
-//		final OkHttpClient client = builder.build();
-//		try (Response response = client.newCall(request).execute()) {
-//			return true;
-//		} catch (final Exception e) {
-//			// e.printStackTrace();
-//		}
-		return false;
-	} 
 
-	public static boolean isSuccessful(int code) {
+		return false;
+	}
+
+	public static boolean isSuccessful(final int code) {
 		return code >= 200 && code < 400;
 	}
 

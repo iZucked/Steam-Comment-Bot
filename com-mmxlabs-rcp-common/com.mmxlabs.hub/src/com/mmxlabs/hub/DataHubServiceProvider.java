@@ -17,13 +17,14 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.services.permissions.IUserPermissionsService;
@@ -141,7 +142,7 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public <T extends HttpRequestBase> @Nullable Pair<CloseableHttpClient, T> makeRequest(String urlPath, Function<URI, T> requestFactory) {
+	public <T extends HttpRequestBase> @Nullable Triple<CloseableHttpClient, T, HttpClientContext> makeRequest(String urlPath, Function<URI, T> requestFactory) {
 		return UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
 	}
 
@@ -161,7 +162,9 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
-		return httpClient.execute(request, responseHandler);
+		final var context= p.getThird();
+		
+		return httpClient.execute(request, responseHandler, context);
 	}
 
 	public void doDeleteRequest(String urlPath, CheckedConsumer<HttpResponse, IOException> responseHandler) throws IOException {

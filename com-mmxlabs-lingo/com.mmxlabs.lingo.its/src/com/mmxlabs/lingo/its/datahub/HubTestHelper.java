@@ -233,7 +233,7 @@ public class HubTestHelper {
 	public static List<Version> getAvailableContainerVersionsFromRegistry(final String client) {
 
 		final HttpGet request = new HttpGet(String.format("https://docker.mmxlabs.com/v2/datahub-%s/tags/list", client));
-		try (var httpClient = HttpClientUtil.createBasicHttpClient(request)) {
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(request, false).build()) {
 			try (var response = httpClient.execute(request)) {
 				final int responseCode = response.getStatusLine().getStatusCode();
 
