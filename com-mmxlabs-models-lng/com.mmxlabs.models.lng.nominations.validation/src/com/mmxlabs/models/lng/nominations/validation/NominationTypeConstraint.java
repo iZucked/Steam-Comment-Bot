@@ -24,16 +24,14 @@ public class NominationTypeConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof AbstractNomination) {
-			final AbstractNomination nomination = (AbstractNomination) target;
+		if (target instanceof AbstractNomination nomination) {
 
 			// Do not validate deleted or done nominations.
 			if (nomination.isDeleted() || nomination.isDone()) {
 				return;
 			}
 		}
-		if (target instanceof AbstractNominationSpec) {
-			final AbstractNominationSpec nomination = (AbstractNominationSpec) target;
+		if (target instanceof AbstractNominationSpec nomination) {
 			final String nominationType = nomination.getType();
 			if (nominationType != null && !"".equals(nominationType)) {
 				if (!NominationsModelUtils.isKnownNominationType(nominationType)) {

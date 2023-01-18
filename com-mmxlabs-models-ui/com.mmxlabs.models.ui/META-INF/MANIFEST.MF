@@ -7,7 +7,6 @@ Bundle-Activator: com.mmxlabs.models.ui.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.edit.ui;bundle-version="2.7.0",
- org.slf4j.api;bundle-version="1.6.1",
  org.ops4j.peaberry;bundle-version="1.2.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
  com.google.inject;bundle-version="3.0.0",
@@ -52,5 +51,6 @@ Export-Package: com.mmxlabs.models.ui,
  com.mmxlabs.models.ui.registries.impl,
  com.mmxlabs.models.ui.util,
  com.mmxlabs.models.ui.valueproviders
-Import-Package: javax.inject;version="1.0.0"
+Import-Package: javax.inject;version="1.0.0",
+ org.slf4j;version="1.7.32"
 Automatic-Module-Name: com.mmxlabs.models.ui
