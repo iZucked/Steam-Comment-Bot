@@ -52,5 +52,5 @@ Export-Package: com.mmxlabs.models.ui,
  com.mmxlabs.models.ui.util,
  com.mmxlabs.models.ui.valueproviders
 Import-Package: javax.inject;version="1.0.0",
- org.slf4j;version="1.7.32"
+ org.slf4j;version="1.7.30"
 Automatic-Module-Name: com.mmxlabs.models.ui

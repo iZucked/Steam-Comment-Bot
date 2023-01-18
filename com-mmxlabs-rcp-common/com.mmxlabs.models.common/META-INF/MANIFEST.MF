@@ -17,4 +17,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.common.commandservice
 Import-Package: javax.inject;version="1.0.0",
- org.slf4j;version="1.7.32"
+ org.slf4j;version="1.7.30"
