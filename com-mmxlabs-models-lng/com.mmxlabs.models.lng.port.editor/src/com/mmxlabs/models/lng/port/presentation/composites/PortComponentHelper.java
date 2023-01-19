@@ -93,6 +93,21 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_maxCvValueEditor(detailComposite, topClass);
 		add_minVesselSizeEditor(detailComposite, topClass);
 		add_maxVesselSizeEditor(detailComposite, topClass);
+		add_LiquefactionEmissionRateEditor(detailComposite, topClass);
+		add_PipelineEmissionRateEditor(detailComposite, topClass);
+		add_UpstreamEmissionRateEditor(detailComposite, topClass);
+	}
+
+	private void add_UpstreamEmissionRateEditor(IInlineEditorContainer detailComposite, EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UPSTREAM_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+		
+	}
+
+	private void add_PipelineEmissionRateEditor(IInlineEditorContainer detailComposite, EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__PIPELINE_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+		
 	}
 
 	/**
@@ -158,6 +173,12 @@ public class PortComponentHelper extends BaseComponentHelper {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__CV_VALUE);
 		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
 	}
+	
+	protected void add_LiquefactionEmissionRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LIQUEFACTION_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+	}
+
 
 	/**
 	 * Create the editor for the defaultStartTime feature on Port

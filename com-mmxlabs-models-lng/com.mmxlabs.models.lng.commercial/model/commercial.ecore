@@ -138,9 +138,16 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upstreamEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upstreamEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="kg/MMBtu"/>
+        <details key="unit" value="kg/mmBtu"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pipelineEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="kg/mmBtu"/>
         <details key="formatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>

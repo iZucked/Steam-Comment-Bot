@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract()
@@ -88,9 +89,12 @@ public interface PurchaseContract extends Contract {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #isSetUpstreamEmissionRate()
+	 * @see #unsetUpstreamEmissionRate()
 	 * @see #setUpstreamEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_UpstreamEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MMBtu' formatString='##0.###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu'"
 	 * @generated
 	 */
 	double getUpstreamEmissionRate();
@@ -100,10 +104,85 @@ public interface PurchaseContract extends Contract {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #isSetUpstreamEmissionRate()
+	 * @see #unsetUpstreamEmissionRate()
 	 * @see #getUpstreamEmissionRate()
 	 * @generated
 	 */
 	void setUpstreamEmissionRate(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetUpstreamEmissionRate()
+	 * @see #getUpstreamEmissionRate()
+	 * @see #setUpstreamEmissionRate(double)
+	 * @generated
+	 */
+	void unsetUpstreamEmissionRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Upstream Emission Rate</em>' attribute is set.
+	 * @see #unsetUpstreamEmissionRate()
+	 * @see #getUpstreamEmissionRate()
+	 * @see #setUpstreamEmissionRate(double)
+	 * @generated
+	 */
+	boolean isSetUpstreamEmissionRate();
+
+	/**
+	 * Returns the value of the '<em><b>Pipeline Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pipeline Emission Rate</em>' attribute.
+	 * @see #isSetPipelineEmissionRate()
+	 * @see #unsetPipelineEmissionRate()
+	 * @see #setPipelineEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_PipelineEmissionRate()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='##0.###'"
+	 * @generated
+	 */
+	double getPipelineEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pipeline Emission Rate</em>' attribute.
+	 * @see #isSetPipelineEmissionRate()
+	 * @see #unsetPipelineEmissionRate()
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 */
+	void setPipelineEmissionRate(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPipelineEmissionRate()
+	 * @see #getPipelineEmissionRate()
+	 * @see #setPipelineEmissionRate(double)
+	 * @generated
+	 */
+	void unsetPipelineEmissionRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pipeline Emission Rate</em>' attribute is set.
+	 * @see #unsetPipelineEmissionRate()
+	 * @see #getPipelineEmissionRate()
+	 * @see #setPipelineEmissionRate(double)
+	 * @generated
+	 */
+	boolean isSetPipelineEmissionRate();
 
 	/**
 	 * Returns the value of the '<em><b>Sales Delivery Type</b></em>' attribute.
