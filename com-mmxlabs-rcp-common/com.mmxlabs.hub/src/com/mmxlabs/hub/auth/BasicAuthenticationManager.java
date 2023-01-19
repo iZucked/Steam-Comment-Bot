@@ -91,7 +91,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 			} catch (final IOException e) {
 				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 			}
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 

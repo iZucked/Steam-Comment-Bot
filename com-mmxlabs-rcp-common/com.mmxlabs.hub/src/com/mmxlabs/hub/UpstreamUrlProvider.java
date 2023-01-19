@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -560,7 +561,7 @@ public class UpstreamUrlProvider {
 
 			});
 
-	public @Nullable CloseableHttpClient makeRequest(@NonNull final String uriFragment, @NonNull HttpRequestBase request) {
+	public <T extends HttpRequestBase> @Nullable Pair<CloseableHttpClient, T> makeRequest(@NonNull final String uriFragment, @NonNull Function<URI, T> func) {
 
 		final String baseUrlIfAvailable = getBaseUrlIfAvailable();
 		if (baseUrlIfAvailable.isEmpty()) {
@@ -570,9 +571,9 @@ public class UpstreamUrlProvider {
 			URI requestURI = new URI(baseUrlIfAvailable + uriFragment);
 			CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(requestURI));
 			if (client != null) {
-				request.setURI(requestURI);
+				T request = func.apply(requestURI);
 				authenticationManager.addAuthToRequest(request);
-				return client;
+				return Pair.of(client, request);
 			}
 		} catch (URISyntaxException e) {
 			return null;

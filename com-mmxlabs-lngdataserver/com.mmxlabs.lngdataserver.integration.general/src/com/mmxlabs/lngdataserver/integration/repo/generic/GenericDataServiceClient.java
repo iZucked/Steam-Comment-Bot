@@ -46,9 +46,7 @@ public class GenericDataServiceClient {
 	public String upload(final String type, final String uuid, final String contentType, final File file, final IProgressListener progressListener) throws IOException {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_UPLOAD_URL, type, uuid);
-		HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient != null) {
+		return DataHubServiceProvider.getInstance().doRequest(requestURL, HttpPost::new, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -57,47 +55,40 @@ public class GenericDataServiceClient {
 			final HttpEntity requestEntity = formDataBuilder.build();
 
 			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
-
-			// Check the response
-			try (var response = httpClient.execute(request)) {
-				final int responseCode = response.getStatusLine().getStatusCode();
-				if (!HttpClientUtil.isSuccessful(responseCode)) {
-					if (responseCode == 409) {
-						throw new IOException("Data already exists " + type + "/" + uuid);
-					}
-
-					throw new IOException("Unexpected code " + response);
+		}, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				if (responseCode == 409) {
+					throw new IOException("Data already exists " + type + "/" + uuid);
 				}
 
-				final String jsonData = EntityUtils.toString(response.getEntity());
-				final JSONObject jsonObject = new JSONObject(jsonData);
-				final String uuidString = jsonObject.getString("uuid");
-				return uuidString;
+				throw new IOException("Unexpected code " + response);
 			}
-		}
-		return null;
+
+			final String jsonData = EntityUtils.toString(response.getEntity());
+			final JSONObject jsonObject = new JSONObject(jsonData);
+			final String uuidString = jsonObject.getString("uuid");
+			return uuidString;
+		});
 	}
 
 	public boolean downloadTo(final String type, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DOWNLOAD_URL, type, uuid);
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient != null) {
-
-			try (var response = httpClient.execute(request)) {
-				final int responseCode = response.getStatusLine().getStatusCode();
-				if (!HttpClientUtil.isSuccessful(responseCode)) {
-					throw new IOException("Unexpected code: " + response);
-				}
-				ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
-				try (FileOutputStream out = new FileOutputStream(file)) {
-					DataStreamReencrypter.reencryptData(w.getContent(), out);
-					return true;
-				}
+		return DataHubServiceProvider.getInstance().doRequestAsBoolean(requestURL, HttpGet::new, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				throw new IOException("Unexpected code: " + response);
 			}
-		}
-		return false;
+			ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+			try (FileOutputStream out = new FileOutputStream(file)) {
+				DataStreamReencrypter.reencryptData(w.getContent(), out);
+				return true;
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
+		});
+
 	}
 
 	public Pair<String, Instant> getRecords(final Collection<String> types) throws IOException {
@@ -106,19 +97,10 @@ public class GenericDataServiceClient {
 			return null;
 		}
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return null;
-		}
-
 		final String typesList = String.join(",", types);
 		final String requestURL = String.format("%s/%s", SCENARIO_LIST_URL, typesList);
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return null;
-		}
 
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doGetRequest(requestURL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
@@ -130,45 +112,35 @@ public class GenericDataServiceClient {
 			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
 			final String jsonData = EntityUtils.toString(response.getEntity());
 			return new Pair<>(jsonData, lastModified);
-		}
+		});
 	}
 
 	public void deleteData(final String type, final String uuid) throws IOException {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DELETE_URL, type, uuid);
-		HttpDelete request = new HttpDelete();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(requestURL, request);
-		if (httpClient == null) {
-			return;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doDeleteRequest(requestURL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
 			}
-		}
+		});
 	}
 
 	public Instant getLastModified() {
-
-		final HttpGet request = new HttpGet();
-		final var httpClient =  DataHubServiceProvider.getInstance().makeRequest(SCENARIO_LAST_MODIFIED_URL, request);
-		if (httpClient == null) {
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					final String date = EntityUtils.toString(response.getEntity());
+					final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+					return lastModified;
+				}
+				return null;
+			});
+		} catch (IOException e) {
+			// TODO: Log exception?
 			return null;
 		}
- 
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (!HttpClientUtil.isSuccessful(responseCode)) {
-				final String date = EntityUtils.toString(response.getEntity());
-				final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-				return lastModified;
-			}
-		} catch (final Exception e) {
-
-		}
-		return null;
 	}
 
 	//

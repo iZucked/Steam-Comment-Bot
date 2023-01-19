@@ -25,4 +25,3 @@ Require-Bundle: com.google.ortools,
  org.eclipse.ui.workbench,
  com.mmxlabs.common.common-util,
  com.mmxlabs.models.lng.cargo.editor
-Import-Package: com.mmxlabs.common

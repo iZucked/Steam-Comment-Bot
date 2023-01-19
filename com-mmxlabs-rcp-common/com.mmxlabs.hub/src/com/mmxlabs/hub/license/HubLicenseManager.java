@@ -37,8 +37,7 @@ public final class HubLicenseManager {
 	}
 
 	/**
-	 * Gets the currently selected license from the DataHub and overwrites the
-	 * license in the user's home
+	 * Gets the currently selected license from the DataHub and overwrites the license in the user's home
 	 *
 	 * @return the license keystore
 	 * @throws IOException
@@ -52,14 +51,16 @@ public final class HubLicenseManager {
 		// try save response to file
 		final File licenseFile = new File(licenseFolderPath.toFile(), DATAHUB_LICENSE_KEYSTORE);
 
-		final HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(LICENSE_ENDPOINT, request);
-		if (httpClient == null) {
+		final var p = DataHubServiceProvider.getInstance().makeRequest(LICENSE_ENDPOINT, HttpGet::new);
+		if (p == null) {
 			if (licenseFile.exists()) {
 				return licenseFile;
 			}
 			return null;
 		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+
 		try {
 			try (var response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
@@ -90,9 +91,7 @@ public final class HubLicenseManager {
 				}
 				return licenseFile;
 			}
-		} catch (
-
-		final IOException e) {
+		} catch (final IOException e) {
 			LOG.error("Error downloading license: " + e.getMessage(), e);
 			if (licenseFile.exists()) {
 				return licenseFile;

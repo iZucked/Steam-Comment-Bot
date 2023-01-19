@@ -12,12 +12,14 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
@@ -34,6 +36,7 @@ import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class CustomUserReportsTests {
 
 	static final Logger logger = LoggerFactory.getLogger(CustomUserReportsTests.class);

@@ -23,9 +23,11 @@ import org.eclipse.jdt.annotation.Nullable;
 public class ProgressHttpEntityWrapper extends HttpEntityWrapper {
 
 	private final @Nullable IProgressListener progressListener;
+	private HttpEntity entity;
 
 	public ProgressHttpEntityWrapper(final HttpEntity entity, final @Nullable IProgressListener progressListener) {
 		super(entity);
+		this.entity = entity;
 		this.progressListener = progressListener;
 	}
 
@@ -57,9 +59,9 @@ public class ProgressHttpEntityWrapper extends HttpEntityWrapper {
 
 				}
 			};
-			super.wrappedEntity.writeTo(fos);
+			entity.writeTo(fos);
 		} else {
-			super.wrappedEntity.writeTo(out);
+			entity.writeTo(out);
 		}
 	}
 
@@ -116,7 +118,7 @@ public class ProgressHttpEntityWrapper extends HttpEntityWrapper {
 				}
 			};
 		} else {
-			return super.wrappedEntity.getContent();
+			return entity.getContent();
 		}
 	}
 }

@@ -54,32 +54,26 @@ public class BaseCaseServiceClient {
 
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
-			final @Nullable String notes, String pricingVersion, final IProgressListener progressListener) throws IOException {
+			final @Nullable String notes, final String pricingVersion, final IProgressListener progressListener) throws IOException {
 
-		HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(BASECASE_UPLOAD_URL, request);
-		if (httpClient == null) {
-			return null;
-		}
+		return DataHubServiceProvider.getInstance().doRequest(BASECASE_UPLOAD_URL, HttpPost::new, request -> {
 
-		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		formDataBuilder.addTextBody("pricingVersionUUID", pricingVersion);
-		formDataBuilder.addTextBody("portsVersionUUID", "");
-		formDataBuilder.addTextBody("vesselsVersionUUID", "");
-		formDataBuilder.addTextBody("distancesVersionUUID", "");
-		formDataBuilder.addBinaryBody("basecase", file, ContentType.DEFAULT_BINARY, scenarioName);
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.addTextBody("pricingVersionUUID", pricingVersion);
+			formDataBuilder.addTextBody("portsVersionUUID", "");
+			formDataBuilder.addTextBody("vesselsVersionUUID", "");
+			formDataBuilder.addTextBody("distancesVersionUUID", "");
+			formDataBuilder.addBinaryBody("basecase", file, ContentType.DEFAULT_BINARY, scenarioName);
 
-		if (notes != null) {
-			formDataBuilder.addTextBody("notes", notes);
-		}
+			if (notes != null) {
+				formDataBuilder.addTextBody("notes", notes);
+			}
 
-		final HttpEntity entity = formDataBuilder.build();
+			final HttpEntity entity = formDataBuilder.build();
 
-		request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
+			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
+		}, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 409) {
@@ -89,60 +83,49 @@ public class BaseCaseServiceClient {
 			}
 
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public void uploadBaseCaseArchive(final File file, //
 			final String uuid, ///
 			final IProgressListener progressListener) throws IOException {
 
-		HttpPost request = new HttpPost();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(BASECASE_UPLOAD_ARCHIVE_URL, request);
-		if (httpClient == null) {
-			return;
-		}
+		DataHubServiceProvider.getInstance().doPostRequest(BASECASE_UPLOAD_ARCHIVE_URL, request -> {
 
-		final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
-		formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		formDataBuilder.addTextBody("uuid", uuid);
-		formDataBuilder.addBinaryBody("archive", file, ContentType.DEFAULT_BINARY, uuid + ".zip");
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.addTextBody("uuid", uuid);
+			formDataBuilder.addBinaryBody("archive", file, ContentType.DEFAULT_BINARY, uuid + ".zip");
 
-		final HttpEntity entity = formDataBuilder.build();
+			final HttpEntity entity = formDataBuilder.build();
 
-		request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
-
-		// Check the response
-		try (var response = httpClient.execute(request)) {
+			request.setEntity(new ProgressHttpEntityWrapper(entity, progressListener));
+		}, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
 					// 404: Endpoint not defined - old server version
-					return;
+					return null;
 				} else if (responseCode == 405) {
 					// POST return a 405 instead of 404
 					// 405: Endpoint not defined - old server version
-					return;
+					return null;
 				}
 				if (responseCode == 503) {
 					// 503: Service unavailable - not configured on server, so do not report an
 					// error for this code.
-					return;
+					return null;
 
 				}
 				throw new IOException("Unexpected code " + response);
 			}
-		}
+			return null;
+		});
 	}
 
 	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(String.format("%s%s", BASECASE_DOWNLOAD_URL, uuid), request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(String.format("%s%s", BASECASE_DOWNLOAD_URL, uuid), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + responseCode);
@@ -152,19 +135,15 @@ public class BaseCaseServiceClient {
 			try (FileOutputStream out = new FileOutputStream(file)) {
 				DataStreamReencrypter.reencryptScenario(w.getContent(), out);
 				return true;
+			} catch (Exception e) {
+				throw new IOException(e);
 			}
-		}
+		});
 	}
 
 	public String getCurrentBaseCase() throws IOException {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(BASECASE_CURRENT_URL, request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(BASECASE_CURRENT_URL, HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current basecase
@@ -174,45 +153,29 @@ public class BaseCaseServiceClient {
 				return "";
 			}
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return null;
-		}
-
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(BASECASE_CURRENT_URL + "/" + uuid, request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(BASECASE_CURRENT_URL + "/" + uuid, HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(BASECASE_DOWNLOAD_URL + uuid + "/details", request);
-		if (httpClient == null) {
-			return null;
-		}
-
-		try (var response = httpClient.execute(request)) {
+		return DataHubServiceProvider.getInstance().doRequest(BASECASE_DOWNLOAD_URL + uuid + "/details", HttpGet::new, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + responseCode);
 			}
 			return EntityUtils.toString(response.getEntity());
-		}
+		});
 	}
 
 	public BaseCaseRecord parseScenariosJSONData(final String jsonData) {
@@ -244,17 +207,8 @@ public class BaseCaseServiceClient {
 
 	public synchronized void updateLockedState() throws IOException {
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return;
-		}
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(LOCK_STATE_URL, request);
-		if (httpClient == null) {
-			return;
-		}
-
 		needsLocking = true;
-		try (var response = httpClient.execute(request)) {
+		DataHubServiceProvider.getInstance().doGetRequest(LOCK_STATE_URL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
@@ -262,18 +216,20 @@ public class BaseCaseServiceClient {
 					isLocked = false;
 					lockedByMe = false;
 					lockedBy = null;
-					return;
+					return null;
 					// Unsupported API
 				}
 				throw new IOException(UNEXPECTED_CODE + response);
 			}
 
-			LockResult lockResult = new ObjectMapper().readValue(response.getEntity().getContent(), LockResult.class);
+			final LockResult lockResult = new ObjectMapper().readValue(response.getEntity().getContent(), LockResult.class);
 
 			isLocked = lockResult.isLocked;
 			lockedBy = lockResult.lockedBy;
 			lockedByMe = lockResult.lockedByMe;
-		}
+
+			return null;
+		});
 	}
 
 	public boolean canPublish() {
@@ -282,53 +238,36 @@ public class BaseCaseServiceClient {
 
 	public synchronized boolean lock() throws IOException {
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return false;
-		}
-
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(LOCK_URL, request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (!HttpClientUtil.isSuccessful(responseCode)) {
-				if (responseCode == 404) {
-					return true;
-					// Unsupported API
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(LOCK_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					if (responseCode == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
 				}
-				throw new IOException(UNEXPECTED_CODE + response);
-			}
-			return true;
+				return true;
+			});
 		} finally {
 			updateLockedState();
 		}
 	}
 
 	public synchronized boolean unlock() throws IOException {
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return false;
-		}
-
-		HttpGet request = new HttpGet();
-
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(UNLOCK_URL, request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (!HttpClientUtil.isSuccessful(responseCode)) {
-				if (responseCode == 404) {
-					return true;
-					// Unsupported API
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(UNLOCK_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					if (responseCode == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
 				}
-				throw new IOException(UNEXPECTED_CODE + response);
-			}
-			return true;
+				return true;
+			});
 		} finally {
 			updateLockedState();
 		}
@@ -339,23 +278,18 @@ public class BaseCaseServiceClient {
 	}
 
 	public synchronized boolean forceUnlock() throws IOException {
-
-		HttpGet request = new HttpGet();
-		final var httpClient = DataHubServiceProvider.getInstance().makeRequest(FORCE_UNLOCK_URL, request);
-		if (httpClient == null) {
-			return false;
-		}
-
-		try (var response = httpClient.execute(request)) {
-			final int responseCode = response.getStatusLine().getStatusCode();
-			if (!HttpClientUtil.isSuccessful(responseCode)) {
-				if (responseCode == 404) {
-					return true;
-					// Unsupported API
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(FORCE_UNLOCK_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					if (responseCode == 404) {
+						return true;
+						// Unsupported API
+					}
+					throw new IOException(UNEXPECTED_CODE + response);
 				}
-				throw new IOException(UNEXPECTED_CODE + response);
-			}
-			return true;
+				return true;
+			});
 		} finally {
 			updateLockedState();
 		}

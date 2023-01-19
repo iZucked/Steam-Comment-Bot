@@ -106,18 +106,18 @@ public class OAuthManager extends AbstractAuthenticationManager {
 				return valid;
 			}
 			buildRequestWithToken(request);
-			try (var response = httpClient.execute(request)) {
+
+			valid = httpClient.execute(request, response -> {
 				final int responseCode = response.getStatusLine().getStatusCode();
 				if (HttpClientUtil.isSuccessful(responseCode)) {
-					valid = true;
+					return true;
 				} else {
 					// token is expired, log the user out
 					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
-			} catch (final IOException e) {
-				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
-			}
-		} catch (final IOException e) {
+				return false;
+			});
+		} catch (final Exception e) {
 			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 

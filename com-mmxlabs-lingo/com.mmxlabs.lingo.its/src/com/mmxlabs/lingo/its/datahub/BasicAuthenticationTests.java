@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
@@ -34,6 +36,7 @@ import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class BasicAuthenticationTests {
 	private static DataHubServiceProvider datahubServiceProvider = DataHubServiceProvider.getInstance();
 	static final Logger logger = LoggerFactory.getLogger(BasicAuthenticationTests.class);
