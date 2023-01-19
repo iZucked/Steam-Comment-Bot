@@ -179,20 +179,22 @@ public class CloudRunnerITSUtil {
 		// Start the lingo process and copy std out/err to this process' output.
 		final Process p = pb.start();
 		while (p.isAlive()) {
-			{
-				String line;
-				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-				while ((line = br.readLine()) != null) {
-					System.out.println(line);
-				}
-			}
-			{
-				String line;
-				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-				while ((line = br.readLine()) != null) {
-					System.err.println(line);
-				}
-			}
+			System.out.println("Running lingo process...");
+			Thread.sleep(20_000);
+//			{
+//				String line;
+//				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//				while ((line = br.readLine()) != null) {
+//					System.out.println(line);
+//				}
+//			}
+//			{
+//				String line;
+//				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+//				while ((line = br.readLine()) != null) {
+//					System.err.println(line);
+//				}
+//			}
 		}
 
 		// Decrypt the result using the symmetric key generated earlier and re-encrypt
