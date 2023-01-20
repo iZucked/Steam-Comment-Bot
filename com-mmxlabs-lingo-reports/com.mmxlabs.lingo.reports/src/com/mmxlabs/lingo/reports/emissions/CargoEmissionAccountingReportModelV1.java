@@ -42,36 +42,36 @@ public class CargoEmissionAccountingReportModelV1{
 	public String eventID;
 	
 	@ColumnName("Start")
-	@HubFormat("DD/MM/YYYY HH:mm")
-	@LingoFormat("dd/MM/yyyy HH:mm")
+	@HubFormat("DD/MM/YY")
+	@LingoFormat("dd/MM/yy")
 
 	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
 	@ColumnName("End")
-	@HubFormat("DD/MM/YYYY HH:mm")
-	@LingoFormat("dd/MM/yyyy HH:mm")
+	@HubFormat("DD/MM/YY")
+	@LingoFormat("dd/MM/yy")
 
 	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	@ColumnName("Base Fuel CF, kg")
+	@ColumnName("Base Fuel")
 //	@LingoFormat("#.###")
 //	@HubFormat("{\"thousandSeparated\": true, \"pattern\": \"0.00\", \"mantissa\": 2}")
-	public Double baseFuelEmission;
+	public Integer baseFuelEmission;
 	
-	@ColumnName("BOG CF, kg")
-	public Double bogEmission;
+	@ColumnName("BOG")
+	public Integer bogEmission;
 	
-	@ColumnName("Pilot Light CF, kg")
-	public Double pilotLightEmission;
+	@ColumnName("Pilot Light")
+	public Integer pilotLightEmission;
 	
-	@ColumnName("Total CF, kg")
-	public Double totalEmission;
+	@ColumnName("Total CO2e kg")
+	public Integer totalEmission;
 	
 	@JsonIgnore
 	@LingoIgnore

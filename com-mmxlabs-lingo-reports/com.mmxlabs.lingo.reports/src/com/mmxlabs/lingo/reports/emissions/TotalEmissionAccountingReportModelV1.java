@@ -28,7 +28,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
  * But it will most probably be changed
  */
 @SchemaVersion(1)
-public class SupplyChainEmissionAccountingReportModelV1{
+public class TotalEmissionAccountingReportModelV1{
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -43,38 +43,38 @@ public class SupplyChainEmissionAccountingReportModelV1{
 	public String eventID;
 	
 	@ColumnName("Start")
-	@HubFormat("DD/MM/YYYY HH:mm")
-	@LingoFormat("dd/MM/yyyy HH:mm")
+	@HubFormat("DD/MM/YY")
+	@LingoFormat("dd/MM/yy")
 
 	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
 	@ColumnName("End")
-	@HubFormat("DD/MM/YYYY HH:mm")
-	@LingoFormat("dd/MM/yyyy HH:mm")
+	@HubFormat("DD/MM/YY")
+	@LingoFormat("dd/MM/yy")
 
 	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
 	
 	@ColumnName("Upstream")
-	public Double upstreamEmission;
+	public Integer upstreamEmission;
 	
 	@ColumnName("Pipeline")
-	public Double pipelineEmission;
+	public Integer pipelineEmission;
 	
 	@ColumnName("Liquefaction")
-	public Double liquefactionEmission;
+	public Integer liquefactionEmission;
 	
 	@ColumnName("Shipping")
-	public Double shippingEmission;
+	public Integer shippingEmission;
 	
-	@ColumnName("Total kg")
-	public Double totalEmission;
+	@ColumnName("Total CO2e kg")
+	public Integer totalEmission;
 	
 	@JsonIgnore
 	@LingoIgnore
@@ -101,7 +101,7 @@ public class SupplyChainEmissionAccountingReportModelV1{
 	public static void main(String args[]) throws Exception {
 
 		SchemaGenerator gen = new SchemaGenerator();
-		String json = gen.generateHubSchema(SupplyChainEmissionAccountingReportModelV1.class, Mode.FULL);
+		String json = gen.generateHubSchema(TotalEmissionAccountingReportModelV1.class, Mode.FULL);
 		System.out.println(json);
 	}
 }

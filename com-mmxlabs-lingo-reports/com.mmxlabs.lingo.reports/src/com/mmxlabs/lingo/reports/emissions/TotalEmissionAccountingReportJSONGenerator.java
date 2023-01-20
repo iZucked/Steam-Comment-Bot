@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.e4.ui.model.internal.ModelUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -18,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -27,17 +27,17 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-public class SecondCargoEmissionAccountingReportJSONGenerator{
+public class TotalEmissionAccountingReportJSONGenerator{
 	
-	public static List<SecondCargoEmissionAccountingReportModelV1> createReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull ScheduleModel scheduleModel) {
-		final List<SecondCargoEmissionAccountingReportModelV1> models = new LinkedList<>();
+	public static List<TotalEmissionAccountingReportModelV1> createReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull ScheduleModel scheduleModel) {
+		final List<TotalEmissionAccountingReportModelV1> models = new LinkedList<>();
 
 		if (scheduleModel.getSchedule() == null) {
 			return models;
 		}
 		
 		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
-			final SecondCargoEmissionAccountingReportModelV1 model = createCargoAllocationReportData(scenarioDataProvider, cargoAllocation);
+			final TotalEmissionAccountingReportModelV1 model = createCargoAllocationReportData(scenarioDataProvider, cargoAllocation);
 			if (model != null) {
 				models.add(model);
 			}
@@ -46,8 +46,8 @@ public class SecondCargoEmissionAccountingReportJSONGenerator{
 		return models;
 	}
 	
-	public static SecondCargoEmissionAccountingReportModelV1 createCargoAllocationReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final CargoAllocation cargoAllocation) {
-		final SecondCargoEmissionAccountingReportModelV1 model = new SecondCargoEmissionAccountingReportModelV1();
+	public static TotalEmissionAccountingReportModelV1 createCargoAllocationReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final CargoAllocation cargoAllocation) {
+		final TotalEmissionAccountingReportModelV1 model = new TotalEmissionAccountingReportModelV1();
 		final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
 
 		final Optional<SlotAllocation> loadOptional = slotAllocations //
@@ -68,23 +68,48 @@ public class SecondCargoEmissionAccountingReportJSONGenerator{
 			}
 			
 		}
-		model.shipping = 0.0;
-		model.upstream = 0.0;
-		model.totalEmission = 0.0;
+		model.liquefactionEmission = 0;
+		model.pipelineEmission = 0;
+		model.shippingEmission = 0;
+		model.upstreamEmission = 0;
+		model.totalEmission = 0;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
 		
        if(loadSlot != null) {
+    	   Port port = loadSlot.getPort();
     	   final PurchaseContract purchaseContract=loadSlot.getContract();
+    	   
     	   if(purchaseContract != null) {
+    		   model.pipelineEmissionRate = purchaseContract.getPipelineEmissionRate();
     		   model.upstreamEmissionRate = purchaseContract.getUpstreamEmissionRate();
-    		   model.upstream = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred() * model.upstreamEmissionRate;
-    		   model.totalEmission += model.upstream;
+    		   int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
+    		   model.upstreamEmission = (int) (physicalEnergyTransferred * model.upstreamEmissionRate);
+    		   model.pipelineEmission = (int) (physicalEnergyTransferred * model.pipelineEmissionRate);
+    		   model.totalEmission += model.upstreamEmission;
+    		   model.totalEmission += model.pipelineEmission;
     	   }
+    	   
+    	   if(port != null) {
+    		   if(purchaseContract == null) {
+    			   model.pipelineEmissionRate = port.getPipelineEmissionRate();
+    			   model.upstreamEmissionRate = port.getUpstreamEmissionRate();
+    			   int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
+        		   model.upstreamEmission = (int) (physicalEnergyTransferred * model.upstreamEmissionRate);
+        		   model.pipelineEmission = (int) (physicalEnergyTransferred * model.pipelineEmissionRate);
+        		   model.totalEmission += model.upstreamEmission;
+        		   model.totalEmission += model.pipelineEmission;
+    		   }
+    		   model.liquefactionEmissionRate = port.getLiquefactionEmissionRate();
+    		   model.liquefactionEmission = (int) (model.liquefactionEmissionRate * ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred());
+    		   model.totalEmission += model.liquefactionEmission;
+    	   }
+
+
        }
 		final Vessel vessel = ScheduleModelUtils.getVessel(cargoAllocation.getSequence());
 		
 		model.eventID = cargoAllocation.getName();
-		//TODO comment
+		//if vesel is not null assign the emission rates and process the usage for each event
 		if(vessel != null) {
 			model.vesselName = vessel.getName();
 			model.baseFuelEmissionRate = vessel.getBaseFuelEmissionRate();
@@ -95,10 +120,10 @@ public class SecondCargoEmissionAccountingReportJSONGenerator{
 					processUsage(model, fu.getFuels());
 				}
 			}
-			model.totalEmission += model.shipping;
+			model.totalEmission += model.shippingEmission;
 		} 
 
-// TODO comment
+        // getting the start and the end of the event
 		LocalDateTime eventStart = null;
 		
 		for (final Event e : cargoAllocation.getEvents()) {
@@ -113,17 +138,17 @@ public class SecondCargoEmissionAccountingReportJSONGenerator{
 		return model;
 	}
 	
-	private static void processUsage(final SecondCargoEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
+	private static void processUsage(final TotalEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
 		for (final FuelQuantity fq : fuelQuantity) {
 			switch (fq.getFuel()) {
 			case BASE_FUEL: 
-				fq.getAmounts().forEach(fa -> model.shipping += fa.getQuantity() * model.baseFuelEmissionRate);
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.baseFuelEmissionRate));
 				break;
 			case FBO, NBO:
-				fq.getAmounts().forEach(fa -> model.shipping += fa.getQuantity() * model.bogEmissionRate);
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.bogEmissionRate));
 				break;
 			case PILOT_LIGHT:
-				fq.getAmounts().forEach(fa -> model.shipping += fa.getQuantity() * model.pilotLightEmissionRate);
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.pilotLightEmissionRate));
 				break;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + fq.getFuel());
@@ -132,7 +157,7 @@ public class SecondCargoEmissionAccountingReportJSONGenerator{
 		
 	}
 
-	public static File jsonOutput(final List<SecondCargoEmissionAccountingReportModelV1> models) {
+	public static File jsonOutput(final List<TotalEmissionAccountingReportModelV1> models) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final File file = new File("/temp/emissions.json");
 		try {

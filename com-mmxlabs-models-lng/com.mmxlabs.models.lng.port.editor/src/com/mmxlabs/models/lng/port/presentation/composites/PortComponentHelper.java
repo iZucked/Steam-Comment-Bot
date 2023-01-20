@@ -14,7 +14,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -93,9 +95,12 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_maxCvValueEditor(detailComposite, topClass);
 		add_minVesselSizeEditor(detailComposite, topClass);
 		add_maxVesselSizeEditor(detailComposite, topClass);
-		add_LiquefactionEmissionRateEditor(detailComposite, topClass);
-		add_PipelineEmissionRateEditor(detailComposite, topClass);
-		add_UpstreamEmissionRateEditor(detailComposite, topClass);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS)) {
+			add_LiquefactionEmissionRateEditor(detailComposite, topClass);
+			add_PipelineEmissionRateEditor(detailComposite, topClass);
+			add_UpstreamEmissionRateEditor(detailComposite, topClass);
+		}
+		
 	}
 
 	private void add_UpstreamEmissionRateEditor(IInlineEditorContainer detailComposite, EClass topClass) {

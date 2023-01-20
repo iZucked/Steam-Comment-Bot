@@ -162,5 +162,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_HEADLINE_EQUITY_BOOK = "features:report-equity-book";
 	public static final String FEATURE_HEADLINE_IDLE_DAYS = "features:headline-idle-days";
 	public static final String FEATURE_HEADLINE_PURCHASE_COST = "features:headline-purchase-cost";
+	
+	//emissions
+	public static final String FEATURE_EMISSIONS = "features:emissions";
 
 }

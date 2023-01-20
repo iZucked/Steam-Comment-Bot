@@ -26,11 +26,11 @@
             id="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView">
       </view>
       <view
-            name="Supply Chain Emissions"
+            name="Total Emissions"
             icon="icons:/icons/16x16/lateness.png"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.emissions.SupplyChainEmissionAccountingReportView"
-            id="com.mmxlabs.lingo.reports.emissions.SupplyChainEmissionAccountingReportView">
+            class="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView"
+            id="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView">
       </view>
 	</extension>
 

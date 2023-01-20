@@ -8,10 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.ReferenceVesselInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteExclusionMultiInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.VesselFillVolumeInlineEditor;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
@@ -28,6 +31,13 @@ public class VesselComponentHelper extends DefaultComponentHelper {
 	public VesselComponentHelper() {
 		super(FleetPackage.Literals.VESSEL);
 
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS)) {
+			ignoreFeatures.add(CommercialPackage.Literals.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE);
+			ignoreFeatures.add(FleetPackage.Literals.VESSEL__BASE_FUEL_EMISSION_RATE);
+			ignoreFeatures.add(FleetPackage.Literals.VESSEL__BOG_EMISSION_RATE);
+			ignoreFeatures.add(FleetPackage.Literals.VESSEL__PILOT_LIGHT_EMISSION_RATE);
+		}
+		
 		ignoreFeatures.add(FleetPackage.Literals.VESSEL__MMX_ID);
 		ignoreFeatures.add(FleetPackage.Literals.VESSEL__MMX_REFERENCE);
 		ignoreFeatures.add(FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE);

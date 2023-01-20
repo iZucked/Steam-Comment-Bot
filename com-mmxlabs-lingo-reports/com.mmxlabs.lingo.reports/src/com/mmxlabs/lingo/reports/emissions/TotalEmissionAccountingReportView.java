@@ -19,25 +19,25 @@ import com.mmxlabs.lingo.reports.modelbased.AbstractSimpleModelBasedReportView;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
-public class SupplyChainEmissionAccountingReportView extends AbstractSimpleModelBasedReportView<SupplyChainEmissionAccountingReportModelV1> {
+public class TotalEmissionAccountingReportView extends AbstractSimpleModelBasedReportView<TotalEmissionAccountingReportModelV1> {
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.lingo.reports.emissions.SecondCargoEmissionAccountingReportView";
 
-	public SupplyChainEmissionAccountingReportView() {
-		super(SupplyChainEmissionAccountingReportModelV1.class);
+	public TotalEmissionAccountingReportView() {
+		super(TotalEmissionAccountingReportModelV1.class);
 	}
 
 	@Override
-	protected synchronized List<SupplyChainEmissionAccountingReportModelV1> transform(final ISelectedDataProvider selectedDataProvider) {
+	protected synchronized List<TotalEmissionAccountingReportModelV1> transform(final ISelectedDataProvider selectedDataProvider) {
 
-		final List<SupplyChainEmissionAccountingReportModelV1> rows = new LinkedList<>();
+		final List<TotalEmissionAccountingReportModelV1> rows = new LinkedList<>();
 		for (final var o : selectedDataProvider.getAllScenarioResults()) {
 			final ScheduleModel typedResult = o.getTypedResult(ScheduleModel.class);
 			if (typedResult != null) {
-				final List<SupplyChainEmissionAccountingReportModelV1> data = SupplyChainEmissionAccountingReportJSONGenerator.createReportData(o.getScenarioDataProvider(), //
+				final List<TotalEmissionAccountingReportModelV1> data = TotalEmissionAccountingReportJSONGenerator.createReportData(o.getScenarioDataProvider(), //
 						typedResult);
 				rows.addAll(data);
 			}
