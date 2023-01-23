@@ -79,6 +79,7 @@ public final class CommonImages {
 		Fuel(16, "icons/16x16/fuel.png"), //
 		Highlighter(16, "icons/16x16/highlighter.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
+		Inventory(16, "icons/16x16/inventory.png"), //
 		Label(16, "icons/16x16/label.png"), //
 		Lateness(16, "icons/16x16/lateness.png"), //
 		Local(16, "icons/16x16/local.png"), //
@@ -111,6 +112,8 @@ public final class CommonImages {
 		Warning(16, "icons/legacy/16x16/warning.gif"), //
 		
 		Read(16, "icons/legacy/16x16/read_obj.gif"), //
+		
+		Report(16, "icons/16x16/report.png"), //
 
 		// 24x12
 		NotesAndTransfer(24, "icons/24x12/notes_and_transfer.png"), //

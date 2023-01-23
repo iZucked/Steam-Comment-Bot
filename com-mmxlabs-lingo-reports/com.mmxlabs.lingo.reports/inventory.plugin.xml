@@ -15,7 +15,7 @@
             class="com.mmxlabs.lingo.reports.views.standard.InventoryReport"
             id="com.mmxlabs.lingo.reports.views.standard.InventoryReport"
             name="Inventory"
-            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_flow_view.gif"
+            icon="icons:/icons/16x16/inventory.png"
             restorable="true">
       </view>
    </extension>
