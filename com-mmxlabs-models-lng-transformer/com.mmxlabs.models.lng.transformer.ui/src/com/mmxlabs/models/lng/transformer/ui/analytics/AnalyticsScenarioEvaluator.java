@@ -26,6 +26,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
@@ -63,15 +65,16 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
-import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxUnit;
-import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.pricesensitivity.PriceSensitivityTask;
@@ -84,6 +87,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.MarketabilitySchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -336,9 +343,23 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 					@Override
 					protected void configure() {
-
-						bind(ViabilityWindowTrimmer.class).in(Singleton.class);
-						bind(ICustomTimeWindowTrimmer.class).to(ViabilityWindowTrimmer.class);
+						bind(MarketabilityWindowTrimmer.class).in(Singleton.class);
+						bind(ICustomTimeWindowTrimmer.class).to(MarketabilityWindowTrimmer.class);
+					}
+					
+					@Provides
+					@Singleton
+					private ISchedulerBuilder provideSchedulerBuilder(@NonNull final Injector injector, @NonNull final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
+						final SchedulerBuilder builder = new MarketabilitySchedulerBuilder();
+						for (final IBuilderExtensionFactory factory : builderExtensionFactories) {
+							final IBuilderExtension instance = factory.createInstance();
+							if (instance != null) {
+								injector.injectMembers(instance);
+								builder.addBuilderExtension(instance);
+							}
+						}
+						injector.injectMembers(builder);
+						return builder;
 					}
 
 				})//
@@ -350,8 +371,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 					}
 
-				})//
-
+				})
 				.make());
 
 		final List<String> hints = new LinkedList<>();

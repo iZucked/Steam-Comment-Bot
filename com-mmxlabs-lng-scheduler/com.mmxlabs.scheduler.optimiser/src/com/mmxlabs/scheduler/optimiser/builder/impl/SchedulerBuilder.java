@@ -147,7 +147,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
  * 
  * @author Simon Goodall
  */
-public final class SchedulerBuilder implements ISchedulerBuilder {
+public class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private Injector injector;
@@ -165,7 +165,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<ISequenceElement> sequenceElements = new ArrayList<>();
 
 	@NonNull
-	private final List<IVessel> vessels = new LinkedList<>();
+	protected final List<IVessel> vessels = new LinkedList<>();
 
 	@NonNull
 	private final List<IVesselCharter> vesselCharters = new LinkedList<>();
@@ -199,7 +199,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * cases where a vessel can be in any location. This can be replaced with a real
 	 * location at a later date, after running an optimisation.
 	 */
-	private IPort ANYWHERE;
+	protected IPort ANYWHERE;
 
 	/**
 	 * A field for tracking the time at which the last time window closes

@@ -85,6 +85,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.ClampedSpeedVessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
@@ -219,8 +220,8 @@ public class MarketabilitySandboxUnit {
 
 			final @NonNull ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<Future<Runnable>> futures = new LinkedList<>();
-			createSchedule(model, bridge, mapper);
-			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
+			Schedule schedule = createSchedule(model, bridge, mapper);
+			createFutureJobs(schedule, model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
 			// Block until all futures completed
 			for (final Future<Runnable> f : futures) {
 				if (monitor.isCanceled()) {
@@ -241,9 +242,9 @@ public class MarketabilitySandboxUnit {
 	}
 	
 	@NonNullByDefault
-	private void createSchedule(final MarketabilityModel model, final LNGScenarioToOptimiserBridge bridge, final IMapperClass mapper) {
+	private Schedule createSchedule(final MarketabilityModel model, final LNGScenarioToOptimiserBridge bridge, final IMapperClass mapper) {
 		final Schedule schedule = bridge.createOptimiserInitialSchedule();
-
+		assert schedule != null;
 		for(final MarketabilityRow row : model.getRows()) {
 			LoadSlot loadSlot = mapper.getOriginal(row.getBuyOption());
 			DischargeSlot dischargeSlot = mapper.getOriginal(row.getSellOption());
@@ -264,6 +265,7 @@ public class MarketabilitySandboxUnit {
 			}
 			addNextEventToRow(container, dischargeSlotVisit);
 		}
+		return schedule;
 	}
 	
 	private @Nullable CanalJourneyEvent findNextPanama(final @NonNull Event start) {
@@ -308,7 +310,7 @@ public class MarketabilitySandboxUnit {
 
 	}
 	
-	private void createFutureJobs(final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
+	private void createFutureJobs(final Schedule schedule, final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
 			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final MarketabilityRow row : model.getRows()) {
 			row.getResult().getRhsResults().clear();
@@ -332,7 +334,7 @@ public class MarketabilitySandboxUnit {
 							return null;
 						}
 						try {
-							final MarketabilityResult result = generateMarketabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market);
+							final MarketabilityResult result = generateMarketabilityResult(schedule, mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market);
 							return () -> {
 								row.getResult().getRhsResults().add(result);
 							};
@@ -355,7 +357,7 @@ public class MarketabilitySandboxUnit {
 		return vsi;
 	}
 
-	private MarketabilityResult generateMarketabilityResult(final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex,
+	private MarketabilityResult generateMarketabilityResult(final Schedule schedule, final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex,
 			final LoadSlot load, final SpotMarket market) {
 		
 		
@@ -379,7 +381,7 @@ public class MarketabilitySandboxUnit {
 				timeZone = discharge.getPort().getLocation().getTimeZone();
 			}
 
-			final InternalResult result = doIt(shipped, vesselAssignment, vesselSpotIndex, load, discharge, marketabilityTarget, dataTransformer.getInitialSequences());
+			final InternalResult result = doIt(schedule, shipped, vesselAssignment, vesselSpotIndex, load, discharge, marketabilityTarget, dataTransformer.getInitialSequences());
 			ret.merge(result);
 			if (!shipped) {
 				// only one iteration.
@@ -397,15 +399,15 @@ public class MarketabilitySandboxUnit {
 		return marketabilityResult;
 	}
 
-	private InternalResult doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
+	private InternalResult doIt(final Schedule schedule, final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
 			final ISequences initialSequences) {
 		if (shipped) {
-			return doShipped(vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences);
+			return doShipped(schedule, vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences);
 		} else {
 			return doUnshipped(load, discharge, target);
 		}
 	}
-
+// TODO: GET RID OF UNSHIPPED CARGO FUNCTION
 	private InternalResult doUnshipped(final LoadSlot load, final DischargeSlot discharge, final Slot<?> target) {
 		final IResource resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
 		final IModifiableSequences solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
@@ -418,7 +420,7 @@ public class MarketabilitySandboxUnit {
 		return res;
 	}
 
-	private InternalResult doShipped(final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
+	private InternalResult doShipped(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
 			final ISequences initialSequences) {
 		final IResource resource;
 
@@ -439,16 +441,18 @@ public class MarketabilitySandboxUnit {
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
 
 		final MarketabilitySandboxEvaluator evaluator = injector.getInstance(MarketabilitySandboxEvaluator.class);
-		final ViabilityWindowTrimmer trimmer = injector.getInstance(ViabilityWindowTrimmer.class);
+		final MarketabilityWindowTrimmer trimmer = injector.getInstance(MarketabilityWindowTrimmer.class);
 		final InsertCargoSequencesGenerator generator = injector.getInstance(InsertCargoSequencesGenerator.class);
-
-		generator.generateOptionsTemp(initialSequences, cargoSegment, resource, trimmer, portSlot, (solution) -> {
+		//generator.clampVesselDates(initialSequences, null, trimmer);
+		generator.generateOptionsTemp(schedule, initialSequences, cargoSegment, resource, trimmer, portSlot, (solution) -> {
 			final SingleResult result = evaluator.evaluate(resource, solution, portSlot);
 			ret.merge(result);
 			return result != null;
 		});
 		return ret;
 	}
+	
+	
 
 	private Pair<Boolean, DischargeSlot> getShippedAndDischarge(final IMapperClass mapper, final LoadSlot load, final SpotMarket market, final int month) {
 		boolean shipped = true;
