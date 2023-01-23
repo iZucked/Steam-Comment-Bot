@@ -96,7 +96,7 @@ public class CargoTransferUtil {
 	
 	// check that slot is not within a complex cargo
 	private static boolean isSimpleCargo(final Slot<?> slot) {
-		return (slot != null && slot.getCargo() != null && slot.getCargo().getSlots().size() > 2);
+		return (slot != null && slot.getCargo() != null && slot.getCargo().getSlots().size() == 2);
 	}
 	
 	private static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //

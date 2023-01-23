@@ -150,7 +150,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 			.build();
 
 			b.buildColumn("Default", CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT) //
-			.withWidth(50) //
+			.withWidth(100) //
 			.withRMMaker((ed, rvp) -> new BooleanFlagAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT, ed)) //
 			.build();
 

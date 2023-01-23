@@ -41,7 +41,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.model,
  com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.lng.scenario.model,
- com.google.guava
+ com.google.guava,
+ com.mmxlabs.models.lng.pricing.editor
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.7.10"

@@ -7,7 +7,9 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
+import com.mmxlabs.models.lng.cargo.editor.SlotPricingBasisWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
@@ -48,7 +50,9 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 
 		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
 		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES)) {
-			addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICING_BASIS, SlotExpressionWrapper::new);
+			addEditor(CargoPackage.Literals.SLOT__PRICING_BASIS, topClass -> {
+				return new SlotPricingBasisWrapper(new PricingBasisInlineEditor(CargoPackage.Literals.SLOT__PRICING_BASIS));
+			});
 		} else {
 			ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
 		}
