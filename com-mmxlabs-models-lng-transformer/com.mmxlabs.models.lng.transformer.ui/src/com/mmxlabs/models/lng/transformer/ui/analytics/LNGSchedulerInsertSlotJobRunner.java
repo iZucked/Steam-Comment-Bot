@@ -115,14 +115,14 @@ public class LNGSchedulerInsertSlotJobRunner {
 	private InsertionOptimisationStage insertionStage;
 
 	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
-			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
-			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable final ExtraDataProvider extraDataProvider,
+			@Nullable final TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
 		this(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents, extraDataProvider, initialSolutionProvider, null);
 	}
 
 	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
-			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
-			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable Consumer<LNGOptimisationBuilder> builderCustomiser) {
+			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable final ExtraDataProvider extraDataProvider,
+			@Nullable final TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable final Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
@@ -143,14 +143,26 @@ public class LNGSchedulerInsertSlotJobRunner {
 		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan, true, true);
 
 		for (final OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof InsertionOptimisationStage) {
-				insertionStage = (InsertionOptimisationStage) stage;
+			if (stage instanceof final InsertionOptimisationStage ios) {
+				insertionStage = ios;
 				break;
 			}
 		}
 		assert insertionStage != null;
 
-		final IOptimiserInjectorService extraService = buildExtraModules(extraDataProvider, initialSolutionProvider);
+		// Determine the upper bound of load and discharges. This will define the number of spot market slots needed per month.
+		int loads = 0;
+		int sales = 0;
+		for (final Slot<?> original : targetSlots) {
+			if (original instanceof LoadSlot) {
+				loads++;
+			} else if (original instanceof DischargeSlot) {
+				sales++;
+			}
+		}
+		final int spotCount = Math.max(Math.max(loads, sales), 1);
+
+		final IOptimiserInjectorService extraService = buildExtraModules(extraDataProvider, initialSolutionProvider, spotCount);
 
 		boolean isBreakEven = false;
 		for (final Slot<?> slot : targetSlots) {
@@ -184,7 +196,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 			targetOptimiserSlots = new LinkedList<>();
 			targetOptimiserEvents = new LinkedList<>();
 			final CargoModelFinder finder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario()));
-			ExtraDataProvider edp = scenarioRunner.getScenarioToOptimiserBridge().getOptimiserExtraDataProvider();
+			final ExtraDataProvider edp = scenarioRunner.getScenarioToOptimiserBridge().getOptimiserExtraDataProvider();
 			if (edp != null) {
 				finder.includeLoads(edp.extraLoads);
 			}
@@ -226,7 +238,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 		}
 	}
 
-	private IOptimiserInjectorService buildExtraModules(ExtraDataProvider extraDataProvider, @Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
+	private IOptimiserInjectorService buildExtraModules(final ExtraDataProvider extraDataProvider,
+			@Nullable final TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, final int spotCount) {
 		return new IOptimiserInjectorService() {
 
 			@Override
@@ -249,8 +262,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 							@Provides
 							@Singleton
 							@Named("EXTERNAL_SOLUTION")
-							private ISequences provideSequences(final Injector injector, ModelEntityMap mem, IOptimisationData data) {
-								ISequences sequences = initialSolutionProvider.apply(mem, data, injector);
+							private ISequences provideSequences(final Injector injector, final ModelEntityMap mem, final IOptimisationData data) {
+								final ISequences sequences = initialSolutionProvider.apply(mem, data, injector);
 								return sequences;
 							}
 
@@ -276,13 +289,13 @@ public class LNGSchedulerInsertSlotJobRunner {
 				}
 
 				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					List<Module> modules = new LinkedList<>();
+					final List<Module> modules = new LinkedList<>();
 					modules.add(new AbstractModule() {
 
 						@Override
 						protected void configure() {
 							// Only one new option per month
-							bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(1);
+							bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(spotCount);
 						}
 
 					});
@@ -298,7 +311,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		scenarioRunner.evaluateInitialState();
 	}
 
-	public void setIterations(int iterations) {
+	public void setIterations(final int iterations) {
 		insertionStage.setIterations(iterations);
 	}
 
@@ -366,7 +379,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, scenarioRunner.getScenarioToOptimiserBridge(), () -> slotInsertionOptions, dualModeInsertions,
 				portfolioBreakEvenTarget, true);
 
-		LNGDataTransformer dt = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer();
+		final LNGDataTransformer dt = scenarioRunner.getScenarioToOptimiserBridge().getDataTransformer();
 		final SequencesContainer initialSequencesContainer = new SequencesContainer(dt.getInitialResult().getBestSolution());
 		link.run(dt, initialSequencesContainer, results, monitor);
 
