@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
@@ -304,7 +304,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final List<String> hints = new LinkedList<>();
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
-		customiseConstraints(constraints);
+		//customiseConstraints(constraints);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
@@ -343,7 +343,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final List<String> hints = new LinkedList<>();
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
-		customiseConstraints(constraints);
+		//customiseConstraints(constraints);
 
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {

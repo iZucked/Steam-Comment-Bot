@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="5.12.2.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="6.1.3.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/logo-square-16.png"/>
       <text>
          LiNGO
-Copyright 2010 - 2022
+Copyright 2010 - 2023
 
 Version: {0}
 Build: {1}

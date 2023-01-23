@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -202,8 +202,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.ChangeablePriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -728,22 +727,17 @@ public class LNGScenarioTransformer {
 		final Map<Port, CooldownPrice> portToCooldownMap = new HashMap<>();
 		// Build calculators and explicit port mapping
 		for (final CooldownPrice price : costModel.getCooldownCosts()) {
-			final ICooldownCalculator cooldownCalculator;
-			// Check here if price is indexed or expression
-			if (price.isLumpsum()) {
-				@Nullable
-				final ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
-				if (cooldownCurve == null) {
-					throw new IllegalStateException("Unable to parse cooldown curve");
-				}
-				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
-			} else {
-				final PreGeneratedIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
-				if (expression == null) {
-					throw new IllegalStateException("Unable to parse cooldown curve");
-				}
-				cooldownCalculator = new CooldownPriceIndexedCalculator(expression);
+			ILongCurve lumpsumCurve = null;
+			ICurve volumeCurve = null;
+
+			if (price.getLumpsumExpression() != null && !price.getLumpsumExpression().isBlank()) {
+				lumpsumCurve = dateHelper.generateLongExpressionCurve(price.getLumpsumExpression(), commodityIndices);
 			}
+			if (price.getVolumeExpression() != null && !price.getVolumeExpression().isBlank()) {
+				volumeCurve = dateHelper.generateExpressionCurve(price.getVolumeExpression(), commodityIndices);
+			}
+
+			final ICooldownCalculator cooldownCalculator = new CooldownCalculator(lumpsumCurve, volumeCurve);
 			injector.injectMembers(cooldownCalculator);
 
 			cooldownCalculators.put(price, cooldownCalculator);

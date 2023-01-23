@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -97,7 +98,6 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -149,7 +149,7 @@ public class InventoryReport extends ViewPart {
 	private Chart inventoryDailyChartViewer;
 	private Chart mullMonthlyOverliftChart;
 	private Chart mullMonthlyCargoCountChart;
-	
+
 	private GridTableViewer inventoryTableViewer;
 
 	private GridTableViewer mullMonthlyTableViewer;
@@ -202,6 +202,8 @@ public class InventoryReport extends ViewPart {
 	private EventHandler todayHandler;
 
 	private IBarSeries cargoSeries;
+	private IBarSeries openSeries;
+	private IBarSeries thirdPartyCargoSeries;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -347,14 +349,10 @@ public class InventoryReport extends ViewPart {
 			{
 				createColumn("Date", 150, o -> "" + o.date.format(formatter));
 				createColumn("Total Feed In", 150, o -> String.format("%,d", o.feedIn));
-				createColumn("Forecast low", 150, o -> String.format("%,d", o.volumeLow));
-				createColumn("Forecast high", 150, o -> String.format("%,d", o.volumeHigh));
 				createColumn("Total Feed Out", 150, o -> String.format("%,d", o.feedOut));
 				createColumn("Total Cargo Out", 150, o -> String.format("%,d", o.cargoOut));
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
-				createColumn("Level low", 150, o -> String.format("%,d", o.ttlLow));
-				createColumn("Level high", 150, o -> String.format("%,d", o.ttlHigh));
 				createColumn("Vessel", 150, o -> o.vessel);
 				createColumn("D-ID", 150, o -> o.dischargeId);
 				createColumn("Buyer", 150, o -> o.salesContract);
@@ -571,6 +569,7 @@ public class InventoryReport extends ViewPart {
 		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
 
 		folder.addSelectionListener(new SelectionAdapter() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final int currentTabSelection = folder.getSelectionIndex();
@@ -603,20 +602,33 @@ public class InventoryReport extends ViewPart {
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
+
 		});
 		getViewSite().getActionBars().getToolBarManager().update(true);
-		
+
 		folder.addListener(SWT.Dispose, e -> {
 			inventoryInsAndOutChart.dispose();
 			inventoryDailyChartViewer.dispose();
 			mullMonthlyOverliftChart.dispose();
-			mullMonthlyCargoCountChart.dispose();});
+			mullMonthlyCargoCountChart.dispose();
+		});
 	}
 
 	public void setCargoVisibilityInInventoryChart(final boolean isVisible) {
 		if (cargoSeries != null) {
 			cargoSeries.setVisible(isVisible);
 			cargoSeries.setVisibleInLegend(isVisible);
+			thirdPartyCargoSeries.setVisible(isVisible);
+			thirdPartyCargoSeries.setVisibleInLegend(isVisible);
+			inventoryInsAndOutChart.updateLayout();
+			inventoryInsAndOutChart.redraw();
+		}
+	}
+
+	public void setOpenSlotVisibilityInInventoryChart(final boolean isVisible) {
+		if (openSeries != null) {
+			openSeries.setVisible(isVisible);
+			openSeries.setVisibleInLegend(isVisible);
 			inventoryInsAndOutChart.updateLayout();
 			inventoryInsAndOutChart.redraw();
 		}
@@ -653,6 +665,8 @@ public class InventoryReport extends ViewPart {
 		// Delete existing data
 		clearChartData(seriesSet);
 		cargoSeries = null;
+		openSeries = null;
+		thirdPartyCargoSeries = null;
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
 			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
@@ -1347,7 +1361,7 @@ public class InventoryReport extends ViewPart {
 											LinkedHashMap::new))
 									.entrySet().stream() //
 									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
-									.collect(Collectors.toList());
+									.toList();
 							if (!inventoryLevels.isEmpty()) {
 								final ILineSeries series = createStepLineSeries(seriesSet, "Tank min", inventoryLevels);
 								series.setSymbolSize(1);
@@ -1366,7 +1380,7 @@ public class InventoryReport extends ViewPart {
 											LinkedHashMap::new))
 									.entrySet().stream() //
 									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
-									.collect(Collectors.toList());
+									.toList();
 							if (!inventoryLevels.isEmpty()) {
 
 								final ILineSeries series = createStepLineSeries(seriesSet, "Tank max", inventoryLevels);
@@ -1380,8 +1394,9 @@ public class InventoryReport extends ViewPart {
 
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
 									.filter(evt -> evt.getSlotAllocation() != null) //
+									.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
 									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
-									.collect(Collectors.toList());
+									.toList();
 							if (!values.isEmpty()) {
 
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
@@ -1396,26 +1411,37 @@ public class InventoryReport extends ViewPart {
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
 									.filter(evt -> evt.getOpenSlotAllocation() != null) //
 									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
-									.collect(Collectors.toList());
+									.toList();
 							if (!values.isEmpty()) {
 
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Open", values);
 								series.setBarWidth(1);
 								series.setBarColor(colourOrange);
+								series.setVisible(colourSchemeAction.isShowingOpenSlots());
+								series.setVisibleInLegend(colourSchemeAction.isShowingOpenSlots());
+								openSeries = series;
 							}
 						}
 						{
 							{
-								final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
-										.filter(evt -> evt.getEvent() != null) //
-										.filter(evt -> evt.getEvent().getPeriod() == InventoryFrequency.CARGO) //
-										.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
-										.collect(Collectors.toList());
-								if (!values.isEmpty()) {
 
+								final List<Pair<LocalDateTime, Integer>> values = new ArrayList<>();
+								for (final InventoryChangeEvent changeEvent : inventoryEvents.getEvents()) {
+									if (changeEvent.getSlotAllocation() != null) {
+										if (changeEvent.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) {
+											values.add(Pair.of(changeEvent.getDate(), Math.abs(changeEvent.getChangeQuantity())));
+										}
+									} else if (changeEvent.getEvent() != null && changeEvent.getEvent().getPeriod() == InventoryFrequency.CARGO) {
+										values.add(Pair.of(changeEvent.getDate(), Math.abs(changeEvent.getChangeQuantity())));
+									}
+								}
+								if (!values.isEmpty()) {
 									final IBarSeries series = createDaySizedBarSeries(seriesSet, "3rd-party", values);
 									series.setBarWidth(2);
 									series.setBarColor(colourOrange);
+									series.setVisible(colourSchemeAction.isShowingCargoes());
+									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+									thirdPartyCargoSeries = series;
 								}
 							}
 						}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.provider;
@@ -292,6 +292,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return portCostEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CooldownPriceEntryItemProvider cooldownPriceEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCooldownPriceEntryAdapter() {
+		if (cooldownPriceEntryItemProvider == null) {
+			cooldownPriceEntryItemProvider = new CooldownPriceEntryItemProvider(this);
+		}
+
+		return cooldownPriceEntryItemProvider;
 	}
 
 	/**
@@ -1033,6 +1056,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
+		if (cooldownPriceEntryItemProvider != null) cooldownPriceEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
 		if (portsExpressionMapItemProvider != null) portsExpressionMapItemProvider.dispose();
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();

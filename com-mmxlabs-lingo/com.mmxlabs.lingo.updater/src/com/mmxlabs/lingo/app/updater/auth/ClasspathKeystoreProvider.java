@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.updater.auth;
@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.app.updater.auth;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -25,10 +25,7 @@ import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.PBEParameterSpec;
@@ -38,15 +35,18 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
+import org.json.simple.JSONObject;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 public abstract class ClasspathKeystoreProvider implements IUpdateAuthenticationProvider {
@@ -62,7 +62,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 
 	@Override
 	@Nullable
-	public Pair<String, String> provideAuthenticationHeader(final URL url) throws Exception {
+	public Pair<String, String> provideAuthenticationHeader(final URI url) throws Exception {
 
 		if (!UPDATE_MINIMAXLABS_COM.equals(url.getHost())) {
 			return null;
@@ -125,7 +125,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 	private boolean isDevLicense() {
 		X509Certificate cert = null;
 		try {
-			cert = LicenseChecker.getClientLicense();
+			cert = LicenseManager.getClientLicense(LicenseManager.getLicenseKeystore());
 		} catch (final Exception e) {
 			return false;
 		}
@@ -161,8 +161,8 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 	/**
 	 * Method to generate a new keypair for JWT tokens. The keystore should be kept
 	 * in the client repo. The public key should be saved under "public_key" in the
-	 * AWS secret. The private key should be saved under "private_key" in the
-	 * AWS secret.
+	 * AWS secret. The private key should be saved under "private_key" in the AWS
+	 * secret.
 	 * 
 	 * @param keystoreFile
 	 * @param publicKeyPath
@@ -170,7 +170,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 	 * @param password
 	 * @throws Exception
 	 */
-	protected void generate(final File keystoreFile, final File publicKeyPath, final File privateKeyPath, final char[] password) throws Exception {
+	protected void generate(final File keystoreFile, String code, String keyId, final File secretJSONFile, final char[] password) throws Exception {
 
 		final KeyStore keyStore = KeyStore.getInstance("PKCS12");
 		keyStore.load(null);
@@ -182,6 +182,11 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 		final RSAPublicKey publicKey = (RSAPublicKey) kp.getPublic();// Get the key instance
 		final RSAPrivateKey privateKey = (RSAPrivateKey) kp.getPrivate();// Get the key instance
 
+		// JSON Object to define the AWS secret data
+		JSONObject secretJSON = new JSONObject();
+		secretJSON.put("client", code);
+		secretJSON.put("code", code);
+
 		{
 			final String publicKeyContent = Base64.getEncoder().encodeToString(publicKey.getEncoded());
 			String publicKeyFormatted = "-----BEGIN PUBLIC KEY-----" + System.lineSeparator();
@@ -189,7 +194,7 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 				publicKeyFormatted += row + System.lineSeparator();
 			}
 			publicKeyFormatted += "-----END PUBLIC KEY-----";
-			Files.asCharSink(publicKeyPath, StandardCharsets.UTF_8).write(Base64.getEncoder().encodeToString(publicKeyFormatted.getBytes()));
+			secretJSON.put("public_key", Base64.getEncoder().encodeToString(publicKeyFormatted.getBytes()));
 
 		}
 		{
@@ -199,9 +204,11 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 				privateKeyFormatted += row + System.lineSeparator();
 			}
 			privateKeyFormatted += "-----END PRIVATE KEY-----";
-			Files.asCharSink(privateKeyPath, StandardCharsets.UTF_8).write(Base64.getEncoder().encodeToString(privateKeyFormatted.getBytes()));
+			secretJSON.put("private_key", Base64.getEncoder().encodeToString(privateKeyFormatted.getBytes()));
 
 		}
+		// Save AWS secret data file
+		Files.asCharSink(secretJSONFile, StandardCharsets.UTF_8).write(secretJSON.toJSONString());
 		{
 
 			final SecretKey key = new SecretKeySpec(privateKey.getEncoded(), "AES");
@@ -213,6 +220,37 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 		try (FileOutputStream os = new FileOutputStream(keystoreFile)) {
 			keyStore.store(os, password);
 		}
+//		
+//		test!
+//		
+//		(need test connect code!)
+//		
+//		
+//		other clients too
+
+		// Print secret creation information
+		System.out.println("Execute the following command to create the secret in AWS");
+		String cli = String.format("aws --region=eu-west-2 secretsmanager create-secret --tags Key=client,Value=%s --name \"updates/%s\" --secret-string %s", code, keyId,
+				secretJSONFile.toPath().toUri().toString().replace("file:///", "file://"));
+		System.out.println(cli);
 	}
 
+	public void checkAuthWorks(final String code) throws Exception {
+
+		final URI url = new URI(String.format("https://update.minimaxlabs.com/LiNGO/%s/latest/version.json", code));
+		final HttpClientBuilder localHttpClient = HttpClientBuilder.create();
+
+		final HttpGet request = new HttpGet(url);
+
+		VersionHelper.getInstance().setClientCode(code);
+		final Pair<String, String> header = provideAuthenticationHeader(url);
+		if (header != null) {
+			request.addHeader(header.getFirst(), header.getSecond());
+		}
+		try (var httpClient = localHttpClient.build()) {
+			try (var response = httpClient.execute(request)) {
+				System.out.println(EntityUtils.toString(response.getEntity()));
+			}
+		}
+	}
 }

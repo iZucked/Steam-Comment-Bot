@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
@@ -103,6 +103,15 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	PortCostEntry createPortCostEntry();
+
+	/**
+	 * Returns a new object of class '<em>Cooldown Price Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cooldown Price Entry</em>'.
+	 * @generated
+	 */
+	CooldownPriceEntry createCooldownPriceEntry();
 
 	/**
 	 * Returns a new object of class '<em>Cooldown Price</em>'.

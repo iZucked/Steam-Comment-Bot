@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.migration.scenario;
@@ -238,8 +238,7 @@ public class ScenarioInstanceMigrator {
 
 				unit.migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 
-				if (unit instanceof IClientMigrationUnit) {
-					final IClientMigrationUnit clientMigrationUnit = (IClientMigrationUnit) unit;
+				if (unit instanceof IClientMigrationUnit clientMigrationUnit) {
 					// Only return real version numbers - ignore snapshot versions
 					if (clientMigrationUnit.getClientDestinationVersion() >= 0) {
 						clientVersion = clientMigrationUnit.getClientDestinationVersion();

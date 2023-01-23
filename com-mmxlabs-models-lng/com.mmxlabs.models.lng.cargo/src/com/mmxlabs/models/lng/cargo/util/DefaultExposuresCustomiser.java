@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -14,7 +14,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
+import com.mmxlabs.models.lng.commercial.RegasPricingParams;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class DefaultExposuresCustomiser implements IExposuresCustomiser{
@@ -27,44 +27,23 @@ public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 			final Contract contract = slot.getContract();
 			if (contract != null) {
 				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
-				if (priceInfo instanceof ExpressionPriceParameters priceParams) {
-					return priceParams.getPriceExpression();
+				if (priceInfo instanceof ExpressionPriceParameters epp) {
+					return epp.getPriceExpression();
+				} else if (priceInfo instanceof RegasPricingParams rpp) {
+					return rpp.getPriceExpression();
 				}
 			}
-		} else if (slot instanceof SpotSlot) {
-			final SpotSlot sslot = (SpotSlot) slot;
+		} else if (slot instanceof SpotSlot sslot) {
 			final SpotMarket spotMarket = sslot.getMarket();
 			if (spotMarket != null) {
 				final LNGPriceCalculatorParameters priceInfo = spotMarket.getPriceInfo();
-				if (priceInfo instanceof DateShiftExpressionPriceParameters) {
-					return ((DateShiftExpressionPriceParameters) priceInfo).getPriceExpression();
+				if (priceInfo instanceof DateShiftExpressionPriceParameters dsepp) {
+					return dsepp.getPriceExpression();
 				}
 			}
 		}
 
 		return null;
-	}
-	
-	@Override
-	public @Nullable String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider) {
-		String priceExpression = provideExposedPriceExpression(slot);
-		if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
-			priceExpression = slot.getPricingBasis();
-		} else if (slot.eIsSet(CargoPackage.Literals.SLOT__CONTRACT)){
-			final Contract contract = slot.getContract();
-			if (contract != null) {
-				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
-				if (priceInfo instanceof ExpressionPriceParameters priceParams) {
-					if (priceParams.getPricingBasis() != null && !priceParams.getPricingBasis().isBlank()) {
-						priceExpression = priceParams.getPricingBasis();
-					}
-				}
-			}
-		}
-		if (priceExpression != null && mmCurveProvider != null) {
-			priceExpression = mmCurveProvider.convertPricingBasisToPriceExpression(priceExpression);
-		}
-		return priceExpression;
 	}
 
 	@Override

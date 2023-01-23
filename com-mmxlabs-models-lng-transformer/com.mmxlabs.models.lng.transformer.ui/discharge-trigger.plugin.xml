@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
@@ -15,8 +15,8 @@
 			<action
 				class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.DischargeTriggerEditorActionDelegate"
 				definitionId="com.mmxlabs.lng.transformer.ui.navigator.handlers.editor.DischargeTriggerEditorActionDelegate"
-				icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/inventory.png"
-				disabledIcon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/24x24/inventory_disabled.png"
+				icon="icons:/icons/24x24/discharge_trigger.png"
+				disabledIcon="icons:/icons/24x24/discharge_trigger_disabled.png"
 				id="com.mmxlabs.inventory.DischargeTrigger" label="Discharge trigger"
 				toolbarPath="additions-end"
 				tooltip="Generate new scenario from a discharge trigger">

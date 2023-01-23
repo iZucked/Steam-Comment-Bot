@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -251,6 +251,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private final Image notesImage;
 	private final Image transferImage;
+	private final Image notesAndTransferImage;
+	private final Image heelCarryImage;
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -283,6 +285,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
 		transferImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_TRANSFER);
+		notesAndTransferImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES_AND_TRANSFER);
+		heelCarryImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_HEEL_CARRY);
 
 		ServiceHelper.withOptionalServiceConsumer(IExtraFiltersProvider.class, p -> {
 			if (p == null) {
@@ -1070,7 +1074,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ls, getScenarioModel());
 							if (ls.getNotes() != null && !ls.getNotes().isEmpty()) {
 								if (slotTransferred) {
-									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+									return notesAndTransferImage;
 								}
 								return notesImage;
 							}
@@ -1243,8 +1247,33 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
-		addTradesColumn(dischargeColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), commandHandler), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
-				.setHeaderTooltip("in m³ or mmBtu");
+		
+		{
+			final BasicAttributeManipulator manipulator = new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), commandHandler);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
+			final GridViewerColumn dischargeVol = addTradesColumn(dischargeColumns, "Vol", manipulator, assignmentPath);
+			dischargeVol.getColumn().setHeaderTooltip("in m³ or mmBtu");
+			dischargeVol.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
+				@Override
+				public Image getImage(final Object element) {
+
+					if (element instanceof RowData) {
+						final RowData rowDataItem = (RowData) element;
+						final Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof DischargeSlot) {
+							final DischargeSlot ds = (DischargeSlot) object;
+
+							if (ds.isHeelCarry()) {
+								return heelCarryImage;
+							}
+						}
+					}
+
+					return super.getImage(element);
+				}
+			});
+			}
+		
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, commandHandler), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
@@ -1262,7 +1291,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									&& CargoTransferUtil.isSlotReferencedByTransferRecord(ds, getScenarioModel());
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
 								if (slotTransferred) {
-									return CargoTransferUtil.joinImages("notes-and-transfer", notesImage, transferImage);
+									return notesAndTransferImage;
 								}
 								return notesImage;
 							}

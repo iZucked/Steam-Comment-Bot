@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,8 +31,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Objects;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -78,6 +77,8 @@ public class SharedScenarioUpdater {
 	// Set used to emit load failure messages once
 	private Set<String> warnedLoadFailures = new HashSet<>();
 
+	private Set<String> blackListed = new HashSet<>();
+
 	public SharedScenarioUpdater(final ScenarioService modelRoot, final File basePath, final SharedWorkspaceServiceClient client) {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
@@ -99,6 +100,11 @@ public class SharedScenarioUpdater {
 		if (scenarios != null) {
 			for (final SharedScenarioRecord scenario : scenarios) {
 				final String uuid = scenario.uuid;
+				// Check blacklisted scenario.
+				if (blackListed.contains(uuid)) {
+					continue;
+				}
+
 				final String path = scenario.pathString;
 
 				final Container parent = getContainer(path);
@@ -130,8 +136,7 @@ public class SharedScenarioUpdater {
 	}
 
 	private void recursiveUUIDCollector(final Container parent, final Collection<String> uuids) {
-		if (parent instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+		if (parent instanceof ScenarioInstance scenarioInstance) {
 			uuids.add(scenarioInstance.getExternalID());
 		}
 		for (final Container c : parent.getElements()) {
@@ -151,8 +156,7 @@ public class SharedScenarioUpdater {
 					parent = pathMap.get(segmentPath);
 					// Convert folder to managed state (it may have been created by the user, but
 					// now we take it over
-					if (parent instanceof Folder) {
-						final Folder folder = (Folder) parent;
+					if (parent instanceof Folder folder) {
 						// Move display code into task executor to avoid deadlock
 						taskExecutor.execute(() -> RunnerHelper.syncExecDisplayOptional(() -> folder.setManaged(true)));
 					}
@@ -206,14 +210,13 @@ public class SharedScenarioUpdater {
 						// Failed!
 						return;
 					}
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					// Something went wrong - reset lastModified to trigger another refresh
 					lastModified = Instant.EPOCH;
 					e.printStackTrace();
 					return;
 				}
 			}
-
 			final ScenarioInstance instance = mapping.computeIfAbsent(record.uuid, u -> loadScenarioFrom(f, record, name));
 			if (instance != null) {
 				RunnerHelper.syncExecDisplayOptional(() -> {
@@ -254,8 +257,7 @@ public class SharedScenarioUpdater {
 			for (final Container c : elements) {
 				recursiveDelete(c);
 			}
-			if (parent instanceof Folder) {
-				final Folder folder = (Folder) parent;
+			if (parent instanceof Folder folder) {
 				if (folder.isManaged() && elements.isEmpty()) {
 					final Container parent2 = folder.getParent();
 					if (parent2 != null) {
@@ -270,7 +272,7 @@ public class SharedScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f) throws IOException {
+	private boolean downloadScenario(final String uuid, final File f) throws Exception {
 		final boolean[] ret = new boolean[1];
 		final Job background = new Job("Download shared team scenario") {
 
@@ -304,47 +306,57 @@ public class SharedScenarioUpdater {
 
 	protected ScenarioInstance loadScenarioFrom(final File f, final SharedScenarioRecord record, final String scenarioname) {
 		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
-		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
-		if (manifest != null) {
-			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(true);
-			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(record.uuid);
+		try {
+			final Manifest manifest = ScenarioStorageUtil.loadManifestChecked(f);
+			if (manifest != null) {
+				final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+				scenarioInstance.setReadonly(true);
+				scenarioInstance.setUuid(manifest.getUUID());
+				scenarioInstance.setExternalID(record.uuid);
 
-			scenarioInstance.setRootObjectURI(archiveURI.toString());
+				scenarioInstance.setRootObjectURI(archiveURI.toString());
 
-			scenarioInstance.setName(scenarioname);
-			scenarioInstance.setVersionContext(manifest.getVersionContext());
-			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+				scenarioInstance.setName(scenarioname);
+				scenarioInstance.setVersionContext(manifest.getVersionContext());
+				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
 
-			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
-			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
+				scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
+				scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
-			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			meta.setCreator(record.creator);
-			meta.setCreated(Date.from(record.creationDate));
+				final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+				meta.setCreator(record.creator);
+				meta.setCreated(Date.from(record.creationDate));
 
-			scenarioInstance.setMetadata(meta);
-			meta.setContentType(manifest.getScenarioType());
-			// Probably better pass in from service
-			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try {
-					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
-					if (modelRecord != null) {
-						modelRecord.setName(scenarioInstance.getName());
-						modelRecord.setScenarioInstance(scenarioInstance);
-						SSDataManager.Instance.register(scenarioInstance, modelRecord);
-						scenarioInstance.setRootObjectURI(archiveURI.toString());
+				scenarioInstance.setMetadata(meta);
+				meta.setContentType(manifest.getScenarioType());
+				// Probably better pass in from service
+				ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+					try {
+						final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
+						if (modelRecord != null) {
+							modelRecord.setName(scenarioInstance.getName());
+							modelRecord.setScenarioInstance(scenarioInstance);
+							SSDataManager.Instance.register(scenarioInstance, modelRecord);
+							scenarioInstance.setRootObjectURI(archiveURI.toString());
+						}
+					} catch (ScenarioEncryptionException e) {
+						LOGGER.error(e.getMessage(), e);
+					} catch (Exception e) {
+						LOGGER.error(e.getMessage(), e);
 					}
-				} catch (ScenarioEncryptionException e) {
-					LOGGER.error(e.getMessage(), e);
-				} catch (Exception e) {
-					LOGGER.error(e.getMessage(), e);
-				}
-			});
-			return scenarioInstance;
-		}
+				});
+				return scenarioInstance;
+			}
+		} catch (final Exception e) {
+			if (e.getCause().getClass().getName().equals("com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException")) {
+				blackListed.add(record.uuid);
+				LOGGER.error("Error reading team scenario file {}. Unknown encryption key.", f.getName());
+				return null;
 
+			}
+
+			e.printStackTrace();
+		}
 		if (warnedLoadFailures.add(f.getName())) {
 			LOGGER.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
 		}
@@ -363,7 +375,7 @@ public class SharedScenarioUpdater {
 		if (f.exists()) {
 			String json;
 			try {
-				json = Files.toString(f, Charsets.UTF_8);
+				json = Files.asCharSource(f, StandardCharsets.UTF_8).read();
 
 				final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(json);
 				if (scenariosList != null) {
@@ -462,12 +474,12 @@ public class SharedScenarioUpdater {
 				if (scenariosPair != null) {
 					final List<SharedScenarioRecord> scenariosList = client.parseScenariosJSONData(scenariosPair.getFirst());
 					update(scenariosList);
-					Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), Charsets.UTF_8);
+					Files.write(scenariosPair.getFirst(), new File(basePath.getAbsolutePath() + "/scenarios.json"), StandardCharsets.UTF_8);
 					lastModified = scenariosPair.getSecond();
 				}
 			}
 		}
-	};
+	}
 
 	public void pause() {
 		updateLock.lock();

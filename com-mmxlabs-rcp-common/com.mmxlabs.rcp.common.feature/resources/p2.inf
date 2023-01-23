@@ -1,6 +1,0 @@
-instructions.configure=\
-org.eclipse.equinox.p2.touchpoint.eclipse.setProgramProperty(propName:javax.net.ssl.keyStore ,propValue:${installFolder}/features/${project.artifactId}_${unqualifiedVersion}.${buildQualifier}/keystore.jks);\
-org.eclipse.equinox.p2.touchpoint.eclipse.setProgramProperty(propName:javax.net.ssl.trustStore ,propValue:${installFolder}/features/${project.artifactId}_${unqualifiedVersion}.${buildQualifier}/keystore.jks);
-instructions.unconfigure=\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeProgramProperty(propName:javax.net.ssl.keyStore ,propValue:${installFolder}/features/${project.artifactId}_${unqualifiedVersion}.${buildQualifier}/keystore.jks);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeProgramProperty(propName:javax.net.ssl.trustStore ,propValue:${installFolder}/features/${project.artifactId}_${unqualifiedVersion}.${buildQualifier}/keystore.jks);

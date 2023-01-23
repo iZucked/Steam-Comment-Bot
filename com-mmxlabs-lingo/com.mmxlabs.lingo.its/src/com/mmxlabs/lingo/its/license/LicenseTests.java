@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.license;
@@ -20,10 +20,18 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -48,38 +56,28 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.BasicAuthenticationManager;
-import com.mmxlabs.hub.common.http.HttpClientUtil;
-import com.mmxlabs.hub.license.LicenseManager;
+import com.mmxlabs.hub.license.HubLicenseManager;
 import com.mmxlabs.lingo.its.datahub.HubTestHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
-
-import okhttp3.Credentials;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
 class LicenseTests {
 
-	static final Logger log = LoggerFactory.getLogger(LicenseTests.class);
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
-			.build();
+	private static final Logger log = LoggerFactory.getLogger(LicenseTests.class);
 
 	public static final int DATAHUB_PORT = 8090;
-	static List<Integer> portPool = List.of(8090, 8091, 8092, 8093, 8094, 8095, 8096, 8097, 8098, 8099);
-	static int timeout = 60000;
-	static int availablePort = HubTestHelper.waitForAvailablePort(portPool, timeout);
+	private static final List<Integer> portPool = List.of(8090, 8091, 8092, 8093, 8094, 8095, 8096, 8097, 8098, 8099);
+	private static final int timeout = 60000;
+	private static final int availablePort = HubTestHelper.waitForAvailablePort(portPool, timeout);
 
-	private static BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
+	private static final BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
 	private static SWTWorkbenchBot bot;
-	static String datahubHost;
-	static String upstreamUrl;
+	private static String datahubHost;
+	private static String upstreamUrl;
 
-	static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
+	private static final String CONTAINER = HubTestHelper.getContainerString(VersionHelper.getInstance().getClientCode());
 
 	@Container
 	public static GenericContainer datahubContainer = HubTestHelper.createDataHubContainer(CONTAINER, availablePort, DATAHUB_PORT, false);
@@ -161,35 +159,35 @@ class LicenseTests {
 	}
 
 	public void setCurrentLicense() throws IOException {
-		File license;
-		try {
-			license = createLicense();
 
-			RequestBody requestBody = new MultipartBody.Builder() //
-					.setType(MultipartBody.FORM) //
-					.addFormDataPart("license", "license.p12", RequestBody.create(HttpClientUtil.MEDIA_TYPE_FORM_DATA, license))//
-					.build();
+		try {
+			File license = createLicense();
 
 			final String postLicenseURL = "/license";
-			final Request.Builder builder = DataHubServiceProvider.getInstance().makeRequestBuilder(postLicenseURL);
+			DataHubServiceProvider.getInstance().doPostRequest(postLicenseURL, request -> {
 
-			if (builder != null) {
-				final Request request = builder //
-						.post(requestBody) //
-						.header("Authorization", Credentials.basic("test", "test", StandardCharsets.UTF_8)) //
-						.build();
+				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+				formDataBuilder.addBinaryBody("license", license, ContentType.DEFAULT_BINARY, "license.p12");
+				final HttpEntity entity = formDataBuilder.build();
 
+				// Add file to post request
+				request.setEntity(entity);
+				// Replace any auth header for test purposes
+				final byte[] encodedAuth = Base64.getEncoder().encode(String.format("%s:%s", "test", "test").getBytes(StandardCharsets.UTF_8));
+				final String authHeader = "Basic " + new String(encodedAuth);
+				request.setHeader("Authorization", authHeader);
+			}, response -> {
 				// Check the response
-				try (Response response = httpClient.newCall(request).execute()) {
-					if (!response.isSuccessful()) {
-						log.error(response.message());
-					}
-					log.info(response.message());
-					response.body().close();
+				int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode < 200 || statusCode >= 400) {
+					log.error(EntityUtils.toString(response.getEntity()));
 				}
-			}
+				log.info(EntityUtils.toString(response.getEntity()));
+				return null;
+			});
 		} catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException | CertificateException | OperatorCreationException | IOException e) {
-			// TODO Auto-generated catch block
+			// // TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -198,8 +196,11 @@ class LicenseTests {
 	void getLicenseFromDatahub() throws IOException {
 		log.info(Boolean.toString(basicAuthenticationManager.isAuthenticated(upstreamUrl)));
 		setCurrentLicense();
-		KeyStore keystore = LicenseManager.getLicenseFromDatahub();
-		Assertions.assertNotNull(keystore);
+
+		File keystoreFile = HubLicenseManager.getLicenseFromDatahub();
+		// TODO: Update test - this may be an old file!
+		Assertions.assertNotNull(keystoreFile);
+		Assertions.assertTrue(keystoreFile.exists());
 	}
 
 }

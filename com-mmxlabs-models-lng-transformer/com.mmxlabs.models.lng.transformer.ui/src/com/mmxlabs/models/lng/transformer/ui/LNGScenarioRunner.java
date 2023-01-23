@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -108,13 +108,6 @@ public class LNGScenarioRunner {
 		});
 
 		return result;
-	}
-
-	public void applyBest(final IMultiStateResult result) {
-		final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
-		RunnerHelper.syncExecDisplayOptional(() -> {
-			this.schedule = getScenarioToOptimiserBridge().overwrite(100, bestSolution.getFirst(), bestSolution.getSecond());
-		});
 	}
 
 	/**

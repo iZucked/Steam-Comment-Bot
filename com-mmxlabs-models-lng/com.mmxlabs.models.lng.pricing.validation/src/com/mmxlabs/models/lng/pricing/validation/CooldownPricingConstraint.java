@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.validation;
@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
@@ -47,43 +46,58 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected void doValidate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof CooldownPrice c) {
+		if (target instanceof final CooldownPrice cooldownPrice) {
 
-			final String portSetName = ScenarioElementNameHelper.getName(c.getPorts(), "Cooldown Cost <No ports>");
+			final String portSetName = ScenarioElementNameHelper.getName(cooldownPrice.getPorts(), "Cooldown Cost <No ports>");
 			final DetailConstraintStatusFactory factoryBase = DetailConstraintStatusFactory.makeStatus().withName(portSetName);
 
-			if (c.getExpression() == null) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price expression."));
-				dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
+			if (isNullOrBlank(cooldownPrice.getLumpsumExpression()) && isNullOrBlank(cooldownPrice.getVolumeExpression())) {
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing pricing."));
+				dcsd.addEObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION);
+				dcsd.addEObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION);
 				failures.add(dcsd);
 			} else {
-				ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression());
-				if (!result.isOk()) {
-					String message = String.format("[Cooldown Price {%s}] %s", getPorts(c), result.getErrorDetails());
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-					dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
-					failures.add(dcsd);
-				} else {
-					if (!c.isLumpsum()) {
-						PriceExpressionUtils.constrainPriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), 0.0, 90.0, null, failures, PriceIndexType.COMMODITY);
+				if (cooldownPrice.getLumpsumExpression() != null && !cooldownPrice.getLumpsumExpression().isBlank()) {
+					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION,
+							cooldownPrice.getLumpsumExpression());
+					if (!result.isOk()) {
+						final String message = String.format("[Cooldown Price {%s}] %s", getPorts(cooldownPrice), result.getErrorDetails());
+						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dcsd.addEObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION);
+						failures.add(dcsd);
+
 					}
 				}
-				if (c.getPorts().isEmpty()) {
+				if (!isNullOrBlank(cooldownPrice.getVolumeExpression())) {
+					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION,
+							cooldownPrice.getVolumeExpression());
+					if (!result.isOk()) {
+						final String message = String.format("[Cooldown Price {%s}] %s", getPorts(cooldownPrice), result.getErrorDetails());
+						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dcsd.addEObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION);
+						failures.add(dcsd);
+					} else {
+						PriceExpressionUtils.constrainPriceExpression(ctx, cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION, cooldownPrice.getVolumeExpression(), 0.0,
+								90.0, null, failures);
+					}
+				}
+
+				if (cooldownPrice.getPorts().isEmpty()) {
 					final DetailConstraintStatusFactory factory = factoryBase.copyName()//
 							.withMessage(String.format("No ports specified"));
-					factory.withObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
+					factory.withObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__PORTS);
 					factory.make(ctx, failures);
 				} else {
 					final List<EObject> objects = extraContext.getSiblings(target);
 					final Set<APortSet<Port>> explicit = new HashSet<>();
 					final Set<Port> implicit = new HashSet<>();
 					for (final EObject obj : objects) {
-						if (obj instanceof CooldownPrice otherCooldownPrice) {
+						if (obj instanceof final CooldownPrice otherCooldownPrice) {
 
-							if (otherCooldownPrice == c) {
+							if (otherCooldownPrice == cooldownPrice) {
 								continue;
 							}
 
@@ -97,11 +111,11 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					}
 					boolean warnedExplcit = false;
 					final boolean warnedImplcit = false;
-					for (final APortSet<Port> portSet : c.getPorts()) {
+					for (final APortSet<Port> portSet : cooldownPrice.getPorts()) {
 						if (explicit.contains(portSet) && !warnedExplcit) {
 							final DetailConstraintStatusFactory factory = factoryBase.copyName()//
 									.withMessage(String.format("Port %s already contained explicitly in another cooldown price entry", portSet.getName()));
-							factory.withObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
+							factory.withObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__PORTS);
 							factory.make(ctx, failures);
 							warnedExplcit = true;
 						}
@@ -112,7 +126,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 								if (implicit.contains(port) && !warnedImplcit) {
 									final DetailConstraintStatusFactory factory = factoryBase.copyName()//
 											.withMessage(String.format("Port %s in group %s already contained in another cooldown price entry", port.getName(), portSet.getName()));
-									factory.withObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
+									factory.withObjectAndFeature(cooldownPrice, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__PORTS);
 									factory.make(ctx, failures);
 									// warnedImplcit = true;
 								}
@@ -121,7 +135,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-		} else if (target instanceof CostModel costModel) {
+		} else if (target instanceof final CostModel costModel) {
 			{
 				final PortModel portModel = ScenarioModelUtil.getPortModel(extraContext.getScenarioDataProvider());
 				// count the number of cooldown prices attached to each port
@@ -147,7 +161,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 						dcsd.addEObjectAndFeature(port, null);
 						if (count > 0) {
 							for (final CooldownPrice c : entry.getValue()) {
-								dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
+								dcsd.addEObjectAndFeature(c, PricingPackage.Literals.COOLDOWN_PRICE_ENTRY__PORTS);
 							}
 						}
 						failures.add(dcsd);
@@ -157,11 +171,15 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	@NonNull
-	private String getPorts(@NonNull CooldownPrice c) {
+	private boolean isNullOrBlank(final String expr) {
+		return expr == null || expr.isBlank();
+	}
 
-		List<String> portNames = new LinkedList<>();
-		for (APortSet<Port> p : c.getPorts()) {
+	@NonNull
+	private String getPorts(@NonNull final CooldownPrice c) {
+
+		final List<String> portNames = new LinkedList<>();
+		for (final APortSet<Port> p : c.getPorts()) {
 			portNames.add(p.getName());
 		}
 		return Joiner.on(", ").join(portNames);

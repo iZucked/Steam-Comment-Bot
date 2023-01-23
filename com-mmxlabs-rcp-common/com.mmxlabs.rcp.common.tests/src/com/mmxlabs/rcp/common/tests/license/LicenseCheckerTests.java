@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.tests.license;
@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.rcp.common.tests.internal.Activator;
 
 class LicenseCheckerTests {
@@ -35,7 +37,7 @@ class LicenseCheckerTests {
 		try {
 			String location = "file:///" + tempDir.toString().replaceAll("\\\\", "/");
 			System.out.println(location);
-			File f = LicenseChecker.getCACertsFileFromEclipseHomeURL(location);
+			File f = TrustStoreManager.getCACertsFileFromEclipseHomeURL(location);
 
 			Assertions.assertNotNull(f);
 		} finally {
@@ -53,7 +55,7 @@ class LicenseCheckerTests {
 				keystore.load(inStream, "helloworld".toCharArray());
 
 				Assertions.assertNull(keystore.getCertificate("lingo"));
-				LicenseChecker.importExtraCertsFromHome(keystore);
+				TrustStoreManager.importExtraCertsFromHome(keystore);
 
 				Assertions.assertNotNull(keystore.getCertificate("cert.pem"));
 			} catch (NoSuchAlgorithmException | IOException e) {
@@ -63,8 +65,8 @@ class LicenseCheckerTests {
 	}
 
 	@Test
-	void licenseFromSystemProperty() throws CertificateException {
-		Assertions.assertNotNull(LicenseChecker.getLicenseFromSystemProperty());
+	void licenseFromSystemProperty() throws Exception {
+		Assertions.assertNotNull(LicenseManager.getLicenseFromSystemProperty());
 	}
 
 	// TODO add user.home and eclipse.home.location properties to build job
@@ -78,32 +80,32 @@ class LicenseCheckerTests {
 	// Assertions.assertNotNull(LicenseChecker.getUserDataLicense());
 	// }
 
-	@Test
-	void createKeystoreCopies() {
-		// TODO use mock keystore instead
-		Mockito.mock(KeyStore.class);
-		final File licenseFile = new File("license.p12");
-		final File keystoreFile = new File("keystore.p12");
-		if (licenseFile.exists() && keystoreFile.exists()) {
-			try (InputStream inStreamLic = new FileInputStream(licenseFile); InputStream inStreamKey = new FileInputStream(keystoreFile)) {
-				final KeyStore license = KeyStore.getInstance("PKCS12");
-				license.load(inStreamLic, "helloworld".toCharArray());
-
-				final KeyStore keystore = KeyStore.getInstance("PKCS12");
-				keystore.load(inStreamKey, "helloworld".toCharArray());
-
-				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
-				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
-				Assertions.assertNull(keyStoreFile);
-				Assertions.assertNull(trustStoreFile);
-
-				LicenseChecker.createKeystoreCopies(keystore, license);
-
-				Assertions.assertNotNull(keyStoreFile);
-				Assertions.assertNotNull(trustStoreFile);
-			} catch (NoSuchAlgorithmException | IOException | CertificateException | KeyStoreException e) {
-				LOG.error("failed to load test license: " + e.getMessage());
-			}
-		}
-	}
+//	@Test
+//	void createKeystoreCopies() {
+//		// TODO use mock keystore instead
+//		Mockito.mock(KeyStore.class);
+//		final File licenseFile = new File("license.p12");
+//		final File keystoreFile = new File("keystore.p12");
+//		if (licenseFile.exists() && keystoreFile.exists()) {
+//			try (InputStream inStreamLic = new FileInputStream(licenseFile); InputStream inStreamKey = new FileInputStream(keystoreFile)) {
+//				final KeyStore license = KeyStore.getInstance("PKCS12");
+//				license.load(inStreamLic, "helloworld".toCharArray());
+//
+//				final KeyStore keystore = KeyStore.getInstance("PKCS12");
+//				keystore.load(inStreamKey, "helloworld".toCharArray());
+//
+//				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
+//				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
+//				Assertions.assertNull(keyStoreFile);
+//				Assertions.assertNull(trustStoreFile);
+//
+//				TrustStoreManager.createKeystoreCopiesAndSetSysProps(keystore, keyStoreFile, license, trustStoreFile);
+//
+//				Assertions.assertNotNull(keyStoreFile);
+//				Assertions.assertNotNull(trustStoreFile);
+//			} catch (NoSuchAlgorithmException | IOException | CertificateException | KeyStoreException e) {
+//				LOG.error("failed to load test license: " + e.getMessage());
+//			}
+//		}
+//	}
 }

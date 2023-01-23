@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -35,7 +35,7 @@ public class CooldownLumpSumCalculatorTest {
 		IVessel mockVessel = Mockito.mock(IVessel.class);
 		IPort mockPort = Mockito.mock(IPort.class);
 		// create a cooldown calculator with injection
-		CooldownLumpSumCalculator lsc = createCooldownLumpSumCalculator(curve);
+		CooldownCalculator lsc = createCooldownLumpSumCalculator(curve);
 
 		// create prices for different times (to test UTC)
 		long priceA = OptimiserUnitConvertor.convertToInternalFixedCost(100000);
@@ -71,8 +71,8 @@ public class CooldownLumpSumCalculatorTest {
 
 	}
 
-	private CooldownLumpSumCalculator createCooldownLumpSumCalculator(final ILongCurve curve) {
-		CooldownLumpSumCalculator contract = new CooldownLumpSumCalculator(curve);
+	private CooldownCalculator createCooldownLumpSumCalculator(final ILongCurve curve) {
+		CooldownCalculator contract = new CooldownCalculator(curve, null);
 
 		Injector injector = Guice.createInjector(new AbstractModule() {
 

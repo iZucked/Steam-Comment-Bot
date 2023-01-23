@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.datahub;
@@ -14,11 +14,13 @@ import java.util.Optional;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
@@ -35,6 +37,7 @@ import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
+@ExtendWith(SWTBotJunit5Extension.class)
 public class CustomTeamReportsTests {
 	// Team reports require the lingo user to be authenticated. We can use either
 	// basic auth or oauth. We arbitrarily decide to use basic

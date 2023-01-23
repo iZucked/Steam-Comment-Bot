@@ -1,22 +1,23 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.hub.auth;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Optional;
 
+import org.apache.http.HttpMessage;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.services.users.UsernameProvider;
-
-import okhttp3.Credentials;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
@@ -69,23 +70,29 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 			return false;
 		}
 
-		// @formatter:off
-		final Request loginRequest = new Request.Builder().header("Authorization", Credentials.basic(username, password, StandardCharsets.UTF_8 )) //
-				.header("Cache-Control", "no-store, max-age=0") //
-				.url(url + UpstreamUrlProvider.BASIC_LOGIN_PATH) //
-				.build();
-		// @formatter:on
+		HttpGet request = new HttpGet(url + UpstreamUrlProvider.BASIC_LOGIN_PATH);
 
-		try (Response loginResponse = httpClient.newCall(loginRequest).execute()) {
-			if (!loginResponse.isSuccessful()) {
-				LOGGER.error("Invalid data hub credentials");
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
+			if (httpClient == null) {
 				return false;
-			} else {
-				UsernameProvider.INSTANCE.setUserId(username);
-				return true;
 			}
-		} catch (final IOException e) {
-			e.printStackTrace();
+			request.addHeader("Authorization", HttpClientUtil.basicAuthHeader(username, password));
+			request.addHeader("Cache-Control", "no-store, max-age=0");
+
+			try (var response = httpClient.execute(request)) {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					LOGGER.error("Invalid data hub credentials");
+					return false;
+				} else {
+					UsernameProvider.INSTANCE.setUserId(username);
+					return true;
+				}
+			} catch (final IOException e) {
+				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
+			}
+		} catch (final Exception e) {
+			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 
 		return false;
@@ -101,26 +108,15 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 		}
 	}
 
-	public Optional<Request.Builder> buildRequestWithBasicAuth() {
+	public void buildRequestWithBasicAuth(HttpMessage msg) {
 		final Optional<String> username = retrieveFromSecurePreferences(KEY_USERNAME);
 		final Optional<String> password = retrieveFromSecurePreferences(KEY_PASSWORD);
-		Optional<Request.Builder> builder;
 
 		if (username.isPresent() && password.isPresent()) {
-			// @formatter:off
-			builder = Optional.of(new Request.Builder() //
-					.header("Authorization", Credentials.basic( //
-							username.get(), //
-							password.get(),
-							StandardCharsets.UTF_8
-							)) //
-					.header("Cache-Control", "no-store, max-age=0")); //
-			// @formatter:on
-		} else {
-			builder = Optional.empty();
+			final byte[] encodedAuth = Base64.getEncoder().encode(String.format("%s:%s", username.get(), password.get()).getBytes(StandardCharsets.UTF_8));
+			final String authHeader = "Basic " + new String(encodedAuth);
+			msg.addHeader("Authorization", authHeader);
 		}
-
-		return builder;
 	}
 
 	@Override

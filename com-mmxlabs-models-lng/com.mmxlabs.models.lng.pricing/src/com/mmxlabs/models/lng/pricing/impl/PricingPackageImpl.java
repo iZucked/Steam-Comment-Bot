@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CooldownPriceEntry;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -127,6 +128,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass portCostEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cooldownPriceEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -772,8 +780,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getCooldownPrice() {
-		return cooldownPriceEClass;
+	public EClass getCooldownPriceEntry() {
+		return cooldownPriceEntryEClass;
 	}
 
 	/**
@@ -782,8 +790,38 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCooldownPrice_Lumpsum() {
-		return (EAttribute)cooldownPriceEClass.getEStructuralFeatures().get(0);
+	public EReference getCooldownPriceEntry_Ports() {
+		return (EReference)cooldownPriceEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCooldownPriceEntry_LumpsumExpression() {
+		return (EAttribute)cooldownPriceEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCooldownPriceEntry_VolumeExpression() {
+		return (EAttribute)cooldownPriceEntryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCooldownPrice() {
+		return cooldownPriceEClass;
 	}
 
 	/**
@@ -1869,8 +1907,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__ACTIVITY);
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__COST);
 
+		cooldownPriceEntryEClass = createEClass(COOLDOWN_PRICE_ENTRY);
+		createEReference(cooldownPriceEntryEClass, COOLDOWN_PRICE_ENTRY__PORTS);
+		createEAttribute(cooldownPriceEntryEClass, COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION);
+		createEAttribute(cooldownPriceEntryEClass, COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION);
+
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
-		createEAttribute(cooldownPriceEClass, COOLDOWN_PRICE__LUMPSUM);
 
 		portsExpressionMapEClass = createEClass(PORTS_EXPRESSION_MAP);
 		createEReference(portsExpressionMapEClass, PORTS_EXPRESSION_MAP__PORTS);
@@ -2044,7 +2086,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		cooldownPriceEClass.getESuperTypes().add(this.getPortsExpressionMap());
+		cooldownPriceEntryEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		cooldownPriceEClass.getESuperTypes().add(this.getCooldownPriceEntry());
 		portsExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsSplitExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		datePointContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
@@ -2148,8 +2191,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPortCostEntry_Activity(), theTypesPackage.getPortCapability(), "activity", null, 1, 1, PortCostEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortCostEntry_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, PortCostEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(cooldownPriceEntryEClass, CooldownPriceEntry.class, "CooldownPriceEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getCooldownPriceEntry_Ports(), g1, null, "ports", null, 1, -1, CooldownPriceEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCooldownPriceEntry_LumpsumExpression(), ecorePackage.getEString(), "lumpsumExpression", null, 1, 1, CooldownPriceEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCooldownPriceEntry_VolumeExpression(), ecorePackage.getEString(), "volumeExpression", null, 1, 1, CooldownPriceEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(cooldownPriceEClass, CooldownPrice.class, "CooldownPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCooldownPrice_Lumpsum(), ecorePackage.getEBoolean(), "lumpsum", null, 0, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsExpressionMapEClass, PortsExpressionMap.class, "PortsExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -2489,6 +2539,18 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   source,
 		   new String[] {
 			   "type", "basefuel"
+		   });
+		addAnnotation
+		  (getCooldownPriceEntry_LumpsumExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getCooldownPriceEntry_VolumeExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
 		   });
 		addAnnotation
 		  (getSuezCanalTariff_SdrToUSD(),
