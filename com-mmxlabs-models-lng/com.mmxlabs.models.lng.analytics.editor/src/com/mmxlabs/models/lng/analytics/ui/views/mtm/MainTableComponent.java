@@ -56,7 +56,7 @@ import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
-public class MainTableCompoment {
+public class MainTableComponent {
 
 	private final @NonNull List<Consumer<MTMModel>> inputWants = new LinkedList<>();
 	private Color myColor;

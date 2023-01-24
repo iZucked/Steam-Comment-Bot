@@ -56,7 +56,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
-public class MainTableCompoment {
+public class MainTableComponent {
 
 	private final @NonNull List<Consumer<MarketabilityModel>> inputWants = new LinkedList<>();
 

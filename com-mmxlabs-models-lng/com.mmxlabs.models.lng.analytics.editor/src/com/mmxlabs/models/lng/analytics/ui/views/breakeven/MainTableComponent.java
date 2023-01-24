@@ -75,7 +75,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 
-public class MainTableCompoment extends AbstractBreakEvenComponent {
+public class MainTableComponent extends AbstractBreakEvenComponent {
 
 	private final List<GridColumn> dynamicColumns = new LinkedList<>();
 	private GridTreeViewer tableViewer;
@@ -87,7 +87,7 @@ public class MainTableCompoment extends AbstractBreakEvenComponent {
 	private Label generateButton;
 	private Consumer<BreakEvenAnalysisModel> refreshDynamicColumns;
 
-	protected MainTableCompoment(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
+	protected MainTableComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<BreakEvenAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 		final ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");

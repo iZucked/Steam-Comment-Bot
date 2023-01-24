@@ -109,7 +109,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 	// private Composite rhsComposite;
 	// private ScrolledComposite rhsScrolledComposite;
-	private MainTableCompoment mainTableComponent;
+	private MainTableComponent mainTableComponent;
 	private ShippingOptionsComponent shippingOptionsComponent;
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
@@ -254,7 +254,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			};
 
 			{
-				mainTableComponent = new MainTableCompoment(BreakEvenModellerView.this, validationErrors, () -> getModel());
+				mainTableComponent = new MainTableComponent(BreakEvenModellerView.this, validationErrors, () -> getModel());
 				hook.accept(mainTableComponent, true);
 			}
 

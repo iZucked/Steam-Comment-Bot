@@ -57,7 +57,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
+public class PartialCaseComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private GridTreeViewer partialCaseViewer;
 
@@ -67,7 +67,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 
 	private OptionModellerView optionModellerView;
 
-	protected PartialCaseCompoment(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
+	protected PartialCaseComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 	}

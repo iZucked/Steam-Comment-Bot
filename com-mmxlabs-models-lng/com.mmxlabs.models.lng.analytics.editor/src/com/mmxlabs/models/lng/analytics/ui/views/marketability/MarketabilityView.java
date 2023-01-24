@@ -92,7 +92,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 	private ICommandHandler localCommandHandler;
 
-	private MainTableCompoment mainTableComponent;
+	private MainTableComponent mainTableComponent;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MarketabilityView.class);
 
@@ -103,7 +103,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
 		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
-		mainTableComponent = new MainTableCompoment();
+		mainTableComponent = new MainTableComponent();
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 
