@@ -162,8 +162,8 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
-		final var context= p.getThird();
-		
+		final var context = p.getThird();
+
 		return httpClient.execute(request, responseHandler, context);
 	}
 
@@ -179,10 +179,12 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
 		httpClient.execute(request, response -> {
 			responseHandler.accept(response);
 			return null;
-		});
+		}, ctx);
 	}
 
 	public <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, Consumer<T> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
@@ -193,10 +195,11 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
 		requestCusomiser.accept(request);
 
-		return httpClient.execute(request, responseHandler);
+		return httpClient.execute(request, responseHandler, ctx);
 
 	}
 
@@ -208,10 +211,11 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
 		requestCusomiser.accept(request);
 
-		return httpClient.execute(request, responseHandler);
+		return httpClient.execute(request, responseHandler, ctx);
 
 	}
 
@@ -223,8 +227,9 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
-		Boolean b = httpClient.execute(request, responseHandler);
+		Boolean b = httpClient.execute(request, responseHandler, ctx);
 		if (b == null) {
 			return false;
 		}
@@ -240,8 +245,9 @@ public class DataHubServiceProvider {
 		}
 		final var httpClient = p.getFirst();
 		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
-		Boolean b = httpClient.execute(request, responseHandler);
+		Boolean b = httpClient.execute(request, responseHandler, ctx);
 		if (b == null) {
 			return false;
 		}
