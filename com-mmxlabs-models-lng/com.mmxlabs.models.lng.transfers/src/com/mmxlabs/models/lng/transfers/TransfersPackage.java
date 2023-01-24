@@ -272,13 +272,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_AGREEMENT__PREFERRED_PBS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT__CODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Transfer Agreement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -789,6 +798,17 @@ public interface TransfersPackage extends EPackage {
 	EReference getTransferAgreement_PreferredPBs();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCode <em>Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Code</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getCode()
+	 * @see #getTransferAgreement()
+	 * @generated
+	 */
+	EAttribute getTransferAgreement_Code();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateFromBU() <em>Get Agreement Or Delegate From BU</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1195,6 +1215,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TRANSFER_AGREEMENT__PREFERRED_PBS = eINSTANCE.getTransferAgreement_PreferredPBs();
+		/**
+		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_AGREEMENT__CODE = eINSTANCE.getTransferAgreement_Code();
 		/**
 		 * The meta object literal for the '<em><b>Get Agreement Or Delegate From BU</b></em>' operation.
 		 * <!-- begin-user-doc -->

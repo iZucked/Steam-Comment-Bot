@@ -48,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getFromBU <em>From BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getToBU <em>To BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPreferredPBs <em>Preferred PBs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -229,6 +230,26 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @ordered
 	 */
 	protected EList<PreferredPricingBasesWrapper> preferredPBs;
+
+	/**
+	 * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String code = CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -621,6 +642,29 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCode(String newCode) {
+		String oldCode = code;
+		code = newCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__CODE, oldCode, code));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -684,6 +728,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return basicGetToBU();
 			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
 				return getPreferredPBs();
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				return getCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -728,6 +774,9 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				getPreferredPBs().clear();
 				getPreferredPBs().addAll((Collection<? extends PreferredPricingBasesWrapper>)newValue);
 				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				setCode((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -770,6 +819,9 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
 				getPreferredPBs().clear();
 				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				setCode(CODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -802,6 +854,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return isSetToBU();
 			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
 				return preferredPBs != null && !preferredPBs.isEmpty();
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -842,6 +896,8 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 		result.append(pricingBasis);
 		result.append(", bufferDays: ");
 		if (bufferDaysESet) result.append(bufferDays); else result.append("<unset>");
+		result.append(", code: ");
+		result.append(code);
 		result.append(')');
 		return result.toString();
 	}

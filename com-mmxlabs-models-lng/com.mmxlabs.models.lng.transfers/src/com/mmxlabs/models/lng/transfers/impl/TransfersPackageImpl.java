@@ -302,6 +302,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransferAgreement_Code() {
+		return (EAttribute)transferAgreementEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getTransferAgreement__GetAgreementOrDelegateFromBU() {
 		return transferAgreementEClass.getEOperations().get(0);
 	}
@@ -610,6 +620,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__FROM_BU);
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__TO_BU);
 		createEReference(transferAgreementEClass, TRANSFER_AGREEMENT__PREFERRED_PBS);
+		createEAttribute(transferAgreementEClass, TRANSFER_AGREEMENT__CODE);
 		createEOperation(transferAgreementEClass, TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_FROM_BU);
 		createEOperation(transferAgreementEClass, TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_TO_BU);
 
@@ -697,6 +708,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEReference(getTransferAgreement_FromBU(), theCommercialPackage.getBusinessUnit(), null, "fromBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferAgreement_ToBU(), theCommercialPackage.getBusinessUnit(), null, "toBU", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferAgreement_PreferredPBs(), theCommercialPackage.getPreferredPricingBasesWrapper(), null, "preferredPBs", null, 0, -1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferAgreement_Code(), ecorePackage.getEString(), "code", null, 0, 1, TransferAgreement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getTransferAgreement__GetAgreementOrDelegateFromBU(), theCommercialPackage.getBusinessUnit(), "getAgreementOrDelegateFromBU", 0, 1, IS_UNIQUE, IS_ORDERED);
 

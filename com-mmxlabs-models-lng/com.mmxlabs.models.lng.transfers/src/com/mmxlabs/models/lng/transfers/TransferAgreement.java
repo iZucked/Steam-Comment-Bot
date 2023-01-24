@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredPBs <em>Preferred PBs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement()
@@ -336,6 +337,28 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	EList<PreferredPricingBasesWrapper> getPreferredPBs();
+
+	/**
+	 * Returns the value of the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Code</em>' attribute.
+	 * @see #setCode(String)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_Code()
+	 * @model
+	 * @generated
+	 */
+	String getCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCode <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Code</em>' attribute.
+	 * @see #getCode()
+	 * @generated
+	 */
+	void setCode(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

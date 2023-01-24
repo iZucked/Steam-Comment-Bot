@@ -62,6 +62,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			addBufferDaysPropertyDescriptor(object);
 			addFromBUPropertyDescriptor(object);
 			addToBUPropertyDescriptor(object);
+			addCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -188,7 +189,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_TransferAgreement_pricingBasis_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferAgreement_pricingBasis_feature", "_UI_TransferAgreement_type"),
+				 getString("_UI_TransferAgreement_pricingBasis_description"),
 				 TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
 				 true,
 				 false,
@@ -210,7 +211,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_TransferAgreement_bufferDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferAgreement_bufferDays_feature", "_UI_TransferAgreement_type"),
+				 getString("_UI_TransferAgreement_bufferDays_description"),
 				 TransfersPackage.Literals.TRANSFER_AGREEMENT__BUFFER_DAYS,
 				 true,
 				 false,
@@ -232,7 +233,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_TransferAgreement_fromBU_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferAgreement_fromBU_feature", "_UI_TransferAgreement_type"),
+				 getString("_UI_TransferAgreement_fromBU_description"),
 				 TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU,
 				 true,
 				 false,
@@ -254,12 +255,34 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_TransferAgreement_toBU_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferAgreement_toBU_feature", "_UI_TransferAgreement_type"),
+				 getString("_UI_TransferAgreement_toBU_description"),
 				 TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_BU,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferAgreement_code_feature"),
+				 getString("_UI_TransferAgreement_code_description"),
+				 TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -337,6 +360,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_AGREEMENT__COMPANY_STATUS:
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:

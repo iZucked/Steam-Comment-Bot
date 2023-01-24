@@ -38,13 +38,14 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS,//
-				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_BU,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__BUFFER_DAYS, //
+				TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM
 				
 		);
@@ -84,6 +85,10 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS) //
+				.makeRow() //
+				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE) //
 				.makeRow() //
 				.make() //
 		;
