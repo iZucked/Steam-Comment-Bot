@@ -65,7 +65,6 @@ public final class MarketabilityUtils {
 			}
 		}
 
-		final Schedule schedule = null;
 		for (Cargo c : cargoModel.getCargoes()) {
 			Slot<?> slot1 = c.getSortedSlots().get(0);
 			Slot<?> slot2 = c.getSortedSlots().get(1);

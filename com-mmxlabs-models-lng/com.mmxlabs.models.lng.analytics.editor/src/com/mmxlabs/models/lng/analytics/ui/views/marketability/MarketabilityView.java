@@ -99,9 +99,9 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	@Override
 	public void createPartControl(final Composite parent) {
 		this.parent = parent;
-
+		
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
-		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		mainTableComponent = new MainTableCompoment();
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);

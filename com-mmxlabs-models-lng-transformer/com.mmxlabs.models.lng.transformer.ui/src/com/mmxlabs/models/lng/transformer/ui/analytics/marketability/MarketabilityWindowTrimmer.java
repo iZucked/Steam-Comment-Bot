@@ -66,6 +66,9 @@ public class MarketabilityWindowTrimmer implements ICustomTimeWindowTrimmer {
 						int newStart = Math.max(tw.getInclusiveStart(), tw.getExclusiveEnd() - 1 - shift);
 						record.setSlotFeasibleTimeWindow(slot, new TimeWindow(newStart, newStart + 1));
 					} else if (mode == Mode.SET) {
+						if(shift < tw.getInclusiveStart() || shift >= tw.getExclusiveEnd()) {
+							record.setSlotFeasibleTimeWindow(slot, new TimeWindow(tw.getInclusiveStart(), tw.getInclusiveStart()));
+						}
 						record.setSlotFeasibleTimeWindow(slot, new TimeWindow(shift, shift + 1));
 					}
 

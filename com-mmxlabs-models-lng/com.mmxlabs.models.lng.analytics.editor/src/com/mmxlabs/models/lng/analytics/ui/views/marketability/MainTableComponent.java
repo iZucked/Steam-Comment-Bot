@@ -19,11 +19,13 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
@@ -32,6 +34,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -68,13 +72,23 @@ public class MainTableCompoment {
 	}
 
 	public void createControls(final Composite mainParent, final MarketabilityView breakEvenModellerView) {
-
+		final Composite vesselSpeedComposite = new Composite(mainParent, SWT.NONE);
+		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+		final Label lbl = new Label(vesselSpeedComposite, SWT.NONE);
+		lbl.setText("Vessel speed:");
+		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+		final Text vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
+		vesselSpeedText.setEditable(true);
+		vesselSpeedText.setTextLimit(2);
+		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
+		
 		Control control = createViewer(mainParent);
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(300, 300).grab(true, true).create());
 	}
 
 	private Control createViewer(final Composite parent) {
-		tableViewer = new GridTreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer = new GridTreeViewer(parent, SWT.BORDER|SWT.H_SCROLL | SWT.V_SCROLL);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 
 		assert tableViewer != null;

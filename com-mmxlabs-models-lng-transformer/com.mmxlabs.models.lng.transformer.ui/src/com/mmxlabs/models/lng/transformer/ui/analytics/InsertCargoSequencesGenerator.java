@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -38,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalStartRequirement;
@@ -137,7 +139,7 @@ public class InsertCargoSequencesGenerator {
 		}
 		assert nextEvent != null;
 
-		clampVesselSpeed(vesselCharter, OptimiserUnitConvertor.convertToInternalSpeed(16));
+		clampVesselSpeed(vesselCharter, OptimiserUnitConvertor.convertToInternalSpeed(17));
 		ISequenceElement start = startEndRequirementProvider.getStartElement(targetResource);
 		ISequenceElement end = startEndRequirementProvider.getEndElement(targetResource);
 
@@ -177,7 +179,7 @@ public class InsertCargoSequencesGenerator {
 		IPortSlot portSlot = portSlotProvider.getPortSlot(load);
 		SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(portSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
 		int loadTime = dateHelper.convertTime(visit.getStart());
-		trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SET, loadTime);
+		//trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SET, loadTime);
 
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
@@ -189,7 +191,7 @@ public class InsertCargoSequencesGenerator {
 			throw new IllegalArgumentException();
 		}
 		Vessel oVessel = (Vessel) vessel;
-		oVessel.setMinSpeed(maxSpeed);
+		//oVessel.setMinSpeed(maxSpeed);
 		oVessel.setMaxSpeed(maxSpeed);
 	}
 
