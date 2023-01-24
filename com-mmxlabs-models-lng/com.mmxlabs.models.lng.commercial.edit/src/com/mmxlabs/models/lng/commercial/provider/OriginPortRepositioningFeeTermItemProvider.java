@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -55,6 +55,7 @@ public class OriginPortRepositioningFeeTermItemProvider extends RepositioningFee
 			addIncludeCanalPropertyDescriptor(object);
 			addIncludeCanalTimePropertyDescriptor(object);
 			addLumpSumPriceExpressionPropertyDescriptor(object);
+			addPriceOnLastLNGPricePropertyDescriptor(object);
 			addOriginPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -193,6 +194,28 @@ public class OriginPortRepositioningFeeTermItemProvider extends RepositioningFee
 	}
 
 	/**
+	 * This adds a property descriptor for the Price On Last LNG Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceOnLastLNGPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyTerm_priceOnLastLNGPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyTerm_priceOnLastLNGPrice_feature", "_UI_NotionalJourneyTerm_type"),
+				 CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Origin Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -256,6 +279,7 @@ public class OriginPortRepositioningFeeTermItemProvider extends RepositioningFee
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL:
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL_TIME:
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

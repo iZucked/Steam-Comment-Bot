@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.repo.general;
@@ -22,11 +22,7 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.scenario.service.model.util.encryption.EncryptionUtils;
 
-import okhttp3.MediaType;
-
 public abstract class AbstractGeneralDataRepository<T> implements IDataRepository<T> {
-
-	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	private final @NonNull TypeRecord type;
 
@@ -60,7 +56,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	public void registerLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.add(versionConsumer);
 	}
-	
+
 	@Override
 	public void deregisterLocalVersionListener(final Runnable versionConsumer) {
 		newLocalVersionCallbacks.remove(versionConsumer);
@@ -128,7 +124,7 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	public boolean hasUpstreamVersion(final String uuid) {
 		return getLocalVersions().stream() //
 				.anyMatch(v -> Objects.equals(uuid, v.getIdentifier())) //
-				;
+		;
 	}
 
 	@Override

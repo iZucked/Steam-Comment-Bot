@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.tests;
 
 import java.time.YearMonth;
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -252,7 +253,7 @@ public class IndexConversionsTest {
 		double unitPrice = 0.0;
 		if (series instanceof final SeriesOperatorExpression opExpr) {
 			final @NonNull ISeries opSeries = opExpr.evaluate();
-			final Number evaluate = opSeries.evaluate(Hours.between(PriceIndexUtils.dateZero, YearMonth.now()));
+			final Number evaluate = opSeries.evaluate(Hours.between(PriceIndexUtils.dateZero, YearMonth.now()), Collections.emptyMap());
 			unitPrice = evaluate.doubleValue();
 		}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,6 +32,8 @@ public class SplitMonthSeries implements ISeries {
 	private final int splitPoint;
 	private final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime;
 
+	private final Set<String> parameters;
+
 	private int[] changePoints;
 
 	public SplitMonthSeries(@NonNull final SeriesParserData seriesParserData, final ISeries series1, final ISeries series2, final int splitPoint) {
@@ -41,6 +44,10 @@ public class SplitMonthSeries implements ISeries {
 		this.mapper = seriesParserData.calendarMonthMapper;
 		this.earliestAndLatestTime = seriesParserData.earliestAndLatestTime;
 
+		parameters = new HashSet<>();
+		parameters.addAll(series1.getParameters());
+		parameters.addAll(series2.getParameters());
+		
 		if (earliestAndLatestTime == null) {
 			this.changePoints = NONE;
 		} else {
@@ -85,16 +92,26 @@ public class SplitMonthSeries implements ISeries {
 	}
 
 	@Override
+	public boolean isParameterised() {
+		return series1.isParameterised() || series2.isParameterised();
+	}
+
+	@Override
+	public Set<String> getParameters() {
+		return parameters;
+	}
+
+	@Override
 	public int[] getChangePoints() {
 
 		return changePoints;
 	}
 
 	@Override
-	public Number evaluate(final int point) {
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
 		Number value = null;
 
-		final int currentMonth = mapper.mapChangePointToMonth(point);
+		final int currentMonth = mapper.mapChangePointToMonth(timePoint);
 
 		// Should be the start of the month in 'unit' (hour)
 		final int monthStartPoint = mapper.mapMonthToChangePoint(currentMonth);
@@ -103,11 +120,11 @@ public class SplitMonthSeries implements ISeries {
 		final int actualSplitPoint = monthStartPoint + daysToPoint(splitPoint - 1);
 
 		// Use first curve
-		if (point < actualSplitPoint) {
-			value = series1.evaluate(point);
+		if (timePoint < actualSplitPoint) {
+			value = series1.evaluate(timePoint, params);
 		} else {
 			// Use second curve
-			value = series2.evaluate(point);
+			value = series2.evaluate(timePoint, params);
 		}
 
 		return value;

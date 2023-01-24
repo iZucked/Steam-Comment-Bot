@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.util;
@@ -73,8 +73,8 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AnalyticsSwitch<Adapter> modelSwitch =
-		new AnalyticsSwitch<Adapter>() {
+	protected AnalyticsSwitch<@Nullable Adapter> modelSwitch =
+		new AnalyticsSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseAnalyticsModel(AnalyticsModel object) {
 				return createAnalyticsModelAdapter();

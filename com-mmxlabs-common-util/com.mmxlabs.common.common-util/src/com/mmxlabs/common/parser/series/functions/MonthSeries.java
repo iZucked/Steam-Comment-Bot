@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
@@ -7,6 +7,8 @@ package com.mmxlabs.common.parser.series.functions;
 import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -63,8 +65,18 @@ public class MonthSeries implements ISeries {
 	}
 
 	@Override
-	public Number evaluate(final int point) {
-		final int newTimePoint = mapper.mapTimePoint(point, ldt -> MonthFunctionASTNode.mapTime(ldt, month));
-		return shiftee.evaluate(newTimePoint);
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+		final int newTimePoint = mapper.mapTimePoint(timePoint, ldt -> MonthFunctionASTNode.mapTime(ldt, month));
+		return shiftee.evaluate(newTimePoint, params);
+	}
+
+	@Override
+	public boolean isParameterised() {
+		return shiftee.isParameterised();
+	}
+
+	@Override
+	public @NonNull Set<String> getParameters() {
+		return shiftee.getParameters();
 	}
 }

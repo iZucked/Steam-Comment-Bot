@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.time.YearMonth;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,6 +17,8 @@ import java.util.Set;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
@@ -27,6 +30,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -45,12 +50,15 @@ import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -82,6 +90,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
@@ -93,6 +102,7 @@ import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -192,6 +202,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				return !(element instanceof PricingBasis && !isPricingBasesEnabled);
 			}
 		});
+
 		return result;
 	}
 
@@ -304,6 +315,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		};
 		getMenuManager().add(unitAction);
 		getMenuManager().update(true);
+		createDeleteColumnsContextMenuListener();
 	}
 
 	private void createSeriesParsers() {
@@ -319,7 +331,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	private void updateDateRange(final PricingModel pricingModel) {
-
 		for (final DataType dt : DataType.values()) {
 
 			@SuppressWarnings("unchecked")
@@ -331,7 +342,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 				if (curve.isSetExpression()) {
 					continue;
 				}
-
+				minDisplayDate = null;
+				maxDisplayDate = null;
 				for (final YearMonthPoint pt : curve.getPoints()) {
 					final YearMonth d = pt.getDate();
 					if (minDisplayDate == null || minDisplayDate.isAfter(d)) {
@@ -343,6 +355,88 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 			}
 		}
+	}
+	private void createDeleteColumnsContextMenuListener() {
+		MenuManager mgr = new MenuManager();
+		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
+			Menu menu;
+
+			@Override
+			public void menuDetected(MenuDetectEvent e) {
+				final Point relativeMousePos = scenarioViewer.getGrid().toControl(new Point(e.x, e.y));
+				final GridColumn column = scenarioViewer.getGrid().getColumn(relativeMousePos);
+				if (column == null) {
+					return;
+				}
+				if (menu == null) {
+					menu = mgr.createContextMenu(scenarioViewer.getGrid());
+				}
+				if (column.getData("date") instanceof @NonNull YearMonth dateLimit) {
+					
+					mgr.removeAll();
+					{
+						final IContributionItem[] items = mgr.getItems();
+						mgr.removeAll();
+						for (final IContributionItem mItem : items) {
+							mItem.dispose();
+						}
+					}
+					if (minDisplayDate == null) {
+						return;
+					}
+					final String DELETE_COLS_NAME = "Delete column and earlier";
+					mgr.add(new RunnableAction(DELETE_COLS_NAME, () -> {
+						CompoundCommand removeColumnRangeCommand = createRemoveYearMonthRangeCommand(minDisplayDate, dateLimit);
+						removeColumnRangeCommand.setLabel(DELETE_COLS_NAME);
+						
+						if (!removeColumnRangeCommand.isEmpty()) {
+							getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(removeColumnRangeCommand);
+							minDisplayDate = dateLimit.plusMonths(1);
+							((IndexTableViewer) viewer).redisplayDateRange(null);
+						}
+						
+
+					}));
+					menu.setVisible(true);
+				}
+			}
+		});
+	}
+	private CompoundCommand createRemoveYearMonthFromCurvesCommand(final @NonNull YearMonth yearMonth, final Iterable<? extends AbstractYearMonthCurve> curves) {
+		if (curves == null) {
+			return new CompoundCommand();
+		}
+		CompoundCommand removeYearMonthCommand = new CompoundCommand();
+		curves.forEach(curve -> {
+			if (curve == null)
+				return;
+			curve.getPoints().stream().filter(ym -> yearMonth.equals(ym.getDate())).limit(1)
+					.forEach(ymPoint -> removeYearMonthCommand.append(RemoveCommand.create(getEditingDomain(), curve, PricingPackage.eINSTANCE.getYearMonthPointContainer_Points(), Collections.singletonList(ymPoint))));
+		});
+		return removeYearMonthCommand;
+	}
+
+	private CompoundCommand createRemoveYearMonthRangeCommand(final @NonNull YearMonth lowerInc, final @NonNull YearMonth upperInc) {
+		CompoundCommand removeCols = new CompoundCommand();
+		for (YearMonth m = lowerInc; !upperInc.isBefore(m); m = m.plusMonths(1)) {
+			CompoundCommand removeColumn = createRemoveColumnCommand(m);
+			appendIfNotEmpty(removeCols, removeColumn);
+		}
+		return removeCols;
+	}
+
+	private static void appendIfNotEmpty(CompoundCommand target, CompoundCommand cmd) {
+		if(cmd.isEmpty())
+			return;
+		target.append(cmd);
+	}
+	private CompoundCommand createRemoveColumnCommand(final @NonNull YearMonth m) {
+		CompoundCommand deleteCol = new CompoundCommand("Delete Year/Month Column");
+		appendIfNotEmpty(deleteCol, createRemoveYearMonthFromCurvesCommand(m, pricingModel.getBunkerFuelCurves()));
+		appendIfNotEmpty(deleteCol, createRemoveYearMonthFromCurvesCommand(m, pricingModel.getCharterCurves()));
+		appendIfNotEmpty(deleteCol, createRemoveYearMonthFromCurvesCommand(m, pricingModel.getCurrencyCurves()));
+		appendIfNotEmpty(deleteCol, createRemoveYearMonthFromCurvesCommand(m, pricingModel.getCommodityCurves()));
+		return deleteCol;
 	}
 
 	protected class IndexTableViewer extends ScenarioTableViewer {
@@ -364,7 +458,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 			super(parent, style, part);
 			eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 			eventBroker.subscribe(PricingImportConstants.LOADED_PRICE_CURVES, loadPriceCurvesEventHandler);
+
+			
 		}
+
+		
 
 		@Override
 		public void dispose() {
@@ -406,7 +504,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 					YearMonth localDate = minDisplayDate;
 					while (!localDate.isAfter(maxDisplayDate)) {
-						addColumn(localDate, true);
+						addColumn(localDate, false);
 						localDate = localDate.plusMonths(1);
 					}
 				}
@@ -427,15 +525,17 @@ public class IndexPane extends ScenarioTableViewerPane {
 		@Override
 		protected void doCommandStackChanged() {
 			transformer.update(pricingModel);
+			updateDateRange(pricingModel);
+			redisplayDateRange(null);
 			super.doCommandStackChanged();
 		}
 
 		private void addColumn(final YearMonth cal, final boolean sortable) {
-
 			final String date = String.format("%4d-%02d", cal.getYear(), (cal.getMonthValue()));
 			final GridViewerColumn col = addSimpleColumn(date, sortable);
-			col.getColumn().setData("date", cal);
 
+			col.getColumn().setMoveable(false);
+			col.getColumn().setData("date", cal);
 			final ICellRenderer renderer = new ICellRenderer() {
 
 				@Override
@@ -473,7 +573,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
 			col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
-
 			final ICellManipulator manipulator = new ICellManipulator() {
 
 				@SuppressWarnings("unchecked")
@@ -627,13 +726,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 			});
 		}
+
+		
 	}
 
 	/**
 	 */
 	@Override
 	protected void enableOpenListener() {
-
 		// Enable the tree controls on this column
 		scenarioViewer.getGrid().addMouseListener(new MouseAdapter() {
 
@@ -705,7 +805,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							// Pricing model should not have lazy curves
 							final ISeries series = seriesParser.getSeries(name).get();
 							if (series != null) {
-								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
+								return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate), Collections.emptyMap());
 							}
 						} catch (final Exception e) {
 							// Ignore, anything from series parser should be picked up via validation

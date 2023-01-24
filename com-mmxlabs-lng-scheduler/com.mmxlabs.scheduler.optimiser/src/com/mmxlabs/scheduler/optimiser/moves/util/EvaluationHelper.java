@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.paperdeals.BasicPaperDealAllocationEntry;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
-import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintChecker;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -99,7 +98,8 @@ public class EvaluationHelper {
 	}
 
 	/**
-	 * Instruct the constraint checkers to accept the given sequence as the valid starting state.
+	 * Instruct the constraint checkers to accept the given sequence as the valid
+	 * starting state.
 	 * 
 	 * @param currentRawSequences
 	 * @param currentFullSequences
@@ -136,7 +136,6 @@ public class EvaluationHelper {
 		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-
 			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
@@ -148,7 +147,8 @@ public class EvaluationHelper {
 	}
 
 	/**
-	 * To be used only for Manual Sandbox, when user expects results similar to manual rewiring
+	 * To be used only for Manual Sandbox, when user expects results similar to
+	 * manual rewiring
 	 * 
 	 * @param currentFullSequences
 	 * @param currentChangedResources
@@ -224,7 +224,7 @@ public class EvaluationHelper {
 				expressionManager.setPriceCurve(key.getIndexName().toLowerCase(), key.seriesType(), priceExpressionProvider.getExpression(key));
 			}
 			expressionManager.initialiseAllPricingData();
-			
+
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 				if (!evaluationProcess.evaluate(sequences, evaluationState)) {
@@ -233,7 +233,7 @@ public class EvaluationHelper {
 			}
 			final ProfitAndLossSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
 			assert volumeAllocatedSequences != null;
-			
+
 			return Pair.of(volumeAllocatedSequences, evaluationState);
 		} catch (Exception e) {
 			return null;
@@ -283,7 +283,7 @@ public class EvaluationHelper {
 
 		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences) {
 			for (final VoyagePlanRecord p : scheduledSequence.getVoyagePlanRecords()) {
-				sumPNL += p.getProfitAndLoss();
+				sumPNL = Math.addExact(sumPNL, p.getProfitAndLoss());
 			}
 		}
 
@@ -291,10 +291,10 @@ public class EvaluationHelper {
 			assert element != null;
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			assert portSlot != null;
-			sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
+			sumPNL = Math.addExact(sumPNL, scheduledSequences.getUnusedSlotGroupValue(portSlot));
 		}
 
-		sumPNL += computePaperPnL(scheduledSequences);
+		sumPNL = Math.addExact(sumPNL, computePaperPnL(scheduledSequences));
 
 		return sumPNL;
 	}

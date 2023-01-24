@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.util;
@@ -148,6 +148,8 @@ public class CharterContractBuilder {
 	}
 
 	public class BallastBonusMaker {
+		
+		public static final String LNG_ONLY = "<LNG_LAST_PRICE_ONLY>";
 		private final SimpleBallastBonusContainer ballastBonusContainer;
 
 		public BallastBonusMaker() {
@@ -185,7 +187,11 @@ public class CharterContractBuilder {
 
 			term.getRedeliveryPorts().addAll(redeliveryPorts);
 			term.getReturnPorts().addAll(returnPorts);
-			term.setFuelPriceExpression(fuelExpression);
+			if (LNG_ONLY.equals(fuelExpression)) {
+				term.setPriceOnLastLNGPrice(true);
+			} else {
+				term.setFuelPriceExpression(fuelExpression);
+			}
 			term.setHirePriceExpression(hireExpression);
 			term.setIncludeCanal(includeCanalFees);
 			term.setIncludeCanalTime(includeCanalTime);

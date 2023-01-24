@@ -1,18 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractAnnotation;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IRepositioningFeeTerm;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class DefaultCharterContract implements ICharterContract {
@@ -26,10 +29,11 @@ public class DefaultCharterContract implements ICharterContract {
 	}
 
 	@Override
-	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final int vesselStartTime, final IPort firstLoadPort) {
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final VesselStartState vesselStartState,
+			PreviousHeelRecord heelRecord) {
 		for (final IBallastBonusTerm term : bbTerms) {
-			if (term.match(portTimesRecord, vesselCharter, vesselStartTime, firstLoadPort)) {
-				return term.calculateCost(portTimesRecord, vesselCharter, vesselStartTime, firstLoadPort);
+			if (term.match(portTimesRecord, vesselCharter, vesselStartState)) {
+				return term.calculateCost(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 			}
 		}
 		return 0L;
@@ -46,15 +50,15 @@ public class DefaultCharterContract implements ICharterContract {
 	}
 
 	@Override
-	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter, final int vesselStartTime,
-			final IPort firstLoadPort) {
+	public @Nullable ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselCharter vesselCharter,
+			final VesselStartState vesselStartState, PreviousHeelRecord heelRecord) {
 
 		final CharterContractAnnotation charterContractAnnotation = new CharterContractAnnotation();
 		for (final IBallastBonusTerm term : bbTerms) {
-			if (term.match(portTimesRecord, vesselCharter, vesselStartTime, firstLoadPort)) {
-				charterContractAnnotation.cost = term.calculateCost(portTimesRecord, vesselCharter, vesselStartTime, firstLoadPort);
+			if (term.match(portTimesRecord, vesselCharter, vesselStartState)) {
+				charterContractAnnotation.cost = term.calculateCost(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 				charterContractAnnotation.matchedPort = portSlot.getPort();
-				charterContractAnnotation.termAnnotation = term.annotate(portTimesRecord, vesselCharter, vesselStartTime, firstLoadPort);
+				charterContractAnnotation.termAnnotation = term.annotate(portTimesRecord, vesselCharter, vesselStartState, heelRecord);
 				break;
 			}
 		}
@@ -62,7 +66,7 @@ public class DefaultCharterContract implements ICharterContract {
 	}
 
 	@Override
-	public ICharterContractAnnotation annotateRF(final IPortTimesRecord portTimesRecord, final IVesselCharter vesselCharter) {
+	public @Nullable ICharterContractAnnotation annotateRF(final IPortTimesRecord portTimesRecord, final IVesselCharter vesselCharter) {
 		final CharterContractAnnotation charterContractAnnotation = new CharterContractAnnotation();
 		for (final IRepositioningFeeTerm term : rfTerms) {
 			if (term.match(portTimesRecord, vesselCharter)) {

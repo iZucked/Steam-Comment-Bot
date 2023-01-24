@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.provider;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
  * @generated
  */
 public class CooldownPriceItemProvider
-	extends PortsExpressionMapItemProvider {
+	extends CooldownPriceEntryItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -47,31 +47,8 @@ public class CooldownPriceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLumpsumPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Lumpsum feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLumpsumPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CooldownPrice_lumpsum_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_lumpsum_feature", "_UI_CooldownPrice_type"),
-				 PricingPackage.Literals.COOLDOWN_PRICE__LUMPSUM,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -93,7 +70,7 @@ public class CooldownPriceItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CooldownPrice)object).getExpression();
+		String label = ((CooldownPrice)object).getLumpsumExpression();
 		return label == null || label.length() == 0 ?
 			getString("_UI_CooldownPrice_type") :
 			getString("_UI_CooldownPrice_type") + " " + label;
@@ -109,12 +86,6 @@ public class CooldownPriceItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(CooldownPrice.class)) {
-			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 

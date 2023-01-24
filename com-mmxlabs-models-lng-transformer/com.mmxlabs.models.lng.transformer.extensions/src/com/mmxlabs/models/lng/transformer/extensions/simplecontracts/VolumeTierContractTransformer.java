@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.simplecontracts;
@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
@@ -63,13 +63,13 @@ public class VolumeTierContractTransformer implements IContractTransformer, ISlo
 	private VolumeTierContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		if (priceInfo instanceof final VolumeTierPriceParameters volTierPriceInfo) {
 
-			Pair<ICurve, IIntegerIntervalCurve> lowExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, volTierPriceInfo.getLowExpression());
+			Pair<IParameterisedCurve, IIntegerIntervalCurve> lowExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, volTierPriceInfo.getLowExpression());
 			if (lowExpressionCurve == null) {
-				lowExpressionCurve = dateHelper.createConstantCurveAndIntervals(0);
+				lowExpressionCurve = dateHelper.createConstantParameterisedCurveAndIntervals(0);
 			}
-			Pair<ICurve, IIntegerIntervalCurve> highExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, volTierPriceInfo.getHighExpression());
+			Pair<IParameterisedCurve, IIntegerIntervalCurve> highExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, volTierPriceInfo.getHighExpression());
 			if (highExpressionCurve == null) {
-				highExpressionCurve = dateHelper.createConstantCurveAndIntervals(0);
+				highExpressionCurve = dateHelper.createConstantParameterisedCurveAndIntervals(0);
 			}
 
 			final long threshold = OptimiserUnitConvertor.convertToInternalVolume(volTierPriceInfo.getThreshold());
@@ -125,13 +125,13 @@ public class VolumeTierContractTransformer implements IContractTransformer, ISlo
 		if (oContract != null) {
 			final VolumeTierSlotParams params = SlotContractParamsHelper.findSlotContractParams(modelSlot, VolumeTierSlotParams.class, VolumeTierPriceParameters.class);
 			if (params != null && params.isOverrideContract()) {
-				Pair<ICurve, IIntegerIntervalCurve> lowExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, params.getLowExpression());
+				Pair<IParameterisedCurve, IIntegerIntervalCurve> lowExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, params.getLowExpression());
 				if (lowExpressionCurve == null) {
-					lowExpressionCurve = dateHelper.createConstantCurveAndIntervals(0);
+					lowExpressionCurve = dateHelper.createConstantParameterisedCurveAndIntervals(0);
 				}
-				Pair<ICurve, IIntegerIntervalCurve> highExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, params.getHighExpression());
+				Pair<IParameterisedCurve, IIntegerIntervalCurve> highExpressionCurve = dateHelper.createCurveAndIntervals(commodityIndices, params.getHighExpression());
 				if (highExpressionCurve == null) {
-					highExpressionCurve = dateHelper.createConstantCurveAndIntervals(0);
+					highExpressionCurve = dateHelper.createConstantParameterisedCurveAndIntervals(0);
 				}
 
 				final long threshold = OptimiserUnitConvertor.convertToInternalVolume(params.getThreshold());

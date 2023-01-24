@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -64,7 +64,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage
  * @generated
  */
-public class ScheduleSwitch<@Nullable T> extends Switch<T> {
+public class ScheduleSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -421,24 +421,6 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: {
-				LumpSumContractDetails lumpSumContractDetails = (LumpSumContractDetails)theEObject;
-				T result = caseLumpSumContractDetails(lumpSumContractDetails);
-				if (result == null) result = caseMatchingContractDetails(lumpSumContractDetails);
-				if (result == null) result = caseUUIDObject(lumpSumContractDetails);
-				if (result == null) result = caseMMXObject(lumpSumContractDetails);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: {
-				NotionalJourneyContractDetails notionalJourneyContractDetails = (NotionalJourneyContractDetails)theEObject;
-				T result = caseNotionalJourneyContractDetails(notionalJourneyContractDetails);
-				if (result == null) result = caseMatchingContractDetails(notionalJourneyContractDetails);
-				if (result == null) result = caseUUIDObject(notionalJourneyContractDetails);
-				if (result == null) result = caseMMXObject(notionalJourneyContractDetails);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: {
 				CharterAvailableToEvent charterAvailableToEvent = (CharterAvailableToEvent)theEObject;
 				T result = caseCharterAvailableToEvent(charterAvailableToEvent);
@@ -585,6 +567,12 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				TransferRecordPNLDetails transferRecordPNLDetails = (TransferRecordPNLDetails)theEObject;
 				T result = caseTransferRecordPNLDetails(transferRecordPNLDetails);
 				if (result == null) result = caseGeneralPNLDetails(transferRecordPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SANDBOX_REFERENCE: {
+				SandboxReference sandboxReference = (SandboxReference)theEObject;
+				T result = caseSandboxReference(sandboxReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1163,36 +1151,6 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Contract Details</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLumpSumContractDetails(LumpSumContractDetails object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Contract Details</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNotionalJourneyContractDetails(NotionalJourneyContractDetails object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Charter Available To Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1429,6 +1387,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTransferRecordPNLDetails(TransferRecordPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sandbox Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sandbox Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSandboxReference(SandboxReference object) {
 		return null;
 	}
 

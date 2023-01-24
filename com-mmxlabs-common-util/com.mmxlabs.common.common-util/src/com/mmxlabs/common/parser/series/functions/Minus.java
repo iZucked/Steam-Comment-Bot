@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
+
+import java.util.Map;
+import java.util.Set;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
@@ -15,8 +18,18 @@ public class Minus implements ISeries {
 	}
 
 	@Override
-	public Number evaluate(int point) {
-		Number n = argument.evaluate(point);
+	public boolean isParameterised() {
+		return argument.isParameterised();
+	}
+
+	@Override
+	public Set<String> getParameters() {
+		return argument.getParameters();
+	}
+
+	@Override
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+		Number n = argument.evaluate(timePoint, params);
 		if (n instanceof Double) {
 			return -n.doubleValue();
 		} else if (n instanceof Integer) {

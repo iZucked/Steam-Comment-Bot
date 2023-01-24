@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
@@ -326,7 +326,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	 */
 	public void setupCooldown(final double value) {
 
-		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice(Double.toString(value), false, scenarioModelBuilder.getPortModelBuilder().getPortModel().getPorts());
+		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice(null, Double.toString(value), scenarioModelBuilder.getPortModelBuilder().getPortModel().getPorts());
 	}
 
 	public ScenarioModelBuilder getScenarioModelBuilder() {

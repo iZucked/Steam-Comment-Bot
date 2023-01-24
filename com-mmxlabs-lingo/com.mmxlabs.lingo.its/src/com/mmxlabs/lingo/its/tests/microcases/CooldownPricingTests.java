@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -46,11 +46,11 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 
 		// Generic flat rate
 		final PortGroup portGroup = scenarioModelBuilder.getPortModelBuilder().makePortGroup("all-ports", scenarioModelBuilder.getPortModelBuilder().getPortModel().getPorts());
-		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", true, Collections.singleton(portGroup));
+		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", null, Collections.singleton(portGroup));
 
 		// Set specific rate
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
-		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", true, Collections.singleton(port1));
+		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", null, Collections.singleton(port1));
 		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -88,10 +88,10 @@ public class CooldownPricingTests extends AbstractMicroTestCase {
 
 		// Set specific rate
 		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
-		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", true, Collections.singleton(port1));
+		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("200000", null, Collections.singleton(port1));
 		// Generic flat rate
 		final PortGroup portGroup = scenarioModelBuilder.getPortModelBuilder().makePortGroup("all-ports", scenarioModelBuilder.getPortModelBuilder().getPortModel().getPorts());
-		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", true, Collections.singleton(portGroup));
+		scenarioModelBuilder.getCostModelBuilder().createCooldownPrice("100000", null, Collections.singleton(portGroup));
 
 		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 

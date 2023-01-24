@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +21,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -62,7 +65,7 @@ public class TestPriceExpressionContract {
 	@Test
 	public void testCalculateSimpleUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
-		final ICurve curve = mock(ICurve.class);
+		final IParameterisedCurve curve = mock(IParameterisedCurve.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
@@ -76,16 +79,16 @@ public class TestPriceExpressionContract {
 		when(port.getTimeZoneId()).thenReturn("UTC");
 
 		// tell the ICurve mock to return specified values at given points
-		when(curve.getValueAtPoint(t1)).thenReturn(p1);
-		when(curve.getValueAtPoint(t2)).thenReturn(p2);
+		when(curve.getValueAtPoint(t1, Collections.emptyMap())).thenReturn(p1);
+		when(curve.getValueAtPoint(t2, Collections.emptyMap())).thenReturn(p2);
 
 		// calculate the unit price at times t1 and t2
-		final int price1 = contract.calculateSimpleUnitPrice(t1, port);
-		final int price2 = contract.calculateSimpleUnitPrice(t2, port);
+		final int price1 = contract.calculateSimpleUnitPrice(t1, port, Collections.emptyMap());
+		final int price2 = contract.calculateSimpleUnitPrice(t2, port, Collections.emptyMap());
 
 		// make sure the mock was evaluated at the right points and nowhere else
-		verify(curve).getValueAtPoint(t1);
-		verify(curve).getValueAtPoint(t2);
+		verify(curve).getValueAtPoint(t1, Collections.emptyMap());
+		verify(curve).getValueAtPoint(t2, Collections.emptyMap());
 		verifyNoMoreInteractions(curve);
 
 		// check that the returned results are correct
@@ -96,7 +99,7 @@ public class TestPriceExpressionContract {
 	@Test
 	public void testCalculateLoadUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
-		final ICurve curve = mock(ICurve.class);
+		final IParameterisedCurve curve = mock(IParameterisedCurve.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
@@ -107,8 +110,8 @@ public class TestPriceExpressionContract {
 		final int loadPricingDate = 90;
 
 		// tell the ICurve mock to return specified values at given points
-		when(curve.getValueAtPoint(loadTime)).thenReturn(priceAtLoadTime);
-		when(curve.getValueAtPoint(loadPricingDate)).thenReturn(oriceAtPricingDate);
+		when(curve.getValueAtPoint(loadTime, Collections.emptyMap())).thenReturn(priceAtLoadTime);
+		when(curve.getValueAtPoint(loadPricingDate, Collections.emptyMap())).thenReturn(oriceAtPricingDate);
 
 		final ILoadSlot loadSlotWithPricingDate = mock(ILoadSlot.class);
 		when(loadSlotWithPricingDate.getPricingDate()).thenReturn(loadPricingDate);
@@ -145,8 +148,9 @@ public class TestPriceExpressionContract {
 		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselCharter, plan, null,
 				annotations);
 
-		verify(curve).getValueAtPoint(loadPricingDate);
-		verify(curve).getValueAtPoint(loadTime);
+		verify(curve).getValueAtPoint(loadPricingDate, Collections.emptyMap());
+		verify(curve).getValueAtPoint(loadTime, Collections.emptyMap());
+		verify(curve, Mockito.times(2)).hasParameters();
 		verifyNoMoreInteractions(curve);
 
 		verify(loadSlotWithPricingDate, Mockito.atLeastOnce()).getPricingDate();
@@ -168,7 +172,7 @@ public class TestPriceExpressionContract {
 	@Test
 	public void testCalculateDischargeUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
-		final ICurve curve = mock(ICurve.class);
+		final IParameterisedCurve curve = mock(IParameterisedCurve.class);
 		final IVessel vessel = mock(IVessel.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
@@ -180,8 +184,8 @@ public class TestPriceExpressionContract {
 		final int pricingDate = 90;
 
 		// tell the ICurve mock to return specified values at given points
-		when(curve.getValueAtPoint(dischargeTime)).thenReturn(priceAtDischargeTime);
-		when(curve.getValueAtPoint(pricingDate)).thenReturn(priceAtPricingDate);
+		when(curve.getValueAtPoint(dischargeTime, Collections.emptyMap())).thenReturn(priceAtDischargeTime);
+		when(curve.getValueAtPoint(pricingDate, Collections.emptyMap())).thenReturn(priceAtPricingDate);
 
 		final ILoadSlot loadSlot = mock(ILoadSlot.class);
 
@@ -202,7 +206,7 @@ public class TestPriceExpressionContract {
 		when(dischargeSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
 
 		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(vessel, dischargeSlotWithPricingDate, portTimesRecord1);
-		verify(curve).getValueAtPoint(pricingDate);
+		verify(curve).getValueAtPoint(pricingDate, Collections.emptyMap());
 
 		final IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
 		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
@@ -210,7 +214,8 @@ public class TestPriceExpressionContract {
 
 		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(vessel, dischargeSlotNoPricingDate, portTimesRecord2);
 
-		verify(curve).getValueAtPoint(dischargeTime);
+		verify(curve).getValueAtPoint(dischargeTime, Collections.emptyMap());
+		verify(curve, Mockito.times(2)).hasParameters();
 		verifyNoMoreInteractions(curve);
 
 		// check that the returned results are correct
@@ -219,7 +224,7 @@ public class TestPriceExpressionContract {
 
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final ICurve curve, @NonNull final IVesselProvider vesselProvider) {
+	private PriceExpressionContract createPriceExpressionContract(final IParameterisedCurve curve, @NonNull final IVesselProvider vesselProvider) {
 		final IIntegerIntervalCurve integerIntervalCurve = new IntegerIntervalCurve();
 		for (int i = 0; i < 2000; i++) {
 			if (i % 31 == 0) {

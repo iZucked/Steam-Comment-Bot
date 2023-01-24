@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.license.features;
@@ -84,6 +84,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
 
 	public static final String FEATURE_MTM_OLD = "features:mtm-old";
+	
+	public static final String FEATURE_MTM_PNL = "features:mtm-by-pnl";
 
 	public static final String FEATURE_MTM = "features:mtm";
 

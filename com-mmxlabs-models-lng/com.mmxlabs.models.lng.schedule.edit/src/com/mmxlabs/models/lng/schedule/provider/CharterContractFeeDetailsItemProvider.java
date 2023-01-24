@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -169,16 +169,6 @@ public class CharterContractFeeDetailsItemProvider extends UUIDObjectItemProvide
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.CHARTER_CONTRACT_FEE_DETAILS__MATCHING_CONTRACT_DETAILS,
-				 ScheduleFactory.eINSTANCE.createLumpSumContractDetails()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.CHARTER_CONTRACT_FEE_DETAILS__MATCHING_CONTRACT_DETAILS,
-				 ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails()));
 
 		newChildDescriptors.add
 			(createChildParameter

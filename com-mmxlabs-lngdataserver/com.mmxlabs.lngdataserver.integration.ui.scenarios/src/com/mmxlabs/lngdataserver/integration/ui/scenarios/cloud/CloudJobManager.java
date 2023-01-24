@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
@@ -127,7 +127,7 @@ public class CloudJobManager extends AbstractJobManager {
 			try {
 				final String info = CloudOptimisationDataService.INSTANCE.getInfo();
 				LOG.info("gateway is reachable: " + info);
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				LOG.error(e.getLocalizedMessage());
 				throw new CloudOptimisationPushException(ScenarioServicePushToCloudAction.MSG_ERROR_FAILED_STATUS_CHECK, Type.FAILED_STATUS_CHECK);
 			}

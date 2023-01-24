@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox;
@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,13 @@ import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SandboxReference;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
@@ -514,6 +522,58 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
 			for (final SolutionOption opt : sandboxResult.getOptions()) {
 				addExtraData(opt, sandboxResult);
+
+				final ScheduleModel scheduleModel = opt.getScheduleModel();
+				final Schedule schedule = scheduleModel.getSchedule();
+
+				// Create a map of sandbox generated positions to the original object...
+				final Map<EObject, EObject> m = new HashMap<>();
+				for (final var sandbox : model.getBuys()) {
+					m.put(mapper.getOriginal(sandbox), sandbox);
+					if (mapper.isCreateBEOptions()) {
+						m.put(mapper.getBreakEven(sandbox), sandbox);
+						m.put(mapper.getChangable(sandbox), sandbox);
+					}
+				}
+				for (final var sandbox : model.getSells()) {
+					m.put(mapper.getOriginal(sandbox), sandbox);
+					if (mapper.isCreateBEOptions()) {
+						m.put(mapper.getBreakEven(sandbox), sandbox);
+						m.put(mapper.getChangable(sandbox), sandbox);
+					}
+				}
+				for (final var sandbox : model.getVesselEvents()) {
+					m.put(mapper.getOriginal(sandbox), sandbox);
+				}
+				// .... then add in a SandboxReference to the schedule object to allow lookup
+				// later (e.g. fore createSandboxFromSolution actions)
+				// We add to the SlotAllocation rather than the Slot to reduce the chances of
+				// dangling references. E.g. exporting the solution would need to clean up the
+				// slots
+				schedule.eAllContents().forEachRemaining(eObj -> {
+					if (eObj instanceof final SlotAllocation sa) {
+						final EObject eObject = m.get(sa.getSlot());
+						if (eObject != null) {
+							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+							ref.setReference(eObject);
+							sa.getExtensions().add(ref);
+						}
+					} else if (eObj instanceof final OpenSlotAllocation sa) {
+						final EObject eObject = m.get(sa.getSlot());
+						if (eObject != null) {
+							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+							ref.setReference(eObject);
+							sa.getExtensions().add(ref);
+						}
+					} else if (eObj instanceof final VesselEventVisit sa) {
+						final EObject eObject = m.get(sa.getVesselEvent());
+						if (eObject != null) {
+							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+							ref.setReference(eObject);
+							sa.getExtensions().add(ref);
+						}
+					}
+				});
 			}
 
 			if (dualPNLMode) {

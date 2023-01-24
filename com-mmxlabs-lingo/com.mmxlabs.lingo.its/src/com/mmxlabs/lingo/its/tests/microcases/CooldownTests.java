@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -50,7 +50,7 @@ public class CooldownTests extends AbstractMicroTestCase {
 				.build();
 
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "0");
-		costModelBuilder.setAllExistingCooldownCosts(false, "5");
+		costModelBuilder.setAllExistingCooldownCosts(null, "5");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//
@@ -79,6 +79,52 @@ public class CooldownTests extends AbstractMicroTestCase {
 
 		});
 	}
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCooldownWithVolumeAndLumpsum() throws Exception {
+		
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vessel.setWarmingTime(0);
+		vessel.setCoolingVolume(1000);
+		
+		@NonNull
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+		.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 1, 0, 0, 0)) //
+		.withEndWindow(LocalDateTime.of(2015, 12, 6, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+		.withStartHeel(0, 0, 22.8, "0") //
+		.withEndHeel(50, 50, EVesselTankState.MUST_BE_COLD, null)//
+		.build();
+		
+		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "0");
+		costModelBuilder.setAllExistingCooldownCosts("1000000", "5");
+		
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				//
+				.makeFOBPurchase("L2", LocalDate.of(2017, 12, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
+				.with(s -> ((LoadSlot)s).setCargoCV(22.8)) //
+				.build() //
+				//
+				.makeDESSale("D2", LocalDate.of(2017, 12, 20), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
+				.build() //
+				//
+				.withVesselAssignment(vesselCharter, 1) //
+				.build();
+		
+		evaluateTest(null, null, scenarioRunner -> {
+			
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			// Check spot index has been updated
+			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			
+			final Sequence sequence = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule().getSequences().get(0);
+			final StartEvent event1 = (StartEvent) sequence.getEvents().get(0);
+			
+			// = 1000m3 * 22.8 * $5.0 + $1m
+			Assertions.assertEquals(-114_000 - 1_000_000L, ScheduleModelKPIUtils.getElementPNL(event1));
+			Assertions.assertEquals(114_000+  1_000_000L, ScheduleModelKPIUtils.calculateEventShippingCost(event1, false, true, ShippingCostType.ALL).longValue());
+			
+		});
+	}
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -96,7 +142,7 @@ public class CooldownTests extends AbstractMicroTestCase {
 				.build();
 
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getBaseFuel(), "0.0");
-		costModelBuilder.setAllExistingCooldownCosts(true, "75000");
+		costModelBuilder.setAllExistingCooldownCosts("75000", null);
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				//

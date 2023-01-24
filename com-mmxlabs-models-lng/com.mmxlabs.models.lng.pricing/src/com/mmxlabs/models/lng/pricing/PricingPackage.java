@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
@@ -373,7 +373,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
 	 * @generated
 	 */
-	int COOLDOWN_PRICE = 10;
+	int COOLDOWN_PRICE = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsExpressionMapImpl <em>Ports Expression Map</em>}' class.
@@ -383,7 +383,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsExpressionMap()
 	 * @generated
 	 */
-	int PORTS_EXPRESSION_MAP = 11;
+	int PORTS_EXPRESSION_MAP = 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl <em>Cost Model</em>}' class.
@@ -639,6 +639,116 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST_ENTRY_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceEntryImpl <em>Cooldown Price Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CooldownPriceEntryImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPriceEntry()
+	 * @generated
+	 */
+	int COOLDOWN_PRICE_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_ENTRY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_ENTRY__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Lumpsum Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Volume Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Cooldown Price Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_ENTRY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
+	 * @generated
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__EXTENSIONS = COOLDOWN_PRICE_ENTRY__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__PORTS = COOLDOWN_PRICE_ENTRY__PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Lumpsum Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__LUMPSUM_EXPRESSION = COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Volume Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__VOLUME_EXPRESSION = COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION;
+
+	/**
+	 * The number of structural features of the '<em>Cooldown Price</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE_FEATURE_COUNT = COOLDOWN_PRICE_ENTRY_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -673,61 +783,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORTS_EXPRESSION_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__EXTENSIONS = PORTS_EXPRESSION_MAP__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__PORTS = PORTS_EXPRESSION_MAP__PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__EXPRESSION = PORTS_EXPRESSION_MAP__EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Lumpsum</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__LUMPSUM = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Cooldown Price</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
-	 * @generated
-	 */
-	int PORTS_SPLIT_EXPRESSION_MAP = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -782,7 +837,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF = 13;
+	int PANAMA_CANAL_TARIFF = 14;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -828,7 +883,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF_BAND = 14;
+	int PANAMA_CANAL_TARIFF_BAND = 15;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -892,7 +947,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaTariffV2()
 	 * @generated
 	 */
-	int PANAMA_TARIFF_V2 = 15;
+	int PANAMA_TARIFF_V2 = 16;
 
 	/**
 	 * The feature id for the '<em><b>Fixed Fee</b></em>' attribute.
@@ -938,7 +993,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTugBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TUG_BAND = 16;
+	int SUEZ_CANAL_TUG_BAND = 17;
 
 	/**
 	 * The feature id for the '<em><b>Tugs</b></em>' attribute.
@@ -984,7 +1039,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariff()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF = 17;
+	int SUEZ_CANAL_TARIFF = 18;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1066,7 +1121,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariffBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF_BAND = 18;
+	int SUEZ_CANAL_TARIFF_BAND = 19;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1121,7 +1176,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalRouteRebate()
 	 * @generated
 	 */
-	int SUEZ_CANAL_ROUTE_REBATE = 19;
+	int SUEZ_CANAL_ROUTE_REBATE = 20;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference list.
@@ -1167,7 +1222,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
 	 * @generated
 	 */
-	int UNIT_CONVERSION = 20;
+	int UNIT_CONVERSION = 21;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' attribute.
@@ -1213,7 +1268,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePointContainer()
 	 * @generated
 	 */
-	int DATE_POINT_CONTAINER = 21;
+	int DATE_POINT_CONTAINER = 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1268,7 +1323,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePoint()
 	 * @generated
 	 */
-	int DATE_POINT = 22;
+	int DATE_POINT = 23;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1305,7 +1360,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPointContainer()
 	 * @generated
 	 */
-	int YEAR_MONTH_POINT_CONTAINER = 23;
+	int YEAR_MONTH_POINT_CONTAINER = 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1360,7 +1415,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPoint()
 	 * @generated
 	 */
-	int YEAR_MONTH_POINT = 24;
+	int YEAR_MONTH_POINT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1397,7 +1452,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getAbstractYearMonthCurve()
 	 * @generated
 	 */
-	int ABSTRACT_YEAR_MONTH_CURVE = 25;
+	int ABSTRACT_YEAR_MONTH_CURVE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1479,7 +1534,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityCurve()
 	 * @generated
 	 */
-	int COMMODITY_CURVE = 26;
+	int COMMODITY_CURVE = 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1570,7 +1625,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterCurve()
 	 * @generated
 	 */
-	int CHARTER_CURVE = 27;
+	int CHARTER_CURVE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1652,7 +1707,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBunkerFuelCurve()
 	 * @generated
 	 */
-	int BUNKER_FUEL_CURVE = 28;
+	int BUNKER_FUEL_CURVE = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1734,7 +1789,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyCurve()
 	 * @generated
 	 */
-	int CURRENCY_CURVE = 29;
+	int CURRENCY_CURVE = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1816,7 +1871,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getMarketIndex()
 	 * @generated
 	 */
-	int MARKET_INDEX = 30;
+	int MARKET_INDEX = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1907,7 +1962,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendarEntry()
 	 * @generated
 	 */
-	int PRICING_CALENDAR_ENTRY = 31;
+	int PRICING_CALENDAR_ENTRY = 32;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -1962,7 +2017,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendar()
 	 * @generated
 	 */
-	int PRICING_CALENDAR = 32;
+	int PRICING_CALENDAR = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2017,7 +2072,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendarEntry()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR_ENTRY = 33;
+	int HOLIDAY_CALENDAR_ENTRY = 34;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -2054,7 +2109,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendar()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR = 34;
+	int HOLIDAY_CALENDAR = 35;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2109,7 +2164,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSettleStrategy()
 	 * @generated
 	 */
-	int SETTLE_STRATEGY = 35;
+	int SETTLE_STRATEGY = 36;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2191,7 +2246,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingBasis()
 	 * @generated
 	 */
-	int PRICING_BASIS = 36;
+	int PRICING_BASIS = 37;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2664,6 +2719,49 @@ public interface PricingPackage extends EPackage {
 	EAttribute getPortCostEntry_Cost();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry <em>Cooldown Price Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Cooldown Price Entry</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPriceEntry
+	 * @generated
+	 */
+	EClass getCooldownPriceEntry();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getPorts()
+	 * @see #getCooldownPriceEntry()
+	 * @generated
+	 */
+	EReference getCooldownPriceEntry_Ports();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getLumpsumExpression <em>Lumpsum Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lumpsum Expression</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getLumpsumExpression()
+	 * @see #getCooldownPriceEntry()
+	 * @generated
+	 */
+	EAttribute getCooldownPriceEntry_LumpsumExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getVolumeExpression <em>Volume Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Expression</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPriceEntry#getVolumeExpression()
+	 * @see #getCooldownPriceEntry()
+	 * @generated
+	 */
+	EAttribute getCooldownPriceEntry_VolumeExpression();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CooldownPrice <em>Cooldown Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2672,17 +2770,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCooldownPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum <em>Lumpsum</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lumpsum</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum()
-	 * @see #getCooldownPrice()
-	 * @generated
-	 */
-	EAttribute getCooldownPrice_Lumpsum();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CostModel <em>Cost Model</em>}'.
@@ -4094,6 +4181,40 @@ public interface PricingPackage extends EPackage {
 		EAttribute PORT_COST_ENTRY__COST = eINSTANCE.getPortCostEntry_Cost();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceEntryImpl <em>Cooldown Price Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CooldownPriceEntryImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPriceEntry()
+		 * @generated
+		 */
+		EClass COOLDOWN_PRICE_ENTRY = eINSTANCE.getCooldownPriceEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COOLDOWN_PRICE_ENTRY__PORTS = eINSTANCE.getCooldownPriceEntry_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Lumpsum Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COOLDOWN_PRICE_ENTRY__LUMPSUM_EXPRESSION = eINSTANCE.getCooldownPriceEntry_LumpsumExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COOLDOWN_PRICE_ENTRY__VOLUME_EXPRESSION = eINSTANCE.getCooldownPriceEntry_VolumeExpression();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4102,14 +4223,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COOLDOWN_PRICE = eINSTANCE.getCooldownPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Lumpsum</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COOLDOWN_PRICE__LUMPSUM = eINSTANCE.getCooldownPrice_Lumpsum();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl <em>Cost Model</em>}' class.

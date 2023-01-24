@@ -1,8 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
 import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode.ExprSelector;
@@ -18,6 +22,7 @@ public class Tier2Series implements ISeries {
 	private final ISeries lowValue;
 	private final ISeries highValue;
 	private final int[] changePoints;
+	private final Set<String> parameters;
 
 	public Tier2Series(final ISeries target, final ComparisonOperators lowOp, final double low, final ISeries lowValue, final ISeries highValue) {
 		this.target = target;
@@ -27,6 +32,21 @@ public class Tier2Series implements ISeries {
 		this.highValue = highValue;
 
 		this.changePoints = SeriesUtil.mergeChangePoints(target, lowValue, highValue);
+
+		parameters = new HashSet<>();
+		parameters.addAll(target.getParameters());
+		parameters.addAll(lowValue.getParameters());
+		parameters.addAll(highValue.getParameters());
+	}
+
+	@Override
+	public Set<String> getParameters() {
+		return parameters;
+	}
+
+	@Override
+	public boolean isParameterised() {
+		return !parameters.isEmpty();
 	}
 
 	@Override
@@ -35,14 +55,14 @@ public class Tier2Series implements ISeries {
 	}
 
 	@Override
-	public Number evaluate(final int point) {
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
 
-		final Number baseValue = target.evaluate(point);
+		final Number baseValue = target.evaluate(timePoint, params);
 		final ExprSelector selected = Tier2FunctionASTNode.select(baseValue.doubleValue(), lowOp, low);
 
 		return switch (selected) {
-		case LOW -> lowValue.evaluate(point);
-		case HIGH -> highValue.evaluate(point);
+		case LOW -> lowValue.evaluate(timePoint, params);
+		case HIGH -> highValue.evaluate(timePoint, params);
 		};
 
 	}

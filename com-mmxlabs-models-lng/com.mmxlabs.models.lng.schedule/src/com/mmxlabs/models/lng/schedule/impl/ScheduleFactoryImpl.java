@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
@@ -134,8 +134,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.EVENT_GROUPING: return createEventGrouping();
 			case SchedulePackage.PORT_VISIT_LATENESS: return createPortVisitLateness();
 			case SchedulePackage.EXPOSURE_DETAIL: return createExposureDetail();
-			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
-			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
 			case SchedulePackage.CANAL_JOURNEY_EVENT: return createCanalJourneyEvent();
 			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
@@ -153,6 +151,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS: return createNotionalJourneyBallastBonusTermDetails();
 			case SchedulePackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS: return createOriginPortRepositioningFeeTermDetails();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS: return createTransferRecordPNLDetails();
+			case SchedulePackage.SANDBOX_REFERENCE: return createSandboxReference();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -614,28 +613,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	@Override
-	public LumpSumContractDetails createLumpSumContractDetails() {
-		LumpSumContractDetailsImpl lumpSumContractDetails = new LumpSumContractDetailsImpl();
-		return lumpSumContractDetails;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
-		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
-		return notionalJourneyContractDetails;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public CharterContractFeeDetails createCharterContractFeeDetails() {
 		CharterContractFeeDetailsImpl charterContractFeeDetails = new CharterContractFeeDetailsImpl();
 		return charterContractFeeDetails;
@@ -815,6 +792,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public TransferRecordPNLDetails createTransferRecordPNLDetails() {
 		TransferRecordPNLDetailsImpl transferRecordPNLDetails = new TransferRecordPNLDetailsImpl();
 		return transferRecordPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SandboxReference createSandboxReference() {
+		SandboxReferenceImpl sandboxReference = new SandboxReferenceImpl();
+		return sandboxReference;
 	}
 
 	/**

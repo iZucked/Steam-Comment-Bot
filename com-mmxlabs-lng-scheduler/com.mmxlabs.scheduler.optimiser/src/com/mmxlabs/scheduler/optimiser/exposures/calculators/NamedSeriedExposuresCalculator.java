@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.exposures.calculators;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -46,7 +47,7 @@ public class NamedSeriedExposuresCalculator {
 			// Lazy commodity curves should be initialised by now.
 			final ISeries series = inputRecord.commodityIndices().getSeries(name).get();
 			// The series is in EXTERNAL format
-			final Number evaluate = series.evaluate(Hours.between(inputRecord.externalDateProvider().getEarliestTime().toLocalDate(), date));
+			final Number evaluate = series.evaluate(Hours.between(inputRecord.externalDateProvider().getEarliestTime().toLocalDate(), date), Collections.emptyMap());
 
 			final long unitPrice = OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 			long nativeVolume = inputRecord.volumeInMMBTU() * 10;
@@ -94,7 +95,7 @@ public class NamedSeriedExposuresCalculator {
 			// Should really look up actual value from curve...
 			// Currency curves should not be lazy
 			final ISeries series = inputRecord.currencyIndices().getSeries(name).get();
-			final Number evaluate = series.evaluate(Hours.between(inputRecord.externalDateProvider().getEarliestTime().toLocalDate(), date));
+			final Number evaluate = series.evaluate(Hours.between(inputRecord.externalDateProvider().getEarliestTime().toLocalDate(), date), Collections.emptyMap());
 			final long unitPrice = OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 			return new Pair<>(unitPrice, new Constant(1_000_000, ""));
 		} else if (inputRecord.lookupData().conversionMap.containsKey(name)) {

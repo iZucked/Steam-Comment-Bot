@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -786,9 +787,10 @@ public class TimeWindowsTrimming {
 					// Evaluate!
 					// Note: We assume the caching will take care of duplicated time sets rather
 					// than needing to manage this here.
+					VesselStartState vesselStartState = new VesselStartState(0, null);
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
 							vesselCharter.getCharterCostCalculator(), //
-							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, sequencesAttributesProvider, null);
+							vesselStartState, previousHeelRecord, portTimesRecord.copy(), true, false, false, sequencesAttributesProvider, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {

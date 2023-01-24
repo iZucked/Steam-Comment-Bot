@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
@@ -15,9 +16,9 @@ public class Equal extends SimpleSeriesFunction {
 	}
 
 	@Override
-	public Number evaluate(int point) {
-		final Number n1 = arguments.get(0).evaluate(point);
-		final Number n2 = arguments.get(1).evaluate(point);
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+		final Number n1 = arguments.get(0).evaluate(timePoint, params);
+		final Number n2 = arguments.get(1).evaluate(timePoint, params);
 		if (n1.doubleValue() == n2.doubleValue()) {
 			return 1;
 		} else {

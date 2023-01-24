@@ -1,11 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series;
 
-public interface ISeries {
-	public int[] getChangePoints();
+import java.util.Map;
+import java.util.Set;
 
-	public Number evaluate(int point);
+import org.eclipse.jdt.annotation.NonNull;
+
+public interface ISeries {
+
+	boolean isParameterised();
+
+	@NonNull
+	Set<String> getParameters();
+
+	int[] getChangePoints();
+
+	Number evaluate(int timePoint, @NonNull Map<String, String> parameters);
 }

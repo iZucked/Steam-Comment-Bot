@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities;
@@ -13,9 +13,9 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.SlotHeelVolumeRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
@@ -53,7 +53,7 @@ public interface IEntityValueCalculator {
 	 * @return
 	 */
 	Pair<Map<IPortSlot, HeelValueRecord>, Long> evaluateNonCargoPlan(VoyagePlan plan, IPortTimesRecord portTimesRecord, IVesselCharter vesselCharter, 
-			int vesselStartTime, int planStartTime, @Nullable IPort firstLoadPort, 
+			VesselStartState vesselStartState, 
 			int lastHeelPricePerMMBTU, Map<IPortSlot, SlotHeelVolumeRecord> heelRecords, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**

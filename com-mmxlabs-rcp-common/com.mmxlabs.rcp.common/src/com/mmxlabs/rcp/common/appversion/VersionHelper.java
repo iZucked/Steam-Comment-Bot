@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.appversion;
@@ -80,5 +80,10 @@ public class VersionHelper {
 	 */
 	public boolean isWorkspaceVersion() {
 		return workspaceVersion;
+	}
+
+	public void setClientCode(String code) {
+		this.code = code;
+		
 	}
 }

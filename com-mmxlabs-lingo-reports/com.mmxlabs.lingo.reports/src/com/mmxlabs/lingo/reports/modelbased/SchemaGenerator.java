@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.modelbased;
@@ -9,18 +9,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubColumnStyle;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubSummary;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubType;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
 public class SchemaGenerator {
@@ -29,31 +30,94 @@ public class SchemaGenerator {
 			Number.class);
 	private static Set<Class<?>> dateTypes = Sets.newHashSet(LocalDate.class, LocalDateTime.class);
 
-	private class SchemaModel {
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private static class ReportModel {
+		@JsonIgnore
 		public int version;
-		@JsonProperty(value = "columnsLite")
-		public List<SchemaModelEntry> summary;
-		@JsonProperty(value = "columns")
-		public List<SchemaModelEntry> full;
+
+		public String type;
+		public List<Column> columns;
+		public List<ColumnStyle> styles;
+		public InitialSort initialSort;
 
 	}
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private class SchemaModelEntry {
-		public String name;
-		// Handson table options
-		public String data;
-		public String type;
-		public String dateFormat;
-		@JsonRawValue
-
-		public String numericFormat;
-
+	private static class InitialSort {
+		public String field;
+		public int mode;
 	}
 
-	public String generateHubSchema(Class<?> cls) throws JsonProcessingException {
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private static class ColumnFormat {
+		public String type;
+//		@JsonRawValue
+		public Object detail;
+	}
 
-		SchemaModel model = new SchemaModel();
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public static class ColumnStyle {
+		public List<StyleObject> row;
+		public List<StyleObject> cell;
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public static class StyleObject {
+		public List<StyleMatcher> matchers;
+		public String condition;
+		public String value;
+		public String field;
+		public List<CssStyle> styling;
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public static class StyleMatcher {
+		public String condition;
+		public String value;
+		public String field;
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public static class CssStyle {
+		public String property;
+		public String value;
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private static class NumberDetail {
+		public boolean thousandSeparated = true;
+		public Integer decimals;
+	}
+
+	private static class DateTimeDetail {
+		public String raw = "DD/MM/YYYY hh:mm";
+		public String dateFormat = "date";
+
+		public DateTimeDetail() {
+
+		}
+
+		public DateTimeDetail(String format) {
+			this.raw = format;
+		}
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private class Column {
+		public String field;
+		public String header;
+		public ColumnFormat format;
+		public ColumnStyle styles;
+		public InitialSort initialSort;
+	}
+
+	public enum Mode {
+		FULL, SUMMARY
+	}
+
+	public String generateHubSchema(Class<?> cls, Mode mode) throws JsonProcessingException {
+
+		ReportModel model = new ReportModel();
 		{
 			model.version = 1;
 			SchemaVersion ver = cls.getAnnotation(SchemaVersion.class);
@@ -61,60 +125,88 @@ public class SchemaGenerator {
 				model.version = ver.value();
 			}
 		}
-		model.full = generateHubSchema(cls, false);
-		model.summary = generateHubSchema(cls, true);
+		model.columns = doGenerateHubSchema(cls, mode);
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(model);
 
 	}
 
-	public List<SchemaModelEntry> generateHubSchema(Class<?> cls, boolean isSummary) throws JsonProcessingException {
+	public List<Column> doGenerateHubSchema(Class<?> cls, Mode mode) throws JsonProcessingException {
 
-		List<SchemaModelEntry> entries = new LinkedList<>();
+		List<Column> entries = new LinkedList<>();
 		for (Field f : cls.getFields()) {
 
 			if (f.getAnnotation(JsonIgnore.class) != null) {
 				continue;
 			}
 
-			SchemaModelEntry entry = new SchemaModelEntry();
+			Column entry = new Column();
 			boolean includeEntry = false;
 			int insertIndex = -1;
-			if (isSummary) {
+			if (mode == Mode.SUMMARY) {
 				HubSummary columnName = f.getAnnotation(HubSummary.class);
 				if (columnName != null) {
-					entry.name = columnName.name();
+					entry.header = columnName.name();
 					includeEntry = true;
 					insertIndex = columnName.index() - 1;
 				}
-			} else {
+			} else if (mode == Mode.FULL) {
 				ColumnName columnName = f.getAnnotation(ColumnName.class);
 				if (columnName != null) {
 					if (!columnName.hubFull().isEmpty()) {
-						entry.name = columnName.hubFull();
+						entry.header = columnName.hubFull();
 					} else {
-						entry.name = columnName.value();
+						entry.header = columnName.value();
 					}
 					includeEntry = true;
 				}
+			} else {
+				throw new IllegalArgumentException();
 			}
 
-			entry.data = f.getName();
+			entry.field = f.getName();
 			Class<?> declaringClass = f.getType();
-			if (numericTypes.contains(declaringClass)) {
-				entry.type = "numeric";
-				HubFormat format = f.getAnnotation(HubFormat.class);
-				if (format != null) {
-					entry.numericFormat = format.value();
+			entry.format = new ColumnFormat();
+
+			String hubType = null;
+			{
+				HubType a = f.getAnnotation(HubType.class);
+				if (a != null) {
+					hubType = a.value();
+//					includeEntry = true;
 				}
-			} else if (dateTypes.contains(declaringClass)) {
-				entry.type = "date";
+			}
+
+			if (Objects.equals(hubType, "number") || (hubType == null && numericTypes.contains(declaringClass))) {
+				entry.format.type = "number";
 				HubFormat format = f.getAnnotation(HubFormat.class);
 				if (format != null) {
-					entry.dateFormat = format.value();
+					ObjectMapper m = new ObjectMapper();
+					// Use jackson to convert object type
+					entry.format.detail = m.readValue(format.value(), NumberDetail.class);
+				}
+			} else if (Objects.equals(hubType, "date") || (hubType == null && dateTypes.contains(declaringClass))) {
+				entry.format.type = "date";
+				HubFormat format = f.getAnnotation(HubFormat.class);
+				if (format != null) {
+					entry.format.detail = new DateTimeDetail(format.value());
 				}
 			} else {
-				entry.type = "text";
+				if (hubType != null) {
+					entry.format.type = hubType;
+				} else {
+					entry.format.type = "string";
+				}
+			}
+
+			{
+				HubColumnStyle style = f.getAnnotation(HubColumnStyle.class);
+				if (style != null) {
+					ObjectMapper m = new ObjectMapper();
+					// Use jackson to convert object type
+					entry.styles = m.readValue(style.value(), ColumnStyle.class);
+				}
+
 			}
 
 			if (includeEntry) {

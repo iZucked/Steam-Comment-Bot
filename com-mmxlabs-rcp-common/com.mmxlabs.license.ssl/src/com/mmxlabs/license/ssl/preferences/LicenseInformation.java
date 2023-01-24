@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.license.ssl.preferences;
@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseManager;
 
 public class LicenseInformation extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -47,7 +48,7 @@ public class LicenseInformation extends PreferencePage implements IWorkbenchPref
 
 		X509Certificate cert = null;
 		try {
-			cert = LicenseChecker.getClientLicense();
+			cert = LicenseManager.getClientLicense(LicenseManager.getLicenseKeystore());
 		} catch (final Exception e) {
 			LOG.error("Unable to load license: " + e.getMessage(), e);
 		}
@@ -59,7 +60,8 @@ public class LicenseInformation extends PreferencePage implements IWorkbenchPref
 			final Text txt = new Text(c, SWT.READ_ONLY);
 			if (cert != null) {
 
-				// Based on http://stackoverflow.com/questions/7933468/parsing-the-cn-out-of-a-certificate-dn
+				// Based on
+				// http://stackoverflow.com/questions/7933468/parsing-the-cn-out-of-a-certificate-dn
 				final X500Principal principal = cert.getSubjectX500Principal();
 				LdapName ln = null;
 				try {

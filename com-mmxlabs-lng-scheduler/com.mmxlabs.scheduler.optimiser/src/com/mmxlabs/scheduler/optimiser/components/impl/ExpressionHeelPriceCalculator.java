@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -36,14 +36,15 @@ public class ExpressionHeelPriceCalculator implements IHeelPriceCalculator {
 	}
 
 	@Override
-	public int getHeelPrice(final long heelVolume, final int utcTime) {
+	public int getHeelPrice(final long heelVolumeInM3, final int utcTime) {
+
 		return expressionCurve.getValueAtPoint(utcTime);
 	}
 
 	@Override
-	public int getHeelPrice(final long heelVolume, final int localTime, final @NonNull IPort port) {
+	public int getHeelPrice(final long heelVolumeInM3, final int localTime, final @NonNull IPort port) {
 		final int utcTime = timeZoneToUtcOffsetProvider.UTC(localTime, port);
-		return getHeelPrice(heelVolume, utcTime);
+		return getHeelPrice(heelVolumeInM3, utcTime);
 	}
 
 	@Override
@@ -57,8 +58,7 @@ public class ExpressionHeelPriceCalculator implements IHeelPriceCalculator {
 			return true;
 		}
 
-		if (obj instanceof ExpressionHeelPriceCalculator) {
-			final ExpressionHeelPriceCalculator other = (ExpressionHeelPriceCalculator) obj;
+		if (obj instanceof ExpressionHeelPriceCalculator other) {
 			return Objects.equals(expression, other.expression);
 
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
@@ -87,7 +87,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		toolkit.adapt(myComposite);
 		myComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		
-		final Group g2 = new Group(myComposite, SWT.NONE);
+		final Group g2 = new Group(middle, SWT.NONE);
 
 		toolkit.adapt(g2);
 

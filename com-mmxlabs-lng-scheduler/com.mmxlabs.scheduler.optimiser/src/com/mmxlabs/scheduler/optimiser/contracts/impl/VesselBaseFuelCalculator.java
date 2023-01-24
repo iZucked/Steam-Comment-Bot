@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -18,7 +18,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
- * Implementation of {@link IVesselBaseFuelCalculator} looking up the base fuel rate of the vessel based on the voyage plan.
+ * Implementation of {@link IVesselBaseFuelCalculator} looking up the base fuel
+ * rate of the vessel based on the voyage plan.
  * 
  * @author achurchill
  * 

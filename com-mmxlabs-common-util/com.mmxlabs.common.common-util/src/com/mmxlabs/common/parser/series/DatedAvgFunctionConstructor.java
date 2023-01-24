@@ -1,10 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series;
-
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -18,26 +16,7 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 	private final int months;
 	private final int lag;
 
-	public CalendarMonthMapper getCalendarMonthMapper() {
-		return calendarMonthMapper;
-	}
-
-	public IExpression<ISeries> getSeries() {
-		return series;
-	}
-
 	private final int reset;
-
-	public DatedAvgFunctionConstructor(final SeriesParserData seriesParserData, final List<IExpression<ISeries>> arguments) {
-		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;
-		if (calendarMonthMapper == null) {
-			throw new IllegalStateException("No calender mapper function defined");
-		}
-		this.series = arguments.get(0);
-		this.months = arguments.get(1).evaluate().evaluate(0).intValue();
-		this.lag = arguments.get(2).evaluate().evaluate(0).intValue();
-		this.reset = arguments.get(3).evaluate().evaluate(0).intValue();
-	}
 
 	public DatedAvgFunctionConstructor(final SeriesParserData seriesParserData, IExpression<ISeries> series, final Integer months, final Integer lag, final Integer reset) {
 		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;

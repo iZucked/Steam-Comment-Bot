@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.contracts.charter;
@@ -132,6 +132,9 @@ public class CharterContractExtensionExporter implements IExporterExtension {
 						notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
 						notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
 						notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));
+						notionalJourneyContractDetails.setLngPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.lngPrice));
+						notionalJourneyContractDetails.setTotalLNGUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalLNGUsed));
+						notionalJourneyContractDetails.setTotalLNGCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalLNGCost));
 
 						notionalJourneyContractDetails.setTotalTimeInDays(((double) ruleA.totalTimeInHours) / 24.0);
 						notionalJourneyContractDetails.setHireRate(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.hireRate));

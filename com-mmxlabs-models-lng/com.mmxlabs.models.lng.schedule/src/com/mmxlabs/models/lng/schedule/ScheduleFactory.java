@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
@@ -330,24 +330,6 @@ public interface ScheduleFactory extends EFactory {
 	ExposureDetail createExposureDetail();
 
 	/**
-	 * Returns a new object of class '<em>Lump Sum Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Lump Sum Contract Details</em>'.
-	 * @generated
-	 */
-	LumpSumContractDetails createLumpSumContractDetails();
-
-	/**
-	 * Returns a new object of class '<em>Notional Journey Contract Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Notional Journey Contract Details</em>'.
-	 * @generated
-	 */
-	NotionalJourneyContractDetails createNotionalJourneyContractDetails();
-
-	/**
 	 * Returns a new object of class '<em>Charter Contract Fee Details</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -499,6 +481,15 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	TransferRecordPNLDetails createTransferRecordPNLDetails();
+
+	/**
+	 * Returns a new object of class '<em>Sandbox Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sandbox Reference</em>'.
+	 * @generated
+	 */
+	SandboxReference createSandboxReference();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.exposures.calculators;
@@ -14,12 +14,14 @@ import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.MonthFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
+import com.mmxlabs.common.parser.astnodes.ParamASTNode;
 import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier3FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode;
+import com.mmxlabs.scheduler.optimiser.exposures.Constant;
 import com.mmxlabs.scheduler.optimiser.exposures.IExposureNode;
 import com.mmxlabs.scheduler.optimiser.exposures.InputRecord;
 
@@ -50,8 +52,9 @@ public class ExposuresASTToCalculator {
 			return NamedSeriedExposuresCalculator.getExposureNode(namedSeriesNode, inputRecord);
 		} else if (node instanceof final FunctionASTNode functionNode) {
 			return FunctionExposuresCalculator.getExposureNode(functionNode, inputRecord);
+		} else if (node instanceof final ParamASTNode paramNode) {
+			return ParamExposuresCalculator.getExposureNode(paramNode, inputRecord);
 		}
-
 		throw new IllegalStateException("Unexpected node type");
 	}
 

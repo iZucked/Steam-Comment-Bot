@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -30,25 +30,25 @@ public class CooldownPriceIndexedCalculatorTest {
 		testCalculatorPriceIndex("Etc/GMT+12");
 	}
 
-	public void testCalculatorPriceIndex(String timeZone) {
-		ICurve curve = Mockito.mock(ICurve.class);
-		IVessel mockVessel = Mockito.mock(IVessel.class);
-		IPort mockPort = Mockito.mock(IPort.class);
+	public void testCalculatorPriceIndex(final String timeZone) {
+		final ICurve curve = Mockito.mock(ICurve.class);
+		final IVessel mockVessel = Mockito.mock(IVessel.class);
+		final IPort mockPort = Mockito.mock(IPort.class);
 		// create a cooldown calculator and avoid using injection
 		// TODO Use injection
-		CooldownPriceIndexedCalculator lsc = createCooldownPriceIndexedCalculator(curve);
+		CooldownCalculator lsc = createCooldownPriceIndexedCalculator(curve);
 
 		// create prices for different times (to test UTC)
-		int priceA = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
-		int priceAMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(5);
-		int priceB = OptimiserUnitConvertor.convertToInternalConversionFactor(20);
-		int priceBMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
-		int timeA = 100;
-		int timeB = 200;
+		final int priceA = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
+		final int priceAMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(5);
+		final int priceB = OptimiserUnitConvertor.convertToInternalConversionFactor(20);
+		final int priceBMinus = OptimiserUnitConvertor.convertToInternalConversionFactor(10);
+		final int timeA = 100;
+		final int timeB = 200;
 
 		// create different cv values (to test correct calculation)
-		int cvA = OptimiserUnitConvertor.convertToInternalConversionFactor(20);
-		int cvB = OptimiserUnitConvertor.convertToInternalConversionFactor(22);
+		final int cvA = OptimiserUnitConvertor.convertToInternalConversionFactor(20);
+		final int cvB = OptimiserUnitConvertor.convertToInternalConversionFactor(22);
 
 		// mock some return values
 		Mockito.when(curve.getValueAtPoint(timeA)).thenReturn(priceA);
@@ -69,18 +69,18 @@ public class CooldownPriceIndexedCalculatorTest {
 			expectedB = OptimiserUnitConvertor.convertToInternalFixedCost(220000);
 		}
 
-		long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, cvA, timeA);
-		long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, cvB, timeB);
+		final long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, cvA, timeA);
+		final long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, cvB, timeB);
 
 		Assertions.assertEquals(testCalculationA, expectedA, String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationA, expectedA));
 		Assertions.assertEquals(testCalculationB, expectedB, String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationB, expectedB));
 
 	}
 
-	private CooldownPriceIndexedCalculator createCooldownPriceIndexedCalculator(final ICurve curve) {
-		CooldownPriceIndexedCalculator contract = new CooldownPriceIndexedCalculator(curve);
-
-		Injector injector = Guice.createInjector(new AbstractModule() {
+ 
+	private CooldownCalculator createCooldownPriceIndexedCalculator(final ICurve curve) {
+		CooldownCalculator contract = new CooldownCalculator(null, curve);
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {

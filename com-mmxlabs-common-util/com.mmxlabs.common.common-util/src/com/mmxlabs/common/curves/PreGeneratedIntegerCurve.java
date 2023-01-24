@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.curves;
@@ -19,6 +19,7 @@ import java.util.TreeMap;
 public class PreGeneratedIntegerCurve implements ICurve {
 
 	private int defaultValue;
+
 	private final TreeMap<Integer, Integer> intervals = new TreeMap<>();
 
 	/**
@@ -48,8 +49,9 @@ public class PreGeneratedIntegerCurve implements ICurve {
 	}
 
 	@Override
-	public int getValueAtPoint(final int pointInt) {
-		final Map.Entry<Integer, Integer> value = intervals.lowerEntry(pointInt + 1);
+	public int getValueAtPoint(final int timePoint) {
+		final Map.Entry<Integer, Integer> value = intervals.lowerEntry(timePoint + 1);
 		return value == null ? defaultValue : value.getValue().intValue();
 	}
+
 }

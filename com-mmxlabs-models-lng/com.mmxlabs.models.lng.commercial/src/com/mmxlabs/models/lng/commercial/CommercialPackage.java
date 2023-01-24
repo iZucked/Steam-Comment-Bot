@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
@@ -2048,13 +2048,22 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION = 5;
 
 	/**
+	 * The feature id for the '<em><b>Price On Last LNG Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE = 6;
+
+	/**
 	 * The number of structural features of the '<em>Notional Journey Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_TERM_FEATURE_COUNT = 6;
+	int NOTIONAL_JOURNEY_TERM_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl <em>Ballast Bonus Term</em>}' class.
@@ -2195,13 +2204,22 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION = BALLAST_BONUS_TERM_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Price On Last LNG Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE = BALLAST_BONUS_TERM_FEATURE_COUNT + 6;
+
+	/**
 	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = BALLAST_BONUS_TERM_FEATURE_COUNT + 6;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = BALLAST_BONUS_TERM_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Notional Journey Ballast Bonus Term</em>' class.
@@ -2210,7 +2228,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 7;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl <em>Monthly Ballast Bonus Term</em>}' class.
@@ -2284,6 +2302,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int MONTHLY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Price On Last LNG Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
@@ -2478,13 +2505,22 @@ public interface CommercialPackage extends EPackage {
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Price On Last LNG Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
+
+	/**
 	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Origin Port Repositioning Fee Term</em>' class.
@@ -2493,7 +2529,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 7;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
@@ -3796,6 +3832,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getNotionalJourneyTerm_LumpSumPriceExpression();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price On Last LNG Price</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isPriceOnLastLNGPrice()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_PriceOnLastLNGPrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BallastBonusTerm <em>Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5023,6 +5070,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Price On Last LNG Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE = eINSTANCE.getNotionalJourneyTerm_PriceOnLastLNGPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl <em>Ballast Bonus Term</em>}' class.

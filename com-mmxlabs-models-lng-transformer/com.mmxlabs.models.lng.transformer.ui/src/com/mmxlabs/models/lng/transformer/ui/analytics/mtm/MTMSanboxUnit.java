@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.mtm;
@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -57,6 +59,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.InsertCargoSequencesGenerator;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -83,14 +86,20 @@ public class MTMSanboxUnit {
 		int arrivalTime = Integer.MAX_VALUE;
 		int price;
 		long volumeInMMBTU;
-		long shippingCost;
+		long totalShippingCost;
+		
+		int oPrice;
+		long oVolumeInMMBTU;
 	}
 
 	static class InternalResult {
 		int arrivalTime = Integer.MAX_VALUE;
 		int netbackPrice;
 		long volumeInMMBTU;
-		long shippingCost;
+		long totalShippingCost;
+		
+		int oPrice;
+		long oVolumeInMMBTU;
 
 		public void merge(@Nullable final InternalResult other) {
 			if (other != null) {
@@ -98,7 +107,10 @@ public class MTMSanboxUnit {
 					this.arrivalTime = other.arrivalTime;
 					this.netbackPrice = other.netbackPrice;
 					this.volumeInMMBTU = other.volumeInMMBTU;
-					this.shippingCost = other.shippingCost;
+					this.totalShippingCost = other.totalShippingCost;
+					
+					this.oPrice = other.oPrice;
+					this.oVolumeInMMBTU = other.oVolumeInMMBTU;
 				}
 			}
 		}
@@ -109,7 +121,10 @@ public class MTMSanboxUnit {
 					this.arrivalTime = other.arrivalTime;
 					this.netbackPrice = other.price;
 					this.volumeInMMBTU = other.volumeInMMBTU;
-					this.shippingCost = other.shippingCost;
+					this.totalShippingCost = other.totalShippingCost;
+					
+					this.oPrice = other.oPrice;
+					this.oVolumeInMMBTU = other.oVolumeInMMBTU;
 				}
 			}
 		}
@@ -255,6 +270,22 @@ public class MTMSanboxUnit {
 					lmtm.remove(best);
 					row.getRhsResults().removeAll(lmtm);
 				}
+				
+				grouped = row.getLhsResults().stream().collect(Collectors.groupingBy(MTMResult::getTarget));
+
+				for (final Map.Entry<SpotMarket, List<MTMResult>> entry : grouped.entrySet()) {
+					double price = -Double.MAX_VALUE;
+					final List<MTMResult> lmtm = entry.getValue();
+					MTMResult best = null;
+					for (final MTMResult result : lmtm) {
+						if (price < result.getEarliestPrice()) {
+							price = result.getEarliestPrice();
+							best = result;
+						}
+					}
+					lmtm.remove(best);
+					row.getLhsResults().removeAll(lmtm);
+				}
 			}
 		}
 	}
@@ -325,8 +356,9 @@ public class MTMSanboxUnit {
 										shipped = true;
 										ls = mapper.getPurchaseMarketOriginal(market, YearMonth.from(ds.getWindowStart().minusMonths(i)));
 									}
-								} else if (market instanceof DESPurchaseMarket) {
-									if (!ds.isFOBSale() && ((DESPurchaseMarket) market).getDestinationPorts().contains(ds.getPort())) {
+								} else if (market instanceof final DESPurchaseMarket desMarket) {
+									final Set<Port> ports = SetUtils.getObjects(desMarket.getDestinationPorts());
+									if (!ds.isFOBSale() && ports.contains(ds.getPort())) {
 										shipped = false;
 										ls = mapper.getPurchaseMarketOriginal(market, YearMonth.from(ds.getWindowStart()));
 									}
@@ -362,7 +394,10 @@ public class MTMSanboxUnit {
 							mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
 							mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
 							mtmResult.setShippingCost(OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
-							Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+							Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.totalShippingCost, ret.volumeInMMBTU)));
+							mtmResult.setTotalShippingCost(OptimiserUnitConvertor.convertToExternalFixedCost(ret.totalShippingCost));
+							mtmResult.setOriginalPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.oPrice));
+							mtmResult.setOriginalVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.oVolumeInMMBTU));
 						}
 
 						return new Runnable() {
@@ -400,8 +435,12 @@ public class MTMSanboxUnit {
 			SequenceHelper.addSequence(solution, injector, charterInMarket, -1, load, discharge);
 		}
 		final MTMSandboxEvaluator evaluator = injector.getInstance(MTMSandboxEvaluator.class);
-		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-
-		return evaluator.evaluate(resource, solution, portSlot);
+		final IPortSlot beTarget = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
+		final IPortSlot buy = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
+		final IPortSlot sell = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
+		
+		final boolean isBuyMTM = beTarget.equals(buy);
+		
+		return evaluator.evaluate(resource, solution, beTarget, isBuyMTM ? buy : sell);
 	}
 }

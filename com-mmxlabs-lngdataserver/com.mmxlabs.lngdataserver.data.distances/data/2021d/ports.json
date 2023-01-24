@@ -1,0 +1,2870 @@
+{
+	"identifier": "303cb9a4-f81d-4aa5-a345-469af4d07fc8",
+	"createdAt": "2021-12-21T12:00:00.0Z",
+	"locations": [{
+			"mmxId": "L_DZ_Bethi",
+			"name": "Bethioua",
+			"geographicPoint": {
+				"lat": 35.8216667175293,
+				"lon": -0.25,
+				"country": "Algeria",
+				"timeZone": "Africa/Algiers"
+			},
+			"upstreamID": "DZ0004"
+		}, {
+			"mmxId": "L_AO_Soyo",
+			"name": "Soyo",
+			"aliases": ["Angola"],
+			"geographicPoint": {
+				"lat": -6.120833396911621,
+				"lon": 12.319999694824219,
+				"country": "Angola",
+				"timeZone": "Africa/Luanda"
+			},
+			"upstreamID": "AO0061"
+		}, {
+			"mmxId": "L_YI_Tener",
+			"name": "Tenerife",
+			"aliases": ["Tenerife", "Santa Cruz de Tenerife"],
+			"geographicPoint": {
+				"lat": 28.482500076293945,
+				"lon": -16.232500076293945,
+				"country": "Canary Is.",
+				"timeZone": "Atlantic/Canary"
+			},
+			"upstreamID": "YI0016"
+		}, {
+			"mmxId": "L_CN_Ningb",
+			"name": "Ningbo",
+			"aliases": ["Ningbo"],
+			"geographicPoint": {
+				"lat": 29.899999618530273,
+				"lon": 121.55000305175781,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0101"
+		}, {
+			"mmxId": "L_CN_BeiHa",
+			"name": "Bei Hai",
+			"aliases": ["Beihai"],
+			"geographicPoint": {
+				"lat": 21.475000381469727,
+				"lon": 109.0616683959961,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0009"
+		}, {
+			"mmxId": "L_CN_Zhous",
+			"name": "Zhoushan",
+			"aliases": ["Ting Hai"],
+			"geographicPoint": {
+				"lat": 30.00666618347168,
+				"lon": 122.09500122070312,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0188"
+		}, {
+			"mmxId": "L_HR_KrkIs",
+			"name": "Krk Island",
+			"geographicPoint": {
+				"lat": 45.32666778564453,
+				"lon": 14.428333282470703,
+				"country": "Croatia",
+				"timeZone": "Europe/Zagreb"
+			},
+			"upstreamID": "HR0036"
+		}, {
+			"mmxId": "L_FR_FosCa",
+			"name": "Fos",
+			"aliases": ["Fos - Cavaou"],
+			"geographicPoint": {
+				"lat": 43.4133338928223,
+				"lon": 4.89750003814697,
+				"country": "France",
+				"timeZone": "Europe/Paris"
+			},
+			"upstreamID": "FR0248"
+		}, {
+			"mmxId": "L_ID_Jakar",
+			"name": "Jakarta",
+			"aliases": ["Jakarta"],
+			"geographicPoint": {
+				"lat": -6.066666603088379,
+				"lon": 106.79499816894531,
+				"country": "Indonesia",
+				"timeZone": "Asia/Jakarta"
+			},
+			"upstreamID": "ID0076"
+		}, {
+			"mmxId": "L_JP_Higas",
+			"name": "Higashi-Ogishima",
+			"aliases": ["Higashi-Ogishima", "H-Ogishima", "H-Ohgishima"],
+			"geographicPoint": {
+				"lat": 35.503334045410156,
+				"lon": 139.75,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0116"
+		}, {
+			"mmxId": "L_JP_Joets",
+			"name": "Joetsu",
+			"geographicPoint": {
+				"lat": 37.19335174560547,
+				"lon": 138.25186157226562,
+				"country": "Japan",
+				"timeZone": "Asia/Kuching"
+			},
+			"upstreamID": "JP0197"
+		}, {
+			"mmxId": "L_JP_Naoet",
+			"name": "Naoetsu",
+			"geographicPoint": {
+				"lat": 37.19335174560547,
+				"lon": 138.25186157226562,
+				"country": "Japan",
+				"timeZone": "Asia/Kuching"
+			},
+			"upstreamID": "JP0197"
+		}, {
+			"mmxId": "L_JP_Senbo",
+			"name": "Senboku",
+			"geographicPoint": {
+				"lat": 34.55666732788086,
+				"lon": 135.42166137695312,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0254"
+		}, {
+			"mmxId": "L_NG_Bonny",
+			"name": "Bonny",
+			"aliases": ["Bonny Island", "Lagos"],
+			"geographicPoint": {
+				"lat": 4.416666507720947,
+				"lon": 7.133333206176758,
+				"country": "Nigeria",
+				"timeZone": "Africa/Lagos"
+			},
+			"upstreamID": "NG0009"
+		}, {
+			"mmxId": "L_PH_Taban",
+			"name": "Tabangao",
+			"geographicPoint": {
+				"lat": 13.721290588378906,
+				"lon": 121.05397033691406,
+				"country": "Philippines",
+				"timeZone": "Asia/Manila"
+			},
+			"upstreamID": "PH0018"
+		}, {
+			"mmxId": "L_KR_Gwang",
+			"name": "Gwangyang",
+			"geographicPoint": {
+				"lat": 34.88333511352539,
+				"lon": 127.79499816894531,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0046"
+		}, {
+			"mmxId": "L_KR_Pyeon",
+			"name": "Pyeongtaek",
+			"aliases": ["Pyeong Taek"],
+			"geographicPoint": {
+				"lat": 37.00400161743164,
+				"lon": 126.774169921875,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0079"
+		}, {
+			"mmxId": "L_KR_Samch",
+			"name": "Samcheog",
+			"aliases": ["Samchok", "Samcheok"],
+			"geographicPoint": {
+				"lat": 37.494998931884766,
+				"lon": 129.13999938964844,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0033"
+		}, {
+			"mmxId": "L_ES_ElFer",
+			"name": "El Ferrol",
+			"aliases": ["El Ferrol", "Ferol", "La Coruna", "Reganose", "Reganosa", "Murgardos", "Ferrol"],
+			"geographicPoint": {
+				"lat": 43.4716682434082,
+				"lon": -8.25,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0061"
+		}, {
+			"mmxId": "L_DZ_Arzew",
+			"name": "Arzew",
+			"geographicPoint": {
+				"lat": 35.849998474121094,
+				"lon": -0.2933333218097687,
+				"country": "Algeria",
+				"timeZone": "Africa/Algiers"
+			},
+			"upstreamID": "DZ0003"
+		}, {
+			"mmxId": "L_DZ_Skikd",
+			"name": "Skikda",
+			"aliases": ["Sonatrach"],
+			"geographicPoint": {
+				"lat": 36.88666534423828,
+				"lon": 6.940000057220459,
+				"country": "Algeria",
+				"timeZone": "Africa/Algiers"
+			},
+			"upstreamID": "DZ0033"
+		}, {
+			"mmxId": "L_AR_Bahia",
+			"name": "Bahia Blanca",
+			"geographicPoint": {
+				"lat": -38.788333892822266,
+				"lon": -62.28883361816406,
+				"country": "Argentina",
+				"timeZone": "America/Buenos_Aires"
+			},
+			"upstreamID": "AR0129"
+		}, {
+			"mmxId": "L_AR_Escob",
+			"name": "Escobar",
+			"geographicPoint": {
+				"lat": -34.23666763305664,
+				"lon": -58.76333236694336,
+				"country": "Argentina",
+				"timeZone": "America/Cordoba"
+			},
+			"upstreamID": "AR0130"
+		}, {
+			"mmxId": "L_AU_Barro",
+			"name": "Barrow Island",
+			"aliases": ["Gorgon"],
+			"geographicPoint": {
+				"lat": -20.81281280517578,
+				"lon": 115.5650863647461,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0021"
+		}, {
+			"mmxId": "L_AU_Dampi",
+			"name": "Dampier",
+			"geographicPoint": {
+				"lat": -20.648332595825195,
+				"lon": 116.67333221435547,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0089"
+		}, {
+			"mmxId": "L_AU_Darwi",
+			"name": "Darwin",
+			"aliases": ["Wickham Point"],
+			"geographicPoint": {
+				"lat": -12.491666793823242,
+				"lon": 130.8816680908203,
+				"country": "Australia",
+				"timeZone": "Australia/Darwin"
+			},
+			"upstreamID": "AU0329"
+		}, {
+			"mmxId": "L_AU_Glads",
+			"name": "Gladstone",
+			"geographicPoint": {
+				"lat": -23.805665969848633,
+				"lon": 151.21817016601562,
+				"country": "Australia",
+				"timeZone": "Australia/Brisbane"
+			},
+			"upstreamID": "AU0421"
+		}, {
+			"mmxId": "L_AU_Karra",
+			"name": "Karratha",
+			"aliases": ["Withnell Bay"],
+			"geographicPoint": {
+				"lat": -20.584999084472656,
+				"lon": 116.76499938964844,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0311"
+		}, {
+			"mmxId": "L_AU_Pluto",
+			"name": "Pluto",
+			"geographicPoint": {
+				"lat": -20.60416603088379,
+				"lon": 116.75416564941406,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0420"
+		}, {
+			"mmxId": "L_BH_Bahra",
+			"name": "Bahrain",
+			"geographicPoint": {
+				"lat": 26.16666603088379,
+				"lon": 50.68166732788086,
+				"country": "Bahrain",
+				"timeZone": "Asia/Bahrain"
+			},
+			"upstreamID": "BH0003"
+		}, {
+			"mmxId": "L_BD_Chitt",
+			"name": "Chittagong",
+			"geographicPoint": {
+				"lat": 22.308332443237305,
+				"lon": 91.80500030517578,
+				"country": "Bangladesh",
+				"timeZone": "Asia/Dhaka"
+			},
+			"upstreamID": "BD0003"
+		}, {
+			"mmxId": "L_BE_Zeebr",
+			"name": "Zeebrugge",
+			"aliases": ["Fluxys"],
+			"geographicPoint": {
+				"lat": 51.352333068847656,
+				"lon": 3.2149999141693115,
+				"country": "Belgium",
+				"timeZone": "Europe/Brussels"
+			},
+			"upstreamID": "BE0033"
+		}, {
+			"mmxId": "L_BR_Guana",
+			"name": "Guanabara",
+			"aliases": ["Petrobras Guanabara"],
+			"geographicPoint": {
+				"lat": -22.78333282470703,
+				"lon": -43.13283157348633,
+				"country": "Brazil",
+				"timeZone": "America/Sao_Paulo"
+			},
+			"upstreamID": "BR0240"
+		}, {
+			"mmxId": "L_BR_Pecem",
+			"name": "Pecem",
+			"aliases": ["Petrobras Pecem"],
+			"geographicPoint": {
+				"lat": -3.5274999141693115,
+				"lon": -38.79999923706055,
+				"country": "Brazil",
+				"timeZone": "America/Fortaleza"
+			},
+			"upstreamID": "BR0166"
+		}, {
+			"mmxId": "L_BR_Salva",
+			"name": "Salvador",
+			"aliases": ["Bahia"],
+			"geographicPoint": {
+				"lat": -12.97166633605957,
+				"lon": -38.53666687011719,
+				"country": "Brazil",
+				"timeZone": "America/Sao_Paulo"
+			},
+			"upstreamID": "BR0130"
+		}, {
+			"mmxId": "L_BR_SaoFr",
+			"name": "Sao Francisco do Sul",
+			"geographicPoint": {
+				"lat": -26.235666275024414,
+				"lon": -48.63833236694336,
+				"country": "Brazil",
+				"timeZone": "America/Sao_Paulo"
+			},
+			"upstreamID": "BR0134"
+		}, {
+			"mmxId": "L_BN_Lumut",
+			"name": "Lumut",
+			"aliases": ["Brunei"],
+			"geographicPoint": {
+				"lat": 4.712500095367432,
+				"lon": 114.44283294677734,
+				"country": "Brunei Darussalam",
+				"timeZone": "Asia/Brunei"
+			},
+			"upstreamID": "BN0003"
+		}, {
+			"mmxId": "L_BN_Seria",
+			"name": "Seria",
+			"geographicPoint": {
+				"lat": 4.714999675750732,
+				"lon": 114.32499694824219,
+				"country": "Brunei Darussalam",
+				"timeZone": "Asia/Brunei"
+			},
+			"upstreamID": "BN0005"
+		}, {
+			"mmxId": "L_CM_Kribi",
+			"name": "Kribi",
+			"geographicPoint": {
+				"lat": 2.941666603088379,
+				"lon": 9.893333435058594,
+				"country": "Cameroon",
+				"timeZone": "Africa/Douala"
+			},
+			"upstreamID": "CM0009"
+		}, {
+			"mmxId": "L_CA_Canap",
+			"name": "Canaport",
+			"aliases": ["Saint John"],
+			"geographicPoint": {
+				"lat": 45.2043342590332,
+				"lon": -65.98049926757812,
+				"country": "Canada",
+				"timeZone": "America/Halifax"
+			},
+			"upstreamID": "CA0712"
+		}, {
+			"mmxId": "L_CA_Halif",
+			"name": "Halifax",
+			"geographicPoint": {
+				"lat": 44.63666534423828,
+				"lon": -63.54166793823242,
+				"country": "Canada",
+				"timeZone": "America/Halifax"
+			},
+			"upstreamID": "CA0201"
+		}, {
+			"mmxId": "L_CA_Kitim",
+			"name": "Kitimat",
+			"geographicPoint": {
+				"lat": 53.98833465576172,
+				"lon": -128.67832946777344,
+				"country": "Canada",
+				"timeZone": "America/Vancouver"
+			},
+			"upstreamID": "CA0250"
+		}, {
+			"mmxId": "L_CA_Princ",
+			"name": "Prince Rupert",
+			"geographicPoint": {
+				"lat": 54.3216667175293,
+				"lon": -130.31666564941406,
+				"country": "Canada",
+				"timeZone": "America/Vancouver"
+			},
+			"upstreamID": "CA0422"
+		}, {
+			"mmxId": "L_CA_Quebe",
+			"name": "Quebec",
+			"geographicPoint": {
+				"lat": 46.82666778564453,
+				"lon": -71.19666290283203,
+				"country": "Canada",
+				"timeZone": "America/Toronto"
+			},
+			"upstreamID": "CA0427"
+		}, {
+			"mmxId": "L_CL_Mejil",
+			"name": "Mejillones",
+			"geographicPoint": {
+				"lat": -23.08333396911621,
+				"lon": -70.41666412353516,
+				"country": "Chile",
+				"timeZone": "America/Santiago"
+			},
+			"upstreamID": "CL0043"
+		}, {
+			"mmxId": "L_CL_Quint",
+			"name": "Quintero",
+			"geographicPoint": {
+				"lat": -32.747501373291016,
+				"lon": -71.5199966430664,
+				"country": "Chile",
+				"timeZone": "America/Santiago"
+			},
+			"upstreamID": "CL0068"
+		}, {
+			"mmxId": "L_CL_Talca",
+			"name": "Talcahuano",
+			"geographicPoint": {
+				"lat": -36.70500183105469,
+				"lon": -73.07333374023438,
+				"country": "Chile",
+				"timeZone": "America/Santiago"
+			},
+			"upstreamID": "CL0074"
+		}, {
+			"mmxId": "L_CN_Chiwa",
+			"name": "Chiwan",
+			"geographicPoint": {
+				"lat": 22.461666107177734,
+				"lon": 113.88166809082031,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0025"
+		}, {
+			"mmxId": "L_CN_Dalia",
+			"name": "Dalian",
+			"geographicPoint": {
+				"lat": 38.9561653137207,
+				"lon": 121.88716888427734,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0609"
+		}, {
+			"mmxId": "L_CN_Fujia",
+			"name": "Fujian",
+			"aliases": ["Xiuyu"],
+			"geographicPoint": {
+				"lat": 25.211166381835938,
+				"lon": 118.99666595458984,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0587"
+		}, {
+			"mmxId": "L_CN_Guang",
+			"name": "Guangdong",
+			"aliases": ["Dapeng"],
+			"geographicPoint": {
+				"lat": 22.574167251586914,
+				"lon": 114.43000030517578,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0204"
+		}, {
+			"mmxId": "L_CN_Yuedo",
+			"name": "Yuedong",
+			"geographicPoint": {
+				"lat": 22.574167251586914,
+				"lon": 114.43000030517578,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0204"
+		}, {
+			"mmxId": "L_CN_Haiko",
+			"name": "Haikou",
+			"geographicPoint": {
+				"lat": 20.02666664123535,
+				"lon": 110.27833557128906,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0036"
+		}, {
+			"mmxId": "L_SP_Haina",
+			"name": "Hainan",
+			"aliases": ["Hainan Strait"],
+			"geographicPoint": {
+				"lat": 20.183332443237305,
+				"lon": 110.36499786376953,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "SP5012"
+		}, {
+			"mmxId": "L_CN_Heibe",
+			"name": "Heibei",
+			"geographicPoint": {
+				"lat": 38.91666793823242,
+				"lon": 118.55000305175781,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0637"
+		}, {
+			"mmxId": "L_CN_Caofe",
+			"name": "Caofeidian",
+			"aliases": ["Cao Fei Dian"],
+			"geographicPoint": {
+				"lat": 38.91666793823242,
+				"lon": 118.55000305175781,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0637"
+		}, {
+			"mmxId": "L_CN_Tangs",
+			"name": "Tangshan",
+			"geographicPoint": {
+				"lat": 38.91666793823242,
+				"lon": 118.55000305175781,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0637"
+		}, {
+			"mmxId": "L_CN_Jiang",
+			"name": "Jiangsu",
+			"aliases": ["Nantong", "Rudong"],
+			"geographicPoint": {
+				"lat": 32.54999923706055,
+				"lon": 121.43000030517578,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0606"
+		}, {
+			"mmxId": "L_CN_Liany",
+			"name": "Lianyungang",
+			"geographicPoint": {
+				"lat": 34.75,
+				"lon": 119.44999694824219,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0073"
+		}, {
+			"mmxId": "L_CN_Qingd",
+			"name": "Qingdao",
+			"aliases": ["Tsingtao"],
+			"geographicPoint": {
+				"lat": 36.09416580200195,
+				"lon": 120.31666564941406,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0148"
+		}, {
+			"mmxId": "L_CN_Qinhu",
+			"name": "Qinhuangdao",
+			"geographicPoint": {
+				"lat": 39.904998779296875,
+				"lon": 119.59166717529297,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0109"
+		}, {
+			"mmxId": "L_CN_Qinzh",
+			"name": "Qinzhou",
+			"geographicPoint": {
+				"lat": 21.71666717529297,
+				"lon": 108.58333587646484,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0110"
+		}, {
+			"mmxId": "L_CN_Shang",
+			"name": "Shanghai",
+			"geographicPoint": {
+				"lat": 31.258333206176758,
+				"lon": 121.5433349609375,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0116"
+		}, {
+			"mmxId": "L_CN_Shenz",
+			"name": "Shenzhen",
+			"geographicPoint": {
+				"lat": 22.443429946899414,
+				"lon": 113.88360595703125,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0122"
+		}, {
+			"mmxId": "L_CN_Tianj",
+			"name": "Tianjin (CNOOC)",
+			"aliases": ["Tianjin Lingang"],
+			"geographicPoint": {
+				"lat": 38.938331604003906,
+				"lon": 117.8116683959961,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0594"
+		}, {
+			"mmxId": "L_CN_Tianj2",
+			"name": "Tianjin (Sinopec)",
+			"geographicPoint": {
+				"lat": 38.938331604003906,
+				"lon": 117.8116683959961,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0594"
+		}, {
+			"mmxId": "L_CN_Yangp",
+			"name": "Yangpu",
+			"geographicPoint": {
+				"lat": 19.72016716003418,
+				"lon": 109.18199920654297,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0621"
+		}, {
+			"mmxId": "L_CN_Yangs",
+			"name": "Yangshan",
+			"aliases": ["Yangshan Deep Water Port"],
+			"geographicPoint": {
+				"lat": 30.6200008392334,
+				"lon": 122.05833435058594,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0540"
+		}, {
+			"mmxId": "L_CN_Zhang",
+			"name": "Zhangjiagang",
+			"geographicPoint": {
+				"lat": 31.969999313354492,
+				"lon": 120.4000015258789,
+				"country": "China",
+				"timeZone": "Asia/Shanghai"
+			},
+			"upstreamID": "CN0182"
+		}, {
+			"mmxId": "L_CN_Zhuha",
+			"name": "Zhuhai",
+			"geographicPoint": {
+				"lat": 22.239166259765625,
+				"lon": 113.58499908447266,
+				"country": "China",
+				"timeZone": "Asia/Chongqing"
+			},
+			"upstreamID": "CN0189"
+		}, {
+			"mmxId": "L_CO_Puert",
+			"name": "Puerto Bahia",
+			"aliases": ["Puerto Bahia"],
+			"geographicPoint": {
+				"lat": 10.293100357055664,
+				"lon": -75.53398132324219,
+				"country": "Colombia",
+				"timeZone": "America/Bogota"
+			},
+			"upstreamID": "CO0051"
+		}, {
+			"mmxId": "L_CY_Limas",
+			"name": "Limassol",
+			"geographicPoint": {
+				"lat": 34.64833450317383,
+				"lon": 33.02083206176758,
+				"country": "Cyprus",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "CY0014"
+		}, {
+			"mmxId": "L_DO_AESAn",
+			"name": "AES Andres",
+			"aliases": ["Caucedo", "Dominican Republic", "Andres"],
+			"geographicPoint": {
+				"lat": 18.399999618530273,
+				"lon": -69.61499786376953,
+				"country": "Dominican Republic",
+				"timeZone": "America/Santo_Domingo"
+			},
+			"upstreamID": "DO0027"
+		}, {
+			"mmxId": "L_TP_Dili",
+			"name": "Dili",
+			"geographicPoint": {
+				"lat": -8.550833702087402,
+				"lon": 125.57550048828125,
+				"country": "East Timor",
+				"timeZone": "Asia/Dili"
+			},
+			"upstreamID": "TP0001"
+		}, {
+			"mmxId": "L_EG_AinSo",
+			"name": "Ain Sokhna",
+			"aliases": ["Ain Sukhna", "Sokhna"],
+			"geographicPoint": {
+				"lat": 29.575000762939453,
+				"lon": 32.40833282470703,
+				"country": "Egypt",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "EG0006"
+		}, {
+			"mmxId": "L_EG_Damie",
+			"name": "Damietta",
+			"aliases": ["SEGAS"],
+			"geographicPoint": {
+				"lat": 31.46666717529297,
+				"lon": 31.758333206176758,
+				"country": "Egypt",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "EG0016"
+		}, {
+			"mmxId": "L_EG_Idku",
+			"name": "Idku",
+			"geographicPoint": {
+				"lat": 31.3700008392334,
+				"lon": 30.295000076293945,
+				"country": "Egypt",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "EG0096"
+		}, {
+			"mmxId": "L_CP_Suez",
+			"name": "Suez",
+			"geographicPoint": {
+				"lat": 29.834999084472656,
+				"lon": 32.5533332824707,
+				"country": "Egypt",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "CP3200"
+		}, {
+			"mmxId": "L_SV_Acaju",
+			"name": "Acajutla",
+			"geographicPoint": {
+				"lat": 13.563333511352539,
+				"lon": -89.84166717529297,
+				"country": "El Salvador",
+				"timeZone": "America/El_Salvador"
+			},
+			"upstreamID": "SV0001"
+		}, {
+			"mmxId": "L_GQ_Punta",
+			"name": "Punta Europa",
+			"aliases": ["Bioko Island"],
+			"geographicPoint": {
+				"lat": 3.7833333015441895,
+				"lon": 8.696666717529297,
+				"country": "Equatorial Guinea",
+				"timeZone": "Africa/Malabo"
+			},
+			"upstreamID": "GQ0044"
+		}, {
+			"mmxId": "L_EE_Paldi",
+			"name": "Paldiski",
+			"aliases": ["Paldiski South Harbour"],
+			"geographicPoint": {
+				"lat": 59.33333206176758,
+				"lon": 24.08333396911621,
+				"country": "Estonia",
+				"timeZone": "Europe/Tallinn"
+			},
+			"upstreamID": "EE0019"
+		}, {
+			"mmxId": "L_FR_Dunki",
+			"name": "Dunkirk",
+			"aliases": ["Dunkirk, France"],
+			"geographicPoint": {
+				"lat": 51.03756666666666,
+				"lon": 2.1870833333333333,
+				"country": "France",
+				"timeZone": "Europe/Paris"
+			},
+			"upstreamID": "FR0299"
+		}, {
+			"mmxId": "L_FR_FosSu",
+			"name": "Fos Sur Mer",
+			"aliases": ["Fos"],
+			"geographicPoint": {
+				"lat": 43.45000076293945,
+				"lon": 4.855000019073486,
+				"country": "France",
+				"timeZone": "Europe/Paris"
+			},
+			"upstreamID": "FR0245"
+		}, {
+			"mmxId": "L_FR_LeHav",
+			"name": "Le Havre",
+			"geographicPoint": {
+				"lat": 49.4716682434082,
+				"lon": 0.1599999964237213,
+				"country": "France",
+				"timeZone": "Europe/Paris"
+			},
+			"upstreamID": "FR0090"
+		}, {
+			"mmxId": "L_FR_Monto",
+			"name": "Montoir",
+			"aliases": ["Montoir De Bretagne"],
+			"geographicPoint": {
+				"lat": 47.29833221435547,
+				"lon": -2.140000104904175,
+				"country": "France",
+				"timeZone": "Europe/Paris"
+			},
+			"upstreamID": "FR0134"
+		}, {
+			"mmxId": "L_DE_Rosto",
+			"name": "Rostock",
+			"geographicPoint": {
+				"lat": 54.15833282470703,
+				"lon": 12.103333473205566,
+				"country": "Germany",
+				"timeZone": "Europe/Berlin"
+			},
+			"upstreamID": "DE0091"
+		}, {
+			"mmxId": "L_DE_Wilhe",
+			"name": "Wilhelmshaven",
+			"geographicPoint": {
+				"lat": 53.53333282470703,
+				"lon": 8.16333293914795,
+				"country": "Germany",
+				"timeZone": "Europe/Berlin"
+			},
+			"upstreamID": "DE0117"
+		}, {
+			"mmxId": "L_GI_Gibra",
+			"name": "Gibraltar",
+			"aliases": ["Gibraltar"],
+			"geographicPoint": {
+				"lat": 36.1349983215332,
+				"lon": -5.364999771118164,
+				"country": "Gibraltar",
+				"timeZone": "Europe/Gibraltar"
+			},
+			"upstreamID": "GI0003"
+		}, {
+			"mmxId": "L_GR_Revit",
+			"name": "Revithoussa",
+			"geographicPoint": {
+				"lat": 37.95833206176758,
+				"lon": 23.405000686645508,
+				"country": "Greece",
+				"timeZone": "Europe/Athens"
+			},
+			"upstreamID": "GR0235"
+		}, {
+			"mmxId": "L_TT_Point",
+			"name": "Pointe-a-Pitre",
+			"aliases": ["Pointe-a-Pitre a", "Pointe"],
+			"geographicPoint": {
+				"lat": 16.233333587646484,
+				"lon": -61.54750061035156,
+				"country": "Guadeloupe",
+				"timeZone": "America/Guadeloupe"
+			},
+			"upstreamID": "GP0005"
+		}, {
+			"mmxId": "L_IN_Dabho",
+			"name": "Dabhol",
+			"geographicPoint": {
+				"lat": 17.52666664123535,
+				"lon": 73.13833618164062,
+				"country": "India",
+				"timeZone": "Asia/Calcutta"
+			},
+			"upstreamID": "IN0189"
+		}, {
+			"mmxId": "L_IN_Dahej",
+			"name": "Dahej",
+			"geographicPoint": {
+				"lat": 21.672515869140625,
+				"lon": 72.50035095214844,
+				"country": "India",
+				"timeZone": "Asia/Calcutta"
+			},
+			"upstreamID": "IN0201"
+		}, {
+			"mmxId": "L_IN_Ennor",
+			"name": "Ennore",
+			"geographicPoint": {
+				"lat": 13.261666297912598,
+				"lon": 80.34166717529297,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0044"
+		}, {
+			"mmxId": "L_IN_Ganga",
+			"name": "Gangavaram",
+			"geographicPoint": {
+				"lat": 17.623332977294922,
+				"lon": 83.23666381835938,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0171"
+		}, {
+			"mmxId": "L_IN_Haldi",
+			"name": "Haldia",
+			"aliases": ["Offshore Haldia No.1 (TA)"],
+			"geographicPoint": {
+				"lat": 22.02666664123535,
+				"lon": 88.09833526611328,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0047"
+		}, {
+			"mmxId": "L_IN_Hazir",
+			"name": "Hazira",
+			"geographicPoint": {
+				"lat": 21.14666748046875,
+				"lon": 72.56416320800781,
+				"country": "India",
+				"timeZone": "Asia/Calcutta"
+			},
+			"upstreamID": "IN0048"
+		}, {
+			"mmxId": "L_IN_Kakin",
+			"name": "Kakinada",
+			"geographicPoint": {
+				"lat": 16.97333335876465,
+				"lon": 82.28500366210938,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0057"
+		}, {
+			"mmxId": "L_IN_Karwa",
+			"name": "Karwar - South Port",
+			"aliases": ["Karwar - South Port South", "Karwar"],
+			"geographicPoint": {
+				"lat": 14.770000457763672,
+				"lon": 74.13666534423828,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0185"
+		}, {
+			"mmxId": "L_IN_Kochi",
+			"name": "Kochi",
+			"aliases": ["Cochin"],
+			"geographicPoint": {
+				"lat": 9.972000122070312,
+				"lon": 76.22808074951172,
+				"country": "India",
+				"timeZone": "Asia/Calcutta"
+			},
+			"upstreamID": "IN0202"
+		}, {
+			"mmxId": "L_IN_Mundr",
+			"name": "Mundra",
+			"geographicPoint": {
+				"lat": 22.726667404174805,
+				"lon": 69.7066650390625,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0093"
+		}, {
+			"mmxId": "L_IN_Pipav",
+			"name": "Pipavav",
+			"geographicPoint": {
+				"lat": 20.91583251953125,
+				"lon": 71.50916290283203,
+				"country": "India",
+				"timeZone": "Asia/Kolkata"
+			},
+			"upstreamID": "IN0110"
+		}, {
+			"mmxId": "L_ID_Ambon",
+			"name": "Ambon",
+			"geographicPoint": {
+				"lat": -3.691666603088379,
+				"lon": 128.1616668701172,
+				"country": "Indonesia",
+				"timeZone": "Asia/Jayapura"
+			},
+			"upstreamID": "ID0008"
+		}, {
+			"mmxId": "L_ID_Arun",
+			"name": "Arun",
+			"aliases": ["Blanglacang", "Blang Lacang"],
+			"geographicPoint": {
+				"lat": 5.2191667556762695,
+				"lon": 97.0999984741211,
+				"country": "Indonesia",
+				"timeZone": "Asia/Jakarta"
+			},
+			"upstreamID": "ID0431"
+		}, {
+			"mmxId": "L_ID_Bonta",
+			"name": "Bontang",
+			"aliases": ["Badak"],
+			"geographicPoint": {
+				"lat": 0.09666666388511658,
+				"lon": 117.4800033569336,
+				"country": "Indonesia",
+				"timeZone": "Asia/Makassar"
+			},
+			"upstreamID": "ID0054"
+		}, {
+			"mmxId": "L_ID_Luwuk",
+			"name": "Luwuk",
+			"geographicPoint": {
+				"lat": -0.9483333230018616,
+				"lon": 122.79833221435547,
+				"country": "Indonesia",
+				"timeZone": "Asia/Makassar"
+			},
+			"upstreamID": "ID0154"
+		}, {
+			"mmxId": "L_ID_Semar",
+			"name": "Semarang",
+			"geographicPoint": {
+				"lat": -6.947133333333333,
+				"lon": 110.42238333333333,
+				"country": "Indonesia",
+				"timeZone": "Asia/Jakarta"
+			},
+			"upstreamID": "ID0260"
+		}, {
+			"mmxId": "L_ID_Tangg",
+			"name": "Tangguh",
+			"aliases": ["Tannguh"],
+			"geographicPoint": {
+				"lat": -2.4233334064483643,
+				"lon": 133.1266632080078,
+				"country": "Indonesia",
+				"timeZone": "Asia/Jayapura"
+			},
+			"upstreamID": "ID0352"
+		}, {
+			"mmxId": "L_IQ_Khora",
+			"name": "Khor al Zubair",
+			"geographicPoint": {
+				"lat": 30.196516036987305,
+				"lon": 47.88589859008789,
+				"country": "Iraq",
+				"timeZone": "Asia/Baghdad"
+			},
+			"upstreamID": "IQ0006"
+		}, {
+			"mmxId": "L_IR_ParsL",
+			"name": "Pars",
+			"geographicPoint": {
+				"lat": 27.516666412353516,
+				"lon": 52.51333236694336,
+				"country": "Iran",
+				"timeZone": "Asia/Tehran"
+			},
+			"upstreamID": "IR0003"
+		}, {
+			"mmxId": "L_IR_Tomba",
+			"name": "Tombak",
+			"aliases": ["Iran"],
+			"geographicPoint": {
+				"lat": 27.71666717529297,
+				"lon": 52.16666793823242,
+				"country": "Iran",
+				"timeZone": "Asia/Tehran"
+			},
+			"upstreamID": "IR0082"
+		}, {
+			"mmxId": "L_IE_Limer",
+			"name": "Limerick",
+			"geographicPoint": {
+				"lat": 52.6591682434082,
+				"lon": -8.645833015441895,
+				"country": "Ireland",
+				"timeZone": "Europe/Dublin"
+			},
+			"upstreamID": "IE0057"
+		}, {
+			"mmxId": "L_IL_Ashdo",
+			"name": "Ashdod",
+			"geographicPoint": {
+				"lat": 31.8266658782959,
+				"lon": 34.63750076293945,
+				"country": "Israel",
+				"timeZone": "Asia/Jerusalem"
+			},
+			"upstreamID": "IL0013"
+		}, {
+			"mmxId": "L_IL_Hader",
+			"name": "Hadera",
+			"geographicPoint": {
+				"lat": 32.46666717529297,
+				"lon": 34.73833465576172,
+				"country": "Israel",
+				"timeZone": "Asia/Tel_Aviv"
+			},
+			"upstreamID": "IL0014"
+		}, {
+			"mmxId": "L_IT_Falco",
+			"name": "Falconara",
+			"geographicPoint": {
+				"lat": 43.650001525878906,
+				"lon": 13.399999618530273,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0053"
+		}, {
+			"mmxId": "L_IT_Gioia",
+			"name": "Gioia Tauro",
+			"geographicPoint": {
+				"lat": 38.44166564941406,
+				"lon": 15.898333549499512,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0070"
+		}, {
+			"mmxId": "L_IT_Livor",
+			"name": "Livorno",
+			"geographicPoint": {
+				"lat": 43.63333511352539,
+				"lon": 9.97166633605957,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0276"
+		}, {
+			"mmxId": "L_IT_Orton",
+			"name": "Ortona",
+			"geographicPoint": {
+				"lat": 42.35333251953125,
+				"lon": 14.416666984558105,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0110"
+		}, {
+			"mmxId": "L_IT_Panig",
+			"name": "Panigaglia",
+			"aliases": ["La Spezia"],
+			"geographicPoint": {
+				"lat": 44.07666778564453,
+				"lon": 9.836166381835938,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0270"
+		}, {
+			"mmxId": "L_IT_Porto",
+			"name": "Porto Empedocle",
+			"geographicPoint": {
+				"lat": 37.28166580200195,
+				"lon": 13.52833366394043,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0133"
+		}, {
+			"mmxId": "L_IT_Rosig",
+			"name": "Rosignano",
+			"geographicPoint": {
+				"lat": 43.358333587646484,
+				"lon": 10.416666984558105,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0263"
+		}, {
+			"mmxId": "L_IT_Rovig",
+			"name": "Rovigo",
+			"geographicPoint": {
+				"lat": 45.09166717529297,
+				"lon": 12.591666221618652,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0265"
+		}, {
+			"mmxId": "L_IT_Tries",
+			"name": "Trieste",
+			"geographicPoint": {
+				"lat": 45.63166809082031,
+				"lon": 13.744999885559082,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0204"
+		}, {
+			"mmxId": "L_JM_PortE",
+			"name": "Port Esquivel",
+			"geographicPoint": {
+				"lat": 17.88833236694336,
+				"lon": -77.12999725341797,
+				"country": "Jamaica",
+				"timeZone": "America/Jamaica"
+			},
+			"upstreamID": "JM0013"
+		}, {
+			"mmxId": "L_JP_Chita",
+			"name": "Chita",
+			"geographicPoint": {
+				"lat": 34.9716682434082,
+				"lon": 136.81832885742188,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0021"
+		}, {
+			"mmxId": "L_JP_Fukuo",
+			"name": "Fukuoko",
+			"aliases": ["Kumamoto"],
+			"geographicPoint": {
+				"lat": 32.7599983215332,
+				"lon": 130.5883331298828,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0358"
+		}, {
+			"mmxId": "L_JP_Futts",
+			"name": "Futtsu",
+			"geographicPoint": {
+				"lat": 35.34166717529297,
+				"lon": 139.82000732421875,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0360"
+		}, {
+			"mmxId": "L_JP_Hachi",
+			"name": "Hachinohe",
+			"geographicPoint": {
+				"lat": 40.551666259765625,
+				"lon": 141.52499389648438,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0043"
+		}, {
+			"mmxId": "L_JP_Hakod",
+			"name": "Hakodate",
+			"geographicPoint": {
+				"lat": 41.788333892822266,
+				"lon": 140.71417236328125,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0047"
+		}, {
+			"mmxId": "L_JP_Hatsu",
+			"name": "Hatsukaichi",
+			"geographicPoint": {
+				"lat": 34.34166717529297,
+				"lon": 132.35667419433594,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0361"
+		}, {
+			"mmxId": "L_JP_Himej",
+			"name": "Himeji",
+			"geographicPoint": {
+				"lat": 34.76416778564453,
+				"lon": 134.6858367919922,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0063"
+		}, {
+			"mmxId": "L_JP_Hitac",
+			"name": "Hitachi",
+			"geographicPoint": {
+				"lat": 36.484033333333336,
+				"lon": 140.625,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0451"
+		}, {
+			"mmxId": "L_JP_Kagos",
+			"name": "Kagoshima",
+			"geographicPoint": {
+				"lat": 31.483333587646484,
+				"lon": 130.52999877929688,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0365"
+		}, {
+			"mmxId": "L_JP_Kawag",
+			"name": "Kawagoe",
+			"geographicPoint": {
+				"lat": 34.996665954589844,
+				"lon": 136.69667053222656,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0366"
+		}, {
+			"mmxId": "L_JP_Kitak",
+			"name": "Kitakyushu",
+			"geographicPoint": {
+				"lat": 33.90999984741211,
+				"lon": 130.81832885742188,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0340"
+		}, {
+			"mmxId": "L_JP_Kushi",
+			"name": "Kushiro",
+			"geographicPoint": {
+				"lat": 42.99166488647461,
+				"lon": 144.336669921875,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0143"
+		}, {
+			"mmxId": "L_JP_Mizus",
+			"name": "Mizushima",
+			"geographicPoint": {
+				"lat": 34.49333190917969,
+				"lon": 133.74000549316406,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0174"
+		}, {
+			"mmxId": "L_JP_Nagas",
+			"name": "Nagasaki",
+			"geographicPoint": {
+				"lat": 32.73833465576172,
+				"lon": 129.8633270263672,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0188"
+		}, {
+			"mmxId": "L_JP_Nanao",
+			"name": "Nanao",
+			"geographicPoint": {
+				"lat": 37.0716667175293,
+				"lon": 137.0016632080078,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0196"
+		}, {
+			"mmxId": "L_JP_Negis",
+			"name": "Negishi",
+			"geographicPoint": {
+				"lat": 35.399166107177734,
+				"lon": 139.63417053222656,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0200"
+		}, {
+			"mmxId": "L_JP_Niiga",
+			"name": "Niigata Higashi",
+			"aliases": ["Niigata-Higashi"],
+			"geographicPoint": {
+				"lat": 38.003334045410156,
+				"lon": 139.22833251953125,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0203"
+		}, {
+			"mmxId": "L_JP_Niiga2",
+			"name": "Niigata-Nishi",
+			"aliases": ["Niigata Nishi"],
+			"geographicPoint": {
+				"lat": 37.94499969482422,
+				"lon": 139.06666564941406,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0204"
+		}, {
+			"mmxId": "L_JP_Ohgis",
+			"name": "Ohgishima",
+			"aliases": ["Ogishima", "Ogishima Tokyo Gas"],
+			"geographicPoint": {
+				"lat": 35.461666107177734,
+				"lon": 139.72000122070312,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0215"
+		}, {
+			"mmxId": "L_JP_Oita",
+			"name": "Oita",
+			"aliases": ["Ohita"],
+			"geographicPoint": {
+				"lat": 33.28083419799805,
+				"lon": 131.66000366210938,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0219"
+		}, {
+			"mmxId": "L_JP_Okina",
+			"name": "Okinawa",
+			"aliases": ["Yoshinaura"],
+			"geographicPoint": {
+				"lat": 26.267499923706055,
+				"lon": 127.81500244140625,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0369"
+		}, {
+			"mmxId": "L_JP_Osaka",
+			"name": "Osaka",
+			"aliases": ["Osaka"],
+			"geographicPoint": {
+				"lat": 34.64833450317383,
+				"lon": 135.4166717529297,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0238"
+		}, {
+			"mmxId": "L_JP_Otaru",
+			"name": "Otaru",
+			"aliases": ["Ishikariwanshinko", "Ishikariwan-Shinko Ishikariwan", "Ishikariwan", "Ishikariwan-Shinko"],
+			"geographicPoint": {
+				"lat": 43.20000076293945,
+				"lon": 141.01666259765625,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0240"
+		}, {
+			"mmxId": "L_JP_Sakai",
+			"name": "Sakai",
+			"geographicPoint": {
+				"lat": 34.564998626708984,
+				"lon": 135.40499877929688,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0427"
+		}, {
+			"mmxId": "L_JP_Sakai2",
+			"name": "Sakaide",
+			"geographicPoint": {
+				"lat": 34.36249923706055,
+				"lon": 133.836669921875,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0255"
+		}, {
+			"mmxId": "L_JP_Senda",
+			"name": "Sendai",
+			"geographicPoint": {
+				"lat": 38.27000045776367,
+				"lon": 141.03334045410156,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0264"
+		}, {
+			"mmxId": "L_JP_Shimi",
+			"name": "Shimizu",
+			"aliases": ["Shimizu, (Honshu), Japan", "Sodeshi"],
+			"geographicPoint": {
+				"lat": 35.02333450317383,
+				"lon": 138.5050048828125,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0274"
+		}, {
+			"mmxId": "L_JP_Shinm",
+			"name": "Shinminato",
+			"aliases": ["Shin-minato"],
+			"geographicPoint": {
+				"lat": 36.77000045776367,
+				"lon": 137.11500549316406,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0368"
+		}, {
+			"mmxId": "L_JP_Sodeg",
+			"name": "Sodegaura",
+			"geographicPoint": {
+				"lat": 35.473331451416016,
+				"lon": 139.96665954589844,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0362"
+		}, {
+			"mmxId": "L_JP_Soma",
+			"name": "Soma",
+			"geographicPoint": {
+				"lat": 37.84166717529297,
+				"lon": 140.97500610351562,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0285"
+		}, {
+			"mmxId": "L_JP_Tobat",
+			"name": "Tobata",
+			"geographicPoint": {
+				"lat": 33.91999816894531,
+				"lon": 130.8633270263672,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0305"
+		}, {
+			"mmxId": "L_JP_Tokyo",
+			"name": "Tokyo Bay",
+			"aliases": ["Tokyo"],
+			"geographicPoint": {
+				"lat": 35.60333251953125,
+				"lon": 139.77499389648438,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0310"
+		}, {
+			"mmxId": "L_JP_Wakay",
+			"name": "Wakayama",
+			"geographicPoint": {
+				"lat": 34.209999084472656,
+				"lon": 135.13833618164062,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0341"
+		}, {
+			"mmxId": "L_JP_Yanai",
+			"name": "Yanai",
+			"geographicPoint": {
+				"lat": 33.95000076293945,
+				"lon": 132.13333129882812,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0363"
+		}, {
+			"mmxId": "L_JP_Yokka",
+			"name": "Yokkaichi",
+			"geographicPoint": {
+				"lat": 34.970001220703125,
+				"lon": 136.6616668701172,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0367"
+		}, {
+			"mmxId": "L_JP_Yokoh",
+			"name": "Yokohama",
+			"aliases": ["Yokohama"],
+			"geographicPoint": {
+				"lat": 35.448333740234375,
+				"lon": 139.68499755859375,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0352"
+		}, {
+			"mmxId": "L_JO_Aqaba",
+			"name": "Aqaba",
+			"geographicPoint": {
+				"lat": 29.50666618347168,
+				"lon": 34.98833465576172,
+				"country": "Jordan",
+				"timeZone": "Asia/Amman"
+			},
+			"upstreamID": "JO0001"
+		}, {
+			"mmxId": "L_KE_Momba",
+			"name": "Mombasa",
+			"geographicPoint": {
+				"lat": -4.049999713897705,
+				"lon": 39.641666412353516,
+				"country": "Kenya",
+				"timeZone": "Africa/Nairobi"
+			},
+			"upstreamID": "KE0006"
+		}, {
+			"mmxId": "L_KR_Kwang",
+			"name": "Kwangyang",
+			"geographicPoint": {
+				"lat": 34.88333511352539,
+				"lon": 127.79499816894531,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0046"
+		}, {
+			"mmxId": "L_KW_MinaA",
+			"name": "Mina Al Ahmadi",
+			"aliases": ["Mina Al-Ahmadi", "Mina Al-Ahmadi, Kuwait"],
+			"geographicPoint": {
+				"lat": 29.066665649414062,
+				"lon": 48.16666793823242,
+				"country": "Kuwait",
+				"timeZone": "Asia/Kuwait"
+			},
+			"upstreamID": "KW0009"
+		}, {
+			"mmxId": "L_LB_Tripo",
+			"name": "Tripoli",
+			"aliases": ["Tripoli, Lebanon"],
+			"geographicPoint": {
+				"lat": 34.48833465576172,
+				"lon": 35.85333251953125,
+				"country": "Lebanon",
+				"timeZone": "Asia/Beirut"
+			},
+			"upstreamID": "LB0010"
+		}, {
+			"mmxId": "L_LY_Marsa",
+			"name": "Marsa el Brega",
+			"aliases": ["Marsa El Brega", "Marsa Brega"],
+			"geographicPoint": {
+				"lat": 30.41666603088379,
+				"lon": 19.59166717529297,
+				"country": "Libya",
+				"timeZone": "Africa/Tripoli"
+			},
+			"upstreamID": "LY0020"
+		}, {
+			"mmxId": "L_LT_Klaip",
+			"name": "Klaipeda",
+			"geographicPoint": {
+				"lat": 55.664516666666664,
+				"lon": 21.13906666666667,
+				"country": "Lithuania",
+				"timeZone": "Europe/Vilnius"
+			},
+			"upstreamID": "LT0004"
+		}, {
+			"mmxId": "L_MY_Bintu",
+			"name": "Bintulu",
+			"aliases": ["Malaysia"],
+			"geographicPoint": {
+				"lat": 3.2632665634155273,
+				"lon": 113.05909729003906,
+				"country": "Malaysia",
+				"timeZone": "Asia/Kuala_Lumpur"
+			},
+			"upstreamID": "MY0010"
+		}, {
+			"mmxId": "L_MY_Johor",
+			"name": "Johore",
+			"geographicPoint": {
+				"lat": 1.4574999809265137,
+				"lon": 103.77666473388672,
+				"country": "Malaysia",
+				"timeZone": "Asia/Kuala_Lumpur"
+			},
+			"upstreamID": "MY0129"
+		}, {
+			"mmxId": "L_MY_Malac",
+			"name": "Malacca",
+			"geographicPoint": {
+				"lat": 2.18833327293396,
+				"lon": 102.10333251953125,
+				"country": "Malaysia",
+				"timeZone": "Asia/Kuala_Lumpur"
+			},
+			"upstreamID": "MY0056"
+		}, {
+			"mmxId": "L_MY_Sunga",
+			"name": "Sungai Udang",
+			"geographicPoint": {
+				"lat": 2.2430832386016846,
+				"lon": 102.12018585205078,
+				"country": "Malaysia",
+				"timeZone": "Asia/Kuala_Lumpur"
+			},
+			"upstreamID": "MY0097"
+		}, {
+			"mmxId": "L_MT_Malta",
+			"name": "Malta",
+			"geographicPoint": {
+				"lat": 35.900001525878906,
+				"lon": 14.521666526794434,
+				"country": "Malta",
+				"timeZone": "Europe/Malta"
+			},
+			"upstreamID": "MT0001"
+		}, {
+			"mmxId": "L_MQ_Fortd",
+			"name": "Fort de France",
+			"geographicPoint": {
+				"lat": 14.598333358764648,
+				"lon": -61.073333740234375,
+				"country": "Martinique",
+				"timeZone": "America/Martinique"
+			},
+			"upstreamID": "MQ0002"
+		}, {
+			"mmxId": "L_MX_Altam",
+			"name": "Altamira",
+			"aliases": ["Altamira, Mexico"],
+			"geographicPoint": {
+				"lat": 22.479999542236328,
+				"lon": -97.88749694824219,
+				"country": "Mexico",
+				"timeZone": "America/Mexico_City"
+			},
+			"upstreamID": "MX0002"
+		}, {
+			"mmxId": "L_MX_Costa",
+			"name": "Costa Azul",
+			"geographicPoint": {
+				"lat": 31.987667083740234,
+				"lon": -116.85832977294922,
+				"country": "Mexico",
+				"timeZone": "America/Mexico_City"
+			},
+			"upstreamID": "MX0105"
+		}, {
+			"mmxId": "L_MX_Manza",
+			"name": "Manzanillo",
+			"aliases": ["Manzanillo, Mexico"],
+			"geographicPoint": {
+				"lat": 19.0575008392334,
+				"lon": -104.31666564941406,
+				"country": "Mexico",
+				"timeZone": "America/Mexico_City"
+			},
+			"upstreamID": "MX0039"
+		}, {
+			"mmxId": "L_MX_Rosar",
+			"name": "Rosarito",
+			"geographicPoint": {
+				"lat": 32.3466682434082,
+				"lon": -117.10416412353516,
+				"country": "Mexico",
+				"timeZone": "America/Tijuana"
+			},
+			"upstreamID": "MX0062"
+		}, {
+			"mmxId": "L_MA_JorfL",
+			"name": "Jorf Lasfar",
+			"geographicPoint": {
+				"lat": 33.128334045410156,
+				"lon": -8.635000228881836,
+				"country": "Morocco",
+				"timeZone": "Africa/Casablanca"
+			},
+			"upstreamID": "MA0021"
+		}, {
+			"mmxId": "L_MZ_Mozam",
+			"name": "Mozambique Port",
+			"geographicPoint": {
+				"lat": -15.040833473205566,
+				"lon": 40.78666687011719,
+				"country": "Mozambique",
+				"timeZone": "Africa/Maputo"
+			},
+			"upstreamID": "MZ0018"
+		}, {
+			"mmxId": "L_NL_Rotte",
+			"name": "Rotterdam",
+			"aliases": ["Maasvlakte", "Gate"],
+			"geographicPoint": {
+				"lat": 51.901668548583984,
+				"lon": 4.434999942779541,
+				"country": "Netherlands",
+				"timeZone": "Europe/Amsterdam"
+			},
+			"upstreamID": "NL0051"
+		}, {
+			"mmxId": "L_NZ_NewPl",
+			"name": "New Plymouth",
+			"geographicPoint": {
+				"lat": -39.05500030517578,
+				"lon": 174.038330078125,
+				"country": "New Zealand",
+				"timeZone": "Pacific/Auckland"
+			},
+			"upstreamID": "NZ0052"
+		}, {
+			"mmxId": "L_NG_Brass",
+			"name": "Brass",
+			"geographicPoint": {
+				"lat": 4.0933332443237305,
+				"lon": 6.324999809265137,
+				"country": "Nigeria",
+				"timeZone": "Africa/Lagos"
+			},
+			"upstreamID": "NG0013"
+		}, {
+			"mmxId": "L_NO_Hamme",
+			"name": "Hammerfest",
+			"aliases": ["Hammerfest", "Melkoya Island"],
+			"geographicPoint": {
+				"lat": 70.68333435058594,
+				"lon": 23.600000381469727,
+				"country": "Norway",
+				"timeZone": "Europe/Oslo"
+			},
+			"upstreamID": "NO0278"
+		}, {
+			"mmxId": "L_OM_Qalha",
+			"name": "Qalhat",
+			"aliases": ["Sur", "Oman"],
+			"geographicPoint": {
+				"lat": 22.66666603088379,
+				"lon": 59.413333892822266,
+				"country": "Oman",
+				"timeZone": "Asia/Qatar"
+			},
+			"upstreamID": "OM0018"
+		}, {
+			"mmxId": "L_PK_Karac",
+			"name": "Karachi",
+			"geographicPoint": {
+				"lat": 24.81166648864746,
+				"lon": 66.97333526611328,
+				"country": "Pakistan",
+				"timeZone": "Asia/Karachi"
+			},
+			"upstreamID": "PK0004"
+		}, {
+			"mmxId": "L_PK_PortQ",
+			"name": "Port Qasim",
+			"aliases": ["Port Qasim"],
+			"geographicPoint": {
+				"lat": 24.77166666666667,
+				"lon": 67.31,
+				"country": "Pakistan",
+				"timeZone": "Asia/Karachi"
+			},
+			"upstreamID": "PK0021"
+		}, {
+			"mmxId": "L_CP_Colon",
+			"name": "Colon",
+			"aliases": ["Colon,Panama", "Colon, Panama"],
+			"geographicPoint": {
+				"lat": 9.388333320617676,
+				"lon": -79.9191665649414,
+				"country": "Panama",
+				"timeZone": "America/Panama"
+			},
+			"upstreamID": "CP1500"
+		}, {
+			"mmxId": "L_PG_PortM",
+			"name": "Port Moresby",
+			"aliases": ["Port Moresby"],
+			"geographicPoint": {
+				"lat": -9.47583293914795,
+				"lon": 147.1458282470703,
+				"country": "Papua New Guinea",
+				"timeZone": "Pacific/Port_Moresby"
+			},
+			"upstreamID": "PG0049"
+		}, {
+			"mmxId": "L_PE_Pampa",
+			"name": "Pampa Melchorita",
+			"aliases": ["Peru", "P.Melchorita"],
+			"geographicPoint": {
+				"lat": -13.260000228881836,
+				"lon": -76.31033325195312,
+				"country": "Peru",
+				"timeZone": "America/Lima"
+			},
+			"upstreamID": "PE0045"
+		}, {
+			"mmxId": "L_PH_Batan",
+			"name": "Batangas",
+			"geographicPoint": {
+				"lat": 13.721290588378906,
+				"lon": 121.05397033691406,
+				"country": "Philippines",
+				"timeZone": "Asia/Manila"
+			},
+			"upstreamID": "PH0018"
+		}, {
+			"mmxId": "L_PL_Swino",
+			"name": "Swinoujscie",
+			"geographicPoint": {
+				"lat": 53.89500045776367,
+				"lon": 14.25333309173584,
+				"country": "Poland",
+				"timeZone": "Europe/Lisbon"
+			},
+			"upstreamID": "PL0021"
+		}, {
+			"mmxId": "L_PT_Sines",
+			"name": "Sines",
+			"geographicPoint": {
+				"lat": 37.935665130615234,
+				"lon": -8.857500076293945,
+				"country": "Portugal",
+				"timeZone": "Europe/Lisbon"
+			},
+			"upstreamID": "PT0044"
+		}, {
+			"mmxId": "L_PR_Penue",
+			"name": "Guayanilla",
+			"aliases": ["EcoElectrica", "Penuelas"],
+			"geographicPoint": {
+				"lat": 17.972999572753906,
+				"lon": -66.76249694824219,
+				"country": "Puerto Rico",
+				"timeZone": "America/Puerto_Rico"
+			},
+			"upstreamID": "PR0029"
+		}, {
+			"mmxId": "L_QA_RasLa",
+			"name": "Ras Laffan",
+			"aliases": ["Ras Laffan (Rich)", "Ras Laffan (Lean)"],
+			"geographicPoint": {
+				"lat": 25.93000030517578,
+				"lon": 51.606666564941406,
+				"country": "Qatar",
+				"timeZone": "Asia/Qatar"
+			},
+			"upstreamID": "QA0009"
+		}, {
+			"mmxId": "L_IT_Taran",
+			"name": "Taranto",
+			"geographicPoint": {
+				"lat": 40.45166778564453,
+				"lon": 17.213333129882812,
+				"country": "Italy",
+				"timeZone": "Europe/Rome"
+			},
+			"upstreamID": "IT0194"
+		}, {
+			"mmxId": "L_RU_Drovy",
+			"name": "Drovyanoy",
+			"geographicPoint": {
+				"lat": 72.4000015258789,
+				"lon": 72.8463363647461,
+				"country": "Russian Federation",
+				"timeZone": "Europe/Moscow"
+			},
+			"upstreamID": "RU0242"
+		}, {
+			"mmxId": "L_RU_Sakha",
+			"name": "Sakhalin",
+			"aliases": ["Prigorodnoye", "Sakhalin-2", "Sakhalin II"],
+			"geographicPoint": {
+				"lat": 46.618831634521484,
+				"lon": 142.899169921875,
+				"country": "Russian Federation",
+				"timeZone": "Asia/Vladivostok"
+			},
+			"upstreamID": "RU0293"
+		}, {
+			"mmxId": "L_RU_Shtok",
+			"name": "Shtokman",
+			"aliases": ["Murmansk"],
+			"geographicPoint": {
+				"lat": 68.98916625976562,
+				"lon": 33.0433349609375,
+				"country": "Russian Federation",
+				"timeZone": "Europe/Moscow"
+			},
+			"upstreamID": "RU0102"
+		}, {
+			"mmxId": "L_RU_Vladi",
+			"name": "Vladivostok",
+			"geographicPoint": {
+				"lat": 43.108333587646484,
+				"lon": 131.8866729736328,
+				"country": "Russian Federation",
+				"timeZone": "Asia/Vladivostok"
+			},
+			"upstreamID": "RU0218"
+		}, {
+			"mmxId": "L_RU_Vybor",
+			"name": "Vyborg",
+			"geographicPoint": {
+				"lat": 60.7066650390625,
+				"lon": 28.731666564941406,
+				"country": "Russian Federation",
+				"timeZone": "Europe/Moscow"
+			},
+			"upstreamID": "RU0225"
+		}, {
+			"mmxId": "L_TZ_Dar-e",
+			"name": "Dar-es-Salaam",
+			"geographicPoint": {
+				"lat": -6.842979907989502,
+				"lon": 39.29983139038086,
+				"country": "Tanzania",
+				"timeZone": "Africa/Dar_es_Salaam"
+			},
+			"upstreamID": "TZ0002"
+		}, {
+			"mmxId": "L_SG_Juron",
+			"name": "Singapore",
+			"aliases": ["Jurong Marine Base - Singapore Base", "Jurong Marine Base", "Jurong Island, Singapore"],
+			"geographicPoint": {
+				"lat": 1.2999999523162842,
+				"lon": 103.68250274658203,
+				"country": "Singapore",
+				"timeZone": "Asia/Singapore"
+			},
+			"upstreamID": "SG0048"
+		}, {
+			"mmxId": "L_ID_Panja",
+			"name": "Panjang",
+			"geographicPoint": {
+				"lat": -5.46999979019165,
+				"lon": 105.31500244140625,
+				"country": "Indonesia",
+				"timeZone": "Asia/Singapore"
+			},
+			"upstreamID": "ID0199"
+		}, {
+			"mmxId": "L_SI_Koper",
+			"name": "Koper",
+			"geographicPoint": {
+				"lat": 45.55833435058594,
+				"lon": 13.733333587646484,
+				"country": "Slovenia",
+				"timeZone": "Europe/Ljubljana"
+			},
+			"upstreamID": "SI0002"
+		}, {
+			"mmxId": "L_ZA_CapeT",
+			"name": "Cape Town",
+			"geographicPoint": {
+				"lat": -33.90999984741211,
+				"lon": 18.433332443237305,
+				"country": "South Africa",
+				"timeZone": "Africa/Johannesburg"
+			},
+			"upstreamID": "ZA0006"
+		}, {
+			"mmxId": "L_ZA_Coega",
+			"name": "Coega",
+			"geographicPoint": {
+				"lat": -33.8033332824707,
+				"lon": 25.691667556762695,
+				"country": "South Africa",
+				"timeZone": "Africa/Johannesburg"
+			},
+			"upstreamID": "ZA0026"
+		}, {
+			"mmxId": "L_ZA_Mosse",
+			"name": "Mossel Bay",
+			"geographicPoint": {
+				"lat": -34.1775016784668,
+				"lon": 22.14666748046875,
+				"country": "South Africa",
+				"timeZone": "Africa/Johannesburg"
+			},
+			"upstreamID": "ZA0013"
+		}, {
+			"mmxId": "L_KR_Dangj",
+			"name": "Dangjin",
+			"geographicPoint": {
+				"lat": 36.915000915527344,
+				"lon": 126.23500061035156,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0042"
+		}, {
+			"mmxId": "L_KR_Dongh",
+			"name": "Donghae",
+			"geographicPoint": {
+				"lat": 37.494998931884766,
+				"lon": 129.13999938964844,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0033"
+		}, {
+			"mmxId": "L_KR_Inche",
+			"name": "Incheon",
+			"aliases": ["Inchon", "Inchon - Soraepogu"],
+			"geographicPoint": {
+				"lat": 37.505001068115234,
+				"lon": 126.5999984741211,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0012"
+		}, {
+			"mmxId": "L_KR_TongY",
+			"name": "Tong Yong",
+			"aliases": ["Tongyeong"],
+			"geographicPoint": {
+				"lat": 34.94916534423828,
+				"lon": 128.43666076660156,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0041"
+		}, {
+			"mmxId": "L_ES_Barce",
+			"name": "Barcelona",
+			"geographicPoint": {
+				"lat": 41.342498779296875,
+				"lon": 2.1633334159851074,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0200"
+		}, {
+			"mmxId": "L_ES_Bilba",
+			"name": "Bilbao",
+			"geographicPoint": {
+				"lat": 43.3650016784668,
+				"lon": -3.0950000286102295,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0168"
+		}, {
+			"mmxId": "L_ES_Carta",
+			"name": "Cartagena",
+			"geographicPoint": {
+				"lat": 37.573333740234375,
+				"lon": -0.9649999737739563,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0201"
+		}, {
+			"mmxId": "L_ES_Huelv",
+			"name": "Huelva",
+			"geographicPoint": {
+				"lat": 37.16666793823242,
+				"lon": -6.909999847412109,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0073"
+		}, {
+			"mmxId": "L_ES_Sagun",
+			"name": "Sagunto",
+			"geographicPoint": {
+				"lat": 39.637001037597656,
+				"lon": -0.2160000056028366,
+				"country": "Spain",
+				"timeZone": "Europe/Madrid"
+			},
+			"upstreamID": "ES0199"
+		}, {
+			"mmxId": "L_TW_Taich",
+			"name": "Taichung",
+			"geographicPoint": {
+				"lat": 24.28333282470703,
+				"lon": 120.51667022705078,
+				"country": "Taiwan",
+				"timeZone": "Asia/Taipei"
+			},
+			"upstreamID": "TW0022"
+		}, {
+			"mmxId": "L_TW_YungA",
+			"name": "Yung An",
+			"aliases": ["Yung-An"],
+			"geographicPoint": {
+				"lat": 22.81366729736328,
+				"lon": 120.19633483886719,
+				"country": "Taiwan",
+				"timeZone": "Asia/Taipei"
+			},
+			"upstreamID": "TW0024"
+		}, {
+			"mmxId": "L_TH_MapTa",
+			"name": "Map Ta Phut",
+			"geographicPoint": {
+				"lat": 12.65666675567627,
+				"lon": 101.14583587646484,
+				"country": "Thailand",
+				"timeZone": "Asia/Bangkok"
+			},
+			"upstreamID": "TH0017"
+		}, {
+			"mmxId": "L_TT_Point2",
+			"name": "Point Fortin",
+			"geographicPoint": {
+				"lat": 10.193333625793457,
+				"lon": -61.70000076293945,
+				"country": "Trinidad and Tobago",
+				"timeZone": "America/Port_of_Spain"
+			},
+			"upstreamID": "TT0008"
+		}, {
+			"mmxId": "L_TR_Aliag",
+			"name": "Aliaga",
+			"geographicPoint": {
+				"lat": 38.82500076293945,
+				"lon": 26.913333892822266,
+				"country": "Turkey",
+				"timeZone": "Europe/Istanbul"
+			},
+			"upstreamID": "TR0183"
+		}, {
+			"mmxId": "L_TR_Marma",
+			"name": "Marmara Ereglisi",
+			"aliases": ["Ereglisi", "Marmara"],
+			"geographicPoint": {
+				"lat": 40.97249984741211,
+				"lon": 27.961666107177734,
+				"country": "Turkey",
+				"timeZone": "Europe/Istanbul"
+			},
+			"upstreamID": "TR0098"
+		}, {
+			"mmxId": "L_GB_Drago",
+			"name": "Dragon",
+			"geographicPoint": {
+				"lat": 51.69933319091797,
+				"lon": -4.997666835784912,
+				"country": "United Kingdom",
+				"timeZone": "Europe/London"
+			},
+			"upstreamID": "GB0753"
+		}, {
+			"mmxId": "L_GB_Holyh",
+			"name": "Holyhead",
+			"geographicPoint": {
+				"lat": 53.32666778564453,
+				"lon": -4.608333110809326,
+				"country": "United Kingdom",
+				"timeZone": "Europe/London"
+			},
+			"upstreamID": "GB0220"
+		}, {
+			"mmxId": "L_GB_South",
+			"name": "South Hook",
+			"aliases": ["Milford Haven", "Swansea"],
+			"geographicPoint": {
+				"lat": 51.697166442871094,
+				"lon": -5.079999923706055,
+				"country": "United Kingdom",
+				"timeZone": "Europe/London"
+			},
+			"upstreamID": "GB0752"
+		}, {
+			"mmxId": "L_GB_Teesi",
+			"name": "Teeside",
+			"aliases": ["Excelerate", "Teesport"],
+			"geographicPoint": {
+				"lat": 54.6115837097168,
+				"lon": -1.1553332805633545,
+				"country": "United Kingdom",
+				"timeZone": "Europe/London"
+			},
+			"upstreamID": "GB0755"
+		}, {
+			"mmxId": "L_GB_Isleo",
+			"name": "Isle of Grain",
+			"geographicPoint": {
+				"lat": 51.43000030517578,
+				"lon": 0.6758333444595337,
+				"country": "United Kingdom",
+				"timeZone": "Europe/London"
+			},
+			"upstreamID": "GB0244"
+		}, {
+			"mmxId": "L_US_Brown",
+			"name": "Brownsville",
+			"geographicPoint": {
+				"lat": 25.959999084472656,
+				"lon": -97.37666320800781,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0104"
+		}, {
+			"mmxId": "L_US_Camer",
+			"name": "Cameron",
+			"geographicPoint": {
+				"lat": 30.038333892822266,
+				"lon": -93.33233642578125,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US1232"
+		}, {
+			"mmxId": "L_US_CoosB",
+			"name": "Coos Bay",
+			"geographicPoint": {
+				"lat": 43.37666702270508,
+				"lon": -124.30000305175781,
+				"country": "United States",
+				"timeZone": "America/Los_Angeles"
+			},
+			"upstreamID": "US0185"
+		}, {
+			"mmxId": "L_US_Corpu",
+			"name": "Corpus Christi",
+			"geographicPoint": {
+				"lat": 27.81333351135254,
+				"lon": -97.40333557128906,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0190"
+		}, {
+			"mmxId": "L_US_Pasca",
+			"name": "Pascagoula",
+			"aliases": ["Gulf LNG Terminal"],
+			"geographicPoint": {
+				"lat": 30.34833335876465,
+				"lon": -88.56666564941406,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0566"
+		}, {
+			"mmxId": "L_US_Plaqu",
+			"name": "Plaquemines",
+			"geographicPoint": {
+				"lat": 29.477062225341797,
+				"lon": -89.68497467041016,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0645"
+		}, {
+			"mmxId": "L_US_PortA",
+			"name": "Port Arthur",
+			"aliases": ["Port Arthur, Texas, U.S.A."],
+			"geographicPoint": {
+				"lat": 29.861665725708008,
+				"lon": -93.9366683959961,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0613"
+		}, {
+			"mmxId": "L_US_PortD",
+			"name": "Port Dolphin",
+			"aliases": ["Tampa"],
+			"geographicPoint": {
+				"lat": 27.920833587646484,
+				"lon": -82.42500305175781,
+				"country": "United States",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "US0799"
+		}, {
+			"mmxId": "L_BR_RioGr",
+			"name": "Rio Grande",
+			"geographicPoint": {
+				"lat": -32.079166412353516,
+				"lon": -52.09166717529297,
+				"country": "Brazil",
+				"timeZone": "America/Monterrey"
+			},
+			"upstreamID": "BR0124"
+		}, {
+			"mmxId": "L_US_CoveP",
+			"name": "Cove Point",
+			"aliases": ["Dominion Cove Point"],
+			"geographicPoint": {
+				"lat": 38.404998779296875,
+				"lon": -76.37999725341797,
+				"country": "United States",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "US0976"
+		}, {
+			"mmxId": "L_US_Elba",
+			"name": "Elba",
+			"aliases": ["Elba Island", "Savanah", "Savannah", "Southern LNG"],
+			"geographicPoint": {
+				"lat": 32.08833312988281,
+				"lon": -80.98999786376953,
+				"country": "United States",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "US0977"
+		}, {
+			"mmxId": "L_US_Evere",
+			"name": "Everett",
+			"geographicPoint": {
+				"lat": 42.38833236694336,
+				"lon": -71.0616683959961,
+				"country": "United States",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "US0243"
+		}, {
+			"mmxId": "L_US_Freep",
+			"name": "Freeport",
+			"geographicPoint": {
+				"lat": 28.939167022705078,
+				"lon": -95.30699920654297,
+				"country": "United States",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "US1245"
+		}, {
+			"mmxId": "L_US_Golde",
+			"name": "Golden Pass",
+			"geographicPoint": {
+				"lat": 29.764999389648438,
+				"lon": -93.92500305175781,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US1235"
+		}, {
+			"mmxId": "L_US_Kenai",
+			"name": "Kenai",
+			"aliases": ["Nikiski"],
+			"geographicPoint": {
+				"lat": 60.676666259765625,
+				"lon": -151.40333557128906,
+				"country": "United States",
+				"timeZone": "America/Anchorage"
+			},
+			"upstreamID": "US1220"
+		}, {
+			"mmxId": "L_US_LakeC",
+			"name": "Lake Charles",
+			"aliases": ["Trunkline LNG"],
+			"geographicPoint": {
+				"lat": 30.110000610351562,
+				"lon": -93.29000091552734,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US0978"
+		}, {
+			"mmxId": "L_US_Sabin",
+			"name": "Sabine Pass",
+			"geographicPoint": {
+				"lat": 29.74250030517578,
+				"lon": -93.87083435058594,
+				"country": "United States",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "US1238"
+		}, {
+			"mmxId": "L_UM_GulfG",
+			"name": "Gulf Gateway",
+			"aliases": ["Gulf Gateway Deepwater Port"],
+			"geographicPoint": {
+				"lat": 28.094999313354492,
+				"lon": -93.02166748046875,
+				"country": "United States Minor Outlying Islands",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "UM0024"
+		}, {
+			"mmxId": "L_UM_Neptu",
+			"name": "Neptune",
+			"aliases": ["Neptune Deepwater Port"],
+			"geographicPoint": {
+				"lat": 42.4716682434082,
+				"lon": -70.6050033569336,
+				"country": "United States Minor Outlying Islands",
+				"timeZone": "America/New_York"
+			},
+			"upstreamID": "UM0042"
+		}, {
+			"mmxId": "L_UM_North",
+			"name": "Northeast Gateway",
+			"aliases": ["Northeast Gateway Deepwater Port", "North East Gateway"],
+			"geographicPoint": {
+				"lat": 42.404998779296875,
+				"lon": -70.5999984741211,
+				"country": "United States Minor Outlying Islands",
+				"timeZone": "America/Chicago"
+			},
+			"upstreamID": "UM0043"
+		}, {
+			"mmxId": "L_UA_Yuzhn",
+			"name": "Yuzhny",
+			"geographicPoint": {
+				"lat": 46.6150016784668,
+				"lon": 31.020000457763672,
+				"country": "Ukraine",
+				"timeZone": "Europe/Kiev"
+			},
+			"upstreamID": "UA0039"
+		}, {
+			"mmxId": "L_AE_AbuDh",
+			"name": "Das Island",
+			"aliases": ["Abu Dhabi", "ADGAS"],
+			"geographicPoint": {
+				"lat": 25.15999984741211,
+				"lon": 52.89833450317383,
+				"country": "United Arab Emirates",
+				"timeZone": "Asia/Dubai"
+			},
+			"upstreamID": "AE0010"
+		}, {
+			"mmxId": "L_AE_Fujai",
+			"name": "Fujairah",
+			"geographicPoint": {
+				"lat": 25.18000030517578,
+				"lon": 56.36166763305664,
+				"country": "United Arab Emirates",
+				"timeZone": "Asia/Dubai"
+			},
+			"upstreamID": "AE0014"
+		}, {
+			"mmxId": "L_AE_Jebel",
+			"name": "Jebel Ali",
+			"aliases": ["Dubai"],
+			"geographicPoint": {
+				"lat": 25.031116485595703,
+				"lon": 55.06705093383789,
+				"country": "United Arab Emirates",
+				"timeZone": "Asia/Dubai"
+			},
+			"upstreamID": "AE0084"
+		}, {
+			"mmxId": "L_UY_Monte",
+			"name": "Montevideo",
+			"geographicPoint": {
+				"lat": -34.90083312988281,
+				"lon": -56.21083450317383,
+				"country": "Uruguay",
+				"timeZone": "America/Montevideo"
+			},
+			"upstreamID": "UY0011"
+		}, {
+			"mmxId": "L_VN_CaiMe",
+			"name": "Cai Mep",
+			"geographicPoint": {
+				"lat": 10.53166675567627,
+				"lon": 107.024169921875,
+				"country": "Vietnam",
+				"timeZone": "Asia/Ho_Chi_Minh"
+			},
+			"upstreamID": "VN0090"
+		}, {
+			"mmxId": "L_VN_HoChi",
+			"name": "Ho Chi Min City",
+			"aliases": ["Ho Chi Min City (formerly Saigon)"],
+			"geographicPoint": {
+				"lat": 10.75278377532959,
+				"lon": 106.78526306152344,
+				"country": "Vietnam",
+				"timeZone": "Asia/Ho_Chi_Minh"
+			},
+			"upstreamID": "VN0099"
+		}, {
+			"mmxId": "L_YE_BalHa",
+			"name": "Bal Haf",
+			"aliases": ["Balhaf", "Yemen"],
+			"geographicPoint": {
+				"lat": 13.956666946411133,
+				"lon": 48.16666793823242,
+				"country": "Yemen",
+				"timeZone": "Asia/Aden"
+			},
+			"upstreamID": "YE0035"
+		}, {
+			"mmxId": "L_CP_PortS",
+			"name": "Port Said",
+			"geographicPoint": {
+				"lat": 31.420000076293945,
+				"lon": 32.401668548583984,
+				"country": "Egypt",
+				"timeZone": "Africa/Cairo"
+			},
+			"upstreamID": "CP2800"
+		}, {
+			"mmxId": "L_CP_Balbo",
+			"name": "Balboa",
+			"geographicPoint": {
+				"lat": 8.96500015258789,
+				"lon": -79.57499694824219,
+				"country": "Panama",
+				"timeZone": "America/Panama"
+			},
+			"upstreamID": "CP1550"
+		}, {
+			"mmxId": "L_MY_Lahad",
+			"name": "Lahad Datu",
+			"geographicPoint": {
+				"lat": 5.019999980926514,
+				"lon": 118.32833099365234,
+				"country": "Malaysia",
+				"timeZone": "Asia/Kuching"
+			},
+			"upstreamID": "MY0048"
+		}, {
+			"mmxId": "L_PR_Guaya",
+			"name": "Guayama",
+			"aliases": ["Aguirre"],
+			"geographicPoint": {
+				"lat": 17.90833282470703,
+				"lon": -66.15333557128906,
+				"country": "Puerto Rico",
+				"timeZone": "America/Puerto_Rico"
+			},
+			"upstreamID": "PR0007"
+		}, {
+			"mmxId": "L_KR_Borye",
+			"name": "Boryeong",
+			"geographicPoint": {
+				"lat": 35.994998931884766,
+				"lon": 126.70916748046875,
+				"country": "South Korea",
+				"timeZone": "Asia/Seoul"
+			},
+			"upstreamID": "KR0058"
+		}, {
+			"mmxId": "L_AU_Onslo",
+			"name": "Onslow",
+			"aliases": ["Wheatstone"],
+			"geographicPoint": {
+				"lat": -21.625,
+				"lon": 115.09583282470703,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0197"
+		}, {
+			"mmxId": "L_JP_Hibik",
+			"name": "Hibiki",
+			"aliases": ["Hibikinada"],
+			"geographicPoint": {
+				"lat": 33.95000076293945,
+				"lon": 130.82833862304688,
+				"country": "Japan",
+				"timeZone": "Asia/Tokyo"
+			},
+			"upstreamID": "JP0055"
+		}, {
+			"mmxId": "L_AU_Prelu",
+			"name": "Prelude FLNG",
+			"geographicPoint": {
+				"lat": -13.786333084106445,
+				"lon": 123.31749725341797,
+				"country": "Australia",
+				"timeZone": "Australia/Perth"
+			},
+			"upstreamID": "AU0436"
+		}, {
+			"mmxId": "L_AU_Ichth",
+			"name": "Ichthys",
+			"geographicPoint": {
+				"lat": -12.491666793823242,
+				"lon": 130.8816680908203,
+				"country": "Australia",
+				"timeZone": "Australia/Darwin"
+			},
+			"upstreamID": "AU0329"
+		}, {
+			"mmxId": "L_AU_Bladi",
+			"name": "Bladin Point",
+			"geographicPoint": {
+				"lat": -12.491666793823242,
+				"lon": 130.8816680908203,
+				"country": "Australia",
+				"timeZone": "Australia/Darwin"
+			},
+			"upstreamID": "AU0438",
+			"fallbackUpstreamId": "AU0329"
+		}, {
+			"mmxId": "L_ID_Senor",
+			"name": "Senoro",
+			"aliases": ["Donggi Senoro"],
+			"geographicPoint": {
+				"lat": -1.3883333333333334,
+				"lon": 122.49166666666666,
+				"country": "Indonesia",
+				"timeZone": "Asia/Makassar"
+			},
+			"upstreamID": "ID0476"
+		},    
+    {
+      "mmxId": "L_KR_Yeosu",
+      "name": "Yeosu",
+      "geographicPoint": {
+        "lat": 34.8558349609375,
+        "lon": 127.73750305175781,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      },
+      "upstreamID": "KR0054"
+    },
+    {
+      "mmxId": "L_KR_Gunsa",
+      "name": "Gunsan",
+      "geographicPoint": {
+        "lat": 35.994998931884766,
+        "lon": 126.70916748046875,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      },
+      "upstreamID": "KR0010"
+    },
+    {
+      "mmxId": "L_IN_Benoa",
+      "name": "Benoa",
+      "geographicPoint": {
+        "lat": -8.75,
+        "lon": 115.21583557128906,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jakarta"
+      },
+      "upstreamID": "ID0348"
+    },
+    {
+      "mmxId": "L_IN_Balik",
+      "name": "Balikpapan",
+      "geographicPoint": {
+        "lat": -1.2633333206176758,
+        "lon": 116.80833435058594,
+        "country": "Indonesia",
+        "timeZone": "Asia/Makassar"
+      },
+      "upstreamID": "ID0025"
+    },
+    {
+      "mmxId": "L_TW_Kaohs",
+      "name": "Kaohsiung",
+      "geographicPoint": {
+        "lat": 22.579999923706055,
+        "lon": 120.30000305175781,
+		"country": "Taiwan",
+        "timeZone": "Asia/Taipei"
+      },
+      "upstreamID": "TW0006"
+    },
+    {
+      "mmxId": "L_PH_Manil",
+      "name": "Manila",
+      "geographicPoint": {
+        "lat": 14.601666450500488,
+        "lon": 120.94999694824219,
+        "country": "Philippines",
+        "timeZone": "Asia/Manila"
+      },
+      "upstreamID": "PH0238"
+    },
+    {
+      "mmxId": "L_CN_HongK",
+      "name": "Hong Kong",
+      "geographicPoint": {
+        "lat": 22.290000915527344,
+        "lon": 114.1683349609375,
+        "country": "China",
+        "timeZone": "Asia/Hong_Kong"
+      },
+      "upstreamID": "CN0041"
+    },
+    {
+      "mmxId": "L_MY_Labua",
+      "name": "Labuan",
+      "geographicPoint": {
+        "lat": 5.268333435058594,
+        "lon": 115.25166320800781,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuching"
+      },
+      "upstreamID": "MY0046"
+    },
+    {
+      "mmxId": "L_JP_Niiha",
+      "name": "Niihama",
+      "geographicPoint": {
+        "lat": 33.97666549682617,
+        "lon": 133.26333618164062,
+        "country": "Japan",
+        "timeZone": "Asia/Tokyo"
+      },
+      "upstreamID": "JP0205"
+    }  
+	],
+	"routingPoints": [{
+		"identifier": "SUZ",
+		"northernEntry": "L_CP_PortS",
+		"southernEntry": "L_CP_Suez",
+		"distance": 102.279
+	}, {
+		"identifier": "PAN",
+		"northernEntry": "L_CP_Colon",
+		"southernEntry": "L_CP_Balbo",
+		"distance": 39.97
+	}]
+}

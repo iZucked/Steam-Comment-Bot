@@ -1,20 +1,43 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.reports.exposures;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.io.Files;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
+import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubColumnStyle;
+import com.mmxlabs.lingo.reports.modelbased.annotations.HubType;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 
 /**
  */
 public class ExposuresReportModel {
-	String dateCargo;
-	List<String> indicesList;
+	@ColumnName("Date")
+	@HubColumnStyle("""
+			{
+				"row": [ {
+					"condition":"matchesRegex",
+					"value":"^[0-9][0-9][0-9][0-9]-[0-9][0-9]$",
+					"styling": [ {
+						"property":"background-color",
+						"value":"rgb(224, 255, 255)"
+					} ]
+				} ]
+			}""")
+	public String dateCargo;
+	
+	@ColumnName("Physical")
+	@HubType("number")
+	public List<String> indicesList;
 
 	public String getDateCargo() {
 		return this.dateCargo;
@@ -34,7 +57,7 @@ public class ExposuresReportModel {
 
 	public ExposuresReportModel() {
 		if (this.indicesList == null) {
-			this.indicesList = new LinkedList<String>();
+			this.indicesList = new LinkedList<>();
 		}
 	}
 
@@ -92,4 +115,9 @@ public class ExposuresReportModel {
 		return rm;
 	}
 
+	public static void main(String[] args) throws Exception {
+		String schema = new SchemaGenerator().generateHubSchema(ExposuresReportModel.class, Mode.SUMMARY);
+		System.out.println(schema);
+		Files.write(schema, new File("target/expo.json"), StandardCharsets.UTF_8);
+	}
 }

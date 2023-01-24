@@ -9,44 +9,7 @@
 	<parent>
 		<groupId>com.mmxlabs.rcp.common</groupId>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
-		<version>5.11.2-SNAPSHOT</version>
+		<version>6.1.3-SNAPSHOT</version>
 	</parent>
-
-	<build>
-		<plugins>
-			<!-- Copy and filter the p2.inf file into the correct location -->
-			<plugin>
-
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-
-				<executions>
-					<execution>
-						<id>prepare-package</id>
-						<phase>prepare-package</phase>
-
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>.</outputDirectory>
-							<resources>
-								<resource>
-
-									<directory>resources</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>p2.inf</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

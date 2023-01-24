@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
@@ -424,8 +425,8 @@ public class PNLBasedWindowTrimmer {
 
 			final ImmutableList<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselCharter, //
 					vesselCharter.getCharterCostCalculator(), //
-					spi.getVesselStartTime(), //
-					key.firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan, //
+					new VesselStartState(spi.getVesselStartTime(), key.firstLoadPort), //
+					previousHeelRecord, portTimesRecord, lastPlan, //
 					returnAll, false, // Do not keep voyage plans
 					key.sequencesAttributesProvider, null);
 

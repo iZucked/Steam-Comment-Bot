@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
+
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -25,19 +28,27 @@ public class DatedAverageSeries implements ISeries {
 	}
 
 	@Override
-	public int[] getChangePoints() {
-
-		return shiftee.getChangePoints();
-
+	public boolean isParameterised() {
+		return shiftee.isParameterised();
 	}
 
 	@Override
-	public Number evaluate(int point) {
+	public int[] getChangePoints() {
+		return shiftee.getChangePoints();
+	}
 
-		int currentMonth = mapper.mapChangePointToMonth(point);
+	@Override
+	public Set<String> getParameters() {
+		return shiftee.getParameters();
+	}
+
+	@Override
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
+
+		int currentMonth = mapper.mapChangePointToMonth(timePoint);
 
 		double sum = 0;
-		int resetDelta = (currentMonth ) % reset;
+		int resetDelta = (currentMonth) % reset;
 		int startMonth = currentMonth//
 				- months //
 				- resetDelta //
@@ -45,7 +56,7 @@ public class DatedAverageSeries implements ISeries {
 		for (int i = 0; i < months; ++i) {
 			int m = startMonth + i;
 			int time = mapper.mapMonthToChangePoint(m);
-			double v = shiftee.evaluate(time).doubleValue();
+			double v = shiftee.evaluate(time, params).doubleValue();
 			if (v == 0.0) {
 				// No data, cannot create average, return 0
 				return 0.0;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.incomestatement;
@@ -61,24 +61,24 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof IncomeStatementData) {
-					return ((IncomeStatementData) element).parent;
+				if (element instanceof IncomeStatementData isd) {
+					return isd.parent;
 				}
 				return super.getParent(element);
 			}
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof IncomeStatementData) {
-					return ((IncomeStatementData) parentElement).children.toArray();
+				if (parentElement instanceof IncomeStatementData isd) {
+					return isd.children.toArray();
 				}
 				return super.getChildren(parentElement);
 			}
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				if (element instanceof IncomeStatementData) {
-					return !((IncomeStatementData) element).children.isEmpty();
+				if (element instanceof IncomeStatementData isd) {
+					return !isd.children.isEmpty();
 				}
 				return super.hasChildren(element);
 			}
@@ -392,8 +392,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			switch (lineItem) {
 			case BOG:
 				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof FuelUsage) {
-						final FuelUsage fuelUsage = (FuelUsage) event;
+					if (event instanceof FuelUsage fuelUsage) {
 						total += ScheduleModelKPIUtils.getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
@@ -480,7 +479,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			case PurchaseVolume: {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					final Slot<?> slot = slotAllocation.getSlot();
-					if (slot instanceof DischargeSlot) {
+					if (slot instanceof LoadSlot) {
 						total += slotAllocation.getEnergyTransferred();
 					}
 				}
@@ -495,11 +494,10 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 			// Find discharge date
 			ZonedDateTime dischargeDate = null;
-			T subType = (T) null;
+			T subType = null;
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot<?> slot = slotAllocation.getSlot();
-				if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (slot instanceof DischargeSlot dischargeSlot) {
 					dischargeDate = slotAllocation.getSlotVisit().getStart();
 					subType = getSubType(dischargeSlot);
 				}
@@ -553,10 +551,8 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	}
 
 	private Color getForeground(final Object element) {
-		if (element instanceof IncomeStatementData) {
-			final IncomeStatementData incomeStatementData = (IncomeStatementData) element;
-			if (incomeStatementData.key instanceof LineItems) {
-				final LineItems lineItems = (LineItems) incomeStatementData.key;
+		if (element instanceof IncomeStatementData incomeStatementData) {
+			if (incomeStatementData.key instanceof LineItems lineItems) {
 				if (lineItems == LineItems.BOG) {
 					return PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 				}

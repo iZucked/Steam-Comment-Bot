@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -46,13 +46,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.curves.PreGeneratedLongCurve;
+import com.mmxlabs.common.curves.WrappedParameterisedCurve;
+import com.mmxlabs.common.parser.series.EmptySeries;
 import com.mmxlabs.common.parser.series.ILazyExpressionContainer;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesType;
-import com.mmxlabs.common.parser.series.SeriesUtil;
 import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
@@ -200,8 +202,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.ChangeablePriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -589,7 +590,7 @@ public class LNGScenarioTransformer {
 		 * First, create all the market curves (should these come through the builder?)
 		 */
 
-		final Association<CommodityCurve, ICurve> commodityIndexAssociation = new Association<>();
+		final Association<CommodityCurve, IParameterisedCurve> commodityIndexAssociation = new Association<>();
 		final Association<BunkerFuelCurve, ICurve> baseFuelIndexAssociation = new Association<>();
 		final Association<CharterCurve, ILongCurve> charterIndexAssociation = new Association<>();
 
@@ -630,26 +631,21 @@ public class LNGScenarioTransformer {
 		// Now pre-compute our various curve data objects...
 		for (final CommodityCurve index : pricingModel.getCommodityCurves()) {
 			try {
-				final ISeries concreteSeries = constructConcreteSeries(index);
-				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
-				curve.setDefaultValue(0);
-				final int[] changePoints = concreteSeries.getChangePoints();
-				if (changePoints.length == 0) {
-					if (index.isSetExpression()) {
-						curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(concreteSeries.evaluate(0).doubleValue()));
-					}
+				IParameterisedCurve curve;
+				if (index.isSetExpression()) {
+					final ISeries parsed = commodityIndices.getSeries(index.getName()).get();
+					curve = dateHelper.generateParameterisedExpressionCurve(parsed);
 				} else {
-					for (final int i : changePoints) {
-						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(concreteSeries.evaluate(i).doubleValue()));
-					}
+					curve = new WrappedParameterisedCurve(dateHelper.constructConcreteCurve(index));
 				}
+
 				modelEntityMap.addModelObject(index, curve);
 				commodityIndexAssociation.add(index, curve);
 				if (commodityIndices.getSeries(index.getName()) instanceof ILazyExpressionContainer) {
 					// Only the lazy curves need to be added - the series parser should already have
 					// initialised on lazy curves
 					final PriceCurveKey key = new PriceCurveKey(index.getName().toLowerCase(), null, SeriesType.COMMODITY);
-					priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
+					priceExpressionProviderEditor.setPriceCurve(key, EmptySeries.INSTANCE);
 				}
 			} catch (final Exception exception) {
 				LOG.warn("Error evaluating series " + index.getName(), exception);
@@ -663,26 +659,23 @@ public class LNGScenarioTransformer {
 					throw new IllegalStateException("Commodity curve option name must be provided");
 				}
 				final String curveName = ymPointContainer.getName().toLowerCase();
-				final ISeries concreteSeries = constructConcreteSeries(ymPointContainer);
+				final ISeries concreteSeries = dateHelper.constructConcreteSeries(ymPointContainer);
 				final PriceCurveKey key = new PriceCurveKey(indexName, curveName, SeriesType.COMMODITY);
-				priceExpressionProviderEditor.setPriceCurve(key, concreteSeries);
+				priceExpressionProviderEditor.setPriceCurve(key, EmptySeries.INSTANCE);
 			}
 		}
 
 		for (final BunkerFuelCurve index : pricingModel.getBunkerFuelCurves()) {
 			try {
-				final ISeries parsed = baseFuelIndices.getSeries(index.getName()).get();
-				final PreGeneratedIntegerCurve curve = new PreGeneratedIntegerCurve();
 
-				final int[] changePoints = parsed.getChangePoints();
-				if (changePoints.length == 0) {
-					curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+				ICurve curve;
+				if (index.isSetExpression()) {
+					final ISeries parsed = baseFuelIndices.getSeries(index.getName()).get();
+					curve = dateHelper.generateExpressionCurve(parsed);
 				} else {
-
-					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
-					}
+					curve = dateHelper.constructConcreteCurve(index);
 				}
+
 				modelEntityMap.addModelObject(index, curve);
 				baseFuelIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
@@ -692,21 +685,14 @@ public class LNGScenarioTransformer {
 
 		for (final CharterCurve index : pricingModel.getCharterCurves()) {
 			try {
-				final ISeries parsed = charterIndices.getSeries(index.getName()).get();
-				final PreGeneratedLongCurve curve = new PreGeneratedLongCurve();
-				curve.setDefaultValue(0L);
-
-				final int[] changePoints = parsed.getChangePoints();
-				if (changePoints.length == 0) {
-					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).doubleValue());
-					curve.setValueAfter(0, dailyCost);
+				ILongCurve curve;
+				if (index.isSetExpression()) {
+					final ISeries parsed = charterIndices.asSeries(index.getName());
+					curve = dateHelper.generateLongExpressionCurve(parsed);
 				} else {
-
-					for (final int i : parsed.getChangePoints()) {
-						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).doubleValue());
-						curve.setValueAfter(i, dailyCost);
-					}
+					curve = dateHelper.constructConcreteLongCurve(index);
 				}
+
 				modelEntityMap.addModelObject(index, curve);
 				charterIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
@@ -741,22 +727,17 @@ public class LNGScenarioTransformer {
 		final Map<Port, CooldownPrice> portToCooldownMap = new HashMap<>();
 		// Build calculators and explicit port mapping
 		for (final CooldownPrice price : costModel.getCooldownCosts()) {
-			final ICooldownCalculator cooldownCalculator;
-			// Check here if price is indexed or expression
-			if (price.isLumpsum()) {
-				@Nullable
-				final ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
-				if (cooldownCurve == null) {
-					throw new IllegalStateException("Unable to parse cooldown curve");
-				}
-				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
-			} else {
-				final PreGeneratedIntegerCurve expression = dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices);
-				if (expression == null) {
-					throw new IllegalStateException("Unable to parse cooldown curve");
-				}
-				cooldownCalculator = new CooldownPriceIndexedCalculator(expression);
+			ILongCurve lumpsumCurve = null;
+			ICurve volumeCurve = null;
+
+			if (price.getLumpsumExpression() != null && !price.getLumpsumExpression().isBlank()) {
+				lumpsumCurve = dateHelper.generateLongExpressionCurve(price.getLumpsumExpression(), commodityIndices);
 			}
+			if (price.getVolumeExpression() != null && !price.getVolumeExpression().isBlank()) {
+				volumeCurve = dateHelper.generateExpressionCurve(price.getVolumeExpression(), commodityIndices);
+			}
+
+			final ICooldownCalculator cooldownCalculator = new CooldownCalculator(lumpsumCurve, volumeCurve);
 			injector.injectMembers(cooldownCalculator);
 
 			cooldownCalculators.put(price, cooldownCalculator);
@@ -4010,32 +3991,4 @@ public class LNGScenarioTransformer {
 		});
 	}
 
-	private ISeries constructConcreteSeries(final YearMonthPointContainer ymPointContainer) {
-		final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<>((o1, o2) -> o1.getFirst().compareTo(o2.getFirst()));
-		for (final YearMonthPoint pt : ymPointContainer.getPoints()) {
-			vals.add(new Pair<>(pt.getDate(), pt.getValue()));
-		}
-		final int[] times = new int[vals.size()];
-		final Number[] nums = new Number[vals.size()];
-		int k = 0;
-		for (final Pair<YearMonth, Number> e : vals) {
-			times[k] = dateHelper.convertTime(e.getFirst());
-			nums[k++] = e.getSecond();
-		}
-		return new ISeries() {
-			@Override
-			public int[] getChangePoints() {
-				return times;
-			}
-
-			@Override
-			public Number evaluate(final int point) {
-				final int pos = SeriesUtil.floor(times, point);
-				if (pos == -1) {
-					return 0;
-				}
-				return nums.length == 0 ? 0 : nums[pos];
-			}
-		};
-	}
 }

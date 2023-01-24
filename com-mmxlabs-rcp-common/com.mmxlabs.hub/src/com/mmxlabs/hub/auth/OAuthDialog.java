@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.hub.auth;
@@ -33,16 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
-import com.mmxlabs.hub.common.http.HttpClientUtil;
-
-import okhttp3.OkHttpClient;
 
 public class OAuthDialog extends Window {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthDialog.class);
 
 	private Browser browser;
-	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
 	private String baseUrl;
 	private String fragment;

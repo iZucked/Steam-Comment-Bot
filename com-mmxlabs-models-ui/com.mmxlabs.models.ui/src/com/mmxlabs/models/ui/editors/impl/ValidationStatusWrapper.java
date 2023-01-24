@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -66,7 +66,8 @@ public class ValidationStatusWrapper {
 	}
 
 	public void processValidation(final IStatus status) {
-		if (validationDecoration.getControl().isDisposed()) {
+		final Control c = validationDecoration.getControl();
+		if (c == null || c.isDisposed()) {
 			return;
 		}
 
@@ -170,7 +171,8 @@ public class ValidationStatusWrapper {
 			validationDecoration.setShowOnlyOnFocus(false);
 
 			// Set a default image
-			// commented out, because this takes about 70% of the runtime of displaying the editor
+			// commented out, because this takes about 70% of the runtime of displaying the
+			// editor
 			// validationDecoration.setImage(decorationInfo.getImage());
 
 			// Hide by default

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.e4;
@@ -43,6 +43,7 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.gif", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox-08.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.scenario.service.ui/icons/filenav_nav.gif", "icons:/16/scenario");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/full/obj16/small_transfers.png", "icons:/16/transfer");
 
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/cloud.png", "icons:/16/cloud");
 		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif", "icons:/icons/legacy/16x16/exec_flow_view.gif");
@@ -67,7 +68,8 @@ public class WorkbenchChangeProcessor {
 		setElementIcon(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView", "icons:/16/cloudplay");
 		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "icons:/16/PNLDetails");
 		setElementIcon(application, "com.mmxlabs.models.lng.nominations.editor.NominationSpecsView", "icons:/16/NominationSpecifications");
-
+		setElementIcon(application, "com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView", "icons:/16/transfer");
+		
 		// Change to new part ID
 		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView",
 				p -> p.setElementId("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView"));

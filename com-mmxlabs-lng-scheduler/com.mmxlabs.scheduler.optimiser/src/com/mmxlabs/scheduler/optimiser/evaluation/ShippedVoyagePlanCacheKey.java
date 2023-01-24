@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.evaluation;
@@ -19,7 +19,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -34,8 +36,7 @@ public final class ShippedVoyagePlanCacheKey {
 
 	public final Object vesselKey;
 	public final ICharterCostCalculator charterCostCalculator;
-	public final int vesselStartTime;
-	public final @Nullable IPort firstLoadPort;
+	public final VesselStartState vesselStartState;
 	public final PreviousHeelRecord previousHeelRecord;
 	public final IPortTimesRecord portTimesRecord;
 	public final boolean lastPlan;
@@ -53,9 +54,10 @@ public final class ShippedVoyagePlanCacheKey {
 	public final ISequencesAttributesProvider sequencesAttributesProvider;
 	// Not part of cache
 	public final IResource resource;
+	private final boolean isEndEvent;
 
-	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
-			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
+
+	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselCharter vesselCharter, ICharterCostCalculator charterCostCalculator, final VesselStartState vesselStartState, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
 			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		this.sequencesAttributesProvider = sequencesAttributesProvider;
@@ -68,8 +70,7 @@ public final class ShippedVoyagePlanCacheKey {
 		}
 		//
 		this.charterCostCalculator = charterCostCalculator;
-		this.vesselStartTime = vesselStartTime;
-		this.firstLoadPort = firstLoadPort;
+		this.vesselStartState = vesselStartState;
 		this.previousHeelRecord = previousHeelRecord;
 		this.portTimesRecord = portTimesRecord;
 		this.lastPlan = lastPlan;
@@ -86,6 +87,7 @@ public final class ShippedVoyagePlanCacheKey {
 			slotsIds.add(portTimesRecord.getReturnSlot().getKey()); // Use equivalence key rather than real id if possible
 		}
 		isCargo = portTimesRecord.getSlots().get(0) instanceof ILoadOption;
+		isEndEvent = portTimesRecord.getSlots().get(0).getPortType() == PortType.End;
 
 		// These values have no impact on a cargo - heel volume is the important field
 		// going into a cargo.
@@ -94,7 +96,7 @@ public final class ShippedVoyagePlanCacheKey {
 		this.hash = Objects.hash(lastPlan, keepDetails, //
 				vesselKey, // Vessel
 				// charterCostCalculator, // Charter costs
-				getPortName(firstLoadPort), previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
+				getPortName(vesselStartState.startPort()), previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
 				slotsIds, //
 				slotTimes, // Slot times.
 				canalBookings, voyageKeys);
@@ -121,15 +123,17 @@ public final class ShippedVoyagePlanCacheKey {
 			return true;
 		}
 
-		if (obj instanceof ShippedVoyagePlanCacheKey) {
-			final ShippedVoyagePlanCacheKey other = (ShippedVoyagePlanCacheKey) obj;
+		if (obj instanceof ShippedVoyagePlanCacheKey other) {
+			
 			// Do quick simple checks first
 			final boolean partA = keepDetails == other.keepDetails //
-					&& Objects.equals(getPortName(firstLoadPort), getPortName(other.firstLoadPort)) && lastPlan == other.lastPlan //
+					&& lastPlan == other.lastPlan //
 					&& previousHeelRecord.heelVolumeInM3 == other.previousHeelRecord.heelVolumeInM3 //
 					&& effectiveLastHeelCV == other.effectiveLastHeelCV //
 					&& effectiveLastHeelPricePerMMBTU == other.effectiveLastHeelPricePerMMBTU //
 					&& previousHeelRecord.forcedCooldown == other.previousHeelRecord.forcedCooldown //
+					// Here the full start state is only relevant for the Last plan (i.e. End event for BB calcs)
+					&& (isEndEvent ?  Objects.equals(vesselStartState, other.vesselStartState) : Objects.equals(getPortName(vesselStartState.startPort()), getPortName(other.vesselStartState.startPort()))) //
 					&& Objects.equals(sequencesAttributesProvider, other.sequencesAttributesProvider) //
 					&& Objects.equals(vesselKey, other.vesselKey); //
 

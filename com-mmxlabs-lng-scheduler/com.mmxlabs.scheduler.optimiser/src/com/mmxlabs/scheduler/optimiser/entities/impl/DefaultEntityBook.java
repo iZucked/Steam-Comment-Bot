@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
+
+import java.util.Collections;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;

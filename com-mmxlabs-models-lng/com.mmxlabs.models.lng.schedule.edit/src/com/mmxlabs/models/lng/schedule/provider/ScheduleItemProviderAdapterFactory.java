@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.provider;
@@ -893,52 +893,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LumpSumContractDetailsItemProvider lumpSumContractDetailsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLumpSumContractDetailsAdapter() {
-		if (lumpSumContractDetailsItemProvider == null) {
-			lumpSumContractDetailsItemProvider = new LumpSumContractDetailsItemProvider(this);
-		}
-
-		return lumpSumContractDetailsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NotionalJourneyContractDetailsItemProvider notionalJourneyContractDetailsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNotionalJourneyContractDetailsAdapter() {
-		if (notionalJourneyContractDetailsItemProvider == null) {
-			notionalJourneyContractDetailsItemProvider = new NotionalJourneyContractDetailsItemProvider(this);
-		}
-
-		return notionalJourneyContractDetailsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1330,6 +1284,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SandboxReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SandboxReferenceItemProvider sandboxReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.SandboxReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSandboxReferenceAdapter() {
+		if (sandboxReferenceItemProvider == null) {
+			sandboxReferenceItemProvider = new SandboxReferenceItemProvider(this);
+		}
+
+		return sandboxReferenceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1496,8 +1473,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (eventGroupingItemProvider != null) eventGroupingItemProvider.dispose();
 		if (portVisitLatenessItemProvider != null) portVisitLatenessItemProvider.dispose();
 		if (exposureDetailItemProvider != null) exposureDetailItemProvider.dispose();
-		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
-		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
 		if (canalJourneyEventItemProvider != null) canalJourneyEventItemProvider.dispose();
 		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
@@ -1515,6 +1490,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (notionalJourneyBallastBonusTermDetailsItemProvider != null) notionalJourneyBallastBonusTermDetailsItemProvider.dispose();
 		if (originPortRepositioningFeeTermDetailsItemProvider != null) originPortRepositioningFeeTermDetailsItemProvider.dispose();
 		if (transferRecordPNLDetailsItemProvider != null) transferRecordPNLDetailsItemProvider.dispose();
+		if (sandboxReferenceItemProvider != null) sandboxReferenceItemProvider.dispose();
 	}
 
 }

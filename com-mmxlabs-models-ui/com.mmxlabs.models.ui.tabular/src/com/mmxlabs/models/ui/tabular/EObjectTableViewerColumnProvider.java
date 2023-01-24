@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.tabular;
@@ -94,6 +94,13 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider implem
 			}
 		}
 
+		if (renderer instanceof IToolTipProvider tp) {
+			final String toolTip = tp.getToolTipText(element);
+			if (toolTip != null) {
+				return toolTip;
+			}
+		}
+		
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			final String toolTip = this.eObjectTableViewer.delegateToolTipProvider.getToolTipText(element);
 			if (toolTip != null) {

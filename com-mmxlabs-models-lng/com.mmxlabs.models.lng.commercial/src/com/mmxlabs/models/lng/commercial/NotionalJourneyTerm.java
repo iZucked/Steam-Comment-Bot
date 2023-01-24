@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanal <em>Include Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanalTime <em>Include Canal Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyTerm()
@@ -170,5 +171,27 @@ public interface NotionalJourneyTerm extends EObject {
 	 * @generated
 	 */
 	void setLumpSumPriceExpression(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Price On Last LNG Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price On Last LNG Price</em>' attribute.
+	 * @see #setPriceOnLastLNGPrice(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyTerm_PriceOnLastLNGPrice()
+	 * @model
+	 * @generated
+	 */
+	boolean isPriceOnLastLNGPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price On Last LNG Price</em>' attribute.
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 */
+	void setPriceOnLastLNGPrice(boolean value);
 
 } // NotionalJourneyTerm

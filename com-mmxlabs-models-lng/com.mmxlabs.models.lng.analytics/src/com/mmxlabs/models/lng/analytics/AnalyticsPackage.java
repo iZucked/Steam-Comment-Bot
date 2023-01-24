@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
@@ -4412,13 +4412,40 @@ s	 * <!-- end-user-doc -->
 	int MTM_RESULT__SHIPPING_COST = 5;
 
 	/**
+	 * The feature id for the '<em><b>Original Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__ORIGINAL_VOLUME = 6;
+
+	/**
+	 * The feature id for the '<em><b>Original Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__ORIGINAL_PRICE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Total Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_RESULT__TOTAL_SHIPPING_COST = 8;
+
+	/**
 	 * The number of structural features of the '<em>MTM Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MTM_RESULT_FEATURE_COUNT = 6;
+	int MTM_RESULT_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMRowImpl <em>MTM Row</em>}' class.
@@ -8502,6 +8529,39 @@ s	 * <!-- end-user-doc -->
 	EAttribute getMTMResult_ShippingCost();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalVolume <em>Original Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Original Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getOriginalVolume()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_OriginalVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalPrice <em>Original Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Original Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getOriginalPrice()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_OriginalPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MTMResult#getTotalShippingCost <em>Total Shipping Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total Shipping Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MTMResult#getTotalShippingCost()
+	 * @see #getMTMResult()
+	 * @generated
+	 */
+	EAttribute getMTMResult_TotalShippingCost();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MTMRow <em>MTM Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11738,6 +11798,30 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MTM_RESULT__SHIPPING_COST = eINSTANCE.getMTMResult_ShippingCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__ORIGINAL_VOLUME = eINSTANCE.getMTMResult_OriginalVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__ORIGINAL_PRICE = eINSTANCE.getMTMResult_OriginalPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Total Shipping Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MTM_RESULT__TOTAL_SHIPPING_COST = eINSTANCE.getMTMResult_TotalShippingCost();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MTMRowImpl <em>MTM Row</em>}' class.

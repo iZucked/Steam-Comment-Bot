@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -12,9 +12,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 
 public class CharterRateToCharterCostCalculator implements ICharterCostCalculator {
 
-	IVesselCharter vesselCharter;
-	ICharterRateCalculator charterRateCalculator;
-	
+	private IVesselCharter vesselCharter;
+	private ICharterRateCalculator charterRateCalculator;
+
 	@Override
 	public long getCharterCost(int voyagePlanStartTime, int eventStartTime, int duration) {
 		long charterRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselCharter, voyagePlanStartTime);

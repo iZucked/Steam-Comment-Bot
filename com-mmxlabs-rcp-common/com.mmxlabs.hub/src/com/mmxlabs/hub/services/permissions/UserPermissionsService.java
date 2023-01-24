@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.hub.services.permissions;
@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +18,9 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class UserPermissionsService implements IUserPermissionsService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserPermissionsService.class);
-
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder()//
-			.build();
 
 	public static final UserPermissionsService INSTANCE = new UserPermissionsService();
 
@@ -73,24 +68,26 @@ public class UserPermissionsService implements IUserPermissionsService {
 
 	public synchronized void updateUserPermissions() throws IOException {
 
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT);
-		if (requestBuilder == null) {
+		final var p = DataHubServiceProvider.getInstance().makeRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, HttpGet::new);
+		if (p == null) {
 			return;
 		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
 
 		hubSupportsPermissions = true;
-		final Request request = requestBuilder //
-				.build();
 
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 404) {
+		try (var response = httpClient.execute(request, ctx)) {
+			int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				if (responseCode == 404) {
 					hubSupportsPermissions = false;
-				} else if (response.code() == 401) {
+				} else if (responseCode == 401) {
 					throw new IOException(UNEXPECTED_CODE + response);
 				}
 			} else {
-				String responseString = response.body().string();
+				String responseString = EntityUtils.toString(response.getEntity());
 				userPermissions = new ObjectMapper().readValue(responseString, UserPermissions.class);
 				userPermissionsAreSet = true;
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.simplecontracts;
@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -56,14 +56,14 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		if (priceInfo instanceof final ExpressionPriceParameters expressionPriceInfo) {
-			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve);
+			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve);
 
 		} else if (priceInfo instanceof final DateShiftExpressionPriceParameters expressionPriceInfo) {
 			if (expressionPriceInfo.getValue() == 0) {
 				// No shift set, return simple variant.
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateExpressionCurve);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve);
 			} else {
-				Function<ISeries, ICurve> curveFactory;
+				Function<ISeries, IParameterisedCurve> curveFactory;
 				if (expressionPriceInfo.isSpecificDay()) {
 					curveFactory = parsed -> dateHelper.generateShiftedCurve(parsed, date -> date.minusMonths(1L).withDayOfMonth(expressionPriceInfo.getValue()).withHour(0));
 				} else {
@@ -103,10 +103,10 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *         the optimiser
 	 */
 	protected PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
-		return createPriceExpressionContract(priceExpression, dateHelper::generateExpressionCurve);
+		return createPriceExpressionContract(priceExpression, dateHelper::generateParameterisedExpressionCurve);
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, ICurve> curveFactory) {
+	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, IParameterisedCurve> curveFactory) {
 
 		final var p = dateHelper.createCurveAndIntervals(indices, priceExpression, curveFactory);
 		final PriceExpressionContract contract = new PriceExpressionContract(p.getFirst(), p.getSecond());

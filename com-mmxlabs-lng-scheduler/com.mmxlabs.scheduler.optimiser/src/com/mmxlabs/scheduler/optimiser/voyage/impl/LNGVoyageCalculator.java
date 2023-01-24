@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -647,8 +647,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IPortSlot firstSlot = ((PortDetails) sequence[0]).getOptions().getPortSlot();
 
 			// price LNG based on the heel value at the first slot
-			if (firstSlot instanceof IHeelOptionSupplierPortSlot) {
-				final IHeelOptionSupplier options = ((IHeelOptionSupplierPortSlot) firstSlot).getHeelOptionsSupplier();
+			if (firstSlot instanceof IHeelOptionSupplierPortSlot optionsPortSlot) {
+				final IHeelOptionSupplier options = optionsPortSlot.getHeelOptionsSupplier();
 				if (options.getMaximumHeelAvailableInM3() > 0) {
 					final int pricePerMMBTu = options.getHeelPriceCalculator().getHeelPrice(startHeelVolumeInM3, portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot().getPort());
 					for (int i = 0; i < sequence.length; i++) {
@@ -840,13 +840,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				int currentMaintenanceIndex = maintenanceIter.next();
 				for (int i = sequence.length - 2; i >= 0; --i) {
 					final IDetailsSequenceElement elem = sequence[i];
-					if (elem instanceof PortDetails) {
-						final PortDetails details = (PortDetails) elem;
+					if (elem instanceof PortDetails details) {
 						for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
 							currentLNGCommitmentInM3 -= details.getFuelConsumption(fk);
 						}
-					} else if (elem instanceof VoyageDetails) {
-						final VoyageDetails details = (VoyageDetails) elem;
+					} else if (elem instanceof VoyageDetails details) {
 						for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
 							currentLNGCommitmentInM3 -= details.getFuelConsumption(fk);
 							currentLNGCommitmentInM3 -= details.getRouteAdditionalConsumption(fk);
@@ -962,12 +960,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final PortDetails details = (PortDetails) element;
 
 				if (i == 0) {
-					@NonNull
-					final PortOptions options = details.getOptions();
-					@NonNull
-					final IPortSlot portSlot = options.getPortSlot();
-					if (portSlot instanceof IHeelOptionSupplierPortSlot) {
-						heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) portSlot;
+					
+					final @NonNull PortOptions options = details.getOptions();
+					final @NonNull IPortSlot portSlot = options.getPortSlot();
+					if (portSlot instanceof IHeelOptionSupplierPortSlot optionPortSlot) {
+						heelOptionSupplierPortSlot = optionPortSlot;
 					}
 
 				}
@@ -1070,8 +1067,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
-			if (element instanceof VoyageDetails) {
-				final VoyageDetails details = (VoyageDetails) element;
+			if (element instanceof VoyageDetails details) {
 				// Calculate travel charter cost.
 				int eventStartTime = time;
 				int duration = details.getTravelTime();
@@ -1171,8 +1167,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		if (lastVoyageDetailsElement != null) {
 			final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-			if (toPortSlot instanceof IHeelOptionConsumerPortSlot) {
-				final IHeelOptionConsumerPortSlot endPortSlot = (IHeelOptionConsumerPortSlot) toPortSlot;
+			if (toPortSlot instanceof IHeelOptionConsumerPortSlot endPortSlot) {
 				// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 				VesselTankState endHeelState;
 				if (endPortSlot.getPortType() == PortType.Maintenance && !(endPortSlot instanceof MaintenanceVesselEventPortSlot)) {
@@ -1484,12 +1479,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			long heelInM3 = startHeelInM3;
 			for (final IDetailsSequenceElement e : sequence) {
-				if (e instanceof PortDetails) {
-					final PortDetails portDetails = (PortDetails) e;
+				if (e instanceof PortDetails portDetails) {
 					@NonNull
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
-					if (portSlot instanceof IDischargeOption) {
-						final IDischargeOption dischargeOption = (IDischargeOption) portSlot;
+					if (portSlot instanceof IDischargeOption dischargeOption) {
 						final int cargoCVValue = portDetails.getOptions().getCargoCVValue();
 						// Check for Long.MAX_VALUE and keep heel positive
 						final long maxDischargeVolume = dischargeOption.getMaxDischargeVolume(cargoCVValue);
@@ -1502,8 +1495,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 							heelInM3 = 0;
 						}
 					}
-				} else if (e instanceof VoyageDetails) {
-					final VoyageDetails voyageDetails = (VoyageDetails) e;
+				} else if (e instanceof VoyageDetails voyageDetails) {
 					long voyageNBOInM3 = 0;
 					voyageNBOInM3 += voyageDetails.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
 					voyageNBOInM3 += voyageDetails.getFuelConsumption(LNGFuelKeys.FBO_In_m3);
@@ -1587,20 +1579,20 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						nboAvailableInM3 = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
 					}
 
-					else if (options.getPortSlot() instanceof ILoadSlot) {
+					else if (options.getPortSlot() instanceof ILoadSlot ls) {
 						if (cargoRunDry != CargoRunDryMode.OFF) {
 
 							incNBO = true;
 
-							loadSlot = ((ILoadSlot) options.getPortSlot());
-							cv = ((ILoadSlot) options.getPortSlot()).getCargoCVValue();
+							loadSlot = ls;
+							cv = ls.getCargoCVValue();
 
 							for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
 								ladenNBO -= details.getFuelConsumption(fk);
 							}
 						}
 					}
-				} else if (options.getPortSlot() instanceof IDischargeSlot) {
+				} else if (options.getPortSlot() instanceof IDischargeSlot ds) {
 					if (incNBO) {
 
 						assert nboAvailableInM3 == Long.MAX_VALUE;
@@ -1619,7 +1611,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 							final long maxLoadInM3 = Math.min(vessel.getCargoCapacity() + loadPortBOGInM3, loadSlot.getMaxLoadVolume() + startHeelInM3[1]);
 
 							long nbo = maxLoadInM3 + ladenNBO;
-							nbo -= ((IDischargeSlot) options.getPortSlot()).getMaxDischargeVolume(cv);
+							nbo -= ds.getMaxDischargeVolume(cv);
 
 							if (nbo < 0) {
 								// not enough gas ....
@@ -1634,7 +1626,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 							final long maxLoadInM3 = Math.min(vessel.getCargoCapacity() + loadPortBOGInM3, loadSlot.getMaxLoadVolume() + startHeelInM3[1]);
 
 							long nbo = maxLoadInM3 + ladenNBO;
-							nbo -= ((IDischargeSlot) options.getPortSlot()).getMinDischargeVolume(cv);
+							nbo -= ds.getMinDischargeVolume(cv);
 
 							if (nbo < 0) {
 								// not enough gas ....
@@ -1650,7 +1642,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 							final long maxLoadInM3 = Math.min(vessel.getCargoCapacity() + loadPortBOGInM3, loadSlot.getMinLoadVolume() + startHeelInM3[1]);
 
 							long nbo = Math.max(0, maxLoadInM3 + ladenNBO);
-							nbo -= ((IDischargeSlot) options.getPortSlot()).getMaxDischargeVolume(cv);
+							nbo -= ds.getMaxDischargeVolume(cv);
 
 							if (nbo < 0) {
 								// not enough gas ....
@@ -1665,7 +1657,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 							final long maxLoadInM3 = Math.min(vessel.getCargoCapacity() + loadPortBOGInM3, loadSlot.getMinLoadVolume() + startHeelInM3[1]);
 
 							long nbo = Math.max(0, maxLoadInM3 + ladenNBO);
-							nbo -= ((IDischargeSlot) options.getPortSlot()).getMinDischargeVolume(cv);
+							nbo -= ds.getMinDischargeVolume(cv);
 
 							if (nbo < 0) {
 								// not enough gas ....
@@ -1808,9 +1800,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// ignore the last element in the sequence, to avoid double-counting (it will be
 		// included in the next sequence)
 		for (int i = 0; i < sequence.length - 1; ++i) {
-			if (sequence[i] instanceof PortDetails) {
+			if (sequence[i] instanceof PortDetails details) {
 				// Port Slot
-				final PortDetails details = (PortDetails) sequence[i];
 				final IPortSlot slot = details.getOptions().getPortSlot();
 				if (slot instanceof ILoadSlot) {
 					return i;
@@ -1825,9 +1816,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 */
 	public final int findFirstDischargeIndex(final IDetailsSequenceElement... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
-			if (sequence[i] instanceof PortDetails) {
+			if (sequence[i] instanceof PortDetails details) {
 				// Port Slot
-				final PortDetails details = (PortDetails) sequence[i];
 				final IPortSlot slot = details.getOptions().getPortSlot();
 				if (slot instanceof IDischargeSlot) {
 					return i;
@@ -1846,8 +1836,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// ignore the last element in the sequence, to avoid double-counting (it will be
 		// included in the next sequence)
 		for (int i = 0; i < sequence.length - 1; i++) {
-			if (sequence[i] instanceof PortDetails) {
-				final PortDetails details = (PortDetails) sequence[i];
+			if (sequence[i] instanceof PortDetails details) {
 				final IPortSlot slot = details.getOptions().getPortSlot();
 				if (slot instanceof ILoadSlot) {
 					storage.add(i);

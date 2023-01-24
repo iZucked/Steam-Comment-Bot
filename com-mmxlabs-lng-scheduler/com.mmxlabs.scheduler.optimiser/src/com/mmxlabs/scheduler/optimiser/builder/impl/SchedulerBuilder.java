@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.common.curves.UnitLongCurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -411,15 +412,16 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		virtualVessel = createVessel("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), createBaseFuel("fakeIdleFuel", 0), createBaseFuel("fakeInPortFuel", 0),
 				createBaseFuel("fakePilotLightFuel", 0), 0, 0, 0, 0, 0, false);
 	}
-	
+
 	public IVessel getVirtualVessel() {
 		return virtualVessel;
 	}
 
-	public IVessel createVirtualMarkerVessel(String name, long capacity) {
-		return createVessel(name, 0, 0, capacity, 0, virtualVessel.getTravelBaseFuel(), virtualVessel.getIdleBaseFuel(), virtualVessel.getInPortBaseFuel(),
-				virtualVessel.getPilotLightBaseFuel(), 0, 0, 0, 0, 0, false);
+	public IVessel createVirtualMarkerVessel(final String name, final long capacity) {
+		return createVessel(name, 0, 0, capacity, 0, virtualVessel.getTravelBaseFuel(), virtualVessel.getIdleBaseFuel(), virtualVessel.getInPortBaseFuel(), virtualVessel.getPilotLightBaseFuel(), 0, 0,
+				0, 0, 0, false);
 	}
+
 	/**
 	 */
 	@Override
@@ -1173,8 +1175,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		// create a new resource for each of these guys, and bind them to their
 		// resources
 		assert virtualVessel != null;
-		final IVesselCharter virtualVesselCharter = createVesselCharter(virtualVessel, "virtual-" + element.getName(), new ZeroLongCurve(), type, createStartRequirement(), createEndRequirement(),
-				null, new ZeroLongCurve(), true);
+		final IVesselCharter virtualVesselCharter = createVesselCharter(virtualVessel, "virtual-" + element.getName(), ZeroLongCurve.getInstance(), type, createStartRequirement(),
+				createEndRequirement(), null, new ZeroLongCurve(), true);
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;
@@ -1641,7 +1643,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private static final class ZeroLongCurve implements ILongCurve {
-		protected ZeroLongCurve() {
+		private ZeroLongCurve() {
 
 		}
 
@@ -1858,8 +1860,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, //
-			final boolean nominal, final int availabilityCount, @Nullable IStartRequirement startRequirement, @Nullable IEndRequirement endRequirement, //
-			@Nullable ICharterContract charterContract, final ILongCurve repositioningFee) {
+			final boolean nominal, final int availabilityCount, @Nullable final IStartRequirement startRequirement, @Nullable final IEndRequirement endRequirement, //
+			@Nullable final ICharterContract charterContract, final ILongCurve repositioningFee) {
 		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, nominal, availabilityCount, startRequirement, endRequirement, charterContract, repositioningFee);
 	}
 

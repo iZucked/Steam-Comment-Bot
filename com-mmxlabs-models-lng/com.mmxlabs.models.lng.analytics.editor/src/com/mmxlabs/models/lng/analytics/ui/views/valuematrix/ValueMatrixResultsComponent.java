@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.analytics.ui.views.valuematrix;
 
 import java.util.ArrayList;
@@ -9,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -28,6 +31,8 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -59,6 +64,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 
 	private Composite summaryComposite;
 
+	private Runnable recalculateScrollbar;
+
 	private class SummaryRow {
 		boolean hasAlternative;
 		boolean empty;
@@ -68,19 +75,21 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		String units;
 	}
 
-	public ValueMatrixResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Supplier<SwapValueMatrixModel> modelProvider) {
+	public ValueMatrixResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Supplier<SwapValueMatrixModel> modelProvider, final Runnable recalculateScrollbar) {
 		super(scenarioEditingLocation, modelProvider);
+		this.recalculateScrollbar = recalculateScrollbar;
 	}
 
 	private Control createResultsComposite(final Composite parent) {
 		resultsComposite = new Composite(parent, SWT.NONE);
 		resultsComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).numColumns(2).create());
-		resultsComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
+		resultsComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).minSize(SWT.DEFAULT, SWT.DEFAULT).create());
 		matrixComposite = new Composite(resultsComposite, SWT.NONE);
+		matrixComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
 		matrixComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).create());
 		summaryComposite = new Composite(resultsComposite, SWT.NONE);
 		summaryComposite.setLayout(GridLayoutFactory.swtDefaults().margins(20, 0).create());
-		summaryComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
+		summaryComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).minSize(500, SWT.DEFAULT).create());
 
 		final GridTableViewer viewer = new GridTableViewer(summaryComposite, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(viewer);
@@ -101,6 +110,16 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 				}
 			}
 		});
+		final Listener resizeListener = new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				matrixComposite.requestLayout();
+				matrixComposite.redraw();
+				resultsComposite.requestLayout();
+				resultsComposite.redraw();
+			}
+		};
 		summaryTableViewer = viewer;
 
 		{
@@ -108,9 +127,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setText("");
-			gvc.getColumn().setWidth(40);
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(true);
+			gvc.getColumn().setMinimumWidth(40);
 			gvc.setLabelProvider(new CellLabelProvider() {
 				@Override
 				public void update(ViewerCell cell) {
@@ -125,21 +142,21 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					cell.setText(cellText);
 				}
 			});
+			gvc.getColumn().addListener(SWT.Resize, resizeListener);
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setText("");
-			gvc.getColumn().setWidth(40);
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(true);
+			gvc.getColumn().setMinimumWidth(40);
 			gvc.setLabelProvider(new CellLabelProvider() {
 				@Override
 				public void update(ViewerCell cell) {
 					cell.setText(cell.getElement() instanceof @NonNull final SummaryRow row && !row.empty ? row.units : "");
 				}
 			});
+			gvc.getColumn().addListener(SWT.Resize, resizeListener);
 		}
 		matrixComposite.setVisible(true);
 		summaryComposite.setVisible(false);
@@ -159,12 +176,23 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		valueMatrixViewer = viewer;
 		viewer.getGrid().setRowHeaderVisible(false);
 
+		final Listener resizeListener = new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				matrixComposite.requestLayout();
+				matrixComposite.redraw();
+				resultsComposite.requestLayout();
+				resultsComposite.redraw();
+			}
+		};
+
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setText("");
-			gvc.getColumn().setWidth(40);
+			gvc.getColumn().setMinimumWidth(40);
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(true);
 			gvc.getColumn().setCellRenderer(new ValueMatrixRowGroupCellRenderer());
@@ -181,6 +209,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					}
 				}
 			});
+			gvc.getColumn().addListener(SWT.Resize, resizeListener);
 		}
 
 		{
@@ -188,7 +217,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setText("");
-			gvc.getColumn().setWidth(40);
+			gvc.getColumn().setMinimumWidth(40);
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(true);
 			gvc.getColumn().setCellRenderer(new CellAsRowHeaderRenderer() {
@@ -212,6 +241,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					}
 				}
 			});
+			gvc.getColumn().addListener(SWT.Resize, resizeListener);
 		}
 
 		final GridColumnGroup valueMatrixColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
@@ -229,7 +259,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setText(Integer.toString(i));
-			gvc.getColumn().setWidth(40);
+			gvc.getColumn().setMinimumWidth(40);
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(true);
 			gvc.setLabelProvider(new CellLabelProvider() {
@@ -247,6 +277,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					cell.setText(cellText);
 				}
 			});
+			gvc.getColumn().addListener(SWT.Resize, resizeListener);
 			++index;
 		}
 		valueMatrixViewer.addSelectionChangedListener(event -> {
@@ -263,17 +294,40 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 						final List<SummaryRow> rows = buildSummaryRows(result);
 						summaryTableViewer.setInput(rows);
 						summaryTableViewer.refresh();
-						summaryComposite.redraw();
-						summaryComposite.requestLayout();
-						summaryComposite.layout();
-						for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
-							col.pack();
-						}
-						summaryTableViewer.refresh();
-						summaryComposite.redraw();
-						summaryComposite.requestLayout();
-						summaryComposite.layout();
+//						summaryComposite.requestLayout();
+//						summaryComposite.redraw();
+//						for (final GridColumn col : summaryTableViewer.getGrid().getColumns()) {
+//							col.pack();
+//						}
+//						summaryTableViewer.refresh();
 						showSummary = true;
+						summaryTableViewer.getGrid().pack();
+						summaryTableViewer.getGrid().requestLayout();
+						summaryTableViewer.getGrid().redraw();
+//						summaryComposite.setVisible(showSummary);
+//						summaryComposite.requestLayout();
+//						summaryComposite.redraw();
+//						resultsComposite.requestLayout();
+//						resultsComposite.redraw();
+//						resultsComposite.getParent().requestLayout();
+//						resultsComposite.getParent().redraw();
+//						resultsComposite.getParent().getParent().requestLayout();
+//						resultsComposite.getParent().getParent().redraw();
+//						resultsComposite.getParent().getParent().getParent().requestLayout();
+//						resultsComposite.getParent().getParent().getParent().redraw();
+//						resultsComposite.getParent().getParent().getParent().getParent().requestLayout();
+//						resultsComposite.getParent().getParent().getParent().getParent().redraw();
+//						final Point lastLastLastLastParentSize = resultsComposite.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+//						resultsComposite.getParent().getParent().setSize(lastLastLastLastParentSize);
+//						final Point lastLastLastParentSize = resultsComposite.getParent().getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+//						resultsComposite.getParent().getParent().getParent().setSize(lastLastLastParentSize);
+//						final Point lastLastParentSize = resultsComposite.getParent().getParent().getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT);;
+//						resultsComposite.getParent().getParent().getParent().getParent().setSize(lastLastParentSize);
+//						final Point lastParentSize = resultsComposite.getParent().getParent().getParent().getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+//						resultsComposite.getParent().getParent().getParent().getParent().setSize(lastParentSize);
+						if (recalculateScrollbar != null) {
+							recalculateScrollbar.run();
+						}
 					}
 				}
 			}
@@ -431,6 +485,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 	@Override
 	public void dispose() {
 		clearValueMatrix();
+		recalculateScrollbar = null;
 	}
 
 	public void refresh() {
@@ -474,6 +529,11 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 				createValueMatrix(model, sortedColumnNumbers);
 				valueMatrixViewer.setInput(rows);
 				valueMatrixViewer.refresh();
+				for (final GridColumn col : valueMatrixViewer.getGrid().getColumns()) {
+					col.pack();
+				}
+				matrixComposite.layout();
+				matrixComposite.redraw();
 				resultsComposite.layout();
 				resultsComposite.redraw();
 				resultsComposite.requestLayout();

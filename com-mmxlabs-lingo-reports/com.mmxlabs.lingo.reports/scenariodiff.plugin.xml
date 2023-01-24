@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
@@ -13,7 +13,7 @@
          point="org.eclipse.ui.views">
       <view
             name="Scenario Diff"
-            icon="icons:/icons/16x16/lateness.png"
+            icon="icons:/icons/16x16/scenario_diff.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.multi.MultiView"
             id="com.mmxlabs.lingo.reports.views.multi.MultiView">

@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series;
 
 import java.io.StringReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -134,16 +136,27 @@ public class SeriesParser {
 		}
 	}
 
-	public void addSeriesData(final String name, final SeriesType seriesType, final int[] points, final Number[] values) {
+	public void addSeriesData(final @NonNull String name, final @NonNull SeriesType seriesType, final int[] points, final @NonNull Number[] values) {
 		final ISeriesContainer seriesContainer = new DefaultSeriesContainer(name, seriesType, new ISeries() {
+
+			@Override
+			public boolean isParameterised() {
+				return false;
+			}
+
+			@Override
+			public Set<String> getParameters() {
+				return Collections.emptySet();
+			}
+
 			@Override
 			public int[] getChangePoints() {
 				return points;
 			}
 
 			@Override
-			public Number evaluate(final int point) {
-				final int pos = SeriesUtil.floor(points, point);
+			public Number evaluate(final int timePoint, final Map<String, String> params) {
+				int pos = SeriesUtil.floor(points, timePoint);
 				if (pos == -1) {
 					return 0;
 				}
@@ -183,4 +196,3 @@ public class SeriesParser {
 		};
 	}
 }
-

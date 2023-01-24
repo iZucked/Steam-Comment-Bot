@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#isIncludeCanal <em>Include Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#isIncludeCanalTime <em>Include Canal Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#getOriginPort <em>Origin Port</em>}</li>
  * </ul>
  *
@@ -157,6 +158,26 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 	 * @ordered
 	 */
 	protected String lumpSumPriceExpression = LUMP_SUM_PRICE_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PRICE_ON_LAST_LNG_PRICE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean priceOnLastLNGPrice = PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getOriginPort() <em>Origin Port</em>}' reference.
@@ -331,6 +352,29 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 	 * @generated
 	 */
 	@Override
+	public boolean isPriceOnLastLNGPrice() {
+		return priceOnLastLNGPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPriceOnLastLNGPrice(boolean newPriceOnLastLNGPrice) {
+		boolean oldPriceOnLastLNGPrice = priceOnLastLNGPrice;
+		priceOnLastLNGPrice = newPriceOnLastLNGPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE, oldPriceOnLastLNGPrice, priceOnLastLNGPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Port getOriginPort() {
 		if (originPort != null && originPort.eIsProxy()) {
 			InternalEObject oldOriginPort = (InternalEObject)originPort;
@@ -385,6 +429,8 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return isIncludeCanalTime();
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return getLumpSumPriceExpression();
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return isPriceOnLastLNGPrice();
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
 				if (resolve) return getOriginPort();
 				return basicGetOriginPort();
@@ -417,6 +463,9 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression((String)newValue);
+				return;
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice((Boolean)newValue);
 				return;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
 				setOriginPort((Port)newValue);
@@ -451,6 +500,9 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression(LUMP_SUM_PRICE_EXPRESSION_EDEFAULT);
 				return;
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice(PRICE_ON_LAST_LNG_PRICE_EDEFAULT);
+				return;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
 				setOriginPort((Port)null);
 				return;
@@ -478,6 +530,8 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return includeCanalTime != INCLUDE_CANAL_TIME_EDEFAULT;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return LUMP_SUM_PRICE_EXPRESSION_EDEFAULT == null ? lumpSumPriceExpression != null : !LUMP_SUM_PRICE_EXPRESSION_EDEFAULT.equals(lumpSumPriceExpression);
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return priceOnLastLNGPrice != PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
 				return originPort != null;
 		}
@@ -499,6 +553,7 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL: return CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL;
 				case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL_TIME: return CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME;
 				case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION: return CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION;
+				case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE: return CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE;
 				default: return -1;
 			}
 		}
@@ -520,6 +575,7 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL: return CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL;
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME: return CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL_TIME;
 				case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION: return CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION;
+				case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE: return CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__PRICE_ON_LAST_LNG_PRICE;
 				default: return -1;
 			}
 		}
@@ -548,6 +604,8 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 		result.append(includeCanalTime);
 		result.append(", lumpSumPriceExpression: ");
 		result.append(lumpSumPriceExpression);
+		result.append(", priceOnLastLNGPrice: ");
+		result.append(priceOnLastLNGPrice);
 		result.append(')');
 		return result.toString();
 	}

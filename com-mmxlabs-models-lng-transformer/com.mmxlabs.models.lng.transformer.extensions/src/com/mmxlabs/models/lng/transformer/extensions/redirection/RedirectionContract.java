@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
@@ -30,6 +31,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.SlotExpressionParamsHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -47,7 +50,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Sample Redirection contract. A combination of both the {@link NetbackContract} and {@link ProfitSharingContract}.
+ * Sample Redirection contract. A combination of both the
+ * {@link NetbackContract} and {@link ProfitSharingContract}.
  * 
  * @author Simon Goodall
  * 
@@ -93,14 +97,17 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	private final ICurve purchasePriceCurve;
+	@Inject
+	private SlotExpressionParamsHelper paramsHelper;
+
+	private final IParameterisedCurve purchasePriceCurve;
 	// private final ICurve salesPriceCurve;
 	private final int notionalSpeed;
 	private final IPort baseSalesMarketPort;
 	private final IPort sourcePurchasePort;
 
-	public RedirectionContract(final ICurve purchasePriceCurve, final ICurve salesPriceCurve, final int notionalSpeed, final IPort baseSalesMarketPort, final IPort sourcePurchasePort,
-			final IVessel templateClass, final ICurve charterInCurve) {
+	public RedirectionContract(final IParameterisedCurve purchasePriceCurve, final IParameterisedCurve salesPriceCurve, final int notionalSpeed, final IPort baseSalesMarketPort,
+			final IPort sourcePurchasePort, final IVessel templateClass, final ICurve charterInCurve) {
 		super();
 		this.purchasePriceCurve = purchasePriceCurve;
 
@@ -116,7 +123,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
 		final int dischargeTime = allocationAnnotation.getSlotTime(dischargeSlot);
 
-		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(loadTime, loadSlot));
+		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(loadTime, loadSlot),
+				paramsHelper.buildParameters(loadSlot, null, allocationAnnotation));
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
@@ -149,9 +157,14 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
 				final int[] baseFuelPricesInMT = vesselBaseFuelCalculator.getBaseFuelPrices(vesselCharter.getVessel(), utcLoadTime);
-				// final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration,
-				// vesselCharter.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselCharter.getVessel().getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route,
-				// vesselCharter.getVessel().getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
+				// final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(),
+				// baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime,
+				// dischargeDuration,
+				// vesselCharter.getVessel(), vesselCharterInRatePerDay, startHeelInM3,
+				// vesselCharter.getVessel().getVesselClass().getMaxSpeed(),
+				// loadSlot.getCargoCVValue(), route,
+				// vesselCharter.getVessel().getVesselClass().getBaseFuelUnitPrice(),
+				// dischargePricePerMMBTu);
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration,
 						vesselCharter.getVessel(), charterCostCalculator, startHeelInM3, vesselCharter.getVessel().getMaxSpeed(), loadSlot.getCargoCVValue(), route, baseFuelPricesInMT,
 						dischargePricePerMMBTu);
@@ -240,7 +253,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 		// FIXME: Safety Heel
 		final long startHeelInM3 = 0;
-		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(transferTime, pricingPort));
+		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(transferTime, pricingPort), paramsHelper.buildParameters(loadOption, null, null));
 		final int cargoCVValue = loadOption.getCargoCVValue();
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadOption);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
@@ -29,6 +29,8 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
@@ -148,8 +150,6 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 
 	@Override
 	public void finishTransforming() {
-		// Set of slots to make sure we do not process spot market slots twice
-		final Set<Slot> seenSlots = new HashSet<>();
 		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		if (commercialModel != null) {
 			final CargoModel cargoModel = rootObject.getCargoModel();
@@ -215,19 +215,30 @@ public class RestrictedElementsTransformer implements ISlotTransformer {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		// Record spot slots as not all of them are attached to the model
-		if (modelSlot instanceof LoadSlot) {
-			loadSlots.add((LoadSlot) modelSlot);
+		if (modelSlot instanceof final LoadSlot ls) {
+			loadSlots.add(ls);
 		}
-		if (modelSlot instanceof DischargeSlot) {
-			dischargeSlots.add((DischargeSlot) modelSlot);
+		if (modelSlot instanceof final DischargeSlot ds) {
+			dischargeSlots.add(ds);
 		}
 
 		allElements.add(sequenceElement);
 		{
+			if (modelSlot instanceof final SpotSlot spotSlot) {
+				final SpotMarket market = spotSlot.getMarket();
+				Set<Port> ports = new HashSet<>();
+				if (market instanceof final DESPurchaseMarket desMarket) {
+					ports = SetUtils.getObjects(desMarket.getDestinationPorts());
+				} else if (market instanceof final FOBSalesMarket fobMarket) {
+					ports = SetUtils.getObjects(fobMarket.getOriginPorts());
+				}
+				ports.forEach(port -> portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement));
+			}
 			final Port port = modelSlot.getPort();
 			if (port != null) {
 				portMap.computeIfAbsent(port, p -> new HashSet<>()).add(sequenceElement);
 			}
+			
 		}
 		{
 			final Contract contract = modelSlot.getContract();

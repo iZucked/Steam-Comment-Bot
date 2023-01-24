@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.scenariodiff;
@@ -699,7 +699,10 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 				final Vessel vessel1 = vc1.getVessel();
 				final Vessel vessel2 = vc2.getVessel();
 				return vc1.getCharterNumber() == vc2.getCharterNumber() && vessel1 != null && vessel2 != null && vessel1.getName().equals(vessel2.getName());
-			}, vc -> ScenarioElementNameHelper.getName(vc.getVessel(), "(unknown)"));
+			}, vc -> {
+				final String vesselName = ScenarioElementNameHelper.getName(vc.getVessel(), "(unknown)");
+				return String.format("%s-%d", vesselName, vc.getCharterNumber());
+			});
 			populateDiffData(res, KEY_VESSEL_EVENTS, pinnedVesselEvents, nonPinnedVesselEvents);
 			populateDiffData(res, KEY_CHARTER_IN_MARKETS, pinnedCharterInMarkets, nonPinnedCharterInMarkets);
 			populateDiffData(res, KEY_CHARTER_OUT_MARKETS, pinnedCharterOutMarkets, nonPinnedCharterOutMarkets);

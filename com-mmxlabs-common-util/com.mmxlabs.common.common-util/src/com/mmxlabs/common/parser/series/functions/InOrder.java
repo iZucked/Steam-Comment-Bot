@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series.functions;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.common.parser.series.ISeries;
 
@@ -14,10 +15,10 @@ public class InOrder extends SimpleSeriesFunction {
 	}
 
 	@Override
-	public Number evaluate(int point) {
+	public Number evaluate(final int timePoint, final Map<String, String> params) {
 		double d = -Double.MAX_VALUE;
 		for (final ISeries s : arguments) {
-			final Number n = s.evaluate(point);
+			final Number n = s.evaluate(timePoint, params);
 			if (n.doubleValue() < d) {
 				return 0;
 			}

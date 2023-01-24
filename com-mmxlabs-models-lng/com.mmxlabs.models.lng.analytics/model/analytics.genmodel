@@ -352,6 +352,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestPrice"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMResult/shipping"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/shippingCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/originalVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/originalPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/totalShippingCost"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//MTMRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMRow/buyOption"/>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
@@ -123,6 +123,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePortCostEntry(PortCostEntry object) {
 				return createPortCostEntryAdapter();
+			}
+			@Override
+			public Adapter caseCooldownPriceEntry(CooldownPriceEntry object) {
+				return createCooldownPriceEntryAdapter();
 			}
 			@Override
 			public Adapter caseCooldownPrice(CooldownPrice object) {
@@ -401,6 +405,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortCostEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CooldownPriceEntry <em>Cooldown Price Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPriceEntry
+	 * @generated
+	 */
+	public Adapter createCooldownPriceEntryAdapter() {
 		return null;
 	}
 

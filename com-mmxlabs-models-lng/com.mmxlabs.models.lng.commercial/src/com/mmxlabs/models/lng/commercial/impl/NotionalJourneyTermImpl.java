@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl#isIncludeCanal <em>Include Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl#isIncludeCanalTime <em>Include Canal Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,6 +155,26 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 	 * @ordered
 	 */
 	protected String lumpSumPriceExpression = LUMP_SUM_PRICE_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PRICE_ON_LAST_LNG_PRICE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isPriceOnLastLNGPrice() <em>Price On Last LNG Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPriceOnLastLNGPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean priceOnLastLNGPrice = PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -318,6 +339,29 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 	 * @generated
 	 */
 	@Override
+	public boolean isPriceOnLastLNGPrice() {
+		return priceOnLastLNGPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPriceOnLastLNGPrice(boolean newPriceOnLastLNGPrice) {
+		boolean oldPriceOnLastLNGPrice = priceOnLastLNGPrice;
+		priceOnLastLNGPrice = newPriceOnLastLNGPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE, oldPriceOnLastLNGPrice, priceOnLastLNGPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM__SPEED:
@@ -332,6 +376,8 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 				return isIncludeCanalTime();
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return getLumpSumPriceExpression();
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return isPriceOnLastLNGPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -361,6 +407,9 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 				return;
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression((String)newValue);
+				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -392,6 +441,9 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression(LUMP_SUM_PRICE_EXPRESSION_EDEFAULT);
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE:
+				setPriceOnLastLNGPrice(PRICE_ON_LAST_LNG_PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -416,6 +468,8 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 				return includeCanalTime != INCLUDE_CANAL_TIME_EDEFAULT;
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return LUMP_SUM_PRICE_EXPRESSION_EDEFAULT == null ? lumpSumPriceExpression != null : !LUMP_SUM_PRICE_EXPRESSION_EDEFAULT.equals(lumpSumPriceExpression);
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM__PRICE_ON_LAST_LNG_PRICE:
+				return priceOnLastLNGPrice != PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -442,6 +496,8 @@ public abstract class NotionalJourneyTermImpl extends EObjectImpl implements Not
 		result.append(includeCanalTime);
 		result.append(", lumpSumPriceExpression: ");
 		result.append(lumpSumPriceExpression);
+		result.append(", priceOnLastLNGPrice: ");
+		result.append(priceOnLastLNGPrice);
 		result.append(')');
 		return result.toString();
 	}

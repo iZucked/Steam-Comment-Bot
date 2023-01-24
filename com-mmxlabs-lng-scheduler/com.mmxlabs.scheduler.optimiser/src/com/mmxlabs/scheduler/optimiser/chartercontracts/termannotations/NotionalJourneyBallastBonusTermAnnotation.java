@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations;
@@ -7,5 +7,6 @@ package com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class NotionalJourneyBallastBonusTermAnnotation extends NotionalJourneyTermAnnotation {
+	
 	public IPort returnPort = null;
 }

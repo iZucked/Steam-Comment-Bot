@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.util.CharterContractBuilder.BallastBonusMaker;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -53,6 +54,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.NotionalJourneyBallastBonusTermAnnotation;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
@@ -162,7 +164,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final EndEvent end = getEndEvent(vesselCharter);
 			final long endEventPNL = -1_000_000;
 			Assertions.assertEquals(-endEventPNL, end.getBallastBonusFee());
-			
+
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -282,6 +284,98 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			long endEventPNL = -62_499;
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testNotionalJourneyBallastBonusOn_Matching_WithLNGPrice() throws Exception {
+
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
+		final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
+		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getVesselOrDelegateFuelConsumption();
+		fuelConsumption.clear();
+		final FuelConsumption fc1 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc1.setSpeed(10);
+		fc1.setConsumption(50);
+		final FuelConsumption fc2 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc2.setSpeed(15);
+		fc2.setConsumption(80);
+		final FuelConsumption fc3 = FleetFactory.eINSTANCE.createFuelConsumption();
+		fc3.setSpeed(20);
+		fc3.setConsumption(100);
+
+		fuelConsumption.add(fc1);
+		fuelConsumption.add(fc2);
+		fuelConsumption.add(fc3);
+		vessel.setMaxSpeed(20);
+
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
+
+		vesselCharter.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
+
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(vesselCharter);
+
+		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
+				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", BallastBonusMaker.LNG_ONLY, true, false,
+				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
+
+		evaluateTest(null, null, scenarioRunner -> {
+
+			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
+			assert schedule != null;
+
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), schedule);
+			Assertions.assertNotNull(cargoAllocation);
+
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+
+			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			final EndEvent end = getEndEvent(vesselCharter);
+
+			boolean foundDetails = false;
+			for (var detail : end.getGeneralPNLDetails()) {
+				if (detail instanceof CharterContractFeeDetails contractDetails) {
+					if (contractDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails termDetails) {
+
+						Assertions.assertEquals(7, termDetails.getLngPrice());
+						// MT per day @ 20 knots * base fuel equiv * days
+						Assertions.assertEquals(100.0 * vessel.getBaseFuel().getEquivalenceFactor() * termDetails.getTotalTimeInDays(), termDetails.getTotalLNGUsed(), 1.0);
+						// Prev line can be out-by-one, so here out by 1*7
+						Assertions.assertEquals(7.0 * termDetails.getTotalLNGUsed(), termDetails.getTotalLNGCost(), 7);
+						
+						Assertions.assertEquals(0, termDetails.getFuelPrice());
+						Assertions.assertEquals(0, termDetails.getTotalFuelUsed());
+						Assertions.assertEquals(0, termDetails.getTotalFuelCost());
+
+						foundDetails = true;
+						break;
+					}
+
+				}
+			}
+			Assertions.assertTrue(foundDetails);
+
+//			long endEventPNL = -62_499;
+//			
+//			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
+//			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
 

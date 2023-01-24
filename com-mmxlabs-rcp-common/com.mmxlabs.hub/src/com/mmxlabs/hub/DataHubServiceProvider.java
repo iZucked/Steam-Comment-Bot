@@ -1,18 +1,31 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.hub;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.services.permissions.IUserPermissionsService;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
@@ -20,8 +33,6 @@ import com.mmxlabs.hub.services.users.IUserNameMapping;
 import com.mmxlabs.hub.services.users.IUserNameProvider;
 import com.mmxlabs.hub.services.users.UserNameUpdater;
 import com.mmxlabs.hub.services.users.UsernameProvider;
-
-import okhttp3.Request.Builder;
 
 /**
  * A central place to access Data Hub services
@@ -75,7 +86,7 @@ public class DataHubServiceProvider {
 		this.loggedIn = loggedIn;
 
 		System.out.printf("Hub State - Online: %s Logged In %s\n", online, loggedIn);
-		
+
 		if (changedToOnlineAndLoggedIn) {
 			// We have changed to online + logged in, so refresh some state
 
@@ -85,7 +96,7 @@ public class DataHubServiceProvider {
 			// Update permissions model
 			try {
 				UserPermissionsService.INSTANCE.updateUserPermissions();
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				LOGGER.error("Error refreshing permissions: " + e.getMessage(), e);
 			}
 		}
@@ -131,12 +142,117 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public @Nullable Builder makeRequestBuilder(String urlPath) {
-		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(urlPath);
+	public <T extends HttpRequestBase> @Nullable Triple<CloseableHttpClient, T, HttpClientContext> makeRequest(String urlPath, Function<URI, T> requestFactory) {
+		return UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
 	}
-	
-	public @Nullable Builder makeRequestBuilder(String baseUrl, String urlPath) {
-		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(baseUrl, urlPath);
+
+	public <U> @Nullable U doGetRequest(String urlPath, ResponseHandler<U> responseHandler) throws IOException {
+		return doRequest(urlPath, HttpGet::new, responseHandler);
+	}
+
+	public <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, ResponseHandler<U> responseHandler) throws IOException {
+
+		if (!isOnlineAndLoggedIn()) {
+			return null;
+		}
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
+		if (p == null) {
+			return null;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var context = p.getThird();
+
+		return httpClient.execute(request, responseHandler, context);
+	}
+
+	public void doDeleteRequest(String urlPath, CheckedConsumer<HttpResponse, IOException> responseHandler) throws IOException {
+
+		if (!isOnlineAndLoggedIn()) {
+			return;
+		}
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpDelete::new);
+		if (p == null) {
+			return;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
+		httpClient.execute(request, response -> {
+			responseHandler.accept(response);
+			return null;
+		}, ctx);
+	}
+
+	public <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, Consumer<T> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
+		if (p == null) {
+			return null;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
+		requestCusomiser.accept(request);
+
+		return httpClient.execute(request, responseHandler, ctx);
+
+	}
+
+	public <U> @Nullable U doPostRequest(String urlPath, Consumer<HttpPost> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpPost::new);
+		if (p == null) {
+			return null;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
+		requestCusomiser.accept(request);
+
+		return httpClient.execute(request, responseHandler, ctx);
+
+	}
+
+	public <T extends HttpRequestBase> boolean doGetRequestAsBoolean(String urlPath, ResponseHandler<Boolean> responseHandler) throws IOException {
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpGet::new);
+		if (p == null) {
+			return false;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
+		Boolean b = httpClient.execute(request, responseHandler, ctx);
+		if (b == null) {
+			return false;
+		}
+		return b;
+
+	}
+
+	public <T extends HttpRequestBase> boolean doRequestAsBoolean(String urlPath, Function<URI, T> requestFactory, ResponseHandler<Boolean> responseHandler) throws IOException {
+
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
+		if (p == null) {
+			return false;
+		}
+		final var httpClient = p.getFirst();
+		final var request = p.getSecond();
+		final var ctx = p.getThird();
+
+		Boolean b = httpClient.execute(request, responseHandler, ctx);
+		if (b == null) {
+			return false;
+		}
+		return b;
+
 	}
 
 	public synchronized void setOnlineState(final boolean newOnline) {

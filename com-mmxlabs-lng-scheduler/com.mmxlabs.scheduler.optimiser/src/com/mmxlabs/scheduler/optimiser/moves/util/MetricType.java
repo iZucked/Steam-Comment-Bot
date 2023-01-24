@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -21,5 +21,9 @@ public enum MetricType {
 			}
 		}
 		return false;
+	}
+
+	public static void increment(long[] metrics, MetricType type, long value) {
+		metrics[type.ordinal()] = Math.addExact(metrics[type.ordinal()], value);
 	}
 }

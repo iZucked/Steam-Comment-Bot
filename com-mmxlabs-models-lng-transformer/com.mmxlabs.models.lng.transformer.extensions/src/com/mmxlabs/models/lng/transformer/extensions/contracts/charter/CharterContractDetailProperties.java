@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.contracts.charter;
@@ -49,6 +49,9 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 					addDetailProperty("Fuel price", "", "$", "/MT", rule.getFuelPrice(), new StringFormatLabelProvider("%,.2f"), details);
 					addDetailProperty("Fuel used", "", "MT", "", rule.getTotalFuelUsed(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Fuel cost", "", "$", "", rule.getTotalFuelCost(), new StringFormatLabelProvider("%,d"), details);
+					addDetailProperty("LNG price", "", "$", "/mmBtu", rule.getLngPrice(), new StringFormatLabelProvider("%,.2f"), details);
+					addDetailProperty("LNG used", "", "mmBtu", "", rule.getTotalLNGUsed(), new StringFormatLabelProvider("%,d"), details);
+					addDetailProperty("LNG cost", "", "$", "", rule.getTotalLNGCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Hire rate", "", "$", "/day", rule.getHireRate(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Hire cost", "", "$", "", rule.getHireCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Route taken", "", "", "", rule.getRouteTaken(), new StringFormatLabelProvider("%s"), details);

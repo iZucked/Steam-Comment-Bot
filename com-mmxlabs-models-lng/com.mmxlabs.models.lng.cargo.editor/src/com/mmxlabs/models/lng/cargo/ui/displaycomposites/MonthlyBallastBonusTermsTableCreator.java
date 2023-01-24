@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
@@ -249,10 +249,10 @@ public class MonthlyBallastBonusTermsTableCreator {
 
 		
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
+				new PriceAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
 
 					@Override
-					public void runSetCommand(final Object object, final Object value) {
+					public void runSetCommand(final Object object, final String value) {
 						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
@@ -333,10 +333,10 @@ public class MonthlyBallastBonusTermsTableCreator {
 				});
 		
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
+				new PriceAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
 
 					@Override
-					public void runSetCommand(final Object object, final Object value) {
+					public void runSetCommand(final Object object, final String value) {
 						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
