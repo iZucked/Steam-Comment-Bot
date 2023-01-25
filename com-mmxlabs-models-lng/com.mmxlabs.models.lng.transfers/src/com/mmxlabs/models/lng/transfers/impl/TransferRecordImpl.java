@@ -1410,7 +1410,7 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 							return entity.getBusinessUnits().get(0);
 						}
 					}
-					return ECollections.emptyEList();
+					return null;
 				}
 			};
 		} else if (transferPackage.getTransferRecord_ToBU() == feature) {
