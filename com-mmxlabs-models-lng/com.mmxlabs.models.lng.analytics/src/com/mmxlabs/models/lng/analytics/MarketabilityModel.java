@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getMarkets <em>Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityModel()
@@ -48,5 +49,54 @@ public interface MarketabilityModel extends AbstractAnalysisModel {
 	 * @generated
 	 */
 	EList<SpotMarket> getMarkets();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Speed</em>' attribute.
+	 * @see #isSetVesselSpeed()
+	 * @see #unsetVesselSpeed()
+	 * @see #setVesselSpeed(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityModel_VesselSpeed()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getVesselSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Speed</em>' attribute.
+	 * @see #isSetVesselSpeed()
+	 * @see #unsetVesselSpeed()
+	 * @see #getVesselSpeed()
+	 * @generated
+	 */
+	void setVesselSpeed(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVesselSpeed()
+	 * @see #getVesselSpeed()
+	 * @see #setVesselSpeed(int)
+	 * @generated
+	 */
+	void unsetVesselSpeed();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Vessel Speed</em>' attribute is set.
+	 * @see #unsetVesselSpeed()
+	 * @see #getVesselSpeed()
+	 * @see #setVesselSpeed(int)
+	 * @generated
+	 */
+	boolean isSetVesselSpeed();
 
 } // MarketabilityModel

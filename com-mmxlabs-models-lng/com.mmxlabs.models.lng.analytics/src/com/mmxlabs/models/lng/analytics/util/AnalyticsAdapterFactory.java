@@ -73,8 +73,8 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AnalyticsSwitch<@Nullable Adapter> modelSwitch =
-		new AnalyticsSwitch<@Nullable Adapter>() {
+	protected AnalyticsSwitch<Adapter> modelSwitch =
+		new AnalyticsSwitch<Adapter>() {
 			@Override
 			public Adapter caseAnalyticsModel(AnalyticsModel object) {
 				return createAnalyticsModelAdapter();

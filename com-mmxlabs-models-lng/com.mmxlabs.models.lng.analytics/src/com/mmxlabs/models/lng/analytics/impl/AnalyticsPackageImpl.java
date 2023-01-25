@@ -2874,6 +2874,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getMarketabilityModel_VesselSpeed() {
+		return (EAttribute)marketabilityModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMarketabilityRow() {
 		return marketabilityRowEClass;
 	}
@@ -4627,6 +4637,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		marketabilityModelEClass = createEClass(MARKETABILITY_MODEL);
 		createEReference(marketabilityModelEClass, MARKETABILITY_MODEL__ROWS);
 		createEReference(marketabilityModelEClass, MARKETABILITY_MODEL__MARKETS);
+		createEAttribute(marketabilityModelEClass, MARKETABILITY_MODEL__VESSEL_SPEED);
 
 		marketabilityRowEClass = createEClass(MARKETABILITY_ROW);
 		createEReference(marketabilityRowEClass, MARKETABILITY_ROW__BUY_OPTION);
@@ -5179,6 +5190,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(marketabilityModelEClass, MarketabilityModel.class, "MarketabilityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityModel_Rows(), this.getMarketabilityRow(), null, "rows", null, 0, -1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketabilityModel_Markets(), theSpotMarketsPackage.getSpotMarket(), null, "markets", null, 0, -1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityModel_VesselSpeed(), ecorePackage.getEInt(), "vesselSpeed", null, 0, 1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityRowEClass, MarketabilityRow.class, "MarketabilityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

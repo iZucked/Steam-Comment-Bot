@@ -3737,13 +3737,22 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__VESSEL_SPEED = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Marketability Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+	int MARKETABILITY_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl <em>Marketability Row</em>}' class.
@@ -8062,6 +8071,17 @@ s	 * <!-- end-user-doc -->
 	EReference getMarketabilityModel_Markets();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Speed</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed()
+	 * @see #getMarketabilityModel()
+	 * @generated
+	 */
+	EAttribute getMarketabilityModel_VesselSpeed();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow <em>Marketability Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11442,6 +11462,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference MARKETABILITY_MODEL__MARKETS = eINSTANCE.getMarketabilityModel_Markets();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKETABILITY_MODEL__VESSEL_SPEED = eINSTANCE.getMarketabilityModel_VesselSpeed();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl <em>Marketability Row</em>}' class.

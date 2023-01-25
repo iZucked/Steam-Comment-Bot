@@ -62,6 +62,7 @@ public class MainTableComponent {
 
 	private final List<Item> dynamicColumns = new LinkedList<>();
 	private GridTreeViewer tableViewer;
+	private Text vesselSpeedText;
 
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
@@ -70,19 +71,31 @@ public class MainTableComponent {
 	public @NonNull List<Consumer<MarketabilityModel>> getInputWants() {
 		return inputWants;
 	}
+	
+	@Nullable
+	public Integer getVesselSpeed() {
+		String speed = vesselSpeedText.getText();
+		try {
+			return Integer.parseInt(speed);
+		} catch(NumberFormatException e) {
+			return null;
+		}
+	}
 
 	public void createControls(final Composite mainParent, final MarketabilityView breakEvenModellerView) {
 		final Composite vesselSpeedComposite = new Composite(mainParent, SWT.NONE);
-		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
-		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
+		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.END).minSize(1000, -1).create());
 		final Label lbl = new Label(vesselSpeedComposite, SWT.NONE);
 		lbl.setText("Vessel speed:");
 		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-		final Text vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
+		vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
 		vesselSpeedText.setEditable(true);
 		vesselSpeedText.setTextLimit(2);
+		vesselSpeedText.setMessage("max");
 		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
-		
+		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
+		knotsLabel.setText("kts");
 		Control control = createViewer(mainParent);
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(300, 300).grab(true, true).create());
 	}

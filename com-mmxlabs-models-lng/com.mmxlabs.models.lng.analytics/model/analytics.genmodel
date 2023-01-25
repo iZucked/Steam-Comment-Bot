@@ -288,6 +288,7 @@
     <genClasses ecoreClass="analytics.ecore#//MarketabilityModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityModel/rows"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityModel/markets"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityModel/vesselSpeed"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//MarketabilityRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityRow/buyOption"/>

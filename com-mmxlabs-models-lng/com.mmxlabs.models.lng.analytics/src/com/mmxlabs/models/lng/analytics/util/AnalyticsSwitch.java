@@ -31,7 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage
  * @generated
  */
-public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
+public class AnalyticsSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

@@ -42,7 +42,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 
 public final class MarketabilityUtils {
-	public static MarketabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name) {
+	public static MarketabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, final Integer vesselSpeed) {
 		final MarketabilityModel model = AnalyticsFactory.eINSTANCE.createMarketabilityModel();
 		model.setName(name);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
@@ -78,7 +78,7 @@ public final class MarketabilityUtils {
 					if (charterInMarket != null && charterInMarket.getVessel() != null && charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
 						final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
 						ecmo.setCharterInMarket(charterInMarket);
-						ecmo.setSpotIndex(0);
+						ecmo.setSpotIndex(c.getSpotIndex());
 						shippingOption = ecmo;
 					}
 				}
@@ -105,6 +105,12 @@ public final class MarketabilityUtils {
 				row.setResult(container);
 			}
 		}
+		if(vesselSpeed != null) {
+			model.setVesselSpeed(vesselSpeed);
+		} else {
+			model.unsetVesselSpeed();
+		}
+		
 		return model;
 	}
 

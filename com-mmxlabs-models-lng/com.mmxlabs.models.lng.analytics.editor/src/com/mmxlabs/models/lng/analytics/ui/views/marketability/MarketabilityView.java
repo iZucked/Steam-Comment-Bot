@@ -112,7 +112,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			if (modelRecord != null) {
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-
+					final Integer vesselSpeed = mainTableComponent.getVesselSpeed();
 					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
 						try {
 							dialog.run(true, false, m -> {
@@ -129,7 +129,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 									final ExecutorService executor = Executors.newFixedThreadPool(1);
 									try {
 										executor.submit(() -> {
-											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket");
+											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket", vesselSpeed);
 											MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
 
 											RunnerHelper.asyncExec(() -> {

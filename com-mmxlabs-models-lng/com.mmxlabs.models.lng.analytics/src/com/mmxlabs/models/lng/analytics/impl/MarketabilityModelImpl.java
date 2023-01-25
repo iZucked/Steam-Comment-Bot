@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityModelImpl#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityModelImpl#getMarkets <em>Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityModelImpl#getVesselSpeed <em>Vessel Speed</em>}</li>
  * </ul>
  *
  * @generated
@@ -59,6 +60,35 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @ordered
 	 */
 	protected EList<SpotMarket> markets;
+
+	/**
+	 * The default value of the '{@link #getVesselSpeed() <em>Vessel Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VESSEL_SPEED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVesselSpeed() <em>Vessel Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected int vesselSpeed = VESSEL_SPEED_EDEFAULT;
+
+	/**
+	 * This is true if the Vessel Speed attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselSpeedESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -111,6 +141,56 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @generated
 	 */
 	@Override
+	public int getVesselSpeed() {
+		return vesselSpeed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVesselSpeed(int newVesselSpeed) {
+		int oldVesselSpeed = vesselSpeed;
+		vesselSpeed = newVesselSpeed;
+		boolean oldVesselSpeedESet = vesselSpeedESet;
+		vesselSpeedESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED, oldVesselSpeed, vesselSpeed, !oldVesselSpeedESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetVesselSpeed() {
+		int oldVesselSpeed = vesselSpeed;
+		boolean oldVesselSpeedESet = vesselSpeedESet;
+		vesselSpeed = VESSEL_SPEED_EDEFAULT;
+		vesselSpeedESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED, oldVesselSpeed, VESSEL_SPEED_EDEFAULT, oldVesselSpeedESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetVesselSpeed() {
+		return vesselSpeedESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_MODEL__ROWS:
@@ -131,6 +211,8 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 				return getRows();
 			case AnalyticsPackage.MARKETABILITY_MODEL__MARKETS:
 				return getMarkets();
+			case AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED:
+				return getVesselSpeed();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -152,6 +234,9 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 				getMarkets().clear();
 				getMarkets().addAll((Collection<? extends SpotMarket>)newValue);
 				return;
+			case AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED:
+				setVesselSpeed((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -170,6 +255,9 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 			case AnalyticsPackage.MARKETABILITY_MODEL__MARKETS:
 				getMarkets().clear();
 				return;
+			case AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED:
+				unsetVesselSpeed();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -186,8 +274,26 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 				return rows != null && !rows.isEmpty();
 			case AnalyticsPackage.MARKETABILITY_MODEL__MARKETS:
 				return markets != null && !markets.isEmpty();
+			case AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED:
+				return isSetVesselSpeed();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (vesselSpeed: ");
+		if (vesselSpeedESet) result.append(vesselSpeed); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } //MarketabilityModelImpl

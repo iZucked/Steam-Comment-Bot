@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -32,6 +35,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -43,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalStartRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
@@ -52,6 +57,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 
 public class InsertCargoSequencesGenerator {
 
@@ -126,7 +133,7 @@ public class InsertCargoSequencesGenerator {
 	}
 
 	private IModifiableSequence createDiversionSequence(final Schedule schedule, final IResource targetResource, final ISequenceElement load, final ISequenceElement saleMarket,
-			final ISequence sequence, MarketabilityWindowTrimmer trimmer) {
+			final ISequence sequence, MarketabilityWindowTrimmer trimmer, final VoyageSpecificationProviderImpl voyageProvider, final Integer vesselSpeed) {
 
 		IVesselCharter vesselCharter = vesselProvider.getVesselCharter(targetResource);
 
@@ -138,8 +145,9 @@ public class InsertCargoSequencesGenerator {
 			}
 		}
 		assert nextEvent != null;
-
-		clampVesselSpeed(vesselCharter, OptimiserUnitConvertor.convertToInternalSpeed(17));
+		if(vesselSpeed != null) {
+			clampVesselSpeed(vesselCharter, OptimiserUnitConvertor.convertToInternalSpeed(vesselSpeed));
+		}
 		ISequenceElement start = startEndRequirementProvider.getStartElement(targetResource);
 		ISequenceElement end = startEndRequirementProvider.getEndElement(targetResource);
 
@@ -179,26 +187,25 @@ public class InsertCargoSequencesGenerator {
 		IPortSlot portSlot = portSlotProvider.getPortSlot(load);
 		SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(portSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
 		int loadTime = dateHelper.convertTime(visit.getStart());
-		//trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SET, loadTime);
-
+		voyageProvider.setArrivalTime(portSlot, loadTime);
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
 	}
 
 	private void clampVesselSpeed(IVesselCharter vc, int maxSpeed) {
 		IVessel vessel = vc.getVessel();
-		if (!(vessel instanceof Vessel)) {
+		if (!(vessel instanceof ThreadLocalVessel)) {
 			throw new IllegalArgumentException();
 		}
-		Vessel oVessel = (Vessel) vessel;
-		//oVessel.setMinSpeed(maxSpeed);
+		ThreadLocalVessel oVessel = (ThreadLocalVessel) vessel;
+		oVessel.setMinSpeed(maxSpeed);
 		oVessel.setMaxSpeed(maxSpeed);
 	}
 
 	// TODO: CHANGE THIS NAME
 	@NonNullByDefault
 	public void generateOptionsTemp(final Schedule schedule, final ISequences sequences, final List<@NonNull ISequenceElement> orderedCargoElements, final IResource targetResource,
-			MarketabilityWindowTrimmer trimmer, final IPortSlot portSlot, final ToBooleanFunction<ISequences> action) {
+			MarketabilityWindowTrimmer trimmer, final IPortSlot portSlot, final Integer vesselSpeed, final ToBooleanFunction<ISequences> action) {
 
 		for (final ISequenceElement e : orderedCargoElements) {
 			if (!helper.checkResource(e, targetResource)) {
@@ -209,11 +216,15 @@ public class InsertCargoSequencesGenerator {
 		final ISequenceElement load = orderedCargoElements.get(0);
 		final ISequenceElement salesMarket = orderedCargoElements.get(orderedCargoElements.size() - 1);
 		assert salesMarket != null;
-		final IModifiableSequences newSequences = new ModifiableSequences(List.of(targetResource));
+		final VoyageSpecificationProviderImpl voyageSpecificationProvider = new VoyageSpecificationProviderImpl();
 
-		final IModifiableSequence modifiableSequence = newSequences.getModifiableSequence(targetResource);
+		final IModifiableSequence modifiableSequence = createDiversionSequence(schedule, targetResource, load, salesMarket, seq, trimmer, voyageSpecificationProvider, vesselSpeed);
+		final Map<IResource, IModifiableSequence> sequenceMap = new HashMap<>();
+		sequenceMap.put(targetResource, modifiableSequence);
+		final SequencesAttributesProviderImpl providers = new SequencesAttributesProviderImpl();
+		providers.addProvider(IVoyageSpecificationProvider.class, voyageSpecificationProvider);
 
-		modifiableSequence.replaceAll(createDiversionSequence(schedule, targetResource, load, salesMarket, seq, trimmer));
+		final IModifiableSequences newSequences = new ModifiableSequences(List.of(targetResource), sequenceMap, new ArrayList<ISequenceElement>(), providers);
 
 		trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.EARLIEST, 0);
 		final boolean earliestValid = action.accept(newSequences);

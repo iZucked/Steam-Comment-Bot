@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalStartRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -61,61 +62,67 @@ public class MarketabilitySchedulerBuilder extends SchedulerBuilder {
 		return new ThreadLocalEndRequirement(endRequirement);
 	}
 	
-//	@Override
-//	@NonNull
-//	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel,
-//			final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel, final int pilotLightRate, final int warmupTimeHours, final int purgeTimeHours, final long cooldownVolumeM3,
-//			final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
-//
-//		final Vessel vessel = new Vessel(name, capacityInM3);
-//
-//		vessel.setMinSpeed(minSpeed);
-//		vessel.setMaxSpeed(maxSpeed);
-//
-//		vessel.setSafetyHeel(safetyHeelInM3);
-//
-//		vessel.setWarmupTime(warmupTimeHours);
-//		vessel.setPurgeTime(purgeTimeHours);
-//		vessel.setCooldownVolume(cooldownVolumeM3);
-//
-//		vessel.setPilotLightRate(pilotLightRate);
-//		vessel.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
-//
-//		vessel.setTravelBaseFuel(baseFuel);
-//		vessel.setIdleBaseFuel(idleBaseFuel);
-//		vessel.setPilotLightBaseFuel(pilotLightBaseFuel);
-//		vessel.setInPortBaseFuel(inPortBaseFuel);
-//
-//		vessel.setHasReliqCapability(hasReliqCapability);
-//		
-//		final ClampedSpeedVessel clampedSpeedVessel = new ClampedSpeedVessel(vessel, maxSpeed);
-//		vessels.add(clampedSpeedVessel);
-//
-//		return clampedSpeedVessel;
-//	}
+	@Override
+	@NonNull
+	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel,
+			final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel, final int pilotLightRate, final int warmupTimeHours, final int purgeTimeHours, final long cooldownVolumeM3,
+			final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
+
+		final Vessel vessel = new Vessel(name, capacityInM3);
+
+		vessel.setMinSpeed(minSpeed);
+		vessel.setMaxSpeed(maxSpeed);
+
+		vessel.setSafetyHeel(safetyHeelInM3);
+
+		vessel.setWarmupTime(warmupTimeHours);
+		vessel.setPurgeTime(purgeTimeHours);
+		vessel.setCooldownVolume(cooldownVolumeM3);
+
+		vessel.setPilotLightRate(pilotLightRate);
+		vessel.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
+
+		vessel.setTravelBaseFuel(baseFuel);
+		vessel.setIdleBaseFuel(idleBaseFuel);
+		vessel.setPilotLightBaseFuel(pilotLightBaseFuel);
+		vessel.setInPortBaseFuel(inPortBaseFuel);
+
+		vessel.setHasReliqCapability(hasReliqCapability);
+		
+		final ThreadLocalVessel threadLocalVessel = new ThreadLocalVessel(vessel);
+		vessels.add(threadLocalVessel);
+
+		return threadLocalVessel;
+	}
 //	
-//	@Override
-//	public void setVesselStateParameters(@NonNull final IVessel vessel, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay, final int idleConsumptionRateInMTPerDay,
-//			final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int serviceSpeed, final int inPortNBORateInM3PerDay) {
-//
-//		if (!vessels.contains(vessel)) {
-//			throw new IllegalArgumentException("IVessel was not created using this builder");
-//		}
-//
-//		// Check instance is the same as that used in createVessel(..)
-//		if (!(vessel instanceof Vessel)) {
-//			throw new IllegalArgumentException("Expected instance of " + Vessel.class.getCanonicalName());
-//		}
-//
-//		final Vessel veeselEditor = (Vessel) vessel;
-//
-//		veeselEditor.setNBORate(state, nboRateInM3PerDay);
-//		veeselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
-//		veeselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
-//		veeselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
-//		veeselEditor.setServiceSpeed(state, serviceSpeed);
-//		veeselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
-//	}
+	@Override
+	public void setVesselStateParameters(@NonNull final IVessel vessel, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay, final int idleConsumptionRateInMTPerDay,
+			final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int serviceSpeed, final int inPortNBORateInM3PerDay) {
+
+		if (!vessels.contains(vessel)) {
+			throw new IllegalArgumentException("IVessel was not created using this builder");
+		}
+
+		// Check instance is the same as that used in createVessel(..)
+		if (!(vessel instanceof ThreadLocalVessel)) {
+			throw new IllegalArgumentException("Expected instance of " + ThreadLocalVessel.class.getCanonicalName());
+		}
+
+		final ThreadLocalVessel veeselEditor = (ThreadLocalVessel) vessel;
+
+		veeselEditor.setNBORate(state, nboRateInM3PerDay);
+		veeselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
+		veeselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		veeselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
+		veeselEditor.setServiceSpeed(state, serviceSpeed);
+		veeselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
+	}
+	
+	@Override
+	public void setVesselPortTypeParameters(@NonNull final IVessel vc, final PortType portType, final int inPortConsumptionRateInMTPerDay) {
+
+		((ThreadLocalVessel) vc).setInPortConsumptionRateInMTPerDay(portType, inPortConsumptionRateInMTPerDay);
+	}
 	
 	
 }
