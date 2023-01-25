@@ -4,22 +4,35 @@
  */
 package com.mmxlabs.lingo.app.headless;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.json.simple.JSONObject;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
+import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseState;
+import com.mmxlabs.lingo.app.headless.HeadlessGenericApplication.InvalidCommandLineException;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -131,4 +144,138 @@ public class HeadlessUtils {
 		r.save(options);
 	}
 
+	public static JSONObject getDefaultMachineInfo() {
+		JSONObject machInfo = new JSONObject();
+		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
+		machInfo.put("os", System.getProperty("os.name"));
+		machInfo.put("JavaVersion", System.getProperty("java.version"));
+
+		{
+			// If we are running on EC2, then we can try to grab the instance type
+			try {
+				Process process = Runtime.getRuntime().exec("ec2-metadata -t");
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						int idx = line.indexOf(':');
+						if (idx > 0) {
+							machInfo.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
+						}
+					}
+				}
+			} catch (Exception e) {
+				// Ignore any exceptions
+			}
+		}
+
+		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
+		return machInfo;
+	}
+
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
+
+	public static String mD5Checksum(File input) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			// If source is a directory, collect MD5 sum of all contents.
+			if (input.isDirectory()) {
+				for (File f : input.listFiles()) {
+					if (f.isFile()) {
+						try (InputStream in = new FileInputStream(f)) {
+							byte[] block = new byte[4096];
+							int length;
+							while ((length = in.read(block)) > 0) {
+								digest.update(block, 0, length);
+							}
+						}
+					}
+				}
+			} else {
+
+				try (InputStream in = new FileInputStream(input)) {
+					byte[] block = new byte[4096];
+					int length;
+					while ((length = in.read(block)) > 0) {
+						digest.update(block, 0, length);
+					}
+				}
+			}
+			String result = bytesToHex(digest.digest());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Filter out invalid command line items that getopt cannot work with
+	 * 
+	 * @param commandLineArgs
+	 * @return
+	 */
+	public static String[] filterCommandLineArgs(final String[] commandLineArgs) {
+		final List<String> commandLine = new ArrayList<>(commandLineArgs.length);
+		int skip = 0;
+		for (final String arg : commandLineArgs) {
+			if (skip != 0) {
+				--skip;
+				continue;
+			}
+			if (arg.equals("-eclipse.keyring")) {
+				skip = 1;
+				continue;
+			}
+			if (arg.equals("-eclipse.password")) {
+				skip = 1;
+				continue;
+			}
+			commandLine.add(arg);
+
+		}
+		return commandLine.toArray(new String[commandLine.size()]);
+	}
+
+	/**
+	 * Returns the value of a command line parameter, or a specified existing value. If the existing value is not null, and the command line parameter is present, a warning is printed to stderr.
+	 */
+	public static String commandLineParameterOrValue(CommandLine commandLine, String commandLineOptionName, String oldValue) {
+		if (commandLine.hasOption(commandLineOptionName)) {
+			String newValue = commandLine.getOptionValue(commandLineOptionName);
+
+			if (oldValue != null && oldValue.equals(newValue) == false) {
+				String overrideWarning = "Overriding existing value with command line option %s: '%s' -> '%s'";
+				System.err.println(String.format(overrideWarning, commandLineOptionName, oldValue, newValue));
+			}
+
+			return newValue;
+
+		}
+
+		return oldValue;
+	}
+	
+	/**
+	 * Checks the user license, throwing an exception if there is a problem.
+	 * 
+	 * @throws LicenseChecker.InvalidLicenseException
+	 */
+	public static void doCheckLicense() throws LicenseChecker.InvalidLicenseException {
+		// check to see if the user has a valid license
+		final LicenseState validity = LicenseChecker.checkLicense();
+		if (validity != LicenseState.Valid) {
+			System.err.println("License is invalid");
+			throw new LicenseChecker.InvalidLicenseException();
+		}
+	}
 }
