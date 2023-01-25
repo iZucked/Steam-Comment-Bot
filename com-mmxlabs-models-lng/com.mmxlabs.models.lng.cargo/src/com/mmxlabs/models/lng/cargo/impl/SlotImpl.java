@@ -3910,7 +3910,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 							return entity.getBusinessUnits().get(0);
 						}
 					}
-					return ECollections.emptyEList();
+					return null;
 				}
 			};
 		}
