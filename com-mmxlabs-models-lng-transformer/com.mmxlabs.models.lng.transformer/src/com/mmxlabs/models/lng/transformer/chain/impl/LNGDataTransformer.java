@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class LNGDataTransformer {
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 
-		List<Module> transformerModules = new ArrayList<>(2);
+		List<Module> transformerModules = new LinkedList<>();
 		transformerModules.add(new LNGTransformerModule(scenarioDataProvider, userSettings, concurrencyLevel, hints));
 		if (extraDataProvider != null) {
 			transformerModules.add(extraDataProvider.asModule());
