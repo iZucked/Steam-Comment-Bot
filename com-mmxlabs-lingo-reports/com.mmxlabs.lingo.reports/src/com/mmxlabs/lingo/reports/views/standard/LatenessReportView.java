@@ -154,7 +154,7 @@ public class LatenessReportView extends EMFReportView {
 				if (startZdt != null) {
 					return startZdt.toLocalDateTime();
 				}
-				return LocalDateTime.of(1970, 1, 1, 0, 0);
+				return null;
 			}
 		});
 		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, new BaseFormatter() {
@@ -172,7 +172,7 @@ public class LatenessReportView extends EMFReportView {
 				if (object instanceof Event event) {
 					return event.getStart().toLocalDateTime();
 				}
-				return LocalDateTime.of(1970, 1, 1, 0, 0);
+				return null;
 			}
 		});
 
