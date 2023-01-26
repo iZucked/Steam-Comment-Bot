@@ -70,7 +70,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			final SlotType slotType = classify(slot);
 			do {
 				final String dateKey = dateToString(cal);
-				final Collection<@NonNull Slot<?>> potentialOverlaps = getOverlappingSlots(slot, dateKey);
+				// Create a copy as we call iterator::remove
+				final Collection<@NonNull Slot<?>> potentialOverlaps = new LinkedList<>(getOverlappingSlots(slot, dateKey));
 				final Iterator<@NonNull Slot<?>> ii = potentialOverlaps.iterator();
 				while (ii.hasNext()) {
 					final Slot<?> overlapSlot = ii.next();
