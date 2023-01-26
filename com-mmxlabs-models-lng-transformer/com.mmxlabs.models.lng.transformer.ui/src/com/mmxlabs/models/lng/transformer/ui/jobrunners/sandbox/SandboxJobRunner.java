@@ -92,6 +92,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 @NonNullByDefault
@@ -248,7 +249,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			json.setType("sandbox:define");
 			loggingData = json;
 		}
-
+		boolean  allowCaching = false;
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
 			final SandboxManualRunner deriveRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
@@ -280,7 +281,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					}
 				}
 			};
-		});
+		}, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxInsertionFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
@@ -385,7 +386,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				res.getSlotsInserted().clear();
 				res.getEventsInserted().clear();
 			}
-		});
+		}, false);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptimiserFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
@@ -393,7 +394,9 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 		final OptimisationResult sandboxResult = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 		sandboxResult.setUseScenarioBase(false);
-
+		
+		boolean allowCaching = false; //model.isUseTargetPNL()
+		
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
 			if (enableLogging) {
@@ -437,17 +440,17 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					}
 				}
 			};
-		});
+		}, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, jobAction, null);
+			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction, boolean allowCaching) {
+		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, jobAction, null, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
 			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction,
-			@Nullable final Consumer<AbstractSolutionSet> abortedHandler) {
+			@Nullable final Consumer<AbstractSolutionSet> abortedHandler, boolean allowCaching) {
 
 		return monitor -> {
 
@@ -477,10 +480,17 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 
 			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings,
-					dualPNLMode ? AnalyticsFactory.eINSTANCE::createDualModeSolutionOption : AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, true /* enableChangeDescription */);
+					dualPNLMode ? AnalyticsFactory.eINSTANCE::createDualModeSolutionOption : AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, 
+							true /* enableChangeDescription */);
 
 			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
 			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+			
+			// Disable caches for the export phase
+			// TODO: Maybe we need a cache-config event?
+			List<String> hints = new LinkedList<>(scenarioToOptimiserBridge.getDataTransformer().getHints());
+			hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+			scenarioToOptimiserBridge.getDataTransformer().getLifecyleManager().startPhase("export", hints);
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
