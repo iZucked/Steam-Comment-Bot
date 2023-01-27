@@ -32,11 +32,11 @@ public class CargoTypeUtil {
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
-	public static enum SimpleCargoType {
+	public enum SimpleCargoType {
 		SHIPPED, FOB_SALE, DES_PURCHASE
 	}
 
-	public static enum DetailedCargoType {
+	public enum DetailedCargoType {
 		UNKNOWN, SHIPPED, OPEN_FOB_PURCHASE, OPEN_DES_SALE, FOB_SALE, DIVERTIBLE_FOB_SALE, DES_PURCHASE, DIVERTIBLE_DES_PURCHASE
 	}
 
