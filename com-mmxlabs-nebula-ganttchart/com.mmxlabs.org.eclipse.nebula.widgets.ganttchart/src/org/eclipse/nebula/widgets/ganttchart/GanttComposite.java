@@ -3434,7 +3434,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// draw a little plaque saying how many days that this event is long
 		if (_showNumDays) {
-			final long days = DateHelper.daysBetween(ge.getActualStartDate(), ge.getActualEndDate()) + 1;
+			final long hours = DateHelper.hoursBetween(ge.getActualStartDate(), ge.getActualEndDate(), false);
+			final long integerDivDays = hours / 24L;
+			final long days = hours % 24 > 0 ? integerDivDays + 1 : integerDivDays;
 			_paintManager.drawDaysOnChart(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, (int) days, bounds);
 		}
 
