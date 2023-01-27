@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.its.verifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,8 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
@@ -135,6 +138,49 @@ public class OptimiserResultVerifier {
 						}
 					}
 
+				}
+				return null;
+			};
+			return new VesselVerifier(this, p);
+		}
+
+		public VesselVerifier withCargoToMarket(final String loadName, final String dischargeMarket) {
+
+			final CargoModelFinder finder = verifier.scenarioModelFinder.getCargoModelFinder();
+			final LoadSlot loadSlot = finder.findLoadSlot(loadName);
+			final SpotMarket marketDES = verifier.scenarioModelFinder.getSpotMarketsModelFinder().findSpotMarket(SpotType.DES_SALE, dischargeMarket);
+			final SpotMarket marketFOB = verifier.scenarioModelFinder.getSpotMarketsModelFinder().findSpotMarket(SpotType.FOB_SALE, dischargeMarket);
+
+			final Function<SolutionData, Pair<SolutionData, IResource>> p = (s) -> {
+
+				final ISequenceElement l = s.getOptimiserDataMapper().getElementFor(loadSlot);
+				final List<ISequenceElement> d_des = marketDES == null ? Collections.emptyList() : s.getOptimiserDataMapper().getElementsFor(marketDES);
+				final List<ISequenceElement> d_fob = marketFOB == null ? Collections.emptyList() : s.getOptimiserDataMapper().getElementsFor(marketFOB);
+
+				final Pair<IResource, Integer> a = s.getLookupManager().lookup(l);
+				for (var d : d_des) {
+					final Pair<IResource, Integer> b = s.getLookupManager().lookup(d);
+
+					if (a != null && b != null) {
+						if (a.getFirst() != null && a.getFirst() == b.getFirst()) {
+							if (a.getSecond() + 1 == b.getSecond()) {
+								return new Pair<>(s, a.getFirst());
+							}
+						}
+
+					}
+				}
+				for (var d : d_fob) {
+					final Pair<IResource, Integer> b = s.getLookupManager().lookup(d);
+
+					if (a != null && b != null) {
+						if (a.getFirst() != null && a.getFirst() == b.getFirst()) {
+							if (a.getSecond() + 1 == b.getSecond()) {
+								return new Pair<>(s, a.getFirst());
+							}
+						}
+
+					}
 				}
 				return null;
 			};

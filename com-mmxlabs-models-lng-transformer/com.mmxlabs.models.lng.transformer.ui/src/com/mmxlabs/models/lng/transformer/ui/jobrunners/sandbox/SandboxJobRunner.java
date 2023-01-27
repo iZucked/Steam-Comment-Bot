@@ -79,7 +79,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSONTransformer;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.CustomTypeResolverBuilder;
+import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
@@ -267,6 +269,13 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 						if (loggingData instanceof final HeadlessSandboxJSON json) {
 							json.getMetrics().setRuntime(runTime);
+
+							final ScenarioMeta scenarioMeta = ScenarioMetaUtils.writeOptimisationMetrics( //
+									deriveRunner.getBridge().getOptimiserScenario(), //
+									userSettings);
+
+							json.setScenarioMeta(scenarioMeta);
+
 						}
 					}
 				}
@@ -626,20 +635,24 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					solutionSet.getExtraSlots().add(s);
 				}
 			};
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.flatMap(s -> s.getEvents().stream()) //
 					.filter(SlotSpecification.class::isInstance) //
 					.map(SlotSpecification.class::cast) //
 					.forEach(action);
-			scheduleSpecification.getNonShippedCargoSpecifications().stream() //
+			scheduleSpecification.getNonShippedCargoSpecifications()
+					.stream() //
 					.flatMap(s -> s.getSlotSpecifications().stream()) //
 					.forEach(action);
-			scheduleSpecification.getOpenEvents().stream() //
+			scheduleSpecification.getOpenEvents()
+					.stream() //
 					.filter(SlotSpecification.class::isInstance) //
 					.map(SlotSpecification.class::cast) //
 					.forEach(action);
 
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.flatMap(s -> s.getEvents().stream()) //
 					.filter(VesselEventSpecification.class::isInstance) //
 					.map(VesselEventSpecification.class::cast) //
@@ -649,7 +662,8 @@ public class SandboxJobRunner extends AbstractJobRunner {
 							solutionSet.getExtraVesselEvents().add(s);
 						}
 					});
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.map(VesselScheduleSpecification::getVesselAllocation) //
 					.filter(VesselCharter.class::isInstance) //
 					.map(VesselCharter.class::cast) //

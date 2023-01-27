@@ -348,13 +348,14 @@ public class SharedScenarioUpdater {
 				return scenarioInstance;
 			}
 		} catch (final Exception e) {
-			if (e.getCause().getClass().getName().equals("com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException")) {
+			if (e.getCause() != null && e.getCause().getClass().getName().equals("com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException")) {
 				blackListed.add(record.uuid);
 				LOGGER.error("Error reading team scenario file {}. Unknown encryption key.", f.getName());
 				return null;
 
 			}
-
+			// We can get here due to e.g.
+			// java.io.IOException: Archive entry not found archive:file:/D:/ws/......lingo!/MANIFEST.xmi
 			e.printStackTrace();
 		}
 		if (warnedLoadFailures.add(f.getName())) {
