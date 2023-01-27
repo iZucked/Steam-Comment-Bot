@@ -36,9 +36,11 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__CARGO);
 
+		// These are hidden as they are linked to another control
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE);
+		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -51,7 +53,6 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 
 		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
 
-		
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 
 		addEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,
@@ -71,14 +72,14 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 
 		addEditor(CargoPackage.Literals.SLOT__NOMINATED_VESSEL, topClass -> new NominatedVesselEditorWrapper(new TextualVesselReferenceInlineEditor(CargoPackage.Literals.SLOT__NOMINATED_VESSEL)));
 
-		addEditor(CargoPackage.Literals.SLOT__PORT, topClass -> {
+		addEditor(CargoPackage.Literals.SLOT__CONTRACT, topClass -> {
 			if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
 				return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT);
 			}
 			return null;
 
 		});
-		addEditor(CargoPackage.Literals.SLOT__CONTRACT, topClass -> new TextualVesselReferenceInlineEditor(CargoPackage.Literals.SLOT__PORT));
+		addEditor(CargoPackage.Literals.SLOT__PORT, topClass -> new TextualPortReferenceInlineEditor(CargoPackage.Literals.SLOT__PORT));
 		addEditor(CargoPackage.Literals.SLOT__CN, topClass -> new TextInlineEditor(CargoPackage.Literals.SLOT__CN));
 		addEditor(CargoPackage.Literals.SLOT__MAX_QUANTITY, topClass -> new VolumeInlineEditor(CargoPackage.Literals.SLOT__MAX_QUANTITY));
 
