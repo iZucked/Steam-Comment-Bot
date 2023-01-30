@@ -394,8 +394,8 @@ public class MarketabilitySandboxUnit {
 			}
 		}
 		if (ret != null && ret.earliestTime != Integer.MAX_VALUE) {
-			marketabilityResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.earliestTime, timeZone).toLocalDate());
-			marketabilityResult.setLatestETA(modelEntityMap.getDateFromHours(ret.latestTime, timeZone).toLocalDate());
+			marketabilityResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.earliestTime, timeZone));
+			marketabilityResult.setLatestETA(modelEntityMap.getDateFromHours(ret.latestTime, timeZone));
 			marketabilityResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.earliestVolume));
 			marketabilityResult.setLatestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.latestVolume));
 			marketabilityResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.earliestPrice));

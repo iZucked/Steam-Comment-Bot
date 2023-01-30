@@ -9,6 +9,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -55,7 +57,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate EARLIEST_ETA_EDEFAULT = null;
+	protected static final ZonedDateTime EARLIEST_ETA_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getEarliestETA() <em>Earliest ETA</em>}' attribute.
@@ -65,7 +67,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate earliestETA = EARLIEST_ETA_EDEFAULT;
+	protected ZonedDateTime earliestETA = EARLIEST_ETA_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLatestETA() <em>Latest ETA</em>}' attribute.
@@ -75,7 +77,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate LATEST_ETA_EDEFAULT = null;
+	protected static final ZonedDateTime LATEST_ETA_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getLatestETA() <em>Latest ETA</em>}' attribute.
@@ -85,7 +87,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate latestETA = LATEST_ETA_EDEFAULT;
+	protected ZonedDateTime latestETA = LATEST_ETA_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getEarliestVolume() <em>Earliest Volume</em>}' attribute.
@@ -232,7 +234,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 */
 	@Override
-	public LocalDate getEarliestETA() {
+	public ZonedDateTime getEarliestETA() {
 		return earliestETA;
 	}
 
@@ -242,8 +244,8 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 */
 	@Override
-	public void setEarliestETA(LocalDate newEarliestETA) {
-		LocalDate oldEarliestETA = earliestETA;
+	public void setEarliestETA(ZonedDateTime newEarliestETA) {
+		ZonedDateTime oldEarliestETA = earliestETA;
 		earliestETA = newEarliestETA;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_ETA, oldEarliestETA, earliestETA));
@@ -255,7 +257,7 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 */
 	@Override
-	public LocalDate getLatestETA() {
+	public ZonedDateTime getLatestETA() {
 		return latestETA;
 	}
 
@@ -265,8 +267,8 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 */
 	@Override
-	public void setLatestETA(LocalDate newLatestETA) {
-		LocalDate oldLatestETA = latestETA;
+	public void setLatestETA(ZonedDateTime newLatestETA) {
+		ZonedDateTime oldLatestETA = latestETA;
 		latestETA = newLatestETA;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA, oldLatestETA, latestETA));
@@ -403,10 +405,10 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 				setTarget((SpotMarket)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_ETA:
-				setEarliestETA((LocalDate)newValue);
+				setEarliestETA((ZonedDateTime)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
-				setLatestETA((LocalDate)newValue);
+				setLatestETA((ZonedDateTime)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
 				setEarliestVolume((Integer)newValue);

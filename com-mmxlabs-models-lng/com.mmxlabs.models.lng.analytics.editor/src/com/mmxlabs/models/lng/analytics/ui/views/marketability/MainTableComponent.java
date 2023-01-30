@@ -8,6 +8,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -135,7 +136,13 @@ public class MainTableComponent {
 					public void update(ViewerCell cell) {
 						cell.setText("");
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							row.getResult().getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getEarliestETA())));
+							for(var result : row.getResult().getRhsResults()) {
+								if(result.getTarget() == sm && result.getEarliestETA() != null) {
+									String text = formatDate(result.getEarliestETA().toLocalDate());
+									text += " " + formatTime(result.getEarliestETA().toLocalTime());
+									cell.setText(text);
+								}
+							}
 						}
 					}
 				}, "Earliest", datesGroup);
@@ -146,7 +153,13 @@ public class MainTableComponent {
 					public void update(ViewerCell cell) {
 						cell.setText("");
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							row.getResult().getRhsResults().stream().filter(x -> x.getTarget() == sm).forEach(res -> cell.setText(formatDate(res.getLatestETA())));
+							for(var result : row.getResult().getRhsResults()) {
+								if(result.getTarget() == sm && result.getLatestETA() != null) {
+									String text = formatDate(result.getLatestETA().toLocalDate());
+									text += " " + formatTime(result.getLatestETA().toLocalTime());
+									cell.setText(text);
+								}
+							}
 						}
 
 					}
@@ -285,6 +298,14 @@ public class MainTableComponent {
 			return "";
 		}
 		return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(date);
+	}
+	
+	@SuppressWarnings("null")
+	private @NonNull String formatTime(final LocalTime time) {
+		if(time == null) {
+			return "";
+		}
+		return DateTimeFormatter.ofPattern("HH:mm").format(time);
 	}
 
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {

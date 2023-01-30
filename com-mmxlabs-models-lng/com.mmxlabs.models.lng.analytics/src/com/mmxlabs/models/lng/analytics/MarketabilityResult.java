@@ -6,6 +6,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -58,12 +60,12 @@ public interface MarketabilityResult extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Earliest ETA</em>' attribute.
-	 * @see #setEarliestETA(LocalDate)
+	 * @see #setEarliestETA(ZonedDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResult_EarliestETA()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	LocalDate getEarliestETA();
+	ZonedDateTime getEarliestETA();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getEarliestETA <em>Earliest ETA</em>}' attribute.
@@ -73,19 +75,19 @@ public interface MarketabilityResult extends EObject {
 	 * @see #getEarliestETA()
 	 * @generated
 	 */
-	void setEarliestETA(LocalDate value);
+	void setEarliestETA(ZonedDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Latest ETA</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Latest ETA</em>' attribute.
-	 * @see #setLatestETA(LocalDate)
+	 * @see #setLatestETA(ZonedDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResult_LatestETA()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	LocalDate getLatestETA();
+	ZonedDateTime getLatestETA();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getLatestETA <em>Latest ETA</em>}' attribute.
@@ -95,7 +97,7 @@ public interface MarketabilityResult extends EObject {
 	 * @see #getLatestETA()
 	 * @generated
 	 */
-	void setLatestETA(LocalDate value);
+	void setLatestETA(ZonedDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Earliest Volume</b></em>' attribute.

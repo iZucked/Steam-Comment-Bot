@@ -8,6 +8,8 @@ import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -247,7 +249,7 @@ public class MarketabilityResultItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((MarketabilityResult)object).getEarliestETA();
+		ZonedDateTime labelValue = ((MarketabilityResult)object).getEarliestETA();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_MarketabilityResult_type") :
