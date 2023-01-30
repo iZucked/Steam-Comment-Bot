@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.peaberry;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -159,6 +160,9 @@ public class OptimiserInjectorServiceMaker {
 		return new ModuleBuilder(this);
 	}
 
+	public List<IOptimiserInjectorService> makeAsList() {
+		return Collections.singletonList(make());
+	}
 	public IOptimiserInjectorService make() {
 		return new IOptimiserInjectorService() {
 

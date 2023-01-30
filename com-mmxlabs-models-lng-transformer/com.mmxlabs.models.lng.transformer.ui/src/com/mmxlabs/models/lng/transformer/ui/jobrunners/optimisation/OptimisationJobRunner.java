@@ -272,9 +272,6 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 			assert userSettings != null;
 
-			if (localOverrides != null) {
-				runnerBuilder.withOptimiserInjectorService(localOverrides);
-			}
 			final LNGScenarioRunner runner = runnerBuilder //
 					.buildDefaultRunner() //
 					.getScenarioRunner();

@@ -112,7 +112,7 @@ public class HeadlessBenchmarkApplication implements IApplication {
 
 		searchForBenchmarks(baseDirectory, "sandbox-", SandboxJobRunner.JOB_TYPE, outputFolder, numRuns, useCase);
 		searchForBenchmarks(baseDirectory, "optimiser-", OptimisationJobRunner.JOB_TYPE, outputFolder, numRuns, useCase);
-		searchForBenchmarks(baseDirectory, "optioniser--", OptioniserJobRunner.JOB_TYPE, outputFolder, numRuns, useCase);
+		searchForBenchmarks(baseDirectory, "optioniser-", OptioniserJobRunner.JOB_TYPE, outputFolder, numRuns, useCase);
 	}
 
 	public void searchForBenchmarks(final File baseDirectory, final String paramsPrefix, final String jobType, final File outputLoggingFolder, final int numRuns, @Nullable final String useCase) {
