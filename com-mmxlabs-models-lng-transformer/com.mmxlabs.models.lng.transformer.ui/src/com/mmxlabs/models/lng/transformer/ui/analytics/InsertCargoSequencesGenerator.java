@@ -158,7 +158,7 @@ public class InsertCargoSequencesGenerator {
 			IPortSlot loadSlot = portSlotProvider.getPortSlot(load);
 			SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(loadSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
 			int startTime = dateHelper.convertTime(visit.getStart());
-			IStartRequirement newStartRequirement = new StartRequirement(loadSlot.getPort(), true, true, new TimeWindow(startTime, startTime + 1),
+			IStartRequirement newStartRequirement = new StartRequirement(loadSlot.getPort(), true, false, new TimeWindow(startTime, startTime + 1),
 					vesselCharter.getStartRequirement().getHeelOptions());
 			IEndRequirement newEndRequirement = null;
 			IStartRequirement threadStartRequirement = startEndRequirementProvider.getStartRequirement(targetResource);
