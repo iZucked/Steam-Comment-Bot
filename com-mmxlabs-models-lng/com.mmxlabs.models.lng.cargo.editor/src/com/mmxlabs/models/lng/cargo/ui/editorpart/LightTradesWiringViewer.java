@@ -1037,7 +1037,7 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
-			protected void wiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
+			protected void wiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed, boolean shiftPressed, boolean altPressed) {
 				if (locked) {
 					return;
 				}
