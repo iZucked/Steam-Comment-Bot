@@ -95,6 +95,7 @@ public class MainTableComponent {
 		vesselSpeedText.setTextLimit(2);
 		vesselSpeedText.setMessage("max");
 		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
+		
 		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
 		knotsLabel.setText("kts");
 		Control control = createViewer(mainParent);
