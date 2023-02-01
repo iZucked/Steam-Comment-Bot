@@ -123,7 +123,7 @@ public class LNGScenarioToOptimiserBridge {
 
 	public LNGScenarioToOptimiserBridge(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
 			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final UserSettings userSettings, @NonNull final SolutionBuilderSettings solutionBuilderSettings,
-			@NonNull final EditingDomain editingDomain, final int concurrencyLevel, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides,
+			@NonNull final EditingDomain editingDomain, final int concurrencyLevel, @Nullable final Module bootstrapModule, @Nullable final List<IOptimiserInjectorService> localOverrides,
 			final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalExtraDataProvider = extraDataProvider;
