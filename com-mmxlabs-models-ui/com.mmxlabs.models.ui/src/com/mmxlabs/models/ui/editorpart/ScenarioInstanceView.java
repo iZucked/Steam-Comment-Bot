@@ -80,8 +80,9 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			@Override
 			public void partClosed(final IWorkbenchPart part) {
 				if (part == lastPart) {
-					selectionChanged(part, StructuredSelection.EMPTY);
 					lastPart = null;
+					selectionChanged(part, StructuredSelection.EMPTY);
+					activeEditorChange(null);
 				}
 			}
 
