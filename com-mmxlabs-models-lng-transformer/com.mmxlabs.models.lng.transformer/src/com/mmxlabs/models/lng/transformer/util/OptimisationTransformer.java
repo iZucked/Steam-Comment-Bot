@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementDateProviderFactory;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.cargo.util.IExtraDataProvider;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -57,9 +58,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 /**
- * Utility for taking an OptimisationSettings from the EMF and starting an
- * optimiser accordingly. At the moment, it's pretty much just what was in
- * TestUtils.
+ * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much just what was in TestUtils.
  * 
  * @author hinton
  * 
@@ -99,13 +98,16 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	@Nullable
 	private IAssignableElementDateProviderFactory assignableElementComparator;
 
+	@Inject(optional = true)
+	@Nullable
+	private IExtraDataProvider extraDataProvider;
+
 	@Override
 	@NonNull
 	public ISequences createInitialSequences(@NonNull final IPhaseOptimisationData data, @NonNull final ModelEntityMap mem) {
 		/**
-		 * This sequences is passed into the initial sequence builder as a starting
-		 * point. Extra elements may be added to the sequence in any position, but the
-		 * existing elements will not be removed or reordered
+		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
+		 * reordered
 		 */
 		// Heads now contains the head of every chunk that has to go together.
 		// We need to pull out all the chunks and sort out their rules
@@ -126,8 +128,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		final IModifiableSequences advice = new ModifiableSequences(resources);
 
 		/**
-		 * This map will be used to try and place elements which aren't in the advice
-		 * above onto particular resources, if possible.
+		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<@NonNull ISequenceElement, @NonNull IResource> resourceAdvice = new HashMap<>();
 
@@ -249,9 +250,9 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, modelDistanceProvider,
-					assignableElementComparator.create(scenarioModel));
+					assignableElementComparator.create(scenarioModel), extraDataProvider);
 		} else {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, modelDistanceProvider);
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, modelDistanceProvider, null, extraDataProvider);
 		}
 		for (final CollectedAssignment seq : assignments) {
 

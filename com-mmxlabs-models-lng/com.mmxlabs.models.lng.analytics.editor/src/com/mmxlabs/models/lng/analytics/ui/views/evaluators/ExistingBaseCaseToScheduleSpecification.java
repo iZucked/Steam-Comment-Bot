@@ -106,9 +106,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 	}
 
 	/**
-	 * Take the current scenario starting point and generate a
-	 * {@link ScheduleSpecification} from it applying the cases defined in the
-	 * {@link BaseCase}.
+	 * Take the current scenario starting point and generate a {@link ScheduleSpecification} from it applying the cases defined in the {@link BaseCase}.
 	 * 
 	 * @param baseCase
 	 * @return
@@ -150,7 +148,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 		// Mapping of cargo to vessel assignment (or null if non-shipped)
 		final Map<AssignableElement, @Nullable CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
-		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
+		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, null, mapper.getExtraDataProvider());
 
 		Map<EObject, BaseCaseRow> elementToRowMap = new HashMap<>();
 
@@ -529,7 +527,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 							if (options.isSetBallastFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getBallastFuelChoice());
 							}
-							if (options.getDischargeDate() != null && scheduleSpec instanceof SlotSpecification ) {
+							if (options.getDischargeDate() != null && scheduleSpec instanceof SlotSpecification) {
 								((SlotSpecification) scheduleSpec).setArrivalDate(options.getDischargeDate());
 							}
 						}

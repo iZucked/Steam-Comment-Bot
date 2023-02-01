@@ -66,6 +66,7 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.cargo.util.IExtraDataProvider;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
@@ -130,7 +131,7 @@ public class PeriodTransformer {
 	private static final int NOMINAL_INDEX = -1;
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
-	
+
 	@Inject
 	@Named(SchedulerConstants.Key_UseHeelRetention)
 	private boolean retainHeel;
@@ -150,7 +151,7 @@ public class PeriodTransformer {
 					install(Peaberry.osgiModule(FrameworkUtil.getBundle(PeriodTransformer.class).getBundleContext()));
 					bind(TypeLiterals.iterable(IPeriodTransformerExtension.class)).toProvider(Peaberry.service(IPeriodTransformerExtension.class).multiple());
 					bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention))//
-					.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_HEEL_RETENTION));
+							.toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_HEEL_RETENTION));
 				}
 			};
 			injector = Guice.createInjector(m);
@@ -252,13 +253,14 @@ public class PeriodTransformer {
 	}
 
 	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final Schedule wholeScenarioSchedule,
-			@Nullable final ExtraDataProvider extraDataProvider, @NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
+			@Nullable final ExtraDataProvider wholeExtraDataProvider, @NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
 		// Take a copy to manipulate.
-		final Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, extraDataProvider, mapping);
+		final Triple<IScenarioDataProvider, ExtraDataProvider, Schedule> p = copyScenario(wholeScenarioDataProvider, wholeScenarioSchedule, wholeExtraDataProvider, mapping);
 		final IScenarioDataProvider outputDataProvider = p.getFirst();
+		final ExtraDataProvider copiedExtraDataProvider = p.getSecond();
 		final LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final Schedule schedule = p.getThird();
 
@@ -282,7 +284,7 @@ public class PeriodTransformer {
 				extension.init(cargoModel, schedule);
 			}
 		}
-		
+
 		// Set-up for the heel carry
 		final Map<Cargo, CargoAllocation> sortedCargoes = new LinkedHashMap<>();
 		final List<HeelCarryCargoPair> heelCarryCargoPairs = new LinkedList<>();
@@ -360,21 +362,21 @@ public class PeriodTransformer {
 				}
 			}
 		}
-		
+
 		// Step 3 lockdown vessels and dates if needed.
 		// ToLockdown may be a partial lock if a cargo is partially In the period.
 		// ReAdded is always a full lockdown.
 		lockDownRecords(periodRecord, records);
 
 		// Update vessel charters based on cargoes/events being removed.
-		updateVesselCharters(cargoModel, spotMarketsModel, portModel, schedule, modelDistanceProvider, records, periodRecord, mapping);
+		updateVesselCharters(cargoModel, spotMarketsModel, portModel, schedule, modelDistanceProvider, records, periodRecord, mapping, copiedExtraDataProvider);
 
 		if (retainHeel) {
 			// Sanity check that heel sink and sink sources number is equal
 			for (final HeelCarryCargoPair pair : heelCarryCargoPairs) {
 				assert pair.firstRecord.isHeelSource && pair.secondRecord.isHeelSink//
-				&& (pair.firstRecord.status != Status.ToRemove && pair.secondRecord.status != Status.ToRemove//
-				|| pair.firstRecord.status == Status.ToRemove && pair.secondRecord.status == Status.ToRemove);
+						&& (pair.firstRecord.status != Status.ToRemove && pair.secondRecord.status != Status.ToRemove//
+								|| pair.firstRecord.status == Status.ToRemove && pair.secondRecord.status == Status.ToRemove);
 			}
 		}
 		// Sanity check - all records should have a valid status
@@ -1011,9 +1013,10 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselCharters(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel, @NonNull final PortModel portModel, final Schedule schedule,
-			@NonNull final ModelDistanceProvider modelDistanceProvider, final Map<EObject, InclusionRecord> records, final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
+			@NonNull final ModelDistanceProvider modelDistanceProvider, final Map<EObject, InclusionRecord> records, final PeriodRecord periodRecord, final IScenarioEntityMapping mapping,
+			IExtraDataProvider extraDataProvider) {
 
-		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
+		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, null, extraDataProvider);
 		assert collectedAssignments != null;
 		updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
 	}
@@ -1299,11 +1302,11 @@ public class PeriodTransformer {
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					final Slot<?> slot = slotAllocation.getSlot();
 					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-					
+
 					final Cargo cargo = slot.getCargo();
 					assert cargo != null;
 					assert cargoAllocation != null;
-					
+
 					sortedCargoes.putIfAbsent(cargo, cargoAllocation);
 
 					final InclusionRecord inclusionRecord = records.computeIfAbsent(cargo, c -> {
@@ -1326,10 +1329,10 @@ public class PeriodTransformer {
 				}
 			}
 		}
-		
+
 		if (retainHeel) {
 			Map.Entry<Cargo, CargoAllocation> previousEntry = null;
-			for(final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
+			for (final Map.Entry<Cargo, CargoAllocation> entry : sortedCargoes.entrySet()) {
 				if (entry.getValue().isIsHeelSource()) {
 					previousEntry = entry;
 				} else if (entry.getValue().isIsHeelSink() && previousEntry != null) {// && getDischarge(entry.getKey()).isHeelCarry()) {
@@ -1388,10 +1391,10 @@ public class PeriodTransformer {
 				r.status = Status.ToKeep;
 			}
 		});
-		
+
 		if (retainHeel) {
 			records.values().forEach(r -> {
-				
+
 				if (r.object instanceof Cargo c) {
 					final CargoAllocation cargoAllocation = sortedCargoes.get(c);
 					if (cargoAllocation.isIsHeelSource()) {
@@ -1405,12 +1408,12 @@ public class PeriodTransformer {
 				}
 			});
 		}
-		
+
 		return records;
 
 	}
-	
-	class HeelCarryCargoPair{
+
+	class HeelCarryCargoPair {
 		Cargo firstCargo;
 		CargoAllocation firstCargoAllocation;
 		InclusionRecord firstRecord;
@@ -1418,7 +1421,7 @@ public class PeriodTransformer {
 		CargoAllocation secondCargoAllocation;
 		InclusionRecord secondRecord;
 	}
-	
+
 	private static HeelCarryCargoPair findPair(final List<HeelCarryCargoPair> heelCarryCargoes, final Cargo cargo) {
 		for (final HeelCarryCargoPair pair : heelCarryCargoes) {
 			if (pair.firstCargo.equals(cargo) || pair.secondCargo.equals(cargo)) {
@@ -1436,7 +1439,7 @@ public class PeriodTransformer {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * A vessel event typically need the previous cargo/event to work out heel information correctly. Return the list of prior events that are needed to compute this correctly. This could be zero to
 	 * many object depending on the sequence. We are looking for the cargo before the event (which could even be cargo, other event, other event, this event)
@@ -1557,8 +1560,8 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * Given a vessel charter, update the starting conditions around the input AssignableElement which is assumed to be outside of the current optimisation period scope. We want to set the
-	 * starting point to be equal to the end conditions of the AssignableElement sequence.
+	 * Given a vessel charter, update the starting conditions around the input AssignableElement which is assumed to be outside of the current optimisation period scope. We want to set the starting
+	 * point to be equal to the end conditions of the AssignableElement sequence.
 	 * 
 	 * @param vesselCharter
 	 * @param assignedObject
@@ -1641,7 +1644,7 @@ public class PeriodTransformer {
 		if (portVisit instanceof VesselEventVisit vesselEventVisit) {
 			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 			if (vesselEvent instanceof CharterOutEvent charterOutEvent) {
- 				if (charterOutEvent.isSetRelocateTo()) {
+				if (charterOutEvent.isSetRelocateTo()) {
 					final Port port = charterOutEvent.getPort();
 					vesselCharter.getEndAt().clear();
 					vesselCharter.getEndAt().add(port);
