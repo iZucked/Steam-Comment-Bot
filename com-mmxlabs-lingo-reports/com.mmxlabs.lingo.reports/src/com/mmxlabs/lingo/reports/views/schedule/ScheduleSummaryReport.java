@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
@@ -22,7 +21,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
-import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportView {
 	
@@ -66,57 +64,6 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 		toolbar.appendToGroup("edit", saveToJSONButton);
 		toolbar.update(true);	
 		*/	
-	}
-	
-	@Override
-	protected void makeActions() {
-		super.makeActions();
-		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
-		copyTableAction.setAdditionalAttributeProvider(new IAdditionalAttributeProvider() {
-			
-			@Override
-			public @NonNull String getTopLeftCellUpperText() {
-				return "";
-			}
-			
-			@Override
-			public @NonNull String getTopLeftCellText() {
-				return "Pinned";
-			}
-			
-			@Override
-			public @NonNull String getTopLeftCellLowerText() {
-				return "";
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
-				return null;
-			}
-			
-			@Override
-			public String getAdditionalRowHeaderText(@NonNull GridItem item){
-				if (item.getData() instanceof Row row && row.isReference()) {
-					return "Y";
-				}
-				return "";
-			};
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalPreRows() {
-				return null;
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
-				return null;
-			}
-			
-			@Override
-			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
-				return null;
-			}
-		});
 	}
 
 	public CustomReportDefinition getReportDefinition() {
