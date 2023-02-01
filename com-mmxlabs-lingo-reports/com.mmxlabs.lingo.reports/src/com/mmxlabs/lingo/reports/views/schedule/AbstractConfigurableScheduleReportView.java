@@ -583,17 +583,21 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		copyTableAction.setAdditionalAttributeProvider(new IAdditionalAttributeProvider() {
 			
+			private @NonNull String getPinText() {
+				return isInPinDiffMode ? "Pin" : "";
+			}
+
 			@Override
 			public @NonNull String getTopLeftCellUpperText() {
+				if (viewer.getGrid().getColumnGroups().length > 0) {
+					return getPinText();
+				}
 				return "";
 			}
 			
 			@Override
 			public @NonNull String getTopLeftCellText() {
-				if (isInPinDiffMode) {
-					return "Pin";
-				}
-				return "";
+				return getPinText();
 			}
 			
 			@Override
