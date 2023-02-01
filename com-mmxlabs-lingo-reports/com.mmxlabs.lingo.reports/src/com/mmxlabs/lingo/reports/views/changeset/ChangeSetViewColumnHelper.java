@@ -1571,7 +1571,9 @@ public class ChangeSetViewColumnHelper {
 				if (availableFlex > 0) {
 					sb.append(" \t(");
 					if (lateness > availableFlex) {
-						sb.append(LatenessUtils.formatLatenessHoursConcise(lateness - availableFlex)).append(" more than flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex))
+						sb.append(LatenessUtils.formatLatenessHoursConcise(lateness - availableFlex))
+								.append(" more than flex of ")
+								.append(LatenessUtils.formatLatenessHoursConcise(availableFlex))
 								.append(")");
 					} else {
 						sb.append("using flex of ").append(LatenessUtils.formatLatenessHoursConcise(availableFlex)).append(")");
@@ -2986,8 +2988,9 @@ public class ChangeSetViewColumnHelper {
 		RunnerHelper.asyncExec(() -> {
 			latenessColumn.getColumn().setVisible(this.showCompareColumns);
 			violationColumn.getColumn().setVisible(this.showCompareColumns);
-			column_LoadPrice.getColumn().setVisible(this.showCompareColumns);
-			column_LoadVolume.getColumn().setVisible(this.showCompareColumns);
+			// We really want to show during b/e mode and hide otherwise
+			// column_LoadPrice.getColumn().setVisible(this.showCompareColumns);
+			// column_LoadVolume.getColumn().setVisible(this.showCompareColumns);
 			column_DischargePrice.getColumn().setVisible(this.showCompareColumns);
 			column_DischargeVolume.getColumn().setVisible(this.showCompareColumns);
 		});
