@@ -2509,12 +2509,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
 						initialiseSlot(newLoad, true, referenceRowData);
+						newLoad.setDESPurchase(false);
 
 						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
 						initialiseSlot(newDischarge, false, referenceRowData);
+						newDischarge.setFOBSale(false);
 
 						final DischargeSlot newDischarge2 = cec.createNewDischarge(setCommands, cargoModel, false);
 						initialiseSlot(newDischarge2, false, referenceRowData);
+						newDischarge2.setFOBSale(false);
 						if (newDischarge2.getWindowStart() != null) {
 							newDischarge2.setWindowStart(newDischarge2.getWindowStart().plusDays(7));
 						}
