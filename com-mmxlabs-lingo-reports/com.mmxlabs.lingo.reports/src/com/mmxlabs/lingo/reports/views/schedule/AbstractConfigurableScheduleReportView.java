@@ -591,7 +591,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			@Override
 			public @NonNull String getTopLeftCellText() {
 				if (isInPinDiffMode) {
-					return "Pinned";
+					return "Pin";
 				}
 				return "";
 			}
