@@ -540,7 +540,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			// TODO: Maybe we need a cache-config event?
 			List<String> hints = new LinkedList<>(scenarioToOptimiserBridge.getDataTransformer().getHints());
 			hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
-			scenarioToOptimiserBridge.getDataTransformer().getLifecyleManager().startPhase("export", hints);
+			scenarioToOptimiserBridge.getFullDataTransformer().getLifecyleManager().startPhase("export", hints);
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
