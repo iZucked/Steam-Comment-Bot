@@ -81,6 +81,24 @@ public interface IPaintManager {
 	 * @param bounds full bounds of draw area
 	 */
 	void drawDaysOnChart(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, int daysNumber, Rectangle bounds);
+
+	/**
+	 * Draws the little plaque showing how many number of days and hours an event spans over.
+	 * 
+	 * @param ganttComposite GanttComposite parent
+	 * @param settings ISettings
+	 * @param colorManager IColorManager
+	 * @param ge GanttEvent
+	 * @param gc GC
+	 * @param threeDee Whether 3D events is on or off
+	 * @param x x location
+	 * @param y y location 
+	 * @param eventWidth Width of event
+	 * @param daysNumber Number of days the event encompasses
+	 * @param hoursNumber Remainder of hours the event encompasses
+	 * @param bounds full bounds of draw area
+	 */
+	void drawDaysAndHoursOnChart(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, int daysNumber, int hoursNumber, Rectangle bounds);
 	
 	/**
 	 * Draws a string shown next to an event.

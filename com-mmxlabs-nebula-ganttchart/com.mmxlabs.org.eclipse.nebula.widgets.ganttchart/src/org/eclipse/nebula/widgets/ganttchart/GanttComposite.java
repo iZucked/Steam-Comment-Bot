@@ -3436,8 +3436,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_showNumDays) {
 			final long hours = DateHelper.hoursBetween(ge.getActualStartDate(), ge.getActualEndDate(), false);
 			final long integerDivDays = hours / 24L;
-			final long days = hours % 24 > 0 ? integerDivDays + 1 : integerDivDays;
-			_paintManager.drawDaysOnChart(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, (int) days, bounds);
+			final long remainingHours = hours % 24L;
+			_paintManager.drawDaysAndHoursOnChart(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, (int) integerDivDays, (int) remainingHours, bounds);
 		}
 
 		// fetch current font
