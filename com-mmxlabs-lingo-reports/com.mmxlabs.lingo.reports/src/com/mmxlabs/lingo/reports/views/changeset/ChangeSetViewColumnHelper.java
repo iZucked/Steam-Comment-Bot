@@ -126,61 +126,61 @@ public class ChangeSetViewColumnHelper {
 	private Color colour_VesselTypeColumn;
 
 	private final ChangeSetView view;
-	//@from private to protected
+	// @from private to protected
 	protected final GridTreeViewer viewer;
 
-	//@private to protected
+	// @private to protected
 	protected GridColumnGroup vesselColumnGroup;
-	
-	//@private to protected
+
+	// @private to protected
 	protected GridViewerColumn vesselColumnStub;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn violationColumn;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn latenessColumn;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn nominationBreaksColumn;
 
-	//@private to protected
+	// @private to protected
 	protected ChangeSetWiringDiagram diagram;
 
 	public ChangeSetWiringDiagram getDiagram() {
 		return diagram;
 	}
-	//@ From private to protected
+
+	// @ From private to protected
 	protected GridViewerColumn column_SetName;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_Lateness;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_Violations;
 
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics
-	 * are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
-	//@private to protected
+	// @private to protected
 	protected @NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider = getDefaultLabelProvider();
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_LoadPrice;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_LoadVolume;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_DischargePrice;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn column_DischargeVolume;
 
-	//@private to protected
+	// @private to protected
 	protected boolean showCompareColumns = true;
 
 	public BiFunction<ChangeSetTableGroup, Integer, String> getChangeSetColumnLabelProvider() {
@@ -629,7 +629,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	//@private to protected
+	// @private to protected
 	protected void createNominationBreaksColumn() {
 		nominationBreaksColumn = new GridViewerColumn(viewer, SWT.CENTER);
 		nominationBreaksColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
@@ -680,10 +680,10 @@ public class ChangeSetViewColumnHelper {
 
 	private static ChangeSetVesselType[] displayedVesselType = { ChangeSetVesselType.FLEET, ChangeSetVesselType.MARKET, ChangeSetVesselType.NOMINAL };
 
-	//@private to protected
+	// @private to protected
 	protected boolean showAlternativePNLBase;
 
-	//@private to protected
+	// @private to protected
 	protected GridViewerColumn altPNLBaseColumn;
 
 	public void updateVesselColumns(final Collection<VesselData> data) {
@@ -789,7 +789,8 @@ public class ChangeSetViewColumnHelper {
 		gvc.setLabelProvider(createStubLabelProvider());
 		gvc.getColumn().setCellRenderer(createCellRenderer(false));
 	}
-	//@from public to private
+
+	// @from public to private
 	public enum SlotIDRenderMode {
 		None, LHS_IN_TARGET, RHS_IN_TARGET
 	};
@@ -943,7 +944,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	//@private to protected
+	// @private to protected
 	protected void createWordWrapRenderer(final GridViewerColumn gvc, final int minWidth) {
 		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
 		renderer.setWordWrap(true);
@@ -951,7 +952,7 @@ public class ChangeSetViewColumnHelper {
 		gvc.getColumn().setHeaderRenderer(renderer);
 	}
 
-	//@from private to protected
+	// @from private to protected
 	protected void createCenteringGroupRenderer(final GridColumnGroup gcg) {
 		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
 		gcg.setHeaderRenderer(renderer);
@@ -969,7 +970,8 @@ public class ChangeSetViewColumnHelper {
 		return d;
 
 	}
-	//@private to protected
+
+	// @private to protected
 	protected CellLabelProvider createStubLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -980,9 +982,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	//@private to protected
-	
-	
+	// @private to protected
+
 	protected CellLabelProvider createIDLabelProvider(final boolean lhs) {
 		return new CellLabelProvider() {
 
@@ -1055,7 +1056,7 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
 		return new CellLabelProvider() {
 
@@ -1357,7 +1358,7 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
 			final EStructuralFeature attrib) {
 
@@ -1398,7 +1399,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createPNLDeltaLabelProvider(final boolean showAlt) {
 		return new CellLabelProvider() {
 
@@ -1501,7 +1502,7 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, false, true, true, change -> {
 			return ChangeSetKPIUtil.getTax(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalTaxEtcValue);
@@ -1510,7 +1511,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createLatenessDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -1677,7 +1678,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	//@private to protecteds
+	// @private to protecteds
 	protected CellLabelProvider createNominationBreaksLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -1970,7 +1971,7 @@ public class ChangeSetViewColumnHelper {
 		return null;
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -2217,7 +2218,7 @@ public class ChangeSetViewColumnHelper {
 		return nominalVesselDelta;
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, false, true, false, change -> {
 			return ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalCargoOtherValue);
@@ -2226,7 +2227,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createUpstreamDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, false, true, true, change -> {
@@ -2236,7 +2237,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, true, true, change -> {
@@ -2247,7 +2248,7 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, true, true, change -> {
@@ -2257,7 +2258,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createShippingDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, true, false, change -> {
 			return ChangeSetKPIUtil.getShipping(change, ResultType.Before) + getExtraValue(change, ResultType.Before, IChangeSetColumnValueExtender::getAdditionalShippingFOBValue);
@@ -2266,19 +2267,19 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createShippingDaysDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaDaysLabelProvider(change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaLabelProvider(true, true, true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType... shippingCostTypes) {
 		return createLambdaLabelProvider(true, true, true, false, change -> {
 			long sum = 0L;
@@ -2295,7 +2296,7 @@ public class ChangeSetViewColumnHelper {
 		});
 	}
 
-	//@from private to protected
+	// @from private to protected
 	protected CellLabelProvider createCSLabelProvider(final InsertionPlanGrouperAndFilter insertionPlanFilter) {
 
 		return new CellLabelProvider() {
@@ -2392,8 +2393,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	//@private to protected
-	
+	// @private to protected
+
 	protected CellLabelProvider createWiringLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -2700,7 +2701,7 @@ public class ChangeSetViewColumnHelper {
 		return str != null && !str.isEmpty();
 	}
 
-	//@private to protected
+	// @private to protected
 	protected CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
 
 		final Function<ChangeSetTableRow, Number> calcF;
@@ -2990,8 +2991,8 @@ public class ChangeSetViewColumnHelper {
 			violationColumn.getColumn().setVisible(this.showCompareColumns);
 			// We really want to show during b/e mode and hide otherwise
 			// column_LoadPrice.getColumn().setVisible(this.showCompareColumns);
-			// column_LoadVolume.getColumn().setVisible(this.showCompareColumns);
-			column_DischargePrice.getColumn().setVisible(this.showCompareColumns);
+			// column_DischargePrice.getColumn().setVisible(this.showCompareColumns);
+			column_LoadVolume.getColumn().setVisible(this.showCompareColumns);
 			column_DischargeVolume.getColumn().setVisible(this.showCompareColumns);
 		});
 	}
