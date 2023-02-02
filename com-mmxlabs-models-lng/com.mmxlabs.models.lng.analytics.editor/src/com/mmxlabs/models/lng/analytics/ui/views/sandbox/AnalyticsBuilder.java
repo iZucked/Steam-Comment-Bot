@@ -1892,10 +1892,14 @@ public class AnalyticsBuilder {
 			vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 		}
 
-		vesselCharter.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
-		vesselCharter.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-		vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-		vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+		if (optionalAvailabilityShippingOption.getStart() != null) {
+			vesselCharter.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+			vesselCharter.setStartBy(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+		}
+		if (optionalAvailabilityShippingOption.getEnd() != null) {
+			vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+			vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+		}
 		vesselCharter.setOptional(true);
 		vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 				optionalAvailabilityShippingOption.getBallastBonus()));
