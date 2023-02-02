@@ -50,18 +50,18 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 @ExtendWith(SWTBotJunit5Extension.class)
 public class HubTests {
 
-	static final Logger logger = LoggerFactory.getLogger(HubTests.class);
-	static final String oauthHubContainer = "datahub-oauth";
-	static final String basicHubContainer = "datahub-basic";
+	private static final Logger logger = LoggerFactory.getLogger(HubTests.class);
+	private static final String oauthHubContainer = "datahub-oauth";
+	private static final String basicHubContainer = "datahub-basic";
 
 	// @formatter:off
 	@Container
-	public static final DockerComposeContainer<?> datahubContainer = new DockerComposeContainer(new File("data/docker/docker-compose.yml"))
-	.withExposedService(oauthHubContainer, 8090)
-	.withExposedService(basicHubContainer, 8091)
-	.waitingFor("datahub-oauth", Wait.forHttp("/ping").forStatusCode(200))
-	.waitingFor("datahub-basic", Wait.forHttp("/ping").forStatusCode(200))
-	.withLocalCompose(false);
+	public static final DockerComposeContainer<?> datahubContainer = new DockerComposeContainer(new File("data/docker/docker-compose.yml")) //
+			.withExposedService(oauthHubContainer, 8090) //
+			.withExposedService(basicHubContainer, 8091) //
+			.waitingFor("datahub-oauth", Wait.forHttp("/ping").forStatusCode(200)) //
+			.waitingFor("datahub-basic", Wait.forHttp("/ping").forStatusCode(200)) //
+			.withLocalCompose(false);
 	// @formatter:on
 
 	private static SWTWorkbenchBot bot;
@@ -116,9 +116,7 @@ public class HubTests {
 	}
 
 	/*
-	 * Got this setup & teardown example for the creator of SWTBot himself in his
-	 * PhD thesis:
-	 * https://www.theseus.fi/bitstream/handle/10024/7470/Mazurkiewicz_Milosz.pdf
+	 * Got this setup & teardown example for the creator of SWTBot himself in his PhD thesis: https://www.theseus.fi/bitstream/handle/10024/7470/Mazurkiewicz_Milosz.pdf
 	 */
 	@AfterAll
 	public static void afterAll() {
@@ -189,7 +187,7 @@ public class HubTests {
 		bot.textWithLabel("&URL").setFocus();
 		bot.textWithLabel("&URL").setText("anything").pressShortcut(Keystrokes.TAB);
 		bot.buttonWithId("login").setFocus();
-		
+
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
 		Thread.sleep(3000);
 		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));

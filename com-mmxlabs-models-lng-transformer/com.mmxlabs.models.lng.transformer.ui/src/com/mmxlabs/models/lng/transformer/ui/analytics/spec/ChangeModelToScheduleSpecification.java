@@ -153,7 +153,7 @@ public class ChangeModelToScheduleSpecification {
 
 		final List<CollectedAssignment> assignments;
 		if (assignableElementDateProviderFactory != null) {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, assignableElementDateProviderFactory.create(lngScenarioModel));
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, assignableElementDateProviderFactory.create(lngScenarioModel), null);
 		} else {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		}

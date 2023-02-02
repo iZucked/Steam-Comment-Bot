@@ -105,8 +105,6 @@ public class PNLBasedWindowTrimmer {
 	@Named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)
 	private CacheMode cacheMode;
 
-	@Inject
-	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
 	private boolean hintDisableCache;
 
 	private final LoadingCache<PNLTrimmerShippedCacheKey, ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>>> shippedCache;
@@ -135,6 +133,8 @@ public class PNLBasedWindowTrimmer {
 
 	@Subscribe
 	public void startPhase(final OptimisationPhaseStartEvent event) {
+
+		hintDisableCache = event.getHints().contains(SchedulerConstants.HINT_DISABLE_CACHES);
 		// TODO: Inspect settings and invalidate only if needed
 		// E.g. gco on/off
 		// E.g. lateness parameter changes.

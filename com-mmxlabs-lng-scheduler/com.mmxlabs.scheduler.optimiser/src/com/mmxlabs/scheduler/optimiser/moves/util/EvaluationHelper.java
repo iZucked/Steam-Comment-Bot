@@ -77,7 +77,7 @@ public class EvaluationHelper {
 	private IPriceExpressionProvider priceExpressionProvider;
 
 	@Inject
-	ILazyExpressionManagerContainer lazyManagerContainer;
+	private ILazyExpressionManagerContainer lazyManagerContainer;
 
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)

@@ -31,6 +31,10 @@ public interface IAdditionalAttributeProvider {
 
 	@NonNull
 	String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item);
+	
+	default String getAdditionalRowHeaderText(@NonNull GridItem item){
+		return item.getHeaderText();
+	};
 
 	@NonNull
 	String getTopLeftCellLowerText();

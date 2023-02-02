@@ -78,18 +78,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -127,7 +126,6 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
@@ -1714,6 +1712,41 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				};
 				addActionToMenu(newLoad, menu);
 			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COMPLEX_CARGO)) {
+
+				final Action newLoad = new Action("LDD cargo") {
+					@Override
+					public void run() {
+
+						final List<Command> setCommands = new LinkedList<>();
+
+						final Cargo newCargo = cec.createNewCargo(setCommands, cargoModel);
+
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
+						initialiseSlot(newLoad, true, referenceRowData);
+
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
+						initialiseSlot(newDischarge, false, referenceRowData);
+
+						final DischargeSlot newDischarge2 = cec.createNewDischarge(setCommands, cargoModel, false);
+						initialiseSlot(newDischarge2, false, referenceRowData);
+						if (newDischarge2.getWindowStart() != null) {
+							newDischarge2.setWindowStart(newDischarge2.getWindowStart().plusDays(7));
+						}
+
+						newLoad.setCargo(newCargo);
+						newDischarge.setCargo(newCargo);
+						newDischarge2.setCargo(newCargo);
+
+						newCargo.setAllowRewiring(true);
+						final CompoundCommand cmd = new CompoundCommand("Cargo");
+						setCommands.forEach(cmd::append);
+
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				addActionToMenu(newLoad, menu);
+			}
 			{
 				final Action newLoad = new Action("FOB Purchase") {
 					public void run() {
@@ -1789,10 +1822,6 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				addActionToMenu(newFOBSale, menu);
 			}
 
-			if (LicenseFeatures.isPermitted("features:complex-cargo")) {
-				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo", scenarioEditingLocation, viewer.getControl().getShell());
-				addActionToMenu(newComplexCargo, menu);
-			}
 			if (actions != null) {
 				for (final Action action : actions) {
 					addActionToMenu(action, menu);

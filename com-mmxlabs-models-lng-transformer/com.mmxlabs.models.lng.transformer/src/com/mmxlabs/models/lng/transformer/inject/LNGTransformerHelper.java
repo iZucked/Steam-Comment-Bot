@@ -175,7 +175,7 @@ public class LNGTransformerHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	@NonNull
-	public static Collection<@NonNull IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
+	public static Collection<@NonNull IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final List<IOptimiserInjectorService> extraService) {
 
 		final List<@NonNull IOptimiserInjectorService> services = new LinkedList<>();
 		final Injector tmpInjector;
@@ -209,7 +209,7 @@ public class LNGTransformerHelper {
 		}
 
 		if (extraService != null) {
-			services.add(extraService);
+			services.addAll(extraService);
 		}
 
 		return services;

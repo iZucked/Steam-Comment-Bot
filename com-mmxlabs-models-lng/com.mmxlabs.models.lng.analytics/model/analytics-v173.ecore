@@ -18,8 +18,6 @@
         eType="#//BreakEvenAnalysisModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="swapValueMatrixModels"
         upperBound="-1" eType="#//SwapValueMatrixModel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="marketabilityModel" eType="#//MarketabilityModel"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>
@@ -443,51 +441,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityModel" eSuperTypes="#//AbstractAnalysisModel">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//MarketabilityRow"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        unsettable="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityRow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//MarketabilityResultContainer"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResult">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestVolume" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestVolume" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestPrice" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPrice" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResultContainer">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"
-        eType="#//MarketabilityResult" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nextEvent" eType="#//MarketabilityEvent"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buyDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sellDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenPanama" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastPanama" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityEvent">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityAssignableElement" eSuperTypes="#//MarketabilityEvent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//AssignableElement"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MarketabilityEndEvent" eSuperTypes="#//MarketabilityEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="ViabilityRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>

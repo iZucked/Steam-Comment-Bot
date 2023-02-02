@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.events;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import com.google.common.eventbus.EventBus;
@@ -13,12 +15,11 @@ public class OptimisationLifecycleManager {
 	@Inject
 	private EventBus eventBus;
 
-	public void startPhase(String phase) {
-		eventBus.post(new OptimisationPhaseStartEvent(phase));
-
+	public void startPhase(final String phase, final Collection<String> hints) {
+		eventBus.post(new OptimisationPhaseStartEvent(phase, hints));
 	}
 
-	public void endPhase(String phase) {
+	public void endPhase(final String phase) {
 		eventBus.post(new OptimisationPhaseEndEvent(phase));
 	}
 }

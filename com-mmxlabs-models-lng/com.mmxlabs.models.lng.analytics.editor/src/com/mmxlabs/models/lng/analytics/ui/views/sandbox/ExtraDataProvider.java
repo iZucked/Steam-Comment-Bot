@@ -19,10 +19,12 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.IExtraDataProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
-public class ExtraDataProvider {
+public class ExtraDataProvider implements IExtraDataProvider {
+
 	public final List<VesselCharter> extraVesselCharters;
 	public final List<CharterInMarketOverride> extraCharterInMarketOverrides;
 	public final List<CharterInMarket> extraCharterInMarkets;
@@ -54,8 +56,8 @@ public class ExtraDataProvider {
 		this.extraPriceCurves = new LinkedList<>();
 	}
 
-	public ExtraDataProvider(List<VesselCharter> newAvailabilities, List<CharterInMarket> newCharterInMarkets, List<CharterInMarketOverride> newCharterInMarketOverrides,
-			List<LoadSlot> extraLoads, List<DischargeSlot> extraDischarges, List<VesselEvent> extraVesselEvents, List<SpotMarket> extraSpotCargoMarkets, List<CommodityCurveOverlay> extraCommodityCurves) {
+	public ExtraDataProvider(List<VesselCharter> newAvailabilities, List<CharterInMarket> newCharterInMarkets, List<CharterInMarketOverride> newCharterInMarketOverrides, List<LoadSlot> extraLoads,
+			List<DischargeSlot> extraDischarges, List<VesselEvent> extraVesselEvents, List<SpotMarket> extraSpotCargoMarkets, List<CommodityCurveOverlay> extraCommodityCurves) {
 		this.extraVesselCharters = newAvailabilities;
 		this.extraCharterInMarkets = newCharterInMarkets;
 		this.extraCharterInMarketOverrides = newCharterInMarketOverrides;
@@ -162,10 +164,50 @@ public class ExtraDataProvider {
 			private List<CommodityCurveOverlay> providePriceCurves() {
 				return extraPriceCurves;
 			}
- 		};
+		};
 	}
 
 	public static com.google.inject.Module createDefaultModule() {
 		return new ExtraDataProvider().asModule();
 	}
+
+	@Override
+	public List<VesselCharter> getExtraVesselCharters() {
+		return extraVesselCharters;
+	}
+
+	@Override
+	public List<CharterInMarketOverride> getExtraCharterInMarketOverrides() {
+		return extraCharterInMarketOverrides;
+	}
+
+	@Override
+	public List<CharterInMarket> getExtraCharterInMarkets() {
+		return extraCharterInMarkets;
+	}
+
+	@Override
+	public List<LoadSlot> getExtraLoads() {
+		return extraLoads;
+	}
+
+	@Override
+	public List<DischargeSlot> getExtraDischarges() {
+		return extraDischarges;
+	}
+
+	@Override
+	public List<VesselEvent> getExtraVesselEvents() {
+		return extraVesselEvents;
+	}
+
+	@Override
+	public List<SpotMarket> getExtraSpotCargoMarkets() {
+		return extraSpotCargoMarkets;
+	}
+
+	public List<CommodityCurveOverlay> getExtraPriceCurves() {
+		return extraPriceCurves;
+	}
+
 }

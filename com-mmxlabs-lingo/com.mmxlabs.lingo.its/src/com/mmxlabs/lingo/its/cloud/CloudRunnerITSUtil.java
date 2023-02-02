@@ -173,28 +173,26 @@ public class CloudRunnerITSUtil {
 
 		// Set this as environment rather than command line arg as the command lines gets too big
 		pb.environment().put("CLASSPATH", System.getProperty("java.class.path"));
-		
+
 		pb.directory(runDir);
 
 		// Start the lingo process and copy std out/err to this process' output.
 		final Process p = pb.start();
 		while (p.isAlive()) {
-			System.out.println("Running lingo process...");
-			Thread.sleep(20_000);
-//			{
-//				String line;
-//				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//				while ((line = br.readLine()) != null) {
-//					System.out.println(line);
-//				}
-//			}
-//			{
-//				String line;
-//				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//				while ((line = br.readLine()) != null) {
-//					System.err.println(line);
-//				}
-//			}
+			{
+				String line;
+				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				while ((line = br.readLine()) != null) {
+					System.out.println(line);
+				}
+			}
+			{
+				String line;
+				final BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+				while ((line = br.readLine()) != null) {
+					System.err.println(line);
+				}
+			}
 		}
 
 		// Decrypt the result using the symmetric key generated earlier and re-encrypt
@@ -252,9 +250,7 @@ public class CloudRunnerITSUtil {
 	}
 
 	/**
-	 * Copies an {@link InputStream} of scenario data to the output stream through a
-	 * re-encryption step. Returns a map of the decrypted digests for each entry in
-	 * the zip file.
+	 * Copies an {@link InputStream} of scenario data to the output stream through a re-encryption step. Returns a map of the decrypted digests for each entry in the zip file.
 	 * 
 	 * @param cipher
 	 * @param in

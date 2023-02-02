@@ -29,6 +29,6 @@ public class MigrateToV173 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Added marketability report
+		// Added allowed ports to Slot in cargo.ecore
 	}
 }

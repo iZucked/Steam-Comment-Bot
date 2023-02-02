@@ -4,21 +4,15 @@
  */
 package com.mmxlabs.lingo.app.headless;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +38,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
-import com.mmxlabs.license.ssl.LicenseState;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
@@ -55,19 +47,14 @@ import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 /**
  * <p>
- * Abstract base class for "headless" applications meant to run some algorithm
- * (e.g. the optimiser or the optioniser) on a scenario and collect performance
- * metrics.
+ * Abstract base class for "headless" applications meant to run some algorithm (e.g. the optimiser or the optioniser) on a scenario and collect performance metrics.
  * </p>
  * 
  * <p>
- * Child classes must implement
- * {@link #runAndWriteResults(int, HeadlessApplicationOptions, File, File, int)
- * runAndWriteResults} to run the algorithm and write the results.
+ * Child classes must implement {@link #runAndWriteResults(int, HeadlessApplicationOptions, File, File, int) runAndWriteResults} to run the algorithm and write the results.
  * <ul>
- * <li>Note that this invites a fair amount of redundancy in the child class
- * methods. In future, this class may be refactored further, to reduce
- * redundancy and remove some responsibilities from the child classes.</li>
+ * <li>Note that this invites a fair amount of redundancy in the child class methods. In future, this class may be refactored further, to reduce redundancy and remove some responsibilities from the
+ * child classes.</li>
  * </ul>
  * </p>
  * 
@@ -115,7 +102,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
 			// check the license
-			doCheckLicense();
+			HeadlessUtils.doCheckLicense();
 			// log the user in and initialise related features
 			HeadlessUtils.initAccessControl();
 			// get the command line
@@ -136,8 +123,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	}
 
 	/**
-	 * Runs a particular scenario multiple times, if necessary. Delegates the "real"
-	 * work to the method runAndWriteResults implemented by the child class.
+	 * Runs a particular scenario multiple times, if necessary. Delegates the "real" work to the method runAndWriteResults implemented by the child class.
 	 * 
 	 * @param hOptions
 	 */
@@ -189,7 +175,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected abstract String getAlgorithmName();
 
 	protected void writeMetaFields(HeadlessGenericJSON<?, ?> json, File scenarioFile, HeadlessApplicationOptions hOptions, int threads) {
-		json.getMeta().setCheckSum(mD5Checksum(scenarioFile));
+		json.getMeta().setCheckSum(HeadlessUtils.mD5Checksum(scenarioFile));
 		json.getMeta().setUseCase(hOptions.useCase);
 		json.getMeta().setClient(clientCode);
 		json.getMeta().setVersion(buildVersion);
@@ -202,14 +188,14 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected Meta writeMetaFields(File scenarioFile, HeadlessApplicationOptions hOptions) {
 		Meta meta = new Meta();
 		meta.setDate(LocalDateTime.now());
-		meta.setCheckSum(mD5Checksum(scenarioFile));
+		meta.setCheckSum(HeadlessUtils.mD5Checksum(scenarioFile));
 		meta.setUseCase(hOptions.useCase);
 		meta.setClient(clientCode);
 		meta.setVersion(buildVersion);
 		meta.setMachineType(machineInfo);
 		meta.setCustomInfo(hOptions.customInfo);
 		meta.setMaxHeapSize(Runtime.getRuntime().maxMemory());
-//		json.getParams().setCores(threads);
+		// json.getParams().setCores(threads);
 
 		return meta;
 	}
@@ -246,42 +232,31 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	/**
 	 * Runs the appropriate algorithm and saves the results in the specified file.
 	 * 
-	 * @param run          The index of this run in a possible batch of multiple
-	 *                     runs (this may be used e.g. to set a seed).
-	 * @param hOptions     General parameter options for the headless run (e.g.
-	 *                     scenario filename, etc.)
-	 * @param options      Special parameter options for the algorithm being run.
-	 * @param scenarioFile The scenario being run.
-	 * @param outFile      The file to output performance data to.
-	 * @param threads      The number of threads being used.
+	 * @param run
+	 *            The index of this run in a possible batch of multiple runs (this may be used e.g. to set a seed).
+	 * @param hOptions
+	 *            General parameter options for the headless run (e.g. scenario filename, etc.)
+	 * @param options
+	 *            Special parameter options for the algorithm being run.
+	 * @param scenarioFile
+	 *            The scenario being run.
+	 * @param outFile
+	 *            The file to output performance data to.
+	 * @param threads
+	 *            The number of threads being used.
 	 * @throws Exception
 	 */
 	protected abstract void runAndWriteResults(int run, HeadlessApplicationOptions hOptions, File scenarioFile, File outFile, int threads) throws Exception;
 
 	/**
-	 * Checks the user license, throwing an exception if there is a problem.
-	 * 
-	 * @throws LicenseChecker.InvalidLicenseException
-	 */
-	protected void doCheckLicense() throws LicenseChecker.InvalidLicenseException {
-		// check to see if the user has a valid license
-		final LicenseState validity = LicenseChecker.checkLicense();
-		if (validity != LicenseState.Valid) {
-			System.err.println("License is invalid");
-			throw new LicenseChecker.InvalidLicenseException();
-		}
-	}
-
-	/**
-	 * Initialises the commandLine field by reading the command line, throwing an
-	 * exception if there is a problem.
+	 * Initialises the commandLine field by reading the command line, throwing an exception if there is a problem.
 	 * 
 	 * @throws InvalidCommandLineException
 	 */
 	protected void readCommandLine() throws InvalidCommandLineException {
 		// read relevant settings from the command line
 		String[] commandLineArgs = Platform.getCommandLineArgs();
-		commandLineArgs = filterCommandLineArgs(commandLineArgs);
+		commandLineArgs = HeadlessUtils.filterCommandLineArgs(commandLineArgs);
 
 		commandLine = parseOptions(commandLineArgs);
 
@@ -308,7 +283,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			buildVersion = "Dev";
 		}
 
-		machineInfo = getDefaultMachineInfo();
+		machineInfo = HeadlessUtils.getDefaultMachineInfo();
 		// merge the machine info from a file specified in the command line
 		if (commandLine.hasOption(MACHINE_INFO)) {
 			try {
@@ -324,9 +299,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	}
 
 	/**
-	 * Reads a list of HeadlessApplicationOptions objects from a batch config file,
-	 * or creates a list of a single item that is populated from command-line
-	 * options.
+	 * Reads a list of HeadlessApplicationOptions objects from a batch config file, or creates a list of a single item that is populated from command-line options.
 	 * 
 	 * @return
 	 * @throws IOException
@@ -352,12 +325,12 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		// override batch file options with command line options
 		for (HeadlessApplicationOptions options : optionsList) {
 			overwriteCustomInfo(options.customInfo);
-			options.outputLoggingFolder = commandLineParameterOrValue(OUTPUT_FOLDER, options.outputLoggingFolder);
-			options.outputScenarioFileName = commandLineParameterOrValue(OUTPUT_SCENARIO, options.outputScenarioFileName);
-			options.algorithmConfigFile = commandLineParameterOrValue(JSON, options.algorithmConfigFile);
-			options.scenarioFileName = commandLineParameterOrValue(INPUT_SCENARIO, options.scenarioFileName);
-			options.numRuns = Integer.parseInt(commandLineParameterOrValue(NUM_RUNS, Integer.toString(options.numRuns)));
-			options.useCase = commandLineParameterOrValue(USE_CASE, options.useCase);
+			options.outputLoggingFolder = HeadlessUtils.commandLineParameterOrValue(commandLine, OUTPUT_FOLDER, options.outputLoggingFolder);
+			options.outputScenarioFileName = HeadlessUtils.commandLineParameterOrValue(commandLine, OUTPUT_SCENARIO, options.outputScenarioFileName);
+			options.algorithmConfigFile = HeadlessUtils.commandLineParameterOrValue(commandLine, JSON, options.algorithmConfigFile);
+			options.scenarioFileName = HeadlessUtils.commandLineParameterOrValue(commandLine, INPUT_SCENARIO, options.scenarioFileName);
+			options.numRuns = Integer.parseInt(HeadlessUtils.commandLineParameterOrValue(commandLine, NUM_RUNS, Integer.toString(options.numRuns)));
+			options.useCase = HeadlessUtils.commandLineParameterOrValue(commandLine, USE_CASE, options.useCase);
 		}
 
 		return optionsList;
@@ -392,29 +365,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	}
 
 	/**
-	 * Returns the value of a command line parameter, or a specified existing value.
-	 * If the existing value is not null, and the command line parameter is present,
-	 * a warning is printed to stderr.
-	 */
-	protected String commandLineParameterOrValue(String commandLineOptionName, String oldValue) {
-		if (commandLine.hasOption(commandLineOptionName)) {
-			String newValue = commandLine.getOptionValue(commandLineOptionName);
-
-			if (oldValue != null && oldValue.equals(newValue) == false) {
-				String overrideWarning = "Overriding existing value with command line option %s: '%s' -> '%s'";
-				System.err.println(String.format(overrideWarning, commandLineOptionName, oldValue, newValue));
-			}
-
-			return newValue;
-
-		}
-
-		return oldValue;
-	}
-
-	/**
-	 * Reads the options for the appropriate algorithm from a JSON file, using
-	 * Jackson.
+	 * Reads the options for the appropriate algorithm from a JSON file, using Jackson.
 	 * 
 	 * @param filename
 	 * @return
@@ -432,34 +383,6 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			return null;
 		}
 
-	}
-
-	/**
-	 * Filter out invalid command line items that getopt cannot work with
-	 * 
-	 * @param commandLineArgs
-	 * @return
-	 */
-	protected String[] filterCommandLineArgs(final String[] commandLineArgs) {
-		final List<String> commandLine = new ArrayList<>(commandLineArgs.length);
-		int skip = 0;
-		for (final String arg : commandLineArgs) {
-			if (skip != 0) {
-				--skip;
-				continue;
-			}
-			if (arg.equals("-eclipse.keyring")) {
-				skip = 1;
-				continue;
-			}
-			if (arg.equals("-eclipse.password")) {
-				skip = 1;
-				continue;
-			}
-			commandLine.add(arg);
-
-		}
-		return commandLine.toArray(new String[commandLine.size()]);
 	}
 
 	@Override
@@ -503,80 +426,6 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 	}
 
-	protected JSONObject getDefaultMachineInfo() {
-		JSONObject machInfo = new JSONObject();
-		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
-		machInfo.put("os", System.getProperty("os.name"));
-		machInfo.put("JavaVersion", System.getProperty("java.version"));
-
-		{
-			// If we are running on EC2, then we can try to grab the instance type
-			try {
-				Process process = Runtime.getRuntime().exec("ec2-metadata -t");
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-					String line;
-					while ((line = reader.readLine()) != null) {
-						int idx = line.indexOf(':');
-						if (idx > 0) {
-							machInfo.put(line.substring(0, idx).trim(), line.substring(idx + 1).trim());
-						}
-					}
-				}
-			} catch (Exception e) {
-				// Ignore any exceptions
-			}
-		}
-
-		machInfo.put("AvailableProcessors", Runtime.getRuntime().availableProcessors());
-		return machInfo;
-	}
-
-	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-
-	public static String bytesToHex(byte[] bytes) {
-		char[] hexChars = new char[bytes.length * 2];
-		for (int j = 0; j < bytes.length; j++) {
-			int v = bytes[j] & 0xFF;
-			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-		}
-		return new String(hexChars);
-	}
-
-	public String mD5Checksum(File input) {
-		try {
-			MessageDigest digest = MessageDigest.getInstance("MD5");
-			// If source is a directory, collect MD5 sum of all contents.
-			if (input.isDirectory()) {
-				for (File f : input.listFiles()) {
-					if (f.isFile()) {
-						try (InputStream in = new FileInputStream(f)) {
-							byte[] block = new byte[4096];
-							int length;
-							while ((length = in.read(block)) > 0) {
-								digest.update(block, 0, length);
-							}
-						}
-					}
-				}
-			} else {
-
-				try (InputStream in = new FileInputStream(input)) {
-					byte[] block = new byte[4096];
-					int length;
-					while ((length = in.read(block)) > 0) {
-						digest.update(block, 0, length);
-					}
-				}
-			}
-			String result = bytesToHex(digest.digest());
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public static void writeRunFailure(File loggingFolder, Throwable e) {
 		if (loggingFolder != null) {
 			try (StringWriter sw = new StringWriter()) {
@@ -595,4 +444,5 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			}
 		}
 	}
+
 }
