@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -96,6 +97,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -1226,7 +1228,7 @@ public class AnalyticsBuilder {
 				return slot.getPort();
 			}
 		} else if (option instanceof final SellMarket sellMarket) {
-			if (sellMarket.getMarket() instanceof DESSalesMarket mkt) {
+			if (sellMarket.getMarket() instanceof final DESSalesMarket mkt) {
 				return mkt.getNotionalPort();
 			}
 		}
@@ -1266,7 +1268,7 @@ public class AnalyticsBuilder {
 				return slot.getPort();
 			}
 		} else if (option instanceof final BuyMarket buyMarket) {
-			if (buyMarket.getMarket() instanceof FOBPurchasesMarket mkt) {
+			if (buyMarket.getMarket() instanceof final FOBPurchasesMarket mkt) {
 				return mkt.getNotionalPort();
 			}
 		}
@@ -1302,7 +1304,7 @@ public class AnalyticsBuilder {
 		} else if (option instanceof final BuyMarket buyMarket) {
 			final YearMonth m = buyMarket.isSetMonth() ? buyMarket.getMonth() : null;
 			if (m != null) {
-				if (buyMarket.getMarket() instanceof FOBPurchasesMarket mkt) {
+				if (buyMarket.getMarket() instanceof final FOBPurchasesMarket mkt) {
 					return m.atDay(1).atStartOfDay(mkt.getNotionalPort().getZoneId());
 				}
 				if (buyMarket.getMarket() instanceof DESPurchaseMarket) {
@@ -1328,7 +1330,7 @@ public class AnalyticsBuilder {
 		} else if (option instanceof final SellMarket sellMarket) {
 			final YearMonth m = sellMarket.isSetMonth() ? sellMarket.getMonth() : null;
 			if (m != null) {
-				if (sellMarket.getMarket() instanceof DESSalesMarket mkt) {
+				if (sellMarket.getMarket() instanceof final DESSalesMarket mkt) {
 					return m.atDay(1).atStartOfDay(mkt.getNotionalPort().getZoneId());
 				}
 				if (sellMarket.getMarket() instanceof FOBSalesMarket) {
@@ -1376,7 +1378,7 @@ public class AnalyticsBuilder {
 		} else if (option instanceof final BuyMarket buyMarket) {
 			final YearMonth m = buyMarket.isSetMonth() ? buyMarket.getMonth() : null;
 			if (m != null) {
-				if (buyMarket.getMarket() instanceof FOBPurchasesMarket mkt) {
+				if (buyMarket.getMarket() instanceof final FOBPurchasesMarket mkt) {
 					return m.atDay(1).atStartOfDay(mkt.getNotionalPort().getZoneId()).plusMonths(1);
 				}
 				if (buyMarket.getMarket() instanceof DESPurchaseMarket) {
@@ -1427,7 +1429,7 @@ public class AnalyticsBuilder {
 		} else if (option instanceof final SellMarket sellMarket) {
 			final YearMonth m = sellMarket.isSetMonth() ? sellMarket.getMonth() : null;
 			if (m != null) {
-				if (sellMarket.getMarket() instanceof DESSalesMarket mkt) {
+				if (sellMarket.getMarket() instanceof final DESSalesMarket mkt) {
 					return m.atDay(1).atStartOfDay(mkt.getNotionalPort().getZoneId()).plusMonths(1);
 				}
 				if (sellMarket.getMarket() instanceof FOBSalesMarket) {
@@ -1521,17 +1523,17 @@ public class AnalyticsBuilder {
 
 			return (Double) buyOpportunity.eGetWithDefault(AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV);
 
-//			if (buyOpportunity.getCv() != 0.0) {
-//				return buyOpportunity.getCv();
-//			}
-//			final PurchaseContract contract = buyOpportunity.getContract();
-//			if (contract != null && contract.isSetCargoCV()) {
-//				return contract.getCargoCV();
-//			}
-//			final Port port = buyOpportunity.getPort();
-//			if (port != null) {
-//				return port.getCvValue();
-//			}
+			// if (buyOpportunity.getCv() != 0.0) {
+			// return buyOpportunity.getCv();
+			// }
+			// final PurchaseContract contract = buyOpportunity.getContract();
+			// if (contract != null && contract.isSetCargoCV()) {
+			// return contract.getCargoCV();
+			// }
+			// final Port port = buyOpportunity.getPort();
+			// if (port != null) {
+			// return port.getCvValue();
+			// }
 		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
@@ -1550,7 +1552,7 @@ public class AnalyticsBuilder {
 
 	public static double @Nullable [] getCargoCVRange(final SellOption option) {
 		if (option instanceof final SellOpportunity sellOpportunity) {
-			double[] range = new double[2];
+			final double[] range = new double[2];
 			boolean isSet = false;
 			final SalesContract contract = sellOpportunity.getContract();
 			final Port port = sellOpportunity.getPort();
@@ -1869,5 +1871,82 @@ public class AnalyticsBuilder {
 
 	public static boolean isNullOrOpen(final SellOption opt) {
 		return opt == null || opt instanceof OpenSell;
+	}
+
+	public static VesselCharter makeOptionalSimpleCharter(final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption) {
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
+		final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
+		vesselCharter.setVessel(vessel);
+		vesselCharter.setEntity(optionalAvailabilityShippingOption.getEntity());
+
+		vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+		if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
+			vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
+			vesselCharter.getStartHeel().setCvValue(22.8);
+			// vesselCharter.getStartHeel().setPriceExpression(PerMMBTU(0.1);
+
+			vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
+			vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
+			vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		}
+
+		vesselCharter.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+		vesselCharter.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+		vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+		vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+		vesselCharter.setOptional(true);
+		vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
+				optionalAvailabilityShippingOption.getBallastBonus()));
+		if (optionalAvailabilityShippingOption.getStartPort() != null) {
+			vesselCharter.setStartAt(optionalAvailabilityShippingOption.getStartPort());
+		}
+		if (optionalAvailabilityShippingOption.getEndPort() != null) {
+			final EList<APortSet<Port>> endAt = vesselCharter.getEndAt();
+			endAt.clear();
+			endAt.add(optionalAvailabilityShippingOption.getEndPort());
+		}
+
+		return vesselCharter;
+	}
+
+	public static VesselCharter makeSimpleCharter(final SimpleVesselCharterOption fleetShippingOption) {
+		final VesselCharter vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
+		vesselCharter.setTimeCharterRate(fleetShippingOption.getHireCost());
+		final Vessel vessel = fleetShippingOption.getVessel();
+		vesselCharter.setVessel(vessel);
+		vesselCharter.setEntity(fleetShippingOption.getEntity());
+
+		vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+
+		if (fleetShippingOption.isUseSafetyHeel()) {
+			vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
+			vesselCharter.getStartHeel().setCvValue(22.8);
+			// vesselCharter.getStartHeel().setPricePerMMBTU(0.1);
+
+			vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
+			vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
+			vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		}
+		vesselCharter.setOptional(false);
+
+		return vesselCharter;
+	}
+
+	public static CharterInMarket makeRoundTripOption(final RoundTripShippingOption roundTripShippingOption) {
+		final Vessel vessel = roundTripShippingOption.getVessel();
+		final BaseLegalEntity entity = roundTripShippingOption.getEntity();
+		final String hireCost = roundTripShippingOption.getHireCost();
+
+		CharterInMarket newMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		newMarket.setCharterInRate(hireCost);
+		newMarket.setVessel(vessel);
+		newMarket.setEntity(entity);
+		newMarket.setNominal(true);
+
+		newMarket.setName(vessel.getName() + " @" + hireCost);
+		return newMarket;
 	}
 }

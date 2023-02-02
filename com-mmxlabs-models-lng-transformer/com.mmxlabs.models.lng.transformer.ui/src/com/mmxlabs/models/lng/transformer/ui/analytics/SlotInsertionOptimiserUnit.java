@@ -192,10 +192,10 @@ public class SlotInsertionOptimiserUnit {
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<IPortSlot> slotElements = slotsToInsert.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
-					.collect(Collectors.toList());
+					.toList();
 			final List<IPortSlot> eventElements = eventsToInsert.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
-					.collect(Collectors.toList());
+					.toList();
 
 			final List<IPortSlot> optionElements = new ArrayList<>(slotElements.size() + eventElements.size());
 			optionElements.addAll(slotElements);
