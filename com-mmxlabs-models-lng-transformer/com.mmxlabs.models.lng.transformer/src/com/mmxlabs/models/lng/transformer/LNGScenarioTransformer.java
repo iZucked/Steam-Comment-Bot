@@ -255,7 +255,7 @@ public class LNGScenarioTransformer {
 	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
 	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
 	public static final String EXTRA_SPOT_CARGO_MARKETS = "extra_spot_cargo_markets";
-	public static final String EXTRA_VESSEL_AVAILABILITIES = "extra_vessel_availabilities";
+	public static final String EXTRA_VESSEL_CHARTERS = "extra_vessel_availabilities";
 	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
 	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
 	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
@@ -264,8 +264,8 @@ public class LNGScenarioTransformer {
 	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
-	@Named(EXTRA_VESSEL_AVAILABILITIES)
-	private List<VesselCharter> extraVesselAvailabilities;
+	@Named(EXTRA_VESSEL_CHARTERS)
+	private List<VesselCharter> extraVesselCharters;
 
 	@Inject
 	@Named(EXTRA_VESSEL_EVENTS)
@@ -3272,8 +3272,8 @@ public class LNGScenarioTransformer {
 
 		}
 
-		if (extraVesselAvailabilities != null) {
-			sortedAvailabilities.addAll(extraVesselAvailabilities);
+		if (extraVesselCharters != null) {
+			sortedAvailabilities.addAll(extraVesselCharters);
 		}
 
 		// Now register the availabilities.

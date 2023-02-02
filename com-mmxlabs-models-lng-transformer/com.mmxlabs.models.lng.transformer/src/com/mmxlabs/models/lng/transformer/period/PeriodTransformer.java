@@ -397,7 +397,7 @@ public class PeriodTransformer {
 		lockAndRemoveCanalBookings(records, output);
 
 		// Trim the spot market curves largely by converting the constant into a curve for the optimisation period and set the constant to 0 for outside of the period.
-		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class), copiedExtraDataProvider, wholeExtraDataProvider);
 
 		// Add any vessel created from the ReAdded cargoes
 		output.getCargoModel().getVesselCharters().addAll(newVesselCharters);
@@ -1690,12 +1690,12 @@ public class PeriodTransformer {
 		this.inclusionChecker = inclusionChecker;
 	}
 
-	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, final LNGScenarioModel wholeScenario) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, final LNGScenarioModel wholeScenario, ExtraDataProvider copiedExtraDataProvider, @Nullable ExtraDataProvider wholeExtraDataProvider) {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
 		if (periodRecord.lowerBoundary == null || periodRecord.upperBoundary == null) {
-			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario, copiedExtraDataProvider);
 			if (periodRecord.lowerBoundary == null) {
 				earliestDate = earliestAndLatestTimes.getFirst();
 			}
@@ -1712,7 +1712,7 @@ public class PeriodTransformer {
 		}
 
 		if (wholeScenario != null) {
-			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario);
+			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario, wholeExtraDataProvider);
 			// Make sure the spot markets do no start any earlier than in the parent scenario
 			if (earliestAndLatestTimesForWholeScenario.getFirst().isAfter(earliestDate)) {
 				earliestDate = earliestAndLatestTimesForWholeScenario.getFirst();

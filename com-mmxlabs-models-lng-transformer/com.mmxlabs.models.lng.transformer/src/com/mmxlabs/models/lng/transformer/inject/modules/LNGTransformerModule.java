@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Singleton;
@@ -28,6 +29,10 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
@@ -279,8 +284,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Singleton
 	@Provides
 	@Named(EARLIEST_AND_LATEST_TIMES)
-	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
-		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario, //
+			final @Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS) List<LoadSlot> extraLoadSlots, //
+			final @Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS) List<DischargeSlot> extraDischargeSlots, //
+			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_EVENTS) List<VesselEvent> extraVesselEvents, //
+			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_CHARTERS) List<VesselCharter> extraVesselCharters) {
+		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario, extraLoadSlots, extraDischargeSlots, extraVesselEvents, extraVesselCharters);
 	}
 
 	@Provides
