@@ -499,54 +499,6 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.MARKETABILITY_MODEL: {
-				MarketabilityModel marketabilityModel = (MarketabilityModel)theEObject;
-				T result = caseMarketabilityModel(marketabilityModel);
-				if (result == null) result = caseAbstractAnalysisModel(marketabilityModel);
-				if (result == null) result = caseUUIDObject(marketabilityModel);
-				if (result == null) result = caseNamedObject(marketabilityModel);
-				if (result == null) result = caseMMXObject(marketabilityModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_ROW: {
-				MarketabilityRow marketabilityRow = (MarketabilityRow)theEObject;
-				T result = caseMarketabilityRow(marketabilityRow);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_RESULT: {
-				MarketabilityResult marketabilityResult = (MarketabilityResult)theEObject;
-				T result = caseMarketabilityResult(marketabilityResult);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: {
-				MarketabilityResultContainer marketabilityResultContainer = (MarketabilityResultContainer)theEObject;
-				T result = caseMarketabilityResultContainer(marketabilityResultContainer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_EVENT: {
-				MarketabilityEvent marketabilityEvent = (MarketabilityEvent)theEObject;
-				T result = caseMarketabilityEvent(marketabilityEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: {
-				MarketabilityAssignableElement marketabilityAssignableElement = (MarketabilityAssignableElement)theEObject;
-				T result = caseMarketabilityAssignableElement(marketabilityAssignableElement);
-				if (result == null) result = caseMarketabilityEvent(marketabilityAssignableElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MARKETABILITY_END_EVENT: {
-				MarketabilityEndEvent marketabilityEndEvent = (MarketabilityEndEvent)theEObject;
-				T result = caseMarketabilityEndEvent(marketabilityEndEvent);
-				if (result == null) result = caseMarketabilityEvent(marketabilityEndEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case AnalyticsPackage.VIABILITY_ROW: {
 				ViabilityRow viabilityRow = (ViabilityRow)theEObject;
 				T result = caseViabilityRow(viabilityRow);
@@ -697,6 +649,54 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				T result = caseSwapValueMatrixResultSet(swapValueMatrixResultSet);
 				if (result == null) result = caseUUIDObject(swapValueMatrixResultSet);
 				if (result == null) result = caseMMXObject(swapValueMatrixResultSet);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_MODEL: {
+				MarketabilityModel marketabilityModel = (MarketabilityModel)theEObject;
+				T result = caseMarketabilityModel(marketabilityModel);
+				if (result == null) result = caseAbstractAnalysisModel(marketabilityModel);
+				if (result == null) result = caseUUIDObject(marketabilityModel);
+				if (result == null) result = caseNamedObject(marketabilityModel);
+				if (result == null) result = caseMMXObject(marketabilityModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_ROW: {
+				MarketabilityRow marketabilityRow = (MarketabilityRow)theEObject;
+				T result = caseMarketabilityRow(marketabilityRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_RESULT: {
+				MarketabilityResult marketabilityResult = (MarketabilityResult)theEObject;
+				T result = caseMarketabilityResult(marketabilityResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: {
+				MarketabilityResultContainer marketabilityResultContainer = (MarketabilityResultContainer)theEObject;
+				T result = caseMarketabilityResultContainer(marketabilityResultContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_EVENT: {
+				MarketabilityEvent marketabilityEvent = (MarketabilityEvent)theEObject;
+				T result = caseMarketabilityEvent(marketabilityEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: {
+				MarketabilityAssignableElement marketabilityAssignableElement = (MarketabilityAssignableElement)theEObject;
+				T result = caseMarketabilityAssignableElement(marketabilityAssignableElement);
+				if (result == null) result = caseMarketabilityEvent(marketabilityAssignableElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MARKETABILITY_END_EVENT: {
+				MarketabilityEndEvent marketabilityEndEvent = (MarketabilityEndEvent)theEObject;
+				T result = caseMarketabilityEndEvent(marketabilityEndEvent);
+				if (result == null) result = caseMarketabilityEvent(marketabilityEndEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

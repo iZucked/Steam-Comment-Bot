@@ -111,13 +111,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.FLEET_VESSEL_ALLOCATION_DESCRIPTOR: return createFleetVesselAllocationDescriptor();
 			case AnalyticsPackage.POSITION_DESCRIPTOR: return createPositionDescriptor();
 			case AnalyticsPackage.VIABILITY_MODEL: return createViabilityModel();
-			case AnalyticsPackage.MARKETABILITY_MODEL: return createMarketabilityModel();
-			case AnalyticsPackage.MARKETABILITY_ROW: return createMarketabilityRow();
-			case AnalyticsPackage.MARKETABILITY_RESULT: return createMarketabilityResult();
-			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
-			case AnalyticsPackage.MARKETABILITY_EVENT: return createMarketabilityEvent();
-			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: return createMarketabilityAssignableElement();
-			case AnalyticsPackage.MARKETABILITY_END_EVENT: return createMarketabilityEndEvent();
 			case AnalyticsPackage.VIABILITY_ROW: return createViabilityRow();
 			case AnalyticsPackage.VIABILITY_RESULT: return createViabilityResult();
 			case AnalyticsPackage.MTM_MODEL: return createMTMModel();
@@ -137,6 +130,13 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL: return createSwapValueMatrixModel();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT: return createSwapValueMatrixResult();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET: return createSwapValueMatrixResultSet();
+			case AnalyticsPackage.MARKETABILITY_MODEL: return createMarketabilityModel();
+			case AnalyticsPackage.MARKETABILITY_ROW: return createMarketabilityRow();
+			case AnalyticsPackage.MARKETABILITY_RESULT: return createMarketabilityResult();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
+			case AnalyticsPackage.MARKETABILITY_EVENT: return createMarketabilityEvent();
+			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: return createMarketabilityAssignableElement();
+			case AnalyticsPackage.MARKETABILITY_END_EVENT: return createMarketabilityEndEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}

@@ -1898,7 +1898,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResultContainer()
 	 * @generated
 	 */
-	int MARKETABILITY_RESULT_CONTAINER = 58;
+	int MARKETABILITY_RESULT_CONTAINER = 78;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -3644,115 +3644,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityModel()
 	 * @generated
 	 */
-	int MARKETABILITY_MODEL = 55;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
-
-	/**
-	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
-
-	/**
-	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
-
-	/**
-	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__ROWS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Markets</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL__VESSEL_SPEED = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Model</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
+	int MARKETABILITY_MODEL = 75;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl <em>Marketability Row</em>}' class.
@@ -3762,52 +3654,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityRow()
 	 * @generated
 	 */
-	int MARKETABILITY_ROW = 56;
-
-	/**
-	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__BUY_OPTION = 0;
-
-	/**
-	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__SELL_OPTION = 1;
-
-	/**
-	 * The feature id for the '<em><b>Shipping</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__SHIPPING = 2;
-
-	/**
-	 * The feature id for the '<em><b>Result</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW__RESULT = 3;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Row</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ROW_FEATURE_COUNT = 4;
+	int MARKETABILITY_ROW = 76;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.
@@ -3817,142 +3664,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResult()
 	 * @generated
 	 */
-	int MARKETABILITY_RESULT = 57;
-
-	/**
-	 * The feature id for the '<em><b>Target</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__TARGET = 0;
-
-	/**
-	 * The feature id for the '<em><b>Earliest ETA</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__EARLIEST_ETA = 1;
-
-	/**
-	 * The feature id for the '<em><b>Latest ETA</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__LATEST_ETA = 2;
-
-	/**
-	 * The feature id for the '<em><b>Earliest Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__EARLIEST_VOLUME = 3;
-
-	/**
-	 * The feature id for the '<em><b>Latest Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__LATEST_VOLUME = 4;
-
-	/**
-	 * The feature id for the '<em><b>Earliest Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__EARLIEST_PRICE = 5;
-
-	/**
-	 * The feature id for the '<em><b>Latest Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__LATEST_PRICE = 6;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Result</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_FEATURE_COUNT = 7;
-
-	/**
-	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Next Event</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Buy Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__BUY_DATE = 2;
-
-	/**
-	 * The feature id for the '<em><b>Sell Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__SELL_DATE = 3;
-
-	/**
-	 * The feature id for the '<em><b>Laden Panama</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA = 4;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Panama</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA = 5;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Result Container</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT_CONTAINER_FEATURE_COUNT = 6;
+	int MARKETABILITY_RESULT = 77;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl <em>Marketability Event</em>}' class.
@@ -3962,25 +3674,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEvent()
 	 * @generated
 	 */
-	int MARKETABILITY_EVENT = 59;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_EVENT__START = 0;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_EVENT_FEATURE_COUNT = 1;
+	int MARKETABILITY_EVENT = 79;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl <em>Marketability Assignable Element</em>}' class.
@@ -3990,34 +3684,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityAssignableElement()
 	 * @generated
 	 */
-	int MARKETABILITY_ASSIGNABLE_ELEMENT = 60;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ASSIGNABLE_ELEMENT__START = MARKETABILITY_EVENT__START;
-
-	/**
-	 * The feature id for the '<em><b>Element</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Marketability Assignable Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_ASSIGNABLE_ELEMENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 1;
+	int MARKETABILITY_ASSIGNABLE_ELEMENT = 80;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl <em>Marketability End Event</em>}' class.
@@ -4027,25 +3694,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEndEvent()
 	 * @generated
 	 */
-	int MARKETABILITY_END_EVENT = 61;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_END_EVENT__START = MARKETABILITY_EVENT__START;
-
-	/**
-	 * The number of structural features of the '<em>Marketability End Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_END_EVENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
+	int MARKETABILITY_END_EVENT = 81;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.
@@ -4055,7 +3704,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 62;
+	int VIABILITY_ROW = 55;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4164,7 +3813,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 63;
+	int VIABILITY_RESULT = 56;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4246,7 +3895,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 64;
+	int MTM_MODEL = 57;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4364,7 +4013,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 65;
+	int MTM_RESULT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4464,7 +4113,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 66;
+	int MTM_ROW = 59;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4564,7 +4213,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 67;
+	int BREAK_EVEN_ANALYSIS_MODEL = 60;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4673,7 +4322,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 68;
+	int BREAK_EVEN_ANALYSIS_ROW = 61;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4755,7 +4404,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 69;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 62;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -4801,7 +4450,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 70;
+	int BREAK_EVEN_ANALYSIS_RESULT = 63;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4856,7 +4505,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
 	 * @generated
 	 */
-	int LOCAL_DATE_TIME_HOLDER = 71;
+	int LOCAL_DATE_TIME_HOLDER = 64;
 
 	/**
 	 * The feature id for the '<em><b>Date Time</b></em>' attribute.
@@ -4884,7 +4533,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OPTION = 72;
+	int COMMODITY_CURVE_OPTION = 65;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
@@ -4903,7 +4552,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OVERLAY = 73;
+	int COMMODITY_CURVE_OVERLAY = 66;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4958,7 +4607,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
 	 * @generated
 	 */
-	int SENSITIVITY_MODEL = 74;
+	int SENSITIVITY_MODEL = 67;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5013,7 +4662,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
 	 * @generated
 	 */
-	int SENSITIVITY_SOLUTION_SET = 75;
+	int SENSITIVITY_SOLUTION_SET = 68;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5176,7 +4825,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
 	 * @generated
 	 */
-	int ABSTRACT_SENSITIVITY_RESULT = 76;
+	int ABSTRACT_SENSITIVITY_RESULT = 69;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5249,7 +4898,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
 	 * @generated
 	 */
-	int PORTFOLIO_SENSITIVITY_RESULT = 77;
+	int PORTFOLIO_SENSITIVITY_RESULT = 70;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5322,7 +4971,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
 	 * @generated
 	 */
-	int CARGO_PN_LRESULT = 78;
+	int CARGO_PN_LRESULT = 71;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5404,7 +5053,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixModel()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_MODEL = 79;
+	int SWAP_VALUE_MATRIX_MODEL = 72;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5612,7 +5261,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT = 80;
+	int SWAP_VALUE_MATRIX_RESULT = 73;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5739,7 +5388,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResultSet()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_SET = 81;
+	int SWAP_VALUE_MATRIX_RESULT_SET = 74;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5803,6 +5452,357 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int SWAP_VALUE_MATRIX_RESULT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__EXTENSIONS = ABSTRACT_ANALYSIS_MODEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__UUID = ABSTRACT_ANALYSIS_MODEL__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__NAME = ABSTRACT_ANALYSIS_MODEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Buys</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__BUYS = ABSTRACT_ANALYSIS_MODEL__BUYS;
+
+	/**
+	 * The feature id for the '<em><b>Sells</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__SELLS = ABSTRACT_ANALYSIS_MODEL__SELLS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__VESSEL_EVENTS = ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__ROWS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__MARKETS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL__VESSEL_SPEED = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__BUY_OPTION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__SELL_OPTION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Shipping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__SHIPPING = 2;
+
+	/**
+	 * The feature id for the '<em><b>Result</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW__RESULT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ROW_FEATURE_COUNT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__TARGET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Earliest ETA</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__EARLIEST_ETA = 1;
+
+	/**
+	 * The feature id for the '<em><b>Latest ETA</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__LATEST_ETA = 2;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__EARLIEST_VOLUME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Latest Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__LATEST_VOLUME = 4;
+
+	/**
+	 * The feature id for the '<em><b>Earliest Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__EARLIEST_PRICE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Latest Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT__LATEST_PRICE = 6;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_FEATURE_COUNT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__NEXT_EVENT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Buy Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__BUY_DATE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Sell Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__SELL_DATE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Laden Panama</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA = 4;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Panama</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA = 5;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Result Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_RESULT_CONTAINER_FEATURE_COUNT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_EVENT__START = 0;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_EVENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT__START = MARKETABILITY_EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>Element</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Marketability Assignable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_ASSIGNABLE_ELEMENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_END_EVENT__START = MARKETABILITY_EVENT__START;
+
+	/**
+	 * The number of structural features of the '<em>Marketability End Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKETABILITY_END_EVENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.

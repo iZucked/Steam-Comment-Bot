@@ -296,34 +296,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createViabilityModelAdapter();
 			}
 			@Override
-			public Adapter caseMarketabilityModel(MarketabilityModel object) {
-				return createMarketabilityModelAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityRow(MarketabilityRow object) {
-				return createMarketabilityRowAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityResult(MarketabilityResult object) {
-				return createMarketabilityResultAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityResultContainer(MarketabilityResultContainer object) {
-				return createMarketabilityResultContainerAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityEvent(MarketabilityEvent object) {
-				return createMarketabilityEventAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityAssignableElement(MarketabilityAssignableElement object) {
-				return createMarketabilityAssignableElementAdapter();
-			}
-			@Override
-			public Adapter caseMarketabilityEndEvent(MarketabilityEndEvent object) {
-				return createMarketabilityEndEventAdapter();
-			}
-			@Override
 			public Adapter caseViabilityRow(ViabilityRow object) {
 				return createViabilityRowAdapter();
 			}
@@ -402,6 +374,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSwapValueMatrixResultSet(SwapValueMatrixResultSet object) {
 				return createSwapValueMatrixResultSetAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityModel(MarketabilityModel object) {
+				return createMarketabilityModelAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityRow(MarketabilityRow object) {
+				return createMarketabilityRowAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResult(MarketabilityResult object) {
+				return createMarketabilityResultAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResultContainer(MarketabilityResultContainer object) {
+				return createMarketabilityResultContainerAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityEvent(MarketabilityEvent object) {
+				return createMarketabilityEventAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityAssignableElement(MarketabilityAssignableElement object) {
+				return createMarketabilityAssignableElementAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityEndEvent(MarketabilityEndEvent object) {
+				return createMarketabilityEndEventAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {

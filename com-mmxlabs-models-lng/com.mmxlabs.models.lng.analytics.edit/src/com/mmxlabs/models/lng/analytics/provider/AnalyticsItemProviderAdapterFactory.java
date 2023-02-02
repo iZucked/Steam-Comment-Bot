@@ -1995,13 +1995,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (fleetVesselAllocationDescriptorItemProvider != null) fleetVesselAllocationDescriptorItemProvider.dispose();
 		if (positionDescriptorItemProvider != null) positionDescriptorItemProvider.dispose();
 		if (viabilityModelItemProvider != null) viabilityModelItemProvider.dispose();
-		if (marketabilityModelItemProvider != null) marketabilityModelItemProvider.dispose();
-		if (marketabilityRowItemProvider != null) marketabilityRowItemProvider.dispose();
-		if (marketabilityResultItemProvider != null) marketabilityResultItemProvider.dispose();
-		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
-		if (marketabilityEventItemProvider != null) marketabilityEventItemProvider.dispose();
-		if (marketabilityAssignableElementItemProvider != null) marketabilityAssignableElementItemProvider.dispose();
-		if (marketabilityEndEventItemProvider != null) marketabilityEndEventItemProvider.dispose();
 		if (viabilityRowItemProvider != null) viabilityRowItemProvider.dispose();
 		if (viabilityResultItemProvider != null) viabilityResultItemProvider.dispose();
 		if (mtmModelItemProvider != null) mtmModelItemProvider.dispose();
@@ -2021,6 +2014,13 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (swapValueMatrixModelItemProvider != null) swapValueMatrixModelItemProvider.dispose();
 		if (swapValueMatrixResultItemProvider != null) swapValueMatrixResultItemProvider.dispose();
 		if (swapValueMatrixResultSetItemProvider != null) swapValueMatrixResultSetItemProvider.dispose();
+		if (marketabilityModelItemProvider != null) marketabilityModelItemProvider.dispose();
+		if (marketabilityRowItemProvider != null) marketabilityRowItemProvider.dispose();
+		if (marketabilityResultItemProvider != null) marketabilityResultItemProvider.dispose();
+		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
+		if (marketabilityEventItemProvider != null) marketabilityEventItemProvider.dispose();
+		if (marketabilityAssignableElementItemProvider != null) marketabilityAssignableElementItemProvider.dispose();
+		if (marketabilityEndEventItemProvider != null) marketabilityEndEventItemProvider.dispose();
 	}
 
 }
