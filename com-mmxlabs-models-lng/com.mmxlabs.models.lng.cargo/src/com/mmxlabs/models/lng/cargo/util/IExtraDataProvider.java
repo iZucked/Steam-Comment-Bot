@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
@@ -26,6 +27,8 @@ public interface IExtraDataProvider {
 
 	List<SpotMarket> getExtraSpotCargoMarkets();
 
-//	List<CommodityCurveOverlay> getExtraPriceCurves();
+	List<ZonedDateTime> getExtraDates();
+
+	// List<CommodityCurveOverlay> getExtraPriceCurves();
 
 }

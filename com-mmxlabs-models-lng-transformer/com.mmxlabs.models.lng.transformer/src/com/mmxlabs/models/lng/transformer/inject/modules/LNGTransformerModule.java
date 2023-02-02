@@ -29,6 +29,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
@@ -285,11 +286,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Named(EARLIEST_AND_LATEST_TIMES)
 	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario, //
-			final @Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS) List<LoadSlot> extraLoadSlots, //
-			final @Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS) List<DischargeSlot> extraDischargeSlots, //
-			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_EVENTS) List<VesselEvent> extraVesselEvents, //
-			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_CHARTERS) List<VesselCharter> extraVesselCharters) {
-		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario, extraLoadSlots, extraDischargeSlots, extraVesselEvents, extraVesselCharters);
+			final @Named(ExtraDataProvider.EXTRA_LOAD_SLOTS) List<LoadSlot> extraLoadSlots, //
+			final @Named(ExtraDataProvider.EXTRA_DISCHARGE_SLOTS) List<DischargeSlot> extraDischargeSlots, //
+			final @Named(ExtraDataProvider.EXTRA_VESSEL_EVENTS) List<VesselEvent> extraVesselEvents, //
+			final @Named(ExtraDataProvider.EXTRA_VESSEL_CHARTERS) List<VesselCharter> extraVesselCharters, //
+		final @Named(ExtraDataProvider.EXTRA_DATES) List<ZonedDateTime> extraDates) {
+		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario, extraLoadSlots, extraDischargeSlots, extraVesselEvents, extraVesselCharters, extraDates);
 	}
 
 	@Provides

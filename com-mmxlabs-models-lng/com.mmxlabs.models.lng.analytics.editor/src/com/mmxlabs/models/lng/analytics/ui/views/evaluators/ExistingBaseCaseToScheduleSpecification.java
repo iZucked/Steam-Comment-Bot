@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -508,7 +510,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 				TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, scheduleSpec) -> {
 					if (options != null) {
-						if (target instanceof LoadSlot) {
+						if (target instanceof LoadSlot ls) {
 							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
@@ -517,10 +519,17 @@ public class ExistingBaseCaseToScheduleSpecification {
 							}
 							if (options.getLoadDate() != null) {
 								((SlotSpecification) scheduleSpec).setArrivalDate(options.getLoadDate());
+								ZonedDateTime zdt;
+								if (ls.getPort() != null) {
+									zdt = options.getLoadDate().atZone(ls.getPort().getZoneId());
+								} else {
+									zdt = options.getLoadDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 
 						}
-						if (target instanceof DischargeSlot) {
+						if (target instanceof DischargeSlot ds) {
 							if (options.isSetBallastRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
 							}
@@ -529,9 +538,16 @@ public class ExistingBaseCaseToScheduleSpecification {
 							}
 							if (options.getDischargeDate() != null && scheduleSpec instanceof SlotSpecification) {
 								((SlotSpecification) scheduleSpec).setArrivalDate(options.getDischargeDate());
+								ZonedDateTime zdt;
+								if (ds.getPort() != null) {
+									zdt = options.getDischargeDate().atZone(ds.getPort().getZoneId());
+								} else {
+									zdt = options.getDischargeDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 						}
-						if (target instanceof VesselEvent) {
+						if (target instanceof VesselEvent ve) {
 							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
@@ -540,6 +556,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 							}
 							if (options.getLoadDate() != null) {
 								((VesselEventSpecification) scheduleSpec).setArrivalDate(options.getLoadDate());
+								ZonedDateTime zdt;
+								if (ve.getPort() != null) {
+									zdt = options.getLoadDate().atZone(ve.getPort().getZoneId());
+								} else {
+									zdt = options.getLoadDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 						}
 					}
