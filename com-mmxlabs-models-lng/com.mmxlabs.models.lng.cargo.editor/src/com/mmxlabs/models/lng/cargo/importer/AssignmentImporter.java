@@ -108,7 +108,7 @@ public class AssignmentImporter {
 										} else {
 											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
 											if (v != null) {
-												final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
+												final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v,
 														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), charterIndex);
 
 												assignableElement.setVesselAssignmentType(availability);

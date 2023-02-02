@@ -25,7 +25,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.lng.scenario.model,
  com.mmxlabs.scenario.service.util,
  org.eclipse.e4.ui.workbench,
- org.eclipse.e4.ui.model.workbench;bundle-version="2.0.1"
+ org.eclipse.e4.ui.model.workbench;bundle-version="2.0.1",
+ org.eclipse.e4.core.contexts,
+ org.eclipse.e4.ui.workbench.swt,
+ org.eclipse.e4.ui.workbench.renderers.swt
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.ui,
  com.mmxlabs.models.lng.ui.actions,

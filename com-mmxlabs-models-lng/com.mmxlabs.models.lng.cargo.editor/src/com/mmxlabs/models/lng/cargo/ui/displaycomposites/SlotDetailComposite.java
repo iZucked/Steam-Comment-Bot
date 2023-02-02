@@ -143,6 +143,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(unshippedWindowFeatures));
 		
 		loadTermsFeatures = new ArrayList<ETypedElement[]>();
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedPorts() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
 		loadTermsFeatures
@@ -159,6 +160,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<ETypedElement[]>();
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedPorts() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures

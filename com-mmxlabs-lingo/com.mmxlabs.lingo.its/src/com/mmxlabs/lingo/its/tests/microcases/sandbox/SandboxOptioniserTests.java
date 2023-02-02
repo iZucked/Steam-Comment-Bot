@@ -18,10 +18,12 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.util.SandboxModelBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -36,7 +38,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
-public class SandboxInsertionTests extends AbstractSandboxTestCase {
+public class SandboxOptioniserTests extends AbstractSandboxTestCase {
 
 	@Override
 	public @NonNull IScenarioDataProvider importReferenceData() throws Exception {
@@ -111,6 +113,52 @@ public class SandboxInsertionTests extends AbstractSandboxTestCase {
 		// Flaky, but we don't store a mapping between sell1 and the generated object.
 		Assertions.assertEquals(sell1.getPort(), resultOptions.getSlotsInserted().get(0).getPort());
 		Assertions.assertEquals(result.getExtraSlots().get(1), resultOptions.getSlotsInserted().get(0));
+	}
+	
+	/**
+	 * This code used to throw an assertion error as the buy opportunity was not real and date 0 was based on the sell.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.REGRESSION_TEST)
+	public void testOptioniseDateIssue() throws Exception {
+		
+		lngScenarioModel.getCargoModel().getVesselCharters().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+		
+		
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+		
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setOptioniseSandboxMode();
+		
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
+		
+		final ShippingOption shipping = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("80000") //
+				.build();
+		
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_PLUTO);
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
+		
+		final BuyOpportunity buy1 = sandboxBuilder.makeBuyOpportunity(false, dischargePort, entity, "5") //
+				.withDate(LocalDate.of(2023, 1, 1)) //
+				.withCV(22.8)
+				.build();
+//				
+		final SellOption sell1 = sandboxBuilder.createSellReference(
+				cargoModelBuilder
+				.makeDESSale("DES_Sale", LocalDate.of(2023, 2, 1),dischargePort, null, entity, "7")
+				.build());
+		
+		BaseCaseRow row1 = sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping);
+		row1.setOptionise(true);
+		
+		// We don't expect any results
+		Assertions.assertThrows(UserFeedbackException.class, () -> evaluateSandbox(sandboxBuilder.getOptionAnalysisModel()));
+		 
 	}
 
 	@Test

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Singleton;
@@ -28,6 +29,10 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
@@ -85,8 +90,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
- * Main entry point to create {@link LNGScenarioTransformer}. This uses
- * injection to populate the data structures.
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
@@ -152,7 +156,6 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_LONG_TERM)).toInstance(userSettings.getMode() == OptimisationMode.LONG_TERM);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.HINT_DISABLE_CACHES)).toInstance(hintDisableCache);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(portfolioBreakEven);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_EVALUATION_ONLY)).toInstance(hintEvaluationMode);
@@ -217,12 +220,14 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(//
-				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START))
+				.toInstance(//
+						LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES));
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_CUTOFF_AT_PROMPT_START)).toInstance(//
-				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_CUTOFF_AT_PROMPT_START))
+				.toInstance(//
+						LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
 
@@ -236,7 +241,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
-		
+
 		bind(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(MinMaxUnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
@@ -279,8 +284,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Singleton
 	@Provides
 	@Named(EARLIEST_AND_LATEST_TIMES)
-	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
-		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario, //
+			final @Named(LNGScenarioTransformer.EXTRA_LOAD_SLOTS) List<LoadSlot> extraLoadSlots, //
+			final @Named(LNGScenarioTransformer.EXTRA_DISCHARGE_SLOTS) List<DischargeSlot> extraDischargeSlots, //
+			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_EVENTS) List<VesselEvent> extraVesselEvents, //
+			final @Named(LNGScenarioTransformer.EXTRA_VESSEL_CHARTERS) List<VesselCharter> extraVesselCharters) {
+		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario, extraLoadSlots, extraDischargeSlots, extraVesselEvents, extraVesselCharters);
 	}
 
 	@Provides

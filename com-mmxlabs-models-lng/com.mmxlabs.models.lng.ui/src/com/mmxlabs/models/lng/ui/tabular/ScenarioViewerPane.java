@@ -6,9 +6,13 @@ package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.menu.impl.MenuFactoryImpl;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
+import org.eclipse.e4.ui.workbench.renderers.swt.ToolBarManagerRenderer;
+import org.eclipse.e4.ui.workbench.swt.factories.IRendererFactory;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,6 +34,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.EditorSite;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
@@ -136,6 +142,33 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 		}
 		externalMenuManager = null;
 
+		if (toolBarManager != null ) {
+//			
+//			Why is it a problem for us? and not the orginal code?
+//			Is it the hook to plugin customisations?
+//					
+//			
+//			ALSO R&D docs
+//			ALSO Jackson update
+//			
+//			Also new API key for opti cloud
+					
+					
+			var site = part.getSite();
+			IEclipseContext context2 =		part.getSite().getService(IEclipseContext.class);
+			IRendererFactory rendererFactory = context2.get(IRendererFactory.class);
+			
+			var apr = rendererFactory.getRenderer(MenuFactoryImpl.eINSTANCE.createToolBar(), null);
+			if (apr instanceof ToolBarManagerRenderer tbmr) {
+				var mToolBar = tbmr.getToolBarModel(toolBarManager);
+				if (mToolBar != null) {
+					tbmr.clearModelToManager(mToolBar, toolBarManager);
+					CompatibilityView.clearOpaqueToolBarItems(tbmr, mToolBar);
+				}
+			}
+			
+		}
+		
 		super.dispose();
 	}
 
