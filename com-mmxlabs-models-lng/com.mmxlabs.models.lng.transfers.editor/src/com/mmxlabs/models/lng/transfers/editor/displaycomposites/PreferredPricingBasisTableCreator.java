@@ -4,12 +4,16 @@
  */
 package com.mmxlabs.models.lng.transfers.editor.displaycomposites;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -19,6 +23,7 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -37,9 +42,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
@@ -97,6 +105,10 @@ public class PreferredPricingBasisTableCreator {
 							for (EObject o : r.getContents()) {
 								if (o instanceof MMXRootObject mmxo) {
 									this.proposalHelper.setRootObject(mmxo);
+									if (getViewer() != null) {
+										setContentProvider(new ArrayContentProvider());
+										getViewer().setInput(getInputs(mmxo));
+									}
 								}
 							}
 						}
@@ -115,8 +127,31 @@ public class PreferredPricingBasisTableCreator {
 						}
 						return value;
 					}
+					
+					@Override
+					protected void doSetValue(Object value) {
+						if (value instanceof NamedObject no) {
+							super.doSetValue(no.getName());
+						} else {
+							super.doSetValue(value);
+						}
+					}
 				};
-				editor.setContentProvider(new ArrayContentProvider());
+				editor.setLabelProvider(new LabelProvider() {
+					@Override
+					public String getText(final Object element) {
+
+						// Is the element missing?
+						if (element == null || "".equals(element)) {
+							return "";
+						}
+
+						if (element instanceof NamedObject namedObject) {
+							return namedObject.getName();
+						}
+						return super.getText(element);
+					}
+				});
 				editor.setValue(object);
 				return editor;
 			}
@@ -201,5 +236,19 @@ public class PreferredPricingBasisTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
+	}
+	
+	@NonNull
+	private static List<String> getInputs(final @NonNull MMXRootObject mmxo){
+		if (mmxo instanceof LNGScenarioModel scenarioModel // 
+				&& scenarioModel.getReferenceModel() != null //
+				&& scenarioModel.getReferenceModel().getPricingModel() != null) {
+			final List<PricingBasis> pb = scenarioModel.getReferenceModel().getPricingModel().getPricingBases();
+			if (pb != null) {
+				return pb.stream().map(NamedObject::getName).toList();
+			}
+
+		}
+		return Collections.emptyList();
 	}
 }

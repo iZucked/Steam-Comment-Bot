@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.lng.transfers.presentation.composites;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
+import com.mmxlabs.models.lng.transfers.editor.PricingBasisWrapper;
 import com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.SimpleOperationInlineEditor;
@@ -31,6 +35,13 @@ public class TransferRecordComponentHelper extends DefaultComponentHelper {
 				}
 			};
 		});
+		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES)) {
+			addEditor(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS, topClass -> {
+				return new PricingBasisWrapper(new PricingBasisInlineEditor(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS));
+			});
+		} else {
+			ignoreFeatures.add(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS);
+		}
 		addEditor(TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS, topClass -> {
 			return new CompanyStatusInlineEditor("Type", TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS);
 		});

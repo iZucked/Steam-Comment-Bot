@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.cargo.editor;
+package com.mmxlabs.models.lng.pricing.editor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,6 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 		
 		combo.getCombo().addModifyListener(e -> {
 			if (combo.getCombo().getSelection() != null) {
-				System.out.println(combo.getCombo().getText());
 				doSetValue(combo.getCombo().getText(), true);
 			}
 			
@@ -85,8 +84,8 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 		EditingDomain editingDomain = commandHandler.getEditingDomain();
 		for (Resource r : editingDomain.getResourceSet().getResources()) {
 			for (EObject o : r.getContents()) {
-				if (o instanceof MMXRootObject) {
-					this.proposalHelper.setRootObject((MMXRootObject) o);
+				if (o instanceof MMXRootObject mmxo) {
+					this.proposalHelper.setRootObject(mmxo);
 				}
 			}
 		}
@@ -94,9 +93,14 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 		return super.wrapControl(ccombo);
 	}
 	
-	public void addValues(final List<? extends EObject> values) {
-		if (combo != null && !ccombo.isDisposed() && !values.isEmpty()) {
-			valueList.addAll(0, values);
+	public void addValues(final List<? extends EObject> values, final boolean clear) {
+		if (combo != null && !ccombo.isDisposed()) {
+			if (clear) {
+				valueList.clear();
+			}
+			if (!values.isEmpty()) {
+				valueList.addAll(0, values);
+			}
 			combo.setInput(valueList);
 		}
 	}

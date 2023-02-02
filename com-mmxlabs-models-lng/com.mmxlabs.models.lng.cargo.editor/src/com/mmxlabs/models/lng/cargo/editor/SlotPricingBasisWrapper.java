@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -26,7 +27,7 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
  * A Class to wrap the slot price expression to see if it should be shown with
  * particular contracts
  * 
- * @author Simon Goodall
+ * @author Simon Goodall, FM
  * 
  */
 public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
@@ -51,6 +52,11 @@ public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
 
 					LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
 					if (priceInfo != null) {
+						
+						if (wrapped instanceof PricingBasisInlineEditor pbie //
+								&& priceInfo instanceof ExpressionPriceParameters epp) {
+							pbie.addValues(epp.getPreferredPBs(), true);
+						}
 
 						EAnnotation eAnnotation = priceInfo.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
 						if (eAnnotation != null) {
@@ -104,7 +110,7 @@ public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
 					
 					if (wrapped instanceof PricingBasisInlineEditor pbie //
 							&& priceInfo instanceof ExpressionPriceParameters epp) {
-						pbie.addValues(epp.getPreferredPBs());
+						pbie.addValues(epp.getPreferredPBs(), true);
 					}
 
 					EAnnotation eAnnotation = priceInfo.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");

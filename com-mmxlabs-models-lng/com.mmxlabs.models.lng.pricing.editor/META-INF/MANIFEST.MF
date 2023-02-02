@@ -6,7 +6,8 @@ Bundle-Version: 6.1.3.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: com.mmxlabs.models.lng.pricing.importers,
+Export-Package: com.mmxlabs.models.lng.pricing.editor,
+ com.mmxlabs.models.lng.pricing.importers,
  com.mmxlabs.models.lng.pricing.presentation.composites,
  com.mmxlabs.models.lng.pricing.ui.autocomplete,
  com.mmxlabs.models.lng.pricing.ui.commands
