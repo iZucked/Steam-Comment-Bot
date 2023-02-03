@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
+import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
@@ -28,6 +29,8 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 
 	protected ComboViewer combo;
 	private Control ccombo;
+	private boolean modifyListenerEnabled = true;
+	
 	protected final List<EObject> valueList = new ArrayList<>();
 	
 	public PricingBasisInlineEditor(final ETypedElement typedElement) {
@@ -74,7 +77,8 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 		});
 		
 		combo.getCombo().addModifyListener(e -> {
-			if (combo.getCombo().getSelection() != null) {
+			
+			if (modifyListenerEnabled && combo.getCombo().getSelection() != null) {
 				doSetValue(combo.getCombo().getText(), true);
 			}
 			
@@ -94,17 +98,34 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 	}
 	
 	public void addValues(final List<? extends EObject> values, final boolean clear) {
-		if (combo != null && !ccombo.isDisposed()) {
-			if (clear) {
-				valueList.clear();
+		try {
+			modifyListenerEnabled = false;
+			if (combo != null && !ccombo.isDisposed()) {
+				if (clear) {
+					valueList.clear();
+				}
+				if (!values.isEmpty()) {
+					valueList.addAll(0, values);
+				}
+				combo.setInput(valueList);
 			}
-			if (!values.isEmpty()) {
-				valueList.addAll(0, values);
-			}
-			combo.setInput(valueList);
+		} finally {
+			modifyListenerEnabled = true;
 		}
 	}
-
+	
+	@Override
+	protected void updateDisplay(final Object value) {
+		if (value == null) {
+			if (combo == null || ccombo.isDisposed()) {
+				return;
+			}
+			combo.getCombo().setText("");
+		} else {
+			super.updateDisplay(value);
+		}
+	}
+	
 	@Override
 	protected void updateValueDisplay(Object value) {
 		if (combo == null || ccombo.isDisposed()) {
@@ -122,6 +143,12 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Object getInitialUnsetValue() {
 		return null;
+	}
+	
+	@Override
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
+		return TransfersPackage.Literals.TRANSFER_RECORD__TRANSFER_AGREEMENT.equals(changedFeature) ||
+				super.updateOnChangeToFeature(changedFeature);
 	}
 
 }

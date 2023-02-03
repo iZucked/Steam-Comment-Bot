@@ -1382,11 +1382,11 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		final TransfersPackage transferPackage = TransfersPackage.eINSTANCE;
 		if (transferPackage.getTransferRecord_PriceExpression() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PriceExpression(),"");
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PriceExpression(), "");
 		} else if (transferPackage.getTransferRecord_Incoterm() == feature) {
 			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_Incoterm(), TransferIncoterm.BOTH);
 		} else if (transferPackage.getTransferRecord_PricingBasis() == feature) {
-			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PricingBasis(),"");
+			return new DelegateInformation(transferPackage.getTransferRecord_TransferAgreement(), transferPackage.getTransferAgreement_PricingBasis(), null);
 		} else if (transferPackage.getTransferRecord_FromBU() == feature) {
 			return new DelegateInformation(null, null, null) {
 

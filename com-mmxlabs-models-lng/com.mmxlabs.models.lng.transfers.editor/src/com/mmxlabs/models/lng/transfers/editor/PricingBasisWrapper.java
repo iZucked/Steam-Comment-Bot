@@ -48,10 +48,6 @@ public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
 				if (notification.getNewValue() != null) {
 					final TransferAgreement agreement = (TransferAgreement) notification.getNewValue();
 
-					if (wrapped instanceof PricingBasisInlineEditor pbie) {
-						pbie.addValues(agreement.getPreferredPBs(), true);
-					}
-
 					EAnnotation eAnnotation = agreement.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
 					if (eAnnotation != null) {
 						String value = eAnnotation.getDetails().get("allowExpressionOverride");
@@ -66,7 +62,7 @@ public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
 
 					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 					dialogContext.getDialogController().updateEditorVisibility();
-					super.display(dialogContext, scenario, input, range);
+					display(dialogContext, scenario, input, range);
 					Label label = getLabel();
 					if (label != null) {
 						label.pack();

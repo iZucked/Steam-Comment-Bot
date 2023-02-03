@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
 import com.mmxlabs.models.lng.cargo.editor.SlotPricingBasisWrapper;
@@ -38,6 +37,9 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE);
+		
+		//TODO: check layout for the feature:
+		// ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -48,16 +50,27 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			}
 		});
 
-		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
-		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES)) {
-			addEditor(CargoPackage.Literals.SLOT__PRICING_BASIS, topClass -> {
-				return new SlotPricingBasisWrapper(new PricingBasisInlineEditor(CargoPackage.Literals.SLOT__PRICING_BASIS));
-			});
-		} else {
-			ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
-		}
+		addEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, topClass -> {
+			return new SlotExpressionWrapper(new TextInlineEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION) {
+				@Override
+				protected boolean updateOnChangeToFeature(final Object changedFeature) {
+					return CargoPackage.Literals.SLOT__CONTRACT.equals(changedFeature);
+				}
 
+				@Override
+				protected void updateDisplay(final Object value) {
+					if (value == null) {
+						updateValueDisplay(value);
+					} else {
+						super.updateDisplay(value);
+					}
+				}
+			});
+		});
 		
+		addEditorWithWrapperForLicenseFeature(KnownFeatures.FEATURE_PRICING_BASES, CargoPackage.Literals.SLOT__PRICING_BASIS, //
+				PricingBasisInlineEditor::new, SlotPricingBasisWrapper::new);
+
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 
 		addEditor(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,

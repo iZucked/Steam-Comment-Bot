@@ -52,11 +52,6 @@ public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
 
 					LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
 					if (priceInfo != null) {
-						
-						if (wrapped instanceof PricingBasisInlineEditor pbie //
-								&& priceInfo instanceof ExpressionPriceParameters epp) {
-							pbie.addValues(epp.getPreferredPBs(), true);
-						}
 
 						EAnnotation eAnnotation = priceInfo.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
 						if (eAnnotation != null) {
@@ -72,7 +67,7 @@ public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
 
 					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 					dialogContext.getDialogController().updateEditorVisibility();
-					super.display(dialogContext, scenario, input, range);
+					display(dialogContext, scenario, input, range);
 					Label label = getLabel();
 					if (label != null) {
 						label.pack();
