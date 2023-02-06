@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -40,7 +39,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PartialCase partialCase) {
+		if (target instanceof @NonNull PartialCase partialCase && SandboxConstraintUtils.shouldValidate(partialCase)) {
 
 			final Set<BuyOption> loadSlots = new HashSet<>();
 			final Set<SellOption> dischargeSlots = new HashSet<>();
@@ -59,7 +58,9 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 				}
 			});
 			// Second pass, report problem slots
-			processPartialCase(partialCase, (row, slot) -> {}, (row, slot) -> {});
+			processPartialCase(partialCase, (row, slot) -> {
+			}, (row, slot) -> {
+			});
 
 			final Set<PartialCaseRow> loadQuestion = new HashSet<>();
 			final Set<PartialCaseRow> dischargeQuestion = new HashSet<>();
