@@ -35,17 +35,17 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.OptioniserUnit;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 
 @SuppressWarnings("unused")
 @ExtendWith(ShiroRunner.class)
-public class SlotInsertionTests extends AbstractMicroTestCase {
+public class OptioniserTests extends AbstractMicroTestCase {
 	@Override
 	protected int getThreadCount() {
 		return 4;
@@ -67,14 +67,14 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -107,9 +107,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
@@ -147,9 +147,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -165,7 +165,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null);
 	}
 
-	private SlotInsertionOptimiserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {
+	private OptioniserUnit getOptioniserUnit(final LNGScenarioRunner scenarioRunner) {
 		@NonNull
 		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		@NonNull
@@ -173,7 +173,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 
 		final InsertionOptimisationStage stage = ScenarioUtils.createDefaultInsertionSettings();
 
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage,
+		final OptioniserUnit slotInserter = new OptioniserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage,
 				scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
 		return slotInserter;
 	}
@@ -196,14 +196,14 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -239,9 +239,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
@@ -281,9 +281,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -320,14 +320,14 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 			Assertions.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result2);
 			Assertions.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -370,9 +370,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertEquals(2, result1.getSolutions().size());
@@ -417,9 +417,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			Assertions.assertEquals(2, result1.getSolutions().size());
@@ -479,9 +479,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final AtomicBoolean bool = new AtomicBoolean(false);
@@ -534,9 +534,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
@@ -618,9 +618,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult results = slotInserter.run(Collections.singletonList(discharge_DES4), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 
 			Assertions.assertTrue(results.getSolutions().size() > 1);
 			// Next validate solution types exist
@@ -672,9 +672,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			// Clear default stages so we can run our own stuff here.
 			plan.getStages().clear();
 		}, null, scenarioRunner -> {
-			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+			final OptioniserUnit slotInserter = getOptioniserUnit(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Lists.newArrayList(load_FOB1, load_FOB2), Collections.emptyList(), 10, new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Lists.newArrayList(load_FOB1, load_FOB2), Collections.emptyList(), 10, new OptioniserLogger(), new NullProgressMonitor());
 			Assertions.assertNotNull(result1);
 //			Assertions.assertTrue(result1.getSolutions().size() == 2);
 //			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();

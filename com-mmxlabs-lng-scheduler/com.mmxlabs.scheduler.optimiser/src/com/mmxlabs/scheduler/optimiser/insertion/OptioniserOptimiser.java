@@ -39,7 +39,7 @@ import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 @NonNullByDefault
-public class SlotInsertionOptimiser {
+public class OptioniserOptimiser {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -65,7 +65,7 @@ public class SlotInsertionOptimiser {
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
 
-	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> providedSlots) {
+	private @Nullable Pair<ISequences, Long> insert(final OptioniserInitialState state, final int seed, final List<ISequenceElement> providedSlots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
@@ -258,7 +258,7 @@ public class SlotInsertionOptimiser {
 		}
 	}
 
-	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final SlotInsertionOptimiserInitialState state, final int seed) {
+	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final OptioniserInitialState state, final int seed) {
 
 		assert SequencesHitchHikerHelper.checkValidSequences(state.originalRawSequences);
 

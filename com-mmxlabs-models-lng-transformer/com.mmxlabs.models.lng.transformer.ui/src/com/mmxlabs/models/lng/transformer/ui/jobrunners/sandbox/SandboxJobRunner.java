@@ -110,7 +110,7 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 @NonNullByDefault
@@ -399,7 +399,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
 					final long startTime = System.currentTimeMillis();
-					SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+					OptioniserLogger logger = new OptioniserLogger();
 					try {
 						return runner.runInsertion(logger, monitor);
 					} finally {

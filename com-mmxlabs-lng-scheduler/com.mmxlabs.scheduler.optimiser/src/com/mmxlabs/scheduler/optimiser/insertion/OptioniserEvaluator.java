@@ -26,9 +26,9 @@ import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
 @NonNullByDefault
-public class SlotInsertionEvaluator {
+public class OptioniserEvaluator {
 
-	protected static final Logger LOG = LoggerFactory.getLogger(SlotInsertionEvaluator.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(OptioniserEvaluator.class);
 
 	@Inject
 	private Injector injector;
@@ -39,7 +39,7 @@ public class SlotInsertionEvaluator {
 	@Inject
 	private IMoveHelper moveHelper;
 
-	public @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final ISequenceElement load, ISequenceElement discharge) {
+	public @Nullable Pair<ISequences, Long> insert(final OptioniserInitialState state, final ISequenceElement load, ISequenceElement discharge) {
 
 		IMove move = null;
 		if (moveHelper.isDESPurchase(load)) {

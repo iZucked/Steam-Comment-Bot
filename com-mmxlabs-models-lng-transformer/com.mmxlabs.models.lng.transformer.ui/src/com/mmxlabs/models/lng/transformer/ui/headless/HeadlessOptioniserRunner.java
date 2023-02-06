@@ -32,7 +32,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 
 public class HeadlessOptioniserRunner {
 
@@ -70,7 +70,7 @@ public class HeadlessOptioniserRunner {
 	 * @throws Exception
 	 */
 
-	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
+	public void run(final int startTry, final File lingoFile, final OptioniserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
@@ -78,19 +78,19 @@ public class HeadlessOptioniserRunner {
 		});
 	}
 
-	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
+	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final OptioniserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
 		CSVImporter.runFromCSVDirectory(csvDirectory, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
+	public void runFromCsvZipFile(final int startTry, final File zipFile, final OptioniserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 
 		CSVImporter.runFromCSVZipFile(zipFile, (mr, sdp) -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
+	public SlotInsertionOptions run(final OptioniserLogger logger, final OptioniserSettings options, final ScenarioModelRecord scenarioModelRecord,
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
 		final UserSettings userSettings = options.userSettings;
@@ -124,7 +124,7 @@ public class HeadlessOptioniserRunner {
 		return result;
 	}
 
-	public void run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+	public void run(final OptioniserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 

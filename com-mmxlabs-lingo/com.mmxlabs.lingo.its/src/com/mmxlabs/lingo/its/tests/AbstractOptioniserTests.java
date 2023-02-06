@@ -28,13 +28,13 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.OptioniserUnit;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 
-public abstract class AbstractSlotInsertionTests {
+public abstract class AbstractOptioniserTests {
 
 	protected void runTest(final URL scenarioURL, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
 			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) throws Exception {
@@ -77,19 +77,19 @@ public abstract class AbstractSlotInsertionTests {
 		runner.setIterations(iterations);
 		runner.prepare();
 
-		final IMultiStateResult results = runner.runInsertion(new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+		final IMultiStateResult results = runner.runInsertion(new OptioniserLogger(), new NullProgressMonitor());
 
 		solutionChecker.accept(runner.getLNGScenarioRunner(), results);
 
 	}
 
-	protected SlotInsertionOptimiserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {
+	protected OptioniserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {
 		final @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		final @NonNull LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 
 		final InsertionOptimisationStage stage = ScenarioUtils.createDefaultInsertionSettings();
 
-		return new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(),
+		return new OptioniserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(),
 				dataTransformer.getInitialResult(), Collections.emptyList());
 	}
 }

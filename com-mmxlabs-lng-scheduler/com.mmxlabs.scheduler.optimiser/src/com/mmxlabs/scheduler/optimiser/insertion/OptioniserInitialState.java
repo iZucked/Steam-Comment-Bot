@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequences;
  * @author Simon Goodall
  *
  */
-public class SlotInsertionOptimiserInitialState {
+public class OptioniserInitialState {
 
 	/**
 	 * List of compulsary, but unsed slots in original solution. The final solution should not contain any additional slots meeting this criteria.
