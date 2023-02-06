@@ -59,52 +59,32 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 				}
 			});
 			// Second pass, report problem slots
-			processPartialCase(partialCase, (row, slot) -> {
-				// if (duplicatedLoadSlots.contains(slot)) {
-				// final DetailConstraintStatusDecorator deco = new
-				// DetailConstraintStatusDecorator(
-				// (IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot
-				// used multiple times.", viewName, IConstraintStatus.ERROR)));
-				// deco.addEObjectAndFeature(row,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
-				// statuses.add(deco);
-				// }
-			}, (row, slot) -> {
-				// if (duplicatdDischargeSlots.contains(slot)) {
-				// final DetailConstraintStatusDecorator deco = new
-				// DetailConstraintStatusDecorator(
-				// (IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot
-				// used multiple times.", viewName, IConstraintStatus.ERROR)));
-				// deco.addEObjectAndFeature(row,
-				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
-				// statuses.add(deco);
-				// }
-			});
+			processPartialCase(partialCase, (row, slot) -> {}, (row, slot) -> {});
 
 			final Set<PartialCaseRow> loadQuestion = new HashSet<>();
 			final Set<PartialCaseRow> dischargeQuestion = new HashSet<>();
 
 			// First pass, find problem slots
 			processPartialCase(partialCase, (row, slot) -> {
-				if (slot != null && slot instanceof BuyOpportunity) {
-					String priceExpression = ((BuyOpportunity) slot).getPriceExpression();
+				if (slot != null && slot instanceof BuyOpportunity buyOpp) {
+					final String priceExpression = buyOpp.getPriceExpression();
 					if (priceExpression != null && priceExpression.contains("?")) {
 						loadQuestion.add(row);
 					}
 				}
 			}, (row, slot) -> {
-				if (slot != null && slot instanceof SellOpportunity) {
-					String priceExpression = ((SellOpportunity) slot).getPriceExpression();
-					if (slot != null && slot instanceof SellOpportunity && priceExpression != null && priceExpression.contains("?")) {
+				if (slot != null && slot instanceof SellOpportunity sellOpp) {
+					final String priceExpression = sellOpp.getPriceExpression();
+					if (priceExpression != null && priceExpression.contains("?")) {
 						dischargeQuestion.add(row);
 					}
 				}
 			});
 			// Second pass, report problem slots
-			if (loadQuestion.size() > 0 && dischargeQuestion.size() > 0) {
+			if (!loadQuestion.isEmpty() && !dischargeQuestion.isEmpty()) {
 				// just add on distinct rows
 				loadQuestion.addAll(dischargeQuestion);
-				processPartialCaseRow(partialCase, (row) -> {
+				processPartialCaseRow(partialCase, row -> {
 					if (loadQuestion.contains(row)) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a ? on a buy and load option", viewName)));
@@ -117,149 +97,27 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 			if (!partialCase.isKeepExistingScenario()) {
 				processPartialShipping(partialCase, ctx, statuses);
 			}
-			// /*
-			// * Mismatched shipping type
-			// */
-			// Set<PartialCaseRow> mismatchedShippingTypes = new HashSet<>();
-			// // First pass, find problem slots
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (row.getBuyOptions().stream().filter(isDESPurchase()).count() > 0
-			// && row.getSellOptions().stream().filter(isFOBSale()).count() > 0) {
-			// mismatchedShippingTypes.add(row);
-			// }
-			// });
-			// // Second pass, report problem slots
-			// if (mismatchedShippingTypes.size() > 0) {
-			// // just add on distinct rows
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (mismatchedShippingTypes.contains(row)) {
-			// final DetailConstraintStatusDecorator deco = new
-			// DetailConstraintStatusDecorator((IConstraintStatus)
-			// ctx.createFailureStatus(String.format("%s - contains row(s) with a DES
-			// purchase and
-			// a FOB Sale", viewName)));
-			// deco.addEObjectAndFeature(row,
-			// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			// statuses.add(deco);
-			// }
-			// });
-			// }
-			//
-			// /*
-			// * Mismatched shipping type
-			// */
-			// Set<PartialCaseRow> mismatchedShippingOption = new HashSet<>();
-			// // First pass, find problem slots
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
-			// && row.getSellOptions().stream().filter(isDESSale()).count() > 0
-			// && row.getShipping().stream().filter(isNominated()).count() > 0) {
-			// mismatchedShippingOption.add(row);
-			// }
-			// });
-			// // Second pass, report problem slots
-			// if (mismatchedShippingOption.size() > 0) {
-			// // just add on distinct rows
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (mismatchedShippingOption.contains(row)) {
-			// final DetailConstraintStatusDecorator deco = new
-			// DetailConstraintStatusDecorator((IConstraintStatus)
-			// ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB
-			// purchase and
-			// a DES Sale and a nominated vessel", viewName)));
-			// deco.addEObjectAndFeature(row,
-			// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			// statuses.add(deco);
-			// }
-			// });
-			// }
-			//
-			// /*
-			// * Mismatched shipping type
-			// */
-			// Set<PartialCaseRow> nullShippingOption = new HashSet<>();
-			// // First pass, find problem slots
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
-			// && row.getSellOptions().stream().filter(isDESSale()).count() > 0
-			// && row.getShipping().isEmpty()) {
-			// nullShippingOption.add(row);
-			// }
-			// });
-			// // Second pass, report problem slots
-			// if (nullShippingOption.size() > 0) {
-			// // just add on distinct rows
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (nullShippingOption.contains(row)) {
-			// final DetailConstraintStatusDecorator deco = new
-			// DetailConstraintStatusDecorator((IConstraintStatus)
-			// ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB
-			// purchase and
-			// a DES Sale and no shipping option", viewName)));
-			// deco.addEObjectAndFeature(row,
-			// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			// statuses.add(deco);
-			// }
-			// });
-			// }
-			//
-			// /*
-			// * The big lateness loop!
-			// */
-			// // first pass
-			// Set<PartialCaseRow> lateRows = new HashSet<>();
-			// processPartialCaseRow(partialCase, (row) -> {
-			// int lateness = getLateness(extraContext, row);
-			// if (lateness < 0) {
-			// lateRows.add(row);
-			// }
-			// });
-			// // Second pass, report problem slots
-			// if (lateRows.size() > 0) {
-			// // just add on distinct rows
-			// processPartialCaseRow(partialCase, (row) -> {
-			// if (lateRows.contains(row)) {
-			// final DetailConstraintStatusDecorator deco = new
-			// DetailConstraintStatusDecorator((IConstraintStatus)
-			// ctx.createFailureStatus(String.format("%s - a combination in the row will
-			// create a
-			// late cargo", viewName)), IConstraintStatus.WARNING);
-			// deco.addEObjectAndFeature(row,
-			// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-			// statuses.add(deco);
-			// }
-			// });
-			// }
-
 		}
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false)
-				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));
+		return b -> ((b instanceof BuyReference buyRef && buyRef.getSlot() != null && !buyRef.getSlot().isDESPurchase()) //
+				|| (b instanceof BuyOpportunity buyOpp && !buyOpp.isDesPurchase()));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
-		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
-				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
+		return b -> ((b instanceof BuyReference buyRef && buyRef.getSlot() != null && buyRef.getSlot().isDESPurchase()) //
+				|| (b instanceof BuyOpportunity buyOpp && buyOpp.isDesPurchase()));
 	}
 
 	public static Predicate<SellOption> isFOBSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
-				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
+		return s -> ((s instanceof SellReference sellRef && sellRef.getSlot() != null && sellRef.getSlot().isFOBSale()) //
+				|| (s instanceof SellOpportunity sellOpp && sellOpp.isFobSale()));
 	}
 
 	public static Predicate<SellOption> isDESSale() {
-		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false)
-				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == false));
-	}
-
-	private static Predicate<ShippingOption> isNominated() {
-		return s -> s != null && s instanceof NominatedShippingOption;
-	}
-
-	private static Predicate<ShippingOption> isShippingNull() {
-		return s -> s != null;
+		return s -> ((s instanceof SellReference sellRef && sellRef.getSlot() != null && !sellRef.getSlot().isFOBSale()) //
+				|| (s instanceof SellOpportunity sellOpp && !sellOpp.isFobSale()));
 	}
 
 	public void processPartialCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, BuyOption> visitLoadSlot, final BiConsumer<PartialCaseRow, SellOption> visitDischargeSlot) {
