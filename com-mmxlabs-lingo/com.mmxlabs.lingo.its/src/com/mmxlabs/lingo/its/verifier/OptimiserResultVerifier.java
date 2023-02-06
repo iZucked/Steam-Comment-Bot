@@ -488,10 +488,10 @@ public class OptimiserResultVerifier {
 
 	public @Nullable ISequences verifySolutionExistsInResults(final List<SolutionData> solutionDataList, final Consumer<String> errorHandler) {
 
-		for (final SolutionData data : solutionDataList) {
+		LOOP_DATA: for (final SolutionData data : solutionDataList) {
 			for (final Function<SolutionData, Boolean> checker : anySolutionChecks) {
 				if (!checker.apply(data)) {
-					continue;
+					continue LOOP_DATA;
 				}
 			}
 			return data.getLookupManager().getRawSequences();
