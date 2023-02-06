@@ -37,10 +37,14 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PartialCaseRow partialCaseRow) {
+		if (target instanceof @NonNull PartialCaseRow partialCaseRow) {
+			if (!SandboxConstraintUtils.shouldValidate(partialCaseRow)) {
+				return;
+			}
+
 			PortModel portModel = null;
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
+			if (rootObject instanceof @NonNull LNGScenarioModel lngScenarioModel) {
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
@@ -155,6 +159,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
+
 	}
 
 	private int getLateness(final PortModel portModel, final PartialCaseRow row, final ModelDistanceProvider modelDistanceProvider) {

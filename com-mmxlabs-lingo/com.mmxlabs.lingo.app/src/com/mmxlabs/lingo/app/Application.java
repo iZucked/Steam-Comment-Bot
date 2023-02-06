@@ -190,8 +190,6 @@ public class Application implements IApplication {
 			}
 		}
 
-		TrustStoreManager.refresh();
-		
 		// Don't abort LiNGO if p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
 		try {

@@ -18,12 +18,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
-import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -42,7 +40,7 @@ public class PartialCaseRowBuyToSellConstraint extends AbstractModelMultiConstra
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof PartialCaseRow partialCaseRow) {
+		if (target instanceof @NonNull PartialCaseRow partialCaseRow && SandboxConstraintUtils.shouldValidate(partialCaseRow)) {
 			validateNonShipped(ctx, statuses, partialCaseRow, AnalyticsBuilder.isFOBPurchase(), AnalyticsBuilder.isFOBSale());
 			validateNonShipped(ctx, statuses, partialCaseRow, AnalyticsBuilder.isDESPurchase(), AnalyticsBuilder.isDESSale());
 		}

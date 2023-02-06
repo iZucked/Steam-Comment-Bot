@@ -102,7 +102,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 			}
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider,
-					new ActualsAssignableDateProvider(actualsModel));
+					new ActualsAssignableDateProvider(actualsModel), null);
 			if (collectAssignments != null) {
 				// Check sequencing for each grouping
 				for (final CollectedAssignment collectedAssignment : collectAssignments) {

@@ -54,6 +54,10 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
 					if (changedFeature == CargoPackage.eINSTANCE.getSlot_Contract()) {
 						return true;
+					} else if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedPorts()) {
+						return true;
+					} else if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedPortsOverride()) {
+						return true;
 					} else if (changedFeature == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 						return true;
 					} else if (changedFeature == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
@@ -77,8 +81,7 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
-					if (target instanceof Slot) {
-						final Slot slot = (Slot) target;
+					if (target instanceof Slot<?> slot) {
 						final Contract contract = slot.getContract();
 
 						PortCapability capability = null;
@@ -91,27 +94,25 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						} else {
 							// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
 							// -- However if the slot is not linked, then we are free to change
-							if (target instanceof LoadSlot) {
-								LoadSlot loadSlot = (LoadSlot) target;
+							if (target instanceof LoadSlot loadSlot) {
 								if (!loadSlot.isDESPurchase()) {
 									capability = PortCapability.LOAD;
 								} else {
 									if (loadSlot.getCargo() == null) {
-//										capability = PortCapability.DISCHARGE;
+										// capability = PortCapability.DISCHARGE;
 									}
 								}
-							} else if (target instanceof DischargeSlot) {
-								DischargeSlot dischargeSlot = (DischargeSlot) target;
+							} else if (target instanceof DischargeSlot dischargeSlot) {
 								if (!dischargeSlot.isFOBSale()) {
 									capability = PortCapability.DISCHARGE;
 								} else {
 									if (dischargeSlot.getCargo() == null) {
-//										capability = PortCapability.LOAD;
+										// capability = PortCapability.LOAD;
 									}
 								}
 							}
 						}
-						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
+						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<>();
 						for (final Pair<String, EObject> p : delegateValue) {
 							if (capability == null || ((Port) p.getSecond()).getCapabilities().contains(capability)) {
 								filterOne.add(p);
@@ -122,19 +123,16 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 							// Make sure current selection is in the list
 							final Port port = slot.getPort();
 							if (port != null) {
-								final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
+								final Pair<String, EObject> pair = Pair.of(port.getName(), port);
 								if (!filterOne.contains(pair)) {
 									filterOne.add(pair);
 								}
 							}
 						}
 
-						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
-						if (contract == null) {
-							return filterOne;
-						}
+						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>();
 
-						Set<Port> ports = SetUtils.getObjects(contract.getAllowedPorts());
+						Set<Port> ports = SetUtils.getObjects(slot.getSlotOrDelegateAllowedPorts());
 
 						if (ports != null && !ports.isEmpty()) {
 							for (final Pair<String, EObject> value : filterOne) {
@@ -150,7 +148,7 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 							// Make sure current selection is in the list (check again in case filtered by contract)
 							final Port port = slot.getPort();
 							if (port != null) {
-								final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
+								final Pair<String, EObject> pair = new Pair<>(port.getName(), port);
 								if (!filteredList.contains(pair)) {
 									filteredList.add(pair);
 								}

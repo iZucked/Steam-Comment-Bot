@@ -24,6 +24,7 @@ import com.google.inject.Module;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -135,7 +136,7 @@ public class StrategicScenarioModuleHelper {
 			}
 
 			@Provides
-			@Named(LNGScenarioTransformer.EXTRA_CHARTER_IN_MARKETS)
+			@Named(ExtraDataProvider.EXTRA_CHARTER_IN_MARKETS)
 			@Singleton
 			private List<CharterInMarket> provideDefaultVessel(@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
 				return Collections.singletonList(market);

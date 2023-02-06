@@ -4,16 +4,18 @@
  */
 package com.mmxlabs.license.ssl.internal;
 
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
+import java.security.KeyStore;
+
+import javax.net.ssl.SSLContext;
+
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.ssl.SSLContexts;
 import org.eclipse.ecf.filetransfer.service.IRetrieveFileTransfer;
 import org.eclipse.ecf.filetransfer.service.IRetrieveFileTransferFactory;
 import org.eclipse.ecf.provider.filetransfer.httpclient45.HttpClientRetrieveFileTransfer;
+
+import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.license.ssl.TrustStoreManager;
 
 /**
  * Copy and paste from ECF so we can customise the https socket factory to use the system properties.
@@ -27,12 +29,32 @@ public class HttpClientRetrieveFileTransferFactory implements IRetrieveFileTrans
 	@Override
 	public IRetrieveFileTransfer newInstance() {
 
-		SSLSocketFactory factory = new SSLSocketFactory(SSLContexts.createSystemDefault(), SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+		final HttpClientBuilder builder = HttpClientBuilder.create();
+		final var sslBuilder = SSLContexts.custom();
+		try {
+			LicenseManager.loadLicenseKeystore(sslBuilder);
+		} catch (final Exception e1) {
+			e1.printStackTrace();
+		}
 
-		final SchemeRegistry registry = new SchemeRegistry();
-		registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-		registry.register(new Scheme("https", 443, factory));
+		final boolean useJavaTruststore = false;
+		final boolean useWindowsTruststore = true;
 
-		return new HttpClientRetrieveFileTransfer(new DefaultHttpClient(new SingleClientConnManager(registry)));
+		try {
+			final KeyStore p = TrustStoreManager.loadTruststore(true, useJavaTruststore, useWindowsTruststore);
+			if (p != null) {
+				sslBuilder.loadTrustMaterial(p, null);
+			}
+
+			final SSLContext sslContext = sslBuilder.build();
+			builder.setSSLContext(sslContext);
+
+		} catch (final Exception e1) {
+			e1.printStackTrace();
+		}
+		// HttpHost httpHost = URIUtils.extractHost(url.toURI());
+		// configureProxyServer(httpHost, builder);
+
+		return new HttpClientRetrieveFileTransfer(builder.build());
 	}
 }

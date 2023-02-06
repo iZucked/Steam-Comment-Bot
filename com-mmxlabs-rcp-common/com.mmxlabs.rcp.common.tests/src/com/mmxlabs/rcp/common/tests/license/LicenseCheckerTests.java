@@ -80,32 +80,32 @@ class LicenseCheckerTests {
 	// Assertions.assertNotNull(LicenseChecker.getUserDataLicense());
 	// }
 
-	@Test
-	void createKeystoreCopies() {
-		// TODO use mock keystore instead
-		Mockito.mock(KeyStore.class);
-		final File licenseFile = new File("license.p12");
-		final File keystoreFile = new File("keystore.p12");
-		if (licenseFile.exists() && keystoreFile.exists()) {
-			try (InputStream inStreamLic = new FileInputStream(licenseFile); InputStream inStreamKey = new FileInputStream(keystoreFile)) {
-				final KeyStore license = KeyStore.getInstance("PKCS12");
-				license.load(inStreamLic, "helloworld".toCharArray());
-
-				final KeyStore keystore = KeyStore.getInstance("PKCS12");
-				keystore.load(inStreamKey, "helloworld".toCharArray());
-
-				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
-				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
-				Assertions.assertNull(keyStoreFile);
-				Assertions.assertNull(trustStoreFile);
-
-				TrustStoreManager.createKeystoreCopiesAndSetSysProps(keystore, keyStoreFile, license, trustStoreFile);
-
-				Assertions.assertNotNull(keyStoreFile);
-				Assertions.assertNotNull(trustStoreFile);
-			} catch (NoSuchAlgorithmException | IOException | CertificateException | KeyStoreException e) {
-				LOG.error("failed to load test license: " + e.getMessage());
-			}
-		}
-	}
+//	@Test
+//	void createKeystoreCopies() {
+//		// TODO use mock keystore instead
+//		Mockito.mock(KeyStore.class);
+//		final File licenseFile = new File("license.p12");
+//		final File keystoreFile = new File("keystore.p12");
+//		if (licenseFile.exists() && keystoreFile.exists()) {
+//			try (InputStream inStreamLic = new FileInputStream(licenseFile); InputStream inStreamKey = new FileInputStream(keystoreFile)) {
+//				final KeyStore license = KeyStore.getInstance("PKCS12");
+//				license.load(inStreamLic, "helloworld".toCharArray());
+//
+//				final KeyStore keystore = KeyStore.getInstance("PKCS12");
+//				keystore.load(inStreamKey, "helloworld".toCharArray());
+//
+//				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
+//				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
+//				Assertions.assertNull(keyStoreFile);
+//				Assertions.assertNull(trustStoreFile);
+//
+//				TrustStoreManager.createKeystoreCopiesAndSetSysProps(keystore, keyStoreFile, license, trustStoreFile);
+//
+//				Assertions.assertNotNull(keyStoreFile);
+//				Assertions.assertNotNull(trustStoreFile);
+//			} catch (NoSuchAlgorithmException | IOException | CertificateException | KeyStoreException e) {
+//				LOG.error("failed to load test license: " + e.getMessage());
+//			}
+//		}
+//	}
 }

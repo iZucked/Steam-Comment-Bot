@@ -109,8 +109,8 @@ public class VesselEventImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), null);
+									final VesselCharter availability = AssignmentEditorHelper.findVesselCharter(v, ((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(),
+											null);
 									assignableElement.setVesselAssignmentType(availability);
 								}
 							}
@@ -131,8 +131,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselCharter charter = AssignmentEditorHelper.findVesselCharter(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), null);
+									final VesselCharter charter = AssignmentEditorHelper.findVesselCharter(v, ((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselCharters(), null);
 									assignableElement.setVesselAssignmentType(charter);
 								}
 							}

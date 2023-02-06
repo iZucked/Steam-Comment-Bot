@@ -164,12 +164,6 @@ public abstract class AbstractMicroTestCase {
 
 	public void evaluateWithLSOTest(final boolean optimise, @Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker, final IOptimiserInjectorService overrides) {
-		final Consumer<OptimisationPlan> planCustomiser;
-		if (tweaker != null) {
-			planCustomiser = tweaker;
-		} else {
-			planCustomiser = plan -> ScenarioUtils.setLSOStageIterations(plan, 10_000);
-		}
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -177,6 +171,18 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		evaluateWithLSOTest(optimise, userSettings, tweaker, runnerHookFactory, checker, overrides);
+	}
+
+	public void evaluateWithLSOTest(final boolean optimise, UserSettings userSettings, @Nullable final Consumer<OptimisationPlan> tweaker,
+			@Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory, @NonNull final Consumer<LNGScenarioRunner> checker, final IOptimiserInjectorService overrides) {
+		final Consumer<OptimisationPlan> planCustomiser;
+		if (tweaker != null) {
+			planCustomiser = tweaker;
+		} else {
+			planCustomiser = plan -> ScenarioUtils.setLSOStageIterations(plan, 10_000);
+		}
 
 		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlanCustomiser(planCustomiser) //
@@ -206,7 +212,6 @@ public abstract class AbstractMicroTestCase {
 		return runnerBuilder.getScenarioRunner().evaluateInitialState();
 	}
 
-	
 	public void evaluateTest() {
 		evaluateTest(null, null, runner -> {
 		});

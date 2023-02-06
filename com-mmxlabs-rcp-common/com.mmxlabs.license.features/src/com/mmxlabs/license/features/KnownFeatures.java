@@ -7,8 +7,7 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature
- * constants.
+ * This really should not be here.... but a shared place to store feature constants.
  * 
  * @author Simon Goodall
  *
@@ -84,7 +83,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
 
 	public static final String FEATURE_MTM_OLD = "features:mtm-old";
-	
+
 	public static final String FEATURE_MTM_PNL = "features:mtm-by-pnl";
 
 	public static final String FEATURE_MTM = "features:mtm";
@@ -165,5 +164,10 @@ public final class KnownFeatures {
 	
 	//emissions
 	public static final String FEATURE_EMISSIONS = "features:emissions";
+
+	/**
+	 * Enable LDD etc style cargoes
+	 */
+	public static final String FEATURE_COMPLEX_CARGO = "features:complex-cargo";
 
 }

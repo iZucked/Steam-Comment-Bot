@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.CargoMaker.CargoMakerSlotMaker;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -103,6 +104,11 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	public T withMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final Slot slot = cargoModelBuilder.createSpotFOBSale(name, market, windowStart, port);
 		this.slot = slot;
+		return (T) this;
+	}
+
+	public T withWindowCounterParty(boolean counterPartyWindow) {
+		this.slot.setWindowCounterParty(counterPartyWindow);
 		return (T) this;
 	}
 

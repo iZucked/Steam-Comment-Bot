@@ -91,6 +91,8 @@ public class SlotItemProvider
 			addLockedPropertyDescriptor(object);
 			addCancelledPropertyDescriptor(object);
 			addWindowCounterPartyPropertyDescriptor(object);
+			addAllowedPortsPropertyDescriptor(object);
+			addAllowedPortsOverridePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1020,6 +1022,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Allowed Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_allowedPorts_feature"),
+				 getString("_UI_Slot_allowedPorts_description"),
+				 CargoPackage.Literals.SLOT__ALLOWED_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Ports Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedPortsOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_allowedPortsOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_allowedPortsOverride_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1089,6 +1135,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__CANCELLED:
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
+			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

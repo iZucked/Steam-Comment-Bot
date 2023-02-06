@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,8 +14,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.common.util.TriConsumer;
@@ -54,15 +56,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.VoyageSpecification;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.EVesselTankState;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class BaseCaseToScheduleSpecification {
@@ -77,7 +72,9 @@ public class BaseCaseToScheduleSpecification {
 		this.usedIDs = getUsedSlotIDs(scenarioModel);
 	}
 
-	public ScheduleSpecification generate(final BaseCase baseCase) {
+	//
+
+	public ScheduleSpecification generate(final BaseCase baseCase, boolean includePartialRowShipping) {
 
 		final ScheduleSpecification specification = CargoFactory.eINSTANCE.createScheduleSpecification();
 
@@ -101,11 +98,36 @@ public class BaseCaseToScheduleSpecification {
 					slotSpecification.setSlot(slot);
 					specification.getOpenEvents().add(slotSpecification);
 				}
+				// This should catch partial rows. Do we need to replicate onto other rows too?
+				if (includePartialRowShipping) {
+					ShippingOption shipping = row.getShipping();
+					if (shipping != null) {
+						
+						final VesselScheduleSpecification vesselScheduleSpecification;
+						if (shipping instanceof RoundTripShippingOption) {
+							// Always new
+							vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+							specification.getVesselScheduleSpecifications().add(vesselScheduleSpecification);
+						} else {
+							if (shippingToScheduleSpec.containsKey(shipping)) {
+								vesselScheduleSpecification = shippingToScheduleSpec.get(shipping);
+							} else {
+								vesselScheduleSpecification	 = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+								shippingToScheduleSpec.put(shipping, vesselScheduleSpecification);
+								specification.getVesselScheduleSpecifications().add(vesselScheduleSpecification);
+							}
+						}
+
+						
+						getShipping(shipping, vesselScheduleSpecification);
+					}
+				}
+
 				continue;
 			}
 
 			final ShippingType shippingType = row.getVesselEventOption() != null ? ShippingType.Shipped : AnalyticsBuilder.getShippingType(row.getBuyOption(), row.getSellOption());
-			if (shippingType == ShippingType.Open) {
+			if (shippingType == ShippingType.Open || shippingType == ShippingType.None)  {
 				if (row.getBuyOption() != null && !(row.getBuyOption() instanceof OpenBuy)) {
 					final SlotSpecification spec = CargoFactory.eINSTANCE.createSlotSpecification();
 					spec.setSlot(getOrCreate(row.getBuyOption()));
@@ -116,6 +138,30 @@ public class BaseCaseToScheduleSpecification {
 					spec.setSlot(getOrCreate(row.getSellOption()));
 					specification.getOpenEvents().add(spec);
 				}
+				if (includePartialRowShipping) {
+					ShippingOption shipping = row.getShipping();
+					if (shipping != null) {
+						
+						final VesselScheduleSpecification vesselScheduleSpecification;
+						if (shipping instanceof RoundTripShippingOption) {
+							// Always new
+							vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+							specification.getVesselScheduleSpecifications().add(vesselScheduleSpecification);
+						} else {
+							if (shippingToScheduleSpec.containsKey(shipping)) {
+								vesselScheduleSpecification = shippingToScheduleSpec.get(shipping);
+							} else {
+								vesselScheduleSpecification	 = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+								shippingToScheduleSpec.put(shipping, vesselScheduleSpecification);
+								specification.getVesselScheduleSpecifications().add(vesselScheduleSpecification);
+							}
+						}
+
+						
+						getShipping(shipping, vesselScheduleSpecification);
+					}
+				}
+
 			} else if (shippingType == ShippingType.NonShipped) {
 				final NonShippedCargoSpecification spec = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
 
@@ -177,7 +223,7 @@ public class BaseCaseToScheduleSpecification {
 				};
 				final TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, slotSpec) -> {
 					if (options != null) {
-						if (target instanceof LoadSlot) {
+						if (target instanceof LoadSlot ls) {
 							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
@@ -186,10 +232,17 @@ public class BaseCaseToScheduleSpecification {
 							}
 							if (options.getLoadDate() != null) {
 								((SlotSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+								ZonedDateTime zdt;
+								if (ls.getPort() != null) {
+									zdt = options.getLoadDate().atZone(ls.getPort().getZoneId());
+								} else {
+									zdt = options.getLoadDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 
 						}
-						if (target instanceof DischargeSlot) {
+						if (target instanceof DischargeSlot ds) {
 							if (options.isSetBallastRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
 							}
@@ -198,9 +251,16 @@ public class BaseCaseToScheduleSpecification {
 							}
 							if (options.getDischargeDate() != null) {
 								((SlotSpecification) slotSpec).setArrivalDate(options.getDischargeDate());
+								ZonedDateTime zdt;
+								if (ds.getPort() != null) {
+									zdt = options.getDischargeDate().atZone(ds.getPort().getZoneId());
+								} else {
+									zdt = options.getDischargeDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 						}
-						if (target instanceof VesselEvent) {
+						if (target instanceof VesselEvent ve) {
 							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
@@ -209,130 +269,19 @@ public class BaseCaseToScheduleSpecification {
 							}
 							if (options.getLoadDate() != null) {
 								((VesselEventSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+								ZonedDateTime zdt;
+								if (ve.getPort() != null) {
+									zdt = options.getLoadDate().atZone(ve.getPort().getZoneId());
+								} else {
+									zdt = options.getLoadDate().atZone(ZoneId.of("Etc/UTC"));
+								}
+								mapper.addExtraDate(zdt);
 							}
 						}
 					}
 				};
 
-				// TODO: This should be cached!
-				if (shipping instanceof RoundTripShippingOption) {
-					final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
-					final Vessel vessel = roundTripShippingOption.getVessel();
-					final BaseLegalEntity entity = roundTripShippingOption.getEntity();
-					final String hireCost = roundTripShippingOption.getHireCost();
-
-					// TODO: Need place to store this in datamodel
-					final CharterInMarket newMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-					newMarket.setCharterInRate(hireCost);
-					newMarket.setVessel(vessel);
-					newMarket.setEntity(entity);
-					newMarket.setNominal(true);
-					// { // From old sandbox code
-					// final String baseName =
-					// SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
-					// @NonNull
-					// final Set<String> usedIDStrings =
-					// clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c
-					// -> c.getName()).collect(Collectors.toSet());
-					// final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
-					// market.setName(id);
-					// }
-					newMarket.setName(vessel.getName() + " @" + hireCost);
-
-					vesselScheduleSpecification.setVesselAllocation(newMarket);
-					vesselScheduleSpecification.setSpotIndex(-1);
-
-					mapper.addMapping(roundTripShippingOption, newMarket);
-				} else if (shipping instanceof ExistingCharterMarketOption) {
-					final ExistingCharterMarketOption option = (ExistingCharterMarketOption) shipping;
-					vesselScheduleSpecification.setVesselAllocation(option.getCharterInMarket());
-					vesselScheduleSpecification.setSpotIndex(option.getSpotIndex());
-					// mapper.addMapping(option, newMarket);
-				} else if (shipping instanceof OptionalSimpleVesselCharterOption) {
-					final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
-					VesselCharter vesselCharter = mapper.get(optionalAvailabilityShippingOption);
-					if (vesselCharter == null) {
-						vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
-						vesselCharter.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
-						final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
-						vesselCharter.setVessel(vessel);
-						vesselCharter.setEntity(optionalAvailabilityShippingOption.getEntity());
-
-						vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-						vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-						if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-							vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
-							vesselCharter.getStartHeel().setCvValue(22.8);
-							// vesselCharter.getStartHeel().setPriceExpression(PerMMBTU(0.1);
-
-							vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
-							vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
-							vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
-						}
-
-						if (optionalAvailabilityShippingOption.getStart() != null) {
-							vesselCharter.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
-							vesselCharter.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-						}
-						if (optionalAvailabilityShippingOption.getEnd() != null) {
-							vesselCharter.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-							vesselCharter.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-						}
-						vesselCharter.setOptional(true);
-						vesselCharter.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
-								optionalAvailabilityShippingOption.getBallastBonus()));
-						if (optionalAvailabilityShippingOption.getStartPort() != null) {
-							vesselCharter.setStartAt(optionalAvailabilityShippingOption.getStartPort());
-						}
-						if (optionalAvailabilityShippingOption.getEndPort() != null) {
-							final EList<APortSet<Port>> endAt = vesselCharter.getEndAt();
-							endAt.clear();
-							endAt.add(optionalAvailabilityShippingOption.getEndPort());
-						}
-
-						mapper.addMapping(optionalAvailabilityShippingOption, vesselCharter);
-					}
-					vesselScheduleSpecification.setVesselAllocation(vesselCharter);
-				} else if (shipping instanceof SimpleVesselCharterOption) {
-					final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
-					VesselCharter vesselCharter = mapper.get(fleetShippingOption);
-					if (vesselCharter == null) {
-						vesselCharter = CargoFactory.eINSTANCE.createVesselCharter();
-						vesselCharter.setTimeCharterRate(fleetShippingOption.getHireCost());
-						final Vessel vessel = fleetShippingOption.getVessel();
-						vesselCharter.setVessel(vessel);
-						vesselCharter.setEntity(fleetShippingOption.getEntity());
-
-						vesselCharter.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-						vesselCharter.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-
-						if (fleetShippingOption.isUseSafetyHeel()) {
-							vesselCharter.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
-							vesselCharter.getStartHeel().setCvValue(22.8);
-							// vesselCharter.getStartHeel().setPricePerMMBTU(0.1);
-
-							vesselCharter.getEndHeel().setMinimumEndHeel(vessel.getSafetyHeel());
-							vesselCharter.getEndHeel().setMaximumEndHeel(vessel.getSafetyHeel());
-							vesselCharter.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
-						}
-						vesselCharter.setOptional(false);
-
-						mapper.addMapping(fleetShippingOption, vesselCharter);
-					}
-					vesselScheduleSpecification.setVesselAllocation(vesselCharter);
-				} else if (shipping instanceof ExistingVesselCharterOption) {
-					final ExistingVesselCharterOption fleetShippingOption = (ExistingVesselCharterOption) shipping;
-					final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
-					mapper.addMapping(fleetShippingOption, vesselCharter);
-					vesselScheduleSpecification.setVesselAllocation(vesselCharter);
-				} else if (shipping instanceof FullVesselCharterOption) {
-					final FullVesselCharterOption fleetShippingOption = (FullVesselCharterOption) shipping;
-					final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
-					mapper.addMapping(fleetShippingOption, vesselCharter);
-					vesselScheduleSpecification.setVesselAllocation(vesselCharter);
-				} else {
-					assert false;
-				}
+				getShipping(shipping, vesselScheduleSpecification);
 
 				if (row.getVesselEventOption() != null) {
 					final VesselEventSpecification eventSpec = CargoFactory.eINSTANCE.createVesselEventSpecification();
@@ -380,6 +329,59 @@ public class BaseCaseToScheduleSpecification {
 
 		return specification;
 
+	}
+
+	private void getShipping(ShippingOption shipping, final @Nullable VesselScheduleSpecification vesselScheduleSpecification) {
+		// TODO: This should be cached!
+		if (shipping instanceof RoundTripShippingOption roundTripShippingOption) {
+			final CharterInMarket newMarket = AnalyticsBuilder.makeRoundTripOption(roundTripShippingOption);
+			if (vesselScheduleSpecification != null) {
+				vesselScheduleSpecification.setVesselAllocation(newMarket);
+				vesselScheduleSpecification.setSpotIndex(-1);
+			}
+			mapper.addMapping(roundTripShippingOption, newMarket);
+		} else if (shipping instanceof ExistingCharterMarketOption option) {
+			if (vesselScheduleSpecification != null) {
+
+				vesselScheduleSpecification.setVesselAllocation(option.getCharterInMarket());
+				vesselScheduleSpecification.setSpotIndex(option.getSpotIndex());
+			}
+		} else if (shipping instanceof OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption) {
+			VesselCharter vesselCharter = mapper.get(optionalAvailabilityShippingOption);
+			if (vesselCharter == null) {
+				vesselCharter = AnalyticsBuilder.makeOptionalSimpleCharter(optionalAvailabilityShippingOption);
+
+				mapper.addMapping(optionalAvailabilityShippingOption, vesselCharter);
+			}
+			if (vesselScheduleSpecification != null) {
+
+				vesselScheduleSpecification.setVesselAllocation(vesselCharter);
+			}
+		} else if (shipping instanceof SimpleVesselCharterOption fleetShippingOption) {
+			VesselCharter vesselCharter = mapper.get(fleetShippingOption);
+			if (vesselCharter == null) {
+				vesselCharter = AnalyticsBuilder.makeSimpleCharter(fleetShippingOption);
+				mapper.addMapping(fleetShippingOption, vesselCharter);
+			}
+			if (vesselScheduleSpecification != null) {
+				vesselScheduleSpecification.setVesselAllocation(vesselCharter);
+			}
+		} else if (shipping instanceof ExistingVesselCharterOption fleetShippingOption) {
+			final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
+			mapper.addMapping(fleetShippingOption, vesselCharter);
+			if (vesselScheduleSpecification != null) {
+				vesselScheduleSpecification.setVesselAllocation(vesselCharter);
+			}
+		} else if (shipping instanceof FullVesselCharterOption fleetShippingOption) {
+			final VesselCharter vesselCharter = fleetShippingOption.getVesselCharter();
+			mapper.addMapping(fleetShippingOption, vesselCharter);
+			if (vesselScheduleSpecification != null) {
+
+				vesselScheduleSpecification.setVesselAllocation(vesselCharter);
+			}
+		} else {
+			assert false;
+		}
 	}
 
 	private LoadSlot getOrCreate(final BuyOption buyOption, final LocalDate windowStart, final int shift) {

@@ -70,7 +70,7 @@ public class CharterContractValidationUtils {
 			} else {
 				addValidationError(ctx, failures, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 			}
-			String mbbMessage = String.format("%s - %s:", topFeatureMessage, ym.format(DateTimeFormatter.ofPattern("yyyy-MMM")));
+			String mbbMessage = String.format("%s - %s:", topFeatureMessage, ym == null ? "<no date>" : ym.format(DateTimeFormatter.ofPattern("yyyy-MMM")));
 			monthlyBallastBonusTermsValidation(ctx, extraContext, failures, mbbMessage, monthlyRule);
 		}
 

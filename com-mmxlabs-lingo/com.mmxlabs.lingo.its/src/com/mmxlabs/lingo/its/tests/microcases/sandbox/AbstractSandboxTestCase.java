@@ -6,10 +6,12 @@ package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -19,6 +21,10 @@ import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxSettings;
 public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 
 	protected void evaluateSandbox(@NonNull OptionAnalysisModel model) {
+		evaluateSandbox(model, null);
+	}
+
+	protected void evaluateSandbox(@NonNull OptionAnalysisModel model, @Nullable UserSettings userSettings) {
 		final LNGScenarioModel root = ScenarioModelUtil.findScenarioModel(model);
 		assert root != null;
 
@@ -28,9 +34,13 @@ public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 		final SandboxSettings settings = new SandboxSettings();
 		settings.setSandboxUUID(model.getUuid());
 
-		settings.setUserSettings(root.getUserSettings());
-		if (settings.getUserSettings() == null) {
-			settings.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
+		if (userSettings != null) {
+			settings.setUserSettings(userSettings);
+		} else {
+			settings.setUserSettings(root.getUserSettings());
+			if (settings.getUserSettings() == null) {
+				settings.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
+			}
 		}
 		runner.withParams(settings);
 

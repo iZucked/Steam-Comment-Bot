@@ -173,7 +173,7 @@ public class CloudRunnerITSUtil {
 
 		// Set this as environment rather than command line arg as the command lines gets too big
 		pb.environment().put("CLASSPATH", System.getProperty("java.class.path"));
-		
+
 		pb.directory(runDir);
 
 		// Start the lingo process and copy std out/err to this process' output.
@@ -250,9 +250,7 @@ public class CloudRunnerITSUtil {
 	}
 
 	/**
-	 * Copies an {@link InputStream} of scenario data to the output stream through a
-	 * re-encryption step. Returns a map of the decrypted digests for each entry in
-	 * the zip file.
+	 * Copies an {@link InputStream} of scenario data to the output stream through a re-encryption step. Returns a map of the decrypted digests for each entry in the zip file.
 	 * 
 	 * @param cipher
 	 * @param in

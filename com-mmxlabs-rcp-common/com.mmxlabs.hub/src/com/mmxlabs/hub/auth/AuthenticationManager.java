@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -40,19 +41,19 @@ public class AuthenticationManager {
 		return instance;
 	}
 
-	private BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
-	private OAuthManager oauthManager = OAuthManager.getInstance();
+	private final BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
+	private final OAuthManager oauthManager = OAuthManager.getInstance();
 
 	private String authenticationScheme = BASIC;
 	private String upstreamURL = null;
 
 	public AtomicBoolean forceBasicAuthentication = new AtomicBoolean(false);
 
-	public synchronized void setForceBasicAuthentication(boolean value) {
+	public synchronized void setForceBasicAuthentication(final boolean value) {
 		forceBasicAuthentication.set(value);
 	}
 
-	public synchronized void updateAuthenticationScheme(String upstreamURL, String scheme) {
+	public synchronized void updateAuthenticationScheme(final String upstreamURL, final String scheme) {
 		this.upstreamURL = upstreamURL;
 		this.authenticationScheme = scheme;
 	}
@@ -73,7 +74,7 @@ public class AuthenticationManager {
 		return authenticated;
 	}
 
-	public void logout(@Nullable Shell shell) {
+	public void logout(@Nullable final Shell shell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthManager.logout(upstreamURL, shell);
 		} else {
@@ -81,17 +82,17 @@ public class AuthenticationManager {
 		}
 	}
 
-	public void logoutAll(@Nullable Shell shell) {
+	public void logoutAll(@Nullable final Shell shell) {
 		oauthManager.logout(upstreamURL, shell);
 		basicAuthenticationManager.logout(upstreamURL, shell);
 	}
 
-	public void clearCookies(String url) {
+	public void clearCookies(final String url) {
 		basicAuthenticationManager.clearCookies(url);
 		oauthManager.clearCookies(url);
 	}
 
-	public void run(@Nullable Shell optionalShell) {
+	public void run(@Nullable final Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthManager.run(upstreamURL, optionalShell);
 		} else {
@@ -99,7 +100,7 @@ public class AuthenticationManager {
 		}
 	}
 
-	protected void startAuthenticationShell(@Nullable Shell optionalShell) {
+	protected void startAuthenticationShell(@Nullable final Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthManager.run(upstreamURL, optionalShell);
 		} else {
@@ -107,10 +108,9 @@ public class AuthenticationManager {
 		}
 	}
 
-	public void addAuthToRequest(@NonNull HttpRequestBase request) {
+	public void addAuthToRequest(@NonNull final HttpRequestBase request, @NonNull final HttpClientContext ctx) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthManager.buildRequestWithToken(request);
-
+			oauthManager.buildRequestWithToken(request, ctx);
 		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication.get()) {
 			basicAuthenticationManager.buildRequestWithBasicAuth(request);
 		} else {
@@ -118,20 +118,20 @@ public class AuthenticationManager {
 		}
 	}
 
-	public void storeInSecurePreferences(String key, String value) {
+	public void storeInSecurePreferences(final String key, final String value) {
 		// returns node corresponding to the path specified. If such node does not
 		// exist, a new node is created
 		try {
 			final ISecurePreferences node = PREFERENCES.node(PREFERENCES_NODE);
 			node.put(key, value, true);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			LOGGER.error(String.format("Failed to create a node in secure preferences, please use a valid node path: %s", e.getMessage()));
-		} catch (StorageException e) {
+		} catch (final StorageException e) {
 			LOGGER.error(String.format("Failed to encrypt the value and save it to secure preferences: %s", e.getMessage()));
 		}
 	}
 
-	public Optional<String> retrieveFromSecurePreferences(String key) {
+	public Optional<String> retrieveFromSecurePreferences(final String key) {
 		Optional<String> value = Optional.empty();
 
 		final ISecurePreferences node = PREFERENCES.node(PREFERENCES_NODE);

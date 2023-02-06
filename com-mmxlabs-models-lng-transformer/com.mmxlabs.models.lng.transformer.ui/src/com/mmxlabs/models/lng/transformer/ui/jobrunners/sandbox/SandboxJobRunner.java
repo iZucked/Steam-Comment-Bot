@@ -9,11 +9,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -22,14 +25,19 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.json.simple.JSONArray;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
@@ -40,6 +48,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
@@ -48,6 +57,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSp
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.Mapper;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -69,28 +79,39 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SandboxManualRunner;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SandboxOptimiserRunner;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSONTransformer;
+import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.CustomTypeResolverBuilder;
+import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.EvaluationSettingsOverrideModule;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSONTransformer;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.LNGOptimisationOverrideModule;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.LoggingModule;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 @NonNullByDefault
 public class SandboxJobRunner extends AbstractJobRunner {
@@ -246,7 +267,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			json.setType("sandbox:define");
 			loggingData = json;
 		}
-
+		boolean allowCaching = false;
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
 			final SandboxManualRunner deriveRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
@@ -267,11 +288,18 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 						if (loggingData instanceof final HeadlessSandboxJSON json) {
 							json.getMetrics().setRuntime(runTime);
+
+							final ScenarioMeta scenarioMeta = ScenarioMetaUtils.writeOptimisationMetrics( //
+									deriveRunner.getBridge().getOptimiserScenario(), //
+									userSettings);
+
+							json.setScenarioMeta(scenarioMeta);
+
 						}
 					}
 				}
 			};
-		});
+		}, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxInsertionFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
@@ -339,9 +367,21 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				json.setType("sandbox:" + json.getType());
 				loggingData = json;
 			}
+//
+//			for (final BaseCaseRow row : model.getBaseCase().getBaseCase()) {
+//				if (row.getShipping() != null) {
+//					if (row.getShipping() instanceof OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption) {
+//						VesselCharter vesselCharter = mapper.get(optionalAvailabilityShippingOption);
+//						if (vesselCharter == null) {
+//							vesselCharter = AnalyticsBuilder.makeOptionalSimpleCharter(optionalAvailabilityShippingOption);
+//							mapper.addMapping(optionalAvailabilityShippingOption, vesselCharter);
+//						}
+//
+//					}
+//				}
+//			}
 
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
 			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(scenarioInstance, sdp, sdp.getEditingDomain(), userSettings, targetSlots, targetEvents,
 					extraDataProvider, (mem, data, injector) -> {
 						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
@@ -359,12 +399,17 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
 					final long startTime = System.currentTimeMillis();
+					OptioniserLogger logger = new OptioniserLogger();
 					try {
-						return runner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
+						return runner.runInsertion(logger, monitor);
 					} finally {
 						if (loggingData instanceof final HeadlessOptioniserJSON json) {
 							final long runTime = System.currentTimeMillis() - startTime;
 							json.getMetrics().setRuntime(runTime);
+							json.getParams().getOptioniserProperties().setIterations(runner.getIterations());
+
+							HeadlessOptioniserJSONTransformer.addRunResult(0, logger, json);
+
 						}
 					}
 				}
@@ -376,7 +421,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				res.getSlotsInserted().clear();
 				res.getEventsInserted().clear();
 			}
-		});
+		}, false);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptimiserFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
@@ -385,8 +430,11 @@ public class SandboxJobRunner extends AbstractJobRunner {
 		final OptimisationResult sandboxResult = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 		sandboxResult.setUseScenarioBase(false);
 
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
+		boolean allowCaching = false; // model.isUseTargetPNL()
 
+		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
+			final AbstractRunnerHook runnerHook;
+			final IOptimiserInjectorService loggingOverrides;
 			if (enableLogging) {
 				final HeadlessOptimiserJSONTransformer transformer = new HeadlessOptimiserJSONTransformer();
 				final HeadlessOptimiserJSON json = transformer.createJSONResultObject();
@@ -397,6 +445,22 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				json.setType("sandbox:" + json.getType());
 
 				loggingData = json;
+
+				final JSONArray jsonStagesStorage = new JSONArray(); // array for output data at present
+
+				json.getMetrics().setStages(jsonStagesStorage);
+
+				// Create logging module
+				final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+				runnerHook = createRunnerHook(jsonStagesStorage, phaseToLoggerMap);
+
+				JsonNode injections = null;
+				boolean doInjections = false;
+
+				loggingOverrides = createExtraModule(true, phaseToLoggerMap, runnerHook, doInjections, injections);
+			} else {
+				runnerHook = null;
+				loggingOverrides = null;
 			}
 
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
@@ -406,6 +470,16 @@ public class SandboxJobRunner extends AbstractJobRunner {
 				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
 			}, builder -> {
 				builder.withThreadCount(threadsAvailable);
+
+				if (enableLogging) {
+					builder.withRunnerHook(runnerHook);
+					builder.withOptimiserInjectorService(loggingOverrides);
+					builder.withOptimisationPlanCustomiser(plan -> {
+						if (loggingData instanceof HeadlessOptimiserJSON loggingOutput) {
+							loggingOutput.setOptimisationPlan(plan);
+						}
+					});
+				}
 			});
 
 			return new SandboxJob() {
@@ -428,17 +502,17 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					}
 				}
 			};
-		});
+		}, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
-		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, jobAction, null);
+			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction, boolean allowCaching) {
+		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, jobAction, null, allowCaching);
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance, final UserSettings userSettings,
 			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction,
-			@Nullable final Consumer<AbstractSolutionSet> abortedHandler) {
+			@Nullable final Consumer<AbstractSolutionSet> abortedHandler, boolean allowCaching) {
 
 		return monitor -> {
 
@@ -472,6 +546,12 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
 			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+
+			// Disable caches for the export phase
+			// TODO: Maybe we need a cache-config event?
+			List<String> hints = new LinkedList<>(scenarioToOptimiserBridge.getDataTransformer().getHints());
+			hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+			scenarioToOptimiserBridge.getFullDataTransformer().getLifecyleManager().startPhase("export", hints);
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
@@ -626,20 +706,24 @@ public class SandboxJobRunner extends AbstractJobRunner {
 					solutionSet.getExtraSlots().add(s);
 				}
 			};
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.flatMap(s -> s.getEvents().stream()) //
 					.filter(SlotSpecification.class::isInstance) //
 					.map(SlotSpecification.class::cast) //
 					.forEach(action);
-			scheduleSpecification.getNonShippedCargoSpecifications().stream() //
+			scheduleSpecification.getNonShippedCargoSpecifications()
+					.stream() //
 					.flatMap(s -> s.getSlotSpecifications().stream()) //
 					.forEach(action);
-			scheduleSpecification.getOpenEvents().stream() //
+			scheduleSpecification.getOpenEvents()
+					.stream() //
 					.filter(SlotSpecification.class::isInstance) //
 					.map(SlotSpecification.class::cast) //
 					.forEach(action);
 
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.flatMap(s -> s.getEvents().stream()) //
 					.filter(VesselEventSpecification.class::isInstance) //
 					.map(VesselEventSpecification.class::cast) //
@@ -649,7 +733,8 @@ public class SandboxJobRunner extends AbstractJobRunner {
 							solutionSet.getExtraVesselEvents().add(s);
 						}
 					});
-			scheduleSpecification.getVesselScheduleSpecifications().stream() //
+			scheduleSpecification.getVesselScheduleSpecifications()
+					.stream() //
 					.map(VesselScheduleSpecification::getVesselAllocation) //
 					.filter(VesselCharter.class::isInstance) //
 					.map(VesselCharter.class::cast) //
@@ -671,12 +756,75 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 		if (model.getBaseCase().isKeepExistingScenario()) {
 			final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), model.getMode() == SandboxModeConstants.MODE_OPTIONISE);
 		} else {
 
 			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), model.getMode() == SandboxModeConstants.MODE_OPTIONISE);
 		}
 		return baseScheduleSpecification;
+	}
+
+	private AbstractRunnerHook createRunnerHook(final JSONArray jsonStagesStorage, final Map<String, LSOLogger> phaseToLoggerMap) {
+		return new AbstractRunnerHook() {
+
+			@Override
+			protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+
+				final String stageAndJobID = getStageAndJobID();
+				final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+				if (logger != null) {
+					final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
+					lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+				}
+			}
+
+		};
+	}
+
+	private @Nullable IOptimiserInjectorService createExtraModule(final boolean exportLogs, final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook,
+			final boolean doInjections, @Nullable final JsonNode injections) {
+		if (!exportLogs && !doInjections) {
+			return null;
+		}
+
+		return new IOptimiserInjectorService() {
+			@Override
+			public @Nullable Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+
+			public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				if (doInjections) {
+					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
+						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(injections));
+					}
+				}
+				// if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+				// return Collections.<@NonNull Module> singletonList(new
+				// OptimisationSettingsOverrideModule());
+				// }
+				if (moduleType == ModuleType.Module_Optimisation) {
+					final LinkedList<@NonNull Module> modules = new LinkedList<>();
+					if (exportLogs) {
+
+						// Default logging parameters
+						final LoggingParameters loggingParameters = new LoggingParameters();
+						loggingParameters.loggingInterval = 5000;
+						loggingParameters.metricsToLog = new String[0];
+
+						modules.add(new LoggingModule(phaseToLoggerMap, runnerHook, loggingParameters));
+					}
+					if (doInjections) {
+						modules.add(new LNGOptimisationOverrideModule(injections));
+					}
+
+					return modules;
+				}
+				return null;
+			}
+		};
 	}
 }

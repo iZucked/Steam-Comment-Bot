@@ -242,5 +242,4 @@ public class SandboxModelBuilder {
 	public PartialCaseRowMaker makePartialCaseRow() {
 		return new PartialCaseRowMaker(this);
 	}
-
 }
