@@ -391,7 +391,7 @@ public class PeriodTransformer {
 		removeExcludedObjects(internalDomain, mapping, records);
 
 		// Remove vessels based on updated start / end dates
-		removeVesselCharters(internalDomain, periodRecord, cargoModel, mapping);
+		removeVesselCharters(internalDomain, periodRecord, cargoModel, mapping, records);
 
 		// Sort out Canal bookings
 		lockAndRemoveCanalBookings(records, output);
@@ -716,9 +716,10 @@ public class PeriodTransformer {
 	}
 
 	public void removeVesselCharters(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
-			@NonNull final IScenarioEntityMapping mapping) {
+			@NonNull final IScenarioEntityMapping mapping, final Map<EObject, InclusionRecord> records) {
 		final Set<VesselCharter> vesselChartersToRemove = new HashSet<>();
 
+		LOOP_CHARTERS:
 		for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
 			assert vesselCharter != null;
 			if (inclusionChecker.getVesselCharterInclusionType(vesselCharter, periodRecord).getFirst() == InclusionType.Out) {
@@ -729,6 +730,34 @@ public class PeriodTransformer {
 				assert originalFromCopy != null; // We should not be null in the transformer
 				mapping.registerRemovedOriginal(originalFromCopy);
 
+			} else {
+				final VesselCharter originalFromCopy = mapping.getOriginalFromCopy(vesselCharter);
+				assert originalFromCopy != null; // We should not be null in the transformer
+				if (originalFromCopy.getMaxDuration() > 0 && (vesselCharter.getMaxDuration() == 0 
+						|| (vesselCharter.getStartBy() != null && vesselCharter.getStartBy().plusDays(vesselCharter.getMaxDuration()).atZone(ZONEID_UTC)
+						.isBefore(periodRecord.lowerCutoff)))) {
+					
+					for (var ir : records.values()) {
+						if (ir.status ==Status.ToRemove) {
+							continue;
+						}
+						if (ir.vesselCharter == vesselCharter) {
+							// Still in use.
+							continue LOOP_CHARTERS;
+						}
+					}
+					
+					
+					if (vesselCharter.getStartAfter() != null || vesselCharter.getEndBy() != null)
+					{
+						// Assume that the vessel can no longer be used and is outside of period.
+
+						vesselChartersToRemove.add(vesselCharter);
+
+						assert originalFromCopy != null; // We should not be null in the transformer
+						mapping.registerRemovedOriginal(originalFromCopy);
+					}
+				}
 			}
 		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, vesselChartersToRemove));
@@ -1181,6 +1210,7 @@ public class PeriodTransformer {
 				int minDurationInDays = vesselCharter.getCharterOrDelegateMinDuration();
 
 				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+					// We've trimmed both ends of the vessel schedule, so min/max duration no longer applies
 					vesselCharter.setMinDuration(0);
 				} else {
 					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
@@ -1195,6 +1225,7 @@ public class PeriodTransformer {
 				int maxDurationInDays = vesselCharter.getCharterOrDelegateMaxDuration();
 
 				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+					// We've trimmed both ends of the vessel schedule, so min/max duration no longer applies
 					vesselCharter.setMaxDuration(0);
 				} else {
 					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
