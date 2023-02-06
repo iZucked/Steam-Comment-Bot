@@ -155,7 +155,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
 					.withCargo("DES_Purchase2", "DES_Sale1")
-					.anyNominalVessel() //
+					.isNonShipped() //
 					.withUnusedSlot("DES_Purchase1") //
 					.build();
 
@@ -289,7 +289,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
 					.withCargo("FOB_Purchase1", "FOB_Sale2")
-					.anyNominalVessel() //
+					.isNonShipped() //
 					.withUnusedSlot("FOB_Sale1") //
 					.build();
 
@@ -542,9 +542,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(scenarioRunner) //
 					.withAnySolutionResultChecker() //
 					.withCargo("FOB_Purchase1", "DES_Sale2")
-					.onFleetVessel("STEAM-145") //
+					.onFleetVessel(vessel.getName()) //
 					.withCargo("DES_Purchase_1", "DES_Sale1")
-					.anyNominalVessel() //
+					.isNonShipped() //
 					.build();
 
 			final ISequences solution = verifier.verifySolutionExistsInResults(result1, Assertions::fail);
