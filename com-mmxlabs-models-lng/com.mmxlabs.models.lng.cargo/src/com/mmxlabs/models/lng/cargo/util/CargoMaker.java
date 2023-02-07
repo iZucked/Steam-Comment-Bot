@@ -81,6 +81,11 @@ public class CargoMaker {
 		this.cargo.setAllowRewiring(true);
 	}
 
+	public CargoMaker withSlot(Slot<?> s) {
+		slots.add(s);
+		return this;
+	}
+
 	public CargoMakerSlotMaker makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);

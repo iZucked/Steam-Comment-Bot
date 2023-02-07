@@ -27,8 +27,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A constraint which checks that the load and discharge quantities for a cargo
- * are compatible, so min discharge volume < max load volume
+ * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume
  * 
  * @author Tom Hinton
  * 
@@ -78,11 +77,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 					if (dischargeUnits == null) {
 						dischargeUnits = slot.getSlotOrDelegateVolumeLimitsUnit();
 					}
-					if (numberOfSlots > 2) {
-						checkComplexDischargeLimitsSet(factoryBase, ctx, failures, cargo, slot);
-						checkComplexDischargeLimitsIdentical(factoryBase, ctx, failures, cargo, slot);
-						checkComplexDischargeLimitUnitsIdentical(factoryBase, ctx, failures, cargo, dischargeUnits, slot);
-					}
+
 					if (slot.getSlotOrDelegateMaxQuantity() == Integer.MAX_VALUE) {
 						maxDischargeValid = false;
 					} else if (slot.getSlotOrDelegateMaxQuantity() == 0) {
@@ -106,6 +101,37 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 			checkMinAndMaxVolumes(factoryBase, ctx, failures, cargo, loadSlot, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, unitsWarning, maxLoadValid, maxDischargeValid);
 			checkMinAndMaxVolumesAgainstVesselCapacity(factoryBase, ctx, failures, cargo, loadSlot, loadMinVolume, loadMaxVolume, dischargeMinVolume, dischargeMaxVolume, cv, unitsWarning,
 					maxLoadValid);
+
+			if (numberOfSlots > 2) {
+				int dischargeSlots = 0;
+				int fixedDischargeSlots = 0;
+				for (int i = 1; i < numberOfSlots; ++i) {
+					Slot<?> s = cargo.getSortedSlots().get(i);
+					if (s instanceof DischargeSlot ds) {
+						++dischargeSlots;
+						if (ds.getSlotOrDelegateMinQuantity() == ds.getSlotOrDelegateMaxQuantity()) {
+							++fixedDischargeSlots;
+						}
+					}
+				}
+				if (fixedDischargeSlots + 1 < dischargeSlots) {
+					final DetailConstraintStatusFactory factory = factoryBase.copyName() //
+							.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
+							.withMessage("LDD can have at most one discharge with a volume range.");
+
+					for (int i = 1; i < numberOfSlots; ++i) {
+						Slot<?> s = cargo.getSortedSlots().get(i);
+						if (s instanceof DischargeSlot ds) {
+							if (ds.getSlotOrDelegateMinQuantity() != ds.getSlotOrDelegateMaxQuantity()) {
+								factory.withObjectAndFeature(ds, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+								factory.withObjectAndFeature(ds, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+							}
+						}
+
+					}
+					factory.make(ctx, failures);
+				}
+			}
 		}
 	}
 
@@ -276,49 +302,6 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-		}
-	}
-
-	private void checkComplexDischargeLimitUnitsIdentical(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo,
-			final VolumeUnits dischargeUnits, final Slot slot) {
-		if (slot.getSlotOrDelegateVolumeLimitsUnit() != dischargeUnits) {
-			factoryBase.copyName() //
-					.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
-					.withMessage("requires volume limit units to be identical") //
-					.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit()) //
-					.make(ctx, failures);
-		}
-	}
-
-	private void checkComplexDischargeLimitsIdentical(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final Slot slot) {
-		// Check fields are the same
-		if (slot.isSetMaxQuantity() && slot.isSetMinQuantity()) {
-			if (slot.getMinQuantity() != slot.getMaxQuantity()) {
-				factoryBase.copyName() //
-						.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
-						.withMessage("requires min and max discharge volumes to be specified and identical") //
-						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity()) //
-						.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity()) //
-						.make(ctx, failures);
-			}
-		}
-	}
-
-	private void checkComplexDischargeLimitsSet(final DetailConstraintStatusFactory factoryBase, final IValidationContext ctx, final List<IStatus> failures, final Cargo cargo, final Slot slot) {
-		// Check fields are set
-		if (!slot.isSetMaxQuantity() || !slot.isSetMinQuantity()) {
-
-			final DetailConstraintStatusFactory factory = factoryBase.copyName() //
-					.withTypedName(COMPLEX_CARGO, cargo.getLoadName()) //
-					.withMessage("requires min and max discharge volumes to be specified and identical");
-
-			if (!slot.isSetMaxQuantity()) {
-				factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-			} else if (!slot.isSetMinQuantity()) {
-				factory.withObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-			}
-
-			factory.make(ctx, failures);
 		}
 	}
 }
