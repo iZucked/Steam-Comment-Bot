@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Vessel Emissions"
+            icon="icons:/icons/legacy/16x16/exec_flow_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.emissions.VesselEmissionAccountingReportView"
+            id="com.mmxlabs.lingo.reports.emissions.VesselEmissionAccountingReportView">
+      </view>
+      <view
+            name="Cargo Emissions"
+            icon="icons:/icons/legacy/16x16/exec_flow_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView"
+            id="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView">
+      </view>
+      <view
+            name="Total Emissions"
+            icon="icons:/icons/legacy/16x16/exec_flow_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView"
+            id="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView">
+      </view>
+	</extension>
+
+</plugin>

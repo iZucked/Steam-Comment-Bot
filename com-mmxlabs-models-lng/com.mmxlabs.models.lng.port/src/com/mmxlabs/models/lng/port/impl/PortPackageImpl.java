@@ -360,6 +360,36 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getPort_LiquefactionEmissionRate() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPort_UpstreamEmissionRate() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPort_PipelineEmissionRate() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getPort__GetZoneId() {
 		return portEClass.getEOperations().get(0);
 	}
@@ -959,6 +989,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
 		createEAttribute(portEClass, PORT__MIN_VESSEL_SIZE);
 		createEAttribute(portEClass, PORT__MAX_VESSEL_SIZE);
+		createEAttribute(portEClass, PORT__LIQUEFACTION_EMISSION_RATE);
+		createEAttribute(portEClass, PORT__UPSTREAM_EMISSION_RATE);
+		createEAttribute(portEClass, PORT__PIPELINE_EMISSION_RATE);
 		createEOperation(portEClass, PORT___GET_ZONE_ID);
 		createEOperation(portEClass, PORT___MMX_ID);
 
@@ -1106,6 +1139,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MinVesselSize(), ecorePackage.getEInt(), "minVesselSize", "0", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MaxVesselSize(), ecorePackage.getEInt(), "maxVesselSize", "0", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_LiquefactionEmissionRate(), ecorePackage.getEDouble(), "liquefactionEmissionRate", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_UpstreamEmissionRate(), ecorePackage.getEDouble(), "upstreamEmissionRate", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_PipelineEmissionRate(), ecorePackage.getEDouble(), "pipelineEmissionRate", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getPort__GetZoneId(), theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1268,6 +1304,27 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source,
 		   new String[] {
 			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getPort_LiquefactionEmissionRate(),
+		   source,
+		   new String[] {
+			   "unit", "kg/mmBtu",
+			   "formatString", "####0.###"
+		   });
+		addAnnotation
+		  (getPort_UpstreamEmissionRate(),
+		   source,
+		   new String[] {
+			   "unit", "kg/mmBtu",
+			   "formatString", "####0.###"
+		   });
+		addAnnotation
+		  (getPort_PipelineEmissionRate(),
+		   source,
+		   new String[] {
+			   "unit", "kg/mmBtu",
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getLocation_Lat(),

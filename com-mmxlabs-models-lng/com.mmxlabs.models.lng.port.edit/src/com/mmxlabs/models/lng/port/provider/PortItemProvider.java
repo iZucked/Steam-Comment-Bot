@@ -64,6 +64,9 @@ public class PortItemProvider
 			addMaxCvValuePropertyDescriptor(object);
 			addMinVesselSizePropertyDescriptor(object);
 			addMaxVesselSizePropertyDescriptor(object);
+			addLiquefactionEmissionRatePropertyDescriptor(object);
+			addUpstreamEmissionRatePropertyDescriptor(object);
+			addPipelineEmissionRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -355,6 +358,72 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Liquefaction Emission Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLiquefactionEmissionRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_liquefactionEmissionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_liquefactionEmissionRate_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__LIQUEFACTION_EMISSION_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Upstream Emission Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUpstreamEmissionRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_upstreamEmissionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_upstreamEmissionRate_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__UPSTREAM_EMISSION_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pipeline Emission Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPipelineEmissionRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_pipelineEmissionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_pipelineEmissionRate_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__PIPELINE_EMISSION_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Short Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -457,6 +526,9 @@ public class PortItemProvider
 			case PortPackage.PORT__MAX_CV_VALUE:
 			case PortPackage.PORT__MIN_VESSEL_SIZE:
 			case PortPackage.PORT__MAX_VESSEL_SIZE:
+			case PortPackage.PORT__LIQUEFACTION_EMISSION_RATE:
+			case PortPackage.PORT__UPSTREAM_EMISSION_RATE:
+			case PortPackage.PORT__PIPELINE_EMISSION_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT__LOCATION:

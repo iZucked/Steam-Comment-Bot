@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.commercial.presentation.composites;
 
 import java.util.List;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -20,6 +22,10 @@ public class PurchaseContractComponentHelper extends DefaultComponentHelper {
 
 	public PurchaseContractComponentHelper() {
 		super(CommercialPackage.Literals.PURCHASE_CONTRACT);
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS)) {
+			ignoreFeatures.add(CommercialPackage.Literals.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE);
+			ignoreFeatures.add(CommercialPackage.Literals.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE);
+		}
 
 		addEditor(CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE, topClass -> {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE);
