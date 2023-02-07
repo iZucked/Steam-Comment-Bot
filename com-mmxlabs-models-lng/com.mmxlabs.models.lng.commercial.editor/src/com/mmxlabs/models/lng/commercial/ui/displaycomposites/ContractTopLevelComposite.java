@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractDetailComposite.ContractDetailGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -90,11 +92,11 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		final Composite myComposite = new Composite(this, SWT.NONE);
 		toolkit.adapt(myComposite);
 		myComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
-		
-		if(object instanceof PurchaseContract) {
+
+		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS) && object instanceof PurchaseContract) {
 			final Group g3 = new Group(middle, SWT.NONE);
 			toolkit.adapt(g3);
-			g3.setText("Emissions");
+			g3.setText("Emission rates");
 			g3.setLayout(new FillLayout());
 			g3.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 			g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
