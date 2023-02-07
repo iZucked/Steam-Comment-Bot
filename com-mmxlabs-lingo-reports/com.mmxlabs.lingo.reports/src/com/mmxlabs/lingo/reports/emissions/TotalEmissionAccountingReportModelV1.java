@@ -28,7 +28,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
  * But it will most probably be changed
  */
 @SchemaVersion(1)
-public class TotalEmissionAccountingReportModelV1{
+public class TotalEmissionAccountingReportModelV1 implements IVesselEmission{
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -97,6 +97,24 @@ public class TotalEmissionAccountingReportModelV1{
 	@JsonIgnore
 	@LingoIgnore
 	public double pilotLightEmissionRate;
+	
+	@JsonIgnore
+	@Override
+	public double getBaseFuelEmissionRate() {
+		return baseFuelEmissionRate;
+	}
+
+	@JsonIgnore
+	@Override
+	public double getBOGEmissionRate() {
+		return bogEmissionRate;
+	}
+
+	@JsonIgnore
+	@Override
+	public double getPilotLightEmissionRate() {
+		return pilotLightEmissionRate;
+	}
 
 	public static void main(String args[]) throws Exception {
 

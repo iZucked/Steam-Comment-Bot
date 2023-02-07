@@ -28,7 +28,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
  * But it will most probably be changed
  */
 @SchemaVersion(1)
-public class CargoEmissionAccountingReportModelV1{
+public class CargoEmissionAccountingReportModelV1 implements IVesselEmission{
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -62,16 +62,16 @@ public class CargoEmissionAccountingReportModelV1{
 	@ColumnName("Base Fuel")
 //	@LingoFormat("#.###")
 //	@HubFormat("{\"thousandSeparated\": true, \"pattern\": \"0.00\", \"mantissa\": 2}")
-	public Integer baseFuelEmission;
+	public Long baseFuelEmission;
 	
 	@ColumnName("BOG")
-	public Integer bogEmission;
+	public Long bogEmission;
 	
 	@ColumnName("Pilot Light")
-	public Integer pilotLightEmission;
+	public Long pilotLightEmission;
 	
 	@ColumnName("Total CO2e kg")
-	public Integer totalEmission;
+	public Long totalEmission;
 	
 	@JsonIgnore
 	@LingoIgnore
@@ -82,6 +82,24 @@ public class CargoEmissionAccountingReportModelV1{
 	@JsonIgnore
 	@LingoIgnore
 	public double pilotLightEmissionRate;
+	
+	@JsonIgnore
+	@Override
+	public double getBaseFuelEmissionRate() {
+		return baseFuelEmissionRate;
+	}
+
+	@JsonIgnore
+	@Override
+	public double getBOGEmissionRate() {
+		return bogEmissionRate;
+	}
+
+	@JsonIgnore
+	@Override
+	public double getPilotLightEmissionRate() {
+		return pilotLightEmissionRate;
+	}
 
 	public static void main(String args[]) throws Exception {
 

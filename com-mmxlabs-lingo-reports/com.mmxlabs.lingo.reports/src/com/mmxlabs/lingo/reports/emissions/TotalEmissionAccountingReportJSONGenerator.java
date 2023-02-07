@@ -20,9 +20,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -76,6 +73,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		model.upstreamEmission = 0L;
 		model.totalEmission = 0L;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
+		int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
 
 		if (loadSlot != null) {
 			Port port = loadSlot.getPort();
@@ -84,28 +82,26 @@ public class TotalEmissionAccountingReportJSONGenerator {
 			if (purchaseContract != null) {
 				model.pipelineEmissionRate = purchaseContract.getContractOrDelegatePipelineEmissionRate();
 				model.upstreamEmissionRate = purchaseContract.getContractOrDelegateUpstreamEmissionRate();
-				int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
-				model.upstreamEmission = (long) (physicalEnergyTransferred * model.upstreamEmissionRate);
-				model.pipelineEmission = (long) (physicalEnergyTransferred * model.pipelineEmissionRate);
-				model.totalEmission += model.upstreamEmission;
-				model.totalEmission += model.pipelineEmission;
 			}
 
 			if (port != null) {
 				if (purchaseContract == null) {
 					model.pipelineEmissionRate = port.getPipelineEmissionRate();
 					model.upstreamEmissionRate = port.getUpstreamEmissionRate();
-					int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
-					model.upstreamEmission = (long) (physicalEnergyTransferred * model.upstreamEmissionRate);
-					model.pipelineEmission = (long) (physicalEnergyTransferred * model.pipelineEmissionRate);
-					model.totalEmission += model.upstreamEmission;
-					model.totalEmission += model.pipelineEmission;
 				}
 				model.liquefactionEmissionRate = port.getLiquefactionEmissionRate();
-				model.liquefactionEmission = (long) (model.liquefactionEmissionRate * ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred());
+				model.liquefactionEmission = (long) (model.liquefactionEmissionRate * physicalEnergyTransferred);
 				model.totalEmission += model.liquefactionEmission;
 			}
 
+			if (model.pipelineEmissionRate != 0.0) {
+				model.pipelineEmission = (long) (physicalEnergyTransferred * model.pipelineEmissionRate);
+				model.totalEmission += model.pipelineEmission;
+			}
+			if (model.upstreamEmissionRate != 0.0) {
+				model.upstreamEmission = (long) (physicalEnergyTransferred * model.upstreamEmissionRate);
+				model.totalEmission += model.upstreamEmission;
+			}
 		}
 		final Vessel vessel = ScheduleModelUtils.getVessel(cargoAllocation.getSequence());
 
@@ -114,12 +110,14 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		// event
 		if (vessel != null) {
 			model.vesselName = vessel.getName();
-			model.baseFuelEmissionRate = vessel.getVesselOrDelegateBaseFuelEmissionRate();
-			model.bogEmissionRate = vessel.getVesselOrDelegateBogEmissionRate();
-			model.pilotLightEmissionRate = vessel.getVesselOrDelegatePilotLightEmissionRate();
+			model.baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
+			model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
+			model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
 			for (final Event e : cargoAllocation.getEvents()) {
 				if (e instanceof FuelUsage fu) {
-					processUsage(model, fu.getFuels());
+					model.shippingEmission += EmissionsUtils.getBaseFuelEmission(model, fu.getFuels());
+					model.shippingEmission += EmissionsUtils.getBOGEmission(model, fu.getFuels());
+					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
 				}
 			}
 			model.totalEmission += model.shippingEmission;
@@ -138,44 +136,6 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		model.eventStart = eventStart;
 
 		return model;
-	}
-
-	private static void processUsage(final TotalEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		for (final FuelQuantity fq : fuelQuantity) {
-			switch (fq.getFuel()) {
-			case BASE_FUEL: {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
-						.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					model.shippingEmission += (long) (optMtFuelAmount.get().getQuantity() * model.baseFuelEmissionRate);
-				}
-				break;
-			}
-			case FBO, NBO: {
-				// Want m3
-				final Optional<FuelAmount> optM3FuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.M3) //
-						.findFirst();
-				if (optM3FuelAmount.isPresent()) {
-					model.shippingEmission += (long) (optM3FuelAmount.get().getQuantity() * model.bogEmissionRate);
-				}
-				break;
-			}
-			case PILOT_LIGHT: {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-				.filter(fa -> fa.getUnit() == FuelUnit.MT)//
-				.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					model.shippingEmission += (long) (optMtFuelAmount.get().getQuantity() * model.pilotLightEmissionRate);
-				}
-				break;
-			}
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + fq.getFuel());
-			}
-		}
-
 	}
 
 	public static File jsonOutput(final List<TotalEmissionAccountingReportModelV1> models) {

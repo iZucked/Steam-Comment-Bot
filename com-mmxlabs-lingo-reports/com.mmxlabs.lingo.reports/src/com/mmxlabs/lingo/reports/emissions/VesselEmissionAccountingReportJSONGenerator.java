@@ -39,9 +39,9 @@ public class VesselEmissionAccountingReportJSONGenerator{
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
-				final double baseFuelEmissionRate = vessel.getBaseFuelEmissionRate();
-				final double bogEmissionRate = vessel.getBogEmissionRate();
-				final double pilotLightEmissionRate = vessel.getPilotLightEmissionRate();
+				final double baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
+				final double bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
+				final double pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
 				for (final Event e : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
 					model.vesselName = vesselName;
@@ -51,9 +51,9 @@ public class VesselEmissionAccountingReportJSONGenerator{
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
 					
-					model.baseFuelEmission = 0;
-					model.bogEmission = 0;
-					model.pilotLightEmission = 0;
+					model.baseFuelEmission = 0L;
+					model.bogEmission = 0L;
+					model.pilotLightEmission = 0L;
 					
 					if (e instanceof FuelUsage fu) {
 						processUsage(model, fu.getFuels());
@@ -93,21 +93,9 @@ public class VesselEmissionAccountingReportJSONGenerator{
 	}
 	
 	private static void processUsage(final VesselEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		for (final FuelQuantity fq : fuelQuantity) {
-			switch (fq.getFuel()) {
-			case BASE_FUEL: 
-				fq.getAmounts().forEach(fa -> model.baseFuelEmission += (int) (fa.getQuantity() * model.baseFuelEmissionRate));
-				break;
-			case FBO, NBO:
-				fq.getAmounts().forEach(fa -> model.bogEmission += (int) (fa.getQuantity() * model.bogEmissionRate));
-				break;
-			case PILOT_LIGHT:
-				fq.getAmounts().forEach(fa -> model.pilotLightEmission += (int) (fa.getQuantity() * model.pilotLightEmissionRate));
-				break;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + fq.getFuel());
-			}
-		}
+		model.baseFuelEmission = EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
+		model.bogEmission = EmissionsUtils.getBOGEmission(model, fuelQuantity);
+		model.pilotLightEmission = EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 		model.totalEmission = model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 	}
 

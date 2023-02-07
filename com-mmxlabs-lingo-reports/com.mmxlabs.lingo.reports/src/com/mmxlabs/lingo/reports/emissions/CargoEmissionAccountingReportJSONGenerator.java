@@ -73,12 +73,12 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		
 		model.eventID = cargoAllocation.getName();
 		model.vesselName = vessel.getName();
-		model.baseFuelEmissionRate = vessel.getBaseFuelEmissionRate();
-		model.bogEmissionRate = vessel.getBogEmissionRate();
-		model.pilotLightEmissionRate = vessel.getPilotLightEmissionRate();
-		model.baseFuelEmission = 0;
-		model.bogEmission = 0;
-		model.pilotLightEmission = 0;
+		model.baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
+		model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
+		model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
+		model.baseFuelEmission = 0L;
+		model.bogEmission = 0L;
+		model.pilotLightEmission = 0L;
 		LocalDateTime eventStart = null;
 		
 		for (final Event e : cargoAllocation.getEvents()) {
@@ -97,21 +97,9 @@ public class CargoEmissionAccountingReportJSONGenerator{
 	}
 	
 	private static void processUsage(final CargoEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		for (final FuelQuantity fq : fuelQuantity) {
-			switch (fq.getFuel()) {
-			case BASE_FUEL: 
-				fq.getAmounts().forEach(fa -> model.baseFuelEmission += (int) (fa.getQuantity() * model.baseFuelEmissionRate));
-				break;
-			case FBO, NBO:
-				fq.getAmounts().forEach(fa -> model.bogEmission += (int) (fa.getQuantity() * model.bogEmissionRate));
-				break;
-			case PILOT_LIGHT:
-				fq.getAmounts().forEach(fa -> model.pilotLightEmission += (int) (fa.getQuantity() * model.pilotLightEmissionRate));
-				break;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + fq.getFuel());
-			}
-		}
+		model.baseFuelEmission = EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
+		model.bogEmission = EmissionsUtils.getBOGEmission(model, fuelQuantity);
+		model.pilotLightEmission = EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 		model.totalEmission = model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 	}
 
