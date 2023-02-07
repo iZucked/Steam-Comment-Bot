@@ -26,15 +26,15 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
-public class VesselEmissionAccountingReportJSONGenerator{
-	
+public class VesselEmissionAccountingReportJSONGenerator {
+
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull ScheduleModel scheduleModel) {
 		final List<VesselEmissionAccountingReportModelV1> models = new LinkedList<>();
 
 		if (scheduleModel.getSchedule() == null) {
 			return models;
 		}
-		
+
 		for (final var seq : scheduleModel.getSchedule().getSequences()) {
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
@@ -50,18 +50,19 @@ public class VesselEmissionAccountingReportJSONGenerator{
 					model.pilotLightEmissionRate = pilotLightEmissionRate;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
-					
+
 					model.baseFuelEmission = 0L;
 					model.bogEmission = 0L;
 					model.pilotLightEmission = 0L;
-					
+					model.totalEmission = 0L;
+
 					if (e instanceof FuelUsage fu) {
 						processUsage(model, fu.getFuels());
 					}
 					if (e instanceof SlotVisit sv) {
 						final SlotAllocation sa = sv.getSlotAllocation();
 						if (sa != null) {
-							final Slot<?> slot = sa.getSlot(); 
+							final Slot<?> slot = sa.getSlot();
 							if (slot != null) {
 								model.equivalents.add(slot);
 								model.eventID = slot.getName();
@@ -84,6 +85,7 @@ public class VesselEmissionAccountingReportJSONGenerator{
 							model.eventID = "Ballast Idle";
 						}
 					}
+					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 					models.add(model);
 				}
 			}
@@ -91,12 +93,11 @@ public class VesselEmissionAccountingReportJSONGenerator{
 
 		return models;
 	}
-	
+
 	private static void processUsage(final VesselEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
 		model.baseFuelEmission += EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
 		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
 		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
-		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {

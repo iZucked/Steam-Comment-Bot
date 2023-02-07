@@ -79,6 +79,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.baseFuelEmission = 0L;
 		model.bogEmission = 0L;
 		model.pilotLightEmission = 0L;
+		model.totalEmission = 0L;
 		LocalDateTime eventStart = null;
 		
 		for (final Event e : cargoAllocation.getEvents()) {
@@ -92,6 +93,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			}
 		}
 		model.eventStart = eventStart;
+		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 		
 		return model;
 	}
@@ -100,7 +102,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.baseFuelEmission += EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
 		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
 		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
-		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 	}
 
 	public static File jsonOutput(final List<CargoEmissionAccountingReportModelV1> models) {
