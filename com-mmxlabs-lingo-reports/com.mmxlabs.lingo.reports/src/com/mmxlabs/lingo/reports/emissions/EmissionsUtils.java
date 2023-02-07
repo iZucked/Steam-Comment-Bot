@@ -57,7 +57,7 @@ public class EmissionsUtils {
 	public static long getPilotLightEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
 		long result = 0L;
 		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.FBO || fq.getFuel() == Fuel.NBO) {
+			if (fq.getFuel()==Fuel.PILOT_LIGHT) {
 				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
 						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
 						.findFirst();

@@ -93,10 +93,10 @@ public class VesselEmissionAccountingReportJSONGenerator{
 	}
 	
 	private static void processUsage(final VesselEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		model.baseFuelEmission = EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
-		model.bogEmission = EmissionsUtils.getBOGEmission(model, fuelQuantity);
-		model.pilotLightEmission = EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
-		model.totalEmission = model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
+		model.baseFuelEmission += EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
+		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
+		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
+		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {
