@@ -98,6 +98,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/cargoCV"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/upstreamEmissionRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/pipelineEmissionRate"/>
+      <genOperations ecoreOperation="commercial.ecore#//PurchaseContract/getContractOrDelegateUpstreamEmissionRate"/>
+      <genOperations ecoreOperation="commercial.ecore#//PurchaseContract/getContractOrDelegatePipelineEmissionRate"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//TaxRate">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//TaxRate/date"/>

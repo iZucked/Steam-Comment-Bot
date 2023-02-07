@@ -62,19 +62,19 @@ public class TotalEmissionAccountingReportModelV1{
 	
 	
 	@ColumnName("Upstream")
-	public Integer upstreamEmission;
+	public Long upstreamEmission;
 	
 	@ColumnName("Pipeline")
-	public Integer pipelineEmission;
+	public Long pipelineEmission;
 	
 	@ColumnName("Liquefaction")
-	public Integer liquefactionEmission;
+	public Long liquefactionEmission;
 	
 	@ColumnName("Shipping")
-	public Integer shippingEmission;
+	public Long shippingEmission;
 	
 	@ColumnName("Total CO2e kg")
-	public Integer totalEmission;
+	public Long totalEmission;
 	
 	@JsonIgnore
 	@LingoIgnore

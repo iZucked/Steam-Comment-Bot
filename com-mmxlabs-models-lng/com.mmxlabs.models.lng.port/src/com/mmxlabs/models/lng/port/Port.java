@@ -532,7 +532,7 @@ public interface Port extends APortSet<Port> {
 	 * @see #setLiquefactionEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_LiquefactionEmissionRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='##0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getLiquefactionEmissionRate();
@@ -554,7 +554,7 @@ public interface Port extends APortSet<Port> {
 	 * @return the value of the '<em>Upstream Emission Rate</em>' attribute.
 	 * @see #setUpstreamEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_UpstreamEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='##0.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getUpstreamEmissionRate();
@@ -576,7 +576,7 @@ public interface Port extends APortSet<Port> {
 	 * @return the value of the '<em>Pipeline Emission Rate</em>' attribute.
 	 * @see #setPipelineEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_PipelineEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='##0.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getPipelineEmissionRate();

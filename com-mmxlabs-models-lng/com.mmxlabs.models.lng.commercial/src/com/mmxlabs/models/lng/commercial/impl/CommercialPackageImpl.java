@@ -2114,6 +2114,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getPurchaseContract_UpstreamEmissionRate(), ecorePackage.getEDouble(), "upstreamEmissionRate", null, 0, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPurchaseContract_PipelineEmissionRate(), ecorePackage.getEDouble(), "pipelineEmissionRate", null, 0, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(purchaseContractEClass, ecorePackage.getEDouble(), "getContractOrDelegateUpstreamEmissionRate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(purchaseContractEClass, ecorePackage.getEDouble(), "getContractOrDelegatePipelineEmissionRate", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(taxRateEClass, TaxRate.class, "TaxRate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTaxRate_Date(), theDateTimePackage.getLocalDate(), "date", null, 1, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTaxRate_Value(), ecorePackage.getEFloat(), "value", null, 1, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2340,14 +2344,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		  (getPurchaseContract_UpstreamEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/mmBtu"
+			   "unit", "kg/mmBtu",
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getPurchaseContract_PipelineEmissionRate(),
 		   source,
 		   new String[] {
 			   "unit", "kg/mmBtu",
-			   "formatString", "##0.###"
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getDateShiftExpressionPriceParameters_Value(),

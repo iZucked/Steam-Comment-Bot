@@ -876,6 +876,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected double baseFuelEmissionRate = BASE_FUEL_EMISSION_RATE_EDEFAULT;
 
 	/**
+	 * This is true if the Base Fuel Emission Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean baseFuelEmissionRateESet;
+
+	/**
 	 * The default value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -896,6 +905,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected double bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
 
 	/**
+	 * This is true if the Bog Emission Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean bogEmissionRateESet;
+
+	/**
 	 * The default value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -914,6 +932,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected double pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
+
+	/**
+	 * This is true if the Pilot Light Emission Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pilotLightEmissionRateESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1969,6 +1996,45 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getVesselOrDelegateBaseFuelEmissionRate() {
+		if (getReference() != null && !isSetBaseFuelEmissionRate()) {
+			return getReference().getBaseFuelEmissionRate();
+		}
+		return getBaseFuelEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getVesselOrDelegateBogEmissionRate() {
+		if (getReference() != null && !isSetBogEmissionRate()) {
+			return getReference().getBogEmissionRate();
+		}
+		return getBogEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getVesselOrDelegatePilotLightEmissionRate() {
+		if (getReference() != null && !isSetPilotLightEmissionRate()) {
+			return getReference().getPilotLightEmissionRate();
+		}
+		return getPilotLightEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -2186,8 +2252,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	public void setBaseFuelEmissionRate(double newBaseFuelEmissionRate) {
 		double oldBaseFuelEmissionRate = baseFuelEmissionRate;
 		baseFuelEmissionRate = newBaseFuelEmissionRate;
+		boolean oldBaseFuelEmissionRateESet = baseFuelEmissionRateESet;
+		baseFuelEmissionRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, baseFuelEmissionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, baseFuelEmissionRate, !oldBaseFuelEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBaseFuelEmissionRate() {
+		double oldBaseFuelEmissionRate = baseFuelEmissionRate;
+		boolean oldBaseFuelEmissionRateESet = baseFuelEmissionRateESet;
+		baseFuelEmissionRate = BASE_FUEL_EMISSION_RATE_EDEFAULT;
+		baseFuelEmissionRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, BASE_FUEL_EMISSION_RATE_EDEFAULT, oldBaseFuelEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBaseFuelEmissionRate() {
+		return baseFuelEmissionRateESet;
 	}
 
 	/**
@@ -2209,8 +2302,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	public void setBogEmissionRate(double newBogEmissionRate) {
 		double oldBogEmissionRate = bogEmissionRate;
 		bogEmissionRate = newBogEmissionRate;
+		boolean oldBogEmissionRateESet = bogEmissionRateESet;
+		bogEmissionRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, bogEmissionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, bogEmissionRate, !oldBogEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBogEmissionRate() {
+		double oldBogEmissionRate = bogEmissionRate;
+		boolean oldBogEmissionRateESet = bogEmissionRateESet;
+		bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
+		bogEmissionRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, BOG_EMISSION_RATE_EDEFAULT, oldBogEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBogEmissionRate() {
+		return bogEmissionRateESet;
 	}
 
 	/**
@@ -2232,8 +2352,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	public void setPilotLightEmissionRate(double newPilotLightEmissionRate) {
 		double oldPilotLightEmissionRate = pilotLightEmissionRate;
 		pilotLightEmissionRate = newPilotLightEmissionRate;
+		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
+		pilotLightEmissionRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, pilotLightEmissionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, pilotLightEmissionRate, !oldPilotLightEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPilotLightEmissionRate() {
+		double oldPilotLightEmissionRate = pilotLightEmissionRate;
+		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
+		pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
+		pilotLightEmissionRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, PILOT_LIGHT_EMISSION_RATE_EDEFAULT, oldPilotLightEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPilotLightEmissionRate() {
+		return pilotLightEmissionRateESet;
 	}
 
 	/**
@@ -3031,13 +3178,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				setMarker(MARKER_EDEFAULT);
 				return;
 			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				setBaseFuelEmissionRate(BASE_FUEL_EMISSION_RATE_EDEFAULT);
+				unsetBaseFuelEmissionRate();
 				return;
 			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				setBogEmissionRate(BOG_EMISSION_RATE_EDEFAULT);
+				unsetBogEmissionRate();
 				return;
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				setPilotLightEmissionRate(PILOT_LIGHT_EMISSION_RATE_EDEFAULT);
+				unsetPilotLightEmissionRate();
 				return;
 		}
 		super.eUnset(featureID);
@@ -3123,11 +3270,11 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				return marker != MARKER_EDEFAULT;
 			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				return baseFuelEmissionRate != BASE_FUEL_EMISSION_RATE_EDEFAULT;
+				return isSetBaseFuelEmissionRate();
 			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				return bogEmissionRate != BOG_EMISSION_RATE_EDEFAULT;
+				return isSetBogEmissionRate();
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				return pilotLightEmissionRate != PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
+				return isSetPilotLightEmissionRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3196,11 +3343,11 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(", marker: ");
 		result.append(marker);
 		result.append(", baseFuelEmissionRate: ");
-		result.append(baseFuelEmissionRate);
+		if (baseFuelEmissionRateESet) result.append(baseFuelEmissionRate); else result.append("<unset>");
 		result.append(", bogEmissionRate: ");
-		result.append(bogEmissionRate);
+		if (bogEmissionRateESet) result.append(bogEmissionRate); else result.append("<unset>");
 		result.append(", pilotLightEmissionRate: ");
-		result.append(pilotLightEmissionRate);
+		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

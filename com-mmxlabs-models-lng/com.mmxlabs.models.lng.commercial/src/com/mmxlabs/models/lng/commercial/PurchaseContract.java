@@ -94,7 +94,7 @@ public interface PurchaseContract extends Contract {
 	 * @see #setUpstreamEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_UpstreamEmissionRate()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getUpstreamEmissionRate();
@@ -144,7 +144,7 @@ public interface PurchaseContract extends Contract {
 	 * @see #setPipelineEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_PipelineEmissionRate()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='##0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getPipelineEmissionRate();
@@ -183,6 +183,22 @@ public interface PurchaseContract extends Contract {
 	 * @generated
 	 */
 	boolean isSetPipelineEmissionRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getContractOrDelegateUpstreamEmissionRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getContractOrDelegatePipelineEmissionRate();
 
 	/**
 	 * Returns the value of the '<em><b>Sales Delivery Type</b></em>' attribute.

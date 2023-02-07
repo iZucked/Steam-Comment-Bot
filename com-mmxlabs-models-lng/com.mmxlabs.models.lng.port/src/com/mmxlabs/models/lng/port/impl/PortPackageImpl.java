@@ -1310,21 +1310,21 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source,
 		   new String[] {
 			   "unit", "kg/mmBtu",
-			   "formatString", "##0.###"
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getPort_UpstreamEmissionRate(),
 		   source,
 		   new String[] {
 			   "unit", "kg/mmBtu",
-			   "formatString", "##0.###"
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getPort_PipelineEmissionRate(),
 		   source,
 		   new String[] {
 			   "unit", "kg/mmBtu",
-			   "formatString", "##0.###"
+			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getLocation_Lat(),

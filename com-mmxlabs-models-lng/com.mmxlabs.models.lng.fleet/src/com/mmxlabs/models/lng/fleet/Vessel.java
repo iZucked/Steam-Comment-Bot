@@ -1130,9 +1130,12 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Base Fuel Emission Rate</em>' attribute.
+	 * @see #isSetBaseFuelEmissionRate()
+	 * @see #unsetBaseFuelEmissionRate()
 	 * @see #setBaseFuelEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BaseFuelEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='##0.###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='####0.###'"
 	 * @generated
 	 */
 	double getBaseFuelEmissionRate();
@@ -1142,19 +1145,47 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Base Fuel Emission Rate</em>' attribute.
+	 * @see #isSetBaseFuelEmissionRate()
+	 * @see #unsetBaseFuelEmissionRate()
 	 * @see #getBaseFuelEmissionRate()
 	 * @generated
 	 */
 	void setBaseFuelEmissionRate(double value);
 
 	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBaseFuelEmissionRate()
+	 * @see #getBaseFuelEmissionRate()
+	 * @see #setBaseFuelEmissionRate(double)
+	 * @generated
+	 */
+	void unsetBaseFuelEmissionRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Base Fuel Emission Rate</em>' attribute is set.
+	 * @see #unsetBaseFuelEmissionRate()
+	 * @see #getBaseFuelEmissionRate()
+	 * @see #setBaseFuelEmissionRate(double)
+	 * @generated
+	 */
+	boolean isSetBaseFuelEmissionRate();
+
+	/**
 	 * Returns the value of the '<em><b>Bog Emission Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Bog Emission Rate</em>' attribute.
+	 * @see #isSetBogEmissionRate()
+	 * @see #unsetBogEmissionRate()
 	 * @see #setBogEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BogEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/m\263' formatString='##0.###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/m\263' formatString='####0.###'"
 	 * @generated
 	 */
 	double getBogEmissionRate();
@@ -1164,19 +1195,47 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Bog Emission Rate</em>' attribute.
+	 * @see #isSetBogEmissionRate()
+	 * @see #unsetBogEmissionRate()
 	 * @see #getBogEmissionRate()
 	 * @generated
 	 */
 	void setBogEmissionRate(double value);
 
 	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBogEmissionRate()
+	 * @see #getBogEmissionRate()
+	 * @see #setBogEmissionRate(double)
+	 * @generated
+	 */
+	void unsetBogEmissionRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Bog Emission Rate</em>' attribute is set.
+	 * @see #unsetBogEmissionRate()
+	 * @see #getBogEmissionRate()
+	 * @see #setBogEmissionRate(double)
+	 * @generated
+	 */
+	boolean isSetBogEmissionRate();
+
+	/**
 	 * Returns the value of the '<em><b>Pilot Light Emission Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pilot Light Emission Rate</em>' attribute.
+	 * @see #isSetPilotLightEmissionRate()
+	 * @see #unsetPilotLightEmissionRate()
 	 * @see #setPilotLightEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PilotLightEmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='##0.###'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='####0.###'"
 	 * @generated
 	 */
 	double getPilotLightEmissionRate();
@@ -1186,10 +1245,35 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Pilot Light Emission Rate</em>' attribute.
+	 * @see #isSetPilotLightEmissionRate()
+	 * @see #unsetPilotLightEmissionRate()
 	 * @see #getPilotLightEmissionRate()
 	 * @generated
 	 */
 	void setPilotLightEmissionRate(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPilotLightEmissionRate()
+	 * @see #getPilotLightEmissionRate()
+	 * @see #setPilotLightEmissionRate(double)
+	 * @generated
+	 */
+	void unsetPilotLightEmissionRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pilot Light Emission Rate</em>' attribute is set.
+	 * @see #unsetPilotLightEmissionRate()
+	 * @see #getPilotLightEmissionRate()
+	 * @see #setPilotLightEmissionRate(double)
+	 * @generated
+	 */
+	boolean isSetPilotLightEmissionRate();
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
@@ -1675,6 +1759,30 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	int getVesselOrDelegateSCNT();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrDelegateBaseFuelEmissionRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrDelegateBogEmissionRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrDelegatePilotLightEmissionRate();
 
 } // end of  Vessel
 

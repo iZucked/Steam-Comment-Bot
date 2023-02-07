@@ -318,6 +318,32 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getContractOrDelegateUpstreamEmissionRate() {
+		if (getPreferredPort() != null && !isSetUpstreamEmissionRate()) {
+			return getPreferredPort().getUpstreamEmissionRate();
+		}
+		return getUpstreamEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getContractOrDelegatePipelineEmissionRate() {
+		if (getPreferredPort() != null && !isSetPipelineEmissionRate()) {
+			return getPreferredPort().getPipelineEmissionRate();
+		}
+		return getPipelineEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

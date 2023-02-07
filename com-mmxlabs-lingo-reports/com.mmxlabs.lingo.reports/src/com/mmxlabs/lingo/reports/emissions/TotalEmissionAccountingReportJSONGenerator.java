@@ -68,11 +68,11 @@ public class TotalEmissionAccountingReportJSONGenerator{
 			}
 			
 		}
-		model.liquefactionEmission = 0;
-		model.pipelineEmission = 0;
-		model.shippingEmission = 0;
-		model.upstreamEmission = 0;
-		model.totalEmission = 0;
+		model.liquefactionEmission = 0L;
+		model.pipelineEmission = 0L;
+		model.shippingEmission = 0L;
+		model.upstreamEmission = 0L;
+		model.totalEmission = 0L;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
 		
        if(loadSlot != null) {
@@ -80,11 +80,11 @@ public class TotalEmissionAccountingReportJSONGenerator{
     	   final PurchaseContract purchaseContract=loadSlot.getContract();
     	   
     	   if(purchaseContract != null) {
-    		   model.pipelineEmissionRate = purchaseContract.getPipelineEmissionRate();
-    		   model.upstreamEmissionRate = purchaseContract.getUpstreamEmissionRate();
+    		   model.pipelineEmissionRate = purchaseContract.getContractOrDelegatePipelineEmissionRate();
+    		   model.upstreamEmissionRate = purchaseContract.getContractOrDelegateUpstreamEmissionRate();
     		   int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
-    		   model.upstreamEmission = (int) (physicalEnergyTransferred * model.upstreamEmissionRate);
-    		   model.pipelineEmission = (int) (physicalEnergyTransferred * model.pipelineEmissionRate);
+    		   model.upstreamEmission = (long) (physicalEnergyTransferred * model.upstreamEmissionRate);
+    		   model.pipelineEmission = (long) (physicalEnergyTransferred * model.pipelineEmissionRate);
     		   model.totalEmission += model.upstreamEmission;
     		   model.totalEmission += model.pipelineEmission;
     	   }
@@ -94,13 +94,13 @@ public class TotalEmissionAccountingReportJSONGenerator{
     			   model.pipelineEmissionRate = port.getPipelineEmissionRate();
     			   model.upstreamEmissionRate = port.getUpstreamEmissionRate();
     			   int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
-        		   model.upstreamEmission = (int) (physicalEnergyTransferred * model.upstreamEmissionRate);
-        		   model.pipelineEmission = (int) (physicalEnergyTransferred * model.pipelineEmissionRate);
+        		   model.upstreamEmission = (long) (physicalEnergyTransferred * model.upstreamEmissionRate);
+        		   model.pipelineEmission = (long) (physicalEnergyTransferred * model.pipelineEmissionRate);
         		   model.totalEmission += model.upstreamEmission;
         		   model.totalEmission += model.pipelineEmission;
     		   }
     		   model.liquefactionEmissionRate = port.getLiquefactionEmissionRate();
-    		   model.liquefactionEmission = (int) (model.liquefactionEmissionRate * ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred());
+    		   model.liquefactionEmission = (long) (model.liquefactionEmissionRate * ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred());
     		   model.totalEmission += model.liquefactionEmission;
     	   }
 
@@ -112,9 +112,9 @@ public class TotalEmissionAccountingReportJSONGenerator{
 		//if vesel is not null assign the emission rates and process the usage for each event
 		if(vessel != null) {
 			model.vesselName = vessel.getName();
-			model.baseFuelEmissionRate = vessel.getBaseFuelEmissionRate();
-			model.bogEmissionRate = vessel.getBogEmissionRate();
-			model.pilotLightEmissionRate = vessel.getPilotLightEmissionRate();
+			model.baseFuelEmissionRate = vessel.getVesselOrDelegateBaseFuelEmissionRate();
+			model.bogEmissionRate = vessel.getVesselOrDelegateBogEmissionRate();
+			model.pilotLightEmissionRate = vessel.getVesselOrDelegatePilotLightEmissionRate();
 			for (final Event e : cargoAllocation.getEvents()) {	
 				if (e instanceof FuelUsage fu) {
 					processUsage(model, fu.getFuels());
@@ -142,13 +142,13 @@ public class TotalEmissionAccountingReportJSONGenerator{
 		for (final FuelQuantity fq : fuelQuantity) {
 			switch (fq.getFuel()) {
 			case BASE_FUEL: 
-				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.baseFuelEmissionRate));
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (long) (fa.getQuantity() * model.baseFuelEmissionRate));
 				break;
 			case FBO, NBO:
-				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.bogEmissionRate));
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (long) (fa.getQuantity() * model.bogEmissionRate));
 				break;
 			case PILOT_LIGHT:
-				fq.getAmounts().forEach(fa -> model.shippingEmission += (int) (fa.getQuantity() * model.pilotLightEmissionRate));
+				fq.getAmounts().forEach(fa -> model.shippingEmission += (long) (fa.getQuantity() * model.pilotLightEmissionRate));
 				break;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + fq.getFuel());
