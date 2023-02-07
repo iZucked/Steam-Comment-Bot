@@ -25,7 +25,7 @@
 						<repository>
 							<id>mmxlabs-releases</id>
 							<layout>p2</layout>
-							<url>https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/</url>
+							<url>mvn:org.eclipse:org.eclipse.release:202112081000:zip</url>
 						</repository>
 					</repositories>
 					<jvmArgs>
