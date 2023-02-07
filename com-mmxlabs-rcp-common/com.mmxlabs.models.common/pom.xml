@@ -3,7 +3,7 @@
   <parent>
     <artifactId>com.mmxlabs.rcp.common.parent</artifactId>
     <groupId>com.mmxlabs.rcp.common</groupId>
-    <version>6.2.1.RELEASE</version>
+    <version>6.2.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>com.mmxlabs.models.common</artifactId>
