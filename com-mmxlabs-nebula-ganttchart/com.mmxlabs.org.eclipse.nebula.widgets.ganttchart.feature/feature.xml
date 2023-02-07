@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature"
       label="Gantt Chart Feature"
-      version="6.1.4.qualifier"
+      version="6.2.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
