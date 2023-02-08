@@ -2614,7 +2614,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				};
 				addActionToMenu(newFOBSale, menu);
 			}
-
+			addActionToMenu(new CreateStripMenuAction("Create Strip"), menu);
 		}
 
 		private final void initialiseSlot(final Slot<?> newSlot, final boolean isLoad, final RowData referenceRowData) {
