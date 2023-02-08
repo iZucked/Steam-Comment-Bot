@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>6.2.2-SNAPSHOT</version>
+		<version>6.2.2.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.its.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
