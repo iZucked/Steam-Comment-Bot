@@ -4,6 +4,7 @@
  */
 package org.eclipse.nebula.widgets.ganttchart;
 
+import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
@@ -81,6 +82,42 @@ public interface IPaintManager {
 	 * @param bounds full bounds of draw area
 	 */
 	void drawDaysOnChart(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, int daysNumber, Rectangle bounds);
+
+	/**
+	 * Draws a little plaque showing how many number of days an event spans over.
+	 * 
+	 * @param ganttComposite GanttComposite parent
+	 * @param settings ISettings
+	 * @param colorManager IColorManager
+	 * @param event GanttEvent
+	 * @param gc GC
+	 * @param threeDee Whether 3D events is on or off
+	 * @param x x location
+	 * @param y y location 
+	 * @param eventWidth Width of event
+	 * @param plaqueContents String to display
+	 * @param bounds full bounds of draw area
+	 */
+	void drawPlaqueOnEvent(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent event, GC gc, boolean threeDee, int x, int y, int eventWidth, IPlaqueContentProvider[] plaqueContentProviders, Rectangle bounds);
+
+
+	/**
+	 * Draws the little plaque showing how many number of days and hours an event spans over.
+	 * 
+	 * @param ganttComposite GanttComposite parent
+	 * @param settings ISettings
+	 * @param colorManager IColorManager
+	 * @param ge GanttEvent
+	 * @param gc GC
+	 * @param threeDee Whether 3D events is on or off
+	 * @param x x location
+	 * @param y y location 
+	 * @param eventWidth Width of event
+	 * @param daysNumber Number of days the event encompasses
+	 * @param hoursNumber Remainder of hours the event encompasses
+	 * @param bounds full bounds of draw area
+	 */
+	void drawDaysAndHoursOnChart(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, int daysNumber, int hoursNumber, Rectangle bounds);
 	
 	/**
 	 * Draws a string shown next to an event.
