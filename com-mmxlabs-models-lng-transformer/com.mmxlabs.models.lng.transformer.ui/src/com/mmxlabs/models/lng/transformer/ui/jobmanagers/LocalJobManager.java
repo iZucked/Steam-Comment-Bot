@@ -178,6 +178,7 @@ public class LocalJobManager extends AbstractJobManager {
 			task.errorHandler.accept("Error processing task parameters", e);
 		}
 		runner.withScenario(task.sdp);
+		runner.withScenarioInstance(task.job.getScenarioInstance());
 
 		try {
 			final AbstractSolutionSet result = runner.run(monitor);
