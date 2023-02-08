@@ -75,8 +75,8 @@ public class FOBDESCargoDatesConstraint extends AbstractModelMultiConstraint {
 							status.setConstraintKey(KEY_DUAL_COUNTERPART_WINDOWS);
 							statuses.add(status);
 						} else if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() != null) {
-							if (!checkDates(getStartLDT(loadSlot), getEndLDT(loadSlot), loadSlot.isWindowCounterParty(), //
-									getStartLDT(dischargeSlot), getEndLDT(dischargeSlot), dischargeSlot.isWindowCounterParty())) {
+							if (!checkDates(getStartLDT(loadSlot), getEndLDT(loadSlot), !loadSlot.isDESPurchase() && loadSlot.isWindowCounterParty(), //
+									getStartLDT(dischargeSlot), getEndLDT(dischargeSlot), !dischargeSlot.isFOBSale() && dischargeSlot.isWindowCounterParty())) {
 
 								final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getLoadName());
 
@@ -103,39 +103,43 @@ public class FOBDESCargoDatesConstraint extends AbstractModelMultiConstraint {
 		// Add on window duration
 		{
 			final int windowSize = (Integer) s.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
-			final TimePeriod tp = (TimePeriod) s.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
+			if (windowSize != 0) {
+				final TimePeriod tp = (TimePeriod) s.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
 
-			switch (tp) {
-			case DAYS:
-				ldt = ldt.plusDays(windowSize).minusHours(1);
-				break;
-			case HOURS:
-				ldt = ldt.plusHours(windowSize);
-				break;
-			case MONTHS:
-				ldt = ldt.plusMonths(windowSize).minusHours(1);
-				break;
-			default:
-				break;
+				switch (tp) {
+				case DAYS:
+					ldt = ldt.plusDays(windowSize).minusHours(1);
+					break;
+				case HOURS:
+					ldt = ldt.plusHours(windowSize);
+					break;
+				case MONTHS:
+					ldt = ldt.plusMonths(windowSize).minusHours(1);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		// Add on any flex
 		{
 			final int windowSize = s.getWindowFlex();
-			final TimePeriod tp = s.getWindowFlexUnits();
+			if (windowSize != 0) {
+				final TimePeriod tp = s.getWindowFlexUnits();
 
-			switch (tp) {
-			case DAYS:
-				ldt = ldt.plusDays(windowSize).minusHours(1);
-				break;
-			case HOURS:
-				ldt = ldt.plusHours(windowSize);
-				break;
-			case MONTHS:
-				ldt = ldt.plusMonths(windowSize).minusHours(1);
-				break;
-			default:
-				break;
+				switch (tp) {
+				case DAYS:
+					ldt = ldt.plusDays(windowSize).minusHours(1);
+					break;
+				case HOURS:
+					ldt = ldt.plusHours(windowSize);
+					break;
+				case MONTHS:
+					ldt = ldt.plusMonths(windowSize).minusHours(1);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		return ldt;
