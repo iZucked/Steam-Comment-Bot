@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
+import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
@@ -328,6 +329,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	private boolean showLegend = false;
 
 	private ILegendProvider legendProvider = null;
+
+	private IPlaqueContentProvider[] plaqueContentProviders;
 
 	static {
 		final String osProperty = System.getProperty("os.name");
@@ -3433,11 +3436,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw a little plaque saying how many days that this event is long
-		if (_showNumDays) {
-			final long hours = DateHelper.hoursBetween(ge.getActualStartDate(), ge.getActualEndDate(), false);
-			final long integerDivDays = hours / 24L;
-			final long remainingHours = hours % 24L;
-			_paintManager.drawDaysAndHoursOnChart(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, (int) integerDivDays, (int) remainingHours, bounds);
+		if (_showNumDays && plaqueContentProviders != null) {
+			_paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
 		}
 
 		// fetch current font
@@ -9088,5 +9088,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	public void setMenuAction(BiConsumer<Menu, GanttEvent> menuAction) {
 		this.menuAction = menuAction;
+	}
+
+	public void replacePlaqueContentProviders(final Collection<@NonNull IPlaqueContentProvider> plaqueContentProviders) {
+		this.plaqueContentProviders = plaqueContentProviders.toArray(new IPlaqueContentProvider[plaqueContentProviders.size()]);
 	}
 }

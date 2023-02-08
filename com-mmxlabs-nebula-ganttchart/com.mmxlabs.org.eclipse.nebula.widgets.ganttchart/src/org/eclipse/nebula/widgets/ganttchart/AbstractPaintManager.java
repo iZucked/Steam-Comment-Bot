@@ -6,6 +6,7 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import java.util.List;
 
+import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -463,6 +464,50 @@ public abstract class AbstractPaintManager implements IPaintManager {
 
 			yMiddle -= unmodified.y / 2;
 			gc.drawString(dayString, middle - unmodified.x + (unmodified.x / 2) + 1, yMiddle, true);
+		}
+	}
+
+	@Override
+	public void drawPlaqueOnEvent(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent event, GC gc, boolean threeDee, int x, int y, int eventWidth, IPlaqueContentProvider[] plaqueContentProviders, Rectangle bounds) {
+		if (event.isImage()) {
+			return;
+		}
+
+		final int top = y - 2;
+		final int xE = x + eventWidth;
+		final int middle = x + ((xE - x) / 2);
+		int yMiddle = event.getY() + (event.getHeight() / 2);
+
+		Color gradient = event.getGradientStatusColor();
+
+		if (gradient == null) {
+			gradient = settings.getDefaultGradientEventColor();
+		}
+
+		final Color textColour = colorManager.getTextColor();
+		final int eventHeight = settings.getEventHeight();
+
+		for (final IPlaqueContentProvider plaqueContentProvider : plaqueContentProviders) {
+			final String plaqueContents = plaqueContentProvider.provideContents(event);
+			if (plaqueContents.isBlank()) {
+				// Short circuit on first match
+				return;
+			}
+			final Point extent = gc.stringExtent(plaqueContents);
+			final Point unmodified = new Point(extent.x, extent.y);
+			extent.x = extent.x + (2*2) +2;
+
+			if ((middle - extent.x) > x) {
+				gc.setBackground(gradient);
+				gc.fillRectangle(middle - extent.x/ 2, top, extent.x, eventHeight + 4);
+				gc.setForeground(textColour);
+				gc.drawRectangle(middle - extent.x /2, top, extent.x, eventHeight + 4);
+				
+				yMiddle -= unmodified.y/2;
+				gc.drawString(plaqueContents, middle - unmodified.x + (unmodified.x / 2) + 1, yMiddle, true);
+				// Short circuit on first match
+				return;
+			}
 		}
 	}
 
