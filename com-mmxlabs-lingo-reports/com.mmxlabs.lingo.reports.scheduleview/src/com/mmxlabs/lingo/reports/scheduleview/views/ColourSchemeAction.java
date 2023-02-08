@@ -57,7 +57,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 	@Override
 	protected void createMenuItems(final Menu menu) {
 		{
-			final Action canalAction = new Action("Show Canals", IAction.AS_CHECK_BOX) {
+			final Action canalAction = new Action("Show canals", IAction.AS_CHECK_BOX) {
 				@Override
 				public void run() {
 					lp.toggleShowCanals();
@@ -156,7 +156,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action toggleShowNominalsByDefaultAction = new Action("Show Nominals", SWT.CHECK) {
+			final Action toggleShowNominalsByDefaultAction = new Action("Show nominals", SWT.CHECK) {
 				@Override
 				public void run() {
 					// TODO: Tidy all this state up.
