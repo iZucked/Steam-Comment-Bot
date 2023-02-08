@@ -22,7 +22,7 @@ import org.json.simple.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 import com.mmxlabs.scheduler.optimiser.utils.GCStats;
 
 //From OSGI prompt, run e.g. 
@@ -101,12 +101,12 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 
 					HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getMachineInfo(), options, scenarioFile, threads);
 
-					List<Future<SlotInsertionOptimiserLogger>> futures = new ArrayList<>();
-					List<SlotInsertionOptimiserLogger> results = new ArrayList<>();
+					List<Future<OptioniserLogger>> futures = new ArrayList<>();
+					List<OptioniserLogger> results = new ArrayList<>();
 
 					// Do everything in N threads.
 					int startTry = (run - 1) * totalIterations; // every run should start at a different point.
-					SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
+					OptioniserLogger logger = new OptioniserLogger();
 
 					CountDownLatch start = new CountDownLatch(1);
 					CountDownLatch finished = new CountDownLatch(threads);
@@ -116,7 +116,7 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 
 						if (threads > 1) {
 							// futures.add(executorService.submit(() -> {
-							SlotInsertionOptimiserLogger loggerT = new SlotInsertionOptimiserLogger();
+							OptioniserLogger loggerT = new OptioniserLogger();
 							results.add(loggerT);
 							Runnable r = createNewOptimiserThread(startTryT, options, scenarioFile, loggerT, start, finished);
 							// r.run();
@@ -178,7 +178,7 @@ public class HeadlessOptioniserRunnerConsoleCommand implements CommandProvider {
 		}
 	}
 
-	private Runnable createNewOptimiserThread(final int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, SlotInsertionOptimiserLogger logger, CountDownLatch start,
+	private Runnable createNewOptimiserThread(final int startTry, HeadlessOptioniserRunner.Options options, File scenarioFile, OptioniserLogger logger, CountDownLatch start,
 			CountDownLatch finished) {
 		return new Runnable() {
 			@Override

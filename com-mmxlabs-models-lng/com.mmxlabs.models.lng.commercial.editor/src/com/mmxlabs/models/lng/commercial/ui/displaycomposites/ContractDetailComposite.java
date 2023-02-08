@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -38,7 +39,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 	private final ContractDetailGroup contractDetailGroup;
 
 	public enum ContractDetailGroup {
-		GENERAL, RESTRICTIONS
+		GENERAL, RESTRICTIONS, EMISSIONS
 	}
 
 	public ContractDetailComposite(final Composite parent, final int style, final ContractDetailGroup contractDetailGroup, final FormToolkit toolkit) {
@@ -67,7 +68,11 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
 			cdg = ContractDetailGroup.RESTRICTIONS;
 		}
-
+		
+		else if(editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_PipelineEmissionRate() ||
+				editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_UpstreamEmissionRate() )  {
+			cdg = ContractDetailGroup.EMISSIONS;
+		}
 		// Do not add elements if they are for the wrong section.
 		if (contractDetailGroup != cdg) {
 			// Rejected...

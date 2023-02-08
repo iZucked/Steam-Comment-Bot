@@ -155,7 +155,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 	@Override
 	protected IAllocationAnnotation calculateShippedMode(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel, @Nullable IAnnotatedSolution annotatedSolution) {
 
-		if (slots.size() > 2 || allocationRecord.fullCargoLot) {
+		if (slots.size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD || allocationRecord.fullCargoLot) {
 			// Fixed discharge volumes, so no decision to make here.
 			return calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
 		}

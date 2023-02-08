@@ -45,7 +45,7 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 
 	private final List<ETypedElement> topFeatures;
 	private final List<ETypedElement> otherFeatures;
-	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<ETypedElement, IInlineEditor>();
+	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<>();
 
 	public CargoDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
 		super(parent, style, toolkit);

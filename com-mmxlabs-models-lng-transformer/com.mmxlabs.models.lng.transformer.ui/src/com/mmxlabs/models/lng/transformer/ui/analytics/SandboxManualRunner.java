@@ -257,7 +257,7 @@ public class SandboxManualRunner {
 
 				specifications = tasks.stream() //
 						.map(baseCase -> {
-							return new Pair<>(baseCase, builder.generate(baseCase));
+							return new Pair<>(baseCase, builder.generate(baseCase, false));
 						}) //
 						.toList();
 
@@ -267,7 +267,7 @@ public class SandboxManualRunner {
 				// baseSpecification = builder.generate(model.getBaseCase());
 
 				specifications = tasks.stream() //
-						.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase))) //
+						.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase, false))) //
 						.toList();
 			}
 		}

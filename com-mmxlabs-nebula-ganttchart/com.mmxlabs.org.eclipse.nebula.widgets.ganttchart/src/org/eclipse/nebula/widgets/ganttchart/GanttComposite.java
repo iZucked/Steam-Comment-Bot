@@ -3581,8 +3581,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			ge.setHorizontalLineTopY(yStart);
 
 			if (fixedHeight) {
-				yStart += fixedRowHeight;
-
 				int extra = 0;
 
 				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));

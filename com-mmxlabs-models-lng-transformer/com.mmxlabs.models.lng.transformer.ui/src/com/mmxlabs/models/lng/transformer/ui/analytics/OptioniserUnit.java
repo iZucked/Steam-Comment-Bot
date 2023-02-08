@@ -71,10 +71,10 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionEvaluator;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserEvaluator;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserOptimiser;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserInitialState;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
@@ -85,7 +85,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
-public class SlotInsertionOptimiserUnit {
+public class OptioniserUnit {
 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
@@ -104,7 +104,7 @@ public class SlotInsertionOptimiserUnit {
 	private @NonNull InsertionOptimisationStage stage;
 
 	@SuppressWarnings("null")
-	public SlotInsertionOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
+	public OptioniserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
 			@NonNull final InsertionOptimisationStage stage, @NonNull final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> initialHints) {
 
@@ -148,18 +148,18 @@ public class SlotInsertionOptimiserUnit {
 
 			@Provides
 			@ThreadLocalScope
-			private SlotInsertionOptimiser providePerThreadOptimiser(@NonNull final Injector injector) {
+			private OptioniserOptimiser providePerThreadOptimiser(@NonNull final Injector injector) {
 
-				SlotInsertionOptimiser optimiser = new SlotInsertionOptimiser();
+				OptioniserOptimiser optimiser = new OptioniserOptimiser();
 				injector.injectMembers(optimiser);
 				return optimiser;
 			}
 
 			@Provides
 			@ThreadLocalScope
-			private SlotInsertionEvaluator providePerThreadEvaluator(@NonNull final Injector injector) {
+			private OptioniserEvaluator providePerThreadEvaluator(@NonNull final Injector injector) {
 
-				SlotInsertionEvaluator optimiser = new SlotInsertionEvaluator();
+				OptioniserEvaluator optimiser = new OptioniserEvaluator();
 				injector.injectMembers(optimiser);
 				return optimiser;
 			}
@@ -170,11 +170,11 @@ public class SlotInsertionOptimiserUnit {
 		this.inputState = inputState;
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, SlotInsertionOptimiserLogger logger, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, OptioniserLogger logger, @NonNull final IProgressMonitor monitor) {
 		return run(slotsToInsert, eventsToInsert, stage.getIterations(), logger, monitor);
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @Nullable SlotInsertionOptimiserLogger logger,
+	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @Nullable OptioniserLogger logger,
 			@NonNull final IProgressMonitor monitor) {
 
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
@@ -192,10 +192,10 @@ public class SlotInsertionOptimiserUnit {
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<IPortSlot> slotElements = slotsToInsert.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
-					.collect(Collectors.toList());
+					.toList();
 			final List<IPortSlot> eventElements = eventsToInsert.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
-					.collect(Collectors.toList());
+					.toList();
 
 			final List<IPortSlot> optionElements = new ArrayList<>(slotElements.size() + eventElements.size());
 			optionElements.addAll(slotElements);
@@ -203,7 +203,7 @@ public class SlotInsertionOptimiserUnit {
 
 			monitor.beginTask("Generate solutions", tries);
 
-			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
+			final OptioniserInitialState state = new OptioniserInitialState();
 			final List<Pair<ISequenceElement, ISequenceElement>> nonShippedPairs = new LinkedList<>();
 			final Map<ISequenceElement, Pair<IResource, List<ISequenceElement>>> initialAllocation = new HashMap<>();
 			{
@@ -381,7 +381,7 @@ public class SlotInsertionOptimiserUnit {
 			try {
 				{
 					if (logger != null) {
-						logger.beginStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+						logger.beginStage(OptioniserLogger.STAGE_NON_SHIPPED_PAIRS);
 					}
 					for (final Pair<ISequenceElement, ISequenceElement> p : nonShippedPairs) {
 						final ISequenceElement buy = p.getFirst();
@@ -392,7 +392,7 @@ public class SlotInsertionOptimiserUnit {
 								return null;
 							}
 							try {
-								final SlotInsertionEvaluator calculator = injector.getInstance(SlotInsertionEvaluator.class);
+								final OptioniserEvaluator calculator = injector.getInstance(OptioniserEvaluator.class);
 								return calculator.insert(state, buy, sell);
 							} catch (final Exception e) {
 								e.printStackTrace();
@@ -403,7 +403,7 @@ public class SlotInsertionOptimiserUnit {
 						}));
 					}
 					if (logger != null) {
-						logger.doneStage(SlotInsertionOptimiserLogger.STAGE_NON_SHIPPED_PAIRS);
+						logger.doneStage(OptioniserLogger.STAGE_NON_SHIPPED_PAIRS);
 					}
 				}
 				{
@@ -430,7 +430,7 @@ public class SlotInsertionOptimiserUnit {
 				// Step 2: full search
 				{
 					if (logger != null) {
-						logger.beginStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+						logger.beginStage(OptioniserLogger.STAGE_FULL_SEARCH);
 					}
 					for (int tryNo = 0; tryNo < tries; ++tryNo) {
 						final int pTryNo = tryNo;
@@ -440,7 +440,7 @@ public class SlotInsertionOptimiserUnit {
 								return null;
 							}
 							try {
-								final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
+								final OptioniserOptimiser calculator = injector.getInstance(OptioniserOptimiser.class);
 								final @Nullable Pair<ISequences, Long> result = calculator.generate(optionElements, state, pTryNo);
 
 								// Sometimes due to spot slot equivalence we can obtain solutions which do not
@@ -526,7 +526,7 @@ public class SlotInsertionOptimiserUnit {
 					}
 				}
 				if (logger != null) {
-					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_FULL_SEARCH);
+					logger.doneStage(OptioniserLogger.STAGE_FULL_SEARCH);
 				}
 
 				if (monitor.isCanceled()) {
@@ -537,7 +537,7 @@ public class SlotInsertionOptimiserUnit {
 				}
 				if (logger != null) {
 
-					logger.beginStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+					logger.beginStage(OptioniserLogger.STAGE_PROCESS_SOLUTIONS);
 				}
 				// Reduce result to unique solutions
 				results = results.stream().distinct().toList();
@@ -635,7 +635,7 @@ public class SlotInsertionOptimiserUnit {
 				solutions.add(0, new NonNullPair<>(inputState.getBestSolution().getFirst(), new HashMap<>()));
 
 				if (logger != null) {
-					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
+					logger.doneStage(OptioniserLogger.STAGE_PROCESS_SOLUTIONS);
 				}
 				return new MultiStateResult(inputState.getBestSolution(), solutions);
 			} finally {

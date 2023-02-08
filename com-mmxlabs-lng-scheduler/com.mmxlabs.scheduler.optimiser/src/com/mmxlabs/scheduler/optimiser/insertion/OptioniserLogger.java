@@ -17,7 +17,7 @@ import com.mmxlabs.common.caches.MemoryUsageInfo;
  * @author Simon Goodall
  *
  */
-public class SlotInsertionOptimiserLogger {
+public class OptioniserLogger {
 
 	public static final String STAGE_NON_SHIPPED_PAIRS = "non-shipped-pairs";
 	public static final String STAGE_FULL_SEARCH = "full-search";
@@ -82,11 +82,11 @@ public class SlotInsertionOptimiserLogger {
 		return stages;
 	}
 	
-	public void aggregate(List<SlotInsertionOptimiserLogger> slotLoggers) {
+	public void aggregate(List<OptioniserLogger> slotLoggers) {
 		aggregateLoggers(this, slotLoggers);
 	}
 	
-	private static void aggregateLoggers(SlotInsertionOptimiserLogger result, List<SlotInsertionOptimiserLogger> slotLoggers) {
+	private static void aggregateLoggers(OptioniserLogger result, List<OptioniserLogger> slotLoggers) {
 		for (var logger : slotLoggers) {			
 			
 			//Update startTime + endTime.

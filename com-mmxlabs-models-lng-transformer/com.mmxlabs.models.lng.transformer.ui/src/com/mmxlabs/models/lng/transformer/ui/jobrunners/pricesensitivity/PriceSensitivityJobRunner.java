@@ -313,11 +313,11 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 
 		if (model.getBaseCase().isKeepExistingScenario()) {
 			final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
 		} else {
 
 			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
 		}
 		return baseScheduleSpecification;
 	}

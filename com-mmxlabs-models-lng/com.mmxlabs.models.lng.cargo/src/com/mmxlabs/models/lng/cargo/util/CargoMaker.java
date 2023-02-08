@@ -54,11 +54,6 @@ public class CargoMaker {
 			return CargoMaker.this;
 		}
 
-		public CargoMakerSlotMaker withWindowCounterParty(boolean counterPartyWindow) {
-			this.slot.setWindowCounterParty(counterPartyWindow);
-			return this;
-		}
-
 		public CargoMakerSlotMaker withSalesDeliveryType(CargoDeliveryType sdt) {
 			if (this.slot instanceof LoadSlot) {
 				LoadSlot ls = (LoadSlot) slot;

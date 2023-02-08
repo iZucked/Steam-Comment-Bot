@@ -714,7 +714,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		}
 	}
 
-	private void makeActions() {
+	protected void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 
