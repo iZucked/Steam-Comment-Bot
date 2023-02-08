@@ -87,7 +87,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 						}
 					};
 
-					final Action oneDp = new Action("1 d.p.") {
+					final Action oneDp = new Action("\"1.5\"") {
 						@Override
 						public void run() {
 							final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
@@ -108,7 +108,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 							selectedShowDaysOption = ShowDaysOption.DECIMAL;
 						}
 					};
-					final Action daysAndHoursText = new Action("1d 12h") {
+					final Action daysAndHoursText = new Action("\"1d 12h\"") {
 						@Override
 						public void run() {
 							final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
