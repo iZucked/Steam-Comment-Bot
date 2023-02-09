@@ -230,6 +230,7 @@ public class InsertCargoSequencesGenerator {
 		final boolean earliestValid = action.accept(newSequences);
 		trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.LATEST, 0);
 		final boolean latestValid = action.accept(newSequences);
+		//FIXME: ONLY FINDS RESULT TO THE NEAREST DAY
 		if (earliestValid && !latestValid) {
 			for (int j = 0; j < 31; j++) {
 				trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SHIFT, j * 24);

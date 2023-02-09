@@ -66,6 +66,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
@@ -376,6 +377,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		final List<String> hints = new LinkedList<>();
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+		hints.add(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
