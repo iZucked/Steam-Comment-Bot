@@ -35,6 +35,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.scenario.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: org.junit.jupiter.api;version="5.1.0",
+ org.junit.jupiter.params;version="5.8.1",
+ org.junit.jupiter.params.provider;version="5.8.1",
  org.junit.runner.manipulation;version="4.12.0",
  org.slf4j
 Bundle-ActivationPolicy: lazy
