@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Schedule Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.schedule.editor;singleton:=true
-Bundle-Version: 6.2.3.qualifier
+Bundle-Version: 6.2.3.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17

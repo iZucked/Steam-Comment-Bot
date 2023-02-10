@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common;singleton:=true
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-common
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 6.2.3.qualifier
+Bundle-Version: 6.2.3.RELEASE
 Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[6.2.3,7.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[6.2.3,7.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
