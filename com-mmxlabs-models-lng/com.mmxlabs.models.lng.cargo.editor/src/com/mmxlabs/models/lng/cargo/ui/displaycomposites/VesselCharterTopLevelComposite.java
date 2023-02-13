@@ -11,6 +11,8 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -45,6 +47,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	/**
 	 * {@link Composite} to contain the heel editors
 	 */
+	private IDisplayComposite startHeelComposite;
+	private IDisplayComposite endHeelComposite;
 	private BallastBonusTermsDetailComposite ballastBonusComposite;
 	private RepositioningFeeTermsDetailComposite repositioningFeeComposite;
 	private Button gccButton;
@@ -85,43 +89,99 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 			gccButton = toolkit.createButton(topLevel.getComposite(), gccButtonLabel(object), SWT.CENTER);
 			gccButton.addMouseListener(new CharterContractMouseListener(object));
 		}
+		
+		final GridDataFactory layoutData = GridDataFactory.fillDefaults().grab(true, true);
 
+		final GridLayout gl2C = createCustomGridLayout(2, false);
+		
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
-		midComposite.setLayout(new GridLayout(1, true));
+		midComposite.setLayout(gl2C);
 		midComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		final Group g2 = new Group(midComposite, SWT.DOWN);
+		final GridLayout gl4C = createCustomGridLayout(4, false);
+		
+		final Composite g2 = new Composite(midComposite, SWT.NONE);
 		toolkit.adapt(g2);
-		g2.setText("Start conditions");
-		g2.setLayout(new GridLayout());
+		g2.setLayout(gl4C);
+		g2.setLayoutData(layoutData.create());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		IDisplayComposite startStuff = new VesselCharterDetailComposite(g2, SWT.NONE, toolkit, VesselCharterDetailGroup.START, dialogContext);
+		final GridLayout gl = createCustomGridLayout(1, false);
+		
+		final Group g21 = new Group(g2, SWT.NONE);
+		toolkit.adapt(g21);
+		g21.setText("Start");
+		g21.setLayout(gl);
+		g21.setLayoutData(layoutData.create());
+		g21.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		IDisplayComposite startStuff = new VesselCharterDetailComposite(g21, SWT.NONE, toolkit, VesselCharterDetailGroup.START, dialogContext);
 		startStuff.setCommandHandler(commandHandler);
 		startStuff.setEditorWrapper(editorWrapper);
 		startStuff.display(dialogContext, root, object, range, dbc);
 		
-		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g2, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
-		repositioningFeeComposite.setCommandHandler(commandHandler);
-		repositioningFeeComposite.setEditorWrapper(editorWrapper);
-		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
+		final Group g22 = new Group(g2, SWT.NONE);
+		toolkit.adapt(g22);
+		g22.setText("Heel");
+		g22.setLayout(gl);
+		g22.setLayoutData(layoutData.create());
+		g22.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		bottomComposite.setLayout(new GridLayout(1, true));
-		bottomComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		final Group g3 = new Group(bottomComposite, SWT.NONE);
+		startHeelComposite = new StartHeelOptionsDetailComposite(g22, SWT.NONE, toolkit);
+		startHeelComposite.setCommandHandler(commandHandler);
+		startHeelComposite.display(dialogContext, root, getStartHeel(object), range, dbc);
+		
+		
+		final Composite g3 = new Composite(midComposite, SWT.NONE);
 		toolkit.adapt(g3);
-		g3.setText("End conditions");
-		g3.setLayout(new GridLayout());
+		g3.setLayout(gl4C);
+		g3.setLayoutData(layoutData.create());
 		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		IDisplayComposite endStuff = new VesselCharterDetailComposite(g3, SWT.NONE, toolkit, VesselCharterDetailGroup.END, dialogContext);
+		final Group g31 = new Group(g3, SWT.NONE);
+		toolkit.adapt(g31);
+		g31.setText("End");
+		g31.setLayout(gl);
+		g31.setLayoutData(layoutData.create());
+		g31.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		IDisplayComposite endStuff = new VesselCharterDetailComposite(g31, SWT.NONE, toolkit, VesselCharterDetailGroup.END, dialogContext);
 		endStuff.setCommandHandler(commandHandler);
 		endStuff.setEditorWrapper(editorWrapper);
 		endStuff.display(dialogContext, root, object, range, dbc);
 		
-		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
+		final Group g32 = new Group(g3, SWT.NONE);
+		toolkit.adapt(g32);
+		g32.setText("Heel");
+		g32.setLayout(gl);
+		g32.setLayoutData(layoutData.create());
+		g32.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		endHeelComposite = new EndHeelOptionsDetailComposite(g32, SWT.NONE, toolkit);
+		endHeelComposite.setCommandHandler(commandHandler);
+		endHeelComposite.display(dialogContext, root, getEndHeel(object), range, dbc);
+		
+		
+		final Group g4 = new Group(midComposite, SWT.NONE);
+		toolkit.adapt(g4);
+		g4.setLayout(gl);
+		g4.setLayoutData(layoutData.create());
+		g4.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		g4.setVisible(hasContract(object));
+		
+		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g4, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
+		repositioningFeeComposite.setCommandHandler(commandHandler);
+		repositioningFeeComposite.setEditorWrapper(editorWrapper);
+		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
+		
+		final Group g5 = new Group(midComposite, SWT.NONE);
+		toolkit.adapt(g5);
+		g5.setLayout(gl);
+		g5.setLayoutData(layoutData.create());
+		g5.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		g5.setVisible(hasContract(object));
+		
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(g5, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.setEditorWrapper(editorWrapper);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
@@ -146,7 +206,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
+		return ref.isContainment() && !ref.isMany() //
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()//
 				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartAt();
 	}
 
@@ -196,6 +257,24 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		}
 	}
 	
+	private boolean hasContract(EObject object) {
+		if (object instanceof VesselCharter va) {
+			final GenericCharterContract gcc = va.getContainedCharterContract();
+			if (gcc != null && gcc.getName() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private EObject getStartHeel(final EObject object) {
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__START_HEEL);
+	}
+	
+	private EObject getEndHeel(final EObject object) {
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__END_HEEL);
+	}
+	
 	private void checkForNewAvailability(EObject object) {
 		if (object instanceof VesselCharter) {
 			final VesselCharter va = (VesselCharter) object;
@@ -217,5 +296,14 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 			}
 		}
 		return "Create";
+	}
+	
+	private GridLayout createCustomGridLayout(int numColumns, boolean makeColumnsEqualWidth) {
+		return GridLayoutFactory.fillDefaults()
+				.numColumns(numColumns)
+				.equalWidth(makeColumnsEqualWidth)
+				.margins(0, 0)
+				.extendedMargins(0, 0, 0, 0)
+				.create();
 	}
 }

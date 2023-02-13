@@ -8,11 +8,9 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import java.time.LocalDateTime;
 
-import org.eclipse.emf.ecore.EClass;
-
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
 import com.mmxlabs.models.ui.editors.impl.LocalDateTimeInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
@@ -33,26 +31,34 @@ public class VesselCharterComponentHelper extends DefaultComponentHelper {
 
 		addEditor(CargoPackage.Literals.VESSEL_CHARTER__VESSEL, topClass -> new TextualVesselReferenceInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__VESSEL));
 
-		addEditor(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, topClass -> new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER) {
+		addEditor(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, topClass -> 
+		new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, 
+				new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")) {
 			@Override
 			protected Object getInitialUnsetValue() {
 				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
 			}
 		});
 
-		addEditor(CargoPackage.Literals.VESSEL_CHARTER__START_BY, topClass -> new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__START_BY) {
+		addEditor(CargoPackage.Literals.VESSEL_CHARTER__START_BY, topClass -> 
+		new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__START_BY, 
+				new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")) {
 			@Override
 			protected Object getInitialUnsetValue() {
 				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
 			}
 		});
-		addEditor(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, topClass -> new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER) {
+		addEditor(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, topClass -> 
+		new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, 
+				new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")) {
 			@Override
 			protected Object getInitialUnsetValue() {
 				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
 			}
 		});
-		addEditor(CargoPackage.Literals.VESSEL_CHARTER__END_BY, topClass -> new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__END_BY) {
+		addEditor(CargoPackage.Literals.VESSEL_CHARTER__END_BY, topClass -> 
+		new LocalDateTimeInlineEditor(CargoPackage.Literals.VESSEL_CHARTER__END_BY, 
+				new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")) {
 			@Override
 			protected Object getInitialUnsetValue() {
 				return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
