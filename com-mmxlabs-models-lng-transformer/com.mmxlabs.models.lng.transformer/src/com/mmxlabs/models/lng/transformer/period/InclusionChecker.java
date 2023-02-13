@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -75,12 +75,11 @@ public class InclusionChecker {
 	public NonNullPair<InclusionType, Position> getObjectInclusionType(@NonNull final InclusionRecord inclusionRecord, @NonNull final PeriodRecord periodRecord) {
 		final EObject object = inclusionRecord.object;
 
-		if (object instanceof Cargo) {
+		if (object instanceof Cargo cargo) {
 
 			// TODO: Decompose into slots. If slot is in boundary, fix to current vessel (though allowed vessels list), but unlock and allow rewiring.
 			// FOB sales stay fixed. DES purchases, only if divertible
 
-			final Cargo cargo = (Cargo) object;
 			final NonNullPair<Slot<?>, Slot<?>> slots = getFirstAndLastSlots(cargo);
 			final Slot<?> firstSlot = slots.getFirst();
 
@@ -113,8 +112,7 @@ public class InclusionChecker {
 							evt = evt.getNextEvent();
 						}
 
-						if (evt instanceof PortVisit) {
-							final PortVisit portVisit2 = (PortVisit) evt;
+						if (evt instanceof PortVisit portVisit2) {
 							if (periodRecord.lowerBoundary != null) {
 								if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
 									return new NonNullPair<>(InclusionType.Boundary, Position.Before);

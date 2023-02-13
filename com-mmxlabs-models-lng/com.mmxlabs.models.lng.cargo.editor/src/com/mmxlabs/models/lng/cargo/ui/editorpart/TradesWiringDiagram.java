@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -138,7 +138,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		graphics.setAntialias(SWT.ON);
 
-		int linewidth = graphics.getLineWidth();
+		final int linewidth = graphics.getLineWidth();
 		graphics.setLineWidth(2);
 
 		// Clip to reported client area to avoid overdraw
@@ -157,17 +157,17 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.setBackground(White);
 			// Left
 			if (row.loadSlot != null) {
-				int extraRadius = 1;
-				int x = ca.x + terminalSize - extraRadius / 2;
-				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
+				final int extraRadius = 1;
+				final int x = ca.x + terminalSize - extraRadius / 2;
+				final int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
 				graphics.fillOval(x - 2, y - 2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
 			}
 			// Right
 			if (row.dischargeSlot != null) {
 				int extraRadius = 0;
 				extraRadius = 1;
-				int x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
-				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
+				final int x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
+				final int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
 				graphics.setBackground(White);
 				graphics.fillOval(x - 2, y - 2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
 			}
@@ -313,7 +313,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			if (row.loadSlot != null && row.loadSlot.isCancelled()) {
 				drawDiagonalCross(true, Black, ca, graphics, midpoint);
 			}
-			
+
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {// && row.dischargeSlot.isCancelled()) {
@@ -331,11 +331,11 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		}
 	}
 
-	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, boolean isSpot, final Rectangle ca, final GC graphics, final float midpoint) {
+	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics, final float midpoint) {
 		Color outlineColour = Green;
 		Color fillColour = terminalColour;
 		// make non-shipped a bit bigger, but hollow
-		int extraRadius = 1;
+		final int extraRadius = 1;
 		if (isSpot) {
 			terminalColour = Grey;
 			outlineColour = Grey;
@@ -370,41 +370,41 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		}
 	}
 
-	private void drawCross(boolean isLeft, Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
+	private void drawCross(final boolean isLeft, final Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
 
 		graphics.setLineWidth(3);
 		int x = 0;
-		int terminalSize2 = terminalSize - 2;
+		final int terminalSize2 = terminalSize - 2;
 		if (isLeft) {
 			x = ca.x + ca.width / 2 - 4;
 		} else {
 			x = ca.x + ca.width / 2 + 4;
 		}
-		int y = (int) (midpoint - terminalSize2 / 2 - 1);
+		final int y = (int) (midpoint - terminalSize2 / 2 - 1);
 
 		graphics.setForeground(terminalColour);
 		graphics.setBackground(terminalColour);
 		graphics.drawLine(x, y, x, y + terminalSize2);
 	}
-	
+
 	// X - cross
-	private void drawDiagonalCross(boolean isLeft, Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
+	private void drawDiagonalCross(final boolean isLeft, final Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
 
 		graphics.setLineWidth(2);
-		int extraRadius = 1;
-		int terminalSize2 = terminalSize - 2;
+		final int extraRadius = 1;
+		final int terminalSize2 = terminalSize - 2;
 		int x = 0;
 		if (isLeft) {
 			x = ca.x + terminalSize + extraRadius;
 		} else {
 			x = ca.x + ca.width - 2 * terminalSize + extraRadius;
 		}
-		int y = (int) (midpoint - (terminalSize) / 2 - extraRadius / 2);
+		final int y = (int) (midpoint - (terminalSize) / 2 - extraRadius / 2);
 
 		graphics.setForeground(terminalColour);
 		graphics.setBackground(terminalColour);
 		graphics.drawLine(x, y, x + terminalSize2 + extraRadius, y + terminalSize2 + extraRadius);
-		graphics.drawLine(x, y + terminalSize2+ extraRadius, x + terminalSize2 + extraRadius, y );
+		graphics.drawLine(x, y + terminalSize2 + extraRadius, x + terminalSize2 + extraRadius, y);
 	}
 
 	public Rectangle getCanvasClientArea() {
@@ -494,7 +494,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (dragging) {
 			dragging = false;
 
-			boolean ctrlPressed = (e.stateMask & SWT.CTRL) != 0;
+			final boolean ctrlPressed = (e.stateMask & SWT.CTRL) != 0;
+			final boolean shiftPressed = (e.stateMask & SWT.SHIFT) != 0;
+			final boolean altPressed = (e.stateMask & SWT.ALT) != 0;
 
 			final List<Float> positions = getTerminalPositions(rootData);
 
@@ -545,7 +547,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					// clear wire
 					newWiring.put(fromRowData, null);
 				}
-				wiringChanged(newWiring, ctrlPressed);
+				wiringChanged(newWiring, ctrlPressed, shiftPressed, altPressed);
 			}
 		}
 
@@ -568,7 +570,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * 
 	 * @param ctrlPressed
 	 */
-	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed);
+	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed, final boolean shiftPressed, final boolean altPressed);
 
 	public void setLocked(final boolean locked) {
 		this.locked = locked;

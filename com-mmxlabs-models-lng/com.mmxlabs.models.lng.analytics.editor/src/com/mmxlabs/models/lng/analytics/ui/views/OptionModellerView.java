@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
@@ -412,10 +412,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			OptionAnalysisModel newModel = null;
 
-			if (target instanceof OptionAnalysisModel) {
-				newModel = (OptionAnalysisModel) target;
-			} else if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (target instanceof OptionAnalysisModel m) {
+				newModel = m;
+			} else if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
 
 				if (analyticsModel.getOptionModels().isEmpty()) {

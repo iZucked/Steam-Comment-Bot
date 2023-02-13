@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -54,11 +54,6 @@ public class CargoMaker {
 			return CargoMaker.this;
 		}
 
-		public CargoMakerSlotMaker withWindowCounterParty(boolean counterPartyWindow) {
-			this.slot.setWindowCounterParty(counterPartyWindow);
-			return this;
-		}
-
 		public CargoMakerSlotMaker withSalesDeliveryType(CargoDeliveryType sdt) {
 			if (this.slot instanceof LoadSlot) {
 				LoadSlot ls = (LoadSlot) slot;
@@ -84,6 +79,11 @@ public class CargoMaker {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.cargo = CargoFactory.eINSTANCE.createCargo();
 		this.cargo.setAllowRewiring(true);
+	}
+
+	public CargoMaker withSlot(Slot<?> s) {
+		slots.add(s);
+		return this;
 	}
 
 	public CargoMakerSlotMaker makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,

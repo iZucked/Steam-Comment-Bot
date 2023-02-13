@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics.spec;
@@ -69,7 +69,7 @@ public class ScheduleSpecificationHelper {
 	private ExtraDataProvider extraDataProvider = new ExtraDataProvider();
 
 	private IScenarioDataProvider scenarioDataProvider;
-	private @Nullable IOptimiserInjectorService extraInjectorService;
+	private List<IOptimiserInjectorService> extraInjectorService = new LinkedList<>();
 
 	public ScheduleSpecificationHelper(final IScenarioDataProvider scenarioDataProvider) {
 		this.scenarioDataProvider = scenarioDataProvider;
@@ -118,7 +118,7 @@ public class ScheduleSpecificationHelper {
 
 						})//
 
-						.make(), //
+						.makeAsList(), //
 				true, // Evaluation only?
 				hints.toArray(new String[hints.size()]) // Hints? No Caching?
 		);
@@ -256,7 +256,7 @@ public class ScheduleSpecificationHelper {
 	}
 
 	public synchronized void withModuleService(@NonNull IOptimiserInjectorService extraInjectorService) {
-		this.extraInjectorService = extraInjectorService;
+		this.extraInjectorService.add(extraInjectorService);
 	}
 
 	public synchronized void processExtraData_VesselCharters(List<VesselCharter> extraVesselAvailabilities) {

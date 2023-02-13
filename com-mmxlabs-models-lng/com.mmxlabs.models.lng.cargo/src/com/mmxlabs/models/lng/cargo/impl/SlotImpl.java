@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -96,6 +97,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  * </ul>
  *
  * @generated
@@ -1022,6 +1025,36 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> allowedPorts;
+
+	/**
+	 * The default value of the '{@link #isAllowedPortsOverride() <em>Allowed Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowedPortsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ALLOWED_PORTS_OVERRIDE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAllowedPortsOverride() <em>Allowed Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowedPortsOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowedPortsOverride = ALLOWED_PORTS_OVERRIDE_EDEFAULT;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2624,6 +2657,62 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<APortSet<Port>> getAllowedPorts() {
+		if (allowedPorts == null) {
+			allowedPorts = new EObjectResolvingEList.Unsettable<APortSet<Port>>(APortSet.class, this, CargoPackage.SLOT__ALLOWED_PORTS);
+		}
+		return allowedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetAllowedPorts() {
+		if (allowedPorts != null) ((InternalEList.Unsettable<?>)allowedPorts).unset();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetAllowedPorts() {
+		return allowedPorts != null && ((InternalEList.Unsettable<?>)allowedPorts).isSet();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isAllowedPortsOverride() {
+		return allowedPortsOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAllowedPortsOverride(boolean newAllowedPortsOverride) {
+		boolean oldAllowedPortsOverride = allowedPortsOverride;
+		allowedPortsOverride = newAllowedPortsOverride;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE, oldAllowedPortsOverride, allowedPortsOverride));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -2682,6 +2771,17 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public int getSlotOrDelegateDaysBuffer() {
 		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<APortSet<Port>> getSlotOrDelegateAllowedPorts() {
+		return (EList<APortSet<Port>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__ALLOWED_PORTS).getValue(this);
+
 	}
 
 	/**
@@ -2984,6 +3084,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isCancelled();
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return isWindowCounterParty();
+			case CargoPackage.SLOT__ALLOWED_PORTS:
+				return getAllowedPorts();
+			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
+				return isAllowedPortsOverride();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3126,6 +3230,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__ALLOWED_PORTS:
+				getAllowedPorts().clear();
+				getAllowedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
+			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
+				setAllowedPortsOverride((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3263,6 +3374,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__ALLOWED_PORTS:
+				unsetAllowedPorts();
+				return;
+			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
+				setAllowedPortsOverride(ALLOWED_PORTS_OVERRIDE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3375,6 +3492,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return cancelled != CANCELLED_EDEFAULT;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
+			case CargoPackage.SLOT__ALLOWED_PORTS:
+				return isSetAllowedPorts();
+			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
+				return allowedPortsOverride != ALLOWED_PORTS_OVERRIDE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3492,6 +3613,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSchedulingTimeWindow();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER:
 				return getSlotOrDelegateDaysBuffer();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS:
+				return getSlotOrDelegateAllowedPorts();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3573,6 +3696,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(cancelled);
 		result.append(", windowCounterParty: ");
 		result.append(windowCounterParty);
+		result.append(", allowedPortsOverride: ");
+		result.append(allowedPortsOverride);
 		result.append(')');
 		return result.toString();
 	}
@@ -3650,6 +3775,30 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 						}
 					} else {
 						return getRestrictedPorts();
+					}
+					return ECollections.emptyEList();
+				}
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__ALLOWED_PORTS) {
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					if (!isAllowedPortsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS);
+							}
+						} else {
+							return getAllowedPorts();
+						}
+					} else {
+						return getAllowedPorts();
 					}
 					return ECollections.emptyEList();
 				}

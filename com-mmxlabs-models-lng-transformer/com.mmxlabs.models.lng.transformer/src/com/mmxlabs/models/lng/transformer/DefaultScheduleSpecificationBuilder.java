@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -50,7 +50,7 @@ public class DefaultScheduleSpecificationBuilder {
 		SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider);
 		if (assignableElementDateProviderFactory != null) {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider,
-					assignableElementDateProviderFactory.create(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class)));
+					assignableElementDateProviderFactory.create(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class)), null);
 		} else {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		}

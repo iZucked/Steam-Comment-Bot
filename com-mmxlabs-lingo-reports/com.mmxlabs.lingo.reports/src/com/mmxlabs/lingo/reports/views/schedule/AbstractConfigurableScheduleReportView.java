@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -67,8 +68,10 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
@@ -96,6 +99,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	private ScenarioComparisonService scenarioComparisonService;
 
 	private EventHandler todayHandler;
+	
+	private boolean isInPinDiffMode = false;
 
 	protected ReentrantSelectionManager selectionManager;
 
@@ -199,6 +204,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			}
 
 			builder.refreshPNLColumns(rootObjects);
+			isInPinDiffMode = selectedDataProvider.inPinDiffMode();
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
@@ -569,5 +575,63 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	@Override
 	protected boolean refreshOnSelectionChange() {
 		return false;// (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty());
+	}
+	
+	@Override
+	protected void makeActions() {
+		super.makeActions();
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
+		copyTableAction.setAdditionalAttributeProvider(new IAdditionalAttributeProvider() {
+			
+			private @NonNull String getPinText() {
+				return isInPinDiffMode ? "Pin" : "";
+			}
+
+			@Override
+			public @NonNull String getTopLeftCellUpperText() {
+				if (viewer.getGrid().getColumnGroups().length > 0) {
+					return getPinText();
+				}
+				return "";
+			}
+			
+			@Override
+			public @NonNull String getTopLeftCellText() {
+				return getPinText();
+			}
+			
+			@Override
+			public @NonNull String getTopLeftCellLowerText() {
+				return "";
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item) {
+				return null;
+			}
+			
+			@Override
+			public String getAdditionalRowHeaderText(@NonNull GridItem item){
+				if (isInPinDiffMode && item.getData() instanceof Row row && row.isReference()) {
+					return "Y";
+				}
+				return "";
+			};
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalPreRows() {
+				return null;
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalHeaderAttributes(GridColumn column) {
+				return null;
+			}
+			
+			@Override
+			public @NonNull String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, int columnIdx) {
+				return null;
+			}
+		});
 	}
 }

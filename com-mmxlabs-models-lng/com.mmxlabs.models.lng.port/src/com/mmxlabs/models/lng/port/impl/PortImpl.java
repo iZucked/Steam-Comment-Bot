@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.impl;
@@ -49,6 +49,9 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinVesselSize <em>Min Vessel Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxVesselSize <em>Max Vessel Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLiquefactionEmissionRate <em>Liquefaction Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -369,6 +372,66 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected boolean maxVesselSizeESet;
+
+	/**
+	 * The default value of the '{@link #getLiquefactionEmissionRate() <em>Liquefaction Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLiquefactionEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double LIQUEFACTION_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getLiquefactionEmissionRate() <em>Liquefaction Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLiquefactionEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double liquefactionEmissionRate = LIQUEFACTION_EMISSION_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double UPSTREAM_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double upstreamEmissionRate = UPSTREAM_EMISSION_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPipelineEmissionRate() <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PIPELINE_EMISSION_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPipelineEmissionRate() <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double pipelineEmissionRate = PIPELINE_EMISSION_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -834,6 +897,75 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getLiquefactionEmissionRate() {
+		return liquefactionEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLiquefactionEmissionRate(double newLiquefactionEmissionRate) {
+		double oldLiquefactionEmissionRate = liquefactionEmissionRate;
+		liquefactionEmissionRate = newLiquefactionEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__LIQUEFACTION_EMISSION_RATE, oldLiquefactionEmissionRate, liquefactionEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getUpstreamEmissionRate() {
+		return upstreamEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUpstreamEmissionRate(double newUpstreamEmissionRate) {
+		double oldUpstreamEmissionRate = upstreamEmissionRate;
+		upstreamEmissionRate = newUpstreamEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__UPSTREAM_EMISSION_RATE, oldUpstreamEmissionRate, upstreamEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getPipelineEmissionRate() {
+		return pipelineEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPipelineEmissionRate(double newPipelineEmissionRate) {
+		double oldPipelineEmissionRate = pipelineEmissionRate;
+		pipelineEmissionRate = newPipelineEmissionRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__PIPELINE_EMISSION_RATE, oldPipelineEmissionRate, pipelineEmissionRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZoneId getZoneId() {
@@ -928,6 +1060,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getMinVesselSize();
 			case PortPackage.PORT__MAX_VESSEL_SIZE:
 				return getMaxVesselSize();
+			case PortPackage.PORT__LIQUEFACTION_EMISSION_RATE:
+				return getLiquefactionEmissionRate();
+			case PortPackage.PORT__UPSTREAM_EMISSION_RATE:
+				return getUpstreamEmissionRate();
+			case PortPackage.PORT__PIPELINE_EMISSION_RATE:
+				return getPipelineEmissionRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -987,6 +1125,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_VESSEL_SIZE:
 				setMaxVesselSize((Integer)newValue);
 				return;
+			case PortPackage.PORT__LIQUEFACTION_EMISSION_RATE:
+				setLiquefactionEmissionRate((Double)newValue);
+				return;
+			case PortPackage.PORT__UPSTREAM_EMISSION_RATE:
+				setUpstreamEmissionRate((Double)newValue);
+				return;
+			case PortPackage.PORT__PIPELINE_EMISSION_RATE:
+				setPipelineEmissionRate((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1044,6 +1191,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__MAX_VESSEL_SIZE:
 				unsetMaxVesselSize();
 				return;
+			case PortPackage.PORT__LIQUEFACTION_EMISSION_RATE:
+				setLiquefactionEmissionRate(LIQUEFACTION_EMISSION_RATE_EDEFAULT);
+				return;
+			case PortPackage.PORT__UPSTREAM_EMISSION_RATE:
+				setUpstreamEmissionRate(UPSTREAM_EMISSION_RATE_EDEFAULT);
+				return;
+			case PortPackage.PORT__PIPELINE_EMISSION_RATE:
+				setPipelineEmissionRate(PIPELINE_EMISSION_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1086,6 +1242,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return isSetMinVesselSize();
 			case PortPackage.PORT__MAX_VESSEL_SIZE:
 				return isSetMaxVesselSize();
+			case PortPackage.PORT__LIQUEFACTION_EMISSION_RATE:
+				return liquefactionEmissionRate != LIQUEFACTION_EMISSION_RATE_EDEFAULT;
+			case PortPackage.PORT__UPSTREAM_EMISSION_RATE:
+				return upstreamEmissionRate != UPSTREAM_EMISSION_RATE_EDEFAULT;
+			case PortPackage.PORT__PIPELINE_EMISSION_RATE:
+				return pipelineEmissionRate != PIPELINE_EMISSION_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1144,6 +1306,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		if (minVesselSizeESet) result.append(minVesselSize); else result.append("<unset>");
 		result.append(", maxVesselSize: ");
 		if (maxVesselSizeESet) result.append(maxVesselSize); else result.append("<unset>");
+		result.append(", liquefactionEmissionRate: ");
+		result.append(liquefactionEmissionRate);
+		result.append(", upstreamEmissionRate: ");
+		result.append(upstreamEmissionRate);
+		result.append(", pipelineEmissionRate: ");
+		result.append(pipelineEmissionRate);
 		result.append(')');
 		return result.toString();
 	}

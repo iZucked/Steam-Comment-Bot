@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -49,8 +51,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		private final DateTimeFormatter df = DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter();
 
 		/**
-		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap
-		 * the given {@link Slot}.
+		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
 		 * 
 		 * @param slot
 		 * @return
@@ -69,7 +70,8 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			final SlotType slotType = classify(slot);
 			do {
 				final String dateKey = dateToString(cal);
-				final Collection<@NonNull Slot<?>> potentialOverlaps = getOverlappingSlots(slot, dateKey);
+				// Create a copy as we call iterator::remove
+				final Collection<@NonNull Slot<?>> potentialOverlaps = new LinkedList<>(getOverlappingSlots(slot, dateKey));
 				final Iterator<@NonNull Slot<?>> ii = potentialOverlaps.iterator();
 				while (ii.hasNext()) {
 					final Slot<?> overlapSlot = ii.next();
@@ -205,16 +207,14 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof Slot) {
 
 			final Slot<?> slot = (Slot<?>) object;
-			if (slot instanceof LoadSlot) {
-				final LoadSlot load = (LoadSlot) slot;
-				// if (load.isDESPurchase()) {
-				// return ctx.createSuccessStatus();
-				// }
-			} else if (slot instanceof DischargeSlot) {
-				final DischargeSlot disch = (DischargeSlot) slot;
-				// if (disch.isFOBSale()) {
-				// return ctx.createSuccessStatus();
-				// }
+			if (slot instanceof LoadSlot load) {
+				if (load.isDESPurchase() && load.getSlotOrDelegateDESPurchaseDealType() != DESPurchaseDealType.DIVERT_FROM_SOURCE) {
+					return;
+				}
+			} else if (slot instanceof DischargeSlot disch) {
+				if (disch.isFOBSale() && disch.getSlotOrDelegateFOBSaleDealType() != FOBSaleDealType.DIVERT_TO_DEST) {
+					return;
+				}
 			}
 			if (slot instanceof SpotSlot) {
 				return;
@@ -234,13 +234,13 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			slotOverlaps.remove(original);
 			slotOverlaps.remove(slot);
 			slotOverlaps.remove(replacement);
-			if (slot instanceof LoadSlot) {
-				final DischargeSlot transferSlot = ((LoadSlot) slot).getTransferFrom();
+			if (slot instanceof LoadSlot ls) {
+				final DischargeSlot transferSlot = ls.getTransferFrom();
 				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
 				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
 				slotOverlaps.remove(transferSlot);
-			} else if (slot instanceof DischargeSlot) {
-				final LoadSlot transferSlot = ((DischargeSlot) slot).getTransferTo();
+			} else if (slot instanceof DischargeSlot ds) {
+				final LoadSlot transferSlot = ds.getTransferTo();
 				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
 				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
 				slotOverlaps.remove(transferSlot);
@@ -277,24 +277,31 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		final PortSlotCounter psc = new PortSlotCounter();
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
+		if (rootObject instanceof LNGScenarioModel scenarioModel) {
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-				if (slot instanceof SpotSlot) {
-					final SpotSlot spotSlot = (SpotSlot) slot;
+				if (slot instanceof SpotSlot spotSlot) {
 					if (spotSlot.getMarket() != null) {
 						continue;
 					}
 				}
+				
+				if (slot.isDESPurchase() && slot.getSlotOrDelegateDESPurchaseDealType() != DESPurchaseDealType.DIVERT_FROM_SOURCE) {
+					continue;
+				}
+			
 				psc.addSlot(slot);
 			}
 			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-				if (slot instanceof SpotSlot) {
-					final SpotSlot spotSlot = (SpotSlot) slot;
+				if (slot instanceof SpotSlot spotSlot) {
 					if (spotSlot.getMarket() != null) {
 						continue;
 					}
+				}
+				
+				if (slot.isFOBSale() && slot.getSlotOrDelegateFOBSaleDealType() != FOBSaleDealType.DIVERT_TO_DEST) {
+					continue;
 				}
 				psc.addSlot(slot);
 			}

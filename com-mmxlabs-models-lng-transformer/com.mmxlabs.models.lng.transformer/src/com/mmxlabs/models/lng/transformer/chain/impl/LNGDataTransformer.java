@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,12 +11,14 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
+import com.mmxlabs.models.lng.cargo.util.IExtraDataProvider;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -80,7 +81,14 @@ public class LNGDataTransformer {
 		this.services = services;
 
 		final List<@NonNull Module> modules = new LinkedList<>();
-
+		modules.add(new AbstractModule() {
+			@Override
+			protected void configure() {
+				if (extraDataProvider != null) {
+					bind(IExtraDataProvider.class).toInstance(extraDataProvider);
+				}
+			}
+		});
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new ThreadLocalScopeModule());
 		modules.add(new NotInjectedScopeModule());
@@ -88,7 +96,7 @@ public class LNGDataTransformer {
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 
-		List<Module> transformerModules = new ArrayList<>(2);
+		List<Module> transformerModules = new LinkedList<>();
 		transformerModules.add(new LNGTransformerModule(scenarioDataProvider, userSettings, concurrencyLevel, hints));
 		if (extraDataProvider != null) {
 			transformerModules.add(extraDataProvider.asModule());

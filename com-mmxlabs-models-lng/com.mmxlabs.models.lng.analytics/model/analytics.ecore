@@ -487,6 +487,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalVolume" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalPrice" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalShippingCost" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MTMRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>

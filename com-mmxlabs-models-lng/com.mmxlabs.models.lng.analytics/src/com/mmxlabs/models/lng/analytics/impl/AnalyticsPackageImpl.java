@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
@@ -2958,6 +2958,36 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getMTMResult_OriginalVolume() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMTMResult_OriginalPrice() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMTMResult_TotalShippingCost() {
+		return (EAttribute)mtmResultEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMTMRow() {
 		return mtmRowEClass;
 	}
@@ -4460,6 +4490,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(mtmResultEClass, MTM_RESULT__EARLIEST_PRICE);
 		createEReference(mtmResultEClass, MTM_RESULT__SHIPPING);
 		createEAttribute(mtmResultEClass, MTM_RESULT__SHIPPING_COST);
+		createEAttribute(mtmResultEClass, MTM_RESULT__ORIGINAL_VOLUME);
+		createEAttribute(mtmResultEClass, MTM_RESULT__ORIGINAL_PRICE);
+		createEAttribute(mtmResultEClass, MTM_RESULT__TOTAL_SHIPPING_COST);
 
 		mtmRowEClass = createEClass(MTM_ROW);
 		createEReference(mtmRowEClass, MTM_ROW__BUY_OPTION);
@@ -4988,6 +5021,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getMTMResult_EarliestPrice(), ecorePackage.getEDouble(), "earliestPrice", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMTMResult_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMTMResult_ShippingCost(), ecorePackage.getEDouble(), "shippingCost", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_OriginalVolume(), ecorePackage.getEInt(), "originalVolume", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_OriginalPrice(), ecorePackage.getEDouble(), "originalPrice", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMTMResult_TotalShippingCost(), ecorePackage.getEInt(), "totalShippingCost", null, 0, 1, MTMResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mtmRowEClass, MTMRow.class, "MTMRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMTMRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, MTMRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app;
@@ -190,8 +190,6 @@ public class Application implements IApplication {
 			}
 		}
 
-		TrustStoreManager.refresh();
-		
 		// Don't abort LiNGO if p2 garbage collect fails.
 		// For some reason this started to happen ~14 Dec 2017
 		try {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
@@ -77,7 +77,7 @@ public class EvaluationHelper {
 	private IPriceExpressionProvider priceExpressionProvider;
 
 	@Inject
-	ILazyExpressionManagerContainer lazyManagerContainer;
+	private ILazyExpressionManagerContainer lazyManagerContainer;
 
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
@@ -465,7 +465,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		if (cargoPNLData.getSlots().size() > SchedulerConstants.COMPLEX_CARGO_SLOTS_THRESHOLD) {
-			throw new RuntimeException("Complex cargoes not supported");
+			return;
 		}
 
 		IEntity loadEntity = null;

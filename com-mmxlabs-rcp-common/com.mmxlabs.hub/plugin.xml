@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
@@ -13,6 +13,12 @@
             class="com.mmxlabs.hub.preferences.DataHubPreferencePage"
             id="com.mmxlabs.lngdataserver.server.DataserverPreferencePage"
             name="Data Hub">
+      </page>
+      <page
+            category="org.eclipse.ui.preferencePages.Workbench"
+            class="com.mmxlabs.hub.preferences.TLSPreferencePage"
+            id="com.mmxlabs.hub.preferences.TLSPreferencePage"
+            name="TLS/SSL Settings">
       </page>
    </extension>
    <extension

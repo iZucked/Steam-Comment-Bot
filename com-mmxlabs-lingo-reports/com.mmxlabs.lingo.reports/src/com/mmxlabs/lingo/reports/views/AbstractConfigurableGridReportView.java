@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views;
@@ -714,7 +714,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		}
 	}
 
-	private void makeActions() {
+	protected void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 

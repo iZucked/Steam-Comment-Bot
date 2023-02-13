@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
@@ -970,13 +970,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1204,13 +1222,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1609,6 +1636,24 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ALLOWED_PORTS = SLOT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ALLOWED_PORTS_OVERRIDE = SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1913,6 +1958,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2347,6 +2401,24 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ALLOWED_PORTS = SLOT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE = SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2642,6 +2714,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3148,6 +3229,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ALLOWED_PORTS = LOAD_SLOT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ALLOWED_PORTS_OVERRIDE = LOAD_SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3461,6 +3560,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -3895,6 +4003,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ALLOWED_PORTS = DISCHARGE_SLOT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE = DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4199,6 +4325,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8060,6 +8195,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowCounterParty();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Ports</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_AllowedPorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allowed Ports Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_AllowedPortsOverride();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8268,6 +8425,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateDaysBuffer();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateAllowedPorts() <em>Get Slot Or Delegate Allowed Ports</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateAllowedPorts()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateAllowedPorts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -10901,6 +11068,22 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
 
 		/**
+		 * The meta object literal for the '<em><b>Allowed Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__ALLOWED_PORTS = eINSTANCE.getSlot_AllowedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Ports Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__ALLOWED_PORTS_OVERRIDE = eINSTANCE.getSlot_AllowedPortsOverride();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11067,6 +11250,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = eINSTANCE.getSlot__GetSlotOrDelegateDaysBuffer();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Allowed Ports</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = eINSTANCE.getSlot__GetSlotOrDelegateAllowedPorts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

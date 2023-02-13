@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.events;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
 
@@ -15,7 +18,20 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 public class OptimisationLifecycleModule extends AbstractModule {
-	private final EventBus eventBus = new EventBus("Optimisation Lifecycle EventBus");
+
+	Map<Object, Object> lastMessage = new ConcurrentHashMap<>();
+
+	private final EventBus eventBus = new EventBus("Optimisation Lifecycle EventBus") {
+
+		public void post(Object event) {
+			if (event instanceof IReplayableEvent) {
+				lastMessage.put(event.getClass(), event);
+			}
+			super.post(event);
+		};
+	};
+
+	private final EventBus eventBus2 = new EventBus("Replay event bus");
 
 	@Override
 	protected void configure() {
@@ -28,7 +44,18 @@ public class OptimisationLifecycleModule extends AbstractModule {
 				typeEncounter.register(new InjectionListener<I>() {
 					@Override
 					public void afterInjection(final I i) {
+						// Register the main event bus
 						eventBus.register(i);
+
+						// Temporarily register the replay bus.
+						if (!lastMessage.isEmpty()) {
+							eventBus2.register(i);
+							try {
+								lastMessage.values().forEach(eventBus2::post);
+							} finally {
+								eventBus2.unregister(i);
+							}
+						}
 					}
 				});
 			}

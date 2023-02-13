@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.jobs;
@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @NonNullByDefault
@@ -57,5 +58,7 @@ public interface IJobRunner {
 	void saveLogs(OutputStream os) throws IOException;
 
 	String saveLogsAsString() throws IOException;
+
+	void withScenarioInstance(ScenarioInstance scenarioInstance);
 
 }

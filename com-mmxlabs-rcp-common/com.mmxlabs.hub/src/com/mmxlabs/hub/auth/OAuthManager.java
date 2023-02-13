@@ -1,23 +1,25 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.hub.auth;
 
-import java.io.IOException;
 import java.util.Optional;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
-
-import okhttp3.Request;
-import okhttp3.Response;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 public class OAuthManager extends AbstractAuthenticationManager {
 
@@ -61,22 +63,19 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	/**
 	 * Create a request builder with Authorization header.
 	 */
-	public Optional<Request.Builder> buildRequestWithToken() {
+	public void buildRequestWithToken(final HttpRequestBase msg, final HttpClientContext ctx) {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
-		Optional<Request.Builder> builder;
-
 		if (token.isPresent()) {
-			// @formatter:off
-			builder = Optional.of( //
-					new Request.Builder() //
-					.header("Cookie", token.get()) //
-					.header("Cache-Control", "no-store, max-age=0")); //
-			// @formatter:on
-		} else {
-			builder = Optional.empty();
-		}
+			final String tkn = token.get();
+			final BasicCookieStore store = new BasicCookieStore();
+			final BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", tkn.replace("JSESSIONID=", ""));
+			cookie.setDomain(msg.getURI().getHost());
+			cookie.setPath("/");
 
-		return builder;
+			store.addCookie(cookie);
+			ctx.setCookieStore(store);
+			msg.addHeader("Cache-Control", "no-store, max-age=0");
+		}
 	}
 
 	public boolean hasToken() {
@@ -92,7 +91,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 			});
 			try {
 				authenticationShell.open();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// Make sure we have cleared the setting.
 				authenticationShellIsOpen.set(false);
 				throw e;
@@ -109,21 +108,27 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	public boolean isTokenValid(final String upstreamURL) {
 		boolean valid = false;
 
-		final Optional<Request.Builder> builder = buildRequestWithToken();
+		final HttpGet request = new HttpGet(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION);
+		try (var httpClient = HttpClientUtil.createBasicHttpClient(URIUtils.extractHost(request.getURI()), false).build()) {
+			if (httpClient == null) {
+				return valid;
+			}
+			final HttpClientContext ctx = new HttpClientContext();
 
-		if (builder.isPresent()) {
-			final Request request = builder.get().url(upstreamURL + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION).build();
+			buildRequestWithToken(request, ctx);
 
-			try (Response response = httpClient.newCall(request).execute()) {
-				if (response.isSuccessful()) {
-					valid = true;
+			valid = httpClient.execute(request, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (HttpClientUtil.isSuccessful(responseCode)) {
+					return true;
 				} else {
 					// token is expired, log the user out
 					Display.getDefault().asyncExec(() -> logout(upstreamURL, null));
 				}
-			} catch (final IOException e) {
-				LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
-			}
+				return false;
+			}, ctx);
+		} catch (final Exception e) {
+			LOGGER.debug(String.format("Unexpected exception: %s", e.getMessage()));
 		}
 
 		return valid;
@@ -142,12 +147,12 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		deleteFromSecurePreferences(COOKIE);
 		// delete cookie from swt browser
 		// doesn't work if the user clicks "stay logged in"
-//		Browser.setCookie("JSESSIONID=;", url);
-//		Browser.setCookie("authenticated=;", url + "/authenticated");
+		// Browser.setCookie("JSESSIONID=;", url);
+		// Browser.setCookie("authenticated=;", url + "/authenticated");
 	}
 
-	public void setPreferEdgeBrowser(boolean preferEdgeBrowser) {
+	public void setPreferEdgeBrowser(final boolean preferEdgeBrowser) {
 		this.preferEdgeBrowser = preferEdgeBrowser;
-		
+
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -94,8 +94,6 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 	@Named(SchedulerConstants.Key_TimeWindowSchedulerCache)
 	private CacheMode cacheMode;
 
-	@Inject
-	@Named(SchedulerConstants.HINT_DISABLE_CACHES)
 	private boolean hintDisableCache;
 
 	private final @NonNull LoadingCache<CacheKey, Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData>> cache;
@@ -311,6 +309,8 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 	@Subscribe
 	public void startPhase(final OptimisationPhaseStartEvent event) {
+
+		hintDisableCache = event.getHints().contains(SchedulerConstants.HINT_DISABLE_CACHES);
 		// TODO: Inspect settings and invalidate only if needed
 		// E.g. gco on/off
 		// E.g. lateness paremeter changes.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation;
@@ -378,11 +378,11 @@ public class ScenarioTools {
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
 		
 
-		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
+		var localOverrides = OptimiserInjectorServiceMaker.begin() //
 				.makeModule() //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
-				.make();
+				.makeAsList();
 
 		
 		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenarioDataProvider, null, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,

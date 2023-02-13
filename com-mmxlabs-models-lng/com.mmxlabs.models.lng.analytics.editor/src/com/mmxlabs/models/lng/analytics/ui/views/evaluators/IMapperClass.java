@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.YearMonth;
+import java.time.ZonedDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -84,4 +85,6 @@ public interface IMapperClass {
 	CharterInMarket get(ExistingCharterMarketOption existingCharterMarketOption);
 
 	boolean isCreateBEOptions();
+
+	void addExtraDate(@NonNull ZonedDateTime extraDate);
 }

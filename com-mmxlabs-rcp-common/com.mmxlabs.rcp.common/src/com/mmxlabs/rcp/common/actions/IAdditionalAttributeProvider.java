@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.actions;
@@ -31,6 +31,10 @@ public interface IAdditionalAttributeProvider {
 
 	@NonNull
 	String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item);
+	
+	default String getAdditionalRowHeaderText(@NonNull GridItem item){
+		return item.getHeaderText();
+	};
 
 	@NonNull
 	String getTopLeftCellLowerText();

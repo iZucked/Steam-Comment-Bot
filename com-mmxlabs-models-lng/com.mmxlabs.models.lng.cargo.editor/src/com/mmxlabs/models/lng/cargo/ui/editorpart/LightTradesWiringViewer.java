@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -1037,7 +1037,7 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
-			protected void wiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
+			protected void wiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed, boolean shiftPressed, boolean altPressed) {
 				if (locked) {
 					return;
 				}

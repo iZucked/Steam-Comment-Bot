@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
@@ -25,6 +25,8 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -92,6 +94,58 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * @ordered
 	 */
 	protected boolean cargoCVESet;
+	/**
+	 * The default value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double UPSTREAM_EMISSION_RATE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getUpstreamEmissionRate() <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double upstreamEmissionRate = UPSTREAM_EMISSION_RATE_EDEFAULT;
+	/**
+	 * This is true if the Upstream Emission Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean upstreamEmissionRateESet;
+	/**
+	 * The default value of the '{@link #getPipelineEmissionRate() <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PIPELINE_EMISSION_RATE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getPipelineEmissionRate() <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double pipelineEmissionRate = PIPELINE_EMISSION_RATE_EDEFAULT;
+	/**
+	 * This is true if the Pipeline Emission Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pipelineEmissionRateESet;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -167,6 +221,132 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * @generated
 	 */
 	@Override
+	public double getUpstreamEmissionRate() {
+		return upstreamEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUpstreamEmissionRate(double newUpstreamEmissionRate) {
+		double oldUpstreamEmissionRate = upstreamEmissionRate;
+		upstreamEmissionRate = newUpstreamEmissionRate;
+		boolean oldUpstreamEmissionRateESet = upstreamEmissionRateESet;
+		upstreamEmissionRateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE, oldUpstreamEmissionRate, upstreamEmissionRate, !oldUpstreamEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetUpstreamEmissionRate() {
+		double oldUpstreamEmissionRate = upstreamEmissionRate;
+		boolean oldUpstreamEmissionRateESet = upstreamEmissionRateESet;
+		upstreamEmissionRate = UPSTREAM_EMISSION_RATE_EDEFAULT;
+		upstreamEmissionRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE, oldUpstreamEmissionRate, UPSTREAM_EMISSION_RATE_EDEFAULT, oldUpstreamEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetUpstreamEmissionRate() {
+		return upstreamEmissionRateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getPipelineEmissionRate() {
+		return pipelineEmissionRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPipelineEmissionRate(double newPipelineEmissionRate) {
+		double oldPipelineEmissionRate = pipelineEmissionRate;
+		pipelineEmissionRate = newPipelineEmissionRate;
+		boolean oldPipelineEmissionRateESet = pipelineEmissionRateESet;
+		pipelineEmissionRateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE, oldPipelineEmissionRate, pipelineEmissionRate, !oldPipelineEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPipelineEmissionRate() {
+		double oldPipelineEmissionRate = pipelineEmissionRate;
+		boolean oldPipelineEmissionRateESet = pipelineEmissionRateESet;
+		pipelineEmissionRate = PIPELINE_EMISSION_RATE_EDEFAULT;
+		pipelineEmissionRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE, oldPipelineEmissionRate, PIPELINE_EMISSION_RATE_EDEFAULT, oldPipelineEmissionRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPipelineEmissionRate() {
+		return pipelineEmissionRateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getContractOrDelegateUpstreamEmissionRate() {
+		if (getPreferredPort() != null && !isSetUpstreamEmissionRate()) {
+			return getPreferredPort().getUpstreamEmissionRate();
+		}
+		return getUpstreamEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getContractOrDelegatePipelineEmissionRate() {
+		if (getPreferredPort() != null && !isSetPipelineEmissionRate()) {
+			return getPreferredPort().getPipelineEmissionRate();
+		}
+		return getPipelineEmissionRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CargoDeliveryType getSalesDeliveryType() {
 		return salesDeliveryType;
 	}
@@ -221,6 +401,10 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return getDesPurchaseDealType();
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return getCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				return getUpstreamEmissionRate();
+			case CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE:
+				return getPipelineEmissionRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -241,6 +425,12 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return;
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				setCargoCV((Double)newValue);
+				return;
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				setUpstreamEmissionRate((Double)newValue);
+				return;
+			case CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE:
+				setPipelineEmissionRate((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -263,6 +453,12 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				unsetCargoCV();
 				return;
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				unsetUpstreamEmissionRate();
+				return;
+			case CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE:
+				unsetPipelineEmissionRate();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -281,6 +477,10 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 				return desPurchaseDealType != DES_PURCHASE_DEAL_TYPE_EDEFAULT;
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return isSetCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+				return isSetUpstreamEmissionRate();
+			case CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE:
+				return isSetPipelineEmissionRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -301,6 +501,10 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 		result.append(desPurchaseDealType);
 		result.append(", cargoCV: ");
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
+		result.append(", upstreamEmissionRate: ");
+		if (upstreamEmissionRateESet) result.append(upstreamEmissionRate); else result.append("<unset>");
+		result.append(", pipelineEmissionRate: ");
+		if (pipelineEmissionRateESet) result.append(pipelineEmissionRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -312,6 +516,10 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV) {
 			return new DelegateInformation(CommercialPackage.Literals.CONTRACT__PREFERRED_PORT, PortPackage.Literals.PORT__CV_VALUE, null);
+		} else if (feature == CommercialPackage.Literals.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE) {
+			return new DelegateInformation(CommercialPackage.Literals.CONTRACT__PREFERRED_PORT, PortPackage.Literals.PORT__PIPELINE_EMISSION_RATE, null);
+		} else if (feature == CommercialPackage.Literals.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE) {
+			return new DelegateInformation(CommercialPackage.Literals.CONTRACT__PREFERRED_PORT, PortPackage.Literals.PORT__UPSTREAM_EMISSION_RATE, null);
 		} 
 		return super.getUnsetValueOrDelegate(feature);
 	}

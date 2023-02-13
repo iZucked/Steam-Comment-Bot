@@ -1,9 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -144,8 +147,34 @@ public class LatenessReportView extends EMFReportView {
 			public String render(final Object object) {
 				return Formatters.asDateTimeFormatterNoTz.render(LatenessUtils.getWindowEndDate(object));
 			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+				final ZonedDateTime startZdt = LatenessUtils.getWindowEndDate(object);
+				if (startZdt != null) {
+					return startZdt.toLocalDateTime();
+				}
+				return null;
+			}
 		});
-		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getEvent_Start());
+		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, new BaseFormatter() {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof Event event) {
+					return Formatters.asDateTimeFormatterNoTz.render(event.getStart());
+				}
+				return "";
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+
+				if (object instanceof Event event) {
+					return event.getStart().toLocalDateTime();
+				}
+				return null;
+			}
+		});
 
 		getBlockManager().makeAllBlocksVisible();
 	}

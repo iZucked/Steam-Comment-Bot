@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -91,8 +91,8 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CargoSwitch<@Nullable Adapter> modelSwitch =
-		new CargoSwitch<@Nullable Adapter>() {
+	protected CargoSwitch<Adapter> modelSwitch =
+		new CargoSwitch<Adapter>() {
 			@Override
 			public Adapter caseCargoModel(CargoModel object) {
 				return createCargoModelAdapter();

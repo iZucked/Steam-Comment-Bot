@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser;
@@ -35,7 +35,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTran
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 
 public class OptioniserJobRunner extends AbstractJobRunner {
 
@@ -156,7 +156,7 @@ public class OptioniserJobRunner extends AbstractJobRunner {
 		// }
 		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 
-		final SlotInsertionOptimiserLogger logger = loggingData == null ? null : new SlotInsertionOptimiserLogger();
+		final OptioniserLogger logger = loggingData == null ? null : new OptioniserLogger();
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
 

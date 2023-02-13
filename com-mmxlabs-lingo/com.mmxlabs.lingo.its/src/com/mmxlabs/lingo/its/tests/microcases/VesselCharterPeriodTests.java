@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases;
@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 /**
@@ -35,8 +36,102 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 public class VesselCharterPeriodTests extends AbstractLegacyMicroTestCase {
 
 	/**
-	 * Vessel availability and cargoes are within the period. No change to start/end information.
+	 * A vessel with no duration left which is outside of the period should be removed. Otherwise the max duration of zero will be treated as unbounded.
 	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCharterWithMaxDurationBeforePeriod() {
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
+
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2022, 4, 18, 0, 0)) //
+				.withStartHeel(1_000, 3_000, 22.6, "5") //
+				.withRepositioning("1000000") //
+				.withEndPorts(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE)) //
+				.withEndHeel(4_000, 5_000, EVesselTankState.EITHER, "7") //
+				.withMinDuration(18)
+				.withMaxDuration(26 + 4) // $ days excess, but well before the period buffer start.
+				.build();
+
+		@NonNull
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2022, 10, 20), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2022, 11, 15), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselCharter, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(false, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2023, 3, 1));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2023, 5));
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			EList<VesselCharter> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselCharters();
+
+			Assertions.assertEquals(0, vesselAvailabilities.size());
+
+		}, null);
+	}
+
+	/**
+	 * A vessel outside of the period with spare duration, but not enough to meet the period should be removed.
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCharterWithmaxDurationBeforePeriod2() {
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
+
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2022, 4, 18, 0, 0)) //
+				.withStartHeel(1_000, 3_000, 22.6, "5") //
+				.withRepositioning("1000000") //
+				.withEndPorts(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE)) //
+				.withEndHeel(4_000, 5_000, EVesselTankState.EITHER, "7") //
+				.withMinDuration(18)
+				.withMaxDuration(26)
+				.build();
+
+		@NonNull
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		vesselCharter.setGenericCharterContract(ballastBonusContract);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2022, 10, 20), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2022, 11, 15), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselCharter, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(false, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2023, 3, 1));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2023, 5));
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			EList<VesselCharter> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselCharters();
+
+			Assertions.assertEquals(0, vesselAvailabilities.size());
+		}, null);
+	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testContainedAvailability() {
@@ -126,7 +221,7 @@ public class VesselCharterPeriodTests extends AbstractLegacyMicroTestCase {
 		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselCharter.setGenericCharterContract(ballastBonusContract);
 
-		/*final Cargo cargo1 =*/ 
+		/* final Cargo cargo1 = */
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
@@ -136,7 +231,7 @@ public class VesselCharterPeriodTests extends AbstractLegacyMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		/*final Cargo cargo2 =*/ 
+		/* final Cargo cargo2 = */
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //

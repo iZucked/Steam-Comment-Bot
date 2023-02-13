@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
@@ -27,13 +27,13 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
-import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.evaluation.CachingVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.CheckingVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.DefaultVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
+import com.mmxlabs.scheduler.optimiser.exposures.ExposuresCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;

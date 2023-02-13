@@ -1,16 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.dates.MonthInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.PlaceholderInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
@@ -33,7 +37,13 @@ public class ContractComponentHelper extends DefaultComponentHelper {
 		addEditor(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE,
 				topClass -> new PermissiveRestrictiveInlineEditor(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
 
-		addDefaultEditorForLicenseFeature("features:adp", CommercialPackage.Literals.CONTRACT__CODE);
+		addEditor(CommercialPackage.Literals.CONTRACT__CODE, topClass -> {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP)) {
+				return ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CODE);
+			} else {
+				return new PlaceholderInlineEditor(CommercialPackage.Literals.CONTRACT__CODE);
+			}
+		});
 
 		addEditor(CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION, topClass -> {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);

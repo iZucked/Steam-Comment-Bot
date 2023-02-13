@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.updater;
@@ -12,8 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -32,6 +32,19 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpMessage;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestWrapper;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -65,20 +78,13 @@ import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
-import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lingo.app.updater.auth.IUpdateAuthenticationProvider;
 import com.mmxlabs.lingo.app.updater.model.UpdateVersion;
 import com.mmxlabs.lingo.app.updater.model.Version;
 import com.mmxlabs.lingo.app.updater.util.SignatureByteProcessor;
 import com.mmxlabs.rcp.common.ServiceHelper;
-
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okio.BufferedSource;
 
 /**
  * 
@@ -88,7 +94,10 @@ import okio.BufferedSource;
  *
  */
 public class LiNGOUpdater {
-
+	static {
+		// Might be best in Application?
+		Security.addProvider(new BouncyCastleProvider());
+	}
 	private static final Logger LOGGER = LoggerFactory.getLogger(LiNGOUpdater.class);
 
 	public static RSAPublicKey readPublicKey(final String resource) throws Exception {
@@ -116,18 +125,17 @@ public class LiNGOUpdater {
 	private static final String FILE_VERSION_JSON_ALT = "version.json";
 	private static final String FILE_VERSIONS_JSON = "versions.json";
 
-//	private static final String UPDATE_FOLDER = "updates";
-
 	private String user = null;
 	private String pw = null;
 
 	private boolean performSigCheck = true;
 
-	private void withAuthHeader(final URL url, final Request.Builder b) {
+	private void withAuthHeader(final URI url, final HttpMessage b) {
 		if (user != null && pw != null) {
-			b.header("Authorization", Credentials.basic(user, pw, StandardCharsets.UTF_8));
+			final byte[] encodedAuth = Base64.getEncoder().encode(String.format("%s:%s", user, pw).getBytes(StandardCharsets.UTF_8));
+			final String authHeader = "Basic " + new String(encodedAuth);
+			b.addHeader("Authorization", authHeader);
 		} else {
-
 			ServiceHelper.withOptionalServiceConsumer(IUpdateAuthenticationProvider.class, p -> {
 				if (p != null) {
 					try {
@@ -194,18 +202,18 @@ public class LiNGOUpdater {
 		m.beginTask("Update", 100);
 		try {
 
-			URL url = null;
+			URI url = null;
 			UpdateVersion updateVersion = null;
 			if (path != null) {
-				url = new URL(path);
+				url = new URI(path);
 				updateVersion = getVersion(url);
 			} else {
-				final List<URL> updateSites = getUpdateSites();
+				final List<URI> updateSites = getUpdateSites();
 				if (updateSites.isEmpty()) {
 					Display.getDefault().asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", "No enabled update sites found"));
 					return;
 				}
-				for (final URL u : updateSites) {
+				for (final URI u : updateSites) {
 					final UpdateVersion version = getVersion(u);
 					if (version != null) {
 						if (updateVersion == null || version.isBetter(updateVersion)) {
@@ -338,9 +346,6 @@ public class LiNGOUpdater {
 				final byte[] encryptedMessageHash = Files.readAllBytes(file.toPath());
 				final RSAPublicKey publicKey = readPublicKey("/certs/update-cert.pem");
 
-				// TODO: We probably should not do this on every call...
-				Security.addProvider(new BouncyCastleProvider());
-
 				final Signature signature = Signature.getInstance("SHA256WithRSA", "BC");
 				signature.initVerify(publicKey);
 
@@ -356,153 +361,171 @@ public class LiNGOUpdater {
 		return false;
 	}
 
-	private void downloadVersion(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
-		final URL url = expandURL(baseUrl);
+	private void downloadVersion(final URI baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+		final URI url = expandURL(baseUrl);
 		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
 
 		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".zip");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
-		OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
-		if (progressListener != null) {
-			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-				@Override
-				public Response intercept(final Chain chain) throws IOException {
-					final Response originalResponse = chain.proceed(chain.request());
-					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
+
+		final HttpClientBuilder builder = createHttpBuilder(url);
+
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				response.setEntity(new ProgressHttpEntityWrapper(response.getEntity(), progressListener));
+				if (response.getStatusLine().getStatusCode() != 200) {
+					throw new IOException("" + response);
 				}
-			});
-		}
-		final OkHttpClient localHttpClient = clientBuilder //
-				.build();
-
-		final Request.Builder requestBuilder = new Request.Builder() //
-				.url(url) //
-		;
-		withAuthHeader(url, requestBuilder);
-
-		final Request request = requestBuilder //
-				.build();
-		try (Response response = localHttpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("" + response);
-			}
-
-			try (FileOutputStream out = new FileOutputStream(file)) {
-				try (BufferedSource bufferedSource = response.body().source()) {
-					ByteStreams.copy(bufferedSource.inputStream(), out);
+				final HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					try (FileOutputStream out = new FileOutputStream(file)) {
+						entity.writeTo(out);
+					}
 				}
 			}
 		}
 	}
 
-	private void downloadVersionSignature(final URL baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
-		final URL url = new URL(expandURL(baseUrl).toString() + ".sha256.sig");
+	private HttpClientBuilder createHttpBuilder(final URI url) {
+
+		final boolean needsClientAuth = url.getHost().contains("updates.minimaxlabs.com");
+		final HttpHost httpHost = URIUtils.extractHost(url);
+		var builder = HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
+		builder.addInterceptorFirst(new HttpRequestInterceptor() {
+
+			@Override
+			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				try {
+					URI uri = new URI(request.getRequestLine().getUri());
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal().getRequestLine().getUri());
+					}
+					if (uri.getHost().contains("update.minimaxlabs.com") ) {
+						withAuthHeader(url, request);
+					}
+				} catch (final URISyntaxException e) {
+					throw new IOException(e);
+				}
+			}
+
+		});
+		return builder;
+	}
+
+	private void downloadVersionSignature(final URI baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
+		final URI url = new URI(expandURL(baseUrl).toString() + ".sha256.sig");
 		final SubMonitor progress = SubMonitor.convert(monitor);
 		progress.beginTask("Download", 100);
 
 		final File file = new File(getUpdatesFolder(), uv.getVersion() + ".sha256.sig");
 
 		final IProgressListener progressListener = WrappedProgressMonitor.wrapMonitor(progress.split(99));
-		OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
-		if (progressListener != null) {
-			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-				@Override
-				public Response intercept(final Chain chain) throws IOException {
-					final Response originalResponse = chain.proceed(chain.request());
-					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
+
+		final HttpClientBuilder builder = createHttpBuilder(url);
+
+		try (var httpClient = builder.build()) {
+			final HttpGet request = new HttpGet(url);
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+				response.setEntity(w);
+
+				final int statusCode = response.getStatusLine().getStatusCode();
+				if (statusCode != 200) {
+					if (statusCode == 404) {
+						throw new RuntimeException("No signature file found at " + url);
+					} else {
+						throw new RuntimeException("Unable to find signature file at " + url + " Code " + statusCode);
+					}
 				}
-			});
-		}
-		final OkHttpClient localHttpClient = clientBuilder //
-				.build();
-
-		final Request.Builder requestBuilder = new Request.Builder() //
-				.url(url) //
-		;
-		withAuthHeader(url, requestBuilder);
-
-		final Request request = requestBuilder //
-				.build();
-		try (Response response = localHttpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 404) {
-					throw new RuntimeException("No signature file found at " + url);
-				} else {
-					throw new RuntimeException("Unable to find signature file at " + url + " Code " + response.code());
-				}
-			}
-
-			try (FileOutputStream fout = new FileOutputStream(file)) {
-				try (BufferedSource bufferedSource = response.body().source()) {
-					ByteStreams.copy(bufferedSource.inputStream(), fout);
+				final HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					try (FileOutputStream out = new FileOutputStream(file)) {
+						entity.writeTo(out);
+					}
 				}
 			}
 		}
 	}
 
-	private UpdateVersion getVersion(final URL baseUrl) throws Exception {
+	private UpdateVersion getVersion(final URI baseUrl) throws Exception {
 		// If URL ends in .zip - then assume file.
-		final URL url = expandURL(baseUrl);
+		final URI url = expandURL(baseUrl);
 
 		if (url.toString().startsWith("http")) {
 
-			final OkHttpClient.Builder clientBuilder = HttpClientUtil.basicBuilder();
+			final HttpClientBuilder builder = createHttpBuilder(url);
+			builder.addInterceptorFirst(new HttpRequestInterceptor() {
 
-			final OkHttpClient localHttpClient = clientBuilder //
-					.build();
-			final Request.Builder requestBuilder = new Request.Builder() //
-					.url(url) //
-			;
-			withAuthHeader(url, requestBuilder);
-
-			final Request request = requestBuilder //
-					.build();
-			try (Response response = localHttpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					Display.getDefault().asyncExec(() -> {
-						final String msg = String.format("Failed to connect to update server - HTTP Error %d", response.code());
-						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
-					});
-					return null;
+				@Override
+				public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+					try {
+						URI uri = new URI(request.getRequestLine().getUri());
+						if (request instanceof HttpRequestWrapper w) {
+							uri = new URI(w.getOriginal().getRequestLine().getUri());
+						}
+						if (!uri.getHost().contains("update.minimaxlabs.com")) {
+							// Adding a header also means the original request headers are discarded.
+							request.addHeader(HttpHeaders.RANGE, "bytes=0-512");
+						}
+					} catch (final URISyntaxException e) {
+						throw new IOException(e);
+					}
 				}
 
-				// Read up to 8k bytes of the upstream file. This sets a hard limit on the
-				// amount downloaded. We will alway grab 8k (unless the file is smaller).
-				try (InputStream is = response.peekBody(1024L * 8L).byteStream()) {
+			});
 
-					// 512 byte buffer. we don't expect version.json to be very big. This is a soft
-					// limit - we download 512k at a time, but can still download the whole file if
-					// needed
-					try (BufferedInputStream bis = new BufferedInputStream(is, 512)) {
+			try (var httpClient = builder//
+					.build()) {
 
-						try (ZipInputStream zis = new ZipInputStream(bis)) {
-							ZipEntry entry = zis.getNextEntry();
-							while (entry != null && (entry.isDirectory() || !entry.getName().contains("version"))) {
-								entry = zis.getNextEntry();
-							}
-							if (entry != null) {
-								if (FILE_VERSION_JSON.equals(entry.getName()) || FILE_VERSION_JSON_ALT.equals(entry.getName())) {
-									final ByteArrayOutputStream out = new ByteArrayOutputStream();
-									ByteStreams.copy(zis, out);
-									final String str = out.toString();
+				final HttpGet request = new HttpGet(url);
+				try (CloseableHttpResponse response = httpClient.execute(request)) {
+					final int statusCode = response.getStatusLine().getStatusCode();
+					if (statusCode < 200 && statusCode >= 300) {
+						Display.getDefault().asyncExec(() -> {
+							final String msg = String.format("Failed to connect to update server - HTTP Error %d", statusCode);
+							MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
+						});
+						return null;
+					}
+					final HttpEntity entity = response.getEntity();
+					if (entity != null) {
+						try (InputStream is = entity.getContent()) {
+							// 512 byte buffer. we don't expect version.json to be very big. This is a soft
+							// limit - we download 512k at a time, but can still download the whole file if
+							// needed - although the Range header limit us
+							try (BufferedInputStream bis = new BufferedInputStream(is, 512)) {
 
-									final ObjectMapper mapper = new ObjectMapper();
-									final UpdateVersion uv = mapper.readValue(str, UpdateVersion.class);
-									return uv;
+								try (ZipInputStream zis = new ZipInputStream(bis)) {
+									ZipEntry entry = zis.getNextEntry();
+									while (entry != null && (entry.isDirectory() || !entry.getName().contains("version"))) {
+										entry = zis.getNextEntry();
+									}
+									if (entry != null) {
+										if (FILE_VERSION_JSON.equals(entry.getName()) || FILE_VERSION_JSON_ALT.equals(entry.getName())) {
+											final ByteArrayOutputStream out = new ByteArrayOutputStream();
+											ByteStreams.copy(zis, out);
+											final String str = out.toString();
+
+											final ObjectMapper mapper = new ObjectMapper();
+											final UpdateVersion uv = mapper.readValue(str, UpdateVersion.class);
+											return uv;
+										}
+									}
 								}
 							}
+						} catch (final EOFException e) {
+							// If we hit here, then we were unable to find version.json at the start of the
+							// zip file.
+							Display.getDefault().asyncExec(() -> {
+								final String msg = String.format("Malformed update file found");
+								MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
+							});
+							return null;
 						}
 					}
-				} catch (final EOFException e) {
-					// If we hit here, then we were unable to find version.json at the start of the
-					// zip file.
-					Display.getDefault().asyncExec(() -> {
-						final String msg = String.format("Malformed update file found");
-						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "No update found", msg);
-					});
-					return null;
 				}
 			}
 		}
@@ -510,21 +533,21 @@ public class LiNGOUpdater {
 		return null;
 	}
 
-	private URL expandURL(final URL baseUrl) throws MalformedURLException {
-		URL url = null;
+	private URI expandURL(final URI baseUrl) throws URISyntaxException {
+		URI url = null;
 		if (baseUrl.toString().endsWith(".zip")) {
 			// Actual repo file
 			url = baseUrl;
 		} else {
 			// Assume a directory - look for update.zip
 			final String sep = baseUrl.toString().endsWith("/") ? "" : "/";
-			url = new URL(baseUrl.toString() + sep + "update.zip");
+			url = new URI(baseUrl.toString() + sep + "update.zip");
 		}
 		return url;
 	}
 
 	/** Get the list of currently enabled update sites */
-	private List<URL> getUpdateSites() {
+	private List<URI> getUpdateSites() {
 
 		final BundleContext context = FrameworkUtil.getBundle(LiNGOUpdater.class).getBundleContext();
 		final ServiceReference<IProvisioningAgentProvider> providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
@@ -544,9 +567,9 @@ public class LiNGOUpdater {
 
 			final IMetadataRepositoryManager mgr = (IMetadataRepositoryManager) agent.getService(IMetadataRepositoryManager.class.getName());
 			final URI[] knownRepositories = mgr.getKnownRepositories(IRepositoryManager.REPOSITORIES_ALL);
-			final List<URL> urls = new LinkedList<>();
+			final List<URI> urls = new LinkedList<>();
 			for (final var u : knownRepositories) {
-				urls.add(u.toURL());
+				urls.add(u);
 			}
 			return urls;
 
@@ -583,17 +606,7 @@ public class LiNGOUpdater {
 			}
 			final ProvisioningSession session = new ProvisioningSession(agent);
 
-//					   //get the repository managers and define our repositories
-			// final IMetadataRepositoryManager manager = new
-			// MetadataRepositoryManager(agent);
-			// final IArtifactRepositoryManager artifactManager = new
-			// ArtifactRepositoryManager(agent);
-			// manager.addRepository(new URI(UPDATE_SITE_URL));
-			// artifactManager.addRepository(new URI(UPDATE_SITE_URL));
-
 			final UpdateOperation operation = new UpdateOperation(session);
-
-//			final IProvisioningPlan provisioningPlan = operation.getProvisioningPlan();
 
 			final URI updateSiteURI = new URI(UPDATE_SITE_URL);
 			operation.getProvisioningContext().setArtifactRepositories(updateSiteURI);
@@ -652,7 +665,5 @@ public class LiNGOUpdater {
 
 	public void disableSigCheck(final boolean b) {
 		this.performSigCheck = !b;
-
 	}
-
 }

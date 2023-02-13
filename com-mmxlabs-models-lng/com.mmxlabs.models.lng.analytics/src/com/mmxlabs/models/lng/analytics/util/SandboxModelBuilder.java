@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.util;
@@ -242,5 +242,4 @@ public class SandboxModelBuilder {
 	public PartialCaseRowMaker makePartialCaseRow() {
 		return new PartialCaseRowMaker(this);
 	}
-
 }

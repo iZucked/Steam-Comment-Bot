@@ -1,18 +1,26 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.events;
 
-public class OptimisationPhaseStartEvent {
+import java.util.Collection;
+
+public class OptimisationPhaseStartEvent implements IReplayableEvent {
 
 	private final String phase;
+	private final Collection<String> hints;
 
-	public OptimisationPhaseStartEvent(final String phase) {
+	public OptimisationPhaseStartEvent(final String phase, final Collection<String> hints) {
 		this.phase = phase;
+		this.hints = hints;
 	}
 
 	public String getPhase() {
 		return phase;
+	}
+
+	public Collection<String> getHints() {
+		return hints;
 	}
 }

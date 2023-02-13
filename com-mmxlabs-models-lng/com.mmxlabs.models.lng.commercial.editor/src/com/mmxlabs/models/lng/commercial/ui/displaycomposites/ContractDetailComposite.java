@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -36,9 +37,9 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 public class ContractDetailComposite extends DefaultDetailComposite {
 
 	private final ContractDetailGroup contractDetailGroup;
-	
-	public enum ContractDetailGroup{
-		GENERAL, RESTRICTIONS
+
+	public enum ContractDetailGroup {
+		GENERAL, RESTRICTIONS, EMISSIONS
 	}
 
 	public ContractDetailComposite(final Composite parent, final int style, final ContractDetailGroup contractDetailGroup, final FormToolkit toolkit) {
@@ -58,21 +59,22 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		ContractDetailGroup cdg = ContractDetailGroup.GENERAL;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
-		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedContracts()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedPorts()
+		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedContracts() || editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedPorts()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedVessels()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedContractsArePermissive()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedPortsArePermissive()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedVesselsArePermissive()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MaxCvValue()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MinCvValue()
-				|| editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_SalesDeliveryType()
+				|| editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedVesselsArePermissive() || editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MaxCvValue()
+				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MinCvValue() || editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_SalesDeliveryType()
 				|| editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
 			cdg = ContractDetailGroup.RESTRICTIONS;
 		}
-	
+		
+		else if(editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_PipelineEmissionRate() ||
+				editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_UpstreamEmissionRate() )  {
+			cdg = ContractDetailGroup.EMISSIONS;
+		}
 		// Do not add elements if they are for the wrong section.
-		if (contractDetailGroup != cdg){
+		if (contractDetailGroup != cdg) {
 			// Rejected...
 			return null;
 		}
@@ -82,7 +84,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 	@Override
 	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
-					
+
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override
@@ -114,7 +116,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					} else {
 						editor.setLabel(null);
 					}
-					
+
 					return gd;
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT) {
@@ -136,19 +138,19 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 							label.setText("Contract dates");
 						}
 						editor.setLabel(null);
+						gd.horizontalSpan = 1;
 					} else {
 						editor.setLabel(null);
+						gd.horizontalSpan = 2;
 					}
-					gd.horizontalSpan = 2;
 					return gd;
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_YEAR_START) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					gd.horizontalSpan = 3;
+					gd.horizontalSpan = 4;
 					return gd;
 				}
-				
-				
+
 				if (feature == CommercialPackage.Literals.CONTRACT__COUNTERPARTY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
@@ -164,8 +166,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					return gd;
 				}
 
-				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS 
-						|| feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
+				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS || feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
@@ -175,40 +176,36 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 							label.setText("Contracts");
 						}
 						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE){
+					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 						editor.setLabel(null);
-					}else {
+					} else {
 						editor.setLabel(null);
 					}
 					return gd;
 				}
-				
-				if (feature == MMXCorePackage.Literals.NAMED_OBJECT__NAME 
-						|| feature == CommercialPackage.Literals.CONTRACT__CODE) {
+
+				if (feature == MMXCorePackage.Literals.NAMED_OBJECT__NAME || feature == CommercialPackage.Literals.CONTRACT__CODE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
-				 
+
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS 
-						|| feature == CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) {
+				if (feature == CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS || feature == CommercialPackage.Literals.CONTRACT__PREFERRED_PORT) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
-					
+
 					return gd;
 				}
-			if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE 
-					|| feature == CommercialPackage.Literals.CONTRACT__ENTITY) {
-				final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-				// 64 - magic constant from MultiDetailDialog
-				gd.horizontalSpan = 4;
-				
-				return gd;
-			}
-				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS 
-						|| feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
+				if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE || feature == CommercialPackage.Literals.CONTRACT__ENTITY) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.horizontalSpan = 4;
+
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS || feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
@@ -218,15 +215,14 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 							label.setText("Ports");
 						}
 						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE){
+					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
 						editor.setLabel(null);
-					}else {
+					} else {
 						editor.setLabel(null);
 					}
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS 
-						|| feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
+				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS || feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
@@ -236,31 +232,29 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 							label.setText("Vessels");
 						}
 						editor.setLabel(null);
-					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE){
+					} else if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS_ARE_PERMISSIVE) {
 						editor.setLabel(null);
-					}else {
+					} else {
 						editor.setLabel(null);
 					}
 					return gd;
 				}
-				
+
 				if (feature == CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION //
 						|| feature == CommercialPackage.Literals.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE //
-					|| feature == CommercialPackage.Literals.SALES_CONTRACT__FOB_SALE_DEAL_TYPE) {
+						|| feature == CommercialPackage.Literals.SALES_CONTRACT__FOB_SALE_DEAL_TYPE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__PRICING_EVENT
-						|| feature == CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION) {
+				if (feature == CommercialPackage.Literals.CONTRACT__PRICING_EVENT || feature == CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					gd.horizontalSpan = 4;
 					return gd;
 				}
-				
-				
+
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 9;
 				return gd;

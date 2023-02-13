@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.repo.generic;
@@ -27,20 +27,16 @@ import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataRepository;
 import com.mmxlabs.scenario.service.model.util.encryption.EncryptionUtils;
 
-import okhttp3.MediaType;
-
 public abstract class AbstractGenericDataRepository<T> implements IDataRepository<T> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractGenericDataRepository.class);
-
-	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	private final String type;
 
 	protected boolean listenForNewLocalVersions;
 	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
 
-	public AbstractGenericDataRepository(final String type) {
+	protected AbstractGenericDataRepository(final String type) {
 		this.type = type;
 	}
 

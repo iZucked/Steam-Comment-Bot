@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.util;
@@ -32,11 +32,11 @@ public class CargoTypeUtil {
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
-	public static enum SimpleCargoType {
+	public enum SimpleCargoType {
 		SHIPPED, FOB_SALE, DES_PURCHASE
 	}
 
-	public static enum DetailedCargoType {
+	public enum DetailedCargoType {
 		UNKNOWN, SHIPPED, OPEN_FOB_PURCHASE, OPEN_DES_SALE, FOB_SALE, DIVERTIBLE_FOB_SALE, DES_PURCHASE, DIVERTIBLE_DES_PURCHASE
 	}
 

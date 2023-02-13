@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.presentation.composites;
@@ -14,7 +14,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -93,6 +95,24 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_maxCvValueEditor(detailComposite, topClass);
 		add_minVesselSizeEditor(detailComposite, topClass);
 		add_maxVesselSizeEditor(detailComposite, topClass);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS)) {
+			add_LiquefactionEmissionRateEditor(detailComposite, topClass);
+			add_PipelineEmissionRateEditor(detailComposite, topClass);
+			add_UpstreamEmissionRateEditor(detailComposite, topClass);
+		}
+		
+	}
+
+	private void add_UpstreamEmissionRateEditor(IInlineEditorContainer detailComposite, EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UPSTREAM_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+		
+	}
+
+	private void add_PipelineEmissionRateEditor(IInlineEditorContainer detailComposite, EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__PIPELINE_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+		
 	}
 
 	/**
@@ -158,6 +178,12 @@ public class PortComponentHelper extends BaseComponentHelper {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__CV_VALUE);
 		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
 	}
+	
+	protected void add_LiquefactionEmissionRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LIQUEFACTION_EMISSION_RATE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
+	}
+
 
 	/**
 	 * Create the editor for the defaultStartTime feature on Port

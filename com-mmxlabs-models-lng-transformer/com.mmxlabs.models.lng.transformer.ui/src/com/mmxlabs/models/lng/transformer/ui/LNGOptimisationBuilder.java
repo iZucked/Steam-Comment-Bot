@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -59,7 +59,7 @@ public class LNGOptimisationBuilder {
 
 	private @Nullable Consumer<OptimisationPlan> optimisationPlanCustomiser;
 	private @Nullable Consumer<UserSettings> userSettingsCustomiser;
-	private @Nullable IOptimiserInjectorService optimiserInjectorService;
+	private List<IOptimiserInjectorService> extraOptimiserInjectorServices = new LinkedList<>();
 	private @Nullable Module extraModule;
 	private @Nullable Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory;
 	private @Nullable IRunnerHook runnerHook;
@@ -98,7 +98,9 @@ public class LNGOptimisationBuilder {
 	}
 
 	public LNGOptimisationBuilder withOptimiserInjectorService(final @Nullable IOptimiserInjectorService optimiserInjectorService) {
-		this.optimiserInjectorService = optimiserInjectorService;
+		if (optimiserInjectorService != null) {
+			this.extraOptimiserInjectorServices.add(optimiserInjectorService);
+		}
 		return this;
 	}
 
@@ -199,7 +201,7 @@ public class LNGOptimisationBuilder {
 					serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createEmptySolutionModule());
 				}
 				// FIXME: This replaces any local overrides!
-				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
+				extraOptimiserInjectorServices.add(serviceMaker.make());
 			} else if (localOptimisationPlan.getUserSettings().getMode() == OptimisationMode.STRATEGIC) {
 				final OptimiserInjectorServiceMaker serviceMaker = OptimiserInjectorServiceMaker.begin()//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, StrategicScenarioModuleHelper.createExtraDataModule())//
@@ -209,7 +211,7 @@ public class LNGOptimisationBuilder {
 				// serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution,
 				// StrategicScenarioModuleHelper.createEmptySolutionModule());
 
-				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
+				extraOptimiserInjectorServices.add(serviceMaker.make());
 			}
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = buildStandardBridge(localOptimisationPlan, evaluationOnly, executorService.getNumThreads(), hints);
@@ -250,7 +252,7 @@ public class LNGOptimisationBuilder {
 	public LNGScenarioToOptimiserBridge buildStandardBridge(final OptimisationPlan optimisationPlan, final boolean evaluationOnly, int concurrencyLevel, final String... initialHints) {
 
 		return new LNGScenarioToOptimiserBridge(scenarioDataProvider, scenarioInstance, extraDataProvider, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(),
-				scenarioDataProvider.getEditingDomain(), concurrencyLevel, extraModule, optimiserInjectorService, evaluationOnly, initialHints);
+				scenarioDataProvider.getEditingDomain(), concurrencyLevel, extraModule, extraOptimiserInjectorServices, evaluationOnly, initialHints);
 	}
 
 	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, boolean includeDefaultExportStage,
@@ -322,7 +324,7 @@ public class LNGOptimisationBuilder {
 	public static void quickEvaluation(final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final @Nullable Module extraModule) {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings,  lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
 		final LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
 				.withExtraModule(extraModule) //

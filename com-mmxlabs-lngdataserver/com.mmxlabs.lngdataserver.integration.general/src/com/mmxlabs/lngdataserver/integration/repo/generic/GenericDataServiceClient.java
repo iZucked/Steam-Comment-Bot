@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.integration.repo.generic;
@@ -11,6 +11,14 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONObject;
 
@@ -23,17 +31,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
-import com.mmxlabs.hub.common.http.ProgressRequestBody;
-import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
 import com.mmxlabs.scenario.service.model.util.encryption.DataStreamReencrypter;
-
-import okhttp3.Interceptor;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.BufferedSource;
 
 public class GenericDataServiceClient {
 
@@ -44,80 +43,52 @@ public class GenericDataServiceClient {
 
 	private static final String SCENARIO_LAST_MODIFIED_URL = "/data/v1/lastModified";
 
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder() //
-			.build();
-
 	public String upload(final String type, final String uuid, final String contentType, final File file, final IProgressListener progressListener) throws IOException {
 
-		RequestBody requestBody = new MultipartBody.Builder() //
-				.setType(MultipartBody.FORM) //
-				.addFormDataPart("data", "data.json", RequestBody.create(HttpClientUtil.MEDIA_TYPE_FORM_DATA, file))//
-				.addFormDataPart("contentType", contentType) //
-				.build();
-
-		if (progressListener != null) {
-			requestBody = new ProgressRequestBody(requestBody, progressListener);
-		}
-
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_UPLOAD_URL, type, uuid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
-		if (requestBuilder != null) {
-			final Request request = requestBuilder //
-					.post(requestBody) //
-					.build();
+		return DataHubServiceProvider.getInstance().doRequest(requestURL, HttpPost::new, request -> {
 
-			// Check the response
-			try (Response response = httpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					if (response.code() == 409) {
-						throw new IOException("Data already exists " + type + "/" + uuid);
-					}
+			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
+			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			formDataBuilder.addBinaryBody("data", file, ContentType.DEFAULT_BINARY, "data.json");
+			formDataBuilder.addTextBody("contentType", contentType);
+			final HttpEntity requestEntity = formDataBuilder.build();
 
-					throw new IOException("Unexpected code " + response);
+			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
+		}, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				if (responseCode == 409) {
+					throw new IOException("Data already exists " + type + "/" + uuid);
 				}
 
-				final String jsonData = response.body().string();
-				final JSONObject jsonObject = new JSONObject(jsonData);
-				final String uuidString = jsonObject.getString("uuid");
-				return uuidString;
+				throw new IOException("Unexpected code " + response);
 			}
-		}
-		return null;
+
+			final String jsonData = EntityUtils.toString(response.getEntity());
+			final JSONObject jsonObject = new JSONObject(jsonData);
+			final String uuidString = jsonObject.getString("uuid");
+			return uuidString;
+		});
 	}
 
 	public boolean downloadTo(final String type, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
-		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
-		if (progressListener != null) {
-			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
-				@Override
-				public Response intercept(final Chain chain) throws IOException {
-					final Response originalResponse = chain.proceed(chain.request());
-					return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(), progressListener)).build();
-				}
-			});
-		}
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DOWNLOAD_URL, type, uuid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
-		if (requestBuilder != null) {
-
-			final Request request = requestBuilder.build();
-
-			final OkHttpClient localHttpClient = clientBuilder.build();
-			try (Response response = localHttpClient.newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					throw new IOException("Unexpected code: " + response);
-				}
-
-				try (FileOutputStream out = new FileOutputStream(file)) {
-					try (BufferedSource bufferedSource = response.body().source()) {
-						DataStreamReencrypter.reencryptData(bufferedSource.inputStream(), out);
-						return true;
-					}
-				}
+		return DataHubServiceProvider.getInstance().doRequestAsBoolean(requestURL, HttpGet::new, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				throw new IOException("Unexpected code: " + response);
 			}
-		}
-		return false;
+			ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
+			try (FileOutputStream out = new FileOutputStream(file)) {
+				DataStreamReencrypter.reencryptData(w.getContent(), out);
+				return true;
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
+		});
+
 	}
 
 	public Pair<String, Instant> getRecords(final Collection<String> types) throws IOException {
@@ -126,71 +97,50 @@ public class GenericDataServiceClient {
 			return null;
 		}
 
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return null;
-		}
-
 		final String typesList = String.join(",", types);
 		final String requestURL = String.format("%s/%s", SCENARIO_LIST_URL, typesList);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
-		if (requestBuilder == null) {
-			return null;
-		}
 
-		final Request request = requestBuilder.build();
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
+		return DataHubServiceProvider.getInstance().doGetRequest(requestURL, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			final String date = response.headers().get("MMX-LastModified");
+			final String date = HttpClientUtil.getHeaderValue(response, "MMX-LastModified");
 			if (date == null) {
 				return null;
 			}
 			final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-			final String jsonData = response.body().string();
+			final String jsonData = EntityUtils.toString(response.getEntity());
 			return new Pair<>(jsonData, lastModified);
-		}
+		});
 	}
 
 	public void deleteData(final String type, final String uuid) throws IOException {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DELETE_URL, type, uuid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
-		if (requestBuilder == null) {
-			return;
-		}
-
-		final Request request = requestBuilder //
-				.delete() //
-				.build();
-
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code: " + response);
+		DataHubServiceProvider.getInstance().doDeleteRequest(requestURL, response -> {
+			final int responseCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				throw new IOException("Unexpected code: " + responseCode);
 			}
-		}
+		});
 	}
 
 	public Instant getLastModified() {
-
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(SCENARIO_LAST_MODIFIED_URL);
-		if (requestBuilder == null) {
+		try {
+			return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LAST_MODIFIED_URL, response -> {
+				final int responseCode = response.getStatusLine().getStatusCode();
+				if (!HttpClientUtil.isSuccessful(responseCode)) {
+					final String date = EntityUtils.toString(response.getEntity());
+					final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
+					return lastModified;
+				}
+				return null;
+			});
+		} catch (IOException e) {
+			// TODO: Log exception?
 			return null;
 		}
-
-		final Request request = requestBuilder //
-				.build();
-
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (response.isSuccessful()) {
-				final String date = response.body().string();
-				final Instant lastModified = Instant.ofEpochSecond(Long.parseLong(date));
-				return lastModified;
-			}
-		} catch (final Exception e) {
-
-		}
-		return null;
 	}
 
 	//

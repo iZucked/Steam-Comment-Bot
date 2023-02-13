@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
@@ -35,6 +35,9 @@ import java.time.ZoneId;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinVesselSize <em>Min Vessel Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxVesselSize <em>Max Vessel Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getLiquefactionEmissionRate <em>Liquefaction Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
@@ -520,6 +523,73 @@ public interface Port extends APortSet<Port> {
 	 * @generated
 	 */
 	boolean isSetMaxVesselSize();
+
+	/**
+	 * Returns the value of the '<em><b>Liquefaction Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Liquefaction Emission Rate</em>' attribute.
+	 * @see #setLiquefactionEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_LiquefactionEmissionRate()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
+	 * @generated
+	 */
+	double getLiquefactionEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getLiquefactionEmissionRate <em>Liquefaction Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Liquefaction Emission Rate</em>' attribute.
+	 * @see #getLiquefactionEmissionRate()
+	 * @generated
+	 */
+	void setLiquefactionEmissionRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Upstream Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #setUpstreamEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_UpstreamEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
+	 * @generated
+	 */
+	double getUpstreamEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Upstream Emission Rate</em>' attribute.
+	 * @see #getUpstreamEmissionRate()
+	 * @generated
+	 */
+	void setUpstreamEmissionRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Pipeline Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pipeline Emission Rate</em>' attribute.
+	 * @see #setPipelineEmissionRate(double)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_PipelineEmissionRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
+	 * @generated
+	 */
+	double getPipelineEmissionRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pipeline Emission Rate</em>' attribute.
+	 * @see #getPipelineEmissionRate()
+	 * @generated
+	 */
+	void setPipelineEmissionRate(double value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -44,6 +44,9 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/maxCvValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/minVesselSize"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/maxVesselSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/liquefactionEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/upstreamEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/pipelineEmissionRate"/>
       <genOperations ecoreOperation="port.ecore#//Port/getZoneId"/>
       <genOperations ecoreOperation="port.ecore#//Port/mmxID"/>
     </genClasses>

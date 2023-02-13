@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
@@ -82,6 +82,19 @@
             visible="true">
          <run
                class="com.mmxlabs.lingo.app.headless.HeadlessSandboxOneshotApplication">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="com.mmxlabs.lingo.app.headless.HeadlessBenchmarkApplication"
+         name="Headless Benchmark Runner"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="com.mmxlabs.lingo.app.headless.HeadlessBenchmarkApplication">
          </run>
       </application>
    </extension>

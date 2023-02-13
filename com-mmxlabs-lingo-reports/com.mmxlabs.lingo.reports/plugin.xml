@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2022
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
     All rights reserved.
 
 -->
@@ -89,6 +89,13 @@
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.LatenessReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView">
+      </view>
+      <view
+            name="End Heel"
+            icon="platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_statistic_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.vessel.endheel.EndHeelReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.EndHeelReportView">
       </view>
       <!--
       <view
@@ -876,6 +883,10 @@
    </extension>
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="emissions"
+            plugin.xml="emissions.plugin.xml">
+      </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="exposures"
             plugin.xml="exposures.plugin.xml">

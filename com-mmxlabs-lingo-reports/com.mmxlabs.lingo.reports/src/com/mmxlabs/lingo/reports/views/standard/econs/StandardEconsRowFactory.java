@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard.econs;
@@ -355,16 +355,18 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				}
 				for (int i = 0; i < totalNumDischarges; ++i) {
 					final int base = EconsRowMarkers.BUY_SELLS_START + EconsRowMarkers.BUY_SELL_LENGTH * (totalNumLoads + i);
+					final int slotIdx = totalNumLoads + i;
+
 					final String lbl = i > 0 ? "Sale #" + (i + 1) : "Sale";
-					rows.add(createRow(base + 0, lbl + " port", false, "", "", createSaleAllocationFormatter(1, sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
+					rows.add(createRow(base + 0, lbl + " port", false, "", "", createSaleAllocationFormatter(slotIdx, sa -> sa.getPort() == null ? "" : sa.getPort().getName())));
 					rows.add(createRow(base + 10, lbl + " date", false, "", "",
-							createSaleAllocationFormatter(1, sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+							createSaleAllocationFormatter(slotIdx, sa -> sa.getSlotVisit().getStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 					rows.add(createRow(base + 20, lbl + " price($/mmBtu)", false, "", "",
-							createBasicFormatter(options, RowType.REVENUE, Double.class, DollarsPerMMBtuFormat::format, createSaleTransformer(1, Double.class, SlotAllocation::getPrice))));
+							createBasicFormatter(options, RowType.REVENUE, Double.class, DollarsPerMMBtuFormat::format, createSaleTransformer(slotIdx, Double.class, SlotAllocation::getPrice))));
 					rows.add(createRow(base + 30, lbl + " volume (m3)", false, "", "",
-							createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeM3Format::format, createSaleTransformer(1, Integer.class, SlotAllocation::getVolumeTransferred))));
+							createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeM3Format::format, createSaleTransformer(slotIdx, Integer.class, SlotAllocation::getVolumeTransferred))));
 					rows.add(createRow(base + 40, lbl + " volume (mmBtu)", false, "", "",
-							createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeMMBtuFormat::format, createSaleTransformer(1, Integer.class, SlotAllocation::getEnergyTransferred))));
+							createBasicFormatter(options, RowType.REVENUE, Integer.class, VolumeMMBtuFormat::format, createSaleTransformer(slotIdx, Integer.class, SlotAllocation::getEnergyTransferred))));
 
 				}
 

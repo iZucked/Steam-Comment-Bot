@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.headless;
@@ -68,7 +68,7 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		readCommandLine();
 		setupBasicFields();
 		// check the license
-		doCheckLicense();
+		HeadlessUtils.doCheckLicense();
 
 		// log the user in and initialise related features
 		HeadlessUtils.initAccessControl();

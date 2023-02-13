@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -41,8 +41,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
  */
 public class AssignmentEditorHelper {
 	public static Pair<ZonedDateTime, ZonedDateTime> getStartPeriodIgnoreSpots(@Nullable final AssignableElement element) {
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
 				for (final Slot<?> slot : sortedSlots) {
@@ -57,8 +56,7 @@ public class AssignmentEditorHelper {
 	}
 
 	public static ZonedDateTime getStartDateIgnoreSpots(@Nullable final AssignableElement element) {
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
 				for (final Slot<?> slot : sortedSlots) {
@@ -74,20 +72,17 @@ public class AssignmentEditorHelper {
 
 	public static @Nullable Pair<ZonedDateTime, ZonedDateTime> getStartPeriod(@Nullable final AssignableElement element) {
 
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
 			return new Pair<>(firstSlot.getSchedulingTimeWindow().getStart(), firstSlot.getSchedulingTimeWindow().getEnd());
-		} else if (element instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) element;
+		} else if (element instanceof VesselEvent vesselEvent) {
 
 			return new Pair<>(vesselEvent.getStartAfterAsDateTime(), vesselEvent.getStartByAsDateTime());
-		} else if (element instanceof Slot<?>) {
-			final Slot<?> slot = (Slot<?>) element;
+		} else if (element instanceof Slot<?> slot) {
 			return new Pair<>(slot.getSchedulingTimeWindow().getStart(), slot.getSchedulingTimeWindow().getEnd());
 		} else {
 			return null;
@@ -96,18 +91,17 @@ public class AssignmentEditorHelper {
 
 	public static @Nullable ZonedDateTime getStartDate(@Nullable final AssignableElement element) {
 
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
 			final Slot<?> firstSlot = slots.get(0);
 			return firstSlot.getSchedulingTimeWindow().getStart();
-		} else if (element instanceof VesselEvent) {
-			return ((VesselEvent) element).getStartByAsDateTime();
-		} else if (element instanceof Slot<?>) {
-			return ((Slot<?>) element).getSchedulingTimeWindow().getStart();
+		} else if (element instanceof VesselEvent vesselEvent) {
+			return vesselEvent.getStartByAsDateTime();
+		} else if (element instanceof Slot<?> slot) {
+			return slot.getSchedulingTimeWindow().getStart();
 		} else {
 			return null;
 		}
@@ -116,8 +110,7 @@ public class AssignmentEditorHelper {
 	@Nullable
 	public static ZonedDateTime getEndDateIgnoreSpots(@Nullable final AssignableElement element) {
 
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
 			if (sortedSlots != null) {
 				for (final Slot<?> slot : sortedSlots) {
@@ -133,8 +126,7 @@ public class AssignmentEditorHelper {
 
 	@Nullable
 	public static ZonedDateTime getEndDate(@Nullable final AssignableElement element) {
-		if (element instanceof Cargo) {
-			final Cargo cargo = (Cargo) element;
+		if (element instanceof Cargo cargo) {
 			final List<Slot<?>> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
@@ -159,18 +151,24 @@ public class AssignmentEditorHelper {
 
 	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
 			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider) {
-		return collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, null);
+		return collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, null, null);
 	}
 
 	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
-			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
+			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider assignableElementDateProvider,
+			@Nullable IExtraDataProvider extraDataProvider) {
 
 		// Map the vessel availability to assignments
 		final Map<VesselCharter, List<AssignableElement>> fleetGrouping = new HashMap<>();
 		final Map<CharterInMarketOverride, List<AssignableElement>> marketOverridesGrouping = new HashMap<>();
 		// Keep the same order as the EMF data model
 		final List<VesselCharter> vesselCharterOrder = new ArrayList<>();
-		for (final VesselCharter va : cargoModel.getVesselCharters()) {
+		List<VesselCharter> combinedCharters = new LinkedList<>();
+		combinedCharters.addAll(cargoModel.getVesselCharters());
+		if (extraDataProvider != null) {
+			combinedCharters.addAll(extraDataProvider.getExtraVesselCharters());
+		}
+		for (final VesselCharter va : combinedCharters) {
 			vesselCharterOrder.add(va);
 			// Pre-create map values
 			fleetGrouping.put(va, new ArrayList<>());
@@ -179,7 +177,14 @@ public class AssignmentEditorHelper {
 		// Spot markets are keyed by market and instance/spot index
 		final List<Pair<CharterInMarket, Integer>> charterInMarketKeysOrder = new ArrayList<>();
 		final Map<Pair<CharterInMarket, Integer>, List<AssignableElement>> spotGrouping = new HashMap<>();
-		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
+
+		List<CharterInMarket> combinedCharterInMarkets = new LinkedList<>();
+		combinedCharterInMarkets.addAll(spotMarketsModel.getCharterInMarkets());
+		if (extraDataProvider != null) {
+			combinedCharterInMarkets.addAll(extraDataProvider.getExtraCharterInMarkets());
+		}
+
+		for (final CharterInMarket charterInMarket : combinedCharterInMarkets) {
 			int start = charterInMarket.isNominal() ? -1 : 0;
 			for (int i = start; i < charterInMarket.getSpotCharterCount(); ++i) {
 				final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, i);
@@ -193,17 +198,18 @@ public class AssignmentEditorHelper {
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(cargoModel.getCargoes());
 		assignableElements.addAll(cargoModel.getVesselEvents());
+		if (extraDataProvider != null) {
+			assignableElements.addAll(extraDataProvider.getExtraVesselEvents());
+		}
 		for (final AssignableElement assignableElement : assignableElements) {
 
-			if (assignableElement instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) assignableElement;
+			if (assignableElement instanceof VesselEvent vesselEvent) {
 				if (vesselEvent.getStartBy() == null || vesselEvent.getStartAfter() == null) {
 					// No date, cannot continue.
 					return null;
 				}
 
-			} else if (assignableElement instanceof Cargo) {
-				final Cargo cargo = (Cargo) assignableElement;
+			} else if (assignableElement instanceof Cargo cargo) {
 				if (cargo.getSlots().isEmpty()) {
 					return null;
 				}
@@ -220,12 +226,11 @@ public class AssignmentEditorHelper {
 				continue;
 			}
 
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				// Use vessel index normally, but for spots include spot index
 				final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, assignableElement.getSpotIndex());
 
-				if (spotGrouping.containsKey(key) == false) {
+				if (!spotGrouping.containsKey(key)) {
 					charterInMarketKeysOrder.add(key);
 					spotGrouping.put(key, new ArrayList<>());
 				}
@@ -233,8 +238,7 @@ public class AssignmentEditorHelper {
 				// Groupings should have been pre-created
 				spotGrouping.get(key).add(assignableElement);
 
-			} else if (vesselAssignmentType instanceof VesselCharter) {
-				final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof VesselCharter vesselCharter) {
 				// Groupings should have been pre-created
 				List<AssignableElement> list = fleetGrouping.get(vesselCharter);
 				if (list == null) {
@@ -242,8 +246,7 @@ public class AssignmentEditorHelper {
 					return null;
 				}
 				list.add(assignableElement);
-			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride charterInMarketOverride) {
 				marketOverridesGrouping.computeIfAbsent(charterInMarketOverride, k -> new LinkedList<>()).add(assignableElement);
 			}
 		}
@@ -264,35 +267,14 @@ public class AssignmentEditorHelper {
 		return result;
 	}
 
-	public static VesselCharter findVesselCharter(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
-			@NonNull final List<VesselCharter> vesselAvailabilities, @Nullable final Integer charterIndex) {
+	public static VesselCharter findVesselCharter(@NonNull final Vessel vessel, @NonNull final List<VesselCharter> vesselCharters, @Nullable final Integer charterIndex) {
 
-		// int mightMatchCount = 0;
-		// for (final VesselCharter vesselCharter : vesselAvailabilities) {
-		// if (vesselCharter.getVessel() == vessel) {
-		// mightMatchCount++;
-		// if (isElementInVesselCharter(assignableElement, vesselCharter)) {
-		// return vesselCharter;
-		// }
-		// }
-		// }
-		// // Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If
-		// multiple,
-		// // give up.
-		// if (mightMatchCount == 1) {
-		// for (final VesselCharter vesselCharter : vesselAvailabilities) {
-		// if (vesselCharter.getVessel() == vessel) {
-		// return vesselCharter;
-		// }
-		// }
-		// } else {
 		final int idx = charterIndex == null ? 1 : charterIndex.intValue();
-		for (final VesselCharter vesselCharter : vesselAvailabilities) {
+		for (final VesselCharter vesselCharter : vesselCharters) {
 			if (vesselCharter.getVessel() == vessel && vesselCharter.getCharterNumber() == idx) {
 				return vesselCharter;
 			}
 		}
-		// }
 
 		return null;
 	}
@@ -327,8 +309,7 @@ public class AssignmentEditorHelper {
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
 
-		if (target instanceof Slot) {
-			final Slot slot = (Slot) target;
+		if (target instanceof Slot<?> slot) {
 			final Cargo cargo = slot.getCargo();
 			if (cargo != null) {
 				// Change target and fall through.
@@ -344,8 +325,7 @@ public class AssignmentEditorHelper {
 			}
 		}
 
-		if (target instanceof Cargo) {
-			final Cargo cargo = (Cargo) target;
+		if (target instanceof Cargo cargo) {
 			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
 			boolean first = true;
 			for (final Slot<?> slot : cargo.getSlots()) {
@@ -358,8 +338,7 @@ public class AssignmentEditorHelper {
 				}
 			}
 			return validVessels;
-		} else if (target instanceof VesselEvent) {
-			final VesselEvent event = (VesselEvent) target;
+		} else if (target instanceof VesselEvent event) {
 			final Set<Vessel> eventVessels = SetUtils.getObjects(event.getAllowedVessels());
 			if (!eventVessels.isEmpty()) {
 				validVessels.retainAll(event.getAllowedVessels());

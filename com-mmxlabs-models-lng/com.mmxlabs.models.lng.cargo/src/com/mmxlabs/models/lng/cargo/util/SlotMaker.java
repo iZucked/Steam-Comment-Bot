@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -19,11 +19,9 @@ public class SlotMaker<T extends Slot> extends AbstractSlotMaker<SlotMaker<T>> {
 	@NonNull
 	public T build() {
 
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
+		if (slot instanceof LoadSlot loadSlot) {
 			cargoModelBuilder.getCargoModel().getLoadSlots().add(loadSlot);
-		} else if (slot instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+		} else if (slot instanceof DischargeSlot dischargeSlot) {
 			cargoModelBuilder.getCargoModel().getDischargeSlots().add(dischargeSlot);
 		} else {
 			assert false;

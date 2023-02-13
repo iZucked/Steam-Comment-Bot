@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editorpart;
@@ -80,8 +80,9 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			@Override
 			public void partClosed(final IWorkbenchPart part) {
 				if (part == lastPart) {
-					selectionChanged(part, StructuredSelection.EMPTY);
 					lastPart = null;
+					selectionChanged(part, StructuredSelection.EMPTY);
+					activeEditorChange(null);
 				}
 			}
 

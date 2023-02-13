@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -23,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyWindowProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
-public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker implements IResourceElementConstraintChecker {
+public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -44,27 +43,13 @@ public class CounterPartyWindowChecker extends AbstractPairwiseConstraintChecker
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 		if (firstSlot instanceof @NonNull final ILoadOption loadOption && secondSlot instanceof @NonNull final IDischargeOption dischargeOption) {
-			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-				return !counterPartyWindowProvider.isCounterPartyWindow(dischargeOption);
-			} else if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				return !counterPartyWindowProvider.isCounterPartyWindow(loadOption);
+			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				// Can't both be counter-party windows
+				boolean isDischargeCPWindow = counterPartyWindowProvider.isCounterPartyWindow(dischargeOption);
+				boolean isLoadCPWindow = counterPartyWindowProvider.isCounterPartyWindow(loadOption);
+				return !(isDischargeCPWindow && isLoadCPWindow);
 			}
 		}
 		return true;
 	}
-
-	@Override
-	public boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource, @Nullable List<@NonNull String> messages) {
-		@NonNull
-		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
-		@NonNull
-		final IPortSlot slot = portSlotProvider.getPortSlot(element);
-		if ((vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE && slot instanceof IDischargeOption) //
-				|| (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE && slot instanceof ILoadOption)) {
-			return !counterPartyWindowProvider.isCounterPartyWindow(slot);
-		}
-		return true;
-
-	}
-
 }

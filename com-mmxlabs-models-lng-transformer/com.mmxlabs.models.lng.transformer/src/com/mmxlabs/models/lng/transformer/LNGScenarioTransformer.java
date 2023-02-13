@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -58,6 +58,7 @@ import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -252,47 +253,39 @@ public class LNGScenarioTransformer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
-	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
-	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
-	public static final String EXTRA_SPOT_CARGO_MARKETS = "extra_spot_cargo_markets";
-	public static final String EXTRA_VESSEL_AVAILABILITIES = "extra_vessel_availabilities";
-	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
-	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
-	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
-	public static final String EXTRA_PRICE_CURVES = "extra_price_curves";
 
 	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
-	@Named(EXTRA_VESSEL_AVAILABILITIES)
-	private List<VesselCharter> extraVesselAvailabilities;
+	@Named(ExtraDataProvider.EXTRA_VESSEL_CHARTERS)
+	private List<VesselCharter> extraVesselCharters;
 
 	@Inject
-	@Named(EXTRA_VESSEL_EVENTS)
+	@Named(ExtraDataProvider.EXTRA_VESSEL_EVENTS)
 	private List<VesselEvent> extraVesselEvents;
 
 	@Inject
-	@Named(EXTRA_CHARTER_IN_MARKETS)
+	@Named(ExtraDataProvider.EXTRA_CHARTER_IN_MARKETS)
 	private List<CharterInMarket> extraCharterInMarkets;
 
 	@Inject
-	@Named(EXTRA_SPOT_CARGO_MARKETS)
+	@Named(ExtraDataProvider.EXTRA_SPOT_CARGO_MARKETS)
 	private List<SpotMarket> extraSpotMarkets;
 
 	@Inject
-	@Named(EXTRA_CHARTER_IN_MARKET_OVERRIDES)
+	@Named(ExtraDataProvider.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
 	private List<CharterInMarketOverride> extraCharterInMarketOverrides;
 
 	@Inject
-	@Named(EXTRA_LOAD_SLOTS)
+	@Named(ExtraDataProvider.EXTRA_LOAD_SLOTS)
 	private List<LoadSlot> extraLoadSlots;
 
 	@Inject
-	@Named(EXTRA_DISCHARGE_SLOTS)
+	@Named(ExtraDataProvider.EXTRA_DISCHARGE_SLOTS)
 	private List<DischargeSlot> extraDischargeSlots;
 
 	@Inject(optional = true)
-	@Named(EXTRA_PRICE_CURVES)
+	@Named(ExtraDataProvider.EXTRA_PRICE_CURVES)
 	private List<CommodityCurveOverlay> extraPriceCurves;
 
 	@Inject
@@ -3272,8 +3265,8 @@ public class LNGScenarioTransformer {
 
 		}
 
-		if (extraVesselAvailabilities != null) {
-			sortedAvailabilities.addAll(extraVesselAvailabilities);
+		if (extraVesselCharters != null) {
+			sortedAvailabilities.addAll(extraVesselCharters);
 		}
 
 		// Now register the availabilities.

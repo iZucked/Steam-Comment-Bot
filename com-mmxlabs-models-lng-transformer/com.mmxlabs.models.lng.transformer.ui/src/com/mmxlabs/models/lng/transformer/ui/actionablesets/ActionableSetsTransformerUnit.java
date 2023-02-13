@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.actionablesets;
@@ -82,7 +82,7 @@ public class ActionableSetsTransformerUnit implements IChainLink {
 	@Override
 	public IMultiStateResult run(final LNGDataTransformer dataTransformer, final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 
-		dataTransformer.getLifecyleManager().startPhase(stage);
+		dataTransformer.getLifecyleManager().startPhase(stage, dataTransformer.getHints());
 
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 

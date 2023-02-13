@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -74,6 +74,9 @@ public class MTMResultItemProvider
 			addEarliestVolumePropertyDescriptor(object);
 			addEarliestPricePropertyDescriptor(object);
 			addShippingCostPropertyDescriptor(object);
+			addOriginalVolumePropertyDescriptor(object);
+			addOriginalPricePropertyDescriptor(object);
+			addTotalShippingCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -189,6 +192,72 @@ public class MTMResultItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Original Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOriginalVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MTMResult_originalVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MTMResult_originalVolume_feature", "_UI_MTMResult_type"),
+				 AnalyticsPackage.Literals.MTM_RESULT__ORIGINAL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Original Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOriginalPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MTMResult_originalPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MTMResult_originalPrice_feature", "_UI_MTMResult_type"),
+				 AnalyticsPackage.Literals.MTM_RESULT__ORIGINAL_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total Shipping Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalShippingCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MTMResult_totalShippingCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MTMResult_totalShippingCost_feature", "_UI_MTMResult_type"),
+				 AnalyticsPackage.Literals.MTM_RESULT__TOTAL_SHIPPING_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -261,6 +330,9 @@ public class MTMResultItemProvider
 			case AnalyticsPackage.MTM_RESULT__EARLIEST_VOLUME:
 			case AnalyticsPackage.MTM_RESULT__EARLIEST_PRICE:
 			case AnalyticsPackage.MTM_RESULT__SHIPPING_COST:
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME:
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE:
+			case AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.MTM_RESULT__SHIPPING:

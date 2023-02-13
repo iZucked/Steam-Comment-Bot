@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
@@ -45,7 +45,7 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 
 	private final List<ETypedElement> topFeatures;
 	private final List<ETypedElement> otherFeatures;
-	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<ETypedElement, IInlineEditor>();
+	private final Map<ETypedElement, IInlineEditor> feature2Editor = new HashMap<>();
 
 	public CargoDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
 		super(parent, style, toolkit);

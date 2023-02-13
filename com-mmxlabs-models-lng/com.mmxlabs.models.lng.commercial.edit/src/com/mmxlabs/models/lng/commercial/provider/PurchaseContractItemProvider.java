@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
@@ -50,6 +50,8 @@ public class PurchaseContractItemProvider
 			addSalesDeliveryTypePropertyDescriptor(object);
 			addDesPurchaseDealTypePropertyDescriptor(object);
 			addCargoCVPropertyDescriptor(object);
+			addUpstreamEmissionRatePropertyDescriptor(object);
+			addPipelineEmissionRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,6 +70,50 @@ public class PurchaseContractItemProvider
 				 getString("_UI_PurchaseContract_cargoCV_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PurchaseContract_cargoCV_feature", "_UI_PurchaseContract_type"),
 				 CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Upstream Emission Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUpstreamEmissionRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PurchaseContract_upstreamEmissionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PurchaseContract_upstreamEmissionRate_feature", "_UI_PurchaseContract_type"),
+				 CommercialPackage.Literals.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pipeline Emission Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPipelineEmissionRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PurchaseContract_pipelineEmissionRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PurchaseContract_pipelineEmissionRate_feature", "_UI_PurchaseContract_type"),
+				 CommercialPackage.Literals.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE,
 				 true,
 				 false,
 				 false,
@@ -149,6 +195,8 @@ public class PurchaseContractItemProvider
 			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
 			case CommercialPackage.PURCHASE_CONTRACT__DES_PURCHASE_DEAL_TYPE:
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
+			case CommercialPackage.PURCHASE_CONTRACT__UPSTREAM_EMISSION_RATE:
+			case CommercialPackage.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

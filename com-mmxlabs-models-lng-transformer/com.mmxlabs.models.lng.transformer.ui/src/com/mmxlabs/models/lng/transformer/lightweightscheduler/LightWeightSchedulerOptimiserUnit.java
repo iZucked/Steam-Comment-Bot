@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler;
@@ -106,7 +106,7 @@ public class LightWeightSchedulerOptimiserUnit {
 			@Override
 			public IMultiStateResult run(final LNGDataTransformer dataTransformer, final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState,
 					final IProgressMonitor monitor) {
-				dataTransformer.getLifecyleManager().startPhase(stage);
+				dataTransformer.getLifecyleManager().startPhase(stage, dataTransformer.getHints());
 
 				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 				if (runnerHook != null) {

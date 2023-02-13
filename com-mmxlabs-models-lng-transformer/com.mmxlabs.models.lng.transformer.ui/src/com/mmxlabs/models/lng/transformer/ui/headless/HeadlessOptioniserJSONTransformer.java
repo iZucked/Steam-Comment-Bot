@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.headless;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 
 public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransformer<HeadlessOptioniserJSON.Params, HeadlessOptioniserJSON.Metrics, HeadlessOptioniserJSON> {
 
@@ -41,7 +41,7 @@ public class HeadlessOptioniserJSONTransformer extends HeadlessGenericJSONTransf
 		return result;
 	}
 
-	public static void addRunResult(int startTry, SlotInsertionOptimiserLogger logger, HeadlessOptioniserJSON result) {
+	public static void addRunResult(int startTry, OptioniserLogger logger, HeadlessOptioniserJSON result) {
 		HeadlessOptioniserJSON.Metrics metrics = new HeadlessOptioniserJSON.Metrics();
 		metrics.setSeed(startTry);
 		metrics.setRuntime(logger.getRuntime());

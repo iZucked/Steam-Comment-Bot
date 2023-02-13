@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.jobmanagers;
@@ -178,6 +178,7 @@ public class LocalJobManager extends AbstractJobManager {
 			task.errorHandler.accept("Error processing task parameters", e);
 		}
 		runner.withScenario(task.sdp);
+		runner.withScenarioInstance(task.job.getScenarioInstance());
 
 		try {
 			final AbstractSolutionSet result = runner.run(monitor);

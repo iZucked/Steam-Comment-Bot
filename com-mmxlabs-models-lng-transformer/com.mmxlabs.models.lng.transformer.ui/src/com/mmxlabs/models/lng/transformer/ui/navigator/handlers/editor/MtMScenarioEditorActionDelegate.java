@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
@@ -91,37 +91,30 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 /**
  * @author FM
  * @version 2 06/09/2021
+ * @version 3 12/01/2023
  * 
  */
 public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
-
-	private static class MtMBuyCriterion {
-
-		public double salePrice = Double.MIN_VALUE;
-		public int saleVolume = Integer.MIN_VALUE;
-		public double shippingMargin = Double.MIN_VALUE;
-		public MTMResult bestResult = null;
-
-		public void setNewValues(double salePrice, int saleVolume, double shippingMargin, final MTMResult result) {
-			this.salePrice = salePrice;
-			this.saleVolume = saleVolume;
-			this.shippingMargin = shippingMargin;
-			this.bestResult = result;
-		}
-	}
-
-	private static class MtMSellCriterion {
+	
+	private static class MtMCriterion {
 
 		public double buyPrice = Double.MAX_VALUE;
-		public int purchaseVolume = Integer.MAX_VALUE;
+		public int buyVolume = Integer.MAX_VALUE;
 		public double shippingMargin = Double.MAX_VALUE;
+		public int shippingCost = Integer.MAX_VALUE;
+		
+		public double salePrice = Double.MIN_VALUE;
+		public int saleVolume = Integer.MIN_VALUE;
 
 		public MTMResult bestResult = null;
 
-		public void setNewValues(double buyPrice, int purchaseVolume, double shippingMargin, final MTMResult result) {
+		public void setNewValues(double buyPrice, int buyVolume, double salePrice, int saleVolume, int shippingCost, double shippingMargin, final MTMResult result) {
 			this.buyPrice = buyPrice;
-			this.purchaseVolume = purchaseVolume;
+			this.buyVolume = buyVolume;
 			this.shippingMargin = shippingMargin;
+			
+			this.salePrice = salePrice;
+			this.saleVolume = saleVolume;
 			this.bestResult = result;
 		}
 	}
@@ -130,6 +123,8 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 
 	// make decision based on PNL
 	private static final boolean OLD_MTM = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_OLD);
+	
+	private static final boolean MTM_BY_PNL = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_PNL);
 
 	private IEditorPart editor;
 
@@ -242,7 +237,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					continue;
 				}
 
-				MtMBuyCriterion criterion = new MtMBuyCriterion();
+				MtMCriterion criterion = new MtMCriterion();
 
 				double loadCV = loadSlot.getSlotOrDelegateCV();
 
@@ -256,15 +251,18 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					final int vesselCapacity = getVesselCapacity(result, loadCV);
 
 					if (criterion.salePrice == Double.MIN_VALUE || criterion.shippingMargin == Double.MIN_VALUE || criterion.saleVolume == Integer.MIN_VALUE) {
-						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
 					} else {
 						if (OLD_MTM) {
 							if ((criterion.salePrice - criterion.shippingMargin) < (result.getEarliestPrice() - result.getShippingCost())) {
-								criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+								criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
 							}
+						} else if (MTM_BY_PNL) {
+							chooseNewBestByPnL(result, criterion, true);
 						} else {
 							chooseNewBestSale(result, criterion, purchaseVolume, vesselCapacity);
 						}
+						
 					}
 				}
 
@@ -310,7 +308,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					continue;
 				}
 
-				final MtMSellCriterion criterion = new MtMSellCriterion();
+				final MtMCriterion criterion = new MtMCriterion();
 
 				int saleVolume = getSaleVolume(criterion, s2sa, dischargeSlot);
 
@@ -319,18 +317,19 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					if (result.getEarliestETA() == null)
 						continue;
 
-					if (criterion.buyPrice == Double.MAX_VALUE || criterion.shippingMargin == Double.MAX_VALUE || criterion.purchaseVolume == Integer.MAX_VALUE) {
-						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+					if (criterion.buyPrice == Double.MAX_VALUE || criterion.shippingMargin == Double.MAX_VALUE || criterion.buyVolume == Integer.MAX_VALUE) {
+						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
 					} else {
 						if (OLD_MTM) {
 							if ((criterion.buyPrice + criterion.shippingMargin) > (result.getEarliestPrice() + result.getShippingCost())) {
-								criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+								criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
 							}
+						} else if (MTM_BY_PNL) {
+							chooseNewBestByPnL(result, criterion, false);
 						} else {
 							chooseNewBestBuy(result, criterion, saleVolume);
 						}
 					}
-
 				}
 
 				if (criterion.bestResult != null) {
@@ -394,7 +393,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		}
 	}
 
-	private static int getSaleVolume(final MtMSellCriterion criterion, final Map<Slot<?>, SlotAllocation> s2sa, final DischargeSlot dischargeSlot) {
+	private static int getSaleVolume(final MtMCriterion criterion, final Map<Slot<?>, SlotAllocation> s2sa, final DischargeSlot dischargeSlot) {
 		int saleVolume = dischargeSlot.getSlotOrDelegateMinQuantity();
 		if (dischargeSlot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
 			saleVolume *= dischargeSlot.getSlotOrDelegateMinCv();
@@ -403,11 +402,11 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			final SlotAllocation sa = s2sa.get(dischargeSlot);
 			if (sa != null) {
 				criterion.buyPrice = sa.getPrice();
-				criterion.purchaseVolume = sa.getEnergyTransferred();
+				criterion.buyVolume = sa.getEnergyTransferred();
 				if (sa.getCargoAllocation() != null) {
 					Integer shippingCost = getShippingCost(sa.getCargoAllocation());
 					if (shippingCost != null) {
-						criterion.shippingMargin = (double) shippingCost / criterion.purchaseVolume;
+						criterion.shippingMargin = (double) shippingCost / criterion.buyVolume;
 					}
 				}
 				final LoadSlot ls = (LoadSlot) sa.getSlot();
@@ -422,7 +421,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		return saleVolume;
 	}
 
-	private static int getPurchaseVolume(MtMBuyCriterion criterion, final Map<Slot<?>, SlotAllocation> s2sa, final LoadSlot loadSlot, double loadCV) {
+	private static int getPurchaseVolume(MtMCriterion criterion, final Map<Slot<?>, SlotAllocation> s2sa, final LoadSlot loadSlot, double loadCV) {
 		int purchaseVolume = loadSlot.getSlotOrDelegateMaxQuantity();
 		if (loadSlot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
 			purchaseVolume *= (int) (loadCV);
@@ -572,8 +571,8 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	 * @param criterion
 	 * @param saleVolume
 	 */
-	private static void chooseNewBestBuy(final MTMResult result, final MtMSellCriterion criterion, int saleVolume) {
-		int volume = Math.min(saleVolume, criterion.purchaseVolume);
+	private static void chooseNewBestBuy(final MTMResult result, final MtMCriterion criterion, int saleVolume) {
+		int volume = Math.min(saleVolume, criterion.buyVolume);
 		volume = Math.min(volume, result.getEarliestVolume());
 		double purchaseCost = criterion.buyPrice * volume;//criterion.purchaseVolume;
 		double shippingCost = criterion.shippingMargin * volume;
@@ -586,7 +585,27 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		double cMtM = cBuyPlusShip / (double) volume;
 
 		if (mtm > cMtM) {
-			criterion.setNewValues(result.getEarliestPrice(), volume, result.getShippingCost(), result);
+			criterion.setNewValues(result.getEarliestPrice(), volume, result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
+		}
+	}
+	
+	private static void chooseNewBestByPnL(final MTMResult result, final MtMCriterion criterion, final boolean isBuy) {
+		double purchaseCost = criterion.buyPrice * criterion.buyVolume;
+		double saleRevenue = criterion.salePrice * criterion.saleVolume;
+		
+		double pnl = saleRevenue - purchaseCost - criterion.shippingCost;
+
+		double cVolumeValue = result.getEarliestPrice() * result.getEarliestVolume();
+		double cOVolumeValue = result.getOriginalPrice() * result.getOriginalVolume();
+		double cpnl = -result.getTotalShippingCost();
+		if (isBuy) {
+			cpnl += cVolumeValue - cOVolumeValue;
+		} else {
+			cpnl += cOVolumeValue - cVolumeValue;
+		}
+
+		if (cpnl > pnl) {
+			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getTotalShippingCost(), result.getOriginalVolume(), result.getShippingCost(), result);
 		}
 	}
 
@@ -599,7 +618,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	 * @param purchaseVolume
 	 * @param vesselCapacity
 	 */
-	private static void chooseNewBestSale(final MTMResult result, MtMBuyCriterion criterion, int purchaseVolume, final int vesselCapacity) {
+	private static void chooseNewBestSale(final MTMResult result, MtMCriterion criterion, int purchaseVolume, final int vesselCapacity) {
 		double revenue = criterion.salePrice * criterion.saleVolume;
 		double shippingCost = criterion.shippingMargin * criterion.saleVolume;
 		double saleMinusShip = revenue - shippingCost;
@@ -611,7 +630,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		double cMtM = cSaleMinusShip / (double) Math.min(vesselCapacity, purchaseVolume);
 
 		if (mtm < cMtM) {
-			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
+			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getOriginalPrice(), result.getOriginalVolume(), result.getTotalShippingCost(), result.getShippingCost(), result);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.jobrunners;
@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
 import com.mmxlabs.models.lng.transformer.jobs.IJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @NonNullByDefault
@@ -30,6 +31,7 @@ public abstract class AbstractJobRunner implements IJobRunner {
 	protected @Nullable Meta meta;
 
 	protected @Nullable IScenarioDataProvider sdp;
+	protected @Nullable ScenarioInstance scenarioInstance;
 
 	public static ObjectMapper createObjectMapper() {
 
@@ -56,6 +58,11 @@ public abstract class AbstractJobRunner implements IJobRunner {
 			final String text = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 			withParams(text);
 		}
+	}
+
+	@Override
+	public void withScenarioInstance(final ScenarioInstance scenarioInstance) {
+		this.scenarioInstance = scenarioInstance;
 	}
 
 	@Override

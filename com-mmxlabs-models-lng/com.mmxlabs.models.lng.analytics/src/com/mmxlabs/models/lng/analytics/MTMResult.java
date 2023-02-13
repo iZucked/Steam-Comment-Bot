@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -27,6 +27,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getEarliestPrice <em>Earliest Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getShippingCost <em>Shipping Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalVolume <em>Original Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalPrice <em>Original Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.MTMResult#getTotalShippingCost <em>Total Shipping Cost</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMTMResult()
@@ -189,5 +192,71 @@ public interface MTMResult extends EObject {
 	 * @generated
 	 */
 	void setShippingCost(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Volume</em>' attribute.
+	 * @see #setOriginalVolume(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMTMResult_OriginalVolume()
+	 * @model unique="false"
+	 * @generated
+	 */
+	int getOriginalVolume();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalVolume <em>Original Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Volume</em>' attribute.
+	 * @see #getOriginalVolume()
+	 * @generated
+	 */
+	void setOriginalVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Price</em>' attribute.
+	 * @see #setOriginalPrice(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMTMResult_OriginalPrice()
+	 * @model unique="false"
+	 * @generated
+	 */
+	double getOriginalPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MTMResult#getOriginalPrice <em>Original Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Price</em>' attribute.
+	 * @see #getOriginalPrice()
+	 * @generated
+	 */
+	void setOriginalPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Total Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Total Shipping Cost</em>' attribute.
+	 * @see #setTotalShippingCost(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMTMResult_TotalShippingCost()
+	 * @model unique="false"
+	 * @generated
+	 */
+	int getTotalShippingCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MTMResult#getTotalShippingCost <em>Total Shipping Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Total Shipping Cost</em>' attribute.
+	 * @see #getTotalShippingCost()
+	 * @generated
+	 */
+	void setTotalShippingCost(int value);
 
 } // MTMResult

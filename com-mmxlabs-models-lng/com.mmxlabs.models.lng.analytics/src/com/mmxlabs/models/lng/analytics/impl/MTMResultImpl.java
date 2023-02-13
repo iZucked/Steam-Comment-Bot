@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 /**
@@ -37,6 +37,9 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getEarliestPrice <em>Earliest Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getShippingCost <em>Shipping Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getOriginalVolume <em>Original Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getOriginalPrice <em>Original Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MTMResultImpl#getTotalShippingCost <em>Total Shipping Cost</em>}</li>
  * </ul>
  *
  * @generated
@@ -141,6 +144,66 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * @ordered
 	 */
 	protected double shippingCost = SHIPPING_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOriginalVolume() <em>Original Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ORIGINAL_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getOriginalVolume() <em>Original Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int originalVolume = ORIGINAL_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOriginalPrice() <em>Original Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double ORIGINAL_PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getOriginalPrice() <em>Original Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double originalPrice = ORIGINAL_PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTotalShippingCost() <em>Total Shipping Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalShippingCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TOTAL_SHIPPING_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTotalShippingCost() <em>Total Shipping Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalShippingCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int totalShippingCost = TOTAL_SHIPPING_COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -344,6 +407,75 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 	 * @generated
 	 */
 	@Override
+	public int getOriginalVolume() {
+		return originalVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOriginalVolume(int newOriginalVolume) {
+		int oldOriginalVolume = originalVolume;
+		originalVolume = newOriginalVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME, oldOriginalVolume, originalVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOriginalPrice(double newOriginalPrice) {
+		double oldOriginalPrice = originalPrice;
+		originalPrice = newOriginalPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE, oldOriginalPrice, originalPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getTotalShippingCost() {
+		return totalShippingCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTotalShippingCost(int newTotalShippingCost) {
+		int oldTotalShippingCost = totalShippingCost;
+		totalShippingCost = newTotalShippingCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST, oldTotalShippingCost, totalShippingCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.MTM_RESULT__SHIPPING:
@@ -373,6 +505,12 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 				return getShipping();
 			case AnalyticsPackage.MTM_RESULT__SHIPPING_COST:
 				return getShippingCost();
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME:
+				return getOriginalVolume();
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE:
+				return getOriginalPrice();
+			case AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST:
+				return getTotalShippingCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -402,6 +540,15 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 				return;
 			case AnalyticsPackage.MTM_RESULT__SHIPPING_COST:
 				setShippingCost((Double)newValue);
+				return;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME:
+				setOriginalVolume((Integer)newValue);
+				return;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE:
+				setOriginalPrice((Double)newValue);
+				return;
+			case AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST:
+				setTotalShippingCost((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -433,6 +580,15 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 			case AnalyticsPackage.MTM_RESULT__SHIPPING_COST:
 				setShippingCost(SHIPPING_COST_EDEFAULT);
 				return;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME:
+				setOriginalVolume(ORIGINAL_VOLUME_EDEFAULT);
+				return;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE:
+				setOriginalPrice(ORIGINAL_PRICE_EDEFAULT);
+				return;
+			case AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST:
+				setTotalShippingCost(TOTAL_SHIPPING_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -457,6 +613,12 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 				return shipping != null;
 			case AnalyticsPackage.MTM_RESULT__SHIPPING_COST:
 				return shippingCost != SHIPPING_COST_EDEFAULT;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_VOLUME:
+				return originalVolume != ORIGINAL_VOLUME_EDEFAULT;
+			case AnalyticsPackage.MTM_RESULT__ORIGINAL_PRICE:
+				return originalPrice != ORIGINAL_PRICE_EDEFAULT;
+			case AnalyticsPackage.MTM_RESULT__TOTAL_SHIPPING_COST:
+				return totalShippingCost != TOTAL_SHIPPING_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -479,6 +641,12 @@ public class MTMResultImpl extends EObjectImpl implements MTMResult {
 		result.append(earliestPrice);
 		result.append(", shippingCost: ");
 		result.append(shippingCost);
+		result.append(", originalVolume: ");
+		result.append(originalVolume);
+		result.append(", originalPrice: ");
+		result.append(originalPrice);
+		result.append(", totalShippingCost: ");
+		result.append(totalShippingCost);
 		result.append(')');
 		return result.toString();
 	}

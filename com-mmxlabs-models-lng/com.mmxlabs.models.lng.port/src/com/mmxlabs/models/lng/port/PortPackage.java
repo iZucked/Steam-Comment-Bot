@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
@@ -235,13 +235,40 @@ public interface PortPackage extends EPackage {
 	int PORT__MAX_VESSEL_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
 
 	/**
+	 * The feature id for the '<em><b>Liquefaction Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__LIQUEFACTION_EMISSION_RATE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Upstream Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__UPSTREAM_EMISSION_RATE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
+
+	/**
+	 * The feature id for the '<em><b>Pipeline Emission Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__PIPELINE_EMISSION_RATE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1618,6 +1645,39 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_MaxVesselSize();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getLiquefactionEmissionRate <em>Liquefaction Emission Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Liquefaction Emission Rate</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getLiquefactionEmissionRate()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_LiquefactionEmissionRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getUpstreamEmissionRate <em>Upstream Emission Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Upstream Emission Rate</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getUpstreamEmissionRate()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_UpstreamEmissionRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getPipelineEmissionRate <em>Pipeline Emission Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pipeline Emission Rate</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getPipelineEmissionRate()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_PipelineEmissionRate();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.port.Port#getZoneId() <em>Get Zone Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2360,6 +2420,30 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__MAX_VESSEL_SIZE = eINSTANCE.getPort_MaxVesselSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Liquefaction Emission Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__LIQUEFACTION_EMISSION_RATE = eINSTANCE.getPort_LiquefactionEmissionRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Upstream Emission Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__UPSTREAM_EMISSION_RATE = eINSTANCE.getPort_UpstreamEmissionRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Pipeline Emission Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__PIPELINE_EMISSION_RATE = eINSTANCE.getPort_PipelineEmissionRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Zone Id</b></em>' operation.

@@ -1,20 +1,29 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.PartialCase;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -22,6 +31,10 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 
 public class SandboxConstraintUtils {
+
+	private SandboxConstraintUtils() {
+
+	}
 
 	public static boolean vesselPortRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
 		final Collection<APortSet<Port>> portRestrictions = AnalyticsBuilder.getPortRestrictions(shippingOption);
@@ -148,6 +161,24 @@ public class SandboxConstraintUtils {
 			return false;
 		}
 		return true;
+	}
+
+	public static boolean shouldValidate(@NonNull final PartialCaseRow partialCaseRow) {
+		return isRunningUnderSandboxModes(partialCaseRow, Collections.singleton(SandboxModeConstants.MODE_DERIVE));
+	}
+
+	public static boolean shouldValidate(@NonNull final PartialCase partialCase) {
+		return isRunningUnderSandboxModes(partialCase, Collections.singleton(SandboxModeConstants.MODE_DERIVE));
+	}
+
+	private static boolean isRunningUnderSandboxModes(@Nullable final EObject eObject, @NonNull Collection<Integer> modes) {
+		if (eObject == null) {
+			return false;
+		}
+		if (eObject instanceof @NonNull OptionAnalysisModel optionAnalysisModel && modes.contains(optionAnalysisModel.getMode())) {
+			return true;
+		}
+		return isRunningUnderSandboxModes(eObject.eContainer(), modes);
 	}
 
 }

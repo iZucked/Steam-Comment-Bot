@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.lngdataserver.lng.importers.creator;
@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -417,21 +419,34 @@ public class ScenarioBuilder {
 
 		return this;
 	}
-	
-	
+
 	/**
 	 * Method to programatically update ports and distances.
 	 * 
-	 * Note: Keep in sync with LingoDistanceUpdater and UpdatePortsPage.
-	 * TODO: Refactor into shared code path.
+	 * Note: Keep in sync with LingoDistanceUpdater and UpdatePortsPage. TODO: Refactor into shared code path.
+	 * 
 	 * @param scenarioDataProvider
 	 * @throws IOException
 	 */
 	public static void reloadPortsAndDistances(IScenarioDataProvider scenarioDataProvider) throws IOException {
-		
+		try (InputStream portInputStream = ScenarioBuilder.class.getResourceAsStream("/ports.json")) {
+			try (InputStream distancesInputStream = ScenarioBuilder.class.getResourceAsStream("/distances.json")) {
+				try (InputStream manualDistancesInputStream = ScenarioBuilder.class.getResourceAsStream("/distances-manual.json")) {
+					try (InputStream portGroupsInputStream = ScenarioBuilder.class.getResourceAsStream("/port-groups.json")) {
+						reloadPortsAndDistances(scenarioDataProvider, portInputStream, distancesInputStream, manualDistancesInputStream, portGroupsInputStream);
+					}
+				}
+			}
+		}
+
+	}
+
+	public static void reloadPortsAndDistances(IScenarioDataProvider scenarioDataProvider, InputStream portInputStream, InputStream distancesInputStream,
+			@Nullable InputStream manualDistancesInputStream, @Nullable InputStream portGroupsInputStream) throws IOException {
+
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
-		
+
 		{
 			for (final PortCapability capability : PortCapability.values()) {
 				boolean found = false;
@@ -448,91 +463,91 @@ public class ScenarioBuilder {
 					portModel.getSpecialPortGroups().add(g);
 				}
 			}
-			
+
 		}
-		
+
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.registerModule(new JavaTimeModule());
-		
+
 		final LocationsVersion locationsVersion;
 		{
-			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/ports.json")) {
-				locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
+			{
+				locationsVersion = mapper.readValue(portInputStream, LocationsVersion.class);
 			}
-			
+
 			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion);
-			
+
 			final CompoundCommand command = new CompoundCommand("Update ports");
 			// Apply basic updates
 			steps.stream() //
-			.filter(UpdateStep.class::isInstance) //
-			.map(UpdateStep.class::cast) //
-			.map(UpdateStep::getAction) //
-			.filter(Objects::nonNull) //
-			.forEach(a -> a.accept(command));
-			
+					.filter(UpdateStep.class::isInstance) //
+					.map(UpdateStep.class::cast) //
+					.map(UpdateStep::getAction) //
+					.filter(Objects::nonNull) //
+					.forEach(a -> a.accept(command));
+
 			// Apply selected quick fixes
 			steps.stream() //
-			.filter(UserUpdateStep.class::isInstance) //
-			.map(UserUpdateStep.class::cast) //
-			.filter(UserUpdateStep::isHasQuickFix) //
-			.forEach(a -> a.getQuickFix().accept(command));
-			
+					.filter(UserUpdateStep.class::isInstance) //
+					.map(UserUpdateStep.class::cast) //
+					.filter(UserUpdateStep::isHasQuickFix) //
+					.forEach(a -> a.getQuickFix().accept(command));
+
 			steps.stream() //
-			.filter(UpdateWarning.class::isInstance) //
-			.map(UpdateWarning.class::cast) //
-			.filter(UpdateWarning::isHasQuickFix) //
-			.forEach(a -> a.getQuickFix().accept(command));
-			
+					.filter(UpdateWarning.class::isInstance) //
+					.map(UpdateWarning.class::cast) //
+					.filter(UpdateWarning::isHasQuickFix) //
+					.forEach(a -> a.getQuickFix().accept(command));
+
 			command.execute();
 		}
-		
+
 		{
 			final List<AtoBviaCLookupRecord> distanceRecords;
 			final List<AtoBviaCLookupRecord> manualDistanceRecords;
-			
-			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances.json")) {
-				distanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
+
+			{
+				distanceRecords = mapper.readValue(distancesInputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
 				});
 			}
-			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/distances-manual.json")) {
-				manualDistanceRecords = mapper.readValue(inputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
+			if (manualDistancesInputStream != null) {
+				manualDistanceRecords = mapper.readValue(manualDistancesInputStream, new TypeReference<List<AtoBviaCLookupRecord>>() {
 				});
+			} else {
+				manualDistanceRecords = Collections.emptyList();
 			}
-			
+
 			final CompoundCommand command = DistancesLinesToScenarioCopier.getUpdateCommand(editingDomain, portModel, locationsVersion, distanceRecords, manualDistanceRecords);
 			command.execute();
 		}
-		
-		{
+
+		if (portGroupsInputStream != null) {
 			final Map<String, APortSet<Port>> typeMap = new HashMap<>();
-			
+
 			portModel.getPorts().forEach(c -> typeMap.put(PortTypeConstants.PORT_PREFIX + c.getLocation().getMmxId(), c));
 			portModel.getPortCountryGroups().forEach(c -> typeMap.put(PortTypeConstants.COUNTRY_GROUP_PREFIX + c.getName(), c));
 			portModel.getPortGroups().forEach(c -> typeMap.put(PortTypeConstants.PORT_GROUP_PREFIX + c.getName(), c));
-			
-			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/port-groups.json")) {
-				
-				final List<PortGroupDefinition> portGroups = mapper.readValue(inputStream, new TypeReference<List<PortGroupDefinition>>() {
-				});
-				
-				for (final PortGroupDefinition pgd : portGroups) {
-					final PortGroup pg = PortFactory.eINSTANCE.createPortGroup();
-					pg.setName(pgd.getName());
-					
-					for (final String id : pgd.getEntries()) {
-						final APortSet<Port> obj = typeMap.get(id);
-						if (obj == null) {
-							throw new IllegalStateException("Unknown object: " + id);
-						}
-						pg.getContents().add(obj);
+
+			final List<PortGroupDefinition> portGroups = mapper.readValue(portGroupsInputStream, new TypeReference<List<PortGroupDefinition>>() {
+			});
+
+			for (final PortGroupDefinition pgd : portGroups) {
+				final PortGroup pg = PortFactory.eINSTANCE.createPortGroup();
+				pg.setName(pgd.getName());
+
+				for (final String id : pgd.getEntries()) {
+					final APortSet<Port> obj = typeMap.get(id);
+					if (obj == null) {
+						throw new IllegalStateException("Unknown object: " + id);
 					}
-					portModel.getPortGroups().add(pg);
+					pg.getContents().add(obj);
 				}
-				
+				portModel.getPortGroups().add(pg);
 			}
+
 		}
+
 	}
 
 	public ScenarioBuilder loadDefaultVessels() throws IOException {

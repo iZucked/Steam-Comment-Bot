@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2022
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,6 +63,7 @@ public class Mapper implements IMapperClass {
 	private Set<CharterInMarket> extraCharterInMarkets = new LinkedHashSet<>();
 	private Set<VesselCharter> extraVesselAvailabilities = new LinkedHashSet<>();
 	private Set<CommodityCurveOverlay> extraPriceCurves = new LinkedHashSet<>();
+	private Set<ZonedDateTime> extraDates = new LinkedHashSet<>();
 
 	Map<ShippingOption, VesselCharter> fleetOptionMap = new HashMap<>();
 	Map<RoundTripShippingOption, CharterInMarket> roundTripOptionMap = new HashMap<>();
@@ -290,9 +292,14 @@ public class Mapper implements IMapperClass {
 	}
 
 	@Override
+	public void addExtraDate(@NonNull ZonedDateTime extraDate) {
+		extraDates.add(extraDate);
+	}
+
+	@Override
 	public ExtraDataProvider getExtraDataProvider() {
 		return new ExtraDataProvider(new ArrayList<>(extraVesselAvailabilities), new ArrayList<>(extraCharterInMarkets), Collections.emptyList(), new ArrayList<>(extraLoads),
-				new ArrayList<>(extraDischarges), new ArrayList<>(extraVesselEvents), new ArrayList<>(extraSpotCargoMarkets), new ArrayList<>(extraPriceCurves));
+				new ArrayList<>(extraDischarges), new ArrayList<>(extraVesselEvents), new ArrayList<>(extraSpotCargoMarkets), new ArrayList<>(extraPriceCurves), new ArrayList<>(extraDates));
 	}
 
 	@Override
