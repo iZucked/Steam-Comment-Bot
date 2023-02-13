@@ -23,6 +23,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -44,8 +45,17 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
@@ -215,14 +225,7 @@ public class SwapValueMatrixUnit {
 				if (dischargePortSlot instanceof com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption oSwapMarketDischargeSlot) {
 					final ISalesPriceCalculator salesPriceCalculator = oSwapMarketDischargeSlot.getDischargePriceCalculator();
 					if (salesPriceCalculator instanceof ChangeablePriceCalculator changeableDischargePriceCalculator) {
-//						if (model.getSwapFee() != 0.0) {
-//							final int internalSwapFee = OptimiserUnitConvertor.convertToInternalPrice(-1 * model.getSwapFee());
-//							final ChangeablePriceCalculator newDischargePriceCalculator = new ChangeablePriceCalculator(internalSwapFee);
-//							oSwapMarketDischargeSlot.setDischargePriceCalculator(newDischargePriceCalculator);
-//							swapDischargePriceCalculator = newDischargePriceCalculator;
-//						} else {
-							swapDischargePriceCalculator = changeableDischargePriceCalculator;
-//						}
+						swapDischargePriceCalculator = changeableDischargePriceCalculator;
 						swapDischargeSequenceElement = portSlotProvider.getElement(dischargePortSlot);
 					} else {
 						throw new IllegalStateException("Swap sandbox could not set market discharge price");
@@ -356,7 +359,7 @@ public class SwapValueMatrixUnit {
 						final int swapMarketPrice = result.getFirst().getSecond();
 						final Schedule baseSchedule = result.getSecond().getFirst();
 						final Schedule swapSchedule = result.getSecond().getSecond();
-						
+
 						final SlotAllocation baseFobLoadSA = baseSchedule.getSlotAllocations().stream() //
 								.filter(sa -> sa.getSlot() == swapCargo.getFirst()) //
 								.findFirst() //
@@ -381,13 +384,13 @@ public class SwapValueMatrixUnit {
 								.filter(sa -> sa.getSlot() == swapDischargeSlot) //
 								.findFirst() //
 								.get();
-						
+
 						final SwapValueMatrixResult swapValueMatrixResult = AnalyticsFactory.eINSTANCE.createSwapValueMatrixResult();
 						swapValueMatrixResult.setBaseDischargePrice(baseDischargePrice);
 						swapValueMatrixResult.setSwapMarketPrice(swapMarketPrice);
 						final long basePnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(baseSchedule);
 						final long swapPnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(swapSchedule);
-						swapValueMatrixResult.setSwapPnlMinusBasePnl(swapPnl-basePnl);
+						swapValueMatrixResult.setSwapPnlMinusBasePnl(swapPnl - basePnl);
 						swapValueMatrixResult.setBaseLoadPrice(baseFobLoadSA.getPrice());
 						swapValueMatrixResult.setSwapFobLoadPrice(swapFobLoadSA.getPrice());
 						swapValueMatrixResult.setBaseFobLoadVolume(baseFobLoadSA.getEnergyTransferred());
@@ -395,6 +398,137 @@ public class SwapValueMatrixUnit {
 						swapValueMatrixResult.setMarketBuyVolume(swapDesMarketPurchaseSA.getEnergyTransferred());
 						swapValueMatrixResult.setMarketSellVolume(swapDesMarketSaleSA.getEnergyTransferred());
 						swapValueMatrixResult.setBaseDesSellVolume(baseDesSaleSA.getEnergyTransferred());
+
+						// Base PnL
+						final List<Sequence> baseEvaluatedSequences = baseSchedule.getSequences();
+						assert baseEvaluatedSequences.size() == 1;
+						final Sequence baseEvaluatedSequence = baseEvaluatedSequences.get(0);
+						assert baseEvaluatedSequence.getVesselCharter() == vesselCharter;
+						final List<ProfitAndLossContainer> basePrecedingPnlContainers = new ArrayList<>();
+
+						final Iterator<Event> iterBaseVisits = baseEvaluatedSequence.getEvents().stream().filter(event -> event instanceof SlotVisit || event instanceof ProfitAndLossContainer)
+								.iterator();
+						while (iterBaseVisits.hasNext()) {
+							final Event nextEvent = iterBaseVisits.next();
+							if (nextEvent instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() instanceof LoadSlot ls) {
+								if (ls == swapCargo.getFirst()) {
+									break;
+								}
+								final CargoAllocation cargoAllocation = sv.getSlotAllocation().getCargoAllocation();
+								basePrecedingPnlContainers.add(cargoAllocation);
+							} else if (nextEvent instanceof final ProfitAndLossContainer pnlContainer) {
+								basePrecedingPnlContainers.add(pnlContainer);
+							}
+						}
+						final CargoAllocation baseCargoAllocation;
+						{
+							assert iterBaseVisits.hasNext();
+							final Event dischargeSlotEvent = iterBaseVisits.next();
+							assert dischargeSlotEvent instanceof SlotVisit dischargeSlotVisit && dischargeSlotVisit.getSlotAllocation().getSlot() == swapCargo.getSecond();
+							final SlotVisit dischargeSlotVisit = (SlotVisit) dischargeSlotEvent;
+							baseCargoAllocation = dischargeSlotVisit.getSlotAllocation().getCargoAllocation();
+						}
+
+						final List<ProfitAndLossContainer> baseSucceedingPnlContainers = new ArrayList<>();
+						while (iterBaseVisits.hasNext()) {
+							final Event nextEvent = iterBaseVisits.next();
+							if (nextEvent instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() instanceof LoadSlot) {
+								baseSucceedingPnlContainers.add(sv.getSlotAllocation().getCargoAllocation());
+							} else if (nextEvent instanceof final ProfitAndLossContainer pnlContainer) {
+								baseSucceedingPnlContainers.add(pnlContainer);
+							}
+						}
+
+						// Swap PnL
+						final List<Sequence> swapEvaluatedSequences = swapSchedule.getSequences();
+						assert swapEvaluatedSequences.size() == 2;
+
+						final Sequence swapBackfillSeq;
+						final Sequence swapVesselCharterSeq;
+						{
+							final Sequence firstSequence = swapEvaluatedSequences.get(0);
+							final Sequence secondSequence = swapEvaluatedSequences.get(1);
+							if (firstSequence.getVesselCharter() == vesselCharter) {
+								swapVesselCharterSeq = firstSequence;
+								assert secondSequence.getVesselCharter() == null;
+								swapBackfillSeq = secondSequence;
+							} else {
+								assert firstSequence.getVesselCharter() == null;
+								assert secondSequence.getVesselCharter() == vesselCharter;
+								swapBackfillSeq = firstSequence;
+								swapVesselCharterSeq = secondSequence;
+							}
+						}
+
+						final List<ProfitAndLossContainer> swapPrecedingPnlContainers = new ArrayList<>();
+
+						final Iterator<Event> iterSwapVesselCharterVisits = swapVesselCharterSeq.getEvents().stream()
+								.filter(event -> event instanceof SlotVisit || event instanceof ProfitAndLossContainer).iterator();
+						while (iterSwapVesselCharterVisits.hasNext()) {
+							final Event nextEvent = iterSwapVesselCharterVisits.next();
+							if (nextEvent instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() instanceof LoadSlot ls) {
+								if (ls == swapCargo.getFirst()) {
+									break;
+								}
+								final CargoAllocation cargoAllocation = sv.getSlotAllocation().getCargoAllocation();
+								swapPrecedingPnlContainers.add(cargoAllocation);
+							} else if (nextEvent instanceof final ProfitAndLossContainer pnlContainer) {
+								swapPrecedingPnlContainers.add(pnlContainer);
+							}
+						}
+						final CargoAllocation swapShippedCargoAllocation;
+						{
+							assert iterSwapVesselCharterVisits.hasNext();
+							final Event desMarketSlotEvent = iterSwapVesselCharterVisits.next();
+							assert desMarketSlotEvent instanceof SlotVisit desMarketSlotVisit && desMarketSlotVisit.getSlotAllocation().getSlot() == swapDischargeSlot;
+							final SlotVisit desMarketSlotVisit = (SlotVisit) desMarketSlotEvent;
+							swapShippedCargoAllocation = desMarketSlotVisit.getSlotAllocation().getCargoAllocation();
+						}
+
+						final List<ProfitAndLossContainer> swapSucceedingPnlContainers = new ArrayList<>();
+						while (iterSwapVesselCharterVisits.hasNext()) {
+							final Event nextEvent = iterSwapVesselCharterVisits.next();
+							if (nextEvent instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() instanceof LoadSlot) {
+								swapSucceedingPnlContainers.add(sv.getSlotAllocation().getCargoAllocation());
+							} else if (nextEvent instanceof final ProfitAndLossContainer pnlContainer) {
+								swapSucceedingPnlContainers.add(pnlContainer);
+							}
+						}
+						assert swapBackfillSeq.getEvents().size() == 2;
+						final CargoAllocation swapBackfillCargoAllocation = ((SlotVisit) swapBackfillSeq.getEvents().get(0)).getSlotAllocation().getCargoAllocation();
+
+						final long basePrecedingPnl = sumPnl(basePrecedingPnlContainers);
+						final long baseCargoPnl = sumPnl(baseCargoAllocation);
+						final long baseSucceedingPnl = sumPnl(baseSucceedingPnlContainers);
+
+						final long swapPrecedingPnl = sumPnl(swapPrecedingPnlContainers);
+						final long swapShippedCargoPnl = sumPnl(swapShippedCargoAllocation);
+						final long swapBackfillCargoPnl = sumPnl(swapBackfillCargoAllocation);
+						final long swapSucceedingPnl = sumPnl(swapSucceedingPnlContainers);
+
+						swapValueMatrixResult.setBasePrecedingPnl(basePrecedingPnl);
+						swapValueMatrixResult.setBaseCargoPnl(baseCargoPnl);
+						swapValueMatrixResult.setBaseSucceedingPnl(baseSucceedingPnl);
+
+						swapValueMatrixResult.setSwapPrecedingPnl(swapPrecedingPnl);
+						swapValueMatrixResult.setSwapShippedCargoPnl(swapShippedCargoPnl);
+						swapValueMatrixResult.setSwapBackfillCargoPnl(swapBackfillCargoPnl);
+						swapValueMatrixResult.setSwapSucceedingPnl(swapSucceedingPnl);
+
+						swapValueMatrixResult.setBasePurchaseCost(baseCargoAllocation.getSlotAllocations().get(0).getVolumeValue());
+						swapValueMatrixResult.setBaseSaleRevenue(baseCargoAllocation.getSlotAllocations().get(1).getVolumeValue());
+						swapValueMatrixResult.setBaseShippingCost(ScheduleModelKPIUtils.getTotalShippingCost(baseCargoAllocation) - calculateBog(baseCargoAllocation));
+						swapValueMatrixResult.setBaseAdditionalPnl(ScheduleModelKPIUtils.getAdditionalProfitAndLoss(baseCargoAllocation));
+
+						swapValueMatrixResult.setSwapCargoPurchaseCost(swapShippedCargoAllocation.getSlotAllocations().get(0).getVolumeValue());
+						swapValueMatrixResult.setSwapCargoSaleRevenue(swapShippedCargoAllocation.getSlotAllocations().get(1).getVolumeValue());
+						swapValueMatrixResult.setSwapCargoShippingCost(ScheduleModelKPIUtils.getTotalShippingCost(swapShippedCargoAllocation) - calculateBog(swapShippedCargoAllocation));
+						swapValueMatrixResult.setSwapCargoAdditionalPnl(ScheduleModelKPIUtils.getAdditionalProfitAndLoss(swapShippedCargoAllocation));
+
+						swapValueMatrixResult.setSwapBackfillPurchaseCost(swapBackfillCargoAllocation.getSlotAllocations().get(0).getVolumeValue());
+						swapValueMatrixResult.setSwapBackfillSaleRevenue(swapBackfillCargoAllocation.getSlotAllocations().get(1).getVolumeValue());
+						swapValueMatrixResult.setSwapBackfillAdditionalPnl(ScheduleModelKPIUtils.getAdditionalProfitAndLoss(swapBackfillCargoAllocation));
+
 						resultsSet.getResults().add(swapValueMatrixResult);
 					} catch (final InterruptedException e) {
 						e.printStackTrace();
@@ -413,6 +547,34 @@ public class SwapValueMatrixUnit {
 
 			}
 		}
+	}
+
+	private static long sumPnl(@NonNull final List<ProfitAndLossContainer> pnlContainers) {
+		return pnlContainers.stream().mapToLong(ScheduleModelKPIUtils::getElementPNL).sum();
+	}
+
+	private static long sumPnl(@NonNull final ProfitAndLossContainer pnlContainer) {
+		return ScheduleModelKPIUtils.getElementPNL(pnlContainer);
+	}
+
+	private int calculateBog(final EventGrouping eventGrouping) {
+		return eventGrouping.getEvents().stream() //
+				.filter(FuelUsage.class::isInstance) //
+				.map(FuelUsage.class::cast) //
+				.mapToInt(fu -> getFuelCost(fu, Fuel.NBO, Fuel.FBO)) //
+				.sum();
+	}
+
+	private int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
+		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
+		return fuelUser == null //
+				? 0 //
+				: fuelUser.getFuels().stream() //
+						.filter(fq -> fuelsOfInterest.contains(fq.getFuel())) //
+						.mapToDouble(FuelQuantity::getCost) //
+						.mapToInt(d -> (int) d) //
+						.sum();
+
 	}
 
 }

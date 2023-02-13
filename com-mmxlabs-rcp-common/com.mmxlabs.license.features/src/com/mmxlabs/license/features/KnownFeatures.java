@@ -111,6 +111,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_SANDBOX_VALUE_MATRIX = "features:sandbox-value-matrix";
 
+	public static final String FEATUREN_SANDBOX_VALUE_MATRIX_HIGHLIGHTING = "features:sandbox-value-matrix-highlighting";
+
 	public static final String FEATURE_BREAK_EVEN_TABLE = "features:break-even-table";
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";

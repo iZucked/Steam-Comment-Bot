@@ -5266,13 +5266,175 @@ s	 * <!-- end-user-doc -->
 	int SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Base Preceding Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Base Cargo Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_CARGO_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Base Succeeding Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Swap Preceding Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Swap Shipped Cargo Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_SHIPPED_CARGO_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Swap Backfill Cargo Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Swap Succeeding Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+
+	/**
+	 * The feature id for the '<em><b>Base Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_PURCHASE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
+	 * The feature id for the '<em><b>Base Sale Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_SALE_REVENUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Base Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_SHIPPING_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Base Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__BASE_ADDITIONAL_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Swap Cargo Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_PURCHASE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Swap Cargo Sale Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SALE_REVENUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+
+	/**
+	 * The feature id for the '<em><b>Swap Cargo Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SHIPPING_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Swap Cargo Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_ADDITIONAL_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+
+	/**
+	 * The feature id for the '<em><b>Swap Backfill Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_PURCHASE_COST = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+
+	/**
+	 * The feature id for the '<em><b>Swap Backfill Sale Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_SALE_REVENUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+
+	/**
+	 * The feature id for the '<em><b>Swap Backfill Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_ADDITIONAL_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
 	 * The number of structural features of the '<em>Swap Value Matrix Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SWAP_VALUE_MATRIX_RESULT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl <em>Swap Value Matrix Result Set</em>}' class.
@@ -8579,6 +8741,204 @@ s	 * <!-- end-user-doc -->
 	EAttribute getSwapValueMatrixResult_BaseDesSellVolume();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePrecedingPnl <em>Base Preceding Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Preceding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePrecedingPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BasePrecedingPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargoPnl <em>Base Cargo Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Cargo Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargoPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BaseCargoPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSucceedingPnl <em>Base Succeeding Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Succeeding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSucceedingPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BaseSucceedingPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPrecedingPnl <em>Swap Preceding Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Preceding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPrecedingPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapPrecedingPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapShippedCargoPnl <em>Swap Shipped Cargo Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Shipped Cargo Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapShippedCargoPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapShippedCargoPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargoPnl <em>Swap Backfill Cargo Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Backfill Cargo Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargoPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapBackfillCargoPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapSucceedingPnl <em>Swap Succeeding Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Succeeding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapSucceedingPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapSucceedingPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePurchaseCost <em>Base Purchase Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Purchase Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePurchaseCost()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BasePurchaseCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSaleRevenue <em>Base Sale Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Sale Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSaleRevenue()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BaseSaleRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseShippingCost <em>Base Shipping Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Shipping Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseShippingCost()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BaseShippingCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseAdditionalPnl <em>Base Additional Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Additional Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseAdditionalPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_BaseAdditionalPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoPurchaseCost <em>Swap Cargo Purchase Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Cargo Purchase Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoPurchaseCost()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapCargoPurchaseCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoSaleRevenue <em>Swap Cargo Sale Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Cargo Sale Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoSaleRevenue()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapCargoSaleRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoShippingCost <em>Swap Cargo Shipping Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Cargo Shipping Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoShippingCost()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapCargoShippingCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoAdditionalPnl <em>Swap Cargo Additional Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Cargo Additional Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoAdditionalPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapCargoAdditionalPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillPurchaseCost <em>Swap Backfill Purchase Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Backfill Purchase Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillPurchaseCost()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapBackfillPurchaseCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillSaleRevenue <em>Swap Backfill Sale Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Backfill Sale Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillSaleRevenue()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapBackfillSaleRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillAdditionalPnl <em>Swap Backfill Additional Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Backfill Additional Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillAdditionalPnl()
+	 * @see #getSwapValueMatrixResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResult_SwapBackfillAdditionalPnl();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet <em>Swap Value Matrix Result Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11389,6 +11749,150 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME = eINSTANCE.getSwapValueMatrixResult_BaseDesSellVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Preceding Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL = eINSTANCE.getSwapValueMatrixResult_BasePrecedingPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Cargo Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_CARGO_PNL = eINSTANCE.getSwapValueMatrixResult_BaseCargoPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Succeeding Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL = eINSTANCE.getSwapValueMatrixResult_BaseSucceedingPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Preceding Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL = eINSTANCE.getSwapValueMatrixResult_SwapPrecedingPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Shipped Cargo Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_SHIPPED_CARGO_PNL = eINSTANCE.getSwapValueMatrixResult_SwapShippedCargoPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Backfill Cargo Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO_PNL = eINSTANCE.getSwapValueMatrixResult_SwapBackfillCargoPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Succeeding Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL = eINSTANCE.getSwapValueMatrixResult_SwapSucceedingPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Purchase Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_PURCHASE_COST = eINSTANCE.getSwapValueMatrixResult_BasePurchaseCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Sale Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_SALE_REVENUE = eINSTANCE.getSwapValueMatrixResult_BaseSaleRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Shipping Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_SHIPPING_COST = eINSTANCE.getSwapValueMatrixResult_BaseShippingCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Additional Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_ADDITIONAL_PNL = eINSTANCE.getSwapValueMatrixResult_BaseAdditionalPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Cargo Purchase Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_PURCHASE_COST = eINSTANCE.getSwapValueMatrixResult_SwapCargoPurchaseCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Cargo Sale Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SALE_REVENUE = eINSTANCE.getSwapValueMatrixResult_SwapCargoSaleRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Cargo Shipping Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SHIPPING_COST = eINSTANCE.getSwapValueMatrixResult_SwapCargoShippingCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Cargo Additional Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_ADDITIONAL_PNL = eINSTANCE.getSwapValueMatrixResult_SwapCargoAdditionalPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Backfill Purchase Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_PURCHASE_COST = eINSTANCE.getSwapValueMatrixResult_SwapBackfillPurchaseCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Backfill Sale Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_SALE_REVENUE = eINSTANCE.getSwapValueMatrixResult_SwapBackfillSaleRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Backfill Additional Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_ADDITIONAL_PNL = eINSTANCE.getSwapValueMatrixResult_SwapBackfillAdditionalPnl();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl <em>Swap Value Matrix Result Set</em>}' class.
