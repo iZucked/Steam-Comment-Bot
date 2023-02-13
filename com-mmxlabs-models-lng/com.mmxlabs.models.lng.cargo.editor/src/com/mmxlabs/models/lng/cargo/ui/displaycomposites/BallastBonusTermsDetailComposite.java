@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
@@ -51,9 +52,9 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	private static final String NOTIONAL_JOURNEY = "Notional journey";
 	private VesselCharter oldVesselCharter = null;
 	private Composite owner = this;
+	private Composite bottomComposite;
 
 	private Combo ballastBonusCombobox;
-	protected Composite endHeelComposite;
 	
 	private GridData gridData;
 	private IStatus status;
@@ -78,39 +79,33 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 
 		addDisposeListener(e -> removeAdapter());
 		toolkit.adapt(this);
-		setLayout(new GridLayout(1, true));
+		setLayout(createCustomGridLayout(1, true));
 		gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
 
 		setLayoutData(gridData);
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		endHeelComposite = toolkit.createComposite(this, SWT.NONE);
-		final GridLayout layout = GridLayoutFactory.swtDefaults() //
-				.numColumns(1) //
-				.equalWidth(true) //
-				.margins(0, 0) //
-				.extendedMargins(0, 0, 0, 0) //
-				.create();
-		endHeelComposite.setLayout(layout);
-		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		if (!dialogContext.isMultiEdit() && LicenseFeatures.isPermitted("features:monthly-ballast-bonus")
+		if (!dialogContext.isMultiEdit() && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MONTHLY_BALLAST_BONUS)
 				&& checkEObject(object)) {
-			Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-			GridLayout gridLayoutCheckbox = new GridLayout(3, false);
-			bottomComposite.setLayout(gridLayoutCheckbox);
+			
+			bottomComposite = toolkit.createComposite(this, SWT.NONE);
+			bottomComposite.setLayout(createCustomGridLayout(4, false));
 			GridData gridDataCheckbox = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 			gridDataCheckbox.horizontalSpan = 2;
 			bottomComposite.setLayoutData(gridDataCheckbox);
+			
+			final Label label = toolkit.createLabel(bottomComposite, "Ballast Bonus");
+			label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
 			ballastBonusCombobox = new Combo(bottomComposite, SWT.NONE);
 			ballastBonusCombobox.setItems(MONTHLY, NOTIONAL_JOURNEY);
-			ballastBonusCombobox.setText("Change Type...");
+			ballastBonusCombobox.setText(determineSelection(object));
 			ballastBonusCombobox.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					changeBallastBonusType();
+					if (!ballastBonusCombobox.getText().equalsIgnoreCase(determineSelection(object))) {
+						changeBallastBonusType();
+					}
 				}
 
 				@Override
@@ -119,6 +114,21 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 				}
 			});
 		}
+	}
+	
+	private String determineSelection(final EObject object) {
+		if (object instanceof VesselCharter va) {
+			if (va.getContainedCharterContract() != null) {
+				if (va.getContainedCharterContract().getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+					return MONTHLY;
+				}
+			}
+		} else if (object instanceof GenericCharterContract gcc) {
+			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer ) {
+				return MONTHLY;
+			}
+		}
+		return NOTIONAL_JOURNEY;
 	}
 	
 	private boolean checkEObject(final EObject object) {
@@ -215,22 +225,22 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		final GenericCharterContract gcc = oldVesselCharter.getContainedCharterContract();
 		
 		if (oldVesselCharter != null) {
-			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), endHeelComposite);
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), this);
 		}
 		doDisplay(dialogContext, root, dbc, gcc);
 	}
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
 		if (!dialogContext.isMultiEdit() && gcc != null) {
-			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
-				final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
-				Composite hubsComp = toolkit.createComposite(owner);
+			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer mbbc) {
+				
+				Composite hubsComp = toolkit.createComposite(bottomComposite);
 				hubsComp.setLayout(new FillLayout());
 				hubsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-				Label lbl = new Label(hubsComp, SWT.LEFT);
+				
+				Label lbl = new Label(hubsComp, SWT.RIGHT);
 				lbl.setBackground(owner.getBackground());
-				lbl.setText("Hubs: ");
+				lbl.setText("\u2000\u2000\u2000\u2000Hubs: ");
 
 				portEditor = new PortMultiReferenceInlineEditor(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContainer_Hubs());
 				portEditor.setCommandHandler(commandHandler);
@@ -259,7 +269,18 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
-				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartHeel();
+		return ref.isContainment() && !ref.isMany() 
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()//
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartHeel()//
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_EndHeel();
+	}
+	
+	private GridLayout createCustomGridLayout(int numColumns, boolean makeColumnsEqualWidth) {
+		return GridLayoutFactory.fillDefaults()
+				.numColumns(numColumns)
+				.equalWidth(makeColumnsEqualWidth)
+				.margins(0, 0)
+				.extendedMargins(3, 0, 0, 0)
+				.create();
 	}
 }

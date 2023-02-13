@@ -50,9 +50,6 @@ public class BallastBonusTermsTableCreator {
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		
-		final Label label = toolkit.createLabel(parent, "Ballast Bonus");
-		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-		
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);

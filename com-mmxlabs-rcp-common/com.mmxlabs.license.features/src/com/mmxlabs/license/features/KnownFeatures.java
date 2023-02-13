@@ -174,5 +174,7 @@ public final class KnownFeatures {
 	 * Enable LDD etc style cargoes
 	 */
 	public static final String FEATURE_COMPLEX_CARGO = "features:complex-cargo";
+	
+	public static final String FEATURE_MONTHLY_BALLAST_BONUS = "features:monthly-ballast-bonus";
 
 }

@@ -4,20 +4,20 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
-import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
+import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 
 public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 
@@ -25,38 +25,43 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 		super(parent, style, toolkit);
 	}
 
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
-		return new DefaultDisplayCompositeLayoutProvider() {
-
-			@Override
-			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-				return new GridLayout(9, false);
-			}
-
-			@Override
-			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
-
-				{
-					final var feature = editor.getFeature();
-					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION 
-							|| feature == CommercialPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
-						return super.createEditorLayoutData(root, value, editor, control);
-					}
-					
-					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL 
-							|| feature == CommercialPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL) {
-						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-						gd.minimumWidth = 64;
-						gd.horizontalSpan = 4;
-						return gd;
-					}
+	@Override
+	protected void sortEditors(List<IInlineEditor> editors) {
+		// Sub classes can sort the editor list prior to rendering
+		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
+				CommercialPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL, //
+				CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION,//
+				CommercialPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL,//
+				CommercialPackage.Literals.END_HEEL_OPTIONS__TANK_STATE
+		);
+		// Reverse the list so that we can move the editors to the head of the list
+		Collections.reverse(orderedFeatures);
+		for (var feature : orderedFeatures) {
+			for (var editor : editors) {
+				if (editor.getFeature() == feature) {
+					editors.remove(editor);
+					editors.add(0, editor);
+					break;
 				}
-				// Anything else needs to fill the space.
-				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-				gd.horizontalSpan = 3;
-				return gd;
 			}
-		};
+		}
+
+	}
+	
+	@Override
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
+
+		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
+				.withRow() //
+				.withFeature(CommercialPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL, 75) //
+				.withFeature(CommercialPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL, 75) //
+				.makeRow()
+				.withRow()
+				.withFeature(CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION, "   Price", 130) //
+				.withFeature(CommercialPackage.Literals.END_HEEL_OPTIONS__TANK_STATE, "   Tank State",  130) //
+				.makeRow()
+				.make();
+
 	}
 
 }

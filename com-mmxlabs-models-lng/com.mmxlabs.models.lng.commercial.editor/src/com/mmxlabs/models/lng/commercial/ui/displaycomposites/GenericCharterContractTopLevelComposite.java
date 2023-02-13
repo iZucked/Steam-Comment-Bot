@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsDetailComposite;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.StartHeelOptionsDetailComposite;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -35,6 +37,8 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 	/**
 	 * {@link Composite} to contain the heel editors
 	 */
+	private IDisplayComposite startHeelComposite;
+	private IDisplayComposite endHeelComposite;
 	private IDisplayComposite ballastBonusComposite;
 	private IDisplayComposite repositioningFeeComposite;
 	
@@ -65,34 +69,46 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
-		midComposite.setLayout(new GridLayout());
+		midComposite.setLayout(new GridLayout(2, false));
 		midComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		final Group g2 = new Group(midComposite, SWT.DOWN);
 		toolkit.adapt(g2);
-		g2.setText("Start conditions");
+		g2.setText("Start");
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		startHeelComposite = new StartHeelOptionsDetailComposite(g2, SWT.NONE, toolkit);
+		startHeelComposite.setCommandHandler(commandHandler);
+		startHeelComposite.display(dialogContext, root, getStartHeel(object), range, dbc);
 		
 		repositioningFeeComposite = new RepositioningFeeDetailComposite(g2, SWT.NONE, dialogContext, toolkit, defaultResizeMethod());
 		repositioningFeeComposite.setCommandHandler(commandHandler);
 		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 		
-		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		bottomComposite.setLayout(new GridLayout());
-		bottomComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		final Group g3 = new Group(bottomComposite, SWT.NONE);
+		final Group g3 = new Group(midComposite, SWT.NONE);
 		toolkit.adapt(g3);
-		g3.setText("End conditions");
+		g3.setText("End");
 		g3.setLayout(new GridLayout());
 		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		endHeelComposite = new EndHeelOptionsDetailComposite(g3, SWT.NONE, toolkit);
+		endHeelComposite.setCommandHandler(commandHandler);
+		endHeelComposite.display(dialogContext, root, getEndHeel(object), range, dbc);
 
 		ballastBonusComposite = new BallastBonusDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeMethod(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 		
 		this.setLayout(new GridLayout(1, true));
+	}
+	
+	private EObject getStartHeel(final EObject object) {
+		return (EObject) object.eGet(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__START_HEEL);
+	}
+	
+	private EObject getEndHeel(final EObject object) {
+		return (EObject) object.eGet(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__END_HEEL);
 	}
 
 	private Runnable defaultResizeMethod() {
