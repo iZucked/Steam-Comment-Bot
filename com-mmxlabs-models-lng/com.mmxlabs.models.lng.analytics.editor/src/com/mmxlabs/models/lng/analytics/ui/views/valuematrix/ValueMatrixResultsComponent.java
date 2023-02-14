@@ -55,7 +55,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CellAsRowHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -203,7 +203,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setImage(CommonImages.getImage(IconPaths.Pin, IconMode.Enabled));
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setHeaderRenderer(new ColumnImageCenterHeaderRenderer());
 			gvc.getColumn().setMinimumWidth(40);
 			gvc.setLabelProvider(new CellLabelProvider() {
 
@@ -303,9 +303,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setImage(CommonImages.getImage(IconPaths.Pin, IconMode.Enabled));
-			final ColumnHeaderRenderer headerRenderer = new ColumnHeaderRenderer();
-			headerRenderer.setCenter(true);
-			gvc.getColumn().setHeaderRenderer(headerRenderer);
+			gvc.getColumn().setHeaderRenderer(new ColumnImageCenterHeaderRenderer());
 			gvc.getColumn().setMinimumWidth(40);
 			gvc.setLabelProvider(new CellLabelProvider() {
 
@@ -329,6 +327,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			gvc.getColumn().setTree(false);
 			GridViewerHelper.configureLookAndFeel(gvc);
 			gvc.getColumn().setImage(CommonImages.getImage(IconPaths.Delta, IconMode.Enabled));
+			gvc.getColumn().setHeaderRenderer(new ColumnImageCenterHeaderRenderer());
 			gvc.getColumn().setMinimumWidth(40);
 			gvc.setLabelProvider(new CellLabelProvider() {
 
