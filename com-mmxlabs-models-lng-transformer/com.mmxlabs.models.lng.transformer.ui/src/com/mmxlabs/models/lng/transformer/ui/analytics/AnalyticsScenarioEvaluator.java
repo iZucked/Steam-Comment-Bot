@@ -377,7 +377,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		final List<String> hints = new LinkedList<>();
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
-		hints.add(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
