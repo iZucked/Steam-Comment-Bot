@@ -223,7 +223,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 		optioniseCol.getColumn().setVisible(mode == SandboxModeConstants.MODE_OPTIONISE);
 
-		if (mode == SandboxModeConstants.MODE_DERIVE) {
+		if (mode == SandboxModeConstants.MODE_DEFINE) {
 			optionsCol.getColumn().setVisible(true);
 			// freezeCol.getColumn().setVisible(false);
 		} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
