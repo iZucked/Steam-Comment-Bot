@@ -278,7 +278,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	public enum ViewMode {
-		COMPARE, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
+		COMPARE, NEW_ACTION_SET, OPTIONISER, GENERIC, SANDBOX
 	}
 
 	public static class ViewState {
@@ -1532,7 +1532,7 @@ public class ChangeSetView extends ViewPart {
 				}
 				final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 				boolean showSimple = true;
-				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
+				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.OPTIONISER) {
 					// Only offer this for dual model insertions.
 					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
 					if (scenarioResult.getResultRoot() instanceof ScheduleModel scheduleModel) {
@@ -1693,7 +1693,7 @@ public class ChangeSetView extends ViewPart {
 					return viewState;
 				}, runAsync, slotId);
 			} else if (plan instanceof SlotInsertionOptions slotInsertionOptions) {
-				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
+				setViewMode(ViewMode.OPTIONISER, slotInsertionOptions.isHasDualModeSolutions());
 				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
@@ -1846,7 +1846,7 @@ public class ChangeSetView extends ViewPart {
 			// handleEvents = true;
 			canExportChangeSet = false;
 			break;
-		case INSERTIONS:
+		case OPTIONISER:
 			insertionPlanFilter.setInsertionModeActive(true);
 			insertionPlanFilter.setMultipleSolutionView(false);
 			insertionPlanFilter.setMaxComplexity(4);
@@ -1919,7 +1919,7 @@ public class ChangeSetView extends ViewPart {
 			}
 		}
 
-		if (viewMode == ViewMode.INSERTIONS) {
+		if (viewMode == ViewMode.OPTIONISER) {
 			columnHelper.showCompareColumns(false);
 		} else {
 			columnHelper.showCompareColumns(true);
