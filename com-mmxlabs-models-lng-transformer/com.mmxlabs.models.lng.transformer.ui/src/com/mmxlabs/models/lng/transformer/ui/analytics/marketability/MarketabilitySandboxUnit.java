@@ -26,7 +26,6 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
@@ -34,7 +33,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
 import com.mmxlabs.models.lng.analytics.MarketabilityEndEvent;
-import com.mmxlabs.models.lng.analytics.MarketabilityEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
@@ -45,7 +43,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
-import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
@@ -71,22 +68,18 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.InsertCargoSequencesGenerator;
-import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.ClampedSpeedVessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
@@ -209,13 +202,14 @@ public class MarketabilitySandboxUnit {
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 	}
 
-	public synchronized void run(final @NonNull MarketabilityModel model, final @NonNull IMapperClass mapper, final @NonNull Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final @NonNull LNGScenarioToOptimiserBridge bridge) {
+	public synchronized void run(final @NonNull MarketabilityModel model, final @NonNull IMapperClass mapper, final @NonNull Map<ShippingOption, VesselAssignmentType> shippingMap,
+			@NonNull final IProgressMonitor monitor, final @NonNull LNGScenarioToOptimiserBridge bridge) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
 		List<String> hints = new LinkedList<>(dataTransformer.getHints());
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		dataTransformer.getLifecyleManager().startPhase("export", hints);
-		
+
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
 			s.enter();
@@ -245,12 +239,12 @@ public class MarketabilitySandboxUnit {
 			monitor.done();
 		}
 	}
-	
+
 	@NonNullByDefault
 	private Schedule createSchedule(final MarketabilityModel model, final LNGScenarioToOptimiserBridge bridge, final IMapperClass mapper) {
 		final Schedule schedule = bridge.createOptimiserInitialSchedule();
 		assert schedule != null;
-		for(final MarketabilityRow row : model.getRows()) {
+		for (final MarketabilityRow row : model.getRows()) {
 			LoadSlot loadSlot = mapper.getOriginal(row.getBuyOption());
 			DischargeSlot dischargeSlot = mapper.getOriginal(row.getSellOption());
 			MarketabilityResultContainer container = row.getResult();
@@ -262,28 +256,28 @@ public class MarketabilitySandboxUnit {
 			CanalJourneyEvent ballastPanama = findNextPanama(dischargeSlotVisit);
 			container.setBuyDate(loadSlotVisit.getStart().toLocalDateTime());
 			container.setSellDate(dischargeSlotVisit.getStart().toLocalDateTime());
-			if(ladenPanama != null) {
+			if (ladenPanama != null) {
 				container.setLadenPanama(ladenPanama.getStart().toLocalDateTime());
 			}
-			if(ballastPanama != null) {
+			if (ballastPanama != null) {
 				container.setBallastPanama(ballastPanama.getStart().toLocalDateTime());
 			}
 			addNextEventToRow(container, dischargeSlotVisit);
 		}
 		return schedule;
 	}
-	
+
 	private @Nullable CanalJourneyEvent findNextPanama(final @NonNull Event start) {
 		Event nextEvent = start.getNextEvent();
-		while(!(nextEvent == null || nextEvent instanceof SlotVisit)) {
-			if(nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
+		while (!(nextEvent == null || nextEvent instanceof SlotVisit)) {
+			if (nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
 				return journey.getCanalJourneyEvent();
 			}
 			nextEvent = nextEvent.getNextEvent();
 		}
 		return null;
 	}
-	
+
 	private void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
 
 		Event nextEvent = start.getNextEvent();
@@ -294,18 +288,17 @@ public class MarketabilitySandboxUnit {
 				marketabilityEvent.setElement(vesselEventVisit.getVesselEvent());
 				container.setNextEvent(marketabilityEvent);
 				return;
-			} else if(nextEvent instanceof SlotVisit slotVisit) {
+			} else if (nextEvent instanceof SlotVisit slotVisit) {
 				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
 				marketabilityEvent.setStart(nextEvent.getStart());
 				marketabilityEvent.setElement(slotVisit.getSlotAllocation().getSlot().getCargo());
 				container.setNextEvent(marketabilityEvent);
 				return;
-			}
-			else if (nextEvent instanceof EndEvent endEvent) {
+			} else if (nextEvent instanceof EndEvent endEvent) {
 				MarketabilityEndEvent marketabilityEndEvent = AnalyticsFactory.eINSTANCE.createMarketabilityEndEvent();
 				marketabilityEndEvent.setStart(nextEvent.getStart());
 				container.setNextEvent(marketabilityEndEvent);
-				
+
 				return;
 
 			} else {
@@ -314,9 +307,9 @@ public class MarketabilitySandboxUnit {
 		}
 
 	}
-	
-	private void createFutureJobs(final Schedule schedule, final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
-			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
+
+	private void createFutureJobs(final Schedule schedule, final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap,
+			final IProgressMonitor monitor, final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final MarketabilityRow row : model.getRows()) {
 			row.getResult().getRhsResults().clear();
 
@@ -325,7 +318,7 @@ public class MarketabilitySandboxUnit {
 			final VesselAssignmentType vesselAssignment = shippingMap.get(shipping);
 			final int vesselSpotIndex = getSpotIndex(shipping);
 			final Integer vesselSpeed;
-			if(model.isSetVesselSpeed()) {
+			if (model.isSetVesselSpeed()) {
 				vesselSpeed = model.getVesselSpeed();
 			} else {
 				vesselSpeed = null;
@@ -344,7 +337,12 @@ public class MarketabilitySandboxUnit {
 							return null;
 						}
 						try {
-							final MarketabilityResult result = generateMarketabilityResult(schedule, mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market, vesselSpeed);
+							final MarketabilityResult result;
+							if (model.getShippingTemplates().contains(shipping)) {
+								result = generateMarketabilityResult(schedule, mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market, vesselSpeed);
+							} else {
+								result = null;
+							}
 							return () -> {
 								row.getResult().getRhsResults().add(result);
 							};
@@ -367,10 +365,9 @@ public class MarketabilitySandboxUnit {
 		return vsi;
 	}
 
-	private MarketabilityResult generateMarketabilityResult(final Schedule schedule, final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex,
-			final LoadSlot load, final SpotMarket market, final Integer vesselSpeed) {
-		
-		
+	private MarketabilityResult generateMarketabilityResult(final Schedule schedule, final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment,
+			final int vesselSpotIndex, final LoadSlot load, final SpotMarket market, final Integer vesselSpeed) {
+
 		final MarketabilityResult marketabilityResult = AnalyticsFactory.eINSTANCE.createMarketabilityResult();
 		marketabilityResult.setTarget(market);
 
@@ -409,8 +406,8 @@ public class MarketabilitySandboxUnit {
 		return marketabilityResult;
 	}
 
-	private InternalResult doIt(final Schedule schedule, final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
-			final ISequences initialSequences, final Integer vesselSpeed) {
+	private InternalResult doIt(final Schedule schedule, final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load,
+			final DischargeSlot discharge, final Slot<?> target, final ISequences initialSequences, final Integer vesselSpeed) {
 		if (shipped) {
 			return doShipped(schedule, vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences, vesselSpeed);
 		} else {
@@ -418,8 +415,8 @@ public class MarketabilitySandboxUnit {
 		}
 	}
 
-	private InternalResult doShipped(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
-			final ISequences initialSequences, final Integer vesselSpeed) {
+	private InternalResult doShipped(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge,
+			final Slot<?> target, final ISequences initialSequences, final Integer vesselSpeed) {
 		final IResource resource;
 
 		final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
@@ -447,8 +444,6 @@ public class MarketabilitySandboxUnit {
 		});
 		return ret;
 	}
-	
-	
 
 	private Pair<Boolean, DischargeSlot> getShippedAndDischarge(final IMapperClass mapper, final LoadSlot load, final SpotMarket market, final int month) {
 		boolean shipped = true;
