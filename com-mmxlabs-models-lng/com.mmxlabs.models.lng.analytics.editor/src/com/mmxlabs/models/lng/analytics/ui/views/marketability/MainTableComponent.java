@@ -256,7 +256,7 @@ public class MainTableComponent {
 		});
 		createChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getLadenPanama() != null) {
-				return formatDate(row.getResult().getLadenPanama());
+				return formatDate(row.getResult().getLadenPanama().toLocalDate());
 			}
 			return "";
 		});
@@ -279,13 +279,13 @@ public class MainTableComponent {
 
 		createChildColumn(tableViewer, "Date", portColumn, row -> {
 			if (row.getResult().getSellDate() != null) {
-				return (formatDate(row.getResult().getSellDate()));
+				return (formatDate(row.getResult().getSellDate().toLocalDate()));
 			}
 			return "";
 		});
 		createChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getBallastPanama() != null) {
-				return formatDate(row.getResult().getBallastPanama());
+				return formatDate(row.getResult().getBallastPanama().toLocalDate());
 			}
 			return "";
 		});

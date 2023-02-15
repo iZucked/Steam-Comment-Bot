@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -209,7 +210,7 @@ public class MarketabilityResultContainerItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((MarketabilityResultContainer)object).getBuyDate();
+		LocalDateTime labelValue = ((MarketabilityResultContainer)object).getBuyDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_MarketabilityResultContainer_type") :

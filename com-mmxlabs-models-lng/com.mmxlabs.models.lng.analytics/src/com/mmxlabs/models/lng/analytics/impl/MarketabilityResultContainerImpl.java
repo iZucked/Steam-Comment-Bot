@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -69,7 +70,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate BUY_DATE_EDEFAULT = null;
+	protected static final LocalDateTime BUY_DATE_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getBuyDate() <em>Buy Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -78,7 +79,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate buyDate = BUY_DATE_EDEFAULT;
+	protected LocalDateTime buyDate = BUY_DATE_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getSellDate() <em>Sell Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -87,7 +88,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate SELL_DATE_EDEFAULT = null;
+	protected static final LocalDateTime SELL_DATE_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getSellDate() <em>Sell Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -96,7 +97,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate sellDate = SELL_DATE_EDEFAULT;
+	protected LocalDateTime sellDate = SELL_DATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' attribute.
@@ -106,7 +107,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate LADEN_PANAMA_EDEFAULT = null;
+	protected static final LocalDateTime LADEN_PANAMA_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getLadenPanama() <em>Laden Panama</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -115,7 +116,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate ladenPanama = LADEN_PANAMA_EDEFAULT;
+	protected LocalDateTime ladenPanama = LADEN_PANAMA_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -124,7 +125,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate BALLAST_PANAMA_EDEFAULT = null;
+	protected static final LocalDateTime BALLAST_PANAMA_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getBallastPanama() <em>Ballast Panama</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -133,7 +134,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate ballastPanama = BALLAST_PANAMA_EDEFAULT;
+	protected LocalDateTime ballastPanama = BALLAST_PANAMA_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -218,7 +219,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public LocalDate getLadenPanama() {
+	public LocalDateTime getLadenPanama() {
 		return ladenPanama;
 	}
 
@@ -228,8 +229,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setLadenPanama(LocalDate newLadenPanama) {
-		LocalDate oldLadenPanama = ladenPanama;
+	public void setLadenPanama(LocalDateTime newLadenPanama) {
+		LocalDateTime oldLadenPanama = ladenPanama;
 		ladenPanama = newLadenPanama;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA, oldLadenPanama, ladenPanama));
@@ -241,7 +242,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public LocalDate getBallastPanama() {
+	public LocalDateTime getBallastPanama() {
 		return ballastPanama;
 	}
 
@@ -251,8 +252,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setBallastPanama(LocalDate newBallastPanama) {
-		LocalDate oldBallastPanama = ballastPanama;
+	public void setBallastPanama(LocalDateTime newBallastPanama) {
+		LocalDateTime oldBallastPanama = ballastPanama;
 		ballastPanama = newBallastPanama;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA, oldBallastPanama, ballastPanama));
@@ -264,7 +265,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public LocalDate getBuyDate() {
+	public LocalDateTime getBuyDate() {
 		return buyDate;
 	}
 
@@ -274,8 +275,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setBuyDate(LocalDate newBuyDate) {
-		LocalDate oldBuyDate = buyDate;
+	public void setBuyDate(LocalDateTime newBuyDate) {
+		LocalDateTime oldBuyDate = buyDate;
 		buyDate = newBuyDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE, oldBuyDate, buyDate));
@@ -287,7 +288,7 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public LocalDate getSellDate() {
+	public LocalDateTime getSellDate() {
 		return sellDate;
 	}
 
@@ -297,8 +298,8 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 	 * @generated
 	 */
 	@Override
-	public void setSellDate(LocalDate newSellDate) {
-		LocalDate oldSellDate = sellDate;
+	public void setSellDate(LocalDateTime newSellDate) {
+		LocalDateTime oldSellDate = sellDate;
 		sellDate = newSellDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE, oldSellDate, sellDate));
@@ -361,16 +362,16 @@ public class MarketabilityResultContainerImpl extends EObjectImpl implements Mar
 				setNextEvent((MarketabilityEvent)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BUY_DATE:
-				setBuyDate((LocalDate)newValue);
+				setBuyDate((LocalDateTime)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__SELL_DATE:
-				setSellDate((LocalDate)newValue);
+				setSellDate((LocalDateTime)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__LADEN_PANAMA:
-				setLadenPanama((LocalDate)newValue);
+				setLadenPanama((LocalDateTime)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER__BALLAST_PANAMA:
-				setBallastPanama((LocalDate)newValue);
+				setBallastPanama((LocalDateTime)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

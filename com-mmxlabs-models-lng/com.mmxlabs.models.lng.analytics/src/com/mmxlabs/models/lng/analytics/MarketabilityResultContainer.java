@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -72,12 +73,12 @@ public interface MarketabilityResultContainer extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden Panama</em>' attribute.
-	 * @see #setLadenPanama(LocalDate)
+	 * @see #setLadenPanama(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_LadenPanama()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getLadenPanama();
+	LocalDateTime getLadenPanama();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getLadenPanama <em>Laden Panama</em>}' attribute.
@@ -87,19 +88,19 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getLadenPanama()
 	 * @generated
 	 */
-	void setLadenPanama(LocalDate value);
+	void setLadenPanama(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Panama</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Panama</em>' attribute.
-	 * @see #setBallastPanama(LocalDate)
+	 * @see #setBallastPanama(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_BallastPanama()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getBallastPanama();
+	LocalDateTime getBallastPanama();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBallastPanama <em>Ballast Panama</em>}' attribute.
@@ -109,19 +110,19 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getBallastPanama()
 	 * @generated
 	 */
-	void setBallastPanama(LocalDate value);
+	void setBallastPanama(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Buy Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Buy Date</em>' attribute.
-	 * @see #setBuyDate(LocalDate)
+	 * @see #setBuyDate(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_BuyDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getBuyDate();
+	LocalDateTime getBuyDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuyDate <em>Buy Date</em>}' attribute.
@@ -131,19 +132,19 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getBuyDate()
 	 * @generated
 	 */
-	void setBuyDate(LocalDate value);
+	void setBuyDate(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Sell Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Sell Date</em>' attribute.
-	 * @see #setSellDate(LocalDate)
+	 * @see #setSellDate(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityResultContainer_SellDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	LocalDate getSellDate();
+	LocalDateTime getSellDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getSellDate <em>Sell Date</em>}' attribute.
@@ -153,5 +154,5 @@ public interface MarketabilityResultContainer extends EObject {
 	 * @see #getSellDate()
 	 * @generated
 	 */
-	void setSellDate(LocalDate value);
+	void setSellDate(LocalDateTime value);
 } // MarketabilityResultContainer
