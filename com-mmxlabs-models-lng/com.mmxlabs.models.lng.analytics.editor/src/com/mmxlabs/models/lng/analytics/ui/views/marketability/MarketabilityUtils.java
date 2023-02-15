@@ -75,12 +75,12 @@ public final class MarketabilityUtils {
 					evco.setVesselCharter(vesselCharter);
 					shippingOption = evco;
 				} else if (c.getVesselAssignmentType() instanceof CharterInMarket charterInMarket) {
-					if (charterInMarket != null && charterInMarket.getVessel() != null && charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
-						final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
-						ecmo.setCharterInMarket(charterInMarket);
-						ecmo.setSpotIndex(c.getSpotIndex());
-						shippingOption = ecmo;
-					}
+//					if (charterInMarket != null && charterInMarket.getVessel() != null && charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
+//						final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+//						ecmo.setCharterInMarket(charterInMarket);
+//						ecmo.setSpotIndex(c.getSpotIndex());
+//						shippingOption = ecmo;
+//					}
 				}
 				if(shippingOption == null) {
 					continue;

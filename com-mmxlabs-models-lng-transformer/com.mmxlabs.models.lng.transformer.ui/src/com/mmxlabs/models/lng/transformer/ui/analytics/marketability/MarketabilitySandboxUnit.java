@@ -84,6 +84,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.ClampedSpeedVessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -211,6 +212,10 @@ public class MarketabilitySandboxUnit {
 	public synchronized void run(final @NonNull MarketabilityModel model, final @NonNull IMapperClass mapper, final @NonNull Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor, final @NonNull LNGScenarioToOptimiserBridge bridge) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
+		List<String> hints = new LinkedList<>(dataTransformer.getHints());
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+		dataTransformer.getLifecyleManager().startPhase("export", hints);
+		
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
 			s.enter();
@@ -255,13 +260,13 @@ public class MarketabilitySandboxUnit {
 			assert dischargeSlotVisit != null;
 			CanalJourneyEvent ladenPanama = findNextPanama(loadSlotVisit);
 			CanalJourneyEvent ballastPanama = findNextPanama(dischargeSlotVisit);
-			container.setBuyDate(loadSlotVisit.getStart().toLocalDate());
-			container.setSellDate(dischargeSlotVisit.getStart().toLocalDate());
+			container.setBuyDate(loadSlotVisit.getStart().toLocalDateTime());
+			container.setSellDate(dischargeSlotVisit.getStart().toLocalDateTime());
 			if(ladenPanama != null) {
-				container.setLadenPanama(ladenPanama.getStart().toLocalDate());
+				container.setLadenPanama(ladenPanama.getStart().toLocalDateTime());
 			}
 			if(ballastPanama != null) {
-				container.setBallastPanama(ballastPanama.getStart().toLocalDate());
+				container.setBallastPanama(ballastPanama.getStart().toLocalDateTime());
 			}
 			addNextEventToRow(container, dischargeSlotVisit);
 		}
@@ -409,20 +414,8 @@ public class MarketabilitySandboxUnit {
 		if (shipped) {
 			return doShipped(schedule, vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences, vesselSpeed);
 		} else {
-			return doUnshipped(load, discharge, target);
+			return null;
 		}
-	}
-// TODO: GET RID OF UNSHIPPED CARGO FUNCTION
-	private InternalResult doUnshipped(final LoadSlot load, final DischargeSlot discharge, final Slot<?> target) {
-		final IResource resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
-		final IModifiableSequences solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
-		SequenceHelper.addFOBDESSequence(solution, dataTransformer, load, discharge);
-		assert solution != null;
-		final MarketabilitySandboxEvaluator evaluator = injector.getInstance(MarketabilitySandboxEvaluator.class);
-		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
-		final InternalResult res = new InternalResult();
-		res.merge(evaluator.evaluate(resource, solution, portSlot));
-		return res;
 	}
 
 	private InternalResult doShipped(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
@@ -446,9 +439,8 @@ public class MarketabilitySandboxUnit {
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
 
 		final MarketabilitySandboxEvaluator evaluator = injector.getInstance(MarketabilitySandboxEvaluator.class);
-		final MarketabilityWindowTrimmer trimmer = injector.getInstance(MarketabilityWindowTrimmer.class);
 		final InsertCargoSequencesGenerator generator = injector.getInstance(InsertCargoSequencesGenerator.class);
-		generator.generateOptionsTemp(schedule, initialSequences, cargoSegment, resource, trimmer, portSlot, vesselSpeed, (solution) -> {
+		generator.generateOptionsTemp(schedule, initialSequences, cargoSegment, resource, portSlot, vesselSpeed, (solution) -> {
 			final SingleResult result = evaluator.evaluate(resource, solution, portSlot);
 			ret.merge(result);
 			return result != null;

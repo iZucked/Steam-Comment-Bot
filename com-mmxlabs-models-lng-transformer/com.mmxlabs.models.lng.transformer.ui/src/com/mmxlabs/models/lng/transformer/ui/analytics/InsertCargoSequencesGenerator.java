@@ -5,26 +5,33 @@
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -39,25 +46,26 @@ import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalVessel;
-import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPanamaAllowedBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.PanamaAllowedBookingsProviderImpl;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 
 public class InsertCargoSequencesGenerator {
@@ -81,10 +89,16 @@ public class InsertCargoSequencesGenerator {
 	private @NonNull ModelEntityMap modelEntityMap;
 
 	@Inject
+	private @NonNull IPanamaBookingsProvider panamaBookings;
+
+	@Inject
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
 	private @NonNull IReturnElementProvider returnElementProvider;
+
+	@Inject
+	private @NonNull MarketabilityWindowTrimmer trimmer;
 
 	public void generateOptions(final ISequences sequences, final List<ISequenceElement> orderedCargoElements, final IResource targetResource, final ViabilityWindowTrimmer trimmer,
 			final IPortSlot portSlot, final ToBooleanFunction<ISequences> action) {
@@ -132,8 +146,8 @@ public class InsertCargoSequencesGenerator {
 		return slot == oSlot2;
 	}
 
-	private IModifiableSequence createDiversionSequence(final Schedule schedule, final IResource targetResource, final ISequenceElement load, final ISequenceElement saleMarket,
-			final ISequence sequence, MarketabilityWindowTrimmer trimmer, final VoyageSpecificationProviderImpl voyageProvider, final Integer vesselSpeed) {
+	private @NonNull IModifiableSequence createDiversionSequence(final Schedule schedule, final @NonNull IResource targetResource, final ISequenceElement load, final ISequenceElement saleMarket,
+			final ISequence sequence, final SequencesAttributesProviderImpl providers, final Integer vesselSpeed) {
 
 		IVesselCharter vesselCharter = vesselProvider.getVesselCharter(targetResource);
 
@@ -145,7 +159,7 @@ public class InsertCargoSequencesGenerator {
 			}
 		}
 		assert nextEvent != null;
-		if(vesselSpeed != null) {
+		if (vesselSpeed != null) {
 			clampVesselSpeed(vesselCharter, OptimiserUnitConvertor.convertToInternalSpeed(vesselSpeed));
 		}
 		ISequenceElement start = startEndRequirementProvider.getStartElement(targetResource);
@@ -183,11 +197,16 @@ public class InsertCargoSequencesGenerator {
 				eRequirement.setEndRequirment(newEndRequirement);
 			}
 		}
-		
+
 		IPortSlot portSlot = portSlotProvider.getPortSlot(load);
 		SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(portSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
 		int loadTime = dateHelper.convertTime(visit.getStart());
+
+		VoyageSpecificationProviderImpl voyageProvider = new VoyageSpecificationProviderImpl();
 		voyageProvider.setArrivalTime(portSlot, loadTime);
+		providers.addProvider(IVoyageSpecificationProvider.class, voyageProvider);
+		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot, targetResource);
+
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
 	}
@@ -202,10 +221,66 @@ public class InsertCargoSequencesGenerator {
 		oVessel.setMaxSpeed(maxSpeed);
 	}
 
+	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent, IResource targetResource) {
+
+		final PanamaAllowedBookingsProviderImpl panamaAllowedBookingsProvider = new PanamaAllowedBookingsProviderImpl();
+		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(targetResource);
+		Set<IRouteOptionBooking> otherCargoBookings = new HashSet<>();
+
+		for (Sequence evaluatedSequence : schedule.getSequences()) {
+			List<Event> events = evaluatedSequence.getEvents();
+			if(evaluatedSequence.getVesselCharter() == null) {
+				continue;
+			}
+			IVesselCharter evalVesselCharter = modelEntityMap.getOptimiserObjectNullChecked(evaluatedSequence.getVesselCharter(), IVesselCharter.class);
+			if (evalVesselCharter != vesselCharter) {
+				List<@NonNull IRouteOptionBooking> canalBookings = events.stream()//
+						.filter(Journey.class::isInstance) //
+						.map(Journey.class::cast)//
+						.map(Journey::getCanalBooking)//
+						.filter(Objects::nonNull)//
+						.map(x -> modelEntityMap.getOptimiserObjectNullChecked(x, IRouteOptionBooking.class))//
+						.toList();
+				otherCargoBookings.addAll(canalBookings);
+			} else {
+				Event currentEvent = events.get(0);
+				while (currentEvent.getNextEvent() != null) {
+					if (currentEvent instanceof SlotVisit slotVisit) {
+						Slot<?> targetSlot = slotVisit.getSlotAllocation().getSlot();
+						IPortSlot oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
+						if (oTargetSlot == load) {
+							do {
+								if (currentEvent instanceof SlotVisit sv) {
+									targetSlot = sv.getSlotAllocation().getSlot();
+									oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
+								}
+								currentEvent = currentEvent.getNextEvent();
+							} while (!oTargetSlot.equals(nextEvent) && currentEvent != null);
+							if (currentEvent == null) {
+								break;
+							}
+						}
+					} else if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
+						
+						IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
+						otherCargoBookings.add(booking);
+					}
+					currentEvent = currentEvent.getNextEvent();
+				}
+			}
+
+		}
+
+		List<IRouteOptionBooking> allPanamaBookings = panamaBookings.getAllBookings().values().stream().flatMap(Collection::stream).toList();
+		panamaAllowedBookingsProvider.setAllowedBookings(Sets.difference(Set.copyOf(allPanamaBookings), otherCargoBookings));
+		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
+	}
+
 	// TODO: CHANGE THIS NAME
 	@NonNullByDefault
 	public void generateOptionsTemp(final Schedule schedule, final ISequences sequences, final List<@NonNull ISequenceElement> orderedCargoElements, final IResource targetResource,
-			MarketabilityWindowTrimmer trimmer, final IPortSlot portSlot, final Integer vesselSpeed, final ToBooleanFunction<ISequences> action) {
+			final IPortSlot portSlot, final Integer vesselSpeed, final ToBooleanFunction<ISequences> action) {
 
 		for (final ISequenceElement e : orderedCargoElements) {
 			if (!helper.checkResource(e, targetResource)) {
@@ -216,24 +291,20 @@ public class InsertCargoSequencesGenerator {
 		final ISequenceElement load = orderedCargoElements.get(0);
 		final ISequenceElement salesMarket = orderedCargoElements.get(orderedCargoElements.size() - 1);
 		assert salesMarket != null;
-		final VoyageSpecificationProviderImpl voyageSpecificationProvider = new VoyageSpecificationProviderImpl();
-
-		final IModifiableSequence modifiableSequence = createDiversionSequence(schedule, targetResource, load, salesMarket, seq, trimmer, voyageSpecificationProvider, vesselSpeed);
+		final SequencesAttributesProviderImpl providers = new SequencesAttributesProviderImpl();
+		final @NonNull IModifiableSequence modifiableSequence = createDiversionSequence(schedule, targetResource, load, salesMarket, seq, providers, vesselSpeed);
 		final Map<IResource, IModifiableSequence> sequenceMap = new HashMap<>();
 		sequenceMap.put(targetResource, modifiableSequence);
-		final SequencesAttributesProviderImpl providers = new SequencesAttributesProviderImpl();
-		providers.addProvider(IVoyageSpecificationProvider.class, voyageSpecificationProvider);
-
-		final IModifiableSequences newSequences = new ModifiableSequences(List.of(targetResource), sequenceMap, new ArrayList<ISequenceElement>(), providers);
+		final IModifiableSequences newSequences = new ModifiableSequences(List.of(targetResource), sequenceMap, new ArrayList<>(), providers);
 
 		trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.EARLIEST, 0);
 		final boolean earliestValid = action.accept(newSequences);
 		trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.LATEST, 0);
 		final boolean latestValid = action.accept(newSequences);
-		//FIXME: ONLY FINDS RESULT TO THE NEAREST DAY
+
 		if (earliestValid && !latestValid) {
-			for (int j = 0; j < 31; j++) {
-				trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SHIFT, j * 24);
+			for (int j = 0; j < 31 * 24; j++) {
+				trimmer.setTrim(portSlot, MarketabilityWindowTrimmer.Mode.SHIFT, j);
 				final boolean newValid = action.accept(newSequences);
 				if (newValid)
 					break;

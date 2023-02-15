@@ -65,19 +65,15 @@ public class MarketabilitySandboxEvaluator {
 		final int arrivalTime = vpr.getPortTimesRecord().getSlotTime(target);
 		final long volume = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(target);
 
-		if (target instanceof LoadOption) {
-			final LoadOption loadOption = (LoadOption) target;
+		if (target instanceof LoadOption loadOption) {
 			final ILoadPriceCalculator loadPriceCalculator = loadOption.getLoadPriceCalculator();
-			if (loadPriceCalculator instanceof BreakEvenLoadPriceCalculator) {
-				final BreakEvenLoadPriceCalculator beCalc = (BreakEvenLoadPriceCalculator) loadPriceCalculator;
+			if (loadPriceCalculator instanceof BreakEvenLoadPriceCalculator beCalc) {
 				return saveResult(beCalc.getPrice(), arrivalTime, volume);
 			}
 		}
-		if (target instanceof DischargeOption) {
-			final DischargeOption dischargeOption = (DischargeOption) target;
+		if (target instanceof DischargeOption dischargeOption) {
 			final ISalesPriceCalculator salesPriceCalculator = dischargeOption.getDischargePriceCalculator();
-			if (salesPriceCalculator instanceof BreakEvenSalesPriceCalculator) {
-				final BreakEvenSalesPriceCalculator beCalc = (BreakEvenSalesPriceCalculator) salesPriceCalculator;
+			if (salesPriceCalculator instanceof BreakEvenSalesPriceCalculator beCalc) {
 				return saveResult(beCalc.getPrice(), arrivalTime, volume);
 			}
 		}
