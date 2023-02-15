@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,6 +25,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.verification.VerificationMode;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -649,7 +653,7 @@ public class PeriodTransformerTests {
 		Assertions.assertTrue(vesselCharter.getEndAt().isEmpty());
 		Assertions.assertNull(vesselCharter.getStartAfter());
 		Assertions.assertNull(vesselCharter.getStartBy());
-		
+
 		// Expect to match end event
 		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 30).toLocalDateTime(), vesselCharter.getEndAfter());
 		Assertions.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 30).toLocalDateTime(), vesselCharter.getEndBy());
@@ -1440,7 +1444,7 @@ public class PeriodTransformerTests {
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(copyVesselCharter));
 
 		transformer.updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
-		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
+		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, records);
 
 		// No change to original
 		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselCharters().contains(vesselCharter));
@@ -1498,11 +1502,12 @@ public class PeriodTransformerTests {
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(copyVesselCharter));
 
 		transformer.updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
-		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
+		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, records);
 
 		// No change to original
 		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselCharters().contains(vesselCharter));
 		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselCharters().contains(copyVesselCharter));
+		Mockito.verify(mapping, VerificationModeFactory.atLeast(0)).getOriginalFromCopy(any());
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1553,12 +1558,14 @@ public class PeriodTransformerTests {
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(copyVesselCharter));
 
 		transformer.updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
-		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
+		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, records);
 
 		// No change to original
 		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselCharters().contains(vesselCharter));
 		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselCharters().contains(copyVesselCharter));
 
+		//
+		Mockito.verify(mapping, VerificationModeFactory.atLeast(0)).getOriginalFromCopy(any());
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
 	}
@@ -1608,7 +1615,7 @@ public class PeriodTransformerTests {
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(copyVesselCharter));
 
 		transformer.updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
-		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
+		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, records);
 
 		// No change to original
 		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselCharters().contains(vesselCharter));
@@ -1664,11 +1671,12 @@ public class PeriodTransformerTests {
 		collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(copyVesselCharter));
 
 		transformer.updateVesselCharters(collectedAssignments, schedule, records, periodRecord, mapping);
-		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
+		transformer.removeVesselCharters(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping, records);
 
 		// No change to original
 		Assertions.assertTrue(scenarioModel.getCargoModel().getVesselCharters().contains(vesselCharter));
 		Assertions.assertTrue(copyScenarioModel.getCargoModel().getVesselCharters().contains(copyVesselCharter));
+		Mockito.verify(mapping, VerificationModeFactory.atLeast(0)).getOriginalFromCopy(any());
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1870,7 +1878,7 @@ public class PeriodTransformerTests {
 			protected void configure() {
 				bind(InclusionChecker.class).toInstance(inclusionChecker);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseHeelRetention))//
-				.toInstance(Boolean.FALSE);
+						.toInstance(Boolean.FALSE);
 			}
 		});
 		return injector.getInstance(PeriodTransformer.class);

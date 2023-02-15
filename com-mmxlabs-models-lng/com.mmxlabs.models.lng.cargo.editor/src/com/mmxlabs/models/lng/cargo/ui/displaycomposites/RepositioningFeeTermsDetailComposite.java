@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -36,7 +37,6 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	private VesselCharter oldVesselCharter = null;
 	private Composite owner = this;
 
-	protected Composite startHeelComposite;
 	private GridData gridData;
 	private IStatus status;
 	public IDialogEditingContext getDialogContext() {
@@ -62,22 +62,20 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 
 		setLayoutData(gridData);
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		GridLayout layout = GridLayoutFactory.swtDefaults() //
-				.numColumns(1) //
-				.equalWidth(true) //
-				.margins(0, 0) //
-				.extendedMargins(0, 0, 0, 0) //
-				.create();
-		
-		startHeelComposite = toolkit.createComposite(this, SWT.NONE);
-		startHeelComposite.setLayout(layout);
-		startHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		startHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 	}
 	
 	protected void createRepositioningFeeComposite(Composite parent, FormToolkit toolkit, GenericCharterContract originPortRepositioningContract) {
-		RepositioningFeeTermsTableCreator.createRepositioningFeeTable(parent, toolkit, dialogContext, commandHandler, originPortRepositioningContract,
+		
+		Composite bottomComposite = toolkit.createComposite(parent, SWT.NONE);
+		bottomComposite.setLayout(createCustomGridLayout(1, false));
+		GridData gridDataCheckbox = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+		gridDataCheckbox.horizontalSpan = 2;
+		bottomComposite.setLayoutData(gridDataCheckbox);
+		
+		final Label label = toolkit.createLabel(bottomComposite, "Repositioning Fee");
+		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+		
+		RepositioningFeeTermsTableCreator.createRepositioningFeeTable(bottomComposite, toolkit, dialogContext, commandHandler, originPortRepositioningContract,
 				statusProvider, resizeAction);
 	}
 
@@ -88,7 +86,7 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 		final GenericCharterContract gcc = oldVesselCharter.getContainedCharterContract();
 		
 		if (oldVesselCharter != null) {
-			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), startHeelComposite);
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselCharter, range, dbc, oldVesselCharter.eClass(), this);
 		}
 		
 		doDisplay(gcc);
@@ -116,8 +114,19 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
+		return ref.isContainment() && !ref.isMany() 
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartHeel()//
 				&& ref != CargoPackage.eINSTANCE.getVesselCharter_EndHeel();
+	}
+	
+	private GridLayout createCustomGridLayout(int numColumns, boolean makeColumnsEqualWidth) {
+		return GridLayoutFactory.fillDefaults()
+				.numColumns(numColumns)
+				.equalWidth(makeColumnsEqualWidth)
+				.margins(0, 0)
+				.extendedMargins(3, 0, 0, 0)
+				.create();
 	}
 
 }

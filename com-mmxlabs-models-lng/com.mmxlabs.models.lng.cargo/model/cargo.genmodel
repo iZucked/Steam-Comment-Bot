@@ -214,22 +214,34 @@
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselCharter">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/optional"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/vessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/charterNumber"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/timeCharterRate"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/startAt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/startAfter"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/startBy"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/endAt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/endAfter"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/endBy"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Name of the vessel"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/vessel"/>
+      <genFeatures createChild="false" propertyDescription="Charter number" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/charterNumber"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Entity"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/entity"/>
+      <genFeatures createChild="false" propertyDescription="Vessel charter hire rate per day"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/timeCharterRate"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Start port of the vessel charter"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/startAt"/>
+      <genFeatures createChild="false" propertyDescription="The vessel is not available before this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/startAfter"/>
+      <genFeatures createChild="false" propertyDescription="The vessel must be in use from this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/startBy"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The vessel must be returned to one of these ports"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/endAt"/>
+      <genFeatures createChild="false" propertyDescription="The vessel must not end before this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/endAfter"/>
+      <genFeatures createChild="false" propertyDescription=" The vessel must have finished use by this date (UTC)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/endBy"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/startHeel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/endHeel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/forceHireCostOnlyEndRule"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/containedCharterContract"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/minDuration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/maxDuration"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="Charter contract"
+          ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/containedCharterContract"/>
+      <genFeatures createChild="false" propertyDescription="Minimum duration of hire"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/minDuration"/>
+      <genFeatures createChild="false" propertyDescription="Maximum duration of hire"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/maxDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/charterContractOverride"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/genericCharterContract"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselCharter/getStartByAsDateTime"/>

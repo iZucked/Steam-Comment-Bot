@@ -78,7 +78,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		final Port portC = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
 
 		cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "1") //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9") //
 				.withVolumeLimits(portDischargeRanges[0], portDischargeRanges[1], VolumeUnits.M3)//

@@ -88,4 +88,15 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 		dateFormatter = new LocalDateTimeTextFormatter(format);
 		formattedText.setFormatter(dateFormatter);
 	}
+	
+	/**
+	 * Change the format string after creation. String will be passed into a {@link DateTimeFormatter}.
+	 * 
+	 * @param format
+	 */
+	public void setDateFormat(String editFormat, String displayFormat) {
+
+		dateFormatter = new LocalDateTimeTextFormatter(editFormat, displayFormat);
+		formattedText.setFormatter(dateFormatter);
+	}
 }

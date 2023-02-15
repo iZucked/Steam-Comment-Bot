@@ -22,9 +22,17 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
  * 
  */
 public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator {
+	
+	private final LocalDateTimeTextFormatter formatter;
+	
+	public LocalDateTimeAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final LocalDateTimeTextFormatter formatter) {
+		super(field, commandHandler);
+		this.formatter = formatter;
+	}
 
 	public LocalDateTimeAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
 		super(field, commandHandler);
+		formatter = new LocalDateTimeTextFormatter();
 	}
 
 	@Override
@@ -39,14 +47,12 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 				return superValue;
 			}
 		};
-		editor.setFormatter(new LocalDateTimeTextFormatter());
+		editor.setFormatter(formatter);
 		return editor;
 	}
 
 	@Override
 	public String renderSetValue(final Object owner, final Object object) {
-
-		final LocalDateTimeTextFormatter formatter = new LocalDateTimeTextFormatter();
 		formatter.setValue(object);
 		return formatter.getDisplayString();
 	}
@@ -54,8 +60,8 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 	@Override
 	public Comparable<?> getComparable(final Object object) {
 		final Object o = getValue(object);
-		if (o instanceof LocalDateTime) {
-			return (LocalDateTime) o;
+		if (o instanceof LocalDateTime ldt) {
+			return ldt;
 		} else {
 			return null;
 		}

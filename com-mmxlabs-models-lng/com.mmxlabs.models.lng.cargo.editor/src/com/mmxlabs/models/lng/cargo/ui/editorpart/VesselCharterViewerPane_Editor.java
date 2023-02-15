@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
@@ -49,16 +50,16 @@ public class VesselCharterViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Start Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAt(), scenarioEditingLocation.getReferenceValueProviderCache(),
 				commandHandler));
 
-		addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAfter(), commandHandler));
+		addTypicalColumn("From", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartAfter(), commandHandler, new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")));
 
-		addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartBy(), commandHandler));
+		addTypicalColumn("To", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_StartBy(), commandHandler, new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")));
 
 		addTypicalColumn("End Port", new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAt(), scenarioEditingLocation.getReferenceValueProviderCache(),
 				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAfter(), commandHandler));
+		addTypicalColumn("From", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndAfter(), commandHandler, new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")));
 
-		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndBy(), commandHandler));
+		addTypicalColumn("To", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselCharter_EndBy(), commandHandler, new LocalDateTimeTextFormatter("dd/MM/yyyy hh:mm","dd/MM/yyyy")));
 
 		setTitle("Vessel Charters", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

@@ -75,6 +75,9 @@
       <genFeatures createChild="false" propertyDescription="" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/mmxReference"/>
       <genFeatures createChild="false" propertyDescription="Flag indicating a vessel with little or no fuel consumption data and can be used only for non-shipped cargoes"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/marker"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/baseFuelEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/bogEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/pilotLightEmissionRate"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessiblePorts"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessibleRoutes"/>
@@ -97,6 +100,9 @@
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateMinBaseFuelConsumption"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateHasReliqCapability"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateSCNT"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateBaseFuelEmissionRate"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateBogEmissionRate"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegatePilotLightEmissionRate"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselGroup/vessels"/>

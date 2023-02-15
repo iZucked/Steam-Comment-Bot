@@ -1,560 +1,560 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
 <target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="83">
-<locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-p2-patched/1.0.0/mmxlabs-p2-patched-1.0.0-p2-repo.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.jdt.annotation" version="2.2.600.v20200408-1511"/>
-<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
-<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
-<unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.22-202111241800/org.eclipse.updates-R-4.22-202111241800.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.core.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.httpclient45.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.query.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.transaction.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.validation.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
-<unit id="javax.activation" version="1.1.0.v201211130549"/>
-<unit id="javax.servlet" version="3.0.0.v201112011016"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="javax.jms" version="0.0.0"/>
-<unit id="javax.wsdl" version="0.0.0"/>
-<unit id="javax.xml" version="0.0.0"/>
-<unit id="javax.xml.bind" version="0.0.0"/>
-<unit id="javax.xml.soap" version="0.0.0"/>
-<unit id="javax.xml.stream" version="0.0.0"/>
-<unit id="javax.xml.ws" version="0.0.0"/>
-<unit id="org.aopalliance" version="0.0.0"/>
-<unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
-<unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
-<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.math" version="0.0.0"/>
-<unit id="org.apache.commons.compress" version="1.21.0.v20211103-2100"/>
-<unit id="org.apache.log4j" version="0.0.0"/>
-<unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
-<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core" version="1.3.0.v20180420-1519"/>
-<unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.library" version="1.3.0.v20180524-2246"/>
-<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-	<unit id="org.junit.jupiter.api" version="0.0.0"/>
-	<unit id="org.junit.jupiter.engine" version="0.0.0"/>
-	<unit id="org.junit.jupiter.migrationsupport" version="0.0.0"/>
-	<unit id="org.junit.jupiter.params" version="0.0.0"/>
-	<unit id="org.junit.platform.commons" version="0.0.0"/>
-	<unit id="org.junit.platform.engine" version="0.0.0"/>
-	<unit id="org.junit.platform.launcher" version="0.0.0"/>
-	<unit id="org.junit.platform.runner" version="0.0.0"/>
-	<unit id="org.junit.platform.suite.api" version="0.0.0"/>
-	<unit id="org.junit.vintage.engine" version="0.0.0"/>
-	<unit id="com.sun.jna" version="4.5.1.v20210503-0343"/>	
-	<unit id="com.sun.jna.platform" version="4.5.1.v20190425-1842"/>
-	<unit id="org.bouncycastle.bcutil" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20211213173813/orbit-buildrepo-R20211213173813.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/nebula/widgets/2.5.0/widgets-2.5.0.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.7.RELEASE/com.mmxlabs.models.datetime.p2-2.1.7.RELEASE.zip-unzip"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.google.ortools.feature.feature.group" version="0.0.0"/>
-<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v3/com.google.ortools.p2-7.5.7466.jdk11v3.zip-unzip"/>
-</location>
-	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		<repository location="https://download.eclipse.org/swtchart/releases/0.12.0/repository/"/>
-		<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
-	</location>
-	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		<repository location="https://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/swtbot/swtbot/4.0.0/swtbot-4.0.0.zip-unzip/"/>
-		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
-		<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
-		<unit id="org.eclipse.swtbot.junit5.feature.group" version="0.0.0"/>
-		<unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
-	</location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.google.errorprone</groupId>
-                <artifactId>error_prone_annotations</artifactId>
-                <version>2.14.0</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.mmxlabs.guice</groupId>
-                <artifactId>com.google.inject</artifactId>
-                <version>5.1.0.jsr305</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>failureaccess</artifactId>
-                <version>1.0.1</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>30.1.1-jre</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-csv</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jdk8</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>2.13.4</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.googlecode.json-simple</groupId>
-                <artifactId>json-simple</artifactId>
-                <version>1.1.1</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy-agent</artifactId>
-                <version>1.9.9</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy</artifactId>
-                <version>1.12.17</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>4.8.0</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.objenesis</groupId>
-                <artifactId>objenesis</artifactId>
-                <version>3.3</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.ops4j.peaberry.extensions</groupId>
-                <artifactId>peaberry.activation</artifactId>
-                <version>1.3</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.ops4j.peaberry.extensions</groupId>
-                <artifactId>peaberry.eclipse</artifactId>
-                <version>1.3</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.ops4j</groupId>
-                <artifactId>peaberry</artifactId>
-                <version>1.3</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>4.1</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.6</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.7</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-math3</artifactId>
-                <version>3.5</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>javax.mail</artifactId>
-                <version>1.6.2</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>javax.mail-api</artifactId>
-                <version>1.6.2</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.poi</artifactId>
-                <version>4.1.2_1</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.xmlbeans</artifactId>
-                <version>3.1.0_2</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>com.github.docker-java</groupId>
-                <artifactId>docker-java-api</artifactId>
-                <version>3.2.14</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.github.docker-java</groupId>
-                <artifactId>docker-java-transport-zerodep</artifactId>
-                <version>3.2.14</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.github.docker-java</groupId>
-                <artifactId>docker-java-transport</artifactId>
-                <version>3.2.14</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.rnorth.duct-tape</groupId>
-                <artifactId>duct-tape</artifactId>
-                <version>1.0.8</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.rnorth.visible-assertions</groupId>
-                <artifactId>visible-assertions</artifactId>
-                <version>2.1.2</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>1.17.6</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers</artifactId>
-                <version>1.17.6</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>secretsmanager</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>regions</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>aws-core</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>utils</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>sdk-core</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>apache-client</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>http-client-spi</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>auth</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>profiles</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>protocol-core</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>aws-json-protocol</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>metrics-spi</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>org.reactivestreams</groupId>
-                <artifactId>reactive-streams</artifactId>
-                <version>1.0.4</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>json-utils</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>third-party-jackson-core</artifactId>
-                <version>2.17.233</version>
-                <type>jar</type>
-            </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>dynamodb</artifactId>
-            <version>2.17.233</version>
-            <type>jar</type>
-        </dependency>
-        </dependencies>        
-    </location>
-    <location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
-        <dependencies>
-          <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>4.0.0</version>
-            <type>jar</type>
-          </dependency>
-        </dependencies>
-    </location>
-    <location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
-      <dependencies>
-        <dependency>
-           <groupId>ch.qos.logback</groupId>
-           <artifactId>logback-core</artifactId>
-           <version>1.2.11</version>
-           <type>jar</type>
-        </dependency>
-        <dependency>
-           <groupId>ch.qos.logback</groupId>
-           <artifactId>logback-classic</artifactId>
-           <version>1.2.11</version>
-           <type>jar</type>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-          <version>1.7.32</version>
-          <type>jar</type>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-ext</artifactId>
-          <version>1.7.32</version>
-          <type>jar</type>
-        </dependency>
-      </dependencies>
-    </location>
-</locations>
-	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
+	<locations>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0" />
+			<repository location="mvn:com.mmxlabs.p2.repository:mmxlabs-p2-patched:1.0.0:zip:p2-repo" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.jdt.annotation" version="2.2.600.v20200408-1511" />
+			<unit id="org.eclipse.platform.sdk" version="0.0.0" />
+			<unit id="org.eclipse.sdk.ide" version="0.0.0" />
+			<unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0" />
+			<repository location="mvn:org.eclipse:org.eclipse.updates:R-4.22-202111241800:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.ecf.core.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.ecf.filetransfer.httpclient45.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.query.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.transaction.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.emf.validation.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.jdt.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.pde.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.rcp.source.feature.group" version="0.0.0" />
+			<unit id="javax.activation" version="1.1.0.v201211130549" />
+			<unit id="javax.servlet" version="3.0.0.v201112011016" />
+			<repository location="mvn:org.eclipse:org.eclipse.release:202112081000:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="javax.jms" version="0.0.0" />
+			<unit id="javax.wsdl" version="0.0.0" />
+			<unit id="javax.xml" version="0.0.0" />
+			<unit id="javax.xml.bind" version="0.0.0" />
+			<unit id="javax.xml.soap" version="0.0.0" />
+			<unit id="javax.xml.stream" version="0.0.0" />
+			<unit id="javax.xml.ws" version="0.0.0" />
+			<unit id="org.aopalliance" version="0.0.0" />
+			<unit id="org.apache.commons.cli" version="1.2.0.v201404270220" />
+			<unit id="org.apache.commons.lang" version="2.6.0.v201404270220" />
+			<unit id="org.apache.commons.logging" version="1.1.1.v201101211721" />
+			<unit id="org.apache.commons.math" version="0.0.0" />
+			<unit id="org.apache.commons.compress" version="1.21.0.v20211103-2100" />
+			<unit id="org.apache.log4j" version="0.0.0" />
+			<unit id="org.dom4j" version="1.6.1.v20190321-1528" />
+			<unit id="org.hamcrest" version="1.1.0.v20090501071000" />
+			<unit id="org.hamcrest.core" version="1.3.0.v20180420-1519" />
+			<unit id="org.hamcrest.generator" version="1.3.0.v201305210900" />
+			<unit id="org.hamcrest.integration" version="1.3.0.v201305210900" />
+			<unit id="org.hamcrest.library" version="1.3.0.v20180524-2246" />
+			<unit id="org.hamcrest.text" version="1.1.0.v20090501071000" />
+			<unit id="org.junit.jupiter.api" version="0.0.0" />
+			<unit id="org.junit.jupiter.engine" version="0.0.0" />
+			<unit id="org.junit.jupiter.migrationsupport" version="0.0.0" />
+			<unit id="org.junit.jupiter.params" version="0.0.0" />
+			<unit id="org.junit.platform.commons" version="0.0.0" />
+			<unit id="org.junit.platform.engine" version="0.0.0" />
+			<unit id="org.junit.platform.launcher" version="0.0.0" />
+			<unit id="org.junit.platform.runner" version="0.0.0" />
+			<unit id="org.junit.platform.suite.api" version="0.0.0" />
+			<unit id="org.junit.vintage.engine" version="0.0.0" />
+			<unit id="com.sun.jna" version="4.5.1.v20210503-0343" />
+			<unit id="com.sun.jna.platform" version="4.5.1.v20190425-1842" />
+			<unit id="org.bouncycastle.bcutil" version="0.0.0" />
+			<unit id="org.bouncycastle.bcpg" version="0.0.0" />
+			<unit id="org.bouncycastle.bcpkix" version="0.0.0" />
+			<unit id="org.bouncycastle.bcprov" version="0.0.0" />
+			<repository location="mvn:org.eclipse.orbit:orbit-buildrepo:R20211213173813:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.nebula.widgets.grid" version="0.0.0" />
+			<repository location="mvn:org.eclipse.nebula:widgets:2.5.0:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0" />
+			<repository location="mvn:com.mmxlabs.nebula.widgets.p2.repository:com.mmxlabs.nebula.widgets.p2:1.1.1:zip:p2-repo" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0" />
+			<repository location="mvn:com.mmxlabs.models.datetime:com.mmxlabs.models.datetime.p2:2.1.7.RELEASE:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<unit id="com.google.ortools.feature.feature.group" version="0.0.0" />
+			<repository location="mvn:com.google.ortools:com.google.ortools.p2:7.5.7466.jdk11v3:zip" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<repository location="mvn:org.eclipse.swtchart:swtchart:0.12:zip" />
+			<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0" />
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+			<repository location="mvn:org.eclipse.swtbot:swtbot:4.0.0:zip" />
+			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.swtbot.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.swtbot.junit5.feature.group" version="0.0.0" />
+			<unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0" />
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.google.errorprone</groupId>
+					<artifactId>error_prone_annotations</artifactId>
+					<version>2.14.0</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.mmxlabs.guice</groupId>
+					<artifactId>com.google.inject</artifactId>
+					<version>5.1.0.jsr305</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>failureaccess</artifactId>
+					<version>1.0.1</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<version>30.1.1-jre</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-csv</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-jdk8</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-jsr310</artifactId>
+					<version>2.13.4</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.googlecode.json-simple</groupId>
+					<artifactId>json-simple</artifactId>
+					<version>1.1.1</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy-agent</artifactId>
+					<version>1.9.9</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy</artifactId>
+					<version>1.12.17</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.mockito</groupId>
+					<artifactId>mockito-core</artifactId>
+					<version>4.8.0</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.objenesis</groupId>
+					<artifactId>objenesis</artifactId>
+					<version>3.3</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.ops4j.peaberry.extensions</groupId>
+					<artifactId>peaberry.activation</artifactId>
+					<version>1.3</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.ops4j.peaberry.extensions</groupId>
+					<artifactId>peaberry.eclipse</artifactId>
+					<version>1.3</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.ops4j</groupId>
+					<artifactId>peaberry</artifactId>
+					<version>1.3</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-collections4</artifactId>
+					<version>4.1</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+					<version>2.6</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
+					<version>3.7</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-math3</artifactId>
+					<version>3.5</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.sun.mail</groupId>
+					<artifactId>javax.mail</artifactId>
+					<version>1.6.2</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>javax.mail</groupId>
+					<artifactId>javax.mail-api</artifactId>
+					<version>1.6.2</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.servicemix.bundles</groupId>
+					<artifactId>org.apache.servicemix.bundles.poi</artifactId>
+					<version>4.1.2_1</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.servicemix.bundles</groupId>
+					<artifactId>org.apache.servicemix.bundles.xmlbeans</artifactId>
+					<version>3.1.0_2</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.github.docker-java</groupId>
+					<artifactId>docker-java-api</artifactId>
+					<version>3.2.14</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.github.docker-java</groupId>
+					<artifactId>docker-java-transport-zerodep</artifactId>
+					<version>3.2.14</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>com.github.docker-java</groupId>
+					<artifactId>docker-java-transport</artifactId>
+					<version>3.2.14</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.rnorth.duct-tape</groupId>
+					<artifactId>duct-tape</artifactId>
+					<version>1.0.8</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.rnorth.visible-assertions</groupId>
+					<artifactId>visible-assertions</artifactId>
+					<version>2.1.2</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.testcontainers</groupId>
+					<artifactId>junit-jupiter</artifactId>
+					<version>1.17.6</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.testcontainers</groupId>
+					<artifactId>testcontainers</artifactId>
+					<version>1.17.6</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>secretsmanager</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>regions</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>aws-core</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>utils</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>sdk-core</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>apache-client</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>http-client-spi</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>auth</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>profiles</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>protocol-core</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>aws-json-protocol</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>metrics-spi</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.reactivestreams</groupId>
+					<artifactId>reactive-streams</artifactId>
+					<version>1.0.4</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>json-utils</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>third-party-jackson-core</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>dynamodb</artifactId>
+					<version>2.17.233</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>com.auth0</groupId>
+					<artifactId>java-jwt</artifactId>
+					<version>4.0.0</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+		<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+					<version>1.2.11</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+					<version>1.2.11</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+					<version>1.7.32</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-ext</artifactId>
+					<version>1.7.32</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</location>
+	</locations>
+	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17" />
 	<environment>
 		<arch>x86_64</arch>
 	</environment>

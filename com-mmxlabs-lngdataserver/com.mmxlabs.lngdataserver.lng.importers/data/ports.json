@@ -3153,8 +3153,19 @@
       },
       "locode": "US  CAU",
       "upstreamID": "US0121"
-    }
-	],
+    }, {
+			"mmxId": "L_DE_Lubmi",
+			"name": "Lubmin",
+			"geographicPoint": {
+				"lat": 53.89500045776367,
+				"lon": 14.25333309173584,
+				"country": "Germany",
+				"timeZone": "Europe/Berlin"
+			},
+			"locode": "DE  LBM",
+			"upstreamID": "PL0021"
+		}
+	],	
 	"routingPoints": [{
 		"identifier": "SUZ",
 		"northernEntry": "L_CP_PortS",

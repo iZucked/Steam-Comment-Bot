@@ -29,6 +29,6 @@ public class MigrateToV174 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Added marketability report to analytics.ecore
+		// Added emissions model
 	}
 }

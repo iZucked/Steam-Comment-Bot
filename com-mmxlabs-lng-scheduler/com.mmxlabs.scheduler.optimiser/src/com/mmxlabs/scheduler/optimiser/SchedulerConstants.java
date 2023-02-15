@@ -92,6 +92,7 @@ public final class SchedulerConstants {
 	public static final String RE_HEDGE_WITH_PAPERS = "re-hedge-with-papers";
 	public static final String RE_HEDGE_CUTOFF_AT_PROMPT_START = "re-hedge-cutoff-at-prompt-start";
 	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
+	public static final String IGNORE_HEDGE_PNL_AT_OPTI = "generated-papers-ignore-at-optimisation";
 	public static final String INDIVIDUAL_EXPOSURES = "individual-exposures";
 	
 	public static final String PROCESS_TRANSFER_MODEL = "process-transfer-model";

@@ -75,7 +75,7 @@ public class ChangeModelToScheduleSpecification {
 	private static final String PREFIX_SLOT = "slot-";
 
 	private static final String PREFIX_MARKET = "market-";
-	
+
 	private final Function<String, EObject> finderFunction;
 	private final LNGScenarioModel lngScenarioModel;
 	private @Nullable final IAssignableElementDateProviderFactory assignableElementDateProviderFactory;
@@ -153,7 +153,8 @@ public class ChangeModelToScheduleSpecification {
 
 		final List<CollectedAssignment> assignments;
 		if (assignableElementDateProviderFactory != null) {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, assignableElementDateProviderFactory.create(lngScenarioModel), null);
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, assignableElementDateProviderFactory.create(lngScenarioModel),
+					null);
 		} else {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		}
@@ -540,7 +541,7 @@ public class ChangeModelToScheduleSpecification {
 
 		assert leftOvers.isEmpty();
 
-		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges, null, null, null));
+		return new Pair<>(scheduleSpecification, new ExtraDataProvider(null, null, null, extraLoads, extraDischarges, null, null, null, null));
 	}
 
 	private @NonNull SpotType map(SlotType slotType) {

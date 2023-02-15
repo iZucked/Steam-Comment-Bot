@@ -77,6 +77,12 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="LoadSlot">
+               </target>
+               <target
+                     class="DischargeSlot">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"

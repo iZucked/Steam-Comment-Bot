@@ -127,6 +127,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fobSaleDealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//FOBSaleDealType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract">
+    <eOperations name="getContractOrDelegateUpstreamEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getContractOrDelegatePipelineEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" lowerBound="1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
@@ -136,6 +138,20 @@
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="mmBtu/m³"/>
         <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upstreamEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="kg/mmBtu"/>
+        <details key="formatString" value="####0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pipelineEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="kg/mmBtu"/>
+        <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

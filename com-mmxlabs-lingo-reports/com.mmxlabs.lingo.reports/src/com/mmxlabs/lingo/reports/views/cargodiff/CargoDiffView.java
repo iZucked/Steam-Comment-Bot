@@ -1393,7 +1393,7 @@ public class CargoDiffView extends ChangeSetView {
 				}
 				final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 				boolean showSimple = true;
-				if (showAlternativeChangeModel && CargoDiffView.this.viewMode == ViewMode.INSERTIONS) {
+				if (showAlternativeChangeModel && CargoDiffView.this.viewMode == ViewMode.OPTIONISER) {
 					// Only offer this for dual model insertions.
 					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
 					if (scenarioResult.getResultRoot() instanceof ScheduleModel scheduleModel) {
@@ -1553,7 +1553,7 @@ public class CargoDiffView extends ChangeSetView {
 					return viewState;
 				}, runAsync, slotId);
 			} else if (plan instanceof SlotInsertionOptions slotInsertionOptions) {
-				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
+				setViewMode(ViewMode.OPTIONISER, slotInsertionOptions.isHasDualModeSolutions());
 				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
@@ -1704,7 +1704,7 @@ public class CargoDiffView extends ChangeSetView {
 			showAlternativeChangeModel = false;
 			canExportChangeSet = false;
 			break;
-		case INSERTIONS:
+		case OPTIONISER:
 			insertionPlanFilter.setInsertionModeActive(true);
 			insertionPlanFilter.setMultipleSolutionView(false);
 			insertionPlanFilter.setMaxComplexity(4);
@@ -1774,7 +1774,7 @@ public class CargoDiffView extends ChangeSetView {
 			}
 		}
 
-		if (viewMode == ViewMode.INSERTIONS) {
+		if (viewMode == ViewMode.OPTIONISER) {
 			columnHelper.showCompareColumns(false);
 		} else {
 			columnHelper.showCompareColumns(true);

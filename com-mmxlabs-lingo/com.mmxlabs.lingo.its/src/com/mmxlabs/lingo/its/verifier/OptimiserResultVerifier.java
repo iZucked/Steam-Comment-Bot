@@ -473,6 +473,22 @@ public class OptimiserResultVerifier {
 			resultChecker.addChecker(checker);
 			return this.resultChecker;
 		}
+
+		public OptimiserResultChecker isNonShipped() {
+			final Function<Pair<SolutionData, IResource>, Boolean> v = p -> {
+				if (p == null || p.getSecond() == null) {
+					return false;
+				}
+				final IResource r = p.getSecond();
+				final IVesselProvider vesselProvider = p.getFirst().getInjector().getInstance(IVesselProvider.class);
+				final IVesselCharter va = vesselProvider.getVesselCharter(r);
+				return (va.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) || (va.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
+			};
+
+			final Function<SolutionData, Boolean> checker = v.compose(result);
+			resultChecker.addChecker(checker);
+			return this.resultChecker;
+		}
 	}
 
 	public @Nullable ISequences verifySolutionExistsInResults(final IMultiStateResult results, final Consumer<String> errorHandler) {
@@ -488,10 +504,10 @@ public class OptimiserResultVerifier {
 
 	public @Nullable ISequences verifySolutionExistsInResults(final List<SolutionData> solutionDataList, final Consumer<String> errorHandler) {
 
-		for (final SolutionData data : solutionDataList) {
+		LOOP_DATA: for (final SolutionData data : solutionDataList) {
 			for (final Function<SolutionData, Boolean> checker : anySolutionChecks) {
 				if (!checker.apply(data)) {
-					continue;
+					continue LOOP_DATA;
 				}
 			}
 			return data.getLookupManager().getRawSequences();

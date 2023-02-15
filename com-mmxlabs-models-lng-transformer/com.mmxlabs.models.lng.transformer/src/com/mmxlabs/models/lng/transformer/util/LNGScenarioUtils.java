@@ -39,14 +39,14 @@ public class LNGScenarioUtils {
 	public static Pair<ZonedDateTime, ZonedDateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject, @Nullable final IExtraDataProvider extraDataProvider) {
 		if (extraDataProvider != null) {
 			return findEarliestAndLatestTimes(rootObject, extraDataProvider.getExtraLoads(), extraDataProvider.getExtraDischarges(), extraDataProvider.getExtraVesselEvents(),
-					extraDataProvider.getExtraVesselCharters());
+					extraDataProvider.getExtraVesselCharters(), extraDataProvider.getExtraDates());
 		} else {
-			return findEarliestAndLatestTimes(rootObject, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+			return findEarliestAndLatestTimes(rootObject, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
 		}
 	}
 
 	public static Pair<ZonedDateTime, ZonedDateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject, final List<LoadSlot> extraLoadSlots,
-			final List<DischargeSlot> extraDischargeSlots, final List<VesselEvent> extraVesselEvents, final List<VesselCharter> extraVesselCharters) {
+			final List<DischargeSlot> extraDischargeSlots, final List<VesselEvent> extraVesselEvents, final List<VesselCharter> extraVesselCharters, final List<ZonedDateTime> extraDates) {
 		ZonedDateTime earliestTime = null;
 		ZonedDateTime latestTime = null;
 		final CargoModel cargoModel = rootObject.getCargoModel();
@@ -85,6 +85,8 @@ public class LNGScenarioUtils {
 
 			assert !allDates.contains(null);
 		});
+
+		allDates.addAll(extraDates);
 
 		earliestTime = allDates.isEmpty() ? EarliestDate : Collections.min(allDates);
 		// round down earliest time

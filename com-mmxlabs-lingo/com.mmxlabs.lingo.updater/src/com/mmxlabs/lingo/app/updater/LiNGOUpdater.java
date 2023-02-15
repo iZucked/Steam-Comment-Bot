@@ -390,10 +390,29 @@ public class LiNGOUpdater {
 	}
 
 	private HttpClientBuilder createHttpBuilder(final URI url) {
-		
+
 		final boolean needsClientAuth = url.getHost().contains("updates.minimaxlabs.com");
 		final HttpHost httpHost = URIUtils.extractHost(url);
-		return HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
+		var builder = HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
+		builder.addInterceptorFirst(new HttpRequestInterceptor() {
+
+			@Override
+			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				try {
+					URI uri = new URI(request.getRequestLine().getUri());
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal().getRequestLine().getUri());
+					}
+					if (uri.getHost().contains("update.minimaxlabs.com") ) {
+						withAuthHeader(url, request);
+					}
+				} catch (final URISyntaxException e) {
+					throw new IOException(e);
+				}
+			}
+
+		});
+		return builder;
 	}
 
 	private void downloadVersionSignature(final URI baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
@@ -409,7 +428,6 @@ public class LiNGOUpdater {
 
 		try (var httpClient = builder.build()) {
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
 				response.setEntity(w);
