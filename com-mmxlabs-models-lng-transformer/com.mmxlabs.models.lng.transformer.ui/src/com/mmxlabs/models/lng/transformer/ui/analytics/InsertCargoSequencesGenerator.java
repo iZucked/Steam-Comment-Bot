@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -205,7 +204,7 @@ public class InsertCargoSequencesGenerator {
 		VoyageSpecificationProviderImpl voyageProvider = new VoyageSpecificationProviderImpl();
 		voyageProvider.setArrivalTime(portSlot, loadTime);
 		providers.addProvider(IVoyageSpecificationProvider.class, voyageProvider);
-		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot, targetResource);
+		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot);
 
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
@@ -221,58 +220,48 @@ public class InsertCargoSequencesGenerator {
 		oVessel.setMaxSpeed(maxSpeed);
 	}
 
-	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent, IResource targetResource) {
+	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent) {
 
 		final PanamaAllowedBookingsProviderImpl panamaAllowedBookingsProvider = new PanamaAllowedBookingsProviderImpl();
 		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
-		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(targetResource);
 		Set<IRouteOptionBooking> otherCargoBookings = new HashSet<>();
 
 		for (Sequence evaluatedSequence : schedule.getSequences()) {
 			List<Event> events = evaluatedSequence.getEvents();
-			if(evaluatedSequence.getVesselCharter() == null) {
+			if (evaluatedSequence.getVesselCharter() == null) {
 				continue;
 			}
-			IVesselCharter evalVesselCharter = modelEntityMap.getOptimiserObjectNullChecked(evaluatedSequence.getVesselCharter(), IVesselCharter.class);
-			if (evalVesselCharter != vesselCharter) {
-				List<@NonNull IRouteOptionBooking> canalBookings = events.stream()//
-						.filter(Journey.class::isInstance) //
-						.map(Journey.class::cast)//
-						.map(Journey::getCanalBooking)//
-						.filter(Objects::nonNull)//
-						.map(x -> modelEntityMap.getOptimiserObjectNullChecked(x, IRouteOptionBooking.class))//
-						.toList();
-				otherCargoBookings.addAll(canalBookings);
-			} else {
-				Event currentEvent = events.get(0);
-				while (currentEvent.getNextEvent() != null) {
-					if (currentEvent instanceof SlotVisit slotVisit) {
-						Slot<?> targetSlot = slotVisit.getSlotAllocation().getSlot();
-						IPortSlot oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
-						if (oTargetSlot == load) {
-							do {
-								if (currentEvent instanceof SlotVisit sv) {
-									targetSlot = sv.getSlotAllocation().getSlot();
-									oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
-								}
-								currentEvent = currentEvent.getNextEvent();
-							} while (!oTargetSlot.equals(nextEvent) && currentEvent != null);
-							if (currentEvent == null) {
-								break;
+
+			Event currentEvent = events.get(0);
+			while (currentEvent.getNextEvent() != null) {
+				if (currentEvent instanceof SlotVisit slotVisit) {
+					Slot<?> targetSlot = slotVisit.getSlotAllocation().getSlot();
+					IPortSlot oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
+					if (oTargetSlot == load) {
+						do {
+							if (currentEvent instanceof SlotVisit sv) {
+								targetSlot = sv.getSlotAllocation().getSlot();
+								oTargetSlot = modelEntityMap.getOptimiserObjectNullChecked(targetSlot, IPortSlot.class);
 							}
+							currentEvent = currentEvent.getNextEvent();
+						} while (!oTargetSlot.equals(nextEvent) && currentEvent != null);
+						if (currentEvent == null) {
+							break;
 						}
-					} else if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
-						
-						IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
-						otherCargoBookings.add(booking);
 					}
-					currentEvent = currentEvent.getNextEvent();
+				} else if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
+					// Add bookings used by other cargoes
+					IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
+					otherCargoBookings.add(booking);
 				}
+				currentEvent = currentEvent.getNextEvent();
 			}
 
 		}
 
 		List<IRouteOptionBooking> allPanamaBookings = panamaBookings.getAllBookings().values().stream().flatMap(Collection::stream).toList();
+		// Marketable Cargo can only use unused panama bookings and bookings used in the
+		// original cargo
 		panamaAllowedBookingsProvider.setAllowedBookings(Sets.difference(Set.copyOf(allPanamaBookings), otherCargoBookings));
 		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
 	}
