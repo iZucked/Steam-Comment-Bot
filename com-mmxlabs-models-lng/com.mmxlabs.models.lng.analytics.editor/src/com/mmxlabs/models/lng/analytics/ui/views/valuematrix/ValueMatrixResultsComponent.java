@@ -89,7 +89,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 	private Color[] colourSequence = null;
 	private int nextColourIndex = 0;
 
-	private boolean showingGroups = false;
+	private boolean showingGroups = true;
 	private boolean highlightLosses = false;
 
 	private Map<SwapValueChangeKey, Integer> changeToColourIndex = new HashMap<>();
