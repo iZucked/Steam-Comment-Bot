@@ -8,6 +8,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -16,22 +17,27 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.formattedtext.FormattedText;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
@@ -39,19 +45,25 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -62,8 +74,9 @@ public class MainTableComponent {
 	private final @NonNull List<Consumer<MarketabilityModel>> inputWants = new LinkedList<>();
 
 	private final List<Item> dynamicColumns = new LinkedList<>();
-	private GridTreeViewer tableViewer;
+	private EObjectTableViewer tableViewer;
 	private Text vesselSpeedText;
+	private LocalResourceManager localResourceManager;
 
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
@@ -72,13 +85,13 @@ public class MainTableComponent {
 	public @NonNull List<Consumer<MarketabilityModel>> getInputWants() {
 		return inputWants;
 	}
-	
+
 	@Nullable
 	public Integer getVesselSpeed() {
 		String speed = vesselSpeedText.getText();
 		try {
 			return Integer.parseInt(speed);
-		} catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return null;
 		}
 	}
@@ -94,8 +107,10 @@ public class MainTableComponent {
 		vesselSpeedText.setEditable(true);
 		vesselSpeedText.setTextLimit(2);
 		vesselSpeedText.setMessage("max");
+		vesselSpeedText.setData(vesselSpeedText.getText());
+
 		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
-		
+
 		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
 		knotsLabel.setText("kts");
 		Control control = createViewer(mainParent);
@@ -103,7 +118,9 @@ public class MainTableComponent {
 	}
 
 	private Control createViewer(final Composite parent) {
-		tableViewer = new GridTreeViewer(parent, SWT.BORDER|SWT.H_SCROLL | SWT.V_SCROLL);
+		localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
+		tableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer.init(new MarketabilityModelContentProvider(), null);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 
 		assert tableViewer != null;
@@ -111,7 +128,7 @@ public class MainTableComponent {
 		tableViewer.getGrid().setHeaderVisible(true);
 		tableViewer.getGrid().setAutoHeight(true);
 
-		createColumn(tableViewer, "Vessel", new ShippingOptionDescriptionFormatter(), false).getColumn();
+		createVesselColumn();
 		createLoadSlotColumn(tableViewer.getGrid());
 		createDischargeSlotColumn(tableViewer.getGrid());
 		createNextEventColumn(tableViewer.getGrid());
@@ -125,20 +142,29 @@ public class MainTableComponent {
 							.sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())) //
 							.toList();
 
+			int i = 0;
+			;
+
 			for (final SpotMarket sm : markets) {
 
 				final GridColumnGroup datesGroup = new GridColumnGroup(tableViewer.getGrid(), SWT.CENTER | SWT.WRAP);
 				GridViewerHelper.configureLookAndFeel(datesGroup);
 				datesGroup.setText(sm.getName());
 				datesGroup.setData(sm);
+				final boolean isBackgroundBlue = i % 2 == 0;
+				final Color highlightColour = localResourceManager.createColor(new RGB(240, 240, 240));
 				var earliestColumn = createChildColumn(tableViewer, new CellLabelProvider() {
 
 					@Override
 					public void update(ViewerCell cell) {
 						cell.setText("");
+						if (isBackgroundBlue) {
+							cell.setBackground(highlightColour);
+						}
+						// cell.setBackground()
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							for(var result : row.getResult().getRhsResults()) {
-								if(result.getTarget() == sm && result.getEarliestETA() != null) {
+							for (var result : row.getResult().getRhsResults()) {
+								if (result.getTarget() == sm && result.getEarliestETA() != null) {
 									String text = formatDate(result.getEarliestETA().toLocalDate());
 									text += " " + formatTime(result.getEarliestETA().toLocalTime());
 									cell.setText(text);
@@ -153,9 +179,12 @@ public class MainTableComponent {
 					@Override
 					public void update(ViewerCell cell) {
 						cell.setText("");
+						if (isBackgroundBlue) {
+							cell.setBackground(highlightColour);
+						}
 						if (cell.getElement() instanceof MarketabilityRow row) {
-							for(var result : row.getResult().getRhsResults()) {
-								if(result.getTarget() == sm && result.getLatestETA() != null) {
+							for (var result : row.getResult().getRhsResults()) {
+								if (result.getTarget() == sm && result.getLatestETA() != null) {
 									String text = formatDate(result.getLatestETA().toLocalDate());
 									text += " " + formatTime(result.getLatestETA().toLocalTime());
 									cell.setText(text);
@@ -165,9 +194,12 @@ public class MainTableComponent {
 
 					}
 				}, "Latest", datesGroup);
+
 				dynamicColumns.add(earliestColumn.getColumn());
 				dynamicColumns.add(latestColumn.getColumn());
 				dynamicColumns.add(datesGroup);
+
+				i++;
 			}
 		};
 		inputWants.add(refreshDynamicColumns);
@@ -177,9 +209,36 @@ public class MainTableComponent {
 	}
 
 	public void refresh() {
-		
 		tableViewer.refresh();
 		GridViewerHelper.recalculateRowHeights(tableViewer.getGrid());
+
+	}
+
+	private void createVesselColumn() {
+		createColumn(tableViewer, "Vessel", new BaseFormatter() {
+			@Override
+			public @Nullable String render(Object object) {
+				if (object instanceof MarketabilityRow row) {
+					final ShippingOption shipping = row.getShipping();
+					if (shipping instanceof ExistingVesselCharterOption option) {
+						final VesselCharter availability = option.getVesselCharter();
+						String vesselName = "<No vessel>";
+						if (availability != null) {
+							Vessel vessel = availability.getVessel();
+							if (vessel != null) {
+								final String s = vessel.getName();
+								if (s != null && !s.trim().isEmpty()) {
+									vesselName = s;
+								}
+							}
+						}
+						return vesselName;
+					}
+				}
+				return "";
+			}
+		}, false);
+
 	}
 
 	private void createNextEventColumn(Grid parent) {
@@ -188,12 +247,23 @@ public class MainTableComponent {
 		nextEventColumn.getHeaderRenderer().setHorizontalAlignment(SWT.CENTER);
 		nextEventColumn.setText("Next Event");
 
-		createChildColumn(tableViewer, "ID", nextEventColumn, row -> {
+		createSortableChildColumn(tableViewer, "ID", nextEventColumn, row -> {
 			if (row.getSellOption() != null) {
-				if(row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable ) {
+				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
 					if (assignable.getElement() instanceof VesselEvent event) {
 						return (event.getName());
-					} else if(assignable.getElement() instanceof Cargo cargo) {
+					} else if (assignable.getElement() instanceof Cargo cargo) {
+						return (cargo.getLoadName());
+					}
+				}
+			}
+			return "";
+		}, row -> {
+			if (row.getSellOption() != null) {
+				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
+					if (assignable.getElement() instanceof VesselEvent event) {
+						return (event.getName());
+					} else if (assignable.getElement() instanceof Cargo cargo) {
 						return (cargo.getLoadName());
 					}
 				}
@@ -201,14 +271,27 @@ public class MainTableComponent {
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Port", nextEventColumn, row -> {
+		createSortableChildColumn(tableViewer, "Port", nextEventColumn, row -> {
 
 			if (row.getSellOption() != null) {
-				if(row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable ) {
+				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
 					Port p = null;
 					if (assignable.getElement() instanceof VesselEvent event) {
 						p = event.getPort();
-					} else if(assignable.getElement() instanceof Cargo cargo) {
+					} else if (assignable.getElement() instanceof Cargo cargo) {
+						p = cargo.getSortedSlots().get(0).getPort();
+					}
+					return (p != null) ? p.getName() : "";
+				}
+			}
+			return "";
+		}, row -> {
+			if (row.getSellOption() != null) {
+				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
+					Port p = null;
+					if (assignable.getElement() instanceof VesselEvent event) {
+						p = event.getPort();
+					} else if (assignable.getElement() instanceof Cargo cargo) {
 						p = cargo.getSortedSlots().get(0).getPort();
 					}
 					return (p != null) ? p.getName() : "";
@@ -217,13 +300,21 @@ public class MainTableComponent {
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Date", nextEventColumn, row -> {
+		createSortableChildColumn(tableViewer, "Date", nextEventColumn, row -> {
 
 			if (row.getSellOption() != null && row.getResult() != null) {
-				if(row.getResult().getNextEvent() != null) {
+				if (row.getResult().getNextEvent() != null) {
 					return formatDate(row.getResult().getNextEvent().getStart().toLocalDate());
-				}			}
+				}
+			}
 			return "";
+		}, row -> {
+			if (row.getSellOption() != null && row.getResult() != null) {
+				if (row.getResult().getNextEvent() != null) {
+					return row.getResult().getNextEvent().getStart();
+				}
+			}
+			return LocalDateTime.MIN;
 		});
 
 	}
@@ -233,32 +324,52 @@ public class MainTableComponent {
 		GridViewerHelper.configureLookAndFeel(portColumn);
 		portColumn.getHeaderRenderer().setHorizontalAlignment(SWT.CENTER);
 		portColumn.setText("Load");
-		createChildColumn(tableViewer, "ID", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "ID", portColumn, row -> {
 
+			if (row.getBuyOption() instanceof BuyReference bo) {
+				return (bo.getSlot().getName());
+			}
+			return "";
+		}, row -> {
 			if (row.getBuyOption() instanceof BuyReference bo) {
 				return (bo.getSlot().getName());
 			}
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Port", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "Port", portColumn, row -> {
+			if (row.getBuyOption() instanceof BuyReference bo) {
+				return (bo.getSlot().getPort().getName());
+			}
+			return "";
+		}, row -> {
 			if (row.getBuyOption() instanceof BuyReference bo) {
 				return (bo.getSlot().getPort().getName());
 			}
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Date", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "Date", portColumn, row -> {
 			if (row.getResult().getBuyDate() != null) {
-				return (DateTimeFormatter.ofPattern("dd/MM/yyyy").format(row.getResult().getBuyDate()));
+				return (formatDate(row.getResult().getBuyDate().toLocalDate()));
 			}
 			return "";
+		}, row -> {
+			if (row.getResult().getBuyDate() != null) {
+				return row.getResult().getBuyDate();
+			}
+			return LocalDateTime.MIN;
 		});
-		createChildColumn(tableViewer, "Panama", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getLadenPanama() != null) {
 				return formatDate(row.getResult().getLadenPanama().toLocalDate());
 			}
 			return "";
+		}, row -> {
+			if (row.getResult().getLadenPanama() != null) {
+				return row.getResult().getLadenPanama();
+			}
+			return LocalDateTime.MIN;
 		});
 
 		return portColumn;
@@ -269,25 +380,40 @@ public class MainTableComponent {
 		GridViewerHelper.configureLookAndFeel(portColumn);
 		portColumn.getHeaderRenderer().setHorizontalAlignment(SWT.CENTER);
 		portColumn.setText("Discharge");
-		createChildColumn(tableViewer, "C/P", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "C/P", portColumn, row -> {
 
 			if (row.getSellOption() instanceof SellReference sr) {
-				return (sr.getSlot().getCounterparty());
+				return sr.getSlot().getSlotOrDelegateCounterparty();
+			}
+			return "";
+		}, row -> {
+			if (row.getSellOption() instanceof SellReference sr) {
+				return sr.getSlot().getSlotOrDelegateCounterparty();
 			}
 			return "";
 		});
 
-		createChildColumn(tableViewer, "Date", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "Date", portColumn, row -> {
 			if (row.getResult().getSellDate() != null) {
 				return (formatDate(row.getResult().getSellDate().toLocalDate()));
 			}
 			return "";
+		}, row -> {
+			if (row.getResult().getSellDate() != null) {
+				return row.getResult().getSellDate();
+			}
+			return LocalDateTime.MIN;
 		});
-		createChildColumn(tableViewer, "Panama", portColumn, row -> {
+		createSortableChildColumn(tableViewer, "Panama", portColumn, row -> {
 			if (row.getResult().getBallastPanama() != null) {
 				return formatDate(row.getResult().getBallastPanama().toLocalDate());
 			}
 			return "";
+		}, row -> {
+			if (row.getResult().getBallastPanama() != null) {
+				return row.getResult().getBallastPanama();
+			}
+			return LocalDateTime.MIN;
 		});
 
 		return portColumn;
@@ -298,12 +424,12 @@ public class MainTableComponent {
 		if (date == null) {
 			return "";
 		}
-		return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(date);
+		return DateTimeFormatter.ofPattern("dd/MM/yy").format(date);
 	}
-	
+
 	@SuppressWarnings("null")
 	private @NonNull String formatTime(final LocalTime time) {
-		if(time == null) {
+		if (time == null) {
 			return "";
 		}
 		return DateTimeFormatter.ofPattern("HH:mm").format(time);
@@ -333,6 +459,7 @@ public class MainTableComponent {
 	protected GridViewerColumn createChildColumn(final GridTreeViewer viewer, CellLabelProvider provider, final String name, final GridColumnGroup parent) {
 
 		final GridColumn gc = new GridColumn(parent, SWT.CENTER | SWT.WRAP);
+
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 		gvc.getColumn().setTree(false);
 		GridViewerHelper.configureLookAndFeel(gvc);
@@ -343,6 +470,61 @@ public class MainTableComponent {
 		gvc.setLabelProvider(provider);
 		gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		return gvc;
+	}
+
+	protected GridViewerColumn createSortableChildColumn(final EObjectTableViewer viewer, final String name, final GridColumnGroup parent, Function<MarketabilityRow, String> labelFunction,
+			Function<MarketabilityRow, Comparable<?>> comparer) {
+		GridViewerColumn childColumn = createChildColumn(viewer, new CellLabelProvider() {
+
+			@Override
+			public void update(ViewerCell cell) {
+				if (cell.getElement() instanceof MarketabilityRow row) {
+					cell.setText(labelFunction.apply(row));
+				}
+
+			}
+		}, name, parent);
+
+		ICellRenderer renderer = new ICellRenderer() {
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public Comparable<?> getComparable(Object object) {
+				if (object instanceof MarketabilityRow row) {
+					return comparer.apply(row);
+				}
+				return null;
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				if (object instanceof MarketabilityRow row) {
+					return labelFunction.apply(row);
+				}
+				return null;
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		};
+
+		childColumn.getColumn().setCellRenderer(new DefaultCellRenderer());
+		childColumn.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+		childColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
+
+		viewer.getSortingSupport().addSortableColumn(viewer, childColumn, childColumn.getColumn());
+		return childColumn;
 	}
 
 	protected GridViewerColumn createChildColumn(final GridTreeViewer viewer, final String name, final GridColumnGroup parent, Function<MarketabilityRow, String> labelFunction) {
@@ -390,4 +572,5 @@ public class MainTableComponent {
 	public void setFocus() {
 		ViewerHelper.setFocus(getViewer());
 	}
+
 }
