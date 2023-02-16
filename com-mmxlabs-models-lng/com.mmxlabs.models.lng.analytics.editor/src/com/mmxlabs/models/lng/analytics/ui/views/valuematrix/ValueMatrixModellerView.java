@@ -232,10 +232,8 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			final Action deleteResultsAction = createDeleteResultsAction(centralComposite);
 			getViewSite().getActionBars().getToolBarManager().add(deleteResultsAction);
 
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATUREN_SANDBOX_VALUE_MATRIX_HIGHLIGHTING)) {
-				highlightAction = new HighlightAction(valueMatrixResultsComponent);
-				getViewSite().getActionBars().getToolBarManager().add(highlightAction);
-			}
+			highlightAction = new HighlightAction(valueMatrixResultsComponent);
+			getViewSite().getActionBars().getToolBarManager().add(highlightAction);
 
 			final Action packAction = createPackAction();
 			packAction.setEnabled(true);
