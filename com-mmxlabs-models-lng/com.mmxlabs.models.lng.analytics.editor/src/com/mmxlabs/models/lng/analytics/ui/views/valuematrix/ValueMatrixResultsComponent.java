@@ -786,6 +786,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 	private void clearValueMatrix() {
 		if (valueMatrixViewer != null) {
 			valueMatrixViewer.getGrid().dispose();
+			changeToColourIndex.clear();
+			nextColourIndex = 0;
 		}
 		valueMatrixViewer = null;
 	}
